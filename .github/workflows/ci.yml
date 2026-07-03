@@ -1,0 +1,34 @@
+# Compile gate for the example corpus (CLAUDE.md sec. 1 guardrail + sec. 5).
+#
+# Runs on GitHub's cloud runners (not your machine) after you PUSH to GitHub.
+# This repo is public, so Actions minutes are free and unlimited. The job just
+# checks out this repo and runs driver/build.py against its own content/.
+#
+# ubuntu-latest ships g++, clang++ and python3 preinstalled, so there is nothing
+# to install -- both compilers here are "normal" (no MSYS/cygwin path quirks).
+
+name: build-examples
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:   # adds a manual "Run workflow" button in the Actions tab
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the corpus
+        uses: actions/checkout@v4
+
+      - name: Show toolchain versions
+        run: |
+          python3 --version
+          g++ --version | head -1
+          clang++ --version | head -1
+
+      - name: Compile every example with g++ AND clang++
+        # --strict: a missing requested compiler is an error (both are required
+        # on CI, unlike local dev where one may be skipped).
+        run: python3 driver/build.py --strict

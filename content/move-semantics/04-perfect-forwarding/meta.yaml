@@ -1,0 +1,12 @@
+title: "Perfect forwarding with a variadic factory"
+standard: "C++11"
+difficulty: 3
+summary: "A make<T>(args...) factory that forwards each argument unchanged (lvalue stays lvalue, rvalue stays rvalue) using forwarding references and std::forward."
+notes: "Args&&... in a deduced template context is a forwarding reference, not an rvalue reference. std::forward preserves the original value category; use it exactly once per forwarded argument. This is the mechanism behind emplace_back and make_unique."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+detailed_tags:
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }

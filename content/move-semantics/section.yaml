@@ -1,0 +1,3 @@
+title: "Move semantics"
+description: "How C++11 move semantics transfer ownership of a resource instead of copying it: std::move, move constructors and assignment, the rule of five, moving objects into containers, perfect forwarding, and why move operations should be noexcept."
+sort_order: 1

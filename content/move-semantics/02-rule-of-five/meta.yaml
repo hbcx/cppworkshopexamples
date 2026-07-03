@@ -1,0 +1,13 @@
+title: "The rule of five for a resource-owning class"
+standard: "C++11"
+difficulty: 2
+summary: "A class that owns a heap array and defines all five special members: destructor, copy/move constructor, copy/move assignment."
+notes: "If you write any one of destructor, copy, or move, you almost always need all five (rule of five). A common alternative is copy-and-swap, which unifies both assignment operators into a single by-value operator= at the cost of one extra move."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of five", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

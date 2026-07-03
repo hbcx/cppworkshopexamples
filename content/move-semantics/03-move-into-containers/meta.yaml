@@ -1,0 +1,14 @@
+title: "Moving objects into a std::vector"
+standard: "C++11"
+difficulty: 2
+summary: "push_back copies an lvalue but moves an rvalue; emplace_back constructs in place. How std::move avoids a copy when filling a container."
+notes: "A moved-from std::string is valid but in an unspecified state (typically empty). Read it only to reassign or destroy it, never rely on a specific leftover value. reserve() up front avoids reallocations while pushing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+detailed_tags:
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "std::vector::emplace_back", url: "https://en.cppreference.com/w/cpp/container/vector/emplace_back" }
+  - { name: "std::vector::reserve", url: "https://en.cppreference.com/w/cpp/container/vector/reserve" }

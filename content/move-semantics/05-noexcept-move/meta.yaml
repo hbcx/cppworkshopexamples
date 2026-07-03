@@ -1,0 +1,12 @@
+title: "Why move constructors should be noexcept"
+standard: "C++11"
+difficulty: 3
+summary: "std::vector only moves its elements on reallocation if their move constructor is noexcept; otherwise it copies to preserve the strong exception guarantee."
+notes: "A throwing move constructor silently degrades vector growth to copies -- a real performance trap. Mark move operations noexcept whenever they cannot throw. std::move_if_noexcept encodes this rule; std::is_nothrow_move_constructible lets you check it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "noexcept specifier", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }
+detailed_tags:
+  - { name: "std::is_nothrow_move_constructible", url: "https://en.cppreference.com/w/cpp/types/is_move_constructible" }
+  - { name: "std::move_if_noexcept", url: "https://en.cppreference.com/w/cpp/utility/move_if_noexcept" }

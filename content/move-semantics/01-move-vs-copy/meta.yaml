@@ -1,0 +1,12 @@
+title: "Move vs copy: seeing which one the compiler picks"
+standard: "C++11"
+difficulty: 1
+summary: "A tiny owning Buffer that logs copy vs move, showing how std::move turns a copy into a move."
+notes: "std::move does not move anything by itself. It is a cast to an rvalue reference that makes its argument eligible for the move constructor. Always mark move operations noexcept."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
