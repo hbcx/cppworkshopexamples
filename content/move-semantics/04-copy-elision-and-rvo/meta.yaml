@@ -1,0 +1,14 @@
+title: "Copy elision, RVO and NRVO"
+standard: "C++17"
+difficulty: 2
+summary: "Returning a prvalue elides all copies/moves (guaranteed since C++17); returning a named local uses NRVO; return std::move(local) defeats it; assignment is never elision."
+notes: "T x = T(args) and returning a prvalue are guaranteed copy elision in C++17 -- a single constructor, no move. Returning a named local is NRVO (permitted, done by all mainstream compilers). return std::move(local) is an anti-pattern: it blocks NRVO and forces a move -- compilers even warn about it with -Wpessimizing-move. Elision applies only to initialization; existing = T(args) still constructs a temporary and move-assigns."
+werror: false
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy elision", url: "https://en.cppreference.com/w/cpp/language/copy_elision" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }

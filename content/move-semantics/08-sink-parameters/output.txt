@@ -1,0 +1,18 @@
+ctor(lv)
+--- ByOverload(lvalue) -> 1 copy ---
+copy(lv)
+--- ByOverload(rvalue) -> 1 move ---
+ctor(rv)
+move
+--- ByValue(lvalue) -> 1 copy + 1 extra move ---
+copy(lv)
+move
+--- ByValue(rvalue) -> 1 move (same as overload) ---
+ctor(rv)
+move
+--- ByForward(lvalue) -> 1 copy ---
+copy(lv)
+--- ByForward(rvalue) -> 1 move ---
+ctor(rv)
+move
+--- end ---

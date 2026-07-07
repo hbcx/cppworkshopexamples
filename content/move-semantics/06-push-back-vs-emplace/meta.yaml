@@ -1,0 +1,13 @@
+title: "push_back vs emplace_back: copies, moves and traps"
+standard: "C++11"
+difficulty: 3
+summary: "push_back of an lvalue always copies; emplace_back of an lvalue also copies; emplace_back only wins when it constructs from raw ctor args, and it silently forwards to explicit constructors."
+notes: "push_back(lvalue) is always a copy even for a movable type -- you must std::move it. emplace_back(lvalue-of-T) copies too; emplace only beats push_back when the argument is not already a T (it builds in place instead of ctor+move+dtor of a temporary). Trap: emplace_back forwards to any constructor including explicit ones, so vector<vector<int>>.emplace_back(10) makes a vector of ten ints. Reallocation is a separate mechanism gated by noexcept move."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "std::vector::emplace_back", url: "https://en.cppreference.com/w/cpp/container/vector/emplace_back" }
+  - { name: "std::vector::reserve", url: "https://en.cppreference.com/w/cpp/container/vector/reserve" }

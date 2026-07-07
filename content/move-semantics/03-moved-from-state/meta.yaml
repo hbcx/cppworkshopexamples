@@ -1,0 +1,13 @@
+title: "What is left in a moved-from object"
+standard: "C++11"
+difficulty: 2
+summary: "A moved-from object is valid but unspecified; std::move on a const object silently copies; a guarded assignment makes self-move safe."
+notes: "After a move the source is valid but in an unspecified state -- only assign to it, clear it, or destroy it, never rely on a leftover value. std::move on a const object falls back to copy because const T&& cannot bind to the move constructor. Guard move assignment with if (this != &other) so self-move is a safe no-op."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }

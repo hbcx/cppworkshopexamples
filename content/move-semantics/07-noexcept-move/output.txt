@@ -1,0 +1,4 @@
+Safe   nothrow-move-constructible: true
+Unsafe nothrow-move-constructible: false
+vector<Safe> relocation:   move 
+vector<Unsafe> relocation: copy 

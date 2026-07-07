@@ -37,6 +37,10 @@ Options:
   --keep                    Keep build artifacts (default: temp dir is removed).
   --dry-run                 Print the plan (sources + flags) without compiling.
   --strict                  Treat a missing requested compiler as an error.
+  --write-output            For run: true examples, capture the program's stdout
+                            and write it to output.txt next to the example (for
+                            the site to display). Opt-in so CI never mutates the
+                            repo; the author regenerates and commits these files.
   -q, --quiet               Only print failures and the final summary.
 """
 
@@ -257,6 +261,7 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
     sanitizers = ex.meta.get("sanitizers") or []
     werror = ex.meta.get("werror", True)
     run = bool(ex.meta.get("run", False))
+    run_stdouts: list[tuple[str, str]] = []
 
     for cc in compilers:
         out = build_root / f"{ex.section}__{ex.slug}__{cc.replace('/', '_')}{EXE_SUFFIX}"
@@ -292,8 +297,32 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
                 res.failures.append(
                     f"{cc}: run failed ({reason}, exit {rp.returncode})\n"
                     + _indent((rp.stderr or rp.stdout)))
+            else:
+                run_stdouts.append((cc, rp.stdout))
+
+    if run and args.write_output and run_stdouts and not args.dry_run:
+        _write_output_file(ex, run_stdouts, res)
 
     return res
+
+
+def _write_output_file(ex: Example, run_stdouts: list, res: Result) -> None:
+    """Persist a run's stdout to output.txt next to the example so the site can
+    show it. All compilers should print identically; warn (don't fail) if not."""
+    distinct = {out for _, out in run_stdouts}
+    first_cc, first_out = run_stdouts[0]
+    if len(distinct) > 1:
+        res.warnings.append(
+            f"compilers produced DIFFERENT stdout; wrote {first_cc}'s. Output may "
+            "be nondeterministic -- review before committing (or drop output.txt).")
+    target = ex.path / "output.txt"
+    if first_out.strip() == "":
+        res.warnings.append("run produced no stdout; output.txt not written")
+        return
+    # Keep LF endings so the committed file is stable across platforms.
+    with open(target, "w", encoding="utf-8", newline="\n") as f:
+        f.write(first_out)
+    res.warnings.append(f"wrote output.txt ({len(first_out.splitlines())} lines)")
 
 
 def _lower_check(res, cc, ex, sources, standard, sanitizers, werror, build_root):
@@ -352,6 +381,7 @@ def main() -> int:
     ap.add_argument("--keep", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--strict", action="store_true")
+    ap.add_argument("--write-output", action="store_true")
     ap.add_argument("-q", "--quiet", action="store_true")
     args = ap.parse_args()
 

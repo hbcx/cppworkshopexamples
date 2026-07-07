@@ -1,0 +1,3 @@
+Widget(gear, 5)
+Widget(bolt, 2)
+gear bolt

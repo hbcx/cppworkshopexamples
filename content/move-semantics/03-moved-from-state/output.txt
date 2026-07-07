@@ -1,0 +1,8 @@
+b = hello
+a (reassigned) = reusable after move
+copy(payload)
+d.label via std::move(const) = payload
+move-assign
+e.label after self-move = keep-me
+moved-to vector size = 3
+source reused, size = 1

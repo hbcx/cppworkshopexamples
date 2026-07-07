@@ -1,0 +1,14 @@
+title: "Sink parameters: by-value vs overloads vs forwarding"
+standard: "C++17"
+difficulty: 3
+summary: "Three ways to take an argument you intend to store, compared: const&/&& overloads, pass-by-value-and-move, and a forwarding-reference template, with the exact copy/move cost of each."
+notes: "For a constructor that stores its argument: const&/&& overloads are optimal but explode to 2^N for N parameters. Pass-by-value-and-move is one signature that costs exactly one extra move for lvalues and is identical for rvalues (guaranteed prvalue elision into the parameter). Forwarding references have zero overhead but are templates that match greedily and need constraining. Prefer pass-by-value when the move is cheap (Effective Modern C++ Item 41)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+detailed_tags:
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }
+  - { name: "copy elision", url: "https://en.cppreference.com/w/cpp/language/copy_elision" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }

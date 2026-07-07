@@ -1,0 +1,24 @@
+--- push_back(lvalue): ALWAYS a copy ---
+ctor(A)
+copy(A)
+--- push_back(std::move(lvalue)): a move ---
+move
+--- push_back(rvalue): ctor + move + dtor(temp) ---
+ctor(B)
+move
+dtor()
+--- emplace_back(lvalue): STILL a copy ---
+ctor(C)
+copy(C)
+--- emplace_back(ctor args): builds in place, no temp ---
+ctor(D)
+--- emplace_back trap: forwards to EXPLICIT ctors ---
+nested[0].size() = 3
+--- end ---
+dtor(C)
+dtor()
+dtor(A)
+dtor(A)
+dtor(B)
+dtor(C)
+dtor(D)

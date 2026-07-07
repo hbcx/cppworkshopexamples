@@ -1,0 +1,18 @@
+--- prvalue return: guaranteed elision (C++17) ---
+ctor(prvalue)
+--- NRVO: named local return ---
+ctor(nrvo)
+--- return std::move(local): pessimisation ---
+ctor(pessimised)
+move
+dtor()
+--- assignment is NOT copy elision ---
+ctor(existing)
+ctor(assigned)
+move-assign
+dtor()
+--- end of scope ---
+dtor(assigned)
+dtor(pessimised)
+dtor(nrvo)
+dtor(prvalue)

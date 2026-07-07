@@ -1,0 +1,7 @@
+--- named rvalue reference is an lvalue ---
+copy
+move
+--- std::forward preserves the caller's value category ---
+relay(lvalue): copy
+relay(rvalue): move
+--- end ---

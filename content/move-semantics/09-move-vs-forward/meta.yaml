@@ -1,0 +1,13 @@
+title: "std::move vs std::forward and reference collapsing"
+standard: "C++11"
+difficulty: 3
+summary: "std::move is an unconditional cast to rvalue; std::forward is a conditional cast that preserves the caller's value category. A named rvalue reference is itself an lvalue."
+notes: "A named variable of type T&& is an lvalue, so passing it on without a cast copies. std::move always casts to rvalue; use it on things you truly own. std::forward<T> only casts to rvalue when T was deduced from an rvalue -- use it exactly once per forwarded argument in a T&& forwarding reference. Reference collapsing (& && -> &, && && -> &&) is what makes forwarding references work."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+detailed_tags:
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }

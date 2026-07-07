@@ -1,0 +1,4 @@
+ctor(4)
+copy ctor
+move ctor
+b.size=4 c.size=4
