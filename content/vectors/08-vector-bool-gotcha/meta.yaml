@@ -1,0 +1,11 @@
+title: "std::vector<bool> is not a vector of bool"
+standard: "C++11"
+difficulty: 3
+summary: "std::vector<bool> is a special-case bit-packed type: operator[] returns a proxy object, not bool&, so auto surprises you and there is no data() pointer to a C array."
+notes: "vector<bool> packs its elements into bits to save space, so it does not model a normal container. operator[] yields a std::vector<bool>::reference proxy that refers back into the vector, which means auto b = bits[i] captures the proxy (and tracks later writes) rather than copying a bool. You cannot take &bits[i] and there is no data(), so it cannot back a C API. When you want a real, addressable container of booleans use std::vector<char> (or std::deque<bool>, or std::bitset for a fixed size). This is a classic C++ wart -- the specialization is widely considered a mistake."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector<bool>", url: "https://en.cppreference.com/w/cpp/container/vector_bool" }
+detailed_tags:
+  - { name: "std::vector::data", url: "https://en.cppreference.com/w/cpp/container/vector/data" }

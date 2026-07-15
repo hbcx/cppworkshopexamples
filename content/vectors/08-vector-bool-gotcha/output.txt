@@ -1,0 +1,2 @@
+proxy tracked the write? yes  (auto captured a reference, not a copy)
+vector<char> is addressable, first byte=1

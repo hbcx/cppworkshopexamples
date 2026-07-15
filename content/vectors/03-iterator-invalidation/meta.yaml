@@ -1,0 +1,13 @@
+title: "Growth invalidates every pointer into the vector"
+standard: "C++11"
+difficulty: 2
+summary: "A push_back that exceeds capacity reallocates the storage, so any pointer, reference or iterator saved into the vector beforehand now dangles."
+notes: "The vector moves its elements to a fresh block on growth, so the old storage is freed and every pointer/reference/iterator into it becomes invalid -- using one afterwards is undefined behaviour. This example proves the storage moved by comparing data() before and after (it never dereferences the stale pointer). Guard against it by reserving enough capacity up front, or by re-fetching the pointer after any operation that can grow the vector. erase and insert invalidate from the affected position onwards for the same reason."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "std::vector::data", url: "https://en.cppreference.com/w/cpp/container/vector/data" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }

@@ -1,0 +1,13 @@
+title: "resize vs reserve: size vs capacity, again"
+standard: "C++11"
+difficulty: 2
+summary: "reserve changes only capacity and leaves the elements alone; resize changes the size, constructing new elements or destroying trailing ones."
+notes: "reserve(n) reserves room -- capacity grows but size and contents are untouched, and indexing past size() is still undefined behaviour because those slots are not constructed. resize(n) changes how many elements exist: growing value-initialises the new ones (0 for int), shrinking destroys the tail. Use reserve when you know how many push_backs are coming; use resize when you want the elements to actually be there. A frequent bug is reserve(n) followed by v[i] = ... expecting resize semantics."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector::resize", url: "https://en.cppreference.com/w/cpp/container/vector/resize" }
+  - { name: "std::vector::reserve", url: "https://en.cppreference.com/w/cpp/container/vector/reserve" }
+  - { name: "std::vector::capacity", url: "https://en.cppreference.com/w/cpp/container/vector/capacity" }

@@ -1,0 +1,2 @@
+sum via C API = 15
+elements adjacent in memory? yes

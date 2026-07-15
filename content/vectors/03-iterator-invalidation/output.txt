@@ -1,0 +1,4 @@
+before: size=2 capacity=2
+after:  size=3 capacity=4
+storage relocated? yes
+=> the saved pointer, and any reference or iterator taken before the growth, now dangles.

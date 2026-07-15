@@ -1,0 +1,3 @@
+before:          1 2 3 2 4 2 5   (size=7)
+after remove(2): size=7 (unchanged; kept elements moved to the front)
+after erase:     1 3 4 5   (size=4)

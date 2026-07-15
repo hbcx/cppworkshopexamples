@@ -1,0 +1,12 @@
+title: "erase-remove: why remove alone does not remove"
+standard: "C++11"
+difficulty: 2
+summary: "std::remove does not erase anything -- it shifts the kept elements to the front and returns the new logical end; a following vector::erase is what shrinks the container."
+notes: "Algorithms work on iterators, not containers, so std::remove cannot change the vector size -- it overwrites removed slots by moving later elements forward and hands back an iterator to the new end. Everything from there to the old end is unspecified leftover, which is why you must call v.erase(new_end, v.end()) to actually drop it. The two-step erase-remove idiom is the standard way to delete all matching elements in one pass; C++20 adds std::erase(v, value) that does both."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

@@ -1,0 +1,14 @@
+title: "Reclaiming capacity: shrink_to_fit and the swap trick"
+standard: "C++11"
+difficulty: 3
+summary: "clear() and erase keep the allocated capacity; to hand memory back you call shrink_to_fit, or swap the vector with an empty one."
+notes: "Shrinking the size never releases memory -- capacity is retained so future growth is cheap, which means a vector that once held a million elements still owns that block after clear(). shrink_to_fit() (C++11) requests the implementation to release the spare capacity, but it is non-binding. The portable pre-C++11 idiom is std::vector<T>().swap(v): swap the buffer into a temporary empty vector that is destroyed at the end of the full expression, forcing the memory to be freed. Reach for either only when the retained capacity actually matters."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector::shrink_to_fit", url: "https://en.cppreference.com/w/cpp/container/vector/shrink_to_fit" }
+  - { name: "std::vector::clear", url: "https://en.cppreference.com/w/cpp/container/vector/clear" }
+  - { name: "std::vector::capacity", url: "https://en.cppreference.com/w/cpp/container/vector/capacity" }
+  - { name: "std::vector::swap", url: "https://en.cppreference.com/w/cpp/container/vector/swap" }

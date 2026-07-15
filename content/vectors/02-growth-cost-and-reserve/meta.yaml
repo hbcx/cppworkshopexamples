@@ -1,0 +1,13 @@
+title: "Why reserve matters: counting reallocations"
+standard: "C++11"
+difficulty: 2
+summary: "An instrumented element type counts how many times growth moves the existing elements; reserving the final size up front removes those reallocations entirely."
+notes: "Each reallocation move-constructs every element into the new block, so growing a vector element by element is O(n) extra element moves on top of the inserts. reserve(n) allocates once, so only the n inserts happen and nothing is reallocated. The moves are noexcept here, so growth moves rather than copies -- if the move constructor were not noexcept, the vector would copy on every reallocation instead (see the move-semantics section)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::vector::reserve", url: "https://en.cppreference.com/w/cpp/container/vector/reserve" }
+detailed_tags:
+  - { name: "std::vector::capacity", url: "https://en.cppreference.com/w/cpp/container/vector/capacity" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }

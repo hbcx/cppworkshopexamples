@@ -1,0 +1,4 @@
+filled:                size=1000 capacity=1000
+after clear():         size=0 capacity=1000
+after shrink_to_fit(): size=0 capacity=0
+after swap-with-empty: size=0 capacity=0

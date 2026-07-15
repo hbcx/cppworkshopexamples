@@ -1,0 +1,12 @@
+title: "Size vs capacity: two different numbers"
+standard: "C++11"
+difficulty: 1
+summary: "size() is how many elements the vector holds; capacity() is how many it can hold before it must allocate a bigger block -- watch them diverge."
+notes: "size() rises by one per push_back; capacity() jumps in blocks because the vector over-allocates so most push_backs are cheap. The exact growth (typically doubling) is implementation-defined, but capacity is always >= size. Confusing the two is behind a lot of vector bugs -- indices past size() are not valid even if they are within capacity()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector::size", url: "https://en.cppreference.com/w/cpp/container/vector/size" }
+  - { name: "std::vector::capacity", url: "https://en.cppreference.com/w/cpp/container/vector/capacity" }

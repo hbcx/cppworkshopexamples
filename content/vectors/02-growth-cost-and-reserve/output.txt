@@ -1,0 +1,3 @@
+without reserve:  reallocations=4 element-moves=15 element-copies=0
+with reserve(8):  reallocations=0 element-moves=8 element-copies=0
+Reserving the final size up front removed every reallocation.

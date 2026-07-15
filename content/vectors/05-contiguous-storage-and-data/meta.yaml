@@ -1,0 +1,12 @@
+title: "Contiguous storage and data() for C APIs"
+standard: "C++11"
+difficulty: 2
+summary: "std::vector guarantees its elements are contiguous, so data() hands a real array pointer you can pass straight to a C function that expects a pointer and a length."
+notes: "Contiguity is a container guarantee, not an accident -- &v[0], v.data() and iterators all walk the same block, so a vector is the safe modern replacement for a C array or new[]. data() (C++11) is preferred over &v[0] because it is well-defined even when the vector is empty. The pointer is only valid until the next operation that can reallocate; do not cache it across a push_back."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector::data", url: "https://en.cppreference.com/w/cpp/container/vector/data" }
+  - { name: "std::iota", url: "https://en.cppreference.com/w/cpp/algorithm/iota" }
