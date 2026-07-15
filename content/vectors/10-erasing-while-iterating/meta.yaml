@@ -1,0 +1,13 @@
+title: "Anti-pattern: erasing elements while iterating by index"
+standard: "C++11"
+difficulty: 3
+summary: "Erasing inside a size()-based index loop skips the element that shifts into the freed slot, so adjacent matches survive; it is also O(n^2). Use erase-remove instead."
+notes: "vector::erase shifts every later element one step left and returns an iterator to the element after the removed one. In an index loop, ++i then steps over the element that moved into slot i, so runs of matching values are only partially removed -- and each erase is O(n), making the whole loop O(n^2). Prefer the erase-remove idiom (std::remove_if + a single erase) for one linear pass, or, if you must loop, write it = v.erase(it) and only ++it when you did not erase."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }

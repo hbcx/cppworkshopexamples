@@ -1,0 +1,13 @@
+title: "Anti-pattern: a reference invalidated by push_back"
+standard: "C++11"
+difficulty: 3
+summary: "Holding a pointer, reference or iterator to an element and then push_back-ing can reallocate the storage, leaving the handle dangling -- reserve first or copy the value out."
+notes: "push_back invalidates all pointers, references and iterators into a vector whenever it reallocates (size == capacity). Keeping a handle to an element across such a call and then reading it is undefined behaviour, and the bug is easy to hide inside a helper that appends. Fix it by reserving enough capacity before taking the reference so no reallocation happens while it is alive, or by not holding the handle across the mutation -- copy the value out, or re-index by position afterwards."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "std::vector::reserve", url: "https://en.cppreference.com/w/cpp/container/vector/reserve" }

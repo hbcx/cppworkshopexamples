@@ -1,0 +1,3 @@
+saved pointer still valid? no  (do not read through it either way)
+fix reserve: first still valid = 10
+fix copy value: first = 10

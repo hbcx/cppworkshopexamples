@@ -1,0 +1,3 @@
+buggy erase-in-loop: 2 3 7   (size=3)
+fix erase-remove:    3 7   (size=2)
+fix erase-return:    3 7   (size=2)

@@ -1,0 +1,13 @@
+title: "Anti-pattern: reserve() does not create elements"
+standard: "C++11"
+difficulty: 3
+summary: "reserve only grows capacity, not size, so writing v[i] after reserve is undefined behaviour and size()-based loops see nothing -- use push_back or resize."
+notes: "reserve(n) reserves storage but leaves size() at its old value, so the slots are raw unconstructed memory: indexing them with operator[] is undefined behaviour even though the capacity is there, and any range-for or size()-based loop iterates zero elements. Reserve is still worthwhile to avoid reallocations, but you must fill with push_back/emplace_back (which grow the size), or call resize(n) up front if you want to assign through operator[]."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::vector::reserve", url: "https://en.cppreference.com/w/cpp/container/vector/reserve" }
+detailed_tags:
+  - { name: "std::vector::resize", url: "https://en.cppreference.com/w/cpp/container/vector/resize" }
+  - { name: "std::vector::size", url: "https://en.cppreference.com/w/cpp/container/vector/size" }

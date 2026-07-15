@@ -1,0 +1,4 @@
+after reserve(5): size=0 capacity=5
+bad (never grown): size=0 {}
+fix push_back    : size=5 {0,1,4,9,16}
+fix resize + []  : size=5 {0,1,4,9,16}
