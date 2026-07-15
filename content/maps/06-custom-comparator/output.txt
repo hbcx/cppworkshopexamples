@@ -1,0 +1,5 @@
+size = 2 (Apple and apple merged)
+  Apple = 3
+  banana = 2
+lookup APPLE = 3
+size still 2 after the APPLE lookup

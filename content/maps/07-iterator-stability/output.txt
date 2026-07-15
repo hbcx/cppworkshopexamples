@@ -1,0 +1,3 @@
+pointer still valid:  *p = two
+iterator still valid: it->second = two
+after erasing key 2, size = 97

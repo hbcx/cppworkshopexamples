@@ -1,0 +1,12 @@
+title: "Sorted keys: a map always iterates in order"
+standard: "C++17"
+difficulty: 1
+summary: "std::map keeps its entries sorted by key at all times, so iteration returns them in order no matter how they were inserted."
+notes: "std::map is an ordered associative container (a balanced binary search tree), so every insert keeps the keys sorted and iterating walks them in ascending key order -- unlike std::unordered_map, which has no order. Structured bindings (C++17) make the walk read cleanly: for (const auto& [key, value] : m). Each element is a std::pair<const Key, Value>, so the key is const and cannot be mutated in place."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+  - { name: "std::map::insert", url: "https://en.cppreference.com/w/cpp/container/map/insert" }

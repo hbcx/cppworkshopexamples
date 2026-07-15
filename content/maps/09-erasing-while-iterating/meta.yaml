@@ -1,0 +1,12 @@
+title: "Anti-pattern: erasing while iterating a map"
+standard: "C++11"
+difficulty: 3
+summary: "Calling erase(it) invalidates it, so the usual ++it in the loop is undefined behaviour; advance with the iterator erase returns, or use the erase(it++) idiom."
+notes: "Erasing an element invalidates iterators to that element only, but that includes the it your for-loop is about to ++ -- so erase(it) followed by ++it is undefined behaviour even though every other element is fine. Since C++11 map::erase returns the iterator to the next element, so the clean fix is it = m.erase(it) and only ++it when you did not erase. The classic pre-C++11 idiom is m.erase(it++): the post-increment leaves it pointing at the next element before erase runs on the old one. Note this is milder than the vector case, where a single erase can invalidate the whole sequence."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::map::erase", url: "https://en.cppreference.com/w/cpp/container/map/erase" }
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }

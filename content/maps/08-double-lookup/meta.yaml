@@ -1,0 +1,13 @@
+title: "Anti-pattern: looking the same key up twice"
+standard: "C++11"
+difficulty: 2
+summary: "Checking a key with count or find and then reading it with [] or at walks the tree twice for one question; do a single lookup and reuse the iterator."
+notes: "Each map lookup is O(log n) key comparisons, so patterns like if (m.count(k)) use(m.at(k)) or if (m.find(k) != m.end()) m[k] = v traverse the tree two or three times for one logical operation. Do it once: keep the iterator from find and read through it, or -- when writing -- use the pair returned by insert/emplace, or insert_or_assign / try_emplace, which locate the slot a single time. For a plain counter, ++m[k] is already a single traversal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }
+  - { name: "std::map::count", url: "https://en.cppreference.com/w/cpp/container/map/count" }
+  - { name: "std::map::at", url: "https://en.cppreference.com/w/cpp/container/map/at" }

@@ -1,0 +1,6 @@
+iterating (sorted by key):
+  Alice = 25
+  Bob = 28
+  Charlie = 30
+  Dave = 40
+size = 4

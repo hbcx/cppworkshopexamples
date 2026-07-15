@@ -1,0 +1,3 @@
+title: "std::map"
+description: "The sorted associative container and the semantics that trip people up: keys are always in order, operator[] silently inserts a default when you only meant to look, the difference between find, at, count and contains, why insert never overwrites while insert_or_assign and try_emplace do the right thing, ordering with a custom comparator, and the node stability that keeps references alive where a vector would invalidate them."
+sort_order: 4

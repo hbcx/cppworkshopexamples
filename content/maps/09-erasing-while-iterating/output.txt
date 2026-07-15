@@ -1,0 +1,2 @@
+fix erase-returns-next: 1:a 3:c 5:e   (size=3)
+fix erase(it++):        1:a 3:c 5:e   (size=3)

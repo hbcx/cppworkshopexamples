@@ -1,0 +1,4 @@
+insert alice:       inserted=yes value=1
+insert alice again: inserted=no value=1
+emplace bob:        inserted=yes
+after m[alice]=999: value=999

@@ -1,0 +1,13 @@
+title: "insert never overwrites, and reports what it did"
+standard: "C++11"
+difficulty: 2
+summary: "map::insert returns a pair<iterator,bool>: the bool says whether a new element was added, and an existing key is left untouched rather than overwritten."
+notes: "insert and emplace add an element only if the key is not already present. They return std::pair<iterator,bool> where the iterator points at the element with that key (new or pre-existing) and the bool is true only when a new element was inserted -- so a second insert of the same key returns false and does NOT change the stored value. This surprises people who expect assignment semantics. To overwrite, assign through operator[], or use insert_or_assign (C++17). emplace constructs the element in place from the arguments, but shares the same unique-key rule."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::map::insert", url: "https://en.cppreference.com/w/cpp/container/map/insert" }
+  - { name: "std::map::emplace", url: "https://en.cppreference.com/w/cpp/container/map/emplace" }
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }

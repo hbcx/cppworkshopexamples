@@ -1,0 +1,12 @@
+title: "Ordering by your own rule: a custom comparator"
+standard: "C++11"
+difficulty: 3
+summary: "The third template parameter of std::map is the comparator that defines key order and, with it, key identity -- a case-insensitive comparator makes Apple and apple the same key."
+notes: "std::map is std::map<Key, T, Compare> with Compare defaulting to std::less<Key>. The comparator defines a strict weak ordering, and the map derives equality from it: two keys are the same when neither compares less than the other. So a case-insensitive less makes Apple and apple equivalent -- the second insert updates the first entry rather than adding a new one, and the stored key stays whatever was inserted first. The comparator must be consistent (a valid strict weak ordering) or the tree invariants break. From C++14 a transparent comparator (std::less<> with is_transparent) also lets you look up by a type other than Key without constructing one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }
+  - { name: "std::map::operator[]", url: "https://en.cppreference.com/w/cpp/container/map/operator_at" }

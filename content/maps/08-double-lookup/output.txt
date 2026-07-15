@@ -1,0 +1,3 @@
+same result: bad=3 good=3
+key comparisons: two-lookup=8 one-lookup=4
+two-lookup did more comparisons? yes

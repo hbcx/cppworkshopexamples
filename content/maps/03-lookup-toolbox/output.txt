@@ -1,0 +1,5 @@
+find pen -> 12
+at(ruler) -> 5
+at(eraser) -> at(eraser) threw out_of_range
+count(pen) = 1, count(eraser) = 0
+size unchanged = 2

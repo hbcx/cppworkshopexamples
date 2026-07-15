@@ -1,0 +1,12 @@
+title: "operator[] inserts when the key is missing"
+standard: "C++11"
+difficulty: 2
+summary: "map::operator[] value-initialises and inserts an entry for an absent key, so a bare lookup through [] silently grows the map -- use find to look without inserting."
+notes: "operator[] returns a reference to the mapped value, creating a value-initialised entry (0 for int, empty for a string) when the key is not present. That makes it convenient for building a map (counts[word]++ just works) but a trap for read-only lookups: counts[missing] inserts missing=0. It also cannot be used on a const map, and it requires the mapped type to be default-constructible. To query without side effects use find, at, count, or contains (C++20)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::map::operator[]", url: "https://en.cppreference.com/w/cpp/container/map/operator_at" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }

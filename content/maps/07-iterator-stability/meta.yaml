@@ -1,0 +1,13 @@
+title: "Node stability: references survive other insertions"
+standard: "C++11"
+difficulty: 2
+summary: "std::map stores each element in its own node, so a pointer, reference or iterator to one element stays valid across insertions and erasures of other elements -- where a std::vector would invalidate it."
+notes: "Because a map is node-based, inserting or erasing an element never moves the others: pointers, references and iterators to the remaining elements stay valid. Only erasing an element invalidates handles to that element specifically. This is the opposite of std::vector, where a growth reallocation invalidates everything at once, and it makes std::map a good choice when you need stable references or must hold an iterator across mutations. The trade-off is that the elements are scattered in memory, so iteration is far less cache-friendly than a vector (see the associative-containers benchmark)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "std::map::erase", url: "https://en.cppreference.com/w/cpp/container/map/erase" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }

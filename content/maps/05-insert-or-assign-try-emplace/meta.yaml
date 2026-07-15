@@ -1,0 +1,12 @@
+title: "Upsert done right: insert_or_assign and try_emplace"
+standard: "C++17"
+difficulty: 3
+summary: "C++17 adds the two operations operator[] and insert leave a gap for: insert_or_assign always sets the value and reports insert-vs-update, while try_emplace inserts only if absent and never touches its arguments when the key exists."
+notes: "insert_or_assign is a true upsert: it overwrites an existing value or inserts a new one, returns pair<iterator,bool> telling you which, and -- unlike operator[] -- does not require the mapped type to be default-constructible and never default-constructs a temporary. try_emplace is the mirror image: it inserts only when the key is absent and, crucially, does NOT construct the value or move from its arguments when the key already exists, which matters when the value is expensive to build or you are moving a unique_ptr in (operator[] and emplace can consume the moved-from argument even on a no-op). Rule of thumb: building or updating -> insert_or_assign; insert-if-missing without disturbing the argument -> try_emplace."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::map::insert_or_assign", url: "https://en.cppreference.com/w/cpp/container/map/insert_or_assign" }
+  - { name: "std::map::try_emplace", url: "https://en.cppreference.com/w/cpp/container/map/try_emplace" }

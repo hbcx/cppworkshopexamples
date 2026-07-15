@@ -1,0 +1,13 @@
+title: "Looking up a key: find vs at vs count"
+standard: "C++11"
+difficulty: 2
+summary: "The non-inserting ways to query a map: find returns an iterator, at throws on a missing key, count reports 0 or 1 -- none of them grow the map the way operator[] does."
+notes: "find is the safe default: it returns an iterator, or end() when the key is absent, and never inserts. at gives checked access by value and throws std::out_of_range if the key is missing, which suits code that treats absence as an error. count returns 0 or 1 because map keys are unique, so it doubles as an existence test before C++20; from C++20 prefer contains, which reads as the intent. All three leave the map unchanged, unlike operator[]."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }
+  - { name: "std::map::at", url: "https://en.cppreference.com/w/cpp/container/map/at" }
+  - { name: "std::map::count", url: "https://en.cppreference.com/w/cpp/container/map/count" }

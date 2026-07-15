@@ -1,0 +1,4 @@
+theme now light (inserted=no)
+lang  now en (inserted=yes)
+try_emplace theme: inserted=no value=light
+try_emplace font:  inserted=yes value=mono
