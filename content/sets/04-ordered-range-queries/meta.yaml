@@ -1,0 +1,12 @@
+title: "Ordered queries: lower_bound, upper_bound and ranges"
+standard: "C++11"
+difficulty: 2
+summary: "Because a set is sorted, lower_bound and upper_bound give O(log n) range queries and rbegin gives the maximum -- the operations an unordered_set cannot offer at all."
+notes: "lower_bound(x) returns the first element not less than x; upper_bound(x) the first element greater than x. Iterating from one to the other walks exactly the elements in a [lo, hi] range, all in O(log n) to locate plus O(k) to scan. begin() is the minimum and rbegin() the maximum. These ordered operations are the whole reason to pick std::set over std::unordered_set, which is faster for single-key lookups but has no order, no range queries, and no nearest-key search."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "std::set::lower_bound", url: "https://en.cppreference.com/w/cpp/container/set/lower_bound" }
+  - { name: "std::set::upper_bound", url: "https://en.cppreference.com/w/cpp/container/set/upper_bound" }

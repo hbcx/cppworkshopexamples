@@ -1,0 +1,12 @@
+title: "Anti-pattern: a comparator that is not a strict weak ordering"
+standard: "C++11"
+difficulty: 3
+summary: "A set's comparator must be a strict weak ordering; using <= is not irreflexive and breaks the tree (undefined behaviour), while an over-coarse but valid comparator silently merges distinct values."
+notes: "std::set relies on its comparator being a strict weak ordering: comp(x, x) must be false and the order must be consistent and transitive. A comparator that returns a <= b is not irreflexive -- comp(x, x) is true -- so the tree invariants break and the behaviour is undefined (lost elements, failed lookups, even crashes). A subtler trap is a comparator that is valid but too coarse: because a set derives equality from the comparator (two values are the same when neither is less than the other), any pair it treats as equivalent collapses to one element, silently dropping data. Keep comparators strictly less-than and precise, and check that distinct values you care about are not equivalent under them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }
+  - { name: "std::set::insert", url: "https://en.cppreference.com/w/cpp/container/set/insert" }

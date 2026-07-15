@@ -1,0 +1,13 @@
+title: "insert tells you whether the value was new"
+standard: "C++11"
+difficulty: 2
+summary: "set::insert returns a pair<iterator,bool> whose bool is true only the first time a value is seen, which makes a set a natural deduplicating filter."
+notes: "insert returns std::pair<iterator,bool>: the iterator points at the element (new or already present) and the bool is true only when a new element was actually added. That single call both stores the value and answers have I seen this before, so a set is the idiomatic way to dedupe a stream in one pass. count returns 0 or 1 because keys are unique; from C++20 contains reads more clearly for a pure existence test."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "std::set::insert", url: "https://en.cppreference.com/w/cpp/container/set/insert" }
+  - { name: "std::set::count", url: "https://en.cppreference.com/w/cpp/container/set/count" }
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }

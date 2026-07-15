@@ -1,0 +1,3 @@
+before:             bob carol dave
+after erase+insert: carol dave zzz
+find(zzz) works? yes

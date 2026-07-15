@@ -1,0 +1,5 @@
+first time seeing a
+first time seeing b
+first time seeing c
+distinct = 3, firstTimes = 3
+count(b) = 1

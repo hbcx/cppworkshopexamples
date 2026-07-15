@@ -1,0 +1,2 @@
+before:                 bob carol dave
+after rename bob->alice: alice carol dave

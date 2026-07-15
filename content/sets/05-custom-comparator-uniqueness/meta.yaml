@@ -1,0 +1,13 @@
+title: "The comparator defines identity, not just order"
+standard: "C++11"
+difficulty: 3
+summary: "A set with a custom comparator treats two elements as the same when neither is less than the other, so a compare-by-id makes a set unique by that field alone."
+notes: "std::set<Key, Compare> derives equality from the comparator: two elements are equivalent when !(a < b) && !(b < a). So a comparator that only looks at an id field makes the whole set unique by id -- a second element with the same id is rejected even if its other fields differ. That turns a set into a keyed collection, but note the value stored is whichever element was inserted first. Looking up needs a probe object with the key field set; a C++14 transparent comparator (is_transparent) lets you search by the bare key without constructing a full element."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }
+  - { name: "std::set::insert", url: "https://en.cppreference.com/w/cpp/container/set/insert" }
+  - { name: "std::set::find", url: "https://en.cppreference.com/w/cpp/container/set/find" }

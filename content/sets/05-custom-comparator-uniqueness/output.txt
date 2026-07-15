@@ -1,0 +1,5 @@
+second insert of id 1 succeeded? no
+staff (ordered by id):
+  1 = Alice
+  2 = Bob
+find id 2 -> Bob

@@ -1,0 +1,11 @@
+title: "Sorted and unique: what a set guarantees"
+standard: "C++11"
+difficulty: 1
+summary: "std::set stores unique keys in sorted order, so inserting duplicates is a no-op and iteration always comes back in order."
+notes: "std::set is an ordered associative container of unique keys (a balanced binary search tree). Inserting a value already present does nothing -- the duplicates collapse -- and iterating walks the elements in ascending order regardless of insertion order. Use it when you need membership plus order; if you do not need the ordering, std::unordered_set is O(1) instead of O(log n)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "std::set::insert", url: "https://en.cppreference.com/w/cpp/container/set/insert" }

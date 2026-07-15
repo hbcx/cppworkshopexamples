@@ -1,0 +1,13 @@
+title: "Anti-pattern: const_cast to change a set element"
+standard: "C++11"
+difficulty: 3
+summary: "Casting away the const on a set element to edit it in place corrupts the tree ordering -- the value lands in the wrong node and lookups start failing; erase and reinsert instead."
+notes: "A set element is const precisely so the tree cannot be resorted from under it. const_cast<T&>(*it) = newValue compiles and appears to work, but it leaves newValue in the old value's node: the tree is no longer sorted, so find can miss elements that are physically present and later inserts can go to the wrong place -- undefined behaviour. The only correct way to change an element is to erase the old value and insert the new one (C++17 extract() does the same without freeing and reallocating the node)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "std::set::erase", url: "https://en.cppreference.com/w/cpp/container/set/erase" }
+  - { name: "std::set::insert", url: "https://en.cppreference.com/w/cpp/container/set/insert" }
+  - { name: "std::set::find", url: "https://en.cppreference.com/w/cpp/container/set/find" }

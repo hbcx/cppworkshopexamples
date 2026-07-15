@@ -1,0 +1,2 @@
+elements (sorted, unique): 1 2 3 4 5
+size = 5 (the three 1s collapsed to one)

@@ -1,0 +1,4 @@
+size = 6 (duplicates retained)
+count(2) = 3
+the 3s: 3 3
+after erasing one 2, count(2) = 2

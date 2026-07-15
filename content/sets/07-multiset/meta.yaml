@@ -1,0 +1,13 @@
+title: "std::multiset: when duplicates are the point"
+standard: "C++17"
+difficulty: 2
+summary: "std::multiset keeps equal keys instead of collapsing them, so count can exceed one, equal_range spans all matches, and erase(key) removes every copy while erase(iterator) removes just one."
+notes: "std::multiset has the same ordered interface as std::set but allows duplicate keys, so it is the container for a sorted bag or a frequency-preserving collection. count(k) can be greater than one, and equal_range(k) returns the [first, last) span of all elements equal to k (structured bindings read it nicely in C++17). Watch the erase overloads: erase(key) removes ALL elements equal to the key and returns how many, while erase(iterator) removes exactly one -- pass m.find(k) when you mean to drop a single copy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::multiset", url: "https://en.cppreference.com/w/cpp/container/multiset" }
+detailed_tags:
+  - { name: "std::set::equal_range", url: "https://en.cppreference.com/w/cpp/container/set/equal_range" }
+  - { name: "std::set::count", url: "https://en.cppreference.com/w/cpp/container/set/count" }
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }

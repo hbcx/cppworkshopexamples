@@ -1,0 +1,13 @@
+title: "Set algebra: intersection, union and difference"
+standard: "C++11"
+difficulty: 3
+summary: "A set is always sorted, which is exactly the precondition the <algorithm> set operations need, so intersection, union and difference are one call each."
+notes: "std::set_intersection, std::set_union and std::set_difference operate on any two sorted ranges and write the result through an output iterator -- and a std::set is always sorted, so it feeds them directly. Collect the result into a fresh set with std::inserter. These are O(n+m) single passes, far better than nested-loop membership tests. The same functions work on sorted std::vectors, which is often faster when you only build the sets once and then combine them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "std::set_intersection", url: "https://en.cppreference.com/w/cpp/algorithm/set_intersection" }
+  - { name: "std::set_union", url: "https://en.cppreference.com/w/cpp/algorithm/set_union" }
+  - { name: "std::set_difference", url: "https://en.cppreference.com/w/cpp/algorithm/set_difference" }

@@ -1,0 +1,12 @@
+title: "Elements are const: erase and reinsert to change one"
+standard: "C++11"
+difficulty: 2
+summary: "A set element is const because mutating it could break the sorted order, so you cannot assign through an iterator -- remove the old value and insert the new one instead."
+notes: "Dereferencing a set iterator gives a const reference: the element cannot be changed in place, because a different value could belong at a different position and would corrupt the tree ordering. So *it = newValue does not compile. To change an element, erase the old value and insert the new one. C++17 adds extract(), which pops the node so you can modify the key and reinsert it without freeing and reallocating -- the efficient form of the same erase-and-reinsert. This is also why a set of structs is often keyed by an id via a custom comparator rather than by the whole object."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+detailed_tags:
+  - { name: "std::set::erase", url: "https://en.cppreference.com/w/cpp/container/set/erase" }
+  - { name: "std::set::insert", url: "https://en.cppreference.com/w/cpp/container/set/insert" }
