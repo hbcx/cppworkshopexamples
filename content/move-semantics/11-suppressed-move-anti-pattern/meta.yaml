@@ -1,0 +1,12 @@
+title: "Anti-pattern: a user-declared destructor suppresses the implicit move"
+standard: "C++17"
+difficulty: 3
+summary: "Declaring a destructor (or any copy/move member) stops the compiler from generating a move constructor, so std::move silently falls back to copying."
+notes: "One user-declared destructor -- often added just to log or set a breakpoint -- disables the implicit move constructor while leaving the class copyable, so every std::move and every container reallocation copies instead of moving. This is why the rule of zero (declare none of the special members) is the safe default; if you must declare one, default the others with = default to keep moves."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of five", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

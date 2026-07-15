@@ -1,0 +1,6 @@
+WithDestructor: std::move ->
+  member COPIED
+RuleOfZero: std::move ->
+  member MOVED
+vector<WithDestructor> reallocation ->
+  member COPIED

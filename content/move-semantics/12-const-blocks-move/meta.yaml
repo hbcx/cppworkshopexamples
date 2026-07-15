@@ -1,0 +1,13 @@
+title: "Anti-pattern: const on a by-value return type blocks moving"
+standard: "C++17"
+difficulty: 3
+summary: "A const return-by-value looks harmless but makes the returned prvalue unmovable, so it copies on every assignment into existing storage."
+notes: "const T makeThing() returns a const prvalue that cannot bind to a move operation, so callers copy-assign instead of move-assign. Copy elision hides the cost at initialization (T x = makeThing() elides everything), which is why the penalty is easy to miss -- it only shows once you assign the result into an existing object. Return by plain value; put const on the objects, not on the return type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }
+detailed_tags:
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "copy elision", url: "https://en.cppreference.com/w/cpp/language/copy_elision" }

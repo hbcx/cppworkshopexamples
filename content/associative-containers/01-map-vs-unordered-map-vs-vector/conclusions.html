@@ -1,0 +1,162 @@
+<p class="conc-lede">
+    Everything below is read off the <strong>random-key</strong> tables in the output above &mdash;
+    the realistic case. Times are medians in nanoseconds per operation, measured on the machine
+    named in the output header. The absolute numbers travel badly between machines; the
+    <em>ratios</em> are the part that holds.
+</p>
+
+<h3>Who wins, and by how much</h3>
+
+<p>Cost relative to the fastest container in each row. <span class="conc-win">1.0&times;</span> is the winner.</p>
+
+<table class="conc-table">
+    <caption>Lookup, key present</caption>
+    <thead>
+        <tr><th>n</th><th>std::map</th><th>unordered_map</th><th>sorted vector</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>100</td><td>1.3&times;</td><td class="conc-win">1.0&times;</td><td>1.4&times;</td></tr>
+        <tr><td>1 000</td><td>7.1&times;</td><td class="conc-win">1.0&times;</td><td>8.1&times;</td></tr>
+        <tr><td>10 000</td><td>11.0&times;</td><td class="conc-win">1.0&times;</td><td>8.3&times;</td></tr>
+        <tr><td>100 000</td><td>13.1&times;</td><td class="conc-win">1.0&times;</td><td>6.7&times;</td></tr>
+        <tr><td>1 000 000</td><td>20.9&times;</td><td class="conc-win">1.0&times;</td><td>4.1&times;</td></tr>
+    </tbody>
+</table>
+
+<table class="conc-table">
+    <caption>Build (insert every key)</caption>
+    <thead>
+        <tr><th>n</th><th>std::map</th><th>unordered_map</th><th>sorted vector</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>100</td><td>7.3&times;</td><td>7.5&times;</td><td class="conc-win">1.0&times;</td></tr>
+        <tr><td>1 000</td><td>7.6&times;</td><td>3.8&times;</td><td class="conc-win">1.0&times;</td></tr>
+        <tr><td>10 000</td><td>3.4&times;</td><td>1.4&times;</td><td class="conc-win">1.0&times;</td></tr>
+        <tr><td>100 000</td><td>4.0&times;</td><td>1.6&times;</td><td class="conc-win">1.0&times;</td></tr>
+        <tr><td>1 000 000</td><td>7.8&times;</td><td>3.6&times;</td><td class="conc-win">1.0&times;</td></tr>
+    </tbody>
+</table>
+
+<h3>Lookup cost, drawn to scale</h3>
+
+<p>
+    The same numbers as a picture, because the eye reads <em>twenty times the ink</em> and does not
+    read <em>484.2 versus 23.2</em>. Bars are scaled within each block.
+</p>
+
+<!-- Inline SVG rather than CSS-sized <div> bars: the length of a bar is a rect
+     width ATTRIBUTE, so it cannot be lost to a stale stylesheet or a style-attribute
+     policy, and it scales with the page instead of reflowing. -->
+<figure class="conc-figure">
+    <svg viewBox="0 0 800 288" role="img" aria-labelledby="chart-title" class="conc-svg">
+        <title id="chart-title">Lookup cost of a present key: std::map, unordered_map and a sorted vector at three sizes</title>
+
+        <g class="conc-svg-group">
+            <text x="0" y="12" class="conc-svg-head">n = 100</text>
+            <text x="0" y="34" class="conc-svg-label">std::map</text>
+            <rect x="140" y="23" width="471" height="14" rx="3" fill="#b5461f"/>
+            <text x="800" y="34" class="conc-svg-value">3.2 ns</text>
+
+            <text x="0" y="56" class="conc-svg-label">unordered_map</text>
+            <rect x="140" y="45" width="368" height="14" rx="3" fill="#3f6f8f"/>
+            <text x="800" y="56" class="conc-svg-value">2.5 ns</text>
+
+            <text x="0" y="78" class="conc-svg-label">sorted vector</text>
+            <rect x="140" y="67" width="500" height="14" rx="3" fill="#6d8f3f"/>
+            <text x="800" y="78" class="conc-svg-value">3.4 ns</text>
+        </g>
+
+        <g class="conc-svg-group">
+            <text x="0" y="112" class="conc-svg-head">n = 10 000</text>
+            <text x="0" y="134" class="conc-svg-label">std::map</text>
+            <rect x="140" y="123" width="500" height="14" rx="3" fill="#b5461f"/>
+            <text x="800" y="134" class="conc-svg-value">55.9 ns</text>
+
+            <text x="0" y="156" class="conc-svg-label">unordered_map</text>
+            <rect x="140" y="145" width="46" height="14" rx="3" fill="#3f6f8f"/>
+            <text x="800" y="156" class="conc-svg-value">5.1 ns</text>
+
+            <text x="0" y="178" class="conc-svg-label">sorted vector</text>
+            <rect x="140" y="167" width="380" height="14" rx="3" fill="#6d8f3f"/>
+            <text x="800" y="178" class="conc-svg-value">42.5 ns</text>
+        </g>
+
+        <g class="conc-svg-group">
+            <text x="0" y="212" class="conc-svg-head">n = 1 000 000</text>
+            <text x="0" y="234" class="conc-svg-label">std::map</text>
+            <rect x="140" y="223" width="500" height="14" rx="3" fill="#b5461f"/>
+            <text x="800" y="234" class="conc-svg-value">484.2 ns</text>
+
+            <text x="0" y="256" class="conc-svg-label">unordered_map</text>
+            <rect x="140" y="245" width="24" height="14" rx="3" fill="#3f6f8f"/>
+            <text x="800" y="256" class="conc-svg-value">23.2 ns</text>
+
+            <text x="0" y="278" class="conc-svg-label">sorted vector</text>
+            <rect x="140" y="267" width="97" height="14" rx="3" fill="#6d8f3f"/>
+            <text x="800" y="278" class="conc-svg-value">94.1 ns</text>
+        </g>
+    </svg>
+    <figcaption>
+        Bars are scaled within each block, so the longest bar of a block is always full width.
+        Compare the shapes between blocks, not the absolute lengths.
+    </figcaption>
+</figure>
+
+<h3>What the complexity promised, and what it delivered</h3>
+
+<p>Lookup of a key that is present, from the smallest n to the largest &mdash; a 10 000&times; growth in the data.</p>
+
+<table class="conc-table">
+    <thead>
+        <tr><th>container</th><th>n = 100</th><th>n = 1 000 000</th><th>growth</th><th>the promise</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>std::map</td><td>3.2 ns</td><td>484.2 ns</td><td>151&times;</td><td>O(log n): one extra level per doubling</td></tr>
+        <tr><td>unordered_map</td><td>2.5 ns</td><td>23.2 ns</td><td>9.3&times;</td><td>O(1): should not grow at all</td></tr>
+        <tr><td>sorted vector</td><td>3.4 ns</td><td>94.1 ns</td><td>27.7&times;</td><td>O(log n): identical to std::map</td></tr>
+    </tbody>
+</table>
+
+<h3>The five things worth taking away</h3>
+
+<ol class="conc-list">
+    <li>
+        <strong>Hashing wins lookups, and wins them wider the more data you have.</strong>
+        The complexity column already told you that, and the measurement agrees: 1.3&times; ahead
+        of the tree at a hundred keys, 20.9&times; ahead at a million.
+    </li>
+    <li>
+        <strong>O(1) is a statement about comparisons, not about time.</strong>
+        <code>unordered_map</code> still grew <strong>9.3&times;</strong> across the range while doing
+        the same single bucket probe throughout. That growth is not algorithmic &mdash; it is the
+        memory hierarchy. Complexity analysis assumes every memory access costs the same; on real
+        hardware a miss to DRAM costs roughly a hundred times a hit in L1, and there is no exponent
+        anywhere in the analysis that accounts for it.
+    </li>
+    <li>
+        <strong>At equal complexity, layout decides.</strong>
+        The sorted vector has <em>exactly</em> the same O(log n) as <code>std::map</code> and performs
+        the same number of comparisons &mdash; yet it was <strong>5.1&times; faster</strong> at a
+        million keys. A binary search walks contiguous memory that the prefetcher can see coming; a
+        tree chases a pointer into a fresh cache line at every level. Same algorithm, different
+        hardware behaviour.
+    </li>
+    <li>
+        <strong>The vector was the cheapest to build at every single size</strong> &mdash; node
+        allocation being what it is. Read that honestly, though: it is cheap to build <em>once</em>.
+        Every later insertion costs O(n), which is precisely why the sorted vector belongs to
+        lookup tables that are filled and then only read.
+    </li>
+    <li>
+        <strong>What the numbers cannot show you is often what decides.</strong>
+        <code>unordered_map</code> has no ordered iteration and no <code>lower_bound</code> at all.
+        If you need a range query or sorted traversal, the fastest container is simply not on the
+        table, and no benchmark will tell you so.
+    </li>
+</ol>
+
+<p class="conc-rule">
+    <strong>Rule of thumb.</strong> Reach for <code>unordered_map</code> for plain key/value lookup.
+    For a read-mostly table, sort a vector and binary-search it. Reach for <code>std::map</code>
+    when you genuinely need the ordering &mdash; and now you know what it costs.
+</p>

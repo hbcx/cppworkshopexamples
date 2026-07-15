@@ -1,0 +1,20 @@
+title: "Benchmark: std::map vs std::unordered_map vs a sorted vector"
+standard: "C++17"
+difficulty: 3
+summary: "The same lookup done three ways, timed over five sizes and two key layouts -- because the container with the better complexity is routinely the slower one."
+notes: "Read the ns-per-operation column across the sizes and the complexity class shows itself: unordered_map stays flat (O(1)) while map climbs by a roughly constant step per 10x (O(log n)). The surprise is the sorted vector: at small n it beats both, because a binary search over contiguous memory touches a couple of cache lines while a tree pays a cache miss per level. Read the other side of the trade honestly, though -- unordered_map cannot answer range queries at all (no lower_bound) and iterates in no useful order, and the sorted vector is only cheap to build once, not to modify. The unordered_map build column includes rehashing: it is measured without reserve(), the way the container is usually written."
+run: true
+bench: true
+optimize: "O2"
+trace: false
+sanitizers: []
+shared: ["bench/datasets.hpp", "bench/timing.hpp"]
+main_tags:
+  - { name: "performance", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }
+  - { name: "std::unordered_map::find", url: "https://en.cppreference.com/w/cpp/container/unordered_map/find" }
+  - { name: "std::lower_bound", url: "https://en.cppreference.com/w/cpp/algorithm/lower_bound" }
+  - { name: "std::chrono::steady_clock", url: "https://en.cppreference.com/w/cpp/chrono/steady_clock" }

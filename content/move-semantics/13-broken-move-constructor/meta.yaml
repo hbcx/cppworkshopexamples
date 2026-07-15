@@ -1,0 +1,12 @@
+title: "Anti-pattern: a move constructor that forgets to reset the source"
+standard: "C++11"
+difficulty: 3
+summary: "Stealing the resource but not invalidating the moved-from object leaves two owners of one resource -- a double free when both destructors run."
+notes: "A move constructor must leave the source in a valid, empty state (null the pointer, reset the handle) so its destructor becomes a no-op. Copying the handle without clearing the source compiles cleanly and often appears to work, but both objects free the same resource at scope exit. The fix is one line: reset the source after stealing. The rule of zero avoids this failure entirely by delegating ownership to std::unique_ptr or std::vector."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

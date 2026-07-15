@@ -1,0 +1,7 @@
+broken move ctor ->
+  acquire #0
+  release #0
+  DOUBLE FREE of #0  <-- bug
+fixed move ctor ->
+  acquire #1
+  release #1

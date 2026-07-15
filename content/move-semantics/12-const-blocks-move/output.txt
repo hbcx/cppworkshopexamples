@@ -1,0 +1,5 @@
+initialize from const factory (elided, nothing printed) ->
+assign from const factory ->
+  copy-assigned
+assign from plain factory ->
+  move-assigned
