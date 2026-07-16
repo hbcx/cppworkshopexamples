@@ -1,0 +1,6 @@
+array<Payload,4> move   : move-constructions=4 move-assignments=0
+vector<Payload> move    : move-constructions=0 move-assignments=0
+array<Payload,4> swap   : move-constructions=4 move-assignments=8
+vector<Payload> swap    : move-constructions=0 move-assignments=0
+array<int,4> after being moved from: 1 2 3 4   <- still there: it was copied
+the copy holds: 1 4

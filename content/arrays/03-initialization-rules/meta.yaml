@@ -1,0 +1,13 @@
+title: "Initialization: the default that leaves garbage"
+standard: "C++11"
+difficulty: 2
+summary: "std::array is an aggregate with no constructors, so std::array<int,3> a; leaves the elements uninitialized while a{}; zeroes them -- and a{1} zeroes everything you did not name."
+notes: "std::array has no constructors at all: it is an aggregate, and it follows the aggregate rules rather than the container ones. That is the trap, because every other standard container default-constructs into a defined empty state. Write std::array<int, 3> a; and for a trivial element type the values are indeterminate -- reading one is undefined behaviour, and in a debug build it will often look like zeros and pass your test. Write a{}; and every element is value-initialized to zero. The same rule makes partial initialization safe rather than surprising: a{1} sets the first element and value-initializes the rest, so the tail is zeros, not garbage. Two more consequences worth knowing: the element type must be default-constructible for the no-initializer form to compile at all, and for a class type like std::string the default constructor runs regardless, so only trivial types can hold garbage here."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+detailed_tags:
+  - { name: "aggregate initialization", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }
+  - { name: "value initialization", url: "https://en.cppreference.com/w/cpp/language/value_initialization" }
+  - { name: "std::array::fill", url: "https://en.cppreference.com/w/cpp/container/array/fill" }

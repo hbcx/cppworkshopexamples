@@ -1,0 +1,13 @@
+title: "The tuple interface: std::get and structured bindings"
+standard: "C++17"
+difficulty: 3
+summary: "std::array is tuple-like, so std::get<I> checks the index at compile time and structured bindings can unpack it -- something no other container can do, because only here is the size known to the type system."
+notes: "std::array specializes std::tuple_size and std::tuple_element, which puts it in the same club as std::tuple and std::pair and has two practical consequences. std::get<2>(a) is checked at COMPILE time: an out-of-range index is a build error, not undefined behaviour, which is a guarantee operator[] cannot offer for a runtime index. And structured bindings work -- auto [x, y, z] = point; unpacks an array into named variables, which is the readable way to handle a fixed-size record of coordinates or a colour. The binding count must match the size exactly, and that too is checked at compile time. This is only possible because N is in the type: a vector cannot participate, because its size is not known until it runs. Use std::get when the index is a constant you wrote yourself; keep operator[] for indices computed at runtime, where a compile-time check is not on offer anyway."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+detailed_tags:
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/container/array/get" }
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+  - { name: "std::tuple_size", url: "https://en.cppreference.com/w/cpp/utility/tuple_size" }

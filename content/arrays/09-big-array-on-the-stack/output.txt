@@ -1,0 +1,12 @@
+sizeof(std::array<int, N>):
+  N = 1 000      = 3 KB
+  N = 100 000    = 390 KB
+  N = 1 000 000  = 3906 KB   <- over a 1 MB stack
+
+ints that fit in a default stack (whole frame, nothing else):
+  Windows, 1 MB: 262144
+  Linux,   8 MB: 2097152
+
+vector<int>(1000000): 1000000 ints on the heap, the local object is only 24 bytes
+unique_ptr<array<int,1000000>>: element 999999 = 2, local object is 8 bytes
+array<int,1024> (4 KB) by reference: sum = 3072

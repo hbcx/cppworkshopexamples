@@ -1,0 +1,6 @@
+std::array<int,3> a{}       [0] [0] [0]
+std::array<int,3> a{7}      [7] [0] [0]
+std::array<int,3> a{1,2,3}  [1] [2] [3]
+std::array<string,2> a      [] []
+  (two empty strings -- std::string's constructor ran)
+after fill(9)               [9] [9] [9]

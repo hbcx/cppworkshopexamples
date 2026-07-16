@@ -1,0 +1,12 @@
+title: "Anti-pattern: a big std::array on the stack"
+standard: "C++14"
+difficulty: 3
+summary: "No allocation is not the same as no cost -- the elements are the object, so a local array is stack, and a stack is one megabyte by default on Windows and eight on Linux."
+notes: "The selling point becomes the trap: because std::array owns its elements inline, sizeof(std::array<T, N>) is N * sizeof(T), and a local one consumes exactly that much stack frame. A million ints is four megabytes, which is four times the default thread stack on Windows -- and the failure is not an exception you can catch or a bad_alloc you can handle, it is the guard page and an instant crash, often with a stack trace that points at the wrong line. Recursion and threads make it worse: the frame is paid on every level, and a spawned thread usually gets a smaller stack than the main one. Three ways out, in the order to consider them. A vector puts the same elements on the heap and costs one allocation, which is nothing next to a megabyte of copying. A static or thread_local array moves it to static storage, which suits a lookup table but is shared state. Or keep the array and pass it by reference rather than by value, since the size that killed the frame is the same size copied at every call boundary -- an array parameter is a full copy, and it is the more common form of this bug."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+detailed_tags:
+  - { name: "performance", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "sizeof", url: "https://en.cppreference.com/w/cpp/language/sizeof" }

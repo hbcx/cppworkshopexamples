@@ -1,0 +1,6 @@
+std::get<0>(point) = 1.5
+std::get<2>(point) = 0.25
+unpacked: x=1.5 y=-2 z=0.25
+after rx = 10: point[0] = 10
+std::tuple_size<decltype(point)>::value = 3
+name: Ada Lovelace

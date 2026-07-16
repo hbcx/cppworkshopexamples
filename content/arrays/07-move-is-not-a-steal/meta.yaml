@@ -1,0 +1,14 @@
+title: "Anti-pattern: expecting std::move on an array to be cheap"
+standard: "C++11"
+difficulty: 3
+summary: "A vector move steals a pointer and costs nothing; an array holds its elements inside itself, so there is nothing to steal -- moving one moves every element, and for a trivial type that is just a copy."
+notes: "The intuition is imported from vector, where a move is three pointers changing hands regardless of size. An array has no pointer: the elements ARE the object, so std::move on it move-constructs every element in turn -- O(N), not O(1) -- and if the element type is trivial there is no move constructor to call and you have simply copied N objects with a different spelling. The same reasoning catches swap, which is O(N) for an array and O(1) for a vector, and it is the reason array::swap is allowed to throw while vector::swap is noexcept. None of this makes std::move wrong here, it just makes it honest: moving an array of std::string still saves N allocations, which is real. What it is not is free, and it is not what the vector habit promises. If you want O(1) transfer of a fixed-size block, the array has to live behind a pointer -- which is what a vector already is."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "std::array::swap", url: "https://en.cppreference.com/w/cpp/container/array/swap" }
+  - { name: "performance", url: "https://en.cppreference.com/w/cpp/container" }

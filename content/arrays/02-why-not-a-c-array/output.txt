@@ -1,0 +1,6 @@
+in main, sizeof(cArray)/sizeof(cArray[0]) = 5
+  inside the function, sizeof(values)/sizeof(values[0]) = 2   <- wrong: it measured the pointer
+  inside the function, values.size() = 5   <- right, and it cannot be lost
+copy is independent: copy[0]=99 original[0]=1
+C arrays with identical elements, cArray == sameValues: false   <- compared addresses
+std::arrays with identical elements, a == b:            true    <- compared elements

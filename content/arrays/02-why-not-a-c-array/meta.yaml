@@ -1,0 +1,14 @@
+title: "What it fixes about the C array"
+standard: "C++11"
+difficulty: 2
+summary: "A C array forgets its size the moment you pass it anywhere, cannot be copied or compared, and returns nothing useful from ==; std::array is the same memory with none of those holes."
+notes: "The C array has three defects and std::array closes all of them at zero cost. It decays: pass one to a function and it silently becomes a pointer, so the sizeof(a)/sizeof(a[0]) trick that worked in the caller quietly computes nonsense in the callee. It cannot be copied or assigned, so people reach for memcpy or a loop where a plain = should do. And == compares the two ADDRESSES rather than the elements, which compiles, is always false for distinct arrays, and is one of the more expensive silent bugs in C code. std::array is a struct, so it copies, assigns and compares like any other value, and its size lives in the type where nothing can strip it. The layout is identical -- it is a T[N] inside a struct with no padding or bookkeeping -- so this is not a trade, it is the same array with the sharp edges filed off. Worth noting how this example builds: it is the one example in the corpus compiled without -Werror, because both traps it demonstrates are now diagnosed (-Wsizeof-array-argument and -Warray-compare). That is the happy ending to the story -- the bugs that ate afternoons in the 1990s are caught today -- but only if warnings are on and read, and only for the shapes the compiler can see through."
+run: true
+werror: false
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+detailed_tags:
+  - { name: "array decay", url: "https://en.cppreference.com/w/cpp/language/implicit_conversion" }
+  - { name: "std::array::size", url: "https://en.cppreference.com/w/cpp/container/array/size" }
+  - { name: "std::array::operator==", url: "https://en.cppreference.com/w/cpp/container/array/operator_cmp" }

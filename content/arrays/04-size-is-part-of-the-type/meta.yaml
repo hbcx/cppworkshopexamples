@@ -1,0 +1,13 @@
+title: "The size is part of the type, and what that costs you"
+standard: "C++11"
+difficulty: 2
+summary: "std::array<int,4> and std::array<int,5> are unrelated types, so a function taking one rejects the other -- template on the size, or take iterators, depending on what you are writing."
+notes: "N sits in the type, which is what buys the compile-time size and the stack storage, and it is also the constraint you have to work around: a function written for std::array<int,5> will not accept std::array<int,4>, and there is no conversion between them. Three ways out, and they are not interchangeable. Template on N when the function is header-only and genuinely generic -- it is exact and zero cost, but it instantiates a copy of the function per size, which is code bloat if the sizes vary. Take a pair of iterators when the algorithm does not care about the container at all; this is what the standard library does and it composes with vector and C arrays for free. Take a pointer and a length for a C boundary or a function you want in a .cpp file rather than a header -- one instantiation, but the size is back to being a convention. In C++20 std::span is the answer to this whole question: a non-owning view that erases N while keeping the length, giving you one function that takes any of them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+detailed_tags:
+  - { name: "std::array::size", url: "https://en.cppreference.com/w/cpp/container/array/size" }
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }

@@ -1,0 +1,14 @@
+title: "A fixed-size array that behaves like a container"
+standard: "C++11"
+difficulty: 1
+summary: "std::array holds its elements directly -- no heap, no pointer to follow -- and still gives you size(), iterators and the rest of the container interface."
+notes: "std::array<T, N> is a struct wrapping a plain T[N], which is exactly why it costs nothing: the elements live inside the object, so an array on the stack stays on the stack and there is no allocation, no capacity and no pointer to chase. On top of that it offers the container interface a C array lacks -- size(), empty(), front(), back(), begin()/end(), fill() and the range-for that follows from them. The size never changes: there is no push_back, no resize, no clear, because N is fixed at compile time. Two accessors, two different contracts: operator[] does no checking and reading out of range is undefined behaviour, while at() throws std::out_of_range. data() hands back the underlying pointer for the C APIs that want one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+detailed_tags:
+  - { name: "std::array::size", url: "https://en.cppreference.com/w/cpp/container/array/size" }
+  - { name: "std::array::at", url: "https://en.cppreference.com/w/cpp/container/array/at" }
+  - { name: "std::array::fill", url: "https://en.cppreference.com/w/cpp/container/array/fill" }
+  - { name: "std::array::data", url: "https://en.cppreference.com/w/cpp/container/array/data" }

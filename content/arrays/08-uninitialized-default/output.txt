@@ -1,0 +1,7 @@
+std::vector<int> v(4):         0 0 0 0
+std::array<int,4> a{}:         0 0 0 0
+SafeConfig s (member has {}):  0 0 0 0
+Config c{} (braces at use):    0 0 0 0
+
+Rule: brace it at the declaration, every time. It costs nothing
+when you overwrite the elements anyway -- the compiler folds it away.

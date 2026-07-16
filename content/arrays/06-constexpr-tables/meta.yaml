@@ -1,0 +1,13 @@
+title: "Lookup tables computed at compile time"
+standard: "C++17"
+difficulty: 3
+summary: "Because an array owns its storage and allocates nothing, the whole thing can be built by a constexpr function and baked into the binary -- the table costs zero instructions at runtime."
+notes: "This is the thing std::array can do that std::vector cannot at this standard: no allocation means the object is a literal type, so a constexpr function can fill one and the result becomes a compile-time constant. The pattern is a function that returns a filled array, called to initialize a constexpr variable -- the loop runs in the compiler, and what lands in the binary is the finished data, in read-only memory, with no static initializer and no first-call check. Compare the alternatives honestly: a hand-written table of literals is what this replaces, and it is the thing that rots when the formula changes and nobody recomputes it; a table built at startup costs initialization order problems and a runtime pass; this costs a build. Two limits worth knowing: the array must be default-constructible to be created before it is filled, which is why the pattern needs a mutable local and a return rather than an initializer list; and there is a compiler step limit on constexpr evaluation, so a table with millions of entries will hit -fconstexpr-ops-limit long before it hits anything fundamental. A static_assert on the result is free proof it happened at compile time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }
+  - { name: "std::array::size", url: "https://en.cppreference.com/w/cpp/container/array/size" }

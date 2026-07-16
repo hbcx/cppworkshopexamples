@@ -1,0 +1,7 @@
+sum_fixed(five)  = 15
+sum_any_size(five)  = 15
+sum_any_size(three) = 60   (a second instantiation was generated for N=3)
+sum_range(five)  = 15
+sum_range(three) = 60
+sum_range(vector) = 300
+sum_raw(five) = 15

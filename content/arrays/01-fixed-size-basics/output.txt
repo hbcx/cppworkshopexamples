@@ -1,0 +1,6 @@
+size  = 5   (fixed at compile time)
+front = 18, back = 20
+values: 18 21 19 23 20
+at(9) threw out_of_range  (temps[9] would just be UB)
+after fill(0): 0 0
+sum via data(): 100

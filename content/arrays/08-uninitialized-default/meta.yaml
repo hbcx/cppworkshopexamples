@@ -1,0 +1,13 @@
+title: "Anti-pattern: leaving a std::array uninitialized"
+standard: "C++11"
+difficulty: 3
+summary: "Every other container default-constructs into a defined state; std::array is an aggregate, so without braces its trivial elements hold whatever was in that memory -- and reading one is undefined behaviour that usually looks like zeros in a debug build."
+notes: "std::array<int, 3> a; is not an empty container, it is three indeterminate ints, because array has no constructors and follows the aggregate rules instead of the container ones. The bug is expensive precisely because it is quiet: fresh stack pages tend to arrive zeroed, so a debug build prints zeros, the test passes, and the failure waits for a release build or for the same stack slot to be reused by something else. The fix is one character -- a{}; value-initializes every element -- and it is worth applying by reflex, since the cost is zero for the cases where you overwrite everything anyway and the compiler will fold it away. Watch the same trap in a struct: a member array is not initialized by a defaulted constructor either, so Config c; leaves it indeterminate while Config c{}; does not, and a default member initializer (std::array<int, 4> limits{};) fixes it once for every constructor. Do not count on the compiler here: -Wuninitialized and -Wmaybe-uninitialized catch some shapes and miss plenty, especially across function boundaries."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+detailed_tags:
+  - { name: "aggregate initialization", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }
+  - { name: "value initialization", url: "https://en.cppreference.com/w/cpp/language/value_initialization" }
+  - { name: "default member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members" }
