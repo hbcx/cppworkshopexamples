@@ -1,0 +1,5 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A server accepts requests faster than it can serve them, and the business rule is that they are answered in the order they arrived. The accepting thread must never block on the work, so incoming requests are parked and handed to workers as they free up."
+  why: "FIFO is the requirement here, not an implementation detail, and std::queue puts it in the type: there is no operator[] and no iteration, so no later change can quietly start serving the newest request first. Wrapped behind a mutex and a try_pop, it is also the smallest correct work queue you can write."
+  signal: "A std::deque or std::vector used as a task buffer whose only operations are push_back and erase(begin()), or a hand-rolled queue exposing empty()/front()/pop() as three separately locked methods."
