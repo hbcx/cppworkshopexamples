@@ -1,3 +1,4 @@
 title: "std::set"
 description: "The sorted set of unique keys and what makes it more than a bag: duplicates collapse on insert, insert reports whether the value was new, elements are const because changing one would break the order, and the ordering unlocks range queries (lower_bound/upper_bound) and the <algorithm> set operations that an unordered_set cannot offer -- plus std::multiset when duplicates are the point."
 sort_order: 5
+category: "Containers"

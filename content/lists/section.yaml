@@ -1,3 +1,4 @@
 title: "std::list"
 description: "The doubly-linked list and the one thing it is genuinely good at: nodes that never move. No random access and no std::sort, but references and iterators survive every insert and erase, and splice transfers elements between lists in O(1) without touching them. Includes the honest measurement of the O(1)-insertion promise against std::vector, plus std::forward_list when one pointer per node is enough."
 sort_order: 7
+category: "Containers"

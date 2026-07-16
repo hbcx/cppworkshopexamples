@@ -1,3 +1,4 @@
 title: "std::queue"
 description: "The FIFO container adaptor: a deliberately narrow interface over another container. Why push/front/pop is all you get and why pop() returns nothing, how the front-then-pop idiom moves work out safely, why there is no iteration, which underlying container it can wrap (deque by default, list yes, vector never), and how it compares to its sibling adaptors std::stack and std::priority_queue."
 sort_order: 6
+category: "Containers"

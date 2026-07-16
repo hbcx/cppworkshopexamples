@@ -1,3 +1,4 @@
 title: "std::vector"
 description: "The container you reach for by default, and the details that bite: size vs capacity, how growth reallocates and invalidates every pointer into it, why reserve matters, the erase-remove idiom, contiguous storage and data(), resize vs reserve, reclaiming capacity, and why std::vector<bool> is not really a vector of bool."
 sort_order: 3
+category: "Containers"

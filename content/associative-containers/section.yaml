@@ -1,3 +1,4 @@
 title: "Associative containers"
 description: "Choosing between std::map, std::unordered_map and a plain sorted vector: what the complexity guarantees promise, what the hardware actually delivers, and why the asymptotically better container is often the slower one at the sizes real code works with."
 sort_order: 2
+category: "Containers"
