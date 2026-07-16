@@ -1,0 +1,7 @@
+active:  alpha gamma
+retired: beta
+old iterator still reads: beta
+same object, never moved: yes
+after splicing everything back:  alpha gamma beta
+retired is now empty: yes
+after moving the head to the tail:  gamma beta alpha

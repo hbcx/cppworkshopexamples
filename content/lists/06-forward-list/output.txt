@@ -1,0 +1,5 @@
+chain:   alpha beta gamma
+after insert_after(first):  alpha alpha-and-a-half beta gamma
+after insert_after(before_begin()):  start alpha alpha-and-a-half beta gamma
+after erase_after(before_begin()):  alpha alpha-and-a-half beta gamma
+length (std::distance, O(n)): 4

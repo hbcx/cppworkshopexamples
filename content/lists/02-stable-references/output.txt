@@ -1,0 +1,5 @@
+iterator still reads: 20
+pointer still reads:  20
+node never moved:     yes
+after erasing its neighbour: 20 (still node 20)
+vector storage moved: yes -- old pointers now dangle

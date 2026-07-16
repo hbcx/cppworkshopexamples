@@ -1,0 +1,13 @@
+title: "Nodes never move: the reason to reach for a list"
+standard: "C++11"
+difficulty: 2
+summary: "Inserting or erasing in a list invalidates nothing except the erased element itself -- every other iterator, reference and pointer stays valid, which is the guarantee a vector cannot make."
+notes: "A node is allocated once and stays where it is for its whole life; insert and erase only relink pointers around it. So a pointer, a reference or an iterator you took earlier keeps working across any number of insertions, and even erasing a neighbour leaves it untouched -- only iterators to the erased element itself are invalidated. A vector guarantees the opposite: one growth reallocation moves every element and invalidates the lot. This is what a list is FOR. If your code hands out long-lived references into a container that keeps changing, or you need to remember a position and come back to it later, a list buys you that safety without the indirection of a vector of unique_ptr. If nothing depends on stability, the list is almost certainly the wrong choice -- see the benchmark at the end of this section."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "std::list::insert", url: "https://en.cppreference.com/w/cpp/container/list/insert" }
+  - { name: "std::list::erase", url: "https://en.cppreference.com/w/cpp/container/list/erase" }

@@ -1,0 +1,14 @@
+title: "A chain of nodes: what a list gives up and what it gains"
+standard: "C++11"
+difficulty: 1
+summary: "std::list stores every element in its own node with a pointer each way, so both ends are O(1) and there is no operator[] -- reaching the middle means walking there."
+notes: "Each element lives in a separately allocated node holding the value plus a next and a prev pointer, and that single design choice explains the whole interface. Both ends are cheap, so push_front is O(1) where a vector has no such operation at all. Nothing is contiguous, so there is no operator[], no at(), no data(): the iterators are bidirectional, not random access, and you reach position k by following k pointers, which std::advance and std::next do for you. size() is O(1) since C++11 -- the container keeps a counter, which older code cannot assume. The price is paid per element: an allocation and two pointers of overhead each, so a list of int spends more memory on bookkeeping than on data."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "std::list::push_front", url: "https://en.cppreference.com/w/cpp/container/list/push_front" }
+  - { name: "std::list::push_back", url: "https://en.cppreference.com/w/cpp/container/list/push_back" }
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }
+  - { name: "std::next", url: "https://en.cppreference.com/w/cpp/iterator/next" }

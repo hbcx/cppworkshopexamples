@@ -1,0 +1,13 @@
+title: "std::forward_list: one pointer per node, and the price of it"
+standard: "C++11"
+difficulty: 3
+summary: "The singly-linked sibling drops the prev pointer to save memory, and the whole interface changes with it: insert_after instead of insert, before_begin to reach the head, no back(), and no size()."
+notes: "forward_list exists to be as small as a hand-written linked list: one pointer per node instead of two, and not one byte of overhead beyond that. Everything odd about its interface follows from having no way back. You cannot insert BEFORE a position without knowing the previous node, so the operations are named insert_after, erase_after and emplace_after, and before_begin() gives you the phantom position needed to touch the head. There is no back() and no push_back, because finding the tail would mean walking the whole chain. size() is absent for a subtler reason: keeping a counter would cost a word per LIST, but more importantly splice_after could not stay O(1) if the sizes had to be adjusted -- the standard chose the speed and made you call std::distance if you want the count. Reach for it only when profiling says the extra pointer matters; the awkward interface is a real cost, and std::list already pays for the memory it uses."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list", url: "https://en.cppreference.com/w/cpp/container/forward_list" }
+detailed_tags:
+  - { name: "std::forward_list::insert_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/insert_after" }
+  - { name: "std::forward_list::before_begin", url: "https://en.cppreference.com/w/cpp/container/forward_list/before_begin" }
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

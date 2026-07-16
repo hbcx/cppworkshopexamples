@@ -1,0 +1,13 @@
+title: "splice: moving elements between lists without touching them"
+standard: "C++11"
+difficulty: 3
+summary: "splice relinks nodes from one list into another in O(1) -- no copy, no move, not even a call to the element's constructor -- and iterators keep pointing at the elements as they change owner."
+notes: "This is the operation no other standard container can offer. Because the value lives in a node, transferring it is a matter of rewiring four pointers: the element itself is never copied, moved or destroyed, so splice works for types that cannot be copied OR moved at all, and it cannot throw. The iterator you held before the splice still refers to the same element -- it now simply belongs to the other list, which is a guarantee worth pausing on, since every other container invalidates on transfer. Watch the complexity of the range overload: splicing a sub-range from a DIFFERENT list is O(n) in the size of the range, not O(1), because both lists have to fix their size counters (splicing within the same list stays O(1), since no count changes). And the elements must come from a list with the same allocator, otherwise the nodes could not simply change hands."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "std::list::splice", url: "https://en.cppreference.com/w/cpp/container/list/splice" }
+  - { name: "std::list::insert", url: "https://en.cppreference.com/w/cpp/container/list/insert" }
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }

@@ -1,0 +1,13 @@
+title: "Anti-pattern: the erase-remove idiom on a list"
+standard: "C++11"
+difficulty: 3
+summary: "std::remove works on a list and gives the right answer, but it shuffles values along the chain because it cannot see the nodes -- the member remove unlinks them instead and moves nothing."
+notes: "The erase-remove idiom is correct and necessary for a vector, which is exactly why it gets copied onto a list without a second thought. std::remove is a generic algorithm: it only has iterators, so it cannot unlink anything, and instead move-assigns every surviving element towards the front and hands back a new end for you to erase. On a list that work is pure waste -- the values are dragged from node to node while the nodes themselves stay put, and the elements are move-assigned rather than destroyed, which for a type with a non-trivial move is a real cost per element. The member remove knows about the nodes: it unlinks the matching ones and destroys them, touching nothing else, and it is a one-liner besides. The general rule from the algorithms example holds here -- when a member shares a name with a free algorithm, the member exists because it can do something the algorithm cannot."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "std::list::remove", url: "https://en.cppreference.com/w/cpp/container/list/remove" }
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+  - { name: "std::list::erase", url: "https://en.cppreference.com/w/cpp/container/list/erase" }

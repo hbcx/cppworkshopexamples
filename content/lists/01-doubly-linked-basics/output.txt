@@ -1,0 +1,6 @@
+stops:  hamburg berlin prague vienna
+front = hamburg, back = vienna, size = 4
+third stop = prague  (found by walking, not indexing)
+last stop  = vienna
+two back   = berlin
+after inserting dresden before the third stop:  hamburg berlin dresden prague vienna

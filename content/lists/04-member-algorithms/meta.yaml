@@ -1,0 +1,15 @@
+title: "Why a list ships its own sort, remove and unique"
+standard: "C++11"
+difficulty: 2
+summary: "std::sort needs random-access iterators, so it does not compile for a list -- the members exist because relinking nodes beats moving values, and list::remove actually removes, unlike std::remove."
+notes: "The generic algorithms are written against iterator categories, and a list only offers bidirectional ones. std::sort demands random access, so it will not compile here at all; the member sort does the job in O(n log n) by relinking nodes, which also makes it stable and leaves every iterator valid. The other members are there for the same reason. list::remove and remove_if unlink and destroy the matching nodes -- contrast std::remove, which cannot resize a container and only shifts the survivors forward, which is why a vector needs the erase-remove idiom while a list does not. unique collapses CONSECUTIVE duplicates, so it is only a deduplicator after sorting. reverse and merge likewise move no values. The rule of thumb: if a member with the same name as an algorithm exists, the member is the one to use -- it is asymptotically better or preserves guarantees the free function cannot."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "std::list::sort", url: "https://en.cppreference.com/w/cpp/container/list/sort" }
+  - { name: "std::list::remove", url: "https://en.cppreference.com/w/cpp/container/list/remove" }
+  - { name: "std::list::unique", url: "https://en.cppreference.com/w/cpp/container/list/unique" }
+  - { name: "std::list::merge", url: "https://en.cppreference.com/w/cpp/container/list/merge" }
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }

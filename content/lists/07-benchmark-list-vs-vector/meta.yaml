@@ -1,0 +1,19 @@
+title: "Benchmark: std::list vs std::vector, and the O(1) insertion myth"
+standard: "C++17"
+difficulty: 3
+summary: "The list inserts in O(1) and the vector shifts the whole tail -- and the vector still wins, because finding the position is a traversal and a traversal over pointers is where the time actually goes."
+notes: "Read the sorted-insert table first: it is the workload chosen to favour the list, and the list loses anyway. Both containers do the same two things per element -- find the position, then put the element there -- and only the second is O(1) for the list. The first is a pointer chase with a cache miss per node, while the vector scans contiguous memory the prefetcher can see coming, and then pays for the shift with a memmove of trivially copyable ints, which is close to free per element. The build and traversal tables show the same effect stripped down: the list pays an allocation per element and a cache miss per hop, so it is slower even at sizes where nothing is being shifted at all. What this does NOT say is that the list is useless -- it says complexity is not a cost model. Insert in the middle of a vector via an iterator you already hold, and the vector wins on memory layout; hold long-lived references into the container, or transfer elements between containers with splice, and the vector cannot do the job at any speed. Choose the list for its guarantees, never for its asymptotics."
+run: true
+bench: true
+optimize: "O2"
+trace: false
+sanitizers: []
+shared: ["bench/datasets.hpp", "bench/timing.hpp"]
+main_tags:
+  - { name: "performance", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::list::insert", url: "https://en.cppreference.com/w/cpp/container/list/insert" }
+  - { name: "std::vector::insert", url: "https://en.cppreference.com/w/cpp/container/vector/insert" }
+  - { name: "std::chrono::steady_clock", url: "https://en.cppreference.com/w/cpp/chrono/steady_clock" }

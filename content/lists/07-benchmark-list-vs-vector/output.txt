@@ -1,0 +1,35 @@
+std::list vs std::vector
+========================
+
+compiler : g++ 16.1.0
+standard : __cplusplus = 201703
+machine  : Intel Core i9-13900K, Windows 11, MSYS2 UCRT64
+method   : 7 samples per cell, inner loop calibrated to >= 2 ms per sample
+
+  build (push_back every key)   (ns per operation, median; min in parentheses)
+  ------------------------------------------------------------
+          n      std::vector       std::list        list/vector
+  ------------------------------------------------------------
+        100       4.0 (   4.0)      18.0 (  17.0)        4.50x
+       1000       1.1 (   1.1)      16.6 (  16.5)       15.09x
+      10000       3.1 (   2.9)      21.4 (  21.1)        6.91x
+     100000       3.1 (   2.9)      22.9 (  22.5)        7.49x
+    1000000       2.0 (   1.9)      23.6 (  23.2)       11.68x
+
+  traverse (sum every element)   (ns per element, median; min in parentheses)
+  ------------------------------------------------------------
+          n      std::vector       std::list        list/vector
+  ------------------------------------------------------------
+        100       0.2 (   0.2)       1.0 (   1.0)        4.71x
+       1000       0.2 (   0.2)       0.9 (   0.9)        5.15x
+      10000       0.2 (   0.2)       1.7 (   1.7)        9.28x
+     100000       0.2 (   0.2)       2.1 (   2.0)       10.76x
+    1000000       0.2 (   0.2)       3.6 (   3.3)       19.83x
+
+  sorted insert (find the position, then insert)   (ns per inserted element, median; min in parentheses)
+  ------------------------------------------------------------
+          n      std::vector       std::list        list/vector
+  ------------------------------------------------------------
+        100      10.0 (   9.0)      41.0 (  39.0)        4.10x
+       1000      48.1 (  46.0)     243.8 ( 243.2)        5.07x
+      10000     370.2 ( 364.1)    6968.2 (6904.3)       18.82x

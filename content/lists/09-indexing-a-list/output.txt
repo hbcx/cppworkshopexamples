@@ -1,0 +1,4 @@
+std::next indexing: sum=500500 in 499500 pointer hops
+plain iteration:    sum=500500 in 1000 pointer hops
+ratio: 499x more work for the same answer, at n=1000
+and it grows with n: the indexed loop is O(n^2), the iterator loop O(n)

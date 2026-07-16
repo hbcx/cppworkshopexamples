@@ -1,0 +1,14 @@
+title: "Anti-pattern: indexing a list with std::next"
+standard: "C++11"
+difficulty: 3
+summary: "std::next(l.begin(), i) restarts the walk from the head every time, so a loop that looks like a vector's index loop is quietly quadratic."
+notes: "A list has no operator[], and std::next is the usual way people give it one back -- it compiles, it reads like v[i], and it turns an O(n) pass into O(n squared). The reason is that std::next on a bidirectional iterator has no way to jump: it follows one pointer at a time from wherever it starts, and starting at begin() every time means the loop walks 0 + 1 + 2 + ... + n-1 nodes to visit n elements. At a thousand elements that is half a million pointer hops instead of a thousand, and every one of them is a potential cache miss. The fix is to hold the iterator instead of recomputing it, which is what iterators are for: a range-for costs exactly one hop per element. This is why the iterator categories exist -- std::next is O(1) on a vector and O(n) on a list, with identical syntax and no warning, so the cost of an algorithm depends on the container it is handed. If the code genuinely needs indexing, that is the signal it wanted a vector."
+run: true
+sanitizers: []
+trace: false
+main_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "std::next", url: "https://en.cppreference.com/w/cpp/iterator/next" }
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }
+  - { name: "performance", url: "https://en.cppreference.com/w/cpp/container" }

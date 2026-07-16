@@ -1,0 +1,4 @@
+erase-remove:    1 2 3 4
+  move-assignments: 3  <- values dragged from node to node
+member remove:   1 2 3 4
+  move-assignments: 0  <- nodes unlinked, values never touched

@@ -1,0 +1,13 @@
+title: "Erasing while iterating: erase returns the next position"
+standard: "C++11"
+difficulty: 2
+summary: "erase invalidates the iterator you pass it, so you rebuild the loop from its return value -- or skip the loop entirely and let remove_if do it."
+notes: "erase destroys the node the iterator refers to, so that iterator is dead the moment the call returns and incrementing it afterwards reads freed memory. The fix is built into the interface: erase returns an iterator to the element that followed, which is exactly what the loop needs next. Write the loop so that erase advances it and ++ advances it otherwise, and never both. Note the difference from a vector, where erase also invalidates everything AFTER the erased position; in a list only the erased element is affected, so any other iterator you happen to be holding stays usable. The idiomatic answer is still to not write the loop at all: remove_if expresses the same intent in one line, does the relinking itself, and cannot be got wrong. Reach for the manual loop only when the decision needs state the predicate cannot see."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "std::list::erase", url: "https://en.cppreference.com/w/cpp/container/list/erase" }
+  - { name: "std::list::remove", url: "https://en.cppreference.com/w/cpp/container/list/remove" }
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }
