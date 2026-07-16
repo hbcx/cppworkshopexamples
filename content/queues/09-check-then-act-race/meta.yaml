@@ -1,0 +1,15 @@
+title: "Anti-pattern: empty() then front() on a shared queue"
+standard: "C++11"
+difficulty: 3
+summary: "Locking each queue operation separately is not enough -- another thread can pop between your empty() check and your front(), so the whole check-take-remove sequence has to be one critical section."
+notes: "This is the classic reason a queue with a mutex inside every method is still not thread-safe. empty() is true when it returns, but that answer is already stale by the time the caller acts on it: another consumer can drain the last element in the gap, and then front() reads an element that is gone -- undefined behaviour, not an exception. The lesson is that thread safety is a property of the OPERATION, not of the individual calls: the interface itself has to expose the whole check-take-remove as one atomic step, which is why the standard queue does not pretend to be thread-safe and why every real work queue wraps it in a try_pop(T& out) that takes the lock once. Note this also rules out an obvious workaround -- adding a lock around the caller's three calls fixes it only if EVERY caller remembers; putting it inside try_pop makes the race unrepresentable. std::queue itself is fine here, like any standard container: concurrent reads are safe, and any write needs external synchronization."
+run: true
+sanitizers: []
+trace: false
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+  - { name: "data race", url: "https://en.cppreference.com/w/cpp/language/memory_model" }

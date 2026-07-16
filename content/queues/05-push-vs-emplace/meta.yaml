@@ -1,0 +1,13 @@
+title: "push vs emplace: one construction fewer"
+standard: "C++11"
+difficulty: 2
+summary: "push takes a finished object and copies or moves it into the queue; emplace forwards the constructor arguments and builds the element in place, skipping the temporary entirely."
+notes: "push(const T&) copies and push(T&&) moves, but either way you must first have a T -- so pushing a temporary costs a construction plus a move. emplace takes the arguments instead and forwards them to the element's constructor inside the queue, so the object is built once, where it will live. For a cheap-to-move type the difference is noise; for a type that owns a buffer, or one whose move is not noexcept, it is a real saving. Two caveats: emplace uses direct-initialization, so it will happily call an explicit constructor that push would reject, and passing a single argument of the element's own type just move-constructs -- the same work push would do."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::queue::emplace", url: "https://en.cppreference.com/w/cpp/container/queue/emplace" }
+  - { name: "std::queue::push", url: "https://en.cppreference.com/w/cpp/container/queue/push" }
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }

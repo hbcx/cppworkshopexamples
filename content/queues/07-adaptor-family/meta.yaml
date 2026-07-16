@@ -1,0 +1,14 @@
+title: "queue vs stack vs priority_queue: same data, three orders"
+standard: "C++11"
+difficulty: 3
+summary: "The three container adaptors differ only in which element they hand back next -- oldest for queue, newest for stack, largest for priority_queue -- and that one choice decides the algorithm."
+notes: "All three wrap a container and expose push/pop/size/empty, so swapping one for another is a small edit with a large effect: a queue makes a traversal breadth-first, a stack makes the same code depth-first, and a priority_queue makes it best-first (Dijkstra, A*, schedulers). Watch the differences. The accessor is named top() on stack and priority_queue but front() on queue, which is what breaks compilation when you swap them. priority_queue defaults to std::less, which yields a MAX-heap -- the counter-intuitive part is that the comparator ranks elements and the largest comes out first, so a min-heap needs std::greater, spelled priority_queue<T, vector<T>, greater<T>>. Its default container is std::vector, not deque, because a binary heap wants contiguous storage. And a priority_queue is only partially ordered: top() is the largest, but the rest is heap order, not sorted order, and elements that compare equivalent come out in an unspecified sequence -- so it is not a stable tie-break."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+detailed_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+  - { name: "container adaptor", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }

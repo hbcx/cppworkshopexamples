@@ -1,0 +1,12 @@
+title: "The queue as a work list: breadth-first search"
+standard: "C++11"
+difficulty: 2
+summary: "The classic commercial use of std::queue -- a list of pending work that grows while you drain it, which is exactly what makes breadth-first search visit nodes level by level."
+notes: "Almost every real use of std::queue is a work list: you pop one item, process it, and processing may push more items. Because the new work goes to the back, everything already pending is handled first -- that FIFO discipline is what turns a plain loop into a breadth-first traversal, and it is why BFS finds the shortest path in an unweighted graph while the same code with a std::stack (LIFO) would dive depth-first instead. Two details matter in practice: mark a node as visited when you PUSH it, not when you pop it, or a node reachable by two edges gets queued twice; and keep the loop condition on empty(), since the queue both shrinks and grows inside the body."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::queue::push", url: "https://en.cppreference.com/w/cpp/container/queue/push" }
+  - { name: "std::queue::pop", url: "https://en.cppreference.com/w/cpp/container/queue/pop" }

@@ -1,0 +1,14 @@
+title: "First in, first out: the whole interface"
+standard: "C++11"
+difficulty: 1
+summary: "std::queue exposes only push, front, back, pop, size and empty -- elements leave in the exact order they arrived."
+notes: "std::queue is not a container, it is a container adaptor: it wraps another container (std::deque by default) and hides everything except the FIFO operations. push adds at the back, front reads the oldest element, pop removes it. back reads the newest element, which is useful when you want to peek at what you just queued. There is no operator[], no iteration and no way to look at the middle -- that narrow interface is the point, it makes the FIFO discipline visible in the type. Calling front or pop on an empty queue is undefined behaviour, so check empty first."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::queue::push", url: "https://en.cppreference.com/w/cpp/container/queue/push" }
+  - { name: "std::queue::front", url: "https://en.cppreference.com/w/cpp/container/queue/front" }
+  - { name: "std::queue::back", url: "https://en.cppreference.com/w/cpp/container/queue/back" }
+  - { name: "std::queue::pop", url: "https://en.cppreference.com/w/cpp/container/queue/pop" }

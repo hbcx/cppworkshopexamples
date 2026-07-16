@@ -1,0 +1,7 @@
+visit order: 0 1 2 3 4 5
+hops 0 -> 0 = 0
+hops 0 -> 1 = 1
+hops 0 -> 2 = 1
+hops 0 -> 3 = 2
+hops 0 -> 4 = 2
+hops 0 -> 5 = 3

@@ -1,0 +1,5 @@
+size  = 3
+front = alice   (the oldest, served next)
+back  = carol   (the newest, just arrived)
+serving: alice bob carol
+empty now? yes

@@ -1,0 +1,13 @@
+title: "There is no way to iterate a queue"
+standard: "C++11"
+difficulty: 2
+summary: "std::queue has no begin/end, so range-for and the algorithms do not work on it -- to inspect the contents you drain a copy, and if you really need to look inside, a queue was the wrong type."
+notes: "The adaptor exposes only the two ends, so there is no iterator, no range-for, no std::find, no operator[]. That is a feature: it guarantees at the type level that nobody reaches into the middle of your work queue. When you only need a peek for logging or a test, copy the queue and drain the copy -- correct but O(n) in copies, so keep it out of hot paths. When you genuinely need to iterate, search or index the pending items, the right answer is not to work around the adaptor but to use the underlying container directly: a std::deque gives you the same push_back/pop_front cost plus full iteration. Reach for std::queue when the FIFO restriction is what you want to express."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+  - { name: "std::queue::front", url: "https://en.cppreference.com/w/cpp/container/queue/front" }
+  - { name: "std::queue::back", url: "https://en.cppreference.com/w/cpp/container/queue/back" }

@@ -1,0 +1,14 @@
+title: "Anti-pattern: a reference from front() used after pop()"
+standard: "C++11"
+difficulty: 3
+summary: "front() hands out a reference, not a value -- pop() then destroys the element it refers to, so any use of that reference afterwards reads a dead object."
+notes: "This one is easy to write because front() reads like a getter that returns the element. It returns a reference, and pop() destroys exactly what it refers to, so the reference dangles the instant you pop. It often survives testing: the memory is not handed back to the operating system, so the old bytes are frequently still readable and the bug shows up only under load, a different allocator, or a different compiler. The rule is simple -- get the value OUT of the queue before popping, never after. Copy it if it is cheap, move it if it is not, and note that auto deduces a value here while auto& keeps the reference, which is why the const auto& habit that is right almost everywhere else is wrong in front of a pop. Wrapping the pair in a small take() helper removes the chance to get the order wrong."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::queue::front", url: "https://en.cppreference.com/w/cpp/container/queue/front" }
+  - { name: "std::queue::pop", url: "https://en.cppreference.com/w/cpp/container/queue/pop" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

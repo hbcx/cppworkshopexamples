@@ -1,0 +1,13 @@
+title: "Choosing the underlying container (and why never vector)"
+standard: "C++11"
+difficulty: 3
+summary: "std::queue wraps std::deque by default and std::list works too, but std::vector can never back a queue -- it has no pop_front, and the error only appears the moment you call pop."
+notes: "The second template parameter is the container, and it must provide front, back, push_back and pop_front. std::deque satisfies that and is the default: it grows in chunks, so push_back and pop_front are both O(1) and it never invalidates references to the elements it keeps. std::list also qualifies -- pick it only when you need every element at a stable address for its whole life, since it pays a separate allocation and a cache miss per node. std::vector is disqualified: it has no pop_front, because removing the front element would mean shifting everything down. The trap is that std::queue<T, std::vector<T>> DECLARES fine -- member functions of a class template are only instantiated when used, so the error surfaces only at the first pop() call, sometimes deep in a build. The third option is to hand the constructor a pre-filled container, which seeds the queue in one step instead of a push loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+  - { name: "container adaptor", url: "https://en.cppreference.com/w/cpp/container" }

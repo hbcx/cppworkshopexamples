@@ -1,0 +1,13 @@
+title: "Anti-pattern: changing an element's priority while it sits in the queue"
+standard: "C++11"
+difficulty: 3
+summary: "A priority_queue orders its elements once, on the way in -- edit a priority afterwards and the heap is not rebuilt, so top() quietly stops being the most important item."
+notes: "The heap invariant is established by push and repaired by pop; nothing watches the elements in between. Change a priority after the fact -- through a stored pointer, a reference into the object, or a const_cast on top() -- and the queue keeps the old arrangement, so top() returns the wrong element and the rest comes out in an order that matches nothing. It is not a crash, which is what makes it expensive: a scheduler simply runs the wrong task and nobody notices until the priorities matter. Note this is exactly why top() returns a const reference; const_cast defeats the compiler, not the invariant. Fix it by treating priorities as immutable once queued: pop the element, change it, push it back -- O(log n) and always correct. If reprioritising is frequent, a priority_queue is the wrong structure, because it has no way to reach an element in the middle: use a std::set of (priority, id), or a heap with an index that supports decrease-key."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+detailed_tags:
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }
+  - { name: "std::priority_queue::top", url: "https://en.cppreference.com/w/cpp/container/priority_queue/top" }
+  - { name: "std::priority_queue::push", url: "https://en.cppreference.com/w/cpp/container/priority_queue/push" }

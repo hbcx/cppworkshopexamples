@@ -1,0 +1,14 @@
+title: "Why pop() returns nothing"
+standard: "C++11"
+difficulty: 2
+summary: "A pop that returned the element by value could throw while copying it out, losing the element for good -- so the standard splits the job into front() and pop(), and you move the element out before popping."
+notes: "A hypothetical T pop() would have to remove the element and then return a copy. If that copy (or move) threw, the element would already be gone from the queue and the value would be lost -- unrecoverable. Splitting the operation makes both halves safe: front() only returns a reference and cannot throw, and pop() only destroys and cannot throw either, so a failure in your own copy leaves the queue untouched. The practical idiom is: take a reference with front(), move out of it if the element is expensive, then pop(). Moving from front() is safe because the element is destroyed immediately afterwards -- but only in that order, and never keep the reference past the pop, because pop() destroys what it refers to."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+detailed_tags:
+  - { name: "std::queue::front", url: "https://en.cppreference.com/w/cpp/container/queue/front" }
+  - { name: "std::queue::pop", url: "https://en.cppreference.com/w/cpp/container/queue/pop" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "exception safety", url: "https://en.cppreference.com/w/cpp/language/exceptions" }

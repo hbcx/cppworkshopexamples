@@ -1,0 +1,9 @@
+queueing:
+  move of render
+  move of encode
+copying out of front():
+  copy of render
+moving out of front():
+  move of encode
+got: render, encode
+remaining: 0

@@ -1,0 +1,4 @@
+push(temporary)  : ctor=1 copy=0 move=1
+push(lvalue)     : ctor=0 copy=1 move=0
+emplace(args...) : ctor=1 copy=0 move=0
+queued: 3, first topic = alerts

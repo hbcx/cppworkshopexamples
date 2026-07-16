@@ -1,0 +1,4 @@
+queue          (oldest first): 40 10 30 20
+stack          (newest first): 20 30 10 40
+priority_queue (largest first): 40 30 20 10
+priority_queue (smallest first): 10 20 30 40

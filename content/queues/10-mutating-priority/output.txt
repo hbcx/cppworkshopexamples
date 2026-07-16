@@ -1,0 +1,5 @@
+as queued:           deploy(3) report(2) backup(1)
+after backup -> 99: top is deploy(3)  <- expected backup(99)
+wrong order:         deploy(3) backup(99) report(2)
+priority set before push: top is backup(99)
+right order:         backup(99) deploy(3) report(2)

@@ -1,0 +1,3 @@
+deque-backed: 1 2
+list-backed:  3 4
+seeded:       7 8 9

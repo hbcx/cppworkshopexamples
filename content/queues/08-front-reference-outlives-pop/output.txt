@@ -1,0 +1,5 @@
+copied out: render
+moved out:  encode
+taken:      upload
+all three still valid: render encode upload
+queue is empty? yes
