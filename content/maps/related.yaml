@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "unordered-containers"
+  note: "Drop the ordering and you get the hash-table version: O(1) average lookup instead of O(log n), at the cost of any defined iteration order."
+- slug: "associative-containers"
+  note: "The head-to-head benchmark of std::map vs std::unordered_map vs a sorted vector, and why the asymptotically slower container is often the faster one."
+- slug: "sets"
+  note: "The keys-only counterpart: the same ordering and node stability, without a mapped value attached to each key."
