@@ -1,0 +1,21 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A service loads a result set into memory -- rows from a query, records from a file, entities from a save game -- and the row count is known, or closely bounded, before the loop starts. The load is on a path someone is waiting on."
+  why: "A reserve() before the loop turns a sequence of reallocations, each of which moves everything already inserted, into a single allocation. This is the one case where the fix is free: without it a vector grows in geometric steps, so loading a million rows constructs and destroys elements it was never asked to, and the objects it moves are often the expensive ones."
+  signal: "A push_back loop whose iteration count is known up front -- a for over a container, a row count from the query, a size read from a header -- with no reserve() before it."
+
+- problem: "The code has to hand a buffer to a C interface: a socket write, an OpenGL vertex upload, a compression or crypto library, an OS call that wants a pointer and a length. The buffer is built in C++ and its lifetime has to be managed correctly on every path out, including the ones that throw."
+  why: "A vector is guaranteed contiguous, so data() and size() are exactly the pointer and length the C function wants, with no conversion step -- and the vector still destroys the buffer for you on every exit path. The alternative is new[] or malloc with a manual free that has to be right on each early return and each exception."
+  signal: "A malloc or new[] paired with a free or delete[] somewhere further down the same function, a raw buffer member freed in a destructor written by hand, or a vector copied into a temporary array only to be passed to a C API."
+
+- problem: "A collection is traversed from front to back on every tick, frame or request -- entities to update, rules to evaluate, packets to inspect. Elements are added and removed, but the dominant operation by far is walking the whole thing."
+  why: "Contiguous storage means the traversal is one linear stride the prefetcher can predict, and elements arrive in cache lines rather than one cache miss at a time. A list looks better on paper for the inserts, and we measured it in this section: on a million elements the traversal alone runs about twenty times slower, which is a gap the constant-time inserts never come close to paying back."
+  signal: "A std::list or std::deque chosen for its insert complexity but whose hot operation is a full traversal, or any node-based container in a per-frame or per-request loop."
+
+- problem: "A collection has to be filtered in place: dropping expired sessions, removing dead entities, purging entries that failed validation. The filter runs over the whole container and may remove many elements at once."
+  why: "erase-remove does the whole job in one pass: remove shifts the survivors forward, and a single erase call trims the tail. Erasing inside a loop instead is quadratic -- every erase shifts the entire tail -- and it is the classic way to invalidate the very iterator the loop is about to increment."
+  signal: "A loop calling erase() on the container it is iterating, especially with it++ inside the body, or a second vector built only to hold the elements that survive a filter."
+
+- problem: "A flag or byte array is shared with something outside the C++ type system: passed to a C API that wants a pointer, or written concurrently by several threads that each own their own index."
+  why: "std::vector<char> or <uint8_t> is what a vector of bytes actually is -- it has data(), and distinct elements are distinct objects that different threads may write at the same time. std::vector<bool> is a proxy-based bitset in disguise: it has no data() to hand over, auto deduces a proxy rather than a bool, and because several elements share one word, two threads writing different indices is a data race that no tool will attribute to your code."
+  signal: "std::vector<bool> anywhere a pointer to the data is needed, an auto binding taken from one, or a vector<bool> written from more than one thread."

@@ -1,0 +1,17 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A crawler, dependency resolver or deduplicating importer has to answer was this one new for every item it meets, and the answer decides whether the item gets processed at all. Items keep arriving while the set is being queried, and at the end the collected keys are reported in order."
+  why: "insert answers both questions in one operation -- it stores the key and its return value says whether it was new -- so there is no look-then-insert window and no second lookup. The obvious alternative, a vector with sort plus unique, only works when everything is collected before anything is asked; here the reads are interleaved with the writes, so it would mean re-sorting on every item."
+  signal: "A find() or contains() immediately followed by an insert() of the same key, or a vector that is sorted and uniqued more than once because new elements keep arriving."
+
+- problem: "A set of keys has to answer questions about neighbourhoods rather than membership: which scheduled jobs fall in this window, which allocation starts just below this address, what is the next free identifier above this one."
+  why: "Because the elements are ordered, lower_bound and upper_bound answer all of these in O(log n) and hand back a position to walk from. std::unordered_set is faster for exact membership and cannot express any of these questions -- there is no next in a hash table, so answering one means examining every element."
+  signal: "An unordered_set or a hash set scanned in full to find the nearest, next or previous element, or a membership container paired with a separately maintained sorted vector of the same keys."
+
+- problem: "Two snapshots of the same collection have to be compared to decide what changed: permissions granted and revoked, files added and deleted since the last sync, subscriptions started and stopped. The result drives real actions, so it has to be exact."
+  why: "Both sets are already sorted, so set_difference and set_intersection produce added, removed and unchanged in one linear pass over the two -- no hashing, no temporary index, and the results come out in order. Comparing two unsorted collections instead means a nested loop that is quadratic, or building a hash index first and then sorting the answers anyway."
+  signal: "A nested loop over two collections with a find() in the body to decide what is missing from one of them, or the words added and removed computed by hand from two vectors."
+
+- problem: "A scheduler, timer wheel or priority list is keyed by due time, and two entries can legitimately share the same instant. Everything due before now has to be taken in order, and individual entries get cancelled by handle while they wait."
+  why: "std::multiset keeps duplicates as separate elements, so two jobs due at the same millisecond both survive, equal_range hands back exactly the ones due at an instant, and erasing by iterator removes that entry and not its twin. A std::set silently drops the second job, and a map from time to a count keeps the number but loses the jobs themselves."
+  signal: "A set or map keyed by a value that is not actually unique, with a tie-breaker such as a sequence number bolted onto the key to stop entries from colliding, or a count as the mapped type standing in for the entries themselves."

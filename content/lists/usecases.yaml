@@ -1,0 +1,17 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "An LRU cache has to answer a lookup and mark the entry as most-recently-used in constant time, then evict the oldest when it is full. The recency order is a list of entries, and every cache hit moves one entry from the middle of that order to the front while a hash map holds handles to all of them."
+  why: "splice moves the node by relinking two pointers -- no copy, no move, and every iterator the hash map is holding stays valid, which is what makes the whole operation O(1). A vector loses on both counts at once: moving an entry to the front shifts everything behind it, and it invalidates exactly the iterators the map stored."
+  signal: "A hash map whose mapped type is an iterator or a node pointer into another container, a recency or priority order rebuilt by erase-then-insert, or a cache that re-sorts its entries on every hit."
+
+- problem: "A registry of long-lived objects -- device sessions, subscribed observers, loaded plugins -- keeps growing while other parts of the system hold pointers or references to individual entries. Registration and deregistration happen at any time, from code that has no idea who is holding what."
+  why: "list nodes are allocated once and never move, so a reference handed out today survives every later insert and erase of other elements. A vector would be faster to traverse but reallocates as it grows, and at that moment every stored pointer, reference and iterator into it silently dangles -- a crash that shows up only once the load crosses the capacity."
+  signal: "A vector or deque whose elements are addressed by long-lived pointers or references, or a container of objects with a reserve() call sized by guesswork and a comment warning not to exceed it."
+
+- problem: "A pipeline stage collects items into a local batch and then hands the whole batch to the next stage, which owns it from that point on. The items are expensive to construct and the handoff happens often enough that copying the batch across the boundary shows up in the profile."
+  why: "splice transfers any range between two lists in constant time without touching the elements themselves -- no allocation, no move constructor, no destructor. Doing the same with insert plus erase moves every element and allocates in the destination, and the cost scales with the batch size instead of being flat."
+  signal: "insert(dest.end(), make_move_iterator(src.begin()), make_move_iterator(src.end())) followed by src.clear(), or any batch handoff that copies elements between two containers only to empty the source."
+
+- problem: "A collection has to hold objects that cannot be moved at all: types with a std::mutex or std::atomic member, objects registered with a callback by address, or types whose copy constructor is deliberately deleted."
+  why: "std::list never relocates an element, so it accepts types that are neither copyable nor movable -- the object is constructed in its node and stays there. std::vector requires elements to be movable to grow, so with such a type it does not merely perform badly, it does not compile, and the usual workaround (a vector of unique_ptr) adds a second allocation and an indirection per element anyway."
+  signal: "A vector of unique_ptr whose only purpose is to stop the elements from moving, or a class carrying a mutex or atomic member that a container refuses to hold."

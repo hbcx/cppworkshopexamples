@@ -1,0 +1,17 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A lookup table is loaded once at startup and then only read for the lifetime of the process: a routing table, a symbol or string-intern table, currency and instrument reference data, a parsed configuration. Millions of lookups follow, and nothing is ever inserted again."
+  why: "Build it in a vector, sort it once, and binary_search it: the whole table is contiguous, so a probe touches a handful of cache lines instead of chasing a pointer per tree level, and the memory footprint drops several times over because there is no node and no three pointers per entry. std::map pays for insert-anywhere and stable references on every lookup, and this table never inserts and holds no references."
+  signal: "A std::map or std::unordered_map that is filled in one place -- an init, a load or a constructor -- and afterwards only ever read from, with no insert or erase anywhere on the hot path."
+
+- problem: "A cache, a session table or a per-connection state map is probed on every request by an exact key, and nothing downstream cares what order the entries are in. The lookup is on the hot path and the table is large enough that it does not fit in cache."
+  why: "std::unordered_map hashes straight to a bucket, which is one probe rather than the log n dependent loads a red-black tree walks -- and at a million entries each of those levels is a likely cache miss. std::map is the wrong default here: its ordering is real work that costs on every lookup, and nothing in this problem asks for it."
+  signal: "A std::map keyed by an id, a hash, a pointer or a session token, iterated nowhere or only for a full sweep where the order does not matter."
+
+- problem: "A small lookup lives inside a hot function: a handful of options, a dozen state transitions, the headers of one request. The container is small and does not grow, but the function runs on every request or every frame."
+  why: "At a few dozen elements, a linear scan over a sorted or unsorted vector beats both associative containers -- the whole thing is in one or two cache lines, and the comparisons cost less than computing a hash or walking a tree. Reaching for unordered_map here means paying the allocation and the hash for a search that would have finished before the hash function returned."
+  signal: "A std::map or std::unordered_map created as a local or a small member, filled with a fixed handful of entries -- often in an initializer list -- and searched a few times."
+
+- problem: "Tens of millions of small entries have to be held in memory at once: an index, a deduplication table, a graph adjacency structure. The limit that bites first is not the lookup time, it is the memory, and the process gets killed or starts swapping before it gets slow."
+  why: "A node-based container allocates one node per entry, so a pair of small integers can turn into an allocation carrying several pointers and allocator overhead -- a flat sorted vector of the same data commonly uses several times less. That factor decides whether the data fits in RAM at all, which is a different question from which container has the better complexity on paper."
+  signal: "A map or unordered_map holding millions of small entries -- integer keys, small structs -- in a process whose resident memory is the constraint being complained about."
