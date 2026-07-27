@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "maps"
+  note: "The ordered container in depth: operator[] that inserts, the find/at/count toolbox, custom ordering, and the node stability a vector lacks."
+- slug: "unordered-containers"
+  note: "The hash-table container in depth: reserve and the load factor, custom keys, and why the iteration order is unspecified."
+- slug: "vectors"
+  note: "The sorted-vector contender from the benchmark on this page, and why contiguous storage beats a tree at small sizes."

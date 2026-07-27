@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "move-semantics"
+  note: "Why a growing vector sometimes copies instead of moves: element moves are only used during reallocation when they cannot throw."
+- slug: "lists"
+  note: "The node-based alternative when stable references or O(1) splicing matter, with the honest head-to-head benchmark against vector."
+- slug: "arrays"
+  note: "The fixed-size sibling: the same contiguous storage but on the stack, with no allocation and the length baked into the type."

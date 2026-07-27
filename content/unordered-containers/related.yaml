@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "maps"
+  note: "The ordered sibling: when you need keys in order, range queries with lower_bound, or a defined iteration order."
+- slug: "associative-containers"
+  note: "The benchmark that pits unordered_map against std::map and a sorted vector across five sizes."
+- slug: "sets"
+  note: "The ordered counterpart of unordered_set: range queries and the set-algebra algorithms a hash set cannot offer."

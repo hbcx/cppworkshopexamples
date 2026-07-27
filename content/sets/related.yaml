@@ -1,0 +1,6 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "unordered-containers"
+  note: "Drop the ordering for O(1) average membership: std::unordered_set, for when you never ask for ranges or sorted output."
+- slug: "maps"
+  note: "Attach a value to each key: the same balanced tree and node stability, as a key-to-value container."

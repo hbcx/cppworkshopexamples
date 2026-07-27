@@ -1,0 +1,6 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "vectors"
+  note: "Where moves pay off most: a vector reallocation moves its elements instead of copying them, but only when the move constructor is noexcept."
+- slug: "lists"
+  note: "The container that never relocates its elements: splice relinks nodes in place, and a std::list can even hold types that are not movable at all."

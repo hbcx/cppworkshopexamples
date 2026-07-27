@@ -1,0 +1,6 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "vectors"
+  note: "The dynamic sibling: reach for it the moment the element count is not fixed at compile time."
+- slug: "move-semantics"
+  note: "Why moving a std::array is not a steal: with no heap buffer to hand over, a move has to copy every element."

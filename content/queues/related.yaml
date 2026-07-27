@@ -1,0 +1,6 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "lists"
+  note: "One of the containers a queue can wrap (deque by default, list yes, vector never), and where a general list picks up."
+- slug: "vectors"
+  note: "Why a std::vector can never back a queue: it has no pop_front, which is exactly what the FIFO adaptor needs."

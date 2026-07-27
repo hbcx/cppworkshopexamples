@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "vectors"
+  note: "The default contiguous container, and the honest benchmark of the list O(1)-insertion promise against it."
+- slug: "move-semantics"
+  note: "Why list is special for moves: splice transfers whole nodes without touching the elements, and it can hold non-movable types."
+- slug: "queues"
+  note: "std::list seen from the other side: one of the containers the FIFO adaptors can be built on."
