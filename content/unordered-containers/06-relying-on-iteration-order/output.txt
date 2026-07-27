@@ -1,0 +1,10 @@
+sorted explicitly before output:
+  depth = 24
+  fps = 60
+  height = 600
+  width = 800
+same data through std::map (ordered by construction):
+  depth = 24
+  fps = 60
+  height = 600
+  width = 800

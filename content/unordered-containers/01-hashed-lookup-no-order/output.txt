@@ -1,0 +1,5 @@
+bob   -> 25
+carol -> 41
+has eve? no
+size = 4
+keys (sorted for display): alice bob carol dave

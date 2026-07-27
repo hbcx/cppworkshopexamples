@@ -1,0 +1,15 @@
+title: "reserve, the load factor, and rehashing"
+standard: "C++11"
+difficulty: 2
+summary: "A hash table rehashes when the load factor would cross its limit; reserve(n) pre-sizes the buckets so a known bulk insert never rehashes."
+notes: "load_factor() is size()/bucket_count(); when an insert would push it past max_load_factor() (default 1.0) the container rehashes -- a bigger bucket array is allocated and every element re-filed. Growing from empty does this several times, and each rehash is O(size). reserve(n) sets the bucket array large enough up front, so inserting up to n elements never rehashes -- the single biggest performance lever these containers have, and the reason the benchmark in Associative containers measures the build cost without it. The exact bucket counts are implementation-defined, so the example checks only portable facts (did a rehash happen, is the load under its cap), never raw counts. trace is off because the loops run thousands of iterations."
+run: true
+sanitizers: []
+trace: false
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "std::unordered_map::reserve", url: "https://en.cppreference.com/w/cpp/container/unordered_map/reserve" }
+  - { name: "std::unordered_map::load_factor", url: "https://en.cppreference.com/w/cpp/container/unordered_map/load_factor" }
+  - { name: "std::unordered_map::max_load_factor", url: "https://en.cppreference.com/w/cpp/container/unordered_map/max_load_factor" }
+  - { name: "std::unordered_map::bucket_count", url: "https://en.cppreference.com/w/cpp/container/unordered_map/bucket_count" }

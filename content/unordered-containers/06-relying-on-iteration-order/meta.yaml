@@ -1,0 +1,12 @@
+title: "Anti-pattern: relying on the iteration order"
+standard: "C++11"
+difficulty: 3
+summary: "The iteration order of an unordered_map is unspecified; code that serializes or compares it as if it were stable is flaky across runs, key changes and library versions."
+notes: "An unordered_map has no order to iterate in: the sequence you get depends on the hashes and the bucket count, so it is neither insertion nor sorted order, it moves when unrelated keys are added, and it differs between standard libraries. Any output produced by iterating one directly -- a config file, a serialized document, the text a golden-file test compares -- is therefore unstable, and the resulting test flakiness looks like it has no cause. The fix is to impose an order: copy the entries out and sort them, or use std::map when a defined order is a standing requirement. The example never prints the raw order (that would itself differ between compilers); it shows only the two fixes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

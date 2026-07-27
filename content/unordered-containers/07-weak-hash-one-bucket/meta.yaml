@@ -1,0 +1,14 @@
+title: "Anti-pattern: a weak hash that fills one bucket"
+standard: "C++11"
+difficulty: 3
+summary: "A hash that ignores part of the key sends every colliding key into one bucket; the map stays correct but each lookup degrades from O(1) to O(n)."
+notes: "A hash container is only fast if the hash spreads keys across buckets. A hash that hashes only some of the fields operator== compares -- here only category -- makes every key sharing that field collide into the same bucket, whatever the bucket count, so a lookup walks a linked list of all of them. Nothing looks wrong: results are correct and it is fast in tests with few keys; the O(n) behaviour only shows up under real load. The example proves it without timing, by measuring the largest bucket: the weak hash puts all n keys in one bucket (deterministic on every implementation), the good hash keeps the largest bucket a tiny fraction of n. trace is off because the loops run 1000+ iterations. The mix in GoodHash is illustrative, not a cryptographic or production-grade hash."
+run: true
+sanitizers: []
+trace: false
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+  - { name: "std::unordered_map::bucket_size", url: "https://en.cppreference.com/w/cpp/container/unordered_map/bucket_size" }
+  - { name: "std::unordered_map::bucket_count", url: "https://en.cppreference.com/w/cpp/container/unordered_map/bucket_count" }

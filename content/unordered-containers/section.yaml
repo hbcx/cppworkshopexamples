@@ -1,0 +1,4 @@
+title: "std::unordered_map / unordered_set"
+description: "The hash-table containers and the mechanics that decide whether they are fast: lookup by key with no order at all, why the iteration order is unspecified and must never be relied on, how reserve and the load factor control rehashing, the subtle rule that a rehash invalidates iterators but not references, and how to give a container your own type as a key with a hash it can actually spread. The map-vs-hash-vs-vector benchmark lives in the Associative containers section; this one is about the hash containers themselves."
+sort_order: 9
+category: "Containers"

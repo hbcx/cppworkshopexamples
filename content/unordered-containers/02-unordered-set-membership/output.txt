@@ -1,0 +1,10 @@
+login  (new)
+click  (new)
+login  (seen before)
+purchase  (new)
+click  (seen before)
+login  (seen before)
+distinct values: 3
+seen 'purchase'? yes
+seen 'logout'?   no
+first occurrences, in arrival order: login click purchase

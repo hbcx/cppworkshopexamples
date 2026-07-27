@@ -1,0 +1,13 @@
+title: "unordered_set: membership and deduplication"
+standard: "C++11"
+difficulty: 1
+summary: "A hash set of unique values: insert reports whether the value was new in one lookup, which is exactly what a dedup or seen set needs."
+notes: "std::unordered_set is the set counterpart of unordered_map -- unique elements, O(1) average insert and membership, no order. insert returns a pair whose bool is true only when the element was actually new, so a single call both records the item and tells you whether it had been seen, which is the whole deduplication pattern. Where std::set would also keep everything sorted and let you ask for ranges, unordered_set drops the order for speed: use it when the only question is present or not, and reach for std::set when you need the ordering too."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }
+detailed_tags:
+  - { name: "std::unordered_set::insert", url: "https://en.cppreference.com/w/cpp/container/unordered_set/insert" }
+  - { name: "std::unordered_set::find", url: "https://en.cppreference.com/w/cpp/container/unordered_set/find" }
+  - { name: "std::unordered_set::count", url: "https://en.cppreference.com/w/cpp/container/unordered_set/count" }

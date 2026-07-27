@@ -1,0 +1,14 @@
+title: "A rehash invalidates iterators, but not references"
+standard: "C++11"
+difficulty: 3
+summary: "Growing an unordered_map rebuilds its bucket array, which invalidates iterators -- yet pointers and references to the elements stay valid, because the nodes themselves do not move."
+notes: "This is the rule that surprises people and the one worth remembering. A rehash reallocates the bucket array and re-files every element, so any iterator obtained before it is dangling and dereferencing it is undefined behaviour. But the elements live in separately allocated nodes that a rehash does not move, so pointers and references to them survive -- unlike std::vector, where a growth reallocation invalidates everything at once. The example takes a pointer and a reference before forcing 100000 inserts, then reads through them afterwards; the invalidated-iterator case is only described in a comment, never executed, because that would be UB. trace is off because the loop runs 100000 iterations."
+run: true
+sanitizers: []
+trace: false
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }
+  - { name: "std::unordered_map::rehash", url: "https://en.cppreference.com/w/cpp/container/unordered_map/rehash" }
+  - { name: "std::unordered_map::operator[]", url: "https://en.cppreference.com/w/cpp/container/unordered_map/operator_at" }

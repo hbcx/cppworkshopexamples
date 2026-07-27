@@ -1,0 +1,5 @@
+(0,0) -> origin
+(1,0) -> east
+(0,1) -> north
+has (5,5)? no
+size = 3

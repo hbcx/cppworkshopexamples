@@ -1,0 +1,13 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A stream of items has to be deduplicated as it flows past: URLs a crawler has already fetched, message or event IDs that must be processed exactly once, keys that have already been handled in this run. The only question ever asked is have I seen this before, and the answer decides whether the item is processed at all."
+  why: "unordered_set answers membership in average O(1) and insert reports newness in the same lookup, so the check is one hash probe per item. std::set would keep everything sorted in a tree -- a per-element node and an O(log n) probe -- to maintain an order nothing here ever reads, and a sort-then-unique over a vector cannot work at all when the answer is needed as each item arrives rather than after the whole input is in."
+  signal: "A std::set or a sorted vector used only with insert plus find/contains and never iterated in order, or a collection named seen, visited, known or processed."
+
+- problem: "A pass over data has to tally counts by key: words in a document, requests per endpoint, events per type, errors per code. The keys are not known in advance, counts are bumped in a hot loop, and the totals are read only once the pass is done."
+  why: "unordered_map<Key,int> makes each ++counts[key] a single average-O(1) hash probe, and the intermediate order genuinely does not matter -- if the final report needs sorting, that is one sort at the end over the distinct keys, not work paid on every increment. std::map would re-balance a tree and pay O(log n) on every ++, keeping an ordering that is thrown away until the very last step."
+  signal: "++counts[key] or counts[key]++ against a std::map inside a loop, or a map whose values are counters that are only read after the loop that fills them."
+
+- problem: "A compiler, parser, protocol decoder or logging pipeline meets the same strings over and over -- identifiers, field names, tags -- and wants to intern them: map each distinct name to a small integer id once, then compare and store ids instead of strings for the rest of the run."
+  why: "Interning is lookup-dominated and the order of the names is meaningless, which is exactly where a hash wins: one hash of the string per lookup. std::map<std::string,Id> compares whole strings at each of its log n tree levels, so a miss on a long identifier walks several full string comparisons -- and it sorts the names into an order the rest of the program never uses."
+  signal: "A std::map keyed by std::string used as a name-to-handle or string-to-id table, or string comparisons from a std::map lookup showing up in a profile."

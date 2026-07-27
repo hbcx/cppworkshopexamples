@@ -1,0 +1,12 @@
+title: "Using your own type as a key"
+standard: "C++11"
+difficulty: 3
+summary: "A user-defined key needs an operator== and a hash functor passed as the third template argument -- the container has no way to hash your type otherwise."
+notes: "Built-in and standard types come with a std::hash specialization, so std::unordered_map<int,...> just works; a user type has none, so you provide two things: an operator== so the container can confirm a match within a bucket, and a hash functor supplied as the third template parameter (or a std::hash specialization). The two must agree -- if a==b then their hashes must be equal -- and the hash should mix every field that operator== looks at, or distinct keys collide needlessly. This example combines both coordinates; hashing only one is the trap the weak-hash anti-pattern shows."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+  - { name: "std::unordered_map::at", url: "https://en.cppreference.com/w/cpp/container/unordered_map/at" }

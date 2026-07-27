@@ -1,0 +1,4 @@
+inserting 10000 entries into an unordered_map
+  without reserve: rehashed while filling? yes
+  with reserve(10000): rehashed while filling? no
+after reserve+fill: load_factor <= max_load_factor? yes

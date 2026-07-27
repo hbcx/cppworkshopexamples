@@ -1,0 +1,13 @@
+title: "Hashed lookup, and no order at all"
+standard: "C++11"
+difficulty: 1
+summary: "std::unordered_map keys a value like std::map but by hashing, so lookup is O(1) average -- and iteration order is unspecified, never insertion or sorted order."
+notes: "The key is hashed straight to a bucket, so find/at/count are average constant time rather than the O(log n) of a tree. The cost is order: iterating an unordered_map gives no guaranteed sequence -- not insertion order, not sorted, and it can differ between standard libraries -- so this example copies the keys out and sorts them before printing. If you need a defined order at all times, that is what std::map is for. count returns 0 or 1 because keys are unique; from C++20 contains reads better as an existence test."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "std::unordered_map::find", url: "https://en.cppreference.com/w/cpp/container/unordered_map/find" }
+  - { name: "std::unordered_map::at", url: "https://en.cppreference.com/w/cpp/container/unordered_map/at" }
+  - { name: "std::unordered_map::count", url: "https://en.cppreference.com/w/cpp/container/unordered_map/count" }

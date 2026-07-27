@@ -1,0 +1,2 @@
+alice, reached via the pre-rehash pointer/reference: 102
+size after growth: 100001
