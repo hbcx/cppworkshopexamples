@@ -1,0 +1,7 @@
+Ann joined
+Ann use_count = 3
+after local reset, owners = 2
+after roster.clear, owners = 1
+still alive: Ann
+Ann left
+team cleared

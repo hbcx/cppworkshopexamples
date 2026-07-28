@@ -1,0 +1,21 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A service builds an expensive read-only object -- a parsed configuration snapshot, a decoded texture or asset, a compiled query plan, a loaded model -- and hands it to many workers at once. No single worker knows when the others are finished, and the object must live until the last reader is done."
+  why: "A shared_ptr lets every reader hold the object and frees it exactly when the last one drops it, with no owner having to coordinate the shutdown. A single owner plus raw pointers dangles the moment that owner frees early, and deep-copying the object per reader wastes memory and defeats the point of a shared snapshot."
+  signal: "One immutable object handed to several threads or subsystems as a raw pointer with a comment about not freeing it, or a heavy object deep-copied per consumer purely to be safe about lifetime."
+
+- problem: "An object registers a callback, or is captured by an asynchronous operation -- a timer, a network reply, a thread-pool task -- that may complete after the code which started it has moved on and dropped its own reference to the object."
+  why: "Capturing a shared_ptr in the callback keeps the target alive until the in-flight work runs and releases it, so the callback never touches a freed object; an observer that must NOT extend the lifetime holds a weak_ptr and lock()s it, getting a clean miss if the object is already gone. A raw pointer captured by the callback is a use-after-free waiting for the timing to line up."
+  signal: "A lambda or callback capturing a bare this or a raw pointer and run later by a timer, socket or thread pool, or an observer list of raw pointers with no defined rule for removal when the target dies."
+
+- problem: "A structure where a node genuinely has several parents -- a dependency DAG, an expression graph that shares common subexpressions, a scene graph with instanced meshes referenced from many places -- so there is no single owner to attach the lifetime to."
+  why: "shared_ptr models multiple ownership directly: a node lives while any parent still references it and is freed when the last one lets go. unique_ptr cannot express more than one owner at all, and a hand-rolled reference count re-implements shared_ptr with more bugs. The known trap, a cycle that never frees, is handled by making the non-ownership direction a weak_ptr."
+  signal: "Nodes reachable from multiple parents freed by hand-written reference counting, or a graph where unique_ptr was abandoned because an object turned out to need a second owner."
+
+- problem: "Several handles refer to one underlying buffer or immutable value -- a persistent data structure, a message broadcast to subscribers, historically some string implementations -- and a deep copy on every assignment would be the dominant cost even though most handles never mutate."
+  why: "Sharing the buffer through a shared_ptr makes assignment a cheap reference bump, and use_count() == 1 is the exact test for whether a handle is the sole owner and may therefore mutate in place instead of copying. Deep-copying on every assignment pays for isolation that most call sites never use."
+  signal: "An assignment operator or value type that always deep-copies a large buffer, or code checking a hand-maintained shared flag before deciding whether to mutate or copy."
+
+- problem: "A result or message is produced on one thread and consumed by one or more others -- a value broadcast to N subscribers, a task result awaited by several waiters -- and it is not known in advance which thread will be the last to finish with it."
+  why: "Because the reference count is atomic, whichever thread drops the final reference is the one that frees the object, safely, with no lock guarding the lifetime. unique_ptr cannot express last-of-N ownership, and a raw pointer guarded by a manual mutex-and-counter re-creates shared_ptr by hand and tends to get the teardown race wrong."
+  signal: "A raw pointer shared across threads with a separate lock and integer counter deciding when to delete it, or a producer that cannot tell which consumer will outlive the others."

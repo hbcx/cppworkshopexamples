@@ -1,0 +1,6 @@
+load grass
+owners while alive = 1
+cache hit: grass
+free grass
+expired? yes
+cache miss: reload needed

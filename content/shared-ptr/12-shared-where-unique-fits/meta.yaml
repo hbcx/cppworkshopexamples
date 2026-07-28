@@ -1,0 +1,12 @@
+title: "Anti-pattern: shared_ptr where unique_ptr fits"
+standard: "C++11"
+difficulty: 3
+summary: "A shared_ptr that is never actually shared pays for a heap control block and atomic reference counting that buy nothing, and it hides that ownership is really unique."
+notes: "shared_ptr is not the default smart pointer -- unique_ptr is. If an object has a single owner for its whole life, a shared_ptr there costs a separate control-block allocation and an atomic increment and decrement on every copy, none of which is needed, and worse it tells the reader that ownership is shared when it is not. The signal is a shared_ptr whose use_count() is always 1. The fix is unique_ptr, which states the single-owner intent, needs no control block and no atomics, and still converts to shared_ptr later if genuine sharing ever appears. Reach for shared_ptr only when more than one owner is real."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }

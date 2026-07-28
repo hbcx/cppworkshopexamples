@@ -1,0 +1,11 @@
+title: "Sharing one object across several containers"
+standard: "C++11"
+difficulty: 2
+summary: "The same object can be held by several containers at once; removing it from one leaves it alive as long as any other still holds a shared_ptr to it."
+notes: "This is the everyday reason to reach for shared_ptr: one object is referenced from more than one place -- a by-id index and a by-team list, a cache and a live view -- and no single container owns it. Each container holds its own shared_ptr, so the object survives until the last container drops it; clearing one index while another still holds the object does not destroy it. The cost is a heap-allocated control block and an atomic count per object, so if in truth there is only ever one container that owns it, unique_ptr in that container is the cheaper, clearer choice."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }

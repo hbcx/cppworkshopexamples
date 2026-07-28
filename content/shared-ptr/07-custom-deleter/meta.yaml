@@ -1,0 +1,11 @@
+title: "Custom deleter in the control block"
+standard: "C++11"
+difficulty: 2
+summary: "A shared_ptr can take a custom deleter like unique_ptr, but it stores the deleter in the control block, so the deleter is not part of the type and does not change the pointer's size."
+notes: "Pass a second argument to the shared_ptr constructor and it runs that instead of delete -- the way to wrap a C handle so it is released when the last owner drops it. The key difference from unique_ptr: the deleter is type-erased into the control block, not baked into the type. So shared_ptr<DbConn> is one type whatever the deleter is, two of them with different deleters interoperate and can be assigned to each other, and sizeof(shared_ptr) is unchanged (it is always two pointers: the object and the control block). The price is paid once in the control-block allocation rather than in the type. make_shared cannot attach a deleter, so these use the constructor directly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

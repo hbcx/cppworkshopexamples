@@ -1,0 +1,4 @@
+Widget 1 born
+converted: u holds no, s holds Widget 1 (use_count 1)
+shared use_count = 2
+Widget 1 gone

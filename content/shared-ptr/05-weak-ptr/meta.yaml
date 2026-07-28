@@ -1,0 +1,12 @@
+title: "weak_ptr: observing without owning"
+standard: "C++11"
+difficulty: 2
+summary: "A weak_ptr refers to an object managed by shared_ptr without keeping it alive; lock() promotes to a shared_ptr if the object still exists, or reports a miss if it is gone."
+notes: "A weak_ptr points at an object owned by shared_ptrs but does not raise the reference count, so it never keeps the object alive. To use the object you call lock(), which atomically returns a shared_ptr if the object is still there (a cache hit) or an empty one if the last owner has already freed it (a miss). expired() answers the same question without producing a shared_ptr. This is exactly what a non-owning cache or an observer wants: it can hold a reference that becomes a defined miss when the object dies, instead of a dangling raw pointer that is undefined to touch. weak_ptr is also how you break the reference cycles that plain shared_ptrs create."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::lock", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/lock" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

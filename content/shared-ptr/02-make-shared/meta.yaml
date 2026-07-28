@@ -1,0 +1,11 @@
+title: "Prefer make_shared"
+standard: "C++11"
+difficulty: 2
+summary: "make_shared builds the object and its control block in a single allocation, is exception-safe, and names the type once; the tradeoff is that a lingering weak_ptr then keeps the whole block alive."
+notes: "shared_ptr(new T) allocates twice -- once for the object, once for the control block that holds the reference counts -- while make_shared fuses them into one allocation, which is faster and touches one cache line instead of two. It is also exception-safe, closing the same argument-evaluation hole make_unique does, and names the type only once. Two caveats: make_shared cannot take a custom deleter (use the constructor for that), and because the object and control block share one allocation, a surviving weak_ptr keeps that entire block -- including the memory the object occupied -- alive until the last weak_ptr is gone; with a separate new, the object's memory can be reclaimed as soon as the last shared_ptr dies even if weak_ptrs remain."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+detailed_tags: []

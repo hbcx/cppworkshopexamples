@@ -1,0 +1,6 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "unique-ptr"
+  note: "The single-owner default: reach for unique_ptr first and widen to shared_ptr only when ownership is genuinely shared, since the atomic reference count is not free."
+- slug: "move-semantics"
+  note: "Why moving a shared_ptr beats copying it: a move transfers the reference and skips the atomic increment and decrement that a copy pays."

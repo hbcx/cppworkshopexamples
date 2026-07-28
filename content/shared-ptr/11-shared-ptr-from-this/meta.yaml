@@ -1,0 +1,11 @@
+title: "Anti-pattern: shared_ptr from this"
+standard: "C++11"
+difficulty: 3
+summary: "Building a shared_ptr from a raw this makes a second control block over an already-owned object, so two counts each delete it; use enable_shared_from_this instead."
+notes: "When a method needs a shared_ptr to its own object, writing shared_ptr<T>(this) creates a control block from scratch -- a second one, because the object is already owned by the shared_ptr the caller holds. Now two independent counts each reach zero and delete the object: a double free. The fix is to derive from enable_shared_from_this<T> and return shared_from_this(), which shares the object's ORIGINAL control block. This only works if the object is already managed by a shared_ptr (see the enable_shared_from_this example); calling it otherwise is undefined. The example runs the correct tool and describes the broken shared_ptr(this) rather than executing the double free."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::enable_shared_from_this", url: "https://en.cppreference.com/w/cpp/memory/enable_shared_from_this" }
+detailed_tags: []

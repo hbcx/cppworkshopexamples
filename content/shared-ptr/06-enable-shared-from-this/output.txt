@@ -1,0 +1,5 @@
+use_count after register = 2
+registry keeps it alive, use_count = 1
+still usable: Worker 1
+Worker 1 destroyed
+done

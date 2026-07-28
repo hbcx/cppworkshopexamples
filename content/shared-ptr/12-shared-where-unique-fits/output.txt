@@ -1,0 +1,3 @@
+[shared] port 8080, use_count stays 1
+[unique] port 8080, single owner, no refcount
+same behaviour; unique_ptr is cheaper and states the intent

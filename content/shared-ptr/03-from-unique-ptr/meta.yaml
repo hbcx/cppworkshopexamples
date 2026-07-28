@@ -1,0 +1,12 @@
+title: "From unique_ptr to shared_ptr (a one-way street)"
+standard: "C++11"
+difficulty: 2
+summary: "A unique_ptr converts to a shared_ptr in one move and even carries its deleter over; the reverse does not exist, which is why factories return unique_ptr."
+notes: "unique_ptr to shared_ptr is a supported implicit conversion from an rvalue: shared_ptr<T> s = std::move(u) transfers ownership, leaves u empty, and the shared_ptr adopts the unique_ptr's deleter. This gives a clean rule -- create as unique_ptr (single owner, cheapest) and widen to shared_ptr only when ownership genuinely becomes shared. There is no conversion the other way: a shared_ptr may have other owners, so it can never hand back exclusive ownership, and it has no release(). That asymmetry is the reason a factory should return unique_ptr rather than shared_ptr -- every caller can promote a unique_ptr to shared, but a caller who only needs one owner cannot demote a shared_ptr back."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

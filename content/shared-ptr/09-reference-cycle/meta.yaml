@@ -1,0 +1,12 @@
+title: "Anti-pattern: a reference cycle leaks"
+standard: "C++11"
+difficulty: 3
+summary: "Two objects that own each other with shared_ptrs keep each other's count above zero forever, so neither is ever destroyed; make the back-edge a weak_ptr."
+notes: "shared_ptr frees an object when its count reaches zero, but a cycle prevents that: if A owns B and B owns A, each holds the other at count one even after every external handle is gone, so both leak silently -- no crash, no warning, just memory that is never reclaimed and destructors that never run. This is the failure mode people mean when they say shared_ptr does not prevent leaks. The fix is to decide which direction is ownership and which is a back-reference, and make the back-reference a weak_ptr: it does not raise the count, so the cycle is broken and the objects are destroyed. The example deliberately leaks the cyclic pair (a defined leak, not undefined behaviour) to show the symptom, then shows the weak_ptr version freeing cleanly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::lock", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/lock" }

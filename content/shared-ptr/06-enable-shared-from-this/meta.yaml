@@ -1,0 +1,11 @@
+title: "enable_shared_from_this: a shared_ptr to yourself"
+standard: "C++11"
+difficulty: 3
+summary: "Deriving from enable_shared_from_this lets a method hand out a shared_ptr to its own object that shares the existing control block, instead of a wrong second one."
+notes: "Sometimes an object must give a shared_ptr to itself -- registering a callback that may run after the caller drops its reference, or adding itself to a list of live objects. Writing shared_ptr<T>(this) is wrong: it builds a SECOND control block, so two independent counts will each delete the object (see the shared_ptr(this) anti-pattern). Deriving from enable_shared_from_this<T> and calling shared_from_this() instead returns a shared_ptr that shares the ORIGINAL control block. The rule that makes it work: the object must already be owned by a shared_ptr before shared_from_this() is called (typically created with make_shared) -- calling it on a stack object or inside the constructor is undefined."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::enable_shared_from_this", url: "https://en.cppreference.com/w/cpp/memory/enable_shared_from_this" }
+detailed_tags: []

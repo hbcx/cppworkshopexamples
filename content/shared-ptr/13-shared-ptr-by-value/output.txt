@@ -1,0 +1,4 @@
+value = 7
+use_count after read = 1
+use_count after keep = 2
+stored value = 7

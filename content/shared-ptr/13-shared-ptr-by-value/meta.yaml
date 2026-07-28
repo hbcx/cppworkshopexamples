@@ -1,0 +1,12 @@
+title: "Anti-pattern: passing shared_ptr by value to observe"
+standard: "C++11"
+difficulty: 3
+summary: "Taking shared_ptr by value just to read the object does an atomic increment and decrement on every call; take a reference or raw pointer to observe, shared_ptr by value only to share."
+notes: "A shared_ptr copy is an atomic increment now and an atomic decrement on return -- cheap once, but on a hot path called constantly it adds real synchronisation traffic and can dominate. A function that only reads the object does not need any of it. The guidance from the C++ Core Guidelines and Herb Sutter (GotW 91): take a plain reference or raw pointer to OBSERVE, which touches no count and works whatever owns the object (unique_ptr, shared_ptr, or a stack object); take shared_ptr by value only when the function actually keeps a copy, i.e. shares ownership -- storing it, capturing it in a task; and take shared_ptr& only when the function may reseat the caller's pointer. The signal is a shared_ptr parameter in a function that never copies it anywhere."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

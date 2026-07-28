@@ -1,0 +1,7 @@
+Resource 1 acquired
+one owner, use_count = 1
+two owners, use_count = 2
+b sees Resource 1
+after inner scope, use_count = 1
+a still sees Resource 1
+Resource 1 released

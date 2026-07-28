@@ -1,0 +1,12 @@
+title: "The reference count is atomic; the object is not"
+standard: "C++11"
+difficulty: 3
+summary: "Copying and destroying shared_ptrs to one object from several threads is safe because the reference count is atomic, but the managed object itself still needs its own synchronisation."
+notes: "The control block's reference count is maintained with atomic operations, so multiple threads may freely copy, assign and destroy shared_ptrs that point at the SAME object without a data race on the count. This example exercises exactly that from several threads and is race-free by construction (the object is only read); the definitive check is a ThreadSanitizer build, which runs in CI on Linux -- TSan is not available on the Windows toolchain here, so locally the example is executed but not sanitiser-verified. Two things this does NOT give you. First, the managed object is not protected: two threads writing the pointee at once is a data race like any other and needs a mutex or atomics of its own. Second, a single shared_ptr INSTANCE shared between threads and reassigned by them is itself unsynchronised; only operations on separate shared_ptr instances that happen to share a control block are safe. The example runs the safe part and describes the unsafe write rather than executing it."
+run: true
+sanitizers: []
+trace: false
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }

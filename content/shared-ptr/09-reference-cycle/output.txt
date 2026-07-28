@@ -1,0 +1,9 @@
+-- the cycle (leaks) --
+A use_count = 2
+live Bad after scope = 2 (leaked: no destructor ran)
+-- the fix (weak_ptr back-edge) --
+A use_count = 1
+B can still reach A while it lives
+Good A destroyed
+Good B destroyed
+live Good after scope = 0 (fixed: all freed)

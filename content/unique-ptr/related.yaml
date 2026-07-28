@@ -4,3 +4,5 @@
   note: "The mechanism underneath: unique_ptr is the canonical move-only type, and every ownership transfer here is exactly the move that section builds."
 - slug: "vectors"
   note: "Where owning pointers get collected: a vector of unique_ptr holds polymorphic or non-copyable objects by base pointer, each still deleted automatically."
+- slug: "shared-ptr"
+  note: "When one owner is not enough: shared_ptr adds a reference count so several owners can share an object, with weak_ptr to break the cycles that creates -- at the cost of an atomic count."

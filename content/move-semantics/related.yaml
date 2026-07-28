@@ -6,3 +6,5 @@
   note: "The container that never relocates its elements: splice relinks nodes in place, and a std::list can even hold types that are not movable at all."
 - slug: "unique-ptr"
   note: "The payoff type: std::unique_ptr is the move-only resource owner these rules were built for, and it makes a class correct with zero hand-written special members (the rule of zero)."
+- slug: "shared-ptr"
+  note: "A type where copy versus move is visible at runtime: copying a shared_ptr is an atomic reference-count bump, while moving it is a cheap pointer steal with no count touched."

@@ -1,0 +1,11 @@
+title: "Shared ownership and the reference count"
+standard: "C++11"
+difficulty: 1
+summary: "Several shared_ptrs can own one object; a reference count tracks how many, and the object is destroyed only when the last owner goes away."
+notes: "shared_ptr models shared ownership: copying one makes another owner and bumps the reference count, and each owner going out of scope drops the count. The managed object is destroyed exactly when the count reaches zero, which is why an inner owner disappearing does not free anything while an outer owner still holds it. use_count() reports the current number of owners -- handy for understanding and tests, but a moving target in real code, so never branch on an exact value except the special case of 1 (sole owner). Reach through the pointer with -> and * just like a raw pointer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }

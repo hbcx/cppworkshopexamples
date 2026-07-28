@@ -1,0 +1,12 @@
+title: "Anti-pattern: one raw pointer, two control blocks"
+standard: "C++11"
+difficulty: 3
+summary: "Constructing two shared_ptrs from the same raw pointer gives the object two independent reference counts that both reach zero and delete it; copy the shared_ptr instead."
+notes: "Copying a shared_ptr is safe and is how you share ownership -- both copies use the SAME control block and one shared count. The trap is constructing two shared_ptrs from the same RAW pointer: each builds its own control block with its own count of one, so each will independently hit zero and delete the object -- a double free and undefined behaviour. It usually happens when a raw pointer escapes (from new, from get(), or from a C API) and is wrapped more than once. The fix is to build exactly one shared_ptr and copy that to share, or use make_shared so no raw pointer is ever exposed to wrap twice."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }
