@@ -1,0 +1,12 @@
+title: "The control block outlives the object"
+standard: "C++11"
+difficulty: 3
+summary: "A weak_ptr stays safe to query after the object is destroyed because it keeps the control block alive; with make_shared it also pins the object's storage until the last weak_ptr is gone."
+notes: "When the last shared_ptr goes, the object is destroyed immediately, but a weak_ptr onto it does not become invalid to touch: lock() returns null and expired() returns true, safely. That works because the reference-counted control block, which holds both the strong count and a weak count, outlives the object -- it is freed only when the last weak_ptr also goes. One consequence to know: make_shared puts the object and the control block in a single allocation, so a surviving weak_ptr keeps that whole block -- including the memory the object occupied -- alive until the last weak_ptr is released. If weak_ptrs are expected to vastly outlive their objects, constructing with shared_ptr(new T) instead lets the object's storage be reclaimed as soon as the strong count hits zero, leaving only the small control block held."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::expired", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/expired" }
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }

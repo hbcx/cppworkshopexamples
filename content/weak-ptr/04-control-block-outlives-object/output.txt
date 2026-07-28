@@ -1,0 +1,6 @@
+Widget 1 built
+alive: use_count = 1, expired = no
+Widget 1 destroyed
+after owner gone: use_count = 0, expired = yes
+lock() returns null
+done

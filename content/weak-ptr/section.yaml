@@ -1,0 +1,4 @@
+title: "std::weak_ptr"
+description: "The non-owning smart pointer: it refers to an object managed by shared_ptr without keeping it alive, so it becomes a defined miss when the object dies instead of a dangling pointer. lock() is the safe way to use one -- an atomic check-and-acquire that returns a shared_ptr only if the object still exists -- and it is the tool for the jobs a shared_ptr cannot do: back-references that would otherwise form a leaking cycle, caches and observer lists that must not extend lifetime, and callbacks that should run only if their target is still there. Covers how the control block outlives the object, weak_from_this, and the misuses -- the expired-then-use race, weak_ptr where a raw pointer belongs, and registries that never purge their dead entries."
+sort_order: 12
+category: "Smart pointers"

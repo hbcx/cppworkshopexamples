@@ -1,0 +1,17 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A subject notifies a set of observers -- UI widgets listening for a model change, sessions subscribed to a broadcast, plugins watching an event bus -- and those observers are created and destroyed independently of the subject, sometimes without unsubscribing."
+  why: "Holding each observer as a weak_ptr lets the subject lock() at notify time and simply skip and drop the ones that have expired, so a destroyed observer falls out of the list with no explicit unregister call. A raw-pointer list dangles the moment an observer is destroyed without unsubscribing; a shared_ptr list removes the dangle only by keeping every observer alive forever, turning the subject into a leak and defeating the point of observing."
+  signal: "An observer or listener list of raw pointers with a matching unregister call that must run in every observer destructor, or a subject that outlives its observers yet holds them by shared_ptr."
+
+- problem: "A cache deduplicates expensive shared objects -- decoded textures, parsed files, compiled shaders, open connections -- so repeated requests for one key return a single instance, but the cache must not keep an object alive after its real users are done with it."
+  why: "Storing a weak_ptr per key lets the cache return the live instance on a hit and reload on a miss while ownership stays entirely with the callers, so an entry frees itself as soon as the last user drops it. A shared_ptr cache never releases and grows without bound; rebuilding the object on every request throws away the deduplication the cache exists to provide."
+  signal: "A map from key to shared_ptr value that is only ever inserted into, or a factory that rebuilds an identical heavy object on each call because nothing remembers the live one."
+
+- problem: "A hierarchy where the owner points down to what it owns and the owned object needs to point back up -- a DOM node to its parent, a widget to its window, a graph node to the graph -- and the two directions together must not form an ownership cycle."
+  why: "Making the ownership direction shared_ptr and the back-reference weak_ptr keeps the structure acyclic, so it is destroyed normally, while the child can still lock() its way to the parent for as long as the parent lives. A raw back-pointer dangles under teardown orders where the child briefly outlives the parent; a shared_ptr back-edge closes the cycle and leaks the whole structure."
+  signal: "A parent and child that both hold a shared_ptr to each other, or a child holding a raw parent pointer that some code path can outlive."
+
+- problem: "A deferred action -- a timer callback, a completion handler, a queued UI update -- should run only if the object it targets still exists: update the label if the window is still open, deliver the result if the request was not cancelled."
+  why: "Capturing a weak_ptr and lock()ing it when the callback fires runs the action only on a live target and quietly no-ops otherwise, without the callback deciding the object's lifetime. Capturing a shared_ptr instead keeps the target alive until the callback runs, so a window that should have closed lingers until its last pending timer fires; capturing a raw this is a use-after-free if the object died first."
+  signal: "A lambda handed to a timer, thread pool or event loop that captures a bare this or a shared_ptr to the object it will touch later."

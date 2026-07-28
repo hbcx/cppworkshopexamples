@@ -1,0 +1,5 @@
+leaf's parent is root
+root use_count = 1
+~root
+after root.reset, leaf's parent is gone
+~leaf

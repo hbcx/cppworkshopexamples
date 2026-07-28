@@ -1,0 +1,11 @@
+title: "Anti-pattern: weak_ptr where a raw pointer fits"
+standard: "C++11"
+difficulty: 3
+summary: "If an observer's lifetime is strictly nested inside the owner's, a weak_ptr only adds atomic weak-count traffic and forces the target to be shared-owned; a plain reference or raw pointer is simpler and cheaper."
+notes: "weak_ptr solves a specific problem: observing an object whose lifetime is uncertain relative to yours. When it is not uncertain -- the observed object is guaranteed to outlive the observation, as with a parameter you only read for the duration of a call -- weak_ptr is the wrong tool. It forces the object to be owned by a shared_ptr just so a weak_ptr can exist, adds atomic weak-count operations on every copy, and turns every use into a lock() plus a null check for a pointer that is never actually null. A plain reference (or a raw pointer if it can legitimately be absent) says exactly what is meant -- I observe, I do not own, and I rely on you to keep it alive for my call -- with no shared ownership, no atomics, and no lock. Reserve weak_ptr for genuinely uncertain lifetimes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

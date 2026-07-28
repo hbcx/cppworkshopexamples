@@ -1,0 +1,12 @@
+title: "Anti-pattern: checking expired() then using the object"
+standard: "C++11"
+difficulty: 3
+summary: "Testing expired() and then dereferencing lock() is a check-then-act race, and dereferencing lock() without checking the result is a null-pointer dereference; lock() once and use the result only if non-null."
+notes: "Two related misuses. First, if (!w.expired()) then use *w.lock(): between the expired() check and the lock() the last owner can drop the object -- another thread, or even a destructor triggered by the same code -- so expired() said alive but lock() now returns null. Second, writing w.lock()->member directly dereferences a shared_ptr that may be empty, which is a null-pointer dereference and undefined behaviour. The single correct idiom is to lock() ONCE, storing the returned shared_ptr, and use it only inside a check: if (auto s = w.lock()) { use s; }. That is one atomic check-and-acquire, and while you hold s the object cannot vanish. expired() is only ever a hint -- fine for a stat or a log, never as a guard before use."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::lock", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/lock" }
+  - { name: "std::weak_ptr::expired", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/expired" }

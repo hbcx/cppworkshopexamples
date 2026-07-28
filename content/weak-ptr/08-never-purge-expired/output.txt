@@ -1,0 +1,2 @@
+registry size = 5, expired entries = 5
+after purge, registry size = 0

@@ -1,0 +1,9 @@
+load grass
+cache hit: grass
+a and b are the same object? yes
+grass use_count = 2
+free grass
+-- both owners dropped --
+load grass
+reloaded grass use_count = 1
+free grass

@@ -4,3 +4,5 @@
   note: "The single-owner default: reach for unique_ptr first and widen to shared_ptr only when ownership is genuinely shared, since the atomic reference count is not free."
 - slug: "move-semantics"
   note: "Why moving a shared_ptr beats copying it: a move transfers the reference and skips the atomic increment and decrement that a copy pays."
+- slug: "weak-ptr"
+  note: "The non-owning companion, in depth: observe a shared object without keeping it alive -- lock() versus expired(), weak caches, back-pointers, and weak_from_this."

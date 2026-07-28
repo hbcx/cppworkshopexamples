@@ -1,0 +1,6 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "shared-ptr"
+  note: "The owner a weak_ptr observes: a weak_ptr only exists against a shared_ptr-managed object, and lock() hands back a shared_ptr to use it safely."
+- slug: "unique-ptr"
+  note: "The other end of the family: a single owner with no reference count, so there is nothing for a weak_ptr to observe -- reach for it when exactly one owner is right."

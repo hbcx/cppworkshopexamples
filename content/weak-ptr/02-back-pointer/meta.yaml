@@ -1,0 +1,12 @@
+title: "The back-pointer that avoids a cycle"
+standard: "C++11"
+difficulty: 2
+summary: "In a tree the parent owns its children with shared_ptr; each child refers back to the parent with a weak_ptr, which models the relationship without forming an ownership cycle."
+notes: "This is the everyday positive use of weak_ptr. Ownership runs one way -- a parent owns its children through shared_ptr -- and the child needs to reach its parent, but making that back-edge a shared_ptr too would create a cycle that never frees (see the reference-cycle anti-pattern in the shared_ptr section). A weak_ptr back-pointer keeps the structure acyclic: the child can lock() its way to the parent while the parent is alive, and once the parent is gone the child's weak reference simply reports expired. The general rule for graphs: pick a direction to be ownership (shared_ptr) and make every back-reference non-owning (weak_ptr)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::lock", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/lock" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

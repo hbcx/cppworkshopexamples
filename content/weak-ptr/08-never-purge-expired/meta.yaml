@@ -1,0 +1,11 @@
+title: "Anti-pattern: never purging expired weak_ptrs"
+standard: "C++11"
+difficulty: 3
+summary: "A registry of weak_ptrs that is never cleaned keeps growing: each expired entry still holds a control block alive, and with make_shared the object's storage too, so a long-running process leaks slowly."
+notes: "A weak_ptr does not keep its object alive, but it does keep the control block alive until it is itself destroyed. A registry -- an observer list, a weak cache -- that only ever appends and never removes expired entries therefore accumulates dead weight: control blocks that will never resolve again, and with make_shared the object-sized storage fused into each one. On a long-running server this is a real, if slow, leak, and it also makes every sweep over the registry do more work. The fix is to reap expired entries -- periodically with remove_if(expired), or opportunistically each time a lock() misses -- so the registry tracks only what is still live."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::expired", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/expired" }

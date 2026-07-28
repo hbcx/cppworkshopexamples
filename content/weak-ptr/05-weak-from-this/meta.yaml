@@ -1,0 +1,12 @@
+title: "weak_from_this: a weak_ptr to yourself"
+standard: "C++17"
+difficulty: 3
+summary: "C++17 added weak_from_this() to enable_shared_from_this, letting a live object register a non-owning reference to itself without building a wrong second control block."
+notes: "Sometimes an object needs to hand out a reference to itself that does not keep it alive -- registering with a manager or watch list that should observe it, not own it. enable_shared_from_this offered shared_from_this() since C++11; C++17 added weak_from_this(), which returns a weak_ptr sharing the object's real control block. As with shared_from_this, the object must already be owned by a shared_ptr (typically via make_shared) before you call it. Building the weak reference by hand from a raw this would instead create a second control block -- the same double-ownership bug the shared_ptr(this) anti-pattern warns about."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+  - { name: "std::enable_shared_from_this", url: "https://en.cppreference.com/w/cpp/memory/enable_shared_from_this" }
+detailed_tags:
+  - { name: "std::weak_ptr::lock", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/lock" }

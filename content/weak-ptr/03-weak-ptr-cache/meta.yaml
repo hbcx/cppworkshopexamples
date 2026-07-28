@@ -1,0 +1,11 @@
+title: "A cache that does not own"
+standard: "C++11"
+difficulty: 2
+summary: "A cache keyed to weak_ptrs returns the same live instance on a hit and reloads on a miss, deduplicating shared objects without keeping any of them alive itself."
+notes: "A registry of weak_ptrs is how you dedupe expensive shared objects -- textures, parsed files, connections -- without the cache becoming their owner. get() locks the weak entry: a live object is returned as-is (a hit), an expired or missing one triggers a reload whose fresh shared_ptr is stored back weakly. Ownership stays entirely with the callers, so an entry frees itself as soon as the last real user drops it, and the next request reloads. Contrast a shared_ptr cache, which never releases and grows without bound. The one piece of housekeeping this pattern still needs is purging expired keys so the map does not accumulate dead entries (see the never-purge anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::lock", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/lock" }

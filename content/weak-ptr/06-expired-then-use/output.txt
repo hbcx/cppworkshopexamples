@@ -1,0 +1,2 @@
+alive, value = 7
+already gone

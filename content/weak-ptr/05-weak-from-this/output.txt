@@ -1,0 +1,4 @@
+watched; use_count = 1
+board sees live Job 1
+Job 1 destroyed
+board entry expired? yes
