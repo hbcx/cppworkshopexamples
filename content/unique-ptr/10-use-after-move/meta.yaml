@@ -1,0 +1,11 @@
+title: "Anti-pattern: using a unique_ptr after moving from it"
+standard: "C++11"
+difficulty: 3
+summary: "std::move leaves a unique_ptr empty (null), so dereferencing it afterwards is undefined behaviour; check the source or give it a new value before reusing it."
+notes: "After std::move the source unique_ptr is null, and calling -> or * on a null unique_ptr is undefined behaviour -- often a crash, sometimes a silent read through address zero. The subtle version is moving a unique_ptr into a function call and then touching the original on the next line, which reads as if it were still valid. The remedy is either to not touch a moved-from pointer at all, or to reset/reassign it before the next use. A moved-from unique_ptr is not poisoned: it is simply empty and ready to own something new."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

@@ -1,0 +1,5 @@
+p after move: empty (null)
+q holds value: 10
+q after being passed: empty (null)
+r holds value: 10
+p after reset: 99

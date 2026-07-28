@@ -1,0 +1,7 @@
+Tracked 1 ctor
+after release: p owns no (no dtor has run yet)
+Tracked 1 dtor
+Tracked 2 ctor
+calling reset...
+Tracked 2 dtor
+after reset: q owns no

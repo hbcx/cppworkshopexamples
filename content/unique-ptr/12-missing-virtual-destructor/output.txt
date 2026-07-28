@@ -1,0 +1,6 @@
+Base ctor
+Derived ctor
+Derived polling
+Derived dtor (buffer freed)
+Base dtor
+p owns: no

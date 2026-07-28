@@ -1,0 +1,12 @@
+title: "Deriving from unique_ptr to name a handle type"
+standard: "C++11"
+difficulty: 3
+summary: "Publicly deriving from std::unique_ptr bakes in a deleter and adds ergonomic constructors to give a C handle a distinct named RAII type; keep it stateless and never delete through the base, which has no virtual destructor."
+notes: "Publicly deriving from unique_ptr bakes a deleter into a distinct named type and, unlike a type alias, lets you add domain-specific constructors, so callers write ResHandle(name) and can never forget the deleter. Inherit the base constructors with using Base::Base, then add your own; the type stays move-only and, with a stateless deleter, still the size of one pointer. The sharp edges: std::unique_ptr has no virtual destructor, so never delete a derived handle through a unique_ptr base pointer and never store it where polymorphic deletion is expected; and do not add data members that own resources, because the base move and destroy will not manage them. Keep the derived type stateless -- naming and ergonomics only. When you do not need a custom constructor, a plain type alias is simpler; when you want the ergonomic call without inheritance, a factory function returning the alias also works."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "inheriting constructors", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }

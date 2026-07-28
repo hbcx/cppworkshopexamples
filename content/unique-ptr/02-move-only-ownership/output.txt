@@ -1,0 +1,4 @@
+after move: a holds no, b holds yes (id 42)
+consume got Widget 42
+after sink: b holds no
+b reused, now holds id 7

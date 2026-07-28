@@ -1,0 +1,12 @@
+title: "Move-only: transferring ownership"
+standard: "C++11"
+difficulty: 1
+summary: "A unique_ptr cannot be copied because ownership is unique; std::move transfers it and leaves the source empty but valid."
+notes: "Copying a unique_ptr is a deleted operation -- there can only ever be one owner -- so the compiler rejects it. std::move transfers ownership to the destination and resets the source to null, which is why passing a unique_ptr into a by-value (sink) parameter also moves it in. A moved-from unique_ptr is not broken: it is simply empty, and you can assign it a new object. This move-only nature is the whole reason unique_ptr is safe to pass around."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::unique_ptr::operator bool", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_bool" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: taking unique_ptr by value just to read it"
+standard: "C++11"
+difficulty: 3
+summary: "A function that only reads the object should take a reference or raw pointer; taking unique_ptr by value forces callers to surrender ownership, and taking it by reference welds the function to one ownership model."
+notes: "A by-value unique_ptr parameter is a sink: it says this function takes ownership. Using that signature for a function that only observes forces every caller to std::move their pointer away (or makes the call impossible from a const context), even though nothing is being transferred. Taking const unique_ptr& avoids the move but welds the function to unique_ptr, so it cannot be called with a stack object, a shared_ptr, or a raw pointer from a C API. The guidance from the C++ Core Guidelines: take a plain reference or raw pointer to observe, and take unique_ptr by value only when the function genuinely keeps ownership."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

@@ -1,0 +1,12 @@
+title: "The array form: unique_ptr<T[]>"
+standard: "C++11"
+difficulty: 2
+summary: "unique_ptr has an array specialization that calls delete[], offers operator[], and drops operator* and ->; a std::vector is usually the better choice."
+notes: "Writing unique_ptr<T[]> (note the brackets) selects the array specialization: it releases with delete[] rather than delete, gives you operator[] for indexing, and deliberately has no operator* or -> because it owns many objects rather than one. It owns a raw dynamic array and nothing more, so it does not track the size the way a vector does and cannot grow. Reach for it only when you truly want a bare new[] buffer -- for example a fixed-size block handed to a C API via get() -- and want the delete[] handled automatically; otherwise std::vector, which also carries the length and can resize, is the better tool."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::unique_ptr<T[]>", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::unique_ptr::get", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/get" }

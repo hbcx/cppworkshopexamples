@@ -1,0 +1,5 @@
+socket 7 open
+c uses fd 7
+moved uses fd 7
+end of main
+socket 7 close

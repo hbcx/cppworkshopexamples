@@ -1,0 +1,21 @@
+# Real-world use cases for this section -- see .claude/skills/cpp-chapter (SKILL.md,
+# "Real-world use cases"). Values are single-line and quoted, no inner quotes.
+- problem: "A widely-included library header defines a class with private data members, so every change to those internals forces every translation unit that includes the header to recompile, and adding or removing a member breaks binary compatibility for already-shipped clients."
+  why: "Holding the implementation behind a single unique_ptr<Impl> member (the pimpl idiom) moves all the private data into the .cpp, so the header stops changing when internals do and the ABI stays stable. A raw Impl pointer hides the same data but drags in the rule of five by hand; an inline private section keeps the fast build but leaks every member and every included type into the header."
+  signal: "A class defined in a header with private data members that pulls in heavy headers of its own, or a class whose smallest internal change triggers a near-total rebuild."
+
+- problem: "A system picks a concrete type at runtime -- a parser for a detected file format, a driver for a configured backend, a strategy for an incoming request -- and construction lives behind a create function so callers never name the concrete classes."
+  why: "Returning unique_ptr<Interface> makes the caller the sole owner with no way to leak the result, and ownership transfers cleanly out of the factory on return. A raw Interface pointer leaves who-deletes-it to a comment and leaks on any early return that forgets it; a shared_ptr pays for an atomic reference count that a single-owner result never needs."
+  signal: "A factory or create function returning a raw base-class pointer, or new Concrete calls scattered across call sites that a single create() could centralize."
+
+- problem: "Code has to drive a C API that hands out an opaque handle needing a specific release call -- fopen and fclose, sqlite3_open and sqlite3_close, SSL_CTX_new and SSL_CTX_free, a socket, an OS or GPU handle -- and every path out of the function, including the ones that throw, must release it exactly once."
+  why: "A unique_ptr with the C free function as its deleter releases the handle on every exit automatically, and because the deleter is part of the type it cannot be forgotten. The alternative is a manual close before each return and inside each catch, which is exactly the code that rots as the function grows new branches."
+  signal: "A C handle acquired at the top of a function with its release call repeated before several returns, or a goto-cleanup label in C-style resource code."
+
+- problem: "A hierarchical structure -- an abstract syntax tree, a scene graph, an HTML DOM, a trie -- where each node owns its children and the whole thing is torn down together when the root goes away."
+  why: "Giving each node unique_ptr children means one owner per node and automatic recursive destruction: dropping the root frees the entire structure with no delete to write and no way to leak a subtree when an exception unwinds a half-built branch. A hand-written recursive delete does the same only until the first early return forgets it; shared_ptr adds reference-count churn and the risk of a cycle that never frees."
+  signal: "Tree or graph nodes holding raw child pointers with a recursive delete in the destructor, or new Node calls whose single ownership is not obvious."
+
+- problem: "A producer builds a work item and hands it to a queue or another thread that will run it and then destroy it; after the hand-off the producer must not touch or free the item."
+  why: "Moving a unique_ptr<Task> into the queue makes the hand-off a fact the compiler enforces: the producer is left holding a null pointer it cannot accidentally use, and ownership sits with exactly one side at a time. A raw-pointer hand-off relies on a comment and turns into a double free or a leak the moment the protocol is misread; a shared_ptr keeps the task alive if the consumer forgets it, hiding the very bug you want surfaced."
+  signal: "A raw pointer pushed onto a queue or passed to a thread with a comment about who frees it, or a shared_ptr used for a hand-off where only one side is ever meant to own the object."

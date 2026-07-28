@@ -1,0 +1,11 @@
+title: "Custom deleter: wrapping a C handle"
+standard: "C++11"
+difficulty: 3
+summary: "A unique_ptr can take a custom deleter so a C handle with its own release function becomes an RAII type; the deleter is part of the pointer type and affects its size."
+notes: "Give unique_ptr a second template argument, the deleter, and it runs that instead of delete -- the way to make any C resource (FILE, a database handle, a socket) release itself on every exit path. The deleter type is part of the unique_ptr type, and it changes the size: a stateless function object holds nothing, so the empty base optimization keeps the unique_ptr the size of one pointer, while a function pointer must be stored, doubling it. Prefer a small stateless functor (or the decltype of a stateless lambda) over a raw function pointer for that reason. make_unique cannot attach a deleter, so these always use the constructor directly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

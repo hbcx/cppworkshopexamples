@@ -1,0 +1,9 @@
+db_open 1
+using connection 1
+db_close 1
+db_open 2
+using connection 2
+db_close 2
+sizeof(void*)   = 8
+sizeof(DbPtr)   = 8
+sizeof(DbPtrFn) = 16

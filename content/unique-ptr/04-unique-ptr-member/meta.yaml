@@ -1,0 +1,12 @@
+title: "A unique_ptr member and the rule of zero"
+standard: "C++11"
+difficulty: 2
+summary: "Holding a resource in a unique_ptr member makes a class correctly movable and self-cleaning with zero hand-written special members."
+notes: "The rule of zero: when the only resource a class owns lives in a member that already manages itself (a unique_ptr here), the compiler-generated destructor and move operations are correct, and the class becomes move-only for free because unique_ptr is move-only. You write none of the five special members. Contrast the rule-of-five class in the Move semantics section, which owns a raw pointer and must spell out all five by hand to avoid a double free. One caveat with an incomplete member type (the pimpl idiom): the destructor must be defined where the type is complete, usually by declaring it in the header and defaulting it in the .cpp."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "rule of zero", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

@@ -1,0 +1,10 @@
+-- entering scope --
+Resource 1 acquired
+Resource 1 in use
+Resource 1 in use
+p holds an object: yes
+Resource 1 released
+-- left scope --
+Resource 2 acquired
+Resource 2 released
+after reset, q holds an object: no

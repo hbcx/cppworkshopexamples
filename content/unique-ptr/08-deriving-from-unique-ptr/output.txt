@@ -1,0 +1,5 @@
+open config
+using config
+a holds: no, b holds: yes
+sizeof(ResHandle) == one pointer? yes
+close config

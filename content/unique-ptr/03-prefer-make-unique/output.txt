@@ -1,0 +1,5 @@
+Session 1 for alice opened
+Session 2 for bob opened
+both sessions are live
+Session 2 closed
+Session 1 closed

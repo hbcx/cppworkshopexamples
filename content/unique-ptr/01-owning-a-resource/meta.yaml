@@ -1,0 +1,12 @@
+title: "Owning a resource: automatic delete at scope end"
+standard: "C++11"
+difficulty: 1
+summary: "A unique_ptr holds a heap object and deletes it automatically when it goes out of scope, so there is no matching delete to forget."
+notes: "The whole point: ownership is tied to the unique_ptr, and the object is destroyed exactly when the unique_ptr is (scope exit, reset, or reassignment). Use -> and * to reach the object as if it were a raw pointer, and operator bool to test whether one is held. reset() destroys the current object early; assigning nullptr does the same. There is no delete anywhere in main."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::unique_ptr::reset", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/reset" }
+  - { name: "std::unique_ptr::operator bool", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_bool" }

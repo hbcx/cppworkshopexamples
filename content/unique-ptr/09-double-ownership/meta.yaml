@@ -1,0 +1,11 @@
+title: "Anti-pattern: two unique_ptrs from one raw pointer"
+standard: "C++11"
+difficulty: 3
+summary: "Constructing two unique_ptrs from the same raw pointer gives the object two owners that both delete it, a double free; keep one owner and transfer with std::move."
+notes: "Each unique_ptr believes it is the sole owner, so both call delete on the same object when they are destroyed -- a double free and undefined behaviour. The trap usually starts with a loose raw pointer that gets wrapped twice, or wrapped once and also stored elsewhere. The fix is to never have a raw owning pointer to alias: build one unique_ptr (ideally with make_unique, which never exposes the raw pointer) and move it to transfer ownership. After the move the source is null, so there is exactly one owner at every moment."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

@@ -1,0 +1,11 @@
+title: "Prefer make_unique over new"
+standard: "C++14"
+difficulty: 2
+summary: "std::make_unique builds the object and the unique_ptr in one step: no raw new, the type is named once, and it closes an exception-safety hole."
+notes: "make_unique was the piece missing from C++11 and added in C++14. Prefer it to unique_ptr(new T): the type is written once instead of twice, and there is never a naked owning pointer between new and the unique_ptr constructor. That gap matters in a call like f(std::unique_ptr<A>(new A), g()): the compiler may evaluate new A, then call g(), then construct the unique_ptr, so if g() throws the freshly newed A leaks. make_unique packages the allocation and the ownership together, removing the window. Its one limitation: it cannot attach a custom deleter, so a handle needing a special release still uses the unique_ptr constructor directly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+detailed_tags: []

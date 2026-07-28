@@ -1,0 +1,12 @@
+title: "Anti-pattern: release() does not free"
+standard: "C++11"
+difficulty: 3
+summary: "release() hands back the raw pointer and gives up ownership without deleting, so a bare p.release() leaks; reset() is the call that destroys the object."
+notes: "release() and reset() are easy to confuse and do opposite things. release() returns the raw pointer and detaches the unique_ptr WITHOUT deleting -- it means take ownership away from me. If you ignore the returned pointer, nothing frees the object and it leaks. Only use release() when you are handing the raw pointer to something else that will own it (another unique_ptr, or a C API that takes ownership). reset() is the one that deletes the managed object now. The rule of thumb: release() gives ownership away and returns the pointer; reset() destroys."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::unique_ptr::release", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/release" }
+  - { name: "std::unique_ptr::reset", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/reset" }

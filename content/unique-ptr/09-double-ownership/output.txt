@@ -1,0 +1,6 @@
+Tracked 1 ctor
+a owns: no, b owns: yes
+Tracked 2 ctor
+c owns Tracked 2
+Tracked 2 dtor
+Tracked 1 dtor

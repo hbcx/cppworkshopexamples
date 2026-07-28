@@ -1,0 +1,4 @@
+title: "std::unique_ptr"
+description: "The sole-ownership smart pointer: it holds one heap object and deletes it automatically at scope end, so there is no matching delete to forget. Move-only by design, it makes ownership transfer explicit and unforgeable; make_unique replaces raw new, a unique_ptr member gives a class correct cleanup for free (the rule of zero), a custom deleter turns any C handle into an RAII type, and the array form owns a dynamic buffer. Plus the misuses -- double ownership, use-after-move, release confused with reset, a missing virtual destructor -- that quietly reintroduce the leaks and double-frees it was meant to prevent."
+sort_order: 10
+category: "Smart pointers"

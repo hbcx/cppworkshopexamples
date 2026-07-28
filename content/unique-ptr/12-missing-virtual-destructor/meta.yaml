@@ -1,0 +1,11 @@
+title: "Anti-pattern: unique_ptr<Base> without a virtual destructor"
+standard: "C++11"
+difficulty: 3
+summary: "Owning a derived object through unique_ptr<Base> when the base destructor is not virtual is undefined behaviour; only the base part is destroyed and the rest leaks."
+notes: "unique_ptr<Base> deletes through a Base pointer, so if Base does not declare a virtual destructor, deleting a Derived through it is undefined behaviour -- in practice only the base destructor runs, the derived destructor is skipped, and whatever the derived part owned leaks. This does not warn on its own and looks fine until you check the destructor order or hunt a leak. The fix is a virtual destructor on any class used as a polymorphic base (or a protected non-virtual one, to forbid deletion through the base at compile time). The example runs the correct virtual-destructor version and describes the broken case rather than executing the UB."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
