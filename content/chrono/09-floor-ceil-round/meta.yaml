@@ -1,0 +1,12 @@
+title: "Rounding durations: floor, ceil and round (C++17)"
+standard: "C++17"
+difficulty: 3
+summary: "duration_cast always truncates toward zero; C++17 adds std::chrono::floor, ceil and round so you can convert to a coarser unit with the rounding you actually mean."
+notes: "duration_cast is the right conversion when you want truncation toward zero, but that is often not the rounding intended -- and for negative durations toward-zero is neither floor nor ceil, which surprises people. C++17 fills the gap with three named conversions: std::chrono::floor rounds toward negative infinity, ceil toward positive infinity, and round to the nearest with ties going to the even value (banker's rounding). So for 2600ms to seconds, floor gives 2s, ceil gives 3s, round gives 3s; for -1500ms, duration_cast and truncation give -1s while floor gives -2s -- the distinction that matters when a duration can be negative. They apply to time_points too: chrono::floor<hours>(a time_point) snaps an instant down to the top of the hour, which is how you bucket timestamps. Choose by intent: a countdown that must not under-report uses ceil, bucketing uses floor, a human-facing nearest value uses round, and only elapsed time you are happy to truncate uses duration_cast."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::round", url: "https://en.cppreference.com/w/cpp/chrono/duration/round" }
+  - { name: "std::chrono::floor", url: "https://en.cppreference.com/w/cpp/chrono/duration/floor" }

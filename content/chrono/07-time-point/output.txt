@@ -1,0 +1,4 @@
+at5s since epoch = 5 s
+finish - start = 5 s
+start before deadline? yes
+finish past deadline?  yes

@@ -1,0 +1,11 @@
+title: "Duration literals: 100ms instead of milliseconds(100)"
+standard: "C++14"
+difficulty: 1
+summary: "C++14 adds suffix literals -- 100ms, 2s, 5min, 3h -- that build the matching duration type, so timing code reads like the units it means."
+notes: "The chrono_literals give a suffix for each standard duration: h, min, s, ms, us, ns. 2s is std::chrono::seconds(2), 100ms is std::chrono::milliseconds(100), and because each produces the proper TYPE they mix and convert exactly like the spelled-out forms -- 1s + 500ms is still 1500ms. They live in the inline namespace std::chrono_literals, so you switch them on with using namespace std::chrono_literals; (or the broader std::literals, or std::chrono which re-exports them). Prefer bringing them in at function or block scope rather than globally in a header, to avoid imposing the suffixes on every translation unit that includes it. A subtlety worth knowing: an integer literal like 2s yields an integer-based duration, while a floating-point literal like 1.5s yields a floating-point duration<double>, which is the easy way to get a fractional duration without a cast. These are pure readability -- the resulting objects are identical to the constructor forms -- but on real timing code they remove a lot of noise and a class of unit mistakes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "chrono literals", url: "https://en.cppreference.com/w/cpp/chrono/duration#Literals" }

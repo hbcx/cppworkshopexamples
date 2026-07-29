@@ -1,0 +1,11 @@
+title: "Duration arithmetic and mixed-unit results"
+standard: "C++11"
+difficulty: 2
+summary: "Adding, subtracting and comparing durations of different units just works: the result takes the finer of the two units automatically, so 2s + 500ms is 2500ms with no manual conversion."
+notes: "Durations support the arithmetic you would expect -- +, -, *, / by a scalar, %, and all the comparisons -- and when the two operands have different units the result is their std::common_type, which is the finest unit that represents both exactly. So seconds + milliseconds yields milliseconds (2s + 500ms == 2500ms), and comparing across units converts first, so 1s > 999ms is true. This is what makes chrono pleasant: you never hand-multiply by 1000, and a unit mismatch cannot silently add a second to a millisecond because the type system reconciles them. Two things to know. Dividing one duration by another gives a plain number (a ratio, how many of one fit in the other), while dividing by a scalar gives a duration. And integer durations do integer arithmetic, so milliseconds(2500) / 1000 is not seconds -- it is milliseconds(2), a truncating divide; convert deliberately with duration_cast or a floating-point Rep when you need the fraction."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::duration", url: "https://en.cppreference.com/w/cpp/chrono/duration" }

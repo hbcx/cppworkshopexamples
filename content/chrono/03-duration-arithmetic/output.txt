@@ -1,0 +1,5 @@
+2s + 500ms = 2500 ms
+1s > 999ms? yes
+2min / 30s = 4
+2min / 4 = 30 s
+2500ms / 1000 = 2 ms (still ms, truncated)

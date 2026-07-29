@@ -1,0 +1,20 @@
+# Where to reach for std::chrono -- problem -> tool, with the alternative each beats.
+- problem: "A blocking call -- a condition variable, a socket read, a queue pop -- needs a timeout, and the API must not let a caller confuse seconds with milliseconds."
+  why: "A std::chrono::milliseconds parameter carries the unit in the type, so seconds(5) converts correctly and a bare 5 will not compile, where a bare int timeout silently accepts the wrong unit and waits a thousand times too long or too short."
+  signal: "a wait or timeout function taking a plain int or long whose unit is only in the parameter name or a comment"
+
+- problem: "Measuring how long a section of code takes -- a request handler, a query, a parse -- to report latency or find a hot spot."
+  why: "steady_clock is monotonic, so subtracting two reads always gives a sane interval, where clock() measures CPU not wall time and gettimeofday or system_clock can jump backwards under an NTP or DST correction and produce a negative elapsed."
+  signal: "a before/after timing pair using clock(), gettimeofday, or system_clock::now() around a block"
+
+- problem: "An entry in a cache or a session store must expire after a fixed time-to-live and be treated as stale afterwards."
+  why: "Storing an expiry as a time_point and comparing against now() keeps the unit and the clock explicit in the type, where holding a raw int64 of epoch milliseconds invites unit drift and hand-rolled arithmetic that silently mixes seconds and milliseconds."
+  signal: "an expiry or deadline stored as a bare integer of epoch millis or seconds, compared with manual arithmetic"
+
+- problem: "A loop must run at a fixed cadence -- poll every 100 ms, emit a frame every 16 ms -- without drifting slower as the work in each cycle adds up."
+  why: "Advancing a time_point by the period and sleeping until it with sleep_until holds the schedule against the absolute clock, where sleep_for(period) restarts the wait after each iteration and so accumulates the work time as drift."
+  signal: "a periodic loop calling sleep_for(fixed) once per iteration rather than sleeping until a computed next-tick time_point"
+
+- problem: "Log lines, audit records or events need a human-readable wall-clock timestamp."
+  why: "system_clock is the one clock that maps to civil time via to_time_t, so it feeds the calendar formatting, where steady_clock has an unspecified epoch and cannot be turned into a date at all, and rolling your own from time() plus a manual struct tm repeats the thread-safety and formatting pitfalls chrono already routes around."
+  signal: "timestamps built from time() and localtime with a hand-filled struct tm, or elapsed-timing clocks misused to produce a date"

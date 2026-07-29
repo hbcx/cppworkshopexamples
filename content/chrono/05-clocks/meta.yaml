@@ -1,0 +1,12 @@
+title: "The three clocks and what each is for"
+standard: "C++11"
+difficulty: 2
+summary: "steady_clock never goes backwards and is for measuring intervals; system_clock is wall-clock time that can jump when the system clock is corrected; high_resolution_clock is just an alias for one of them."
+notes: "chrono ships three clocks and picking the wrong one is the library's most common mistake. steady_clock is monotonic -- successive now() calls never decrease, and it is unaffected by the user or NTP changing the wall clock -- so it is the ONLY correct choice for measuring how long something took. Its epoch is unspecified (often boot time), so its absolute value is meaningless; only differences matter. system_clock represents wall-clock civil time, is the one that converts to and from time_t and a calendar date, and can jump forwards or backwards when the clock is set or synchronised -- perfect for timestamps, wrong for durations. high_resolution_clock is defined as the clock with the shortest tick, but in practice every implementation makes it a typedef for steady_clock or system_clock, so its steadiness is not guaranteed -- name the clock you actually mean instead. Each clock exposes the static constant is_steady and the type-level now(), duration and time_point. The rule reduces to: measuring elapsed time -> steady_clock; a timestamp a human will read -> system_clock; high_resolution_clock -> avoid, say which you want."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::steady_clock", url: "https://en.cppreference.com/w/cpp/chrono/steady_clock" }
+  - { name: "std::chrono::system_clock", url: "https://en.cppreference.com/w/cpp/chrono/system_clock" }

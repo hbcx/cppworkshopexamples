@@ -1,0 +1,12 @@
+title: "Anti-pattern: high_resolution_clock for measuring intervals"
+standard: "C++11"
+difficulty: 3
+summary: "high_resolution_clock is only defined as the clock with the shortest tick, not a steady one, and on several implementations it is a typedef for system_clock -- so timing with it inherits the wall clock's ability to jump; name steady_clock instead."
+notes: "high_resolution_clock looks like the obvious choice for a stopwatch -- it has the finest resolution -- but resolution is not the property that matters for an interval; monotonicity is. The standard specifies only that it has the shortest representable tick, and explicitly permits it to be a typedef for system_clock or steady_clock, with the choice left to the implementation (libstdc++ has aliased it to system_clock). When it aliases system_clock it is NOT steady, so a measurement across an NTP correction or a DST change can come out negative, the same failure as timing with system_clock directly. Because you cannot portably know which clock it is, its is_steady is not something to rely on. steady_clock is guaranteed monotonic by the standard and is almost always high-resolution in practice anyway, so it is the correct name to write for any interval. This example does not print the implementation-defined alias (which would vary and is not the point); it states the guarantee that is missing and demonstrates the steady_clock replacement whose is_steady is always true."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::high_resolution_clock", url: "https://en.cppreference.com/w/cpp/chrono/high_resolution_clock" }
+  - { name: "std::chrono::steady_clock", url: "https://en.cppreference.com/w/cpp/chrono/steady_clock" }

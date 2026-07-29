@@ -1,0 +1,12 @@
+title: "Wall-clock time: system_clock, time_t and a calendar date"
+standard: "C++11"
+difficulty: 2
+summary: "system_clock is the one clock that maps to civil time: to_time_t and from_time_t bridge to the C time_t, and gmtime plus strftime turn that into a formatted UTC date."
+notes: "Only system_clock represents wall-clock time, so it alone offers system_clock::to_time_t (a time_point to a C time_t) and system_clock::from_time_t (the reverse). time_t is the bridge to the pre-chrono calendar machinery in <ctime>: gmtime breaks a time_t into a struct tm in UTC, localtime does it in the local zone, and strftime formats that struct into text. Before C++20 chrono had no calendar of its own, so this hop through time_t is the portable way to print a date, and it is where two bugs live -- localtime and gmtime return a pointer to a shared static buffer (not thread-safe; use the _r or _s variants in real code), and localtime pulls in the machine's timezone and DST, which makes output non-reproducible. This example deliberately formats a FIXED time_t through gmtime, so the printed date is the same UTC instant on every machine; production code that timestamps for humans would use system_clock::now() and localtime. In C++20 std::chrono gains real calendar and time-zone types that replace this whole dance."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::system_clock", url: "https://en.cppreference.com/w/cpp/chrono/system_clock" }
+  - { name: "std::chrono::system_clock::to_time_t", url: "https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t" }

@@ -1,0 +1,4 @@
+[buggy] system_clock elapsed = -2 s (negative!)
+system_clock::is_steady = false
+steady_clock::is_steady = true
+[correct] steady interval non-negative? yes

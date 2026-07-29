@@ -1,0 +1,12 @@
+title: "Anti-pattern: duration_cast for a value you meant to round"
+standard: "C++17"
+difficulty: 3
+summary: "duration_cast always truncates toward zero, so using it to show a countdown in whole seconds under-reports -- 1900ms becomes 1s and 400ms becomes 0s -- when ceil or round was meant."
+notes: "duration_cast is the truncating conversion: it drops the fraction toward zero. That is correct for elapsed time you are content to floor, but it is the wrong tool the moment the result faces a user or drives a decision. A countdown converted with duration_cast<seconds> reports 1 second left when 1900 ms remain, and 0 seconds left when 400 ms remain -- so a timer reads finished with almost half a second to go, and a deadline check can act early. C++17's named roundings fix this by intent: ceil rounds up (a remaining-time display that must never under-report), floor rounds down (bucketing an instant into its containing second or hour), and round goes to the nearest with ties to even (a natural human-facing value). This example shows the same milliseconds rendered by duration_cast versus ceil and round, including the near-zero case where truncation is most misleading. The rule: reach for duration_cast only when truncation toward zero is genuinely what you want; for anything shown or compared against a threshold, pick ceil, floor or round deliberately."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::round", url: "https://en.cppreference.com/w/cpp/chrono/duration/round" }
+  - { name: "std::chrono::duration_cast", url: "https://en.cppreference.com/w/cpp/chrono/duration/duration_cast" }

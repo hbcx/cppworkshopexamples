@@ -1,0 +1,12 @@
+title: "Anti-pattern: measuring elapsed time with system_clock"
+standard: "C++11"
+difficulty: 3
+summary: "system_clock tracks wall-clock time and can be moved backwards by an NTP correction or a DST change, so subtracting two of its readings can yield a negative or wrong interval; steady_clock cannot."
+notes: "The stopwatch pattern -- read the clock, do work, read again, subtract -- is only correct with a MONOTONIC clock. system_clock is not one: it follows civil time, so if the machine syncs with a time server or crosses a daylight-saving boundary between the two reads, the second reading can be EARLIER than the first, and the elapsed duration comes out negative or badly inflated. This is rare enough to pass every test and then corrupt a latency metric or fire a timeout instantly in production. steady_clock is defined to never go backwards regardless of what happens to the wall clock, which is exactly why it exists and why it is the only right choice for intervals. This example cannot force a real clock adjustment, so it constructs the two system_clock instants by hand to show what the subtraction produces when the clock was set back two seconds mid-measurement -- a negative elapsed -- then contrasts steady_clock, whose is_steady is guaranteed true and whose successive reads never decrease. The fix is a one-word change: use steady_clock::now() for anything you subtract."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::steady_clock", url: "https://en.cppreference.com/w/cpp/chrono/steady_clock" }
+  - { name: "std::chrono::system_clock", url: "https://en.cppreference.com/w/cpp/chrono/system_clock" }

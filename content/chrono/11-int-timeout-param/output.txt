@@ -1,0 +1,2 @@
+[buggy] int API told 5 (meant seconds), will wait 5 ms
+[correct] duration API given seconds(5), will wait 5000 ms

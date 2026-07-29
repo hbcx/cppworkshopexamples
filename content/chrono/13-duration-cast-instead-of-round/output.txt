@@ -1,0 +1,5 @@
+[buggy]   duration_cast: 1 s left
+[correct] ceil:          2 s left
+[correct] round:         2 s
+[buggy]   400ms truncates to 0 s
+[correct] 400ms ceils to     1 s

@@ -1,0 +1,11 @@
+title: "Time points: a duration since a clock's epoch"
+standard: "C++11"
+difficulty: 2
+summary: "A time_point is a clock plus a duration measured from that clock's epoch; subtracting two gives a duration, and adding a duration to one gives a deadline."
+notes: "A std::chrono::time_point<Clock, Duration> marks an instant as a distance -- a duration -- from its Clock's epoch, and time_since_epoch() hands that duration back. The type ties an instant to its clock, which is why you cannot subtract a system_clock time_point from a steady_clock one: they measure from different, incomparable origins, and the compiler stops you. The arithmetic is exactly what you want for scheduling: time_point - time_point = duration (how far apart two instants are), time_point + duration = time_point (a later instant), and comparisons order instants. That last combination is how deadlines are built -- auto deadline = Clock::now() + timeout; then loop while Clock::now() < deadline, or hand the deadline to a wait_until. This example constructs time_points from known durations rather than reading a live clock, so the relationships it prints are exact and reproducible; in real code the starting point comes from steady_clock::now() for intervals or system_clock::now() for wall-clock instants."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::time_point", url: "https://en.cppreference.com/w/cpp/chrono/time_point" }

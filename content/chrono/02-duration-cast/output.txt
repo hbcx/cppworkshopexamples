@@ -1,0 +1,4 @@
+2s as ms = 2000
+1500ms as s (truncated) = 1
+-1500ms as s (toward zero) = -1
+1500ms as seconds (double) = 1.5

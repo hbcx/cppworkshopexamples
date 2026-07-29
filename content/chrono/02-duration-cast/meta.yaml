@@ -1,0 +1,12 @@
+title: "Converting units: implicit widening and duration_cast"
+standard: "C++11"
+difficulty: 2
+summary: "A conversion that loses nothing is implicit -- seconds to milliseconds just works -- but a lossy one, milliseconds to seconds, needs an explicit duration_cast that truncates toward zero."
+notes: "chrono lets a duration convert implicitly ONLY when no information can be lost: going to a finer unit (seconds -> milliseconds multiplies the count and is exact) is allowed silently, and so is any conversion whose result the target Rep represents exactly. The reverse -- a coarser unit, or an integer target that cannot hold the fraction -- would drop data, so the language refuses it and you must ask for it with std::chrono::duration_cast<T>(d). That cast TRUNCATES TOWARD ZERO, like integer division: duration_cast<seconds>(1500ms) is 1s, and for a negative value duration_cast<seconds>(-1500ms) is -1s, not -2s. That truncation is the right default for elapsed time but wrong when you meant to round -- C++17 adds floor, ceil and round for that (a later example). Use implicit conversion when widening; use duration_cast at the single point where you deliberately accept the loss, and prefer a floating-point duration (duration<double>) when you want to keep the fraction instead of discarding it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::duration_cast", url: "https://en.cppreference.com/w/cpp/chrono/duration/duration_cast" }
+  - { name: "std::chrono::duration", url: "https://en.cppreference.com/w/cpp/chrono/duration" }

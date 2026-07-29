@@ -1,0 +1,5 @@
+timeout = 100 ms
+window  = 2 s
+1s + 500ms = 1500 ms
+1.5s in seconds = 1.5
+5min = 5 min

@@ -1,0 +1,4 @@
+oneHour.count()   = 1  (hours)
+sameInMin.count() = 60  (minutes)
+[buggy] minutes from oneHour.count() = 1 (wanted 60)
+[correct] duration_cast<minutes>(oneHour).count() = 60

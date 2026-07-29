@@ -1,0 +1,4 @@
+steady_clock::is_steady = true
+system_clock::is_steady = false
+steady now() never decreases? yes
+system_clock converts to time_t; steady_clock does not

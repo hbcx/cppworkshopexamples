@@ -1,0 +1,3 @@
+high_resolution_clock guaranteed steady? no -- implementation-defined
+steady_clock::is_steady = true
+[correct] steady interval non-negative? yes

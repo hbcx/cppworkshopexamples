@@ -1,0 +1,9 @@
+2600ms -> seconds
+  duration_cast (toward zero): 2
+  floor: 2
+  ceil:  3
+  round: 3
+-1500ms -> seconds
+  duration_cast (toward zero): -1
+  floor (toward -inf):         -2
+2500ms round to seconds (ties to even): 2

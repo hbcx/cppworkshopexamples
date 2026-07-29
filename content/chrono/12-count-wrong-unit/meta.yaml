@@ -1,0 +1,11 @@
+title: "Anti-pattern: reading .count() in the wrong unit"
+standard: "C++11"
+difficulty: 3
+summary: ".count() returns the number in the duration's own period, which is invisible at the call site, so reading it while assuming a different unit -- minutes from an hours value, milliseconds from a clock's native ticks -- silently gives a wrong number."
+notes: ".count() strips a duration back to a bare integer in ITS unit, and that unit is not visible where the number is used. hours(1).count() is 1, minutes(60).count() is 60, and both are the same amount of time -- so any code that reads .count() without first converting to a known unit is trusting a comment. Two shapes of this bug are common. Assuming the wrong standard unit: taking hours(1).count() and treating it as minutes gives 1 where 60 was meant. And reading a clock's native duration: steady_clock::now() differences are in the clock's own period (often nanoseconds), so calling .count() on one and printing it as milliseconds is off by a factor of a million. The rule is to duration_cast (or floor/round) to the exact unit you want and only THEN call .count(): duration_cast<minutes>(d).count() is unambiguous, d.count() is not. Better still, keep values as duration types all the way to the boundary and let the type system convert, so .count() appears once, at the very edge, next to the unit it is being turned into."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::duration_cast", url: "https://en.cppreference.com/w/cpp/chrono/duration/duration_cast" }

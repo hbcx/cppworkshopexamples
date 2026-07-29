@@ -1,0 +1,12 @@
+title: "Measuring elapsed time with steady_clock"
+standard: "C++11"
+difficulty: 2
+summary: "Take steady_clock::now() before and after the work, subtract to get a duration, and duration_cast it to the unit you want to report -- the canonical stopwatch."
+notes: "The pattern is three lines: auto start = steady_clock::now(); do the work; auto elapsed = steady_clock::now() - start;. Subtracting two time_points of the same clock gives a duration in that clock's native unit (steady_clock::duration, often nanoseconds), which you then duration_cast to milliseconds or microseconds for reporting. steady_clock is essential here -- a wall clock could be adjusted mid-measurement and hand you a negative or inflated interval. Two practical notes. The clock's native tick is fine-grained, so keep the raw difference and cast only when you print, rather than casting to milliseconds early and losing sub-millisecond detail. And to avoid unit mistakes, report through a floating-point duration<double, milli> when you want a fractional millisecond count. This example measures a real (tiny) sleep and asserts the elapsed time is at least the requested amount, printing that relationship rather than the raw number, because the exact nanoseconds differ from run to run and machine to machine."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::steady_clock", url: "https://en.cppreference.com/w/cpp/chrono/steady_clock" }
+  - { name: "std::chrono::duration_cast", url: "https://en.cppreference.com/w/cpp/chrono/duration/duration_cast" }

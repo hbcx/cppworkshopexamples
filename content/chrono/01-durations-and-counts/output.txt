@@ -1,0 +1,4 @@
+threeSec.count() = 3 (unit: seconds)
+halfSec.count()  = 500 (unit: milliseconds)
+sec3 and ms3 both count 3, but sec3 == ms3? no
+twoMin.count() = 2 (unit: minutes)

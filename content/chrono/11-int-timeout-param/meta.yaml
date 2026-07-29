@@ -1,0 +1,11 @@
+title: "Anti-pattern: a bare int for a timeout"
+standard: "C++11"
+difficulty: 3
+summary: "void wait(int timeout) hides the unit in a comment, so a caller who thinks in seconds and passes 5 to a millisecond parameter gets a 1000x-wrong wait the compiler cannot catch; a std::chrono::milliseconds parameter makes the unit part of the type."
+notes: "When a duration crosses an API boundary as a plain integer, the unit lives only in the parameter name and the documentation, and the type system cannot help. A function declared wait(int timeout_ms) compiles perfectly when a caller passes 5 meaning five seconds, and silently waits five milliseconds -- a class of bug that is invisible at the call site and survives code review because 5 looks fine. Taking the parameter as std::chrono::milliseconds moves the unit into the type: seconds(5) passed to it converts automatically to 5000 ms, minutes and microseconds convert too, and a bare 5 does not compile at all because an int is not a duration, so the caller is FORCED to state the unit. This is chrono's core value proposition, not a nicety -- it is the difference between a unit mismatch being a compile error and being a production incident. The example prints how each API interprets a caller who meant five seconds: the int version yields 5 ms, the duration version 5000 ms. Prefer a duration parameter for any API that takes a time span, and accept a templated Rep and Period if you want to take any duration unit generically."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::duration", url: "https://en.cppreference.com/w/cpp/chrono/duration" }

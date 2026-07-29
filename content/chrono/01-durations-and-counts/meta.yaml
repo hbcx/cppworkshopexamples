@@ -1,0 +1,11 @@
+title: "Durations: a count plus a unit baked into the type"
+standard: "C++11"
+difficulty: 1
+summary: "A std::chrono::duration is an integer count paired with a compile-time unit, so std::chrono::seconds and std::chrono::milliseconds are different types and .count() gives the number in whatever unit the type carries."
+notes: "A duration is std::chrono::duration<Rep, Period>: Rep is the arithmetic type of the count (usually a signed integer) and Period is a std::ratio fixing the unit -- std::ratio<1> for seconds, std::milli for milliseconds. The standard aliases seconds, milliseconds, microseconds, nanoseconds, minutes and hours save you writing that out. The key idea is that the unit lives in the TYPE, not in a comment: seconds(3) and milliseconds(3) are unrelated types holding the same count 3 but meaning different amounts of time, and a function taking std::chrono::milliseconds cannot be handed a bare 3. .count() extracts the raw number, but only in the duration's own unit -- calling it without knowing the period is how unit bugs happen (its own anti-pattern). Construct a duration from a count, seconds(5), or from the C++14 literals in a later example; keep durations in duration types and only reach for .count() at the very edge, when you must hand a plain number to something outside chrono."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono", url: "https://en.cppreference.com/w/cpp/chrono" }
+detailed_tags:
+  - { name: "std::chrono::duration", url: "https://en.cppreference.com/w/cpp/chrono/duration" }
