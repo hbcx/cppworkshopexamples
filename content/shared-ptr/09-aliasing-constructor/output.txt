@@ -1,0 +1,9 @@
+Engine built
+Car built
+same owner, use_count = 2
+engine handle sees: V8
+after car.reset(), engine still valid: V8
+engine use_count = 1
+leaving main
+Car scrapped
+Engine scrapped

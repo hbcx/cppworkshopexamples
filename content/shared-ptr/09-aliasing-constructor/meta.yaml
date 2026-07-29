@@ -1,0 +1,12 @@
+title: "The aliasing constructor: share the owner, point at a part"
+standard: "C++11"
+difficulty: 3
+summary: "shared_ptr has a two-argument constructor that shares another shared_ptr's control block but stores a different pointer, so you can hand out a shared_ptr to a subobject that keeps the whole parent alive."
+notes: "The aliasing constructor shared_ptr<U>(owner, ptr) shares OWNERSHIP with owner (same control block, same reference count) but makes get() return ptr -- a pointer that is usually into the owned object, such as a member or an array element. This separates the two identities a shared_ptr carries: what it keeps alive (the control block) and what it points at (get()). Its purpose is to expose a part of a shared object as its own shared_ptr without a second allocation and without a second control block: as long as the alias lives, the whole parent lives, so the part can never dangle. Building a plain shared_ptr<Engine>(&car->engine) instead would create a SEPARATE control block over a subobject the parent already owns and free it twice -- the aliasing constructor is the correct way to do this. The stored pointer need not literally be inside the owner, but that is the overwhelmingly common use."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "aliasing constructor", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/shared_ptr" }
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }

@@ -1,0 +1,3 @@
+buf[2] = 30
+buf[0] written through the other owner = 99
+use_count = 2

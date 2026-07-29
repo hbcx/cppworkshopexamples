@@ -1,0 +1,12 @@
+title: "The array form: shared_ptr<T[]>"
+standard: "C++17"
+difficulty: 2
+summary: "Since C++17 shared_ptr has an array specialization that releases with delete[] and offers operator[], catching up with unique_ptr<T[]> from six years earlier."
+notes: "Before C++17 shared_ptr had no array support: a shared_ptr<int>(new int[4]) would call plain delete on the buffer -- undefined behaviour -- so you had to pass a delete[] deleter by hand, std::shared_ptr<int>(new int[4], std::default_delete<int[]>()), and even then there was no operator[]. C++17 added the shared_ptr<T[]> partial specialization: the default deleter calls delete[], operator[] indexes the buffer, and operator* and -> are dropped because it owns many objects rather than one -- the same shape as unique_ptr<T[]> which had it since C++11. make_shared<T[]>(n) only arrives in C++20, so under C++17 you still construct from a new[] expression. This is a niche tool: a shared_ptr<std::vector<T>> or a shared_ptr to a container is usually clearer and also carries the length. Reach for the raw array form only for a genuinely shared fixed buffer -- e.g. one decoded frame held by several consumers -- where you want delete[] handled for you and nothing more."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr<T[]>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }

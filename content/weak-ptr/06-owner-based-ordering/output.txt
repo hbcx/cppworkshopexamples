@@ -1,0 +1,6 @@
+same get()?   no
+same owner?   yes
+lookup a ->   first
+entries:      2
+expired keys: 1
+entries:      2

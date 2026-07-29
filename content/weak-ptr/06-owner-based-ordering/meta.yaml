@@ -1,0 +1,13 @@
+title: "Owner-based ordering: keying a container on weak_ptr"
+standard: "C++11"
+difficulty: 3
+summary: "owner_before and std::owner_less compare shared_ptr and weak_ptr by their control block instead of their stored pointer, which is the only stable way to order a weak_ptr and the only way to use one as a map or set key."
+notes: "A shared_ptr carries two identities: the pointer it returns from get() and the control block it shares. Ordinary operator< and == compare the pointer, but owner_before compares the control block -- two smart pointers are owner-equivalent when neither a.owner_before(b) nor b.owner_before(a) holds. This matters for two reasons. First, an aliasing shared_ptr has a different get() but the same owner, so owner-based comparison still recognises them as the same object (see the aliasing constructor example in the shared_ptr chapter). Second, and more usefully, a weak_ptr cannot be compared by value at all: get() is not available because the object may already be gone, so value ordering is impossible. The control block, however, outlives the object and gives a stable order, so std::owner_less<std::weak_ptr<T>> as the comparator lets a weak_ptr key a std::map or std::set -- the natural key for an observer registry or a cache. Ordinary std::less on a weak_ptr will not even compile. C++17 adds std::owner_less<void>, a transparent comparator that compares shared_ptr and weak_ptr heterogeneously, so you can look up a weak_ptr-keyed map with a shared_ptr directly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::owner_less", url: "https://en.cppreference.com/w/cpp/memory/owner_less" }
+  - { name: "std::shared_ptr::owner_before", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/owner_before" }
