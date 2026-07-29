@@ -1,0 +1,11 @@
+title: "Anti-pattern: keeping a c_str pointer across a modification"
+standard: "C++11"
+difficulty: 3
+summary: "The const char* from c_str() or data() is borrowed and only valid until the next change to the string; caching it across an append or resize leaves it pointing at freed memory."
+notes: "c_str() and data() return a pointer into the string's own buffer -- they do not copy. That pointer is valid only until the next operation that can change the buffer: append, +=, insert, erase, resize, reserve, clear, operator=, or anything that might reallocate. Because a growing string moves to a larger heap block, a pointer captured before the growth is left dangling at the old, freed location, and reading through it is undefined behaviour that usually looks fine right up until the reallocation lands on a real workload. The trap shows up when a pointer is stashed -- passed to a C struct that stores it, cached in a local, kept in a member -- and the string is mutated afterwards. Two fixes: re-fetch c_str() after every modification and never hold it across one, or, if the C side must retain the pointer, give it a copy it owns (strdup, or copy into a buffer) rather than the string's live buffer. This example describes the use-after-invalidation in a comment and runs only the re-fetch version, since dereferencing the stale pointer is undefined behaviour. Note that even without reallocation -- an in-place edit that keeps the same buffer -- the pointer is formally invalidated, so the rule is do not cache it, not it usually survives."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::c_str", url: "https://en.cppreference.com/w/cpp/string/basic_string/c_str" }

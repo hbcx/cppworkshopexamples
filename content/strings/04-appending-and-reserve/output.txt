@@ -1,0 +1,4 @@
+built: https://example.com/xxx (size 23)
+without reserve, buffer moved? yes
+with reserve,    buffer moved? no
+after reserve(100): size 0, capacity >= 100? yes

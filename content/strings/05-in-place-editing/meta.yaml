@@ -1,0 +1,13 @@
+title: "Editing in place: insert, erase, replace and erase-remove"
+standard: "C++11"
+difficulty: 2
+summary: "Change the middle of a string with insert / erase / replace by position and length, and strip every occurrence of a character with the same erase-remove idiom that vectors use."
+notes: "insert(pos, str) opens a gap and drops text in; erase(pos, len) closes one; replace(pos, len, str) does both at once and, unlike a manual erase-then-insert, needs the string to shift its tail only once. All three take a position and a length and can move a lot of characters, so they are O(n) -- fine for occasional edits, not for a hot loop. Removing every occurrence of a character is the one that trips people up: erase(pos, len) removes a contiguous run, it does NOT filter, so stripping all spaces takes the erase-remove idiom -- std::remove shuffles the survivors to the front and returns the new logical end, then a single erase(first, end()) trims the tail -- exactly as for a std::vector. Reaching for str.erase(str.find(' ')) in a loop instead is both slower and easy to get wrong when matches overlap. For replacing one substring with another everywhere, loop find + replace, advancing past the replacement each time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::replace", url: "https://en.cppreference.com/w/cpp/string/basic_string/replace" }
+  - { name: "std::string::erase", url: "https://en.cppreference.com/w/cpp/string/basic_string/erase" }
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }

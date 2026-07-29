@@ -1,0 +1,3 @@
+length via C API: 67
+matches size():   yes
+copy still intact: yes

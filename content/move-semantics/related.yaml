@@ -8,3 +8,5 @@
   note: "The payoff type: std::unique_ptr is the move-only resource owner these rules were built for, and it makes a class correct with zero hand-written special members (the rule of zero)."
 - slug: "shared-ptr"
   note: "A type where copy versus move is visible at runtime: copying a shared_ptr is an atomic reference-count bump, while moving it is a cheap pointer steal with no count touched."
+- slug: "strings"
+  note: "The move type made concrete: a std::string move hands over its heap buffer, the small-string optimization decides when there is a buffer at all, and moved-from strings appear throughout."

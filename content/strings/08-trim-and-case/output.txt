@@ -1,0 +1,4 @@
+[padded text]
+all-blank trims to empty? yes
+mixed case text
+high-byte fold did not crash, size = 1

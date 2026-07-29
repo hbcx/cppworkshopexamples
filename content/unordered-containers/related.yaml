@@ -6,3 +6,5 @@
   note: "The benchmark that pits unordered_map against std::map and a sorted vector across five sizes."
 - slug: "sets"
   note: "The ordered counterpart of unordered_set: range queries and the set-algebra algorithms a hash set cannot offer."
+- slug: "strings"
+  note: "The default key type: how a std::string stores, compares and hashes, and why key length -- not just element count -- drives lookup cost."

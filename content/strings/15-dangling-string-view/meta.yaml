@@ -1,0 +1,11 @@
+title: "Anti-pattern: a string_view that outlives its string"
+standard: "C++17"
+difficulty: 3
+summary: "A string_view owns nothing, so binding one to a temporary or returning one that refers to a local leaves it pointing at freed memory -- a dangle that compiles without a warning."
+notes: "std::string_view is a pointer and a length into characters someone else owns. The convenience -- no copy -- is exactly the danger: nothing keeps the underlying text alive, so the view is only valid while that text is. Two traps dominate. Binding a view to a temporary, std::string_view v = firstName + lastName, destroys the concatenated string at the end of the statement and leaves v dangling immediately. Returning a view of a local, std::string_view label() { std::string s = build(); return s; }, dangles the moment the function returns. Both compile cleanly and often appear to work because the freed bytes are briefly untouched, which is what makes this class of bug so pernicious. The fixes are about ownership, not cleverness: return a std::string (own the result) when the data is produced locally, and only pass or store a string_view when the source provably outlives it -- a string literal, or a std::string that stays in scope for the whole life of the view. This example describes the dangling lines in comments and runs only the owning versions, because dereferencing a dangling view is undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

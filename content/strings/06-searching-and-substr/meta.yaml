@@ -1,0 +1,13 @@
+title: "Searching and slicing: find, npos and substr"
+standard: "C++11"
+difficulty: 2
+summary: "find and its relatives return a position or the sentinel npos when there is no match; substr cuts out a piece by position and length -- together they cover most text parsing."
+notes: "find returns the index of the first match or std::string::npos when there is none, and the single most common string bug is treating that return as a bool: npos is the largest size_t value, so if (s.find(x)) is true even on a miss. Always compare against npos. The family covers the usual needs: rfind searches from the end, find_first_of / find_last_of match any character from a set (not the substring), and every one takes an optional start position so you can scan for repeats. substr(pos, len) returns a new string copied from pos; len is clamped to what remains, so an oversized len is fine, but a pos greater than size() throws std::out_of_range. This example splits a key=value pair by finding the separator and taking the substrings on each side -- the shape of a hand-rolled parser."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::find", url: "https://en.cppreference.com/w/cpp/string/basic_string/find" }
+  - { name: "std::string::substr", url: "https://en.cppreference.com/w/cpp/string/basic_string/substr" }
+  - { name: "std::string::npos", url: "https://en.cppreference.com/w/cpp/string/basic_string/npos" }

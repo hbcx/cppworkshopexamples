@@ -1,0 +1,4 @@
+by value    allocations: 1
+by const&   allocations: 0
+by view     allocations: 0
+view+literal allocations: 0

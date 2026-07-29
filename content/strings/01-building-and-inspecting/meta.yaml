@@ -1,0 +1,12 @@
+title: "Building and inspecting a string"
+standard: "C++11"
+difficulty: 1
+summary: "The everyday std::string interface: construct it several ways, ask its size, index it safely with at versus the unchecked operator[], and walk it like any container."
+notes: "std::string owns its characters and manages their storage for you, which is the whole point over a bare char array. size() and length() are the same call (length is the older spelling); empty() is clearer and cheaper than size() == 0. Two accessors with two contracts: operator[] does no bounds checking and reading past the end is undefined behaviour, while at() throws std::out_of_range -- and note operator[](size()) is defined and returns the null terminator, a quirk at() does not share. front() and back() read the ends. A string is a container of char: begin()/end() and range-for work, so the standard algorithms apply. Construction is flexible -- from a literal, from a count and a fill character, from a substring of another string, or from an iterator range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::size", url: "https://en.cppreference.com/w/cpp/string/basic_string/size" }
+  - { name: "std::string::at", url: "https://en.cppreference.com/w/cpp/string/basic_string/at" }

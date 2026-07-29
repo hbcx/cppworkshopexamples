@@ -1,0 +1,12 @@
+title: "Anti-pattern: substr just to compare a prefix"
+standard: "C++11"
+difficulty: 3
+summary: "if (s.substr(0, n) == prefix) allocates a throwaway string on every check; compare, rfind-at-0, or a string_view answer the same question with no allocation."
+notes: "substr returns a NEW string -- it copies the requested range into a fresh allocation. Using it only to compare, if (s.substr(0, 4) == \"http\"), throws that allocation away immediately, so a check that should touch no memory allocates (and frees) one string per call; in a parser or a hot loop that is pure waste, and it is also subtly wrong when s is shorter than the prefix, where substr silently returns what little there is. Three allocation-free alternatives ask the same question directly: s.compare(0, prefix.size(), prefix) == 0 compares the range in place; s.rfind(prefix, 0) == 0 anchors the search at position 0 so it only checks the prefix; and in C++20 s.starts_with(prefix) says it outright. This example counts heap allocations with a global operator new to make the difference visible: the substr version allocates, the compare version does not. The same waste appears with ends_with-by-substr and with substr used to extract a piece that is then only read -- prefer a string_view when you just need to look."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::substr", url: "https://en.cppreference.com/w/cpp/string/basic_string/substr" }
+  - { name: "std::string::compare", url: "https://en.cppreference.com/w/cpp/string/basic_string/compare" }

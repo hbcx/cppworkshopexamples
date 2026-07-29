@@ -1,0 +1,4 @@
+path:  C:\logs\app\today.txt
+regex: \d+\.\d+
+json blob has 42 bytes and contains a quote? yes
+raw == escaped equivalent? yes

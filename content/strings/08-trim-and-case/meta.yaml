@@ -1,0 +1,12 @@
+title: "Trimming and changing case"
+standard: "C++11"
+difficulty: 2
+summary: "Two everyday utilities the library does not ship: trim whitespace with find_first_not_of / find_last_not_of, and change case with std::transform -- guarding tolower against the negative-char trap."
+notes: "There is no str.trim() and no str.to_lower(), so these are the small helpers every codebase ends up writing. Trimming: find_first_not_of(\" \\t\\n\") gives the first non-blank index and find_last_not_of the last, and substr between them is the trimmed string; when the whole string is blank the first search returns npos, which the helper must treat as an empty result rather than passing npos to substr. Case folding: std::transform over the string with std::tolower does it in one line, but tolower is a C function taking an int that must be representable as unsigned char -- passing a plain char that is negative (any byte above 127, common in UTF-8 or Latin-1) is undefined behaviour, so the argument must be cast to unsigned char first. This is one of the most widespread latent bugs in C++ string code because it works fine on pure ASCII and only bites on accented input. Both helpers return a new string here; the same logic can edit in place with erase."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::find_first_not_of", url: "https://en.cppreference.com/w/cpp/string/basic_string/find_first_not_of" }
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }

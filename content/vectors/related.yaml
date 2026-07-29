@@ -8,3 +8,5 @@
   note: "The fixed-size sibling: the same contiguous storage but on the stack, with no allocation and the length baked into the type."
 - slug: "unique-ptr"
   note: "Owning heterogeneous or non-copyable elements: a vector of unique_ptr stores polymorphic objects by base pointer, each deleted automatically when the vector goes."
+- slug: "strings"
+  note: "The same contiguous-growth container specialized for characters: size versus capacity, reserve, and the erase-remove idiom all reappear, plus the small-string optimization a vector has no equivalent for."

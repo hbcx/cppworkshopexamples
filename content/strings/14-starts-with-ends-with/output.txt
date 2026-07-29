@@ -1,0 +1,5 @@
+is https? yes
+is ftp?   no
+ends /v1? yes
+csv file? yes
+"ht".starts_with("https")? no

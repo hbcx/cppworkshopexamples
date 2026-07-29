@@ -1,0 +1,5 @@
+after insert:  hello, world
+after erase:   hello world
+after replace: HELLO world
+replaceAll:    HELLO w0rld
+spaces removed: abcd

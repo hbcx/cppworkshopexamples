@@ -1,0 +1,12 @@
+title: "The small-string optimization: short strings skip the heap"
+standard: "C++11"
+difficulty: 2
+summary: "Every mainstream std::string keeps a small inline buffer, so a short string stores its characters inside the object itself with no heap allocation; only once it outgrows that buffer does it allocate."
+notes: "The small-string optimization (SSO) is why std::string is cheap for the short strings that dominate real code -- names, keys, flags. The object carries a small char buffer inline (commonly around 15 characters on a 64-bit libstdc++), and while the text fits there data() points back into the object and no allocation happens. Cross that threshold and the string moves to a heap buffer, and data() then points outside the object. This example detects which regime it is in with a pointer comparison -- is data() inside the object's own footprint? -- rather than printing a raw capacity, because the exact inline size is implementation-defined and would differ between standard libraries. The practical consequences: copying or moving a short string touches no heap at all, but the SSO buffer inflates sizeof(std::string) to typically 32 bytes, and it means capacity() is non-zero for a freshly constructed empty string. Do not hard-code the threshold; rely only on the fact that one exists."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::capacity", url: "https://en.cppreference.com/w/cpp/string/basic_string/capacity" }
+  - { name: "std::string::data", url: "https://en.cppreference.com/w/cpp/string/basic_string/data" }

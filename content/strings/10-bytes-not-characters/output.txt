@@ -1,0 +1,4 @@
+text: café
+size() in bytes:  5
+code points:      4
+substr(0,4) ends mid-character? yes

@@ -1,0 +1,12 @@
+title: "Numbers to strings and back: to_string and stoi"
+standard: "C++11"
+difficulty: 2
+summary: "std::to_string turns a number into text and std::stoi / std::stod parse it back; both are C++11, and stoi has two sharp edges -- it throws on junk and silently stops at the first non-digit."
+notes: "std::to_string(n) gives the decimal text of an integer or floating value, and std::stoi / std::stol / std::stoll / std::stod parse the reverse. Two things about the parsers bite. First, they THROW: std::invalid_argument when the text does not begin with a number, std::out_of_range when it does not fit the target type -- so unvalidated input must be wrapped in try/catch. Second, they parse a PREFIX: stoi(\"42abc\") returns 42 and does not complain, and the optional size_t* pos argument tells you where parsing stopped, which is how you detect trailing junk. stoi also takes a base, so base 16 parses hex. For floating-point, to_string uses a fixed format that is rarely what you want for display -- reach for it to move data, not to format it. C++17 adds std::from_chars, a faster, locale-independent, non-throwing alternative that reports errors instead of throwing; prefer it in hot or untrusted paths."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "std::stoi", url: "https://en.cppreference.com/w/cpp/string/basic_string/stol" }

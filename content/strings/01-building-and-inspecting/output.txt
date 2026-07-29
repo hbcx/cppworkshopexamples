@@ -1,0 +1,8 @@
+fromLiteral = hello (size 5)
+filled      = xxx
+slice       = ell
+empty?      yes
+at(0)       = h
+front/back  = h o
+at(99)      threw out_of_range
+non-l chars = 3

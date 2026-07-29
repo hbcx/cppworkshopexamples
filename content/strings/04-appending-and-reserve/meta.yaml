@@ -1,0 +1,12 @@
+title: "Building a string: append, += and reserve"
+standard: "C++11"
+difficulty: 2
+summary: "Grow a string in place with += / append / push_back, and use reserve to build a long one without the string re-allocating its buffer over and over."
+notes: "operator+= and append add to the string in place and amortize to linear cost, exactly like vector::push_back. The trap is the readable-looking alternative a + b + c + d: each + builds and throws away a fresh temporary string, so a chain of them is quadratic in allocations, whereas +=/append reuse and grow one buffer. When you know the final length, reserve(n) sets capacity up front so the whole build does not re-allocate and move the characters even once -- this example proves it by watching whether data() moves during the build (a stable pointer means no reallocation). Reserve changes capacity, never size: the string is still empty afterwards and you fill it with append/+=. push_back adds a single char; append adds a string, a substring, a char buffer, or a count-and-fill. For assembling from many pieces, reserve then append each piece is the pattern to reach for."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::append", url: "https://en.cppreference.com/w/cpp/string/basic_string/append" }
+  - { name: "std::string::reserve", url: "https://en.cppreference.com/w/cpp/string/basic_string/reserve" }

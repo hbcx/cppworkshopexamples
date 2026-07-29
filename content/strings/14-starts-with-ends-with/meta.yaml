@@ -1,0 +1,12 @@
+title: "starts_with and ends_with (C++20)"
+standard: "C++20"
+difficulty: 2
+summary: "C++20 finally adds the prefix and suffix tests as members, replacing the error-prone substr / compare / rfind idioms people wrote for twenty years."
+notes: "s.starts_with(prefix) and s.ends_with(suffix) are C++20 members that return a bool and allocate nothing; they take a std::string, a string_view, a const char*, or a single char. Before C++20 there was no direct call, and every codebase reinvented one badly: s.substr(0, p.size()) == p allocates a temporary and is wrong when the string is shorter than the prefix; s.compare(0, p.size(), p) == 0 avoids the allocation but reads awkwardly; s.rfind(p, 0) == 0 works but is a puzzle to anyone reading it. The members say exactly what they mean and handle the short-string case correctly. This is a small feature with outsized value because prefix and suffix checks are everywhere -- routing on a URL path, matching a filename extension, recognising a command. C++23 adds the matching contains() for a substring test; until then, s.find(x) != npos remains the way to ask that. Also related and often paired: std::string_view carries the same two members, so you can test a borrowed slice without materialising a string."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::starts_with", url: "https://en.cppreference.com/w/cpp/string/basic_string/starts_with" }
+  - { name: "std::string::ends_with", url: "https://en.cppreference.com/w/cpp/string/basic_string/ends_with" }

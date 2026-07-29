@@ -1,0 +1,11 @@
+title: "Anti-pattern: building a string with s = s + piece"
+standard: "C++11"
+difficulty: 3
+summary: "s = s + piece in a loop allocates a fresh buffer on every iteration, turning an O(n) build into O(n squared); += and append reuse and grow one buffer instead."
+notes: "operator+ has to produce a new string: a + b cannot know it may reuse a's storage, so it allocates a result, copies both sides in, and the assignment then replaces s with it. Do that once and it is nothing; do it inside a loop -- s = s + piece for each of n pieces -- and every iteration allocates and copies the entire string so far, which is 1 + 2 + 3 + ... + n work: quadratic time and quadratic allocations. += and append are different in kind, not degree: they add to the existing buffer in place and grow it geometrically, so the whole build is amortized linear and touches the heap a handful of times, not n times. This example proves the difference by watching whether the buffer's address moves on each iteration -- with s = s + piece it moves almost every time, with += it settles and stops. The fix is mechanical: replace s = s + x with s += x, and when the final size is known, reserve first so even the geometric reallocations vanish (see the appending-and-reserve example). std::ostringstream is the readable alternative when the pieces are heterogeneous."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::append", url: "https://en.cppreference.com/w/cpp/string/basic_string/append" }

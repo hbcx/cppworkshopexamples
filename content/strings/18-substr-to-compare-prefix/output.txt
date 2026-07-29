@@ -1,0 +1,4 @@
+same answer? yes (prefix matches)
+substr  test allocations: 1
+compare test allocations: 0
+rfind   test allocations: 0

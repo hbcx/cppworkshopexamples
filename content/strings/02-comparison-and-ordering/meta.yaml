@@ -1,0 +1,11 @@
+title: "Comparing strings: ==, <, compare and case-insensitivity"
+standard: "C++11"
+difficulty: 2
+summary: "std::string compares by byte value, not by locale: == checks content, < orders lexicographically, and compare() gives the three-way sign -- while case-insensitive matching is something you have to build."
+notes: "Equality on std::string compares the characters, so == and != mean what you expect and cost O(n) only when the lengths match. Ordering with <, >, etc. is lexicographic on the raw byte values: it is NOT locale-aware or case-folded, so uppercase letters sort before lowercase in ASCII and non-English text orders by byte, not by alphabet. compare() is the three-way form -- it returns a negative value, zero, or positive, like C's strcmp, and has overloads to compare only a substring range, which avoids building a temporary just to compare a slice. Two practical consequences. Case-insensitive comparison is not built in: you compare after transforming both sides to one case, or walk both with a case-folding predicate. And you can compare a std::string directly against a string literal (const char*) without constructing a temporary, because the overloads accept it. This byte-wise ordering is exactly what makes std::string a well-behaved std::map key."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::compare", url: "https://en.cppreference.com/w/cpp/string/basic_string/compare" }

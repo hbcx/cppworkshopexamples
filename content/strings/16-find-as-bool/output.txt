@@ -1,0 +1,5 @@
+[buggy] thinks "ftp" is present (it is not)
+[buggy] correct only by luck: !0 is true, so this branch is taken
+[correct] has "ftp"?   no
+[correct] has "https"? yes
+(find("https") returned index 0)

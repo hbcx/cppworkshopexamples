@@ -1,0 +1,3 @@
+s = s + piece : buffer moved 193 times (out of 200)
+s += piece    : buffer moved 5 times (out of 200)
++= reallocates far less often? yes

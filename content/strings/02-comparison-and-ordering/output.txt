@@ -1,0 +1,6 @@
+a == b?          yes
+a == c?          no
+iequals(a, c)?   yes
+"Apple" < "apple"? yes
+a.compare(c) is positive
+a == "apple"?    yes

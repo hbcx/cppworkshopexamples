@@ -1,0 +1,5 @@
+key = timeout, value = 30
+'?' found? no
+last slash at 10
+first vowel at 1
+substr(11, 999) = bin

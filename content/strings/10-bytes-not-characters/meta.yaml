@@ -1,0 +1,11 @@
+title: "Bytes, not characters: std::string and UTF-8"
+standard: "C++11"
+difficulty: 2
+summary: "std::string is a sequence of bytes, not of characters: size() counts bytes, operator[] indexes bytes, and a single accented or non-Latin character in UTF-8 spans several of them."
+notes: "std::string knows nothing about text encoding -- it is std::basic_string<char>, a container of bytes. In UTF-8, ASCII characters are one byte but everything else is two to four, so a string that a human reads as five characters can have far more than five bytes. Every byte-level operation inherits this: size() returns the byte count, operator[] and iterators step one byte at a time, substr cuts at a byte offset and can split a multi-byte character in half, and reverse() or a naive per-byte transform corrupts the text outright. This is not a bug to fix but the model to know -- for storage, I/O, concatenation and byte-exact search it is exactly right and fast. What std::string does NOT give you is character counting, case folding beyond ASCII, or normalization; those need a real Unicode library (ICU) or, in C++20, careful use of char8_t and u8 literals. The rule: treat std::string as a UTF-8 byte buffer, keep indices on code-unit boundaries you control, and never assume one byte is one character."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::size", url: "https://en.cppreference.com/w/cpp/string/basic_string/size" }

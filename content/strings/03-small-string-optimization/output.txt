@@ -1,0 +1,5 @@
+sizeof(std::string) = 32 bytes
+short ("hi") stored inline? yes -- no heap
+long stored inline?  no -- on the heap
+empty string capacity is non-zero? yes
+empty string inline? yes

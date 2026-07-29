@@ -1,0 +1,6 @@
+port 8080
+parsed port + 1 = 8081
+stoi("42abc") = 42, stopped at index 2 (trailing junk)
+hex ff = 255
+stoi("not a number") threw invalid_argument
+double round-trips to 3.5? yes

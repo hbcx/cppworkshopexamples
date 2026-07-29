@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "move-semantics"
+  note: "std::string is the textbook move type: moving one hands over its heap buffer in O(1) while a copy allocates, and it is the object most of those examples use to show moved-from state."
+- slug: "vectors"
+  note: "std::string is a container of char with the same size/capacity/reserve growth model, so the reallocation, reserve and erase-remove lessons transfer straight across."
+- slug: "unordered-containers"
+  note: "std::string is the default hash-map key: lookup cost scales with its length because the whole string is hashed and then compared, which the hashing tradeoffs there make concrete."

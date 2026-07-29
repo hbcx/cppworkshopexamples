@@ -1,0 +1,12 @@
+title: "Anti-pattern: treating find's result as a bool"
+standard: "C++11"
+difficulty: 3
+summary: "find returns a position or npos, not a yes/no: if (s.find(x)) is wrong twice over -- npos is truthy so a miss reads as found, and a match at index 0 is falsy so it reads as not found."
+notes: "std::string::find returns a size_type index, and on failure the sentinel std::string::npos, which is the largest possible size_type -- emphatically not zero. Writing if (s.find(x)) or if (!s.find(x)) treats that index as a boolean and gets it backwards in both directions. A miss returns npos, which is non-zero and therefore true, so the code thinks the absent thing was found. A match at the very start returns 0, which is false, so the code thinks the present thing was missing -- and prefixes at index 0 are the single most common thing people search for. The one and only correct test is an explicit comparison against npos: s.find(x) != std::string::npos means found, == std::string::npos means not. This example shows both failure directions with defined, deterministic values and then the correct comparison. The same rule applies to rfind, find_first_of and every member that returns a position."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::find", url: "https://en.cppreference.com/w/cpp/string/basic_string/find" }
+  - { name: "std::string::npos", url: "https://en.cppreference.com/w/cpp/string/basic_string/npos" }

@@ -1,0 +1,6 @@
+c_api_length = 11
+size()       = 11
+before append: example.com
+after append, re-fetch c_str(): example.com (dangling now)
+size() with embedded null = 3
+strlen(c_str())           = 1

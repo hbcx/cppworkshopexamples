@@ -1,0 +1,24 @@
+# Where to reach for std::string -- problem -> tool, with the alternative each beats.
+- problem: "A service reads simple text config or protocol lines -- KEY=VALUE environment pairs, HTTP-style header lines, INI entries -- where the grammar is one separator and a value."
+  why: "A hand scan with find and substr is a few lines and compiles instantly, while std::regex drags in a heavy engine and a runtime-compiled pattern to match a single fixed character."
+  signal: "a std::regex whose pattern is a literal delimiter, or repeated splitting of one line around a single character"
+
+- problem: "Assembling a log line, a dynamic SQL statement, or a filesystem path from many pieces whose combined length is roughly known."
+  why: "reserve then append reuses one buffer, where a chain of operator+ allocates a temporary per plus and snprintf into a fixed char array silently truncates when the pieces run long."
+  signal: "a string built with s = s + ... in a loop, or a fixed-size char buffer filled with snprintf and manual length tracking"
+
+- problem: "Reading a whole file or a network payload into memory as a growable byte buffer, including binary data that may contain null bytes."
+  why: "std::string owns contiguous storage, grows itself, and exposes data() and size() for the read call while keeping embedded nulls, replacing manual malloc and realloc bookkeeping; std::vector<char> is the alternative when no text operations are ever needed."
+  signal: "manual new[] or realloc of a char buffer that is resized as more data arrives and then treated as text"
+
+- problem: "A parsing or formatting helper called all over the codebase that only reads its text argument, invoked with std::string values, string literals, and slices of larger buffers alike."
+  why: "a std::string_view parameter binds all three with no allocation, where const std::string& forces a literal or char pointer argument into a temporary std::string at every call."
+  signal: "a function overloaded to take both const std::string& and const char*, or a hot-path substr feeding a read-only callee"
+
+- problem: "User-supplied identifiers -- usernames, tags, header names -- that must match regardless of case or surrounding whitespace before they are stored or looked up."
+  why: "normalizing once at ingest, by trimming and lowercasing into a std::string key, makes every later comparison a plain equality, where carrying the raw text forces a case-insensitive whitespace-tolerant compare at each of the many lookup sites."
+  signal: "repeated tolower or trim loops at comparison sites rather than one normalization at the boundary"
+
+- problem: "Processing a log, CSV, or config file one record at a time, where records are newline-separated and fields use a fixed delimiter."
+  why: "std::getline over the stream reads record by record and preserves empty fields, where reading the whole file to split on newlines wastes memory and fgets into a fixed buffer truncates long lines."
+  signal: "a whole-file read followed by a split on the newline character, or fgets with a fixed char array line buffer"

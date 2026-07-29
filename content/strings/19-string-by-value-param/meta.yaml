@@ -1,0 +1,11 @@
+title: "Anti-pattern: a read-only string parameter taken by value"
+standard: "C++17"
+difficulty: 3
+summary: "void log(std::string s) copies the caller's string -- a heap allocation -- every call, when the function only reads it; const std::string& or std::string_view read it for free."
+notes: "Passing a std::string by value binds the parameter by making a COPY of the argument, which allocates and copies the characters (unless the short-string optimization covers it). For a function that only inspects the text -- logs it, parses it, hashes it -- that copy is pure overhead paid at every call. Take it by const std::string& and the function reads the caller's string directly with no allocation; take it by std::string_view (C++17) and the same signature also accepts literals and char buffers without forcing them into a std::string first. This example counts allocations with a global operator new: the by-value call allocates, the reference and view calls do not. The by-value form is not always wrong -- it is the right choice for a SINK that will KEEP the string, where taking by value and moving into place lets a caller's rvalue skip the copy entirely (see the sink-parameters example in the move-semantics chapter). The rule is by intent: reading -> const& or string_view; storing -> by value then move. What you should not do is take by value out of habit for a function that only looks."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }

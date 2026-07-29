@@ -1,0 +1,12 @@
+title: "Talking to C: c_str, data and null termination"
+standard: "C++11"
+difficulty: 2
+summary: "c_str() hands a C API a guaranteed null-terminated const char*; the pointer is only valid until the next modification, and embedded null bytes are the one case it cannot represent."
+notes: "A std::string knows its length, so it can hold embedded null bytes -- but a C API stops at the first null. c_str() returns a const char* that is guaranteed null-terminated (since C++11 the internal buffer always has that trailing null), which is exactly what functions like strlen, fopen or a socket call expect. data() returns the same buffer; in C++11 it is const, and C++17 added a non-const data() overload so you can let a C API write into the string in place. Two rules keep this safe. The pointer is borrowed, not owned: it is invalidated by any operation that can reallocate or change the string -- append, +=, resize -- so never cache it across a modification, and never delete or free it. And if the string contains an embedded null, the C side sees a truncated value while size() still counts the full length; strlen on c_str() then disagrees with size(), which this example shows deliberately."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::string::c_str", url: "https://en.cppreference.com/w/cpp/string/basic_string/c_str" }
+  - { name: "std::string::data", url: "https://en.cppreference.com/w/cpp/string/basic_string/data" }

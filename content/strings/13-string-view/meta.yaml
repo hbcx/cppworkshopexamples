@@ -1,0 +1,11 @@
+title: "std::string_view: looking at text you do not own"
+standard: "C++17"
+difficulty: 3
+summary: "A string_view is a pointer-and-length pair that refers to characters owned by someone else, so substrings and function parameters become free -- no allocation, no copy -- as long as the underlying text outlives the view."
+notes: "std::string_view (C++17) is a non-owning window onto a character sequence: it holds a pointer and a length and copies nothing. Two payoffs. A function parameter typed string_view accepts a std::string, a string literal, or a char buffer without forcing a conversion or an allocation at each call -- one signature for every kind of caller. And substr on a string_view returns another view into the SAME buffer, so slicing a large string into tokens costs nothing, where std::string::substr allocates a fresh copy each time. The price is that a view owns nothing, so the text it points at must outlive it: returning a view of a local string, or taking a view of a temporary, leaves it dangling (its own anti-pattern). Two more sharp edges: a string_view is NOT guaranteed null-terminated, so never hand view.data() to a C API expecting a C string, and remove_prefix / remove_suffix shrink the window cheaply by just moving the endpoints. Use it for read-only access to text you are borrowing; keep std::string when you need to own or modify."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
