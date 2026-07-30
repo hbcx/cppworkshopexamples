@@ -1,0 +1,11 @@
+title: "make_pair and type deduction"
+standard: "C++11"
+difficulty: 1
+summary: "std::make_pair deduces both element types from its arguments so you do not repeat them, but it decays references and arrays -- a string literal becomes const char*, not std::string."
+notes: "make_pair exists so you can build a pair without spelling out both types, which before C++17 was the only concise way (there was no class template argument deduction for pair yet). It deduces each type from the corresponding argument and, crucially, DECAYS it: arrays and string literals become pointers, references become values, and top-level const is dropped. So make_pair(hello, 5) yields pair<const char*, int>, not pair<std::string, int> -- a real surprise if you expected to call .first.size(). To store a std::string you either name the type (std::pair<std::string,int>) or make the argument a std::string. From C++17, class template argument deduction lets you write std::pair p{1, 3.5} directly, which makes make_pair largely redundant -- except that the two apply their decay rules slightly differently, so make_pair is still the tool when you specifically want the decayed types."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::make_pair", url: "https://en.cppreference.com/w/cpp/utility/pair/make_pair" }
+detailed_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }

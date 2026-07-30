@@ -1,0 +1,2 @@
+value : temporary, n = 1
+ref   : temporary, n = 2

@@ -1,0 +1,11 @@
+title: "Returning two values from a function"
+standard: "C++11"
+difficulty: 2
+summary: "A pair return type hands back two related results at once -- quotient and remainder, min and max -- instead of an out-parameter or a one-off struct."
+notes: "The everyday reason to reach for pair is a function that naturally produces two things: divide gives a quotient and a remainder, a scan gives a minimum and a maximum, a lookup gives a value and a found flag. Returning a pair keeps both results in the return value, which reads better than an output reference parameter (the caller no longer has to declare a variable first and pass its address) and is cheaper to write than a dedicated struct for a throwaway result. Note the braced-return shorthand: return {lo, hi} builds the pair from the function's declared return type without naming it again. The trade-off is names: .first and .second say nothing about meaning, so for a result that outlives the call or crosses an API boundary a named struct is clearer -- that tension is the subject of a later anti-pattern. Since C++11 the standard library ships std::minmax_element for this particular case; the hand-rolled version here is just to show the pair return shape."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+detailed_tags:
+  - { name: "std::make_pair", url: "https://en.cppreference.com/w/cpp/utility/pair/make_pair" }

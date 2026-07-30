@@ -1,0 +1,3 @@
+x < y? yes
+n = 7, word = seven
+n now 99 (second ignored)

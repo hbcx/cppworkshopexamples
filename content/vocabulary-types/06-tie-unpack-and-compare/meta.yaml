@@ -1,0 +1,12 @@
+title: "std::tie: unpack into existing variables and compare by members"
+standard: "C++11"
+difficulty: 3
+summary: "std::tie builds a pair or tuple of references, which unpacks into variables you already have and gives the one-line way to write a multi-key operator< without a nested if-chain."
+notes: "std::tie makes a tuple of references to its arguments. Two uses follow. First, assigning a pair to a tie unpacks it into variables that already exist -- the pre-C++17 stand-in for structured bindings, and still the tool when the targets are existing members or when you want to drop a field with std::ignore. Second, and more valuable, comparing two ties compares the referenced members lexicographically, which is the idiomatic way to order a struct by several fields: return tie(a.last, a.first, a.id) < tie(b.last, b.first, b.id) is correct by construction, where hand-writing the if a.last != b.last ... chain is easy to get subtly wrong. The reference nature is the catch: never return a tie of local variables, because it dangles. Since C++20 the spaceship operator can default the whole comparison, but the tie idiom remains the portable, explicit form and lets you reorder or exclude fields."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::tie", url: "https://en.cppreference.com/w/cpp/utility/tuple/tie" }
+detailed_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+  - { name: "std::ignore", url: "https://en.cppreference.com/w/cpp/utility/tuple/ignore" }

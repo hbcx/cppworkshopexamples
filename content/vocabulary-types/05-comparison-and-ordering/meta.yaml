@@ -1,0 +1,11 @@
+title: "Lexicographic comparison and composite keys"
+standard: "C++11"
+difficulty: 2
+summary: "pair defines all six relational operators lexicographically -- compare first, break ties with second -- which makes a pair a ready-made two-level sort key with no custom comparator."
+notes: "pair's comparison is lexicographic: operator< compares the two firsts, and only if they are equal does it compare the seconds; the other five relational operators follow from the same rule. That single fact turns a pair into a composite sort key for free. Want to sort records by age and then by name for ties? Store pair<int, std::string> and call std::sort with no comparator at all -- the default less-than already does age-then-name. The same is why std::set<std::pair<...>> and a std::map keyed on a pair order the way you expect. The ordering is only as meaningful as the member order: put the primary key in .first. Comparison requires both member types to be comparable, and for floating-point members the usual NaN caveat applies (a NaN makes the pair neither less nor equal)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

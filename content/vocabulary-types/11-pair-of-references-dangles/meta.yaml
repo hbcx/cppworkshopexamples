@@ -1,0 +1,11 @@
+title: "Anti-pattern: a pair member that references a temporary"
+standard: "C++11"
+difficulty: 3
+summary: "A pair with a reference member bound to a temporary dangles the moment the full expression ends; store by value, or keep the referent alive yourself."
+notes: "A pair can hold a reference member, and make_pair(std::ref(x), ...) will build one for you. That reference obeys the ordinary lifetime rule: it does not extend the lifetime of what it binds to. Bind it to a temporary -- pair<const std::string&, int>(makeLabel(), 1) -- and the temporary is destroyed at the end of the full expression, leaving .first dangling; reading it is undefined behaviour. The trap is easy to miss because the constructor call looks like it stores the value, and auto plus std::ref hides the reference member entirely. The fix is almost always to store by value: pair<std::string, int> owns its copy and stays valid as long as the pair does, with no lifetime coupling. If a reference member is genuinely what you want (to alias something large you do not wish to copy), you become responsible for keeping the referent alive at least as long as the pair -- typically a named object in an enclosing scope, never a temporary. This example does not run the dangling read (UB is nondeterministic and would break the two-compiler output check); it is described in a comment, and only the safe forms execute."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+detailed_tags:
+  - { name: "std::make_pair", url: "https://en.cppreference.com/w/cpp/utility/pair/make_pair" }

@@ -1,0 +1,12 @@
+title: "first and second: two values in one object"
+standard: "C++11"
+difficulty: 1
+summary: "std::pair bundles two values of possibly different types; you read and write them through the public data members .first and .second."
+notes: "std::pair is the smallest vocabulary type: a struct with two public members named first and second and nothing else. There is no getter ceremony -- .first and .second are ordinary mutable members you read and assign directly. Construct one with the two values, with braces, or leave it default-constructed, in which case both members are value-initialized (0 for an int, empty for a std::string). Because the two types are independent template parameters, a pair can mix an int with a string, a double with a char, and so on. This example just exercises the members; later examples cover make_pair, structured bindings, comparison and constructing in place."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+detailed_tags:
+  - { name: "std::pair::first", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+  - { name: "std::pair::second", url: "https://en.cppreference.com/w/cpp/utility/pair" }

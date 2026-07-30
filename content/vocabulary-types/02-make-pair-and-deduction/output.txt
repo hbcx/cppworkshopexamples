@@ -1,0 +1,4 @@
+1 / 3.5
+equal? yes
+decayed to C string: hello
+length = 5

@@ -1,0 +1,12 @@
+title: "piecewise_construct: build the members in place"
+standard: "C++11"
+difficulty: 3
+summary: "The piecewise_construct constructor takes two tuples of arguments and builds each member directly inside the pair -- no temporary, no extra move, and the only way to fill a pair whose members are not movable."
+notes: "The ordinary pair constructor takes the two values already built, so pair<A,B>(A(...), B(...)) constructs each temporary and then moves it into the member -- two constructions and two moves. The piecewise_construct overload takes std::piecewise_construct as a tag plus two tuples (usually from std::forward_as_tuple), and forwards each tuple's contents as the constructor arguments for that member, so each member is built in place: the moves disappear. This matters in two cases -- when the members are expensive to move, and when they cannot be moved or copied at all, where it is the only way to form the pair. It is exactly the machinery map::emplace and unordered_map::emplace use under the hood to construct a pair<const Key, Value> node without a spare copy. This example counts constructions and moves with static counters (order-independent, so the output is identical on every compiler) to show the two moves vanish."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::piecewise_construct", url: "https://en.cppreference.com/w/cpp/utility/piecewise_construct" }
+detailed_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+  - { name: "std::forward_as_tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple/forward_as_tuple" }

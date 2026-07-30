@@ -1,0 +1,13 @@
+title: "Anti-pattern: copying every map entry in a range-for"
+standard: "C++11"
+difficulty: 3
+summary: "A map's element type is pair<const Key, Value>; a loop variable typed pair<Key, Value> does not match and silently copies every entry instead of binding to it."
+notes: "The value_type of std::map<K,V> is pair<const K, V> -- the key is const. Writing the range-for loop variable as std::pair<K, V> (a non-const key) is a different type, so instead of binding to each element the loop constructs a fresh pair and copy-initializes it from the element, once per iteration. Nothing warns you in the general case, the loop works, and on a big map with heavy keys it quietly copies the whole container every pass. This example makes the copies visible with a key type that counts its own copy-construction: the wrong loop reports one copy per element, the const-reference loop reports zero. Always iterate a map by reference -- for (const auto& e : m) or structured bindings for (const auto& [k, v] : m) -- and add & when you need to mutate the mapped value. Note: modern clang flags exactly this with -Wrange-loop-construct; this example disables -Werror so the trap can be shown and measured rather than rejected at compile time."
+run: true
+sanitizers: []
+werror: false
+main_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+detailed_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }

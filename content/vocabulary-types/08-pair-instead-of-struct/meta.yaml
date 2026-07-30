@@ -1,0 +1,12 @@
+title: "Anti-pattern: pair where a named struct belongs"
+standard: "C++11"
+difficulty: 2
+summary: "Using pair -- especially nested pair -- as a domain type hides meaning behind .first and .second; a tiny struct with named members costs the same and reads at every use site."
+notes: "pair is glue, not a domain type. Its members are named first and second precisely because it does not know what they mean, and that is fine for a throwaway two-value result consumed on the next line. It stops being fine the moment the value is stored, passed across an API, or nested: pair<pair<double,double>, std::string> forces every reader to remember that .first.first is a latitude and .first.second a longitude, and a swap of the two goes unnoticed by the compiler. A struct with named members has identical size and cost, documents itself at the point of use, lets the compiler catch a mis-assigned field by type where you give the fields distinct types, and in C++17 still supports aggregate initialization and structured bindings. Rule of thumb: pair for a local intermediate the reader sees defined nearby; a named struct the moment the value has a life beyond that."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+detailed_tags:
+  - { name: "std::pair::first", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+  - { name: "std::pair::second", url: "https://en.cppreference.com/w/cpp/utility/pair" }

@@ -1,0 +1,4 @@
+q = 3, r = 2
+ada is 36
+bea is 41
+ada now 37

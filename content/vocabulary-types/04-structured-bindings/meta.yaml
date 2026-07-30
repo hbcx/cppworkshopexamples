@@ -1,0 +1,12 @@
+title: "Structured bindings: naming first and second"
+standard: "C++17"
+difficulty: 2
+summary: "C++17 structured bindings unpack a pair into two named variables -- auto [q, r] = divmod(...) -- so you stop writing .first and .second, and can bind map entries by reference to edit them in place."
+notes: "The weakness of pair is that .first and .second carry no meaning at the call site. Structured bindings (C++17) fix exactly that: auto [q, r] = divmod(17, 5) introduces two real names bound to the pair's members, and the reader never sees .first again. The names are the whole point -- choose them well. The idiom shows up most in range-for over a map, whose element type is pair<const Key, Value>: for (const auto& [name, age] : ages) reads like the data it walks. Add a reference -- for (auto& [name, age] : ages) -- and the bound names alias the real members, so assigning through age mutates the container. Two caveats: the binding count must match exactly (two names for a pair, no more, no fewer), and const/reference qualifiers apply to the whole pair, not per name. Structured bindings also work on std::tuple, std::array and any aggregate, because they are a language feature, not a pair member."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }

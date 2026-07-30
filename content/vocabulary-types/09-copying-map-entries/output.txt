@@ -1,0 +1,3 @@
+[buggy]   copies during loop = 3
+[correct] copies during loop = 0
+same sum? yes

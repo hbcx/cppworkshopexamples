@@ -1,0 +1,11 @@
+title: "Anti-pattern: make_pair with explicit template arguments"
+standard: "C++11"
+difficulty: 3
+summary: "Spelling out std::make_pair<T,U>(...) defeats the deduction it exists for, and changes the parameters to rvalue references so passing lvalues stops compiling; deduce, or name the pair type instead."
+notes: "make_pair's entire job is to deduce the element types from its arguments. Writing make_pair<int, std::string>(a, b) throws that away and does harm: the function's parameters become T1&& and T2&& with T1, T2 now fixed, i.e. int&& and std::string&&, so an lvalue argument no longer binds and the call fails to compile -- a baffling error for something that looks like it just names the obvious types. When the explicit types differ from the arguments it instead forces silent conversions and copies. There are two correct forms depending on intent: to build a pair of the arguments' own (decayed) types, call make_pair(a, b) with no template arguments and let it deduce; to demand specific member types, name the pair -- std::pair<long, std::string>(a, b) -- whose constructor takes its arguments by reference and converts as needed, with no rvalue-reference trap. From C++17, class template argument deduction (std::pair p{a, b}) covers the deduce case too. The broken call here is left in a comment, not compiled, since it is a hard error by design."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::make_pair", url: "https://en.cppreference.com/w/cpp/utility/pair/make_pair" }
+detailed_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }

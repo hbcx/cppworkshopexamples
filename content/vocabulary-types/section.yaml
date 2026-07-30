@@ -1,0 +1,4 @@
+title: "Vocabulary types"
+description: "The standard value-carrying types you reach for at API boundaries instead of ad-hoc structs, out-parameters, or error codes: std::pair and std::tuple to return and hold several values at once, std::optional (C++17) for a value that may be absent, std::variant (C++17) for a value that is exactly one of a fixed set of types, std::any (C++17) for a value whose type is decided at runtime, and std::expected (C++23) for a result that is either a value or an error -- each making the shape and the possible states of a value explicit in the type."
+sort_order: 15
+category: "Utilities"
