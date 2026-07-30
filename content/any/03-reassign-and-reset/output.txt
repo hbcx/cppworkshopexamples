@@ -1,0 +1,5 @@
+int?    true
+double? true
+string? true
+char?   true, value = z
+after reset, has_value? false

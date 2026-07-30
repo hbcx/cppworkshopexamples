@@ -1,0 +1,2 @@
+any:     string hi
+variant: int 42

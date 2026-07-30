@@ -1,0 +1,3 @@
+make_any string = xxxxx
+in_place_type:
+  Widget(1, 2)

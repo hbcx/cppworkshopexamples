@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 10, "out": "value cast: 7\n"}, {"file": "main.cpp", "line": 12, "out": "any_cast<long> threw: stored type is int, not long\npointer cast ok: 7\npointer cast to double: nullptr (wrong type)\n"}]}

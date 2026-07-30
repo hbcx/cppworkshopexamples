@@ -1,0 +1,3 @@
+[buggy]   stored = hello
+[correct] stored = hello world
+[correct] stored = hello world!

@@ -1,0 +1,12 @@
+title: "The two any_cast forms and the exact-type rule"
+standard: "C++17"
+difficulty: 2
+summary: "any_cast<T>(a) returns a copy and throws bad_any_cast on a type mismatch; any_cast<T>(&a) returns a pointer or null; either way the type must match exactly -- no conversions, not even int to long."
+notes: "any_cast comes in two forms with different failure modes. The value form, any_cast<T>(a), returns the stored value (a copy) and throws std::bad_any_cast when T is not the stored type -- the checked access for when you are sure of the type and want a hard error otherwise. The pointer form, any_cast<T>(&a), takes the any's address and returns a T* on a match or nullptr on a mismatch -- the way to test-and-use without exceptions, the same idea as optional's checked access. The rule both obey is EXACT type match: any erases the type down to its precise identity, so any holding an int is not castable to long, unsigned int, or double -- there are no implicit conversions through any, unlike a normal assignment. This surprises people who expect an int to come back as a long; it will not. Check with type() == typeid(T) or the pointer form before the value form when the type is uncertain, and remember the stored type is the decayed type of what you put in."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/any_cast" }
+detailed_tags:
+  - { name: "std::bad_any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/bad_any_cast" }
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }

@@ -1,0 +1,12 @@
+title: "Store a value, cast it back"
+standard: "C++17"
+difficulty: 1
+summary: "std::any holds one value of any type chosen at assignment; has_value and type() report its state, and std::any_cast<T> recovers the value when T is the stored type."
+notes: "std::any is the type-erased single-value vocabulary type: it holds one object of an arbitrary type, decided when you assign it, and it can later hold a value of a completely different type. That flexibility is bought with runtime bookkeeping -- any stores the value (small ones inline, larger ones on the heap) plus enough type information to hand it back safely. has_value() says whether it holds anything; type() returns the std::type_info of the stored type, best compared against typeid(T) rather than printed, since type().name() is an implementation-defined string. You get the value out with std::any_cast<T>, which succeeds only when T matches the stored type exactly. This example just stores and reads; the next covers what any_cast does on a mismatch, and why the match must be exact. Reach for any only when the type genuinely is not known until runtime -- a closed set of types is a job for variant, and a single known type needs no erasure at all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }
+detailed_tags:
+  - { name: "std::any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/any_cast" }
+  - { name: "std::any::type", url: "https://en.cppreference.com/w/cpp/utility/any/type" }

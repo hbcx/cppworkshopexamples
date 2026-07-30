@@ -1,0 +1,12 @@
+title: "Reassigning to a different type, and reset"
+standard: "C++17"
+difficulty: 2
+summary: "Assigning a new value to an any replaces both the value and the stored TYPE -- the set of types is open, unlike variant -- while emplace constructs a new type in place and reset() empties it."
+notes: "The defining trait of any versus variant is that its type is open: assigning a value of a different type simply replaces what it holds, and type() changes to match, with no fixed list of alternatives declared anywhere. So one any can be an int, then a double, then a std::string over its life. emplace<T>(args...) does the same deliberately: it destroys the current value and constructs a T in place from the arguments, which is how you switch type without building a temporary first. reset() drops the contained value, runs its destructor, and leaves the any empty (has_value() false). This open-endedness is exactly what makes any powerful and dangerous: powerful because a store can hold values whose types were not known when it was written, dangerous because the type is now a runtime fact the compiler cannot check, so every read is an any_cast that can miss. If the set of types is actually fixed and known, that check belongs in the type system -- reach for variant instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }
+detailed_tags:
+  - { name: "std::any::emplace", url: "https://en.cppreference.com/w/cpp/utility/any/emplace" }
+  - { name: "std::any::reset", url: "https://en.cppreference.com/w/cpp/utility/any/reset" }

@@ -1,0 +1,5 @@
+has_value? true
+as int = 42
+as string = hello
+holds string? true
+empty.has_value()? false

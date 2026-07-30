@@ -1,0 +1,12 @@
+title: "A heterogeneous store dispatched on type()"
+standard: "C++17"
+difficulty: 3
+summary: "A vector of any holds values of different types in one container; each is handled by comparing type() against the types you know and any_cast-ing the match -- the realistic use, where the type set is open."
+notes: "The honest use of any is a store whose element types are not fixed when the container is written: a property bag, a script or config value, a message payload carried through a generic layer. A vector<any> holds a mix -- an int here, a double there, a string, an empty slot -- and consuming it means asking each element what it is: compare type() against typeid(T) for the types you handle, any_cast the match, and fall back for anything unrecognised. That last point is the cost made visible: because the types are a runtime fact, the dispatch is a chain of type() checks the compiler cannot verify is exhaustive, and an unhandled type slips through to the fallback rather than a compile error. That is the trade any makes -- open-endedness for static checking. When the set of types IS known and closed, a variant with std::visit gives the same heterogeneous store WITH a compile-time-exhaustive dispatch and no allocation, which is why any is the right tool only when the type set is genuinely open. This example dispatches a mixed vector, including an empty slot and a type the handler does not know."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }
+detailed_tags:
+  - { name: "std::any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/any_cast" }
+  - { name: "std::any::type", url: "https://en.cppreference.com/w/cpp/utility/any/type" }

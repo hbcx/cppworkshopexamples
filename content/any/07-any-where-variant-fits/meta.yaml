@@ -1,0 +1,12 @@
+title: "Anti-pattern: any where a closed variant fits"
+standard: "C++17"
+difficulty: 2
+summary: "When the set of types is known and closed, any erases it into runtime any_casts a forgotten case slips past; a variant names the alternatives so std::visit is compile-time exhaustive, with no allocation."
+notes: "any is for an OPEN set of types -- ones not known when the code is written. If the set is actually closed and small (a value is always an int, a double or a string; a shape is always one of three), any throws that knowledge away: every read is an any_cast that can miss, the dispatch is a chain of type() tests the compiler cannot check for completeness, and a newly added type silently falls through to a default. std::variant<Ts...> is the right tool for the closed case: it names the alternatives in the type, holds the value inline with no heap allocation, and std::visit dispatches to a handler for each -- and if a handler is missing the code does not compile. This example renders the same logical value both ways: an any behind a type() ladder with an UNHANDLED fallback the compiler cannot rule out, and a variant behind std::visit that must cover every alternative. Rule: reach for any only when the type is genuinely unknown until runtime; a fixed menu of types belongs in a variant where the type system can enforce it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }
+detailed_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }

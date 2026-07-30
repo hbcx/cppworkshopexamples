@@ -1,0 +1,4 @@
+value cast: 7
+any_cast<long> threw: stored type is int, not long
+pointer cast ok: 7
+pointer cast to double: nullptr (wrong type)

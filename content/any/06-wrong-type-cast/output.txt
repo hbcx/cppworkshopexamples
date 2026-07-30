@@ -1,0 +1,5 @@
+holds const char*? true
+holds std::string? false
+any_cast<std::string> threw: stored type is const char*
+any_cast<long> threw: stored type is int, not long
+fixed: hi

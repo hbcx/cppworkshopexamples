@@ -1,0 +1,16 @@
+# Where to reach for std::any -- problem -> tool, with the alternative each beats.
+- problem: "A property bag or dynamic settings map must hold values of open-ended types keyed by name -- a config layer, a scripting bridge, a document model where a field can be a number, a string or a date the container was never told about."
+  why: "std::any stores each value with its exact type recovered by any_cast, so the container needs no fixed list of types, where a variant would have to enumerate every possible value type up front (and cannot cover ones added later) and a void* plus a hand-kept type tag drops both type safety and automatic destruction."
+  signal: "a map or struct storing values as void* with a separate type enum or tag, or a variant whose alternative list keeps growing to cover new value types"
+
+- problem: "A library or framework must let callers attach arbitrary data it will hand back untouched -- a user-data slot on a widget, node or connection that the library stores but never interprets."
+  why: "std::any holds the caller's value with its type and destroys it correctly, so the library stays ignorant of the type while the caller retrieves it with any_cast, where a void* forces the caller to manage the lifetime and risks a wrong-type reinterpret with no check."
+  signal: "a void* userData or context field in a library API, paired with casts back to the caller's type and manual new/delete around it"
+
+- problem: "Decoupled components share a blackboard or cache, each storing and later reading values of its own types by key, with no component aware of the others' types."
+  why: "std::any lets each component round-trip its own arbitrary type through the shared store, where forcing a common base class couples the components to one hierarchy and a variant of all their types would have to know every component's payloads in one central declaration."
+  signal: "a shared map forcing every stored type to derive from one Object base, or a central variant listing payloads owned by unrelated modules"
+
+- problem: "A generic middle layer -- an event bus, a task queue, a message router -- must carry a payload from producer to consumer without understanding it, where producer and consumer know the type but the layer does not."
+  why: "std::any lets the layer move and store the payload opaquely and the consumer any_cast it back, where templating the whole layer on the payload type prevents it from carrying different payloads at once, and a void* loses the type and the payload's lifetime."
+  signal: "an event or message layer templated on the payload type, or one carrying void* payloads with an out-of-band type code to reinterpret them"

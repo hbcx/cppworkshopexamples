@@ -1,0 +1,12 @@
+title: "Anti-pattern: any_cast to the wrong type"
+standard: "C++17"
+difficulty: 2
+summary: "any stores the decayed type of what you put in and any_cast needs an exact match, so a string literal (stored as const char*) is not a std::string and an int is not a long -- both throw."
+notes: "Two exact-type surprises bite here. First, decay: std::any a = \"hi\" does not store a std::string, it stores a const char* -- a string literal decays like it would anywhere else -- so any_cast<std::string> throws bad_any_cast, and the value you thought you stored is not the type you stored. Second, no conversions: any erases the type down to its precise identity, and any_cast performs no arithmetic or derived-to-base conversions, so an int does not come back as a long, an unsigned, or a double. Together these mean any_cast<T> must name exactly the decayed type that was assigned. The fixes are to store the type you mean (wrap literals in std::string) and to cast to precisely that type, or -- when the type is uncertain -- to check type() == typeid(T) or use the nullptr-returning pointer form before the throwing value form. This is the everyday any bug: it compiles, and fails only at runtime on the cast."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/any_cast" }
+detailed_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }
+  - { name: "std::bad_any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/bad_any_cast" }

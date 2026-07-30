@@ -1,0 +1,11 @@
+title: "Anti-pattern: modifying the copy any_cast returns"
+standard: "C++17"
+difficulty: 2
+summary: "The value form any_cast<T>(a) returns a COPY, so mutating its result leaves the value inside the any unchanged; cast to T& or use the pointer form to reach the stored object."
+notes: "any_cast<T>(a) -- the by-value form -- returns a copy of the contained value, not a handle to it. So mutating that result changes a throwaway temporary and the object inside the any is untouched, which surprises people who read any_cast as an accessor like a reference. For a class type the mistake even compiles quietly: any_cast<std::string>(a) += \"x\" modifies a temporary string and is discarded. To reach the stored object you must ask for a reference: any_cast<T&>(a) returns a reference into the any (throwing on a type mismatch), and the pointer form any_cast<T>(&a) returns a T* to the stored object (or nullptr). Both let you write through to the contained value. This example shows a by-value cast whose mutation is lost, then the reference and pointer forms that actually change what the any holds. The rule mirrors ordinary C++: if you mean to modify in place, name a reference or a pointer, not a value."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/any_cast" }
+detailed_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }

@@ -1,0 +1,5 @@
+int: 42
+double: 3.14
+string: hello
+(empty)
+unknown type

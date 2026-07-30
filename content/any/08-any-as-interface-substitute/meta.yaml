@@ -1,0 +1,12 @@
+title: "Anti-pattern: any as a substitute for a real interface"
+standard: "C++17"
+difficulty: 3
+summary: "Holding objects in any and switching on type() to act on them pulls behaviour off the types into ladders that every function repeats and the compiler never checks; a common interface puts it back where it belongs."
+notes: "This is the any-where-variant-fits smell taken one step further: not just a closed set of data types, but a set of types that have BEHAVIOUR. Storing them in any and writing areaAny/drawAny/serializeAny, each a type() ladder that casts and acts, scatters every type's logic across every function and forces all of them to be found and updated whenever a type is added -- with no compiler check that any ladder is complete, so a new type silently gets the default. That is exactly the problem virtual dispatch solves: give the types a common base with virtual methods, and each type carries its own area(), draw(), serialize(). Adding a type is one class; a missing override is a compile error; callers just invoke the method. any (like a variant) is for data that has no behaviour of its own and is acted on from outside; the moment you find yourself branching on type() to call type-specific logic in more than one place, you are hand-rolling a vtable and should use a real one. This example computes an area both ways to show the ladder collapse into a single virtual call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }
+detailed_tags:
+  - { name: "std::any::type", url: "https://en.cppreference.com/w/cpp/utility/any/type" }
+  - { name: "std::any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/any_cast" }

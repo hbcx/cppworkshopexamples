@@ -1,0 +1,12 @@
+title: "Constructing in place: make_any and in_place_type"
+standard: "C++17"
+difficulty: 2
+summary: "make_any<T>(args...) builds an any holding a freshly constructed T, and the in_place_type constructor builds the T directly inside the any from its arguments -- no temporary to move in."
+notes: "Assigning a value to an any copies or moves it in. When the stored type is expensive to move, or takes several constructor arguments, you want it built in place instead. Two tools do that. make_any<T>(args...) returns an any holding a T constructed from args, the any counterpart to make_optional and make_shared -- convenient and deduction-free about the stored type. The any constructor taking std::in_place_type<T> followed by the arguments constructs the T directly inside the any's storage from those arguments, with no separate temporary T created and moved in, which is the only clean way to place a type that is awkward to move or needs many arguments. This mirrors optional's std::in_place and the pair piecewise_construct story: the in-place tag turns arguments into an object built where it will live. This example builds a std::string of repeated characters with make_any and a multi-argument Widget with in_place_type, whose logged constructor shows it is built exactly once."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::make_any", url: "https://en.cppreference.com/w/cpp/utility/any/make_any" }
+detailed_tags:
+  - { name: "std::in_place_type", url: "https://en.cppreference.com/w/cpp/utility/in_place" }
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }

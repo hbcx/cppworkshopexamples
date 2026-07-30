@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 13}, {"file": "main.cpp", "line": 14, "out": "make_any string = xxxxx\n"}, {"file": "main.cpp", "line": 18, "out": "in_place_type:\n"}, {"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 7, "out": "  Widget(1, 2)\n"}, {"file": "main.cpp", "line": 21}, {"file": "main.cpp", "line": 22}]}
