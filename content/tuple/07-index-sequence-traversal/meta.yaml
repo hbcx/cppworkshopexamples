@@ -1,0 +1,13 @@
+title: "Traversing a tuple with an index sequence"
+standard: "C++14"
+difficulty: 3
+summary: "The pre-fold way to visit every element: make_index_sequence turns the tuple's size into a compile-time pack 0..N-1, and expanding std::get<Is> over that pack touches each element in turn."
+notes: "std::apply plus a fold (the previous example) is the modern shortcut, but the technique underneath it is worth knowing on its own: std::make_index_sequence<N> builds a std::index_sequence<0, 1, ..., N-1>, and a helper templated on those indices can expand std::get<Is>(t) over the pack to reach every element. Because the indices are a parameter pack, one expansion covers a tuple of any size, with the element types still resolved per position at compile time. This example uses the classic pre-C++17 pack-expansion trick -- a braced-init array whose elements are the side-effecting expressions, evaluated left to right, with a leading 0 so the array is never empty -- which is exactly what a C++17 fold expression ((std::cout << get<Is>(t)), ...) now replaces in one line. index_sequence is the general tool for turning a compile-time count into a pack you can expand, and it powers std::apply, std::tuple_cat and much of the standard library's tuple machinery; get<Is> is only one thing you can do with it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::index_sequence", url: "https://en.cppreference.com/w/cpp/utility/integer_sequence" }
+detailed_tags:
+  - { name: "std::make_index_sequence", url: "https://en.cppreference.com/w/cpp/utility/integer_sequence" }
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/utility/tuple/get" }
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }

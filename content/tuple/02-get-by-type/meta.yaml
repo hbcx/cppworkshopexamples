@@ -1,0 +1,11 @@
+title: "get by type when the type is unique"
+standard: "C++14"
+difficulty: 2
+summary: "C++14 lets you fetch a tuple element by its type -- get<std::string>(t) -- instead of counting indices, which is clearer and survives reordering, but only when that type appears exactly once."
+notes: "Counting indices is error-prone and breaks the moment someone reorders the tuple. C++14 added std::get<T>, which selects the element of type T, so get<std::string>(item) says what it wants and keeps working if the fields are shuffled. Like get<I> it returns a reference and assigns through. The restriction is that T must be UNIQUE in the tuple: with two elements of the same type the request is ambiguous and does not compile, and you fall back to get<I>. That restriction is also the honest signal that a tuple with several same-typed fields (two ints that are really width and height) is exactly the case where a named struct would serve better -- the subject of a later anti-pattern. Prefer get<T> when the types are distinct and meaningful; keep get<I> for repeated types or when the position genuinely is the identity."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/utility/tuple/get" }
+detailed_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }

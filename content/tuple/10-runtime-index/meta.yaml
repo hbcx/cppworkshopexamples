@@ -1,0 +1,12 @@
+title: "Anti-pattern: reaching for a runtime index into a tuple"
+standard: "C++17"
+difficulty: 3
+summary: "std::get takes the index as a template argument -- a compile-time constant -- so there is no get(i) and a loop counter will not compile; iterate a tuple with std::apply and a fold instead."
+notes: "A tuple looks array-like, so the instinct is to walk it with a loop and index it by the counter: get<i>(t). It does not compile, because the index is a template argument that must be a constant expression, and i is a runtime value. This is not an arbitrary restriction: the elements have different types per position, so get<i> with a runtime i could not even name one return type. The right tool for visiting every element is the generic-traversal idiom -- std::apply hands the whole pack to a generic lambda and a C++17 fold expression expands the operation across each element, type-correct at every position, which is the compile-time equivalent of the loop the author wanted. And when the need for a runtime index is real, that is the signal the data is actually homogeneous: use a std::array or std::vector, where operator[] with a runtime index is exactly right. The non-compiling loop is shown in a comment; the runnable code is the apply-based fix."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/utility/tuple/get" }
+detailed_tags:
+  - { name: "std::apply", url: "https://en.cppreference.com/w/cpp/utility/apply" }
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }

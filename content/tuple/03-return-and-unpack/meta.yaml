@@ -1,0 +1,11 @@
+title: "Returning several results and unpacking them"
+standard: "C++17"
+difficulty: 2
+summary: "Where pair tops out at two results, a tuple returns as many as the computation produces, and C++17 structured bindings name them at the call site instead of get<0>/get<1>/get<2>."
+notes: "A function that naturally produces three or more results -- min, max and mean in one pass; a value, an index and a status -- can return a tuple instead of taking a fistful of out-parameters. The braced return {lo, hi, mean} builds the tuple from the declared return type without naming it again. At the call site, C++17 structured bindings turn the anonymous elements back into named variables: auto [lo, hi, mean] = stats(v). That is the readable half of the deal -- get<0>/get<1>/get<2> at every use would undo the clarity. The names are yours to choose, and choosing them well is the difference between a tuple that reads fine locally and one that should have been a struct. For a result that crosses an API boundary or is stored, prefer the named struct; a tuple shines when the result is unpacked right where it is produced."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }
+detailed_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }

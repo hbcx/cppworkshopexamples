@@ -1,0 +1,12 @@
+title: "make_tuple and get: values by index"
+standard: "C++11"
+difficulty: 1
+summary: "A tuple holds a fixed number of values of possibly different types -- pair generalized past two -- accessed by compile-time index with std::get<I>, since there are no first/second names."
+notes: "std::tuple is pair extended from exactly two elements to any fixed number. The cost of that generality is that the members lose their names: there is no .first/.second, and no .third either. You read and write elements by position with std::get<I>, where I is a constant known at compile time; get returns a reference, so you can assign through it. make_tuple builds one while deducing every element type, and it decays its arguments exactly like make_pair (a string literal becomes const char*). Because the index is compile-time, an out-of-range get is a build error rather than undefined behaviour -- the size lives in the type. This example just exercises construction and get; later ones cover access by type, structured bindings, concatenation, and applying a tuple to a function."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }
+detailed_tags:
+  - { name: "std::make_tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple/make_tuple" }
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/utility/tuple/get" }

@@ -4,3 +4,5 @@
   note: "The dynamic sibling: reach for it the moment the element count is not fixed at compile time."
 - slug: "move-semantics"
   note: "Why moving a std::array is not a steal: with no heap buffer to hand over, a move has to copy every element."
+- slug: "tuple"
+  note: "The heterogeneous fixed-size bundle: when the elements are of different types, reach for tuple and its get/apply interface."

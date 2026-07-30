@@ -1,0 +1,4 @@
+id    = 7
+name  = bolt
+price = 0.25
+renamed to hex bolt

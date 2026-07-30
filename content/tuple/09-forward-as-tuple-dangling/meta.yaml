@@ -1,0 +1,12 @@
+title: "Anti-pattern: forward_as_tuple outliving its arguments"
+standard: "C++11"
+difficulty: 3
+summary: "std::forward_as_tuple builds a tuple of references to its arguments to forward them into a call; store it and use it later and those references dangle -- to keep a tuple, use make_tuple, which owns copies."
+notes: "std::forward_as_tuple exists to perfect-forward a set of arguments straight into a call -- most visibly the two argument-tuples of piecewise_construct in map/unordered_map emplace. To do that with zero copies it returns a tuple of references (lvalue or rvalue) to whatever you passed. It therefore owns nothing, and must be consumed in the same full expression that creates it. The anti-pattern is treating it like a value: auto t = std::forward_as_tuple(makeName(), 42) binds references to temporaries that die at the semicolon, so any later get<0>(t) reads freed memory -- undefined behaviour, and completely hidden behind auto, which makes t look like it copied. The fix depends on intent: to forward, do it inline in the one expression (as emplace does); to KEEP a tuple around, use std::make_tuple, which stores by value and so safely outlives the arguments. This example runs only the safe forms; the dangling read is described in a comment, never executed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_as_tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple/forward_as_tuple" }
+detailed_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }
+  - { name: "std::make_tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple/make_tuple" }

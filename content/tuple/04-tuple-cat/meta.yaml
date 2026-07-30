@@ -1,0 +1,12 @@
+title: "tuple_cat: joining tuples end to end"
+standard: "C++11"
+difficulty: 2
+summary: "std::tuple_cat concatenates several tuples into one, preserving every element type, so a combined record can be assembled from parts and its field count is fixed at compile time."
+notes: "std::tuple_cat takes any number of tuples and returns one tuple that is their elements laid end to end, with every type carried through unchanged. It is the tool for composing a record out of pieces -- a name pair here, some metadata there -- into a single value, and it also underlies generic code that folds a variable set of tuples together. The size of the result is the sum of the inputs' sizes, known at compile time, so tuple_size<decltype(result)> reports it and an index past the end still fails to compile. Because it preserves types positionally, the readability caveat of tuple applies to the result too: tuple_cat is about assembling data, not about giving those fields names. This example joins a name tuple and a metadata tuple and reads back the combined fields."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::tuple_cat", url: "https://en.cppreference.com/w/cpp/utility/tuple/tuple_cat" }
+detailed_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }
+  - { name: "std::tuple_size", url: "https://en.cppreference.com/w/cpp/utility/tuple_size" }

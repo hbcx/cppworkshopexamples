@@ -1,0 +1,11 @@
+title: "Anti-pattern: tuple where a named struct belongs"
+standard: "C++11"
+difficulty: 2
+summary: "Using a tuple as a domain type hides meaning behind get<N> and lets two same-typed fields be swapped with no complaint; a struct with named members costs the same and documents itself."
+notes: "Everything that makes tuple useful for a local, immediately-unpacked result makes it a liability as a stored or shared type. Access is positional -- get<1> says nothing about what field one is -- so meaning lives only in the line that built the tuple, and a reader (or a refactor) has to trace back to it. Worse, when two elements share a type, tuple<int,int> for a width and a height, swapping them compiles silently: the type system cannot help because both are int. A struct with named members has the same layout and cost, names each field at every use site, and turns get<N> into real member access; give the fields distinct types where you can and the compiler even catches a mixed-up assignment. The rule matches pair's: a tuple for a value the reader sees produced and consumed nearby; a named struct the moment it is stored, returned across an API, or has same-typed fields that could be transposed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }
+detailed_tags:
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/utility/tuple/get" }

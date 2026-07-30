@@ -1,0 +1,20 @@
+# Where to reach for std::tuple -- problem -> tool, with the alternative each beats.
+- problem: "A function computes several related results in one pass -- a min, a max and a mean; a parsed value, its end position and a status flag -- and the caller wants all of them at once."
+  why: "A tuple return keeps every result in the return value and C++17 structured bindings name them at the call site, where a fistful of out-parameters forces the caller to declare each variable up front and pass its address, and a one-off struct means inventing and naming a type for a value used on the very next line."
+  signal: "a function taking two or more non-const reference or pointer out-parameters, or returning a struct that is defined and used at a single call site"
+
+- problem: "A set of call arguments must be captured now and the call made later -- a deferred task, a retry wrapper, a job queued to a thread pool -- each argument keeping its own type."
+  why: "A tuple stores the heterogeneous arguments together and std::apply spreads them back into the call, where separate per-argument fields drift out of sync with the function signature and a hand-written f(get<0>(t), get<1>(t), ...) must be edited every time the arity changes."
+  signal: "a task or closure object storing call arguments as separate fields, or code spelling out f(get<0>(t), get<1>(t), ...) by hand"
+
+- problem: "A variadic template must hold an arbitrary, caller-chosen set of heterogeneous values -- the bound arguments of a callback, the columns of a row, the captured state of a small handle object."
+  why: "std::tuple is the standard heterogeneous fixed-size container, so a parameter pack can be stored, forwarded and later expanded with a fold, where a hand-rolled recursive head/tail struct reinvents tuple_size, tuple_element and get for every new use."
+  signal: "a variadic template that captures its parameter pack into members, or a recursively-defined cons-cell struct holding a head and a tail"
+
+- problem: "Records must be ordered by several fields of different types in priority order -- last name, then first name, then a numeric id; or timestamp, then severity, then sequence number."
+  why: "Comparing std::tie(a.f1, a.f2, ...) against std::tie(b.f1, b.f2, ...) is lexicographic by construction and correct the first time, where a hand-written chain of if a.x != b.x return a.x < b.x over the fields is easy to get subtly wrong and tedious to reorder."
+  signal: "an operator< or comparator lambda with a nested if a.x != b.x ... chain comparing several members in sequence"
+
+- problem: "A small in-memory table of mixed-type columns is needed briefly -- a lookup fixture in a test, a handful of parsed rows -- not worth a dedicated row type."
+  why: "A vector of tuples keeps each row's columns together and type-safe with zero boilerplate, where several parallel vectors indexed in lockstep can silently desynchronize and a named row struct is overkill for throwaway data."
+  signal: "several vectors of equal length indexed by one shared loop variable, or a struct defined only to populate one local table"

@@ -1,0 +1,5 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "pair"
+  note: "The two-element special case, with its own make_pair/get, lexicographic comparison and structured-binding story."
+- slug: "arrays"
+  note: "The homogeneous fixed-size cousin: the same tuple interface (get, tuple_size, structured bindings) when every element shares one type."

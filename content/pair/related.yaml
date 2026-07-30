@@ -1,0 +1,5 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "tuple"
+  note: "The same idea past two values: N heterogeneous elements indexed by position, plus tuple_cat and std::apply."
+- slug: "maps"
+  note: "pair in daily use: a map's element type is pair<const Key, Value>, and insert returns pair<iterator, bool>."

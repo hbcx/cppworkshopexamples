@@ -1,0 +1,12 @@
+title: "Traversing a heterogeneous tuple generically"
+standard: "C++17"
+difficulty: 3
+summary: "A tuple cannot be walked with an ordinary for loop because its elements differ in type; std::apply plus a C++17 fold expression processes every element in turn, whatever its type."
+notes: "The reason a tuple exists in generic code is also what makes it awkward: the elements have different types, so there is no ordinary loop over them -- the loop body would need a different type each iteration. The standard idiom is std::apply to hand all elements to a generic lambda at once, then a C++17 fold expression over the resulting parameter pack to expand an operation across them: ((std::cout << elem), ...) runs the stream insertion once per element, type-correct each time, with no recursion or index juggling. sizeof...(elems) gives the count. Before C++17 this took a recursive helper indexed by std::index_sequence; apply plus a fold collapses it to a few lines. tuple_size and tuple_element expose the shape at compile time, which is what lets library code react to a tuple's arity and element types at all. This is the advanced payoff of tuples: uniform handling of a fixed, heterogeneous set of values."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::apply", url: "https://en.cppreference.com/w/cpp/utility/apply" }
+detailed_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }
+  - { name: "std::tuple_size", url: "https://en.cppreference.com/w/cpp/utility/tuple_size" }

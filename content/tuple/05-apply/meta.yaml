@@ -1,0 +1,12 @@
+title: "std::apply: call a function with a tuple's elements"
+standard: "C++17"
+difficulty: 2
+summary: "std::apply (C++17) unpacks a tuple into a function call, passing each element as an argument, so a set of arguments stored now can be invoked later without hand-writing get<0>, get<1>, ..."
+notes: "std::apply takes a callable and a tuple and calls the callable with the tuple's elements spread out as its arguments. It closes the loop opened by structured bindings: bindings turn a returned tuple into names, apply turns a stored tuple back into a call. The everyday use is deferred or generic invocation -- a task that captures its arguments now to run later, a wrapper that forwards a packed argument list, or test code that drives one function over many argument sets -- anywhere you would otherwise write f(get<0>(t), get<1>(t), ...) by hand and have to edit it whenever the arity changes. It works with any callable (free function, lambda, member via std::invoke rules) and forwards value categories, so it is also the building block for the generic tuple traversal in the next example. This example applies a stored tuple to both a summing function and a formatting one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::apply", url: "https://en.cppreference.com/w/cpp/utility/apply" }
+detailed_tags:
+  - { name: "std::tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple" }
+  - { name: "std::make_tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple/make_tuple" }

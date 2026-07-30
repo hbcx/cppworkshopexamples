@@ -8,6 +8,6 @@ sanitizers: []
 main_tags:
   - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
 detailed_tags:
-  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/container/array/get" }
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/utility/tuple/get" }
   - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
   - { name: "std::tuple_size", url: "https://en.cppreference.com/w/cpp/utility/tuple_size" }
