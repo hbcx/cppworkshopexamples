@@ -1,0 +1,3 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "variant"
+  note: "The closed-set counterpart: when the value is one of a known few types, variant keeps it type-safe with an exhaustive std::visit and no allocation."

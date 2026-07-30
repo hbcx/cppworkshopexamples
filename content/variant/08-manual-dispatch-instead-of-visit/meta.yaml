@@ -1,0 +1,12 @@
+title: "Anti-pattern: a holds_alternative ladder instead of visit"
+standard: "C++17"
+difficulty: 2
+summary: "Dispatching a variant by hand with a chain of holds_alternative and get works, but nothing checks it is exhaustive -- forget an alternative and that case silently falls through, where std::visit would not compile."
+notes: "The whole safety win of variant over a hand-rolled union or std::any is that std::visit is exhaustive: the compiler refuses to build a visitor that cannot handle every alternative. Re-implementing the dispatch as an if (holds_alternative<A>) ... else if (holds_alternative<B>) ... ladder throws that away. It is verbose, it repeats the alternative list at every use site, and -- the real cost -- nothing verifies it is complete, so a forgotten alternative just reaches a default or falls off the end, at runtime, with no warning. This is exactly the failure mode any has and variant was meant to remove, quietly reintroduced. This example renders a variant two ways: a ladder that omits the std::string case and silently returns UNHANDLED, and a std::visit whose generic lambda covers every alternative and would fail to compile if one were missing. Use get/get_if/holds_alternative for reaching one specific alternative you care about; reach for std::visit whenever you are handling all of them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }
+  - { name: "std::holds_alternative", url: "https://en.cppreference.com/w/cpp/utility/variant/holds_alternative" }

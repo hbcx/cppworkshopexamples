@@ -1,0 +1,5 @@
+get<int> = 7
+get<std::string> threw: int is the active alternative
+get_if<int> ok: 7
+get_if<std::string>: nullptr (not active)
+holds int? true

@@ -1,0 +1,12 @@
+title: "Anti-pattern: ignoring valueless_by_exception"
+standard: "C++17"
+difficulty: 3
+summary: "If constructing a new alternative throws mid-assignment, the variant is left with no active alternative -- valueless_by_exception() is true, index() is variant_npos, and get or visit then throw; keep alternatives nothrow or restore a state after catching."
+notes: "A variant normally always holds one of its alternatives, but there is one escape hatch: if changing the active alternative has to destroy the old value and then construct the new one, and that construction throws, the variant is left with neither -- the old value is already gone and the new one never completed. It enters the valueless_by_exception() state: index() returns variant_npos, and any std::get, get_if is fine (returns null) but std::visit and get<>(v) throw std::bad_variant_access. Assuming a variant is never valueless -- calling visit right after an emplace that could throw, say -- is the bug. It is rare because the library avoids it whenever it can (when an alternative is nothrow-move-constructible it constructs into a temporary and moves, so a throw leaves the old value intact), which is a concrete reason to make your alternatives nothrow-movable. This example forces the state with a type whose move constructor throws (assigned into the variant, so the throw happens mid-change), shows valueless_by_exception() flip to true and visit throwing on it, then restores a valid value. Avoid it by keeping alternatives nothrow-constructible/movable where you can, and by re-establishing a known alternative after catching an exception from an assignment or emplace."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::variant::valueless_by_exception", url: "https://en.cppreference.com/w/cpp/utility/variant/valueless_by_exception" }
+  - { name: "std::bad_variant_access", url: "https://en.cppreference.com/w/cpp/utility/variant/bad_variant_access" }

@@ -1,3 +1,5 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 - slug: "optional"
   note: "The no-error sibling: when a miss has no reason worth reporting, drop E and use optional<T> for plain present-or-absent."
+- slug: "variant"
+  note: "The general sum type underneath: expected picks a value or error side; variant holds one of any fixed set of named alternatives, dispatched with visit."

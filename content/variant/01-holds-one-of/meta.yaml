@@ -1,0 +1,12 @@
+title: "One of a fixed set: index and holds_alternative"
+standard: "C++17"
+difficulty: 1
+summary: "variant<Ts...> holds exactly one value from its list of alternatives; index() gives the active position, holds_alternative<T> tests a type, and assigning another alternative switches which is active."
+notes: "std::variant is a type-safe union: it stores exactly one value out of a fixed set of alternative types, and it always knows which one, so it can destroy the right one and reject a wrong access. A default-constructed variant holds its FIRST alternative (value-initialized). index() returns the zero-based position of the active alternative, and holds_alternative<T>(v) answers whether a specific type is active. You read the value with std::get -- by type, std::get<T>(v), or by position, std::get<I>(v). Assigning a value of a different alternative switches the active member: the old value is destroyed and the new one constructed, and index() moves to match. Unlike std::any the set of types is CLOSED and named in the type, which is what lets the compiler check accesses and, with std::visit, force you to handle every case. This example just switches a variant between int, double and string and reads back the active one; later examples cover checked access, visitation and modelling with variant."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::holds_alternative", url: "https://en.cppreference.com/w/cpp/utility/variant/holds_alternative" }
+  - { name: "std::variant::index", url: "https://en.cppreference.com/w/cpp/utility/variant/index" }

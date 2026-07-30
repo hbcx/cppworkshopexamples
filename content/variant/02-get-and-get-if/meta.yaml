@@ -1,0 +1,12 @@
+title: "Checked access: get, get_if and holds_alternative"
+standard: "C++17"
+difficulty: 2
+summary: "std::get<T> returns the active value or throws bad_variant_access when T is not active; std::get_if<T>(&v) returns a pointer or nullptr; holds_alternative is the boolean test before either."
+notes: "Reading a variant means naming an alternative that might not be the active one, so there are checked and throwing forms, mirroring optional and any. std::get<T>(v) (or get<I>) returns a reference to the value when that alternative is active and THROWS std::bad_variant_access otherwise -- the access for when you are certain and want a hard failure if you are wrong. std::get_if<T>(&v) takes the variant's address and returns a pointer to the value or nullptr when that alternative is not active -- the test-and-use form with no exception, ideal in an if. holds_alternative<T>(v) is the plain boolean question, useful to branch before a get. The one thing get does NOT do is convert: asking for an alternative that is not active is an error, not a coercion, exactly as with any_cast. In practice you rarely reach for get at all once you know std::visit (next examples), which handles every alternative at once and cannot forget one; get and get_if are for the cases where you genuinely want just one alternative."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::get_if", url: "https://en.cppreference.com/w/cpp/utility/variant/get_if" }
+detailed_tags:
+  - { name: "std::get", url: "https://en.cppreference.com/w/cpp/utility/tuple/get" }
+  - { name: "std::bad_variant_access", url: "https://en.cppreference.com/w/cpp/utility/variant/bad_variant_access" }

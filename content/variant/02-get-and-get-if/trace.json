@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 10, "out": "get<int> = 7\n"}, {"file": "main.cpp", "line": 12, "out": "get<std::string> threw: int is the active alternative\nget_if<int> ok: 7\nget_if<std::string>: nullptr (not active)\nholds int? true\n"}]}

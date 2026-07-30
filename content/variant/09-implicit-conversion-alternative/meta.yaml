@@ -1,0 +1,12 @@
+title: "Anti-pattern: letting implicit conversion pick the alternative"
+standard: "C++17"
+difficulty: 2
+summary: "Assigning a value whose type is not itself an alternative lets it convert to whichever one it can -- not always the one you meant -- and when two alternatives fit equally the assignment is an ambiguous compile error; say which with in_place_type or in_place_index."
+notes: "variant's converting constructor selects the alternative by overload resolution over implicit conversions, which is convenient until the conversions overlap. A value with no exact alternative silently converts to the best-matching one: a float stored into variant<int, double> becomes the double (float to int is narrowing and excluded, float to double is not), so the type is not the int a reader might picture. Worse, when a value converts equally well to two alternatives -- an int literal into variant<long, long long> -- the assignment is ambiguous and does not compile at all, which is a confusing error for something that looks obvious. (The historical trap of variant<std::string, bool> = \"literal\" selecting bool because const char* converts to bool was fixed by C++17's P0608, so it now picks the string; but overlap in general still bites.) The fix is to stop relying on the conversion and name the alternative: construct with std::in_place_type<T> to choose by type, or std::in_place_index<I> to choose by position. This example shows a float landing as double, then the two in_place forms picking the alternative unambiguously; the ambiguous long/long long line is left in a comment because it does not compile."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::in_place_type", url: "https://en.cppreference.com/w/cpp/utility/in_place" }
+  - { name: "std::in_place_index", url: "https://en.cppreference.com/w/cpp/utility/in_place" }

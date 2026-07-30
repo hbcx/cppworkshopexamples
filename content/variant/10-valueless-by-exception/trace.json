@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 17}, {"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 19, "out": "before: valueless? false\n"}, {"file": "main.cpp", "line": 25}, {"file": "main.cpp", "line": 12, "out": "caught move failure\nafter:  valueless? true\nvisit on valueless threw bad_variant_access\nrestored: valueless? false\n"}]}

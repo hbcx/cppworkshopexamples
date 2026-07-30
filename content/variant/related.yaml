@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "any"
+  note: "The open-set counterpart: when the type is not one of a known few, any erases it -- at the cost of the exhaustive, checked dispatch variant gives."
+- slug: "optional"
+  note: "The two-state special case: optional<T> is essentially variant<T, nothing> with a purpose-built present-or-absent interface."
+- slug: "expected"
+  note: "A purpose-built value-or-error sum type: expected<T, E> is variant-like but picks a success/error side and adds monadic chaining."

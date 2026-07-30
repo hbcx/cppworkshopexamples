@@ -1,0 +1,3 @@
+variant:   jpeg
+interface: png
+interface: gif

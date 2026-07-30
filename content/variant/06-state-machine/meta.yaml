@@ -1,0 +1,11 @@
+title: "Modelling a state machine with a variant of states"
+standard: "C++17"
+difficulty: 3
+summary: "Each state is a struct carrying its own data; the machine's state is a variant of them, and a visitor computes the next state per event -- a closed set with value semantics and no heap, where a class hierarchy would need virtual dispatch and allocation."
+notes: "This is variant's headline modelling use: a fixed set of states, each holding different data, dispatched by visit. The states are plain structs -- Idle with nothing, Connecting with an attempt count, Connected with a peer name -- and the current state is a variant of them. An event is a visitor whose per-state operator() returns the next state, so a transition is s = std::visit(OnEvent{}, s), and because visit is exhaustive the compiler rejects the code if a state is left unhandled. Compared with a class hierarchy of states behind a base pointer, this keeps value semantics (the state is a plain object, copyable, no heap allocation, no virtual dispatch), makes the set of states explicit and closed in one type, and turns adding a state into a compile error everywhere it must be handled rather than a forgotten override. Compared with an enum plus a union of state data, variant tracks the tag and destroys the right member for you. The trade is that the set of states is closed: when states are meant to be extended by other modules, a hierarchy is the better fit. This example steps a tiny connection machine through Idle to Connecting to Connected."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }

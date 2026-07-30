@@ -1,0 +1,11 @@
+title: "std::visit: dispatch over every alternative"
+standard: "C++17"
+difficulty: 2
+summary: "std::visit calls one callable with whichever alternative is active; a generic lambda handles them all in one body, and the dispatch is checked at compile time -- an unhandled alternative does not compile."
+notes: "std::visit is the reason to prefer variant over a hand-rolled union or std::any: it applies a callable to the active alternative, whatever it is, and the compiler verifies the callable can handle EVERY alternative. Pass a generic lambda -- [](const auto& x){ ... } -- and one body covers all types that support the operation, here streaming to cout; the visitor is instantiated per alternative and the right one is selected at runtime by the variant's index, with no explicit branching. This is exhaustive by construction: add a type to the variant that the visitor cannot handle and the program fails to compile, where a chain of holds_alternative/get (or an any type() ladder) would silently miss it at runtime. visit also works over multiple variants at once (it dispatches on the combination). Use a generic lambda when one body fits all alternatives; when each needs different handling, the overloaded idiom in the next example gives per-type functions while keeping the same compile-time exhaustiveness."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }
+detailed_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }

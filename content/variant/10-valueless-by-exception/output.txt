@@ -1,0 +1,5 @@
+before: valueless? false
+caught move failure
+after:  valueless? true
+visit on valueless threw bad_variant_access
+restored: valueless? false

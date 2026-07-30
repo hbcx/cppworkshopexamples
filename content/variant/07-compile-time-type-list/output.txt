@@ -1,0 +1,5 @@
+entries    = 3
+total size = 1051136
+config.ini  512 bytes, ro=true
+README.md   2048 bytes, ro=false
+data.bin    1048576 bytes, ro=false

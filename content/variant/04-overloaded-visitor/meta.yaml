@@ -1,0 +1,11 @@
+title: "Per-type handlers: the overloaded visitor idiom"
+standard: "C++17"
+difficulty: 3
+summary: "The overloaded idiom builds a visitor from a set of lambdas -- one per alternative -- by inheriting their operator() and adding a deduction guide, giving std::visit a separate handler for each type while staying compile-time exhaustive."
+notes: "A generic lambda is neat when one body fits every alternative, but often each type wants its own code. The overloaded idiom supplies that: a small struct that inherits from a pack of lambda types and pulls in all their operator() with a using-declaration, plus a class template argument deduction guide so overloaded{ l1, l2, ... } deduces the lambda types. The result is a single callable with one overload per lambda, which std::visit resolves to the matching alternative -- per-type handlers with the exhaustiveness of visit, so a missing alternative still fails to compile. The four-line overloaded template is boilerplate you write once (it is a proposed standard-library helper for a future standard); everything else is just listing a lambda per type. This example renders an int, a double and a string each with its own handler. Prefer this over the generic lambda when the alternatives need genuinely different logic, and over a holds_alternative/get ladder always, because the ladder loses the compile-time check that every case is covered."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }
+detailed_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }

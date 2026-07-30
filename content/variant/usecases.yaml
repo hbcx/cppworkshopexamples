@@ -1,0 +1,16 @@
+# Where to reach for std::variant -- problem -> tool, with the alternative each beats.
+- problem: "A value is exactly one of a small, fixed set of shapes acted on from outside -- a JSON/config value that is null, a bool, a number or a string; a spreadsheet cell; a token from a lexer."
+  why: "variant names the closed set in the type and std::visit forces every case to be handled, so a new shape is a compile error until covered, where std::any erases the set and turns each read into an unchecked any_cast that can silently miss, and a void* with a tag drops type safety and destruction."
+  signal: "a std::any (or void* plus an enum tag) whose stored value is always one of a handful of known types, read through a chain of type checks"
+
+- problem: "A hand-rolled tagged union -- an enum discriminant beside a raw union of the payloads -- must be replaced with something that cannot read the wrong member or leak a non-trivial one."
+  why: "variant tracks the active alternative itself and runs the correct destructor, so the discriminant and the union collapse into one type that is safe by construction, where the manual enum-plus-union relies on every access checking the tag by hand and every destructor being written and kept in sync."
+  signal: "a struct with an enum kind field next to a union, with switch statements on the kind to pick the right union member and to destroy it"
+
+- problem: "A state machine or protocol has a fixed set of states, each carrying different data, and transitions must be handled per state -- Idle, Connecting with an attempt count, Connected with a peer."
+  why: "a variant of state structs with std::visit gives value semantics, no heap and a compile-time-exhaustive transition function, so adding a state fails to compile until every handler covers it, where a class hierarchy of states pays for allocation and virtual dispatch and an enum-plus-fields soup lets unrelated states' data coexist and be misread."
+  signal: "an enum of states beside fields that are only valid in some states, or a Base* state pointer with a virtual handle(event) hierarchy for a fixed state set"
+
+- problem: "An abstract syntax tree or expression tree is built from a fixed set of node kinds, walked by operations like evaluate or print."
+  why: "a variant of node types with a recursive std::visit keeps nodes as values (no per-node allocation) and makes each operation exhaustive over the node kinds, where a virtual Node hierarchy allocates every node and spreads each operation across the classes as virtual methods -- fine when the node set is open, needless indirection when it is closed."
+  signal: "a closed grammar or node set modelled as a Node base class with virtual eval/print, or a tree whose every node is separately heap-allocated"

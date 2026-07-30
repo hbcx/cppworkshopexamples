@@ -1,0 +1,6 @@
+index = 0
+holds int? true
+value = 42
+index = 2
+value = hello
+index = 1, value = 3.5

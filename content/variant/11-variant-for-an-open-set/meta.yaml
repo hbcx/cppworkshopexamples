@@ -1,0 +1,11 @@
+title: "Anti-pattern: variant for an open, extensible set"
+standard: "C++17"
+difficulty: 3
+summary: "variant names its alternatives in one closed list, so a set of types meant to grow forces edits to the variant AND every visit over it, and outside code cannot extend it at all; an open set belongs behind a virtual interface."
+notes: "variant is the right tool for a CLOSED set of types -- one you control and expect to stay fixed -- and its exhaustive visit is a feature precisely because the list is complete. Use it for an OPEN set and that strength inverts: every new type must be added to the variant's alternative list and to every std::visit over it across the codebase, and because the list lives in your header, other modules or plugins cannot add a type at all. That is the problem inheritance solves. Behind a virtual interface, a new kind is one new class implementing the interface; there is no central list to find and edit, callers invoke the virtual method unchanged, and third parties extend the hierarchy without touching your code -- at the cost of heap allocation and pointer indirection, and losing compile-time exhaustiveness (which for an open set you did not want anyway). This is the mirror of the any-where-variant-fits anti-pattern: closed set -> variant, open set -> interface, and the smell to watch for is a variant whose alternative list keeps growing or that you wish outside code could extend. This example names an image format both ways, adding a new format freely under the interface."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }

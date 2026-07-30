@@ -1,0 +1,4 @@
+Idle
+Connecting (attempt 1)
+Connected to server-1
+Connected to server-1

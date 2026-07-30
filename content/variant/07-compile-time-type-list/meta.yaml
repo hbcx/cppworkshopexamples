@@ -1,0 +1,13 @@
+title: "A compile-time table: variant as a type list"
+standard: "C++17"
+difficulty: 3
+summary: "Used purely for its type traits, a variant is a compile-time list of types: each alternative is a struct of constexpr members, variant_alternative_t indexed by an enum picks one, and lookups and even a total resolve entirely at compile time."
+notes: "variant exposes std::variant_size and std::variant_alternative_t, and those traits work whether or not a value is ever stored -- so a variant can double as a fixed, compile-time LIST of types. This example uses that to build a table with no runtime cost: each file is its own type carrying its metadata as constexpr static members (name, path, size, read-only), the variant lists those types, and an enum names their positions. std::variant_alternative_t<Id, Files> (wrapped in a using alias) turns an enum key into the type at that index, whose constexpr members are then readable at compile time -- FileAt<Config>::size is a constant baked into the binary, not a map lookup at run time. A fold over std::make_index_sequence<variant_size_v<Files>> even sums every file's size before the program runs, so a query over the whole set is a static_assert-checkable constant. This is the pattern for a small, closed dataset known at compile time: the search happens in the type system, not at runtime. Note the trade-offs -- std::tuple carries the same tuple_size/tuple_element traits and is the more conventional type-list, and this technique fits only a fixed set fully known when you compile; for data that varies at run time you want an actual container. Here variant is chosen to show its introspection traits, and because an enum-indexed set of named alternatives reads naturally as a table."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::variant_alternative_t", url: "https://en.cppreference.com/w/cpp/utility/variant/variant_alternative" }
+  - { name: "std::variant_size", url: "https://en.cppreference.com/w/cpp/utility/variant/variant_size" }
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }

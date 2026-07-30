@@ -1,0 +1,12 @@
+title: "std::monostate: an empty first alternative"
+standard: "C++17"
+difficulty: 2
+summary: "A default-constructed variant holds its first alternative, so if the first type has no default constructor the variant has none either; std::monostate is an empty placeholder that makes the variant default-constructible and models an initial no-value state."
+notes: "A variant's default constructor value-initializes its FIRST alternative. That is a problem when the first type is not default-constructible -- a handle that needs an fd, a class with only a parameterized constructor -- because then the variant cannot be default-constructed either, which breaks code that wants an empty-ish variant to fill in later. std::monostate solves it: an empty type with nothing in it, placed first in the alternative list, so std::variant<std::monostate, T...> is always default-constructible and starts in the monostate -- a first-class no-value-yet state you can test with holds_alternative<std::monostate>. It is the variant analogue of optional's disengaged state, used when you need a valid empty variant before the real value is assigned. This example holds a variant<monostate, Connection> for a Connection that has no default constructor: it begins empty, then takes on a real Connection. Reach for monostate whenever a variant needs a legitimate empty state or its first real alternative cannot be default-constructed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::monostate", url: "https://en.cppreference.com/w/cpp/utility/variant/monostate" }
+detailed_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+  - { name: "std::get_if", url: "https://en.cppreference.com/w/cpp/utility/variant/get_if" }

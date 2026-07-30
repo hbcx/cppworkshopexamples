@@ -1,3 +1,5 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 - slug: "expected"
   note: "Carry a reason for the absence: expected<T, E> holds either the value or an error, for when the caller needs to know why, not just that."
+- slug: "variant"
+  note: "The general sum type: optional is variant<T, nothing>; when there is more than one real alternative, variant holds one of several named types."
