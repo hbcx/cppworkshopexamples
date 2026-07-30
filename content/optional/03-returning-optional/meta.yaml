@@ -1,0 +1,11 @@
+title: "Returning optional from a fail-able function"
+standard: "C++17"
+difficulty: 2
+summary: "A lookup or parse that may not produce a value returns optional<T> instead of a magic sentinel or a bool-plus-out-parameter, so 'no result' is part of the type and cannot be read by accident."
+notes: "The classic use of optional is the return type of a function that may legitimately have no answer: a parse, a map lookup, a first-match search. The alternatives it replaces each have a hole. A magic sentinel (-1, npos, an empty string) is an in-band value that a caller can use as if it were real, and that collides the day the sentinel becomes a valid result. A bool return with an out-parameter forces the caller to declare a variable up front and splits the answer across two names that can drift. optional puts the answer and its presence in one value: the caller has to open it (via if, value_or or value()) to get at the contents, so forgetting to handle absence is visible rather than silent. Return std::nullopt for the no-value case and the value otherwise; the braced/implicit conversion from T keeps the success path terse. This is the same problem the pair<T,bool> idiom used to solve, now with a name for the empty case and no second field to interpret."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+detailed_tags:
+  - { name: "std::nullopt", url: "https://en.cppreference.com/w/cpp/utility/optional/nullopt" }

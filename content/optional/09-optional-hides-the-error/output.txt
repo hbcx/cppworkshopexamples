@@ -1,0 +1,5 @@
+optional(""): failed (reason unknown)
+optional("bad"): failed (reason unknown)
+expected(""): not found
+expected("bad"): bad format
+expected("ok"): ok, size 2

@@ -1,0 +1,12 @@
+title: "Safe access: value_or, value() and the * trap"
+standard: "C++17"
+difficulty: 2
+summary: "value_or returns a fallback when empty, value() returns the value but throws bad_optional_access when empty, and bare * on an empty optional is undefined behaviour."
+notes: "There are three ways to get at the contents, and they differ precisely in what happens when the optional is empty. value_or(fallback) returns the contained value if engaged and the fallback otherwise -- the tidy way to collapse absence into a default in one expression. value() returns a reference to the value but THROWS std::bad_optional_access if empty, so it is the checked access when reaching in unconditionally should be a hard error rather than silent corruption. operator* and operator-> do NOT check: dereferencing a disengaged optional is undefined behaviour, exactly like dereferencing a null pointer, so they are only for when you have already established the optional is engaged (an if, or right after constructing it). The rule of thumb: guard with if (opt) then use *; use value_or when you have a sensible default; use value() when emptiness truly should not happen and you want a throw if it does; never use * on something you have not checked. A note on value_or: its argument is always evaluated, which the value_or anti-pattern later in this section makes concrete."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional::value_or", url: "https://en.cppreference.com/w/cpp/utility/optional/value_or" }
+detailed_tags:
+  - { name: "std::optional::value", url: "https://en.cppreference.com/w/cpp/utility/optional/value" }
+  - { name: "std::bad_optional_access", url: "https://en.cppreference.com/w/cpp/utility/optional/bad_optional_access" }

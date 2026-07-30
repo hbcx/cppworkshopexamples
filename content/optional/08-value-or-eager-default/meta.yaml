@@ -1,0 +1,11 @@
+title: "Anti-pattern: an always-evaluated value_or default"
+standard: "C++17"
+difficulty: 3
+summary: "value_or's argument is an ordinary function argument, so it is evaluated even when the optional has a value and the default is discarded -- costly when the default is expensive to produce."
+notes: "value_or(x) reads like lazy 'use x only if empty', but x is a plain function argument: it is fully evaluated before value_or is even called, engaged or not. So opt.value_or(expensiveDefault()) always runs expensiveDefault() and throws the result away whenever opt has a value -- wasted work, and worse if the default has side effects or allocates. This example counts the calls to prove the default is computed despite the optional being engaged. The fixes are to make the default lazy: a plain if (opt) use *opt; else expensiveDefault(), which only computes on the empty path, or in C++23 or_else, whose argument is a callable invoked only when the optional is empty. value_or is perfect for a cheap, already-available fallback (a literal, a constant, an existing variable); reach past it the moment producing the default is itself expensive."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional::value_or", url: "https://en.cppreference.com/w/cpp/utility/optional/value_or" }
+detailed_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }

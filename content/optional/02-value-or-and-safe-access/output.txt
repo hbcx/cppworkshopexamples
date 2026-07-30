@@ -1,0 +1,4 @@
+present.value_or(-1) = 7
+absent.value_or(-1)  = -1
+value() on empty threw bad_optional_access
+*present = 7

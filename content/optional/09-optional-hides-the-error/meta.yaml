@@ -1,0 +1,12 @@
+title: "Anti-pattern: optional where the caller needs the reason"
+standard: "C++23"
+difficulty: 2
+summary: "optional says a value is absent but not why; for an operation that can fail for different reasons the caller cannot distinguish them -- std::expected<T, E> carries the reason in the type."
+notes: "optional models presence versus absence, and that is exactly right when there is only one way to have no value. It is the wrong tool when failure has reasons the caller must act on differently: a load that returns nullopt cannot say whether the file was missing or malformed, so callers end up smuggling the reason through a side channel -- errno, a logged string, a second out-parameter -- which is the very fragmentation the vocabulary type was meant to avoid. std::expected<T, E> (C++23) is the fit: it holds either the value or an error object, so the reason travels with the result and the caller branches on it (r.error()). This example contrasts a nullopt-returning loader, where two distinct failures are indistinguishable, with an expected-returning one that reports NotFound versus BadFormat. Rule of thumb: optional when absence is the whole story; expected (or exceptions, or an error code) when the caller needs to know why. expected gets its own chapter; this is only the contrast that motivates it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+detailed_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }

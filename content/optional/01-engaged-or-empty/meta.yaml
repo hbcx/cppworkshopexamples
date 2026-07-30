@@ -1,0 +1,12 @@
+title: "Engaged or empty: has_value and access"
+standard: "C++17"
+difficulty: 1
+summary: "optional<T> either holds a T (engaged) or nothing (disengaged); you test it with has_value or the bool conversion, and when engaged read it with * or ->."
+notes: "std::optional<T> is a value that may be absent, with the absence living in the type rather than in a sentinel. It is built empty by default (or from std::nullopt) and engaged from a T. Two ways to ask what state it is in: has_value(), or the contextual bool conversion that makes if (opt) read naturally. When engaged, the contained value is reached with operator* or operator-> exactly like a pointer -- but unlike a pointer the storage is inline, no heap allocation, and no separate object to own. This example only covers the query-and-read basics on an already-known state; the very next one is about accessing safely when you are NOT sure it is engaged (value_or, the throwing value(), and why bare * on an empty optional is undefined behaviour)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+detailed_tags:
+  - { name: "std::nullopt", url: "https://en.cppreference.com/w/cpp/utility/optional/nullopt" }
+  - { name: "std::optional::has_value", url: "https://en.cppreference.com/w/cpp/utility/optional/operator_bool" }

@@ -1,0 +1,20 @@
+# Where to reach for std::optional -- problem -> tool, with the alternative each beats.
+- problem: "A lookup, search or parse may legitimately have no answer -- a key not in a table, a pattern not found, a string that is not a number -- and the caller must handle the miss."
+  why: "optional<T> puts the result and its presence in one value the caller has to open before use, where a magic sentinel (-1, npos, empty string) is an in-band value that reads as real and collides the day it becomes valid, and a bool-plus-out-parameter splits the answer across two names that can drift."
+  signal: "a function returning a magic sentinel to mean failure, or a bool return paired with an out-parameter that holds the real result"
+
+- problem: "A field or setting may be genuinely unset, which must behave differently from a valid zero or empty value -- an unconfigured timeout versus a timeout deliberately set to 0."
+  why: "optional<T> makes absence a distinct state, so value_or applies a default only when truly unset while an explicit zero is kept, where a plain T needs a magic sentinel every reader must remember, or a parallel bool that can fall out of sync with the value."
+  signal: "a value field shadowed by a separate bool hasX flag, or a sentinel constant like -1 or INT_MIN standing in for not set"
+
+- problem: "A class member has no meaningful value until later -- it depends on a resource acquired after construction, or on the first use -- but the object itself lives on the stack."
+  why: "an optional<T> member defers construction in place and reports whether it is ready, where a unique_ptr<T> would add a heap allocation purely to express not yet here, and a bool-plus-raw-storage reinvents optional's lifetime bookkeeping by hand."
+  signal: "a bool initialized or ready flag guarding a member, or a unique_ptr used only to delay constructing a stack-sized object"
+
+- problem: "A function parameter is genuinely optional, where passing no argument must be distinct from every possible value the argument could take."
+  why: "an optional<T> parameter expresses 'argument omitted' as its own state in one signature, where a magic default like -1 steals a real value and a set of overloads differing only by a trailing argument multiplies the function for one axis of choice."
+  signal: "overload sets that differ only by the presence of one trailing parameter, or a default argument using a sentinel value to mean not supplied"
+
+- problem: "A computed or fetched value is cached, and the cache slot must distinguish not computed yet from computed to a value that happens to be zero or empty."
+  why: "optional<Result> holds the computed value or nothing in a single slot whose emptiness is the not-yet-computed state, where a separate bool computed beside the value is two fields to keep consistent and easy to read in the wrong order."
+  signal: "a cached value stored next to a bool computed or dirty flag, or a cache using a sentinel value to mean not populated"

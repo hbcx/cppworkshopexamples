@@ -1,0 +1,12 @@
+title: "Anti-pattern: dereferencing a disengaged optional"
+standard: "C++17"
+difficulty: 2
+summary: "Using * or -> on an empty optional reads a value that is not there -- undefined behaviour, like dereferencing a null pointer; check first, or use value_or or the throwing value()."
+notes: "operator* and operator-> on optional do not check for a value: on a disengaged optional they are undefined behaviour, the same class of bug as dereferencing nullptr, and just as likely to appear to work in a debug build before corrupting something in release. The trap is that optional looks like a handle, so writing *lookup(key) straight after a fallible call reads naturally -- and is wrong on the miss. The remedies are all cheap: guard with if (opt) (or the bool conversion) and only then use *, which is the everyday form; value_or(default) when a fallback is sensible; or value(), which throws std::bad_optional_access on empty and so converts a mistaken assumption into a visible exception instead of silent UB. This example never runs the bad dereference -- it is described in a comment -- and demonstrates each safe alternative. The one-line rule: * is for an optional you have already established is engaged; for anything uncertain, check or use value_or/value()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+detailed_tags:
+  - { name: "std::optional::value", url: "https://en.cppreference.com/w/cpp/utility/optional/value" }
+  - { name: "std::bad_optional_access", url: "https://en.cppreference.com/w/cpp/utility/optional/bad_optional_access" }

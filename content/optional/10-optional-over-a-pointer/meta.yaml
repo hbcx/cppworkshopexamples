@@ -1,0 +1,11 @@
+title: "Anti-pattern: optional wrapping an already-nullable pointer"
+standard: "C++17"
+difficulty: 2
+summary: "A pointer is already nullable, so optional<T*> creates two different ways to say 'none' -- a disengaged optional and an engaged one holding nullptr -- that every reader must handle and that can disagree."
+notes: "optional adds a not-present state to a type that lacks one. A raw pointer already has that state: nullptr means 'none'. Wrapping it, optional<T*>, therefore stacks two empty representations -- a disengaged optional, and an engaged optional whose value is nullptr -- and now every check has to consider both, code paths can produce one where another expects the other, and has_value() disagrees with the pointer being null. This example shows a disengaged optional<Widget*> and an engaged-but-null one both meaning 'no widget' while reporting different has_value(). The fixes: if you only need nullable observation, use a plain T* and let nullptr be the single, conventional 'none'; if you want value semantics or 'maybe a value' without a raw pointer, use optional<T> (one empty state, owns the object) or optional<std::reference_wrapper<T>> to hold an optional reference. The same smell applies to optional over any type that already encodes emptiness (an empty smart pointer, a container that can be empty when empty means absent)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+detailed_tags:
+  - { name: "std::nullopt", url: "https://en.cppreference.com/w/cpp/utility/optional/nullopt" }

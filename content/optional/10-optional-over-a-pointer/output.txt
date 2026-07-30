@@ -1,0 +1,4 @@
+a engaged? false   b engaged? true   -- yet both mean "no widget"
+p -> gadget
+p -> none
+owned -> owned

@@ -1,0 +1,13 @@
+title: "Constructing in place, emplace and reset"
+standard: "C++17"
+difficulty: 2
+summary: "make_optional builds an engaged optional; std::in_place and emplace construct the contained value directly with no temporary; assigning a value or nullopt, and reset(), move between engaged and empty."
+notes: "Several ways to fill and empty an optional, differing in whether a temporary is made. make_optional(args) deduces T and returns an engaged optional, the counterpart to make_pair. Passing std::in_place as the first constructor argument builds the contained T directly inside the optional from the remaining arguments -- no temporary T to move in, which matters when T is expensive or awkward to move, and is the only clean way for types best constructed in place. emplace(args) does the same after the fact: it destroys any current value and constructs a new one from the arguments, in place. Plain assignment also works -- opt = value engages (constructing or assigning as needed), opt = std::nullopt disengages -- and reset() disengages explicitly, running the contained value's destructor. This example uses a Widget that logs its constructor so you can see in_place and emplace build with no extra move, and watches a std::string optional go engaged then empty via reset."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::make_optional", url: "https://en.cppreference.com/w/cpp/utility/optional/make_optional" }
+detailed_tags:
+  - { name: "std::in_place", url: "https://en.cppreference.com/w/cpp/utility/in_place" }
+  - { name: "std::optional::emplace", url: "https://en.cppreference.com/w/cpp/utility/optional/emplace" }
+  - { name: "std::optional::reset", url: "https://en.cppreference.com/w/cpp/utility/optional/reset" }

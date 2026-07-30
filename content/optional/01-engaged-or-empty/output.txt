@@ -1,0 +1,6 @@
+present.has_value() = true
+absent (as bool)    = false
+*present = 42
+length via -> = 3
+present holds 42
+absent holds nothing

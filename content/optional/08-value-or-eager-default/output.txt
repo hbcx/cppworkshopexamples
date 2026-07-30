@@ -1,0 +1,4 @@
+value_or result = real
+expensiveDefault calls (value_or) = 1
+if/else result  = real
+expensiveDefault calls (if/else)  = 0

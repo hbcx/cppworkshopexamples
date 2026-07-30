@@ -1,0 +1,4 @@
+port = 8080
+missing: handled, not dereferenced
+value_or: -1
+value(): threw instead of corrupting

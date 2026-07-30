@@ -1,0 +1,8 @@
+n = 5
+in_place:
+  Widget(1, 2)
+emplace:
+  Widget(3, 4)
+s engaged? true, *s = hello
+after reset, engaged? false
+after = nullopt, engaged? false

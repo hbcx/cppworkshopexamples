@@ -1,0 +1,13 @@
+title: "Monadic optional: and_then, transform, or_else"
+standard: "C++23"
+difficulty: 3
+summary: "C++23 gives optional and_then, transform and or_else, which chain fallible steps without nested has_value checks: each stage runs only when there is a value and short-circuits to empty otherwise."
+notes: "Before C++23, threading a value through several fallible steps meant a staircase of if (opt) { ... } blocks or repeated value_or. C++23 adds three member functions that compose optionals directly. transform(f) applies f to the value if present and rewraps the result as an optional, leaving an empty optional untouched -- a map over the zero-or-one value. and_then(f) is for when f itself returns an optional (a further step that can fail): it calls f on the value and flattens, so the chain becomes empty as soon as any step yields nullopt, with no manual unwrapping between stages. or_else(f) goes the other way: when the optional is empty it calls f to supply an alternative optional, the functional form of a default or a fallback lookup. Chained, they read as a pipeline -- parse, then validate, then format, else a placeholder -- where every stage silently short-circuits on absence. The payoff over value_or plus if is that the happy path is one expression and the empty path is handled once at the end; the cost is C++23. libstdc++ provides these from GCC 12."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+detailed_tags:
+  - { name: "std::optional::and_then", url: "https://en.cppreference.com/w/cpp/utility/optional/and_then" }
+  - { name: "std::optional::transform", url: "https://en.cppreference.com/w/cpp/utility/optional/transform" }
+  - { name: "std::optional::or_else", url: "https://en.cppreference.com/w/cpp/utility/optional/or_else" }

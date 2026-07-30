@@ -1,0 +1,11 @@
+title: "Absent is not zero: modeling an unset field"
+standard: "C++17"
+difficulty: 2
+summary: "optional<T> distinguishes 'no value' from a valid default like 0 or empty string, which a plain T with a magic sentinel cannot -- so an unset config field and an explicit zero stay different."
+notes: "A recurring modeling bug is using a plain value to mean two things: the real datum and 'not set'. A timeout stored as int cannot tell 30 meaning thirty seconds from 0 meaning both 'disabled' and 'nobody configured it'; the usual patch is a magic sentinel (-1 = unset) that every reader must remember, or a parallel bool hasTimeout that can fall out of sync with the value. optional<int> makes absence a first-class, separate state: nullopt is unset, and an engaged 0 is a real, deliberate zero. value_or(default) then applies the fallback only for the genuinely-absent case, leaving an explicit 0 intact. This is why optional shows up in config structs, parsed records and API fields where 'omitted' and 'set to the zero value' must behave differently. The cost is one discriminator bit and a check at the point of use; the payoff is that the two states can no longer be confused."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+detailed_tags:
+  - { name: "std::optional::value_or", url: "https://en.cppreference.com/w/cpp/utility/optional/value_or" }
