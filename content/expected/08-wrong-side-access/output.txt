@@ -1,0 +1,3 @@
+good -> value 7
+bad -> error not seven
+value() on error threw, carrying: not seven

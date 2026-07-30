@@ -1,0 +1,12 @@
+title: "Anti-pattern: expected where a reasonless optional fits"
+standard: "C++23"
+difficulty: 2
+summary: "expected<T, E> earns its second channel only when the error carries information; when failure has nothing to say, a placeholder E is dead weight and optional<T> states absence more clearly."
+notes: "expected is optional plus a reason for the absence. If there is no reason -- the operation either yields a value or simply does not, with nothing to report about the miss -- then the error channel has no job, and giving it a placeholder type like std::monostate (or bool) just makes every caller construct and ignore an error that means nothing. It also misleads: a reader sees expected and expects to learn WHY it failed, then finds the error side is empty of meaning. optional<T> says exactly present or absent, with one empty state and no dead type, and it is the honest signature for a lookup whose only failure mode is not found. This is the mirror image of the optional anti-pattern that reaches for optional when the caller does need the reason: match the tool to whether failure carries information. Rule: optional when absence is the whole story; upgrade to expected the day E would actually say something the caller can act on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+  - { name: "std::monostate", url: "https://en.cppreference.com/w/cpp/utility/variant/monostate" }

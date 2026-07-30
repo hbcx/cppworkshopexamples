@@ -1,0 +1,11 @@
+title: "expected vs exceptions: comparing the two error styles"
+standard: "C++23"
+difficulty: 2
+summary: "The same fallible operation written both ways: an exception is out-of-band and invisible in the signature, while expected puts the failure in the return type where the caller must acknowledge it -- each fits a different failure rate."
+notes: "expected and exceptions solve the same problem -- reporting failure -- with opposite trade-offs, and the choice is about how often failure happens and how local its handling is. An exception makes the happy path clean and propagates automatically through many frames, but the failure is invisible at the call site (the signature looks infallible), it costs a throw plus stack unwinding when it fires, and it cannot be used where exceptions are disabled. expected puts the failure in the return type: the caller cannot ignore it without stepping around the type system, handling is inline and local, there is no unwinding, and it works with exceptions off -- at the price of threading the result through each layer (which the monadic operations ease). The rough rule: exceptions for truly exceptional, rare faults handled far from where they arise; expected for expected, frequent failures the immediate caller must handle -- a parse that often fails, a lookup that often misses, validation. They coexist: a boundary can turn an expected into a throw with value(), or catch and turn a throw into an unexpected. This example runs the same divide-by-zero both ways to show how differently the failure reads at the call site."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }

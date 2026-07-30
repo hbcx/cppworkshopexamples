@@ -1,0 +1,20 @@
+# Where to reach for std::expected -- problem -> tool, with the alternative each beats.
+- problem: "An operation fails in ways the caller must tell apart and handle differently -- a parse that can hit several malformations, a request that can time out or be refused, a validation with named rules."
+  why: "expected<T, E> carries the specific error in the return type, so the caller branches on error() and the failure is visible in the signature, where a thrown exception is invisible at the call site and unwinds the stack, and an errno-style global is a shared, race-prone side channel."
+  signal: "a function that signals failure through a thrown exception, a global error flag, or a bool return with the reason logged somewhere else"
+
+- problem: "A sequence of steps each of which can fail must run in order, stopping at the first failure and reporting which step failed -- read, then parse, then validate, then apply."
+  why: "chaining the steps with and_then threads the value along and short-circuits to the first error automatically, carrying it out untouched, where hand-written if (!step) return step.error(); after every call is boilerplate that is easy to get wrong or forget on one branch."
+  signal: "a run of calls each followed by the same if failed return the error block, or nested ifs that deepen with each fallible step"
+
+- problem: "An error must cross an abstraction boundary, turning a low-level cause into a domain-level one -- a socket errno becoming a RequestError the layer above understands."
+  why: "transform_error maps just the error channel as the value passes through, so each layer speaks its own error vocabulary, where letting the low-level error leak upward couples the caller to internals and re-throwing loses the original context unless you wrap it by hand."
+  signal: "a catch block that rethrows a different exception type, or an error code passed up through several layers unchanged and reinterpreted at the top"
+
+- problem: "A hot path fails often as normal operation -- a cache miss, a lookup that usually is not there, input that is frequently malformed -- and the failure handling is right at the call site."
+  why: "expected returns the failure as an ordinary value with no throw and no stack unwinding, which is cheap at high failure rates, where exceptions are tuned for the rare case and pay a heavy cost per throw when failure is common."
+  signal: "a try/catch inside a tight loop, or profiling that shows exception throw/unwind cost on a frequently-failing path"
+
+- problem: "A codebase or module is built with exceptions disabled -- an embedded target, a game engine, a latency-sensitive service -- yet functions still need to report failures with a reason."
+  why: "expected carries the error in the return value without throwing, so it works with -fno-exceptions, where exceptions are simply unavailable and a bare error code has to travel out-of-band through an extra parameter or a global."
+  signal: "a build using -fno-exceptions or a house style banning throw, paired with functions returning raw error codes plus out-parameters"

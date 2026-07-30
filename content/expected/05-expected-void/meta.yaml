@@ -1,0 +1,11 @@
+title: "expected<void, E>: success or a reason it failed"
+standard: "C++23"
+difficulty: 2
+summary: "For an operation that returns nothing on success but can still fail, expected<void, E> carries just did-it-work plus the error on failure -- the value channel is empty, the error channel still meaningful."
+notes: "Not every fallible operation produces a value: writing a file, committing a transaction, validating input, sending a request. These return nothing on success, but they can still fail with a reason, and a plain bool return throws that reason away. expected<void, E> is the fit: the success side carries no value (you return {} for success), the error side carries the E. has_value() and the bool conversion still report success, there is simply no operator* to read; on failure you read error() as usual. It composes with the monadic operations too -- and_then on a successful expected<void,E> runs the next step, so a sequence of side-effecting, fallible actions chains and short-circuits on the first failure just like the value-carrying case. Reach for it wherever you would otherwise return bool and log the reason elsewhere, or throw for a failure the caller is expected to handle."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: reading the wrong side of expected"
+standard: "C++23"
+difficulty: 2
+summary: "expected has two unchecked accessors -- * / -> for the value and error() for the error -- each valid only on its own side; using the wrong one is undefined behaviour, so branch on has_value first."
+notes: "optional has one unchecked accessor to misuse; expected has two, and the mistake unique to it is reaching for the wrong one. operator* and operator-> read the value and are undefined behaviour on the error side; error() reads the error and is undefined behaviour on the value side. Neither checks, both trust that you tested has_value() first, and neither warns -- so *r straight after a fallible call, or r.error() in a branch you assumed was the failure, corrupts silently. The remedy is the same discipline as optional plus one extra rule: branch on if (r) (or the bool conversion) and only then use *, and only reach for error() under !r. For the value side there is also value(), which throws std::bad_expected_access carrying the error instead of silent UB when you are wrong. This example never runs either wrong-side access -- they are described in a comment -- and shows the checked branching plus value()'s throw. One-liner: * and error() are for the side you have already confirmed is active."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::expected::error", url: "https://en.cppreference.com/w/cpp/utility/expected/error" }
+  - { name: "std::bad_expected_access", url: "https://en.cppreference.com/w/cpp/utility/expected/bad_expected_access" }

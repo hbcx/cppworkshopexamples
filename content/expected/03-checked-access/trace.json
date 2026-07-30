@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 10, "out": "ok.value_or(-1)  = 10\n"}, {"file": "main.cpp", "line": 11, "out": "bad.value_or(-1) = -1\n"}, {"file": "main.cpp", "line": 16, "out": "value() threw, carrying error: nope\n*ok = 10\n"}]}

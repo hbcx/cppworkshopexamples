@@ -1,0 +1,4 @@
+ok.value_or(-1)  = 10
+bad.value_or(-1) = -1
+value() threw, carrying error: nope
+*ok = 10

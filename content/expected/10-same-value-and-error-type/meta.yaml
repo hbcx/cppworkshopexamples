@@ -1,0 +1,11 @@
+title: "Anti-pattern: same value and error type"
+standard: "C++23"
+difficulty: 2
+summary: "expected<int, int> compiles, but a bare int is a value and only std::unexpected(x) makes it an error, so the two channels look identical and are easy to swap; give the error a distinct type."
+notes: "expected keeps value and error apart by channel, not by type -- so when T and E are the same type (or freely interconvertible) the two are indistinguishable at a glance. expected<int, int> holds a value when built from a bare int and an error only when built from std::unexpected(int); expected<std::string, std::string> has the same trap. The code compiles, but every construction and every read depends on remembering which int is which, has_value() is the only thing that can tell them apart, and a stray return x where you meant return std::unexpected(x) silently routes a failure down the success channel. The fix is to give the error channel a type that cannot be confused with the value: an enum class of causes, or a small struct. That also makes error() self-describing (an ErrorCode::Timeout instead of a naked 3) and lets the compiler catch a value/error mix-up as a type error. Reserve same-type expected for the rare case where the error genuinely is another T and the channel alone is meaning enough."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }

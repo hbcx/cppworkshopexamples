@@ -1,0 +1,12 @@
+title: "Returning expected with a rich error"
+standard: "C++23"
+difficulty: 2
+summary: "A fallible function returns expected<T, E> where E is a real error type -- a struct with a code and a message, not just a flag -- so the caller learns not only that it failed but what and where."
+notes: "The point of expected over optional is that the failure carries information. Make E a type that says something: an enum of causes, or a struct with a position, a code and a human-readable message. The function returns the value directly on success and std::unexpected(err) on failure; the caller checks the result and, on the error side, reads error() to get the full object and act on it -- report the position, retry on a specific code, translate the message. This keeps the error in the return type and in the signature, where a thrown exception is invisible at the call site and an errno-style global is a race waiting to happen. It also composes: a later example chains several such functions and passes the error through automatically. Choose the error type deliberately -- an enum when a fixed set of causes is enough, a struct when the caller needs context; that choice is the difference between an error the caller can handle and one it can only log."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }
+  - { name: "std::expected::error", url: "https://en.cppreference.com/w/cpp/utility/expected/error" }

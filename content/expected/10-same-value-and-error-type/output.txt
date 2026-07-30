@@ -1,0 +1,3 @@
+7 -> value 7
+-3 -> error code 3
+asValue.has_value()=true, asError.has_value()=false

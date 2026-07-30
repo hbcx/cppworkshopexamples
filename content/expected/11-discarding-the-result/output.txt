@@ -1,0 +1,2 @@
+[buggy]   ignored commit(-5): committed=false -- yet the code moved on as if it worked
+[correct] commit(-5) failed: amount must be positive

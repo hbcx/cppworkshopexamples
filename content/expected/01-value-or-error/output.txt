@@ -1,0 +1,5 @@
+ok.has_value() = true
+bad (as bool)  = false
+value = 42
+error = disk full
+length via -> = 3

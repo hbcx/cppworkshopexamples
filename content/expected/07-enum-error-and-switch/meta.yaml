@@ -1,0 +1,12 @@
+title: "An enum error handled in a switch"
+standard: "C++23"
+difficulty: 2
+summary: "When failure has a fixed, closed set of causes, make E an enum class and dispatch on error() in a switch -- a file read that reports empty path, not found, empty file or permission denied, each handled explicitly."
+notes: "A struct error carries free-form context; an enum class error carries a choice from a fixed set of causes, and it is the right fit when the caller must react differently to each and the set is closed. The function checks its preconditions in order -- is the path empty, does the file exist, is it empty, is it readable -- and returns std::unexpected(FileError::X) at the first failure, or the contents on success. The caller then branches once on error() in a switch, giving every case its own message or recovery; because the enum is a closed set, a switch with no default lets the compiler warn if a new cause is added and a handler is forgotten, which a string or int error could never do. This example models the filesystem in memory so the result is deterministic (no real disk), but the shape is exactly the real one: try, get back either the bytes or a named reason, and dispatch. Prefer an enum error for a small fixed taxonomy the caller switches on; reach for a struct when the failure needs data (a position, a message, an OS code) beyond which case it is."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }
+  - { name: "std::expected::error", url: "https://en.cppreference.com/w/cpp/utility/expected/error" }

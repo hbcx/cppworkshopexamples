@@ -1,0 +1,12 @@
+title: "Value or error: the two sides of expected"
+standard: "C++23"
+difficulty: 1
+summary: "expected<T, E> holds either a value (T) or an error (E); build it from a value for success or std::unexpected(e) for failure, check with has_value, and read the value with * or the error with error()."
+notes: "std::expected<T, E> is the value-or-error vocabulary type: on the success side it carries a T, on the failure side an E, and it is always exactly one of the two. You construct the success case straight from a T and the failure case from std::unexpected(e), which tags a value as belonging to the error channel so the two cannot be confused even when T and E are similar. has_value() (or the contextual bool conversion) says which side is active. On success you read the value with operator* or operator-> exactly like optional; on failure you read the error with error(). Each accessor is valid only on its own side -- reading the value of an error, or the error of a value, is undefined behaviour, covered in the checked-access example. Where optional says only present or absent, expected says present or absent-with-a-reason, which is why it is the return type of choice for operations that can fail in ways the caller must tell apart."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }
+  - { name: "std::expected::error", url: "https://en.cppreference.com/w/cpp/utility/expected/error" }

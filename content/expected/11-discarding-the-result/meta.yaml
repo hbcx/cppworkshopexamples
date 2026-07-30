@@ -1,0 +1,12 @@
+title: "Anti-pattern: discarding the expected result"
+standard: "C++23"
+difficulty: 3
+summary: "The whole point of expected is that the failure is a return value -- ignore that value and the error vanishes silently, and the code runs on as if the operation had succeeded."
+notes: "expected trades the automatic propagation of an exception for something explicit: the failure is handed back as a value the caller is meant to inspect. Its strength becomes its weakness the moment that value is dropped. Calling commit(x); and ignoring the returned expected discards the error as surely as an empty catch -- and worse, because nothing unwinds, so control simply falls through to the next line as though it worked, and the mistake surfaces later as corrupt state rather than at the failure. Unlike an unhandled exception, which terminates loudly, an ignored expected fails quietly. Treat every fallible call as one you must check: branch on the result, or in a chain use the monadic operations so an error short-circuits the rest, or convert to the throwing world at a boundary with value(). The standard does not require expected to be [[nodiscard]], but some standard libraries mark it so -- libstdc++ does -- so on those a plain discard is actually flagged; this example turns -Werror off precisely to let the drop through and show its effect, and where your library or a [[nodiscard]] function warns you, treat that warning as the error it is. This example shows an ignored failing commit leaving state untouched while the program believes it succeeded, then the checked version that catches it."
+run: true
+sanitizers: []
+werror: false
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::unexpected", url: "https://en.cppreference.com/w/cpp/utility/expected/unexpected" }

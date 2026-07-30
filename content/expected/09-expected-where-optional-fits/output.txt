@@ -1,0 +1,3 @@
+expected: has_value=false (error type carries no info)
+optional: has_value=false
+optional hit: 42

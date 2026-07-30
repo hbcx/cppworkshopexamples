@@ -1,0 +1,5 @@
+[ok]    config.ini: read 9 bytes -> port=8080
+[error] missing.dat: file not found
+[warn]  empty.log: file is empty
+[error] secret.txt: permission denied
+[error] (no name given): path is empty

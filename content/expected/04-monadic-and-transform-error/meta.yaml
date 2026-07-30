@@ -1,0 +1,13 @@
+title: "Chaining with and_then, transform, or_else and transform_error"
+standard: "C++23"
+difficulty: 3
+summary: "The C++23 monadic operations chain fallible steps and carry the error through automatically: and_then sequences steps that can fail, transform maps the value, transform_error translates the error, or_else recovers."
+notes: "expected shines when several fallible steps compose. The four monadic members thread the value along the success channel and short-circuit on the first error, with no manual if (r) unwrapping between stages. transform(f) maps the value through f and rewraps, leaving an error untouched. and_then(f) is for a step that itself returns an expected: it runs f on the value and flattens, so the chain turns into that step's error the moment it fails. transform_error(f) maps only the error side, which is how you translate a low-level error into a domain error as it crosses a layer boundary, leaving a value untouched. or_else(f) runs f on the error to recover or replace it, producing another expected. Together they read as a pipeline -- parse, then range-check with and_then, then format with transform, then relabel any failure with transform_error -- where the happy path is one expression and every failure lands in the error channel with its context intact. This is the payoff over hand-written error propagation; the cost is C++23 (libstdc++ from GCC 12)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::expected", url: "https://en.cppreference.com/w/cpp/utility/expected" }
+detailed_tags:
+  - { name: "std::expected::and_then", url: "https://en.cppreference.com/w/cpp/utility/expected/and_then" }
+  - { name: "std::expected::transform", url: "https://en.cppreference.com/w/cpp/utility/expected/transform" }
+  - { name: "std::expected::transform_error", url: "https://en.cppreference.com/w/cpp/utility/expected/transform_error" }

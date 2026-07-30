@@ -1,0 +1,4 @@
+throw: 5
+throw: caught -- divide by zero
+expected: 5
+expected: divide by zero

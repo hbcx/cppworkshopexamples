@@ -1,0 +1,3 @@
+write(5): ok
+write(-1): failed -- value must be non-negative
+engaged? true
