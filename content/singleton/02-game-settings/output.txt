@@ -1,0 +1,6 @@
+[settings] defaults loaded
+[audio]  master volume = 0.8
+[render] 1920x1080 fullscreen=off
+-- user changes settings --
+[audio]  master volume = 0.5
+[render] 2560x1440 fullscreen=on

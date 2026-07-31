@@ -1,0 +1,19 @@
+# Where to reach for Singleton -- problem -> pattern, with the alternative it beats.
+# Genuine uses are few, and that is part of the lesson: prefer dependency
+# injection unless exactly-one is a true invariant of the domain.
+
+- problem: "A resource that is physically singular in the process -- the one log sink writing to a file, a single GPU or audio device context, the one open handle to a piece of hardware -- must have exactly one owner, and every subsystem needs to reach it."
+  why: "a Meyers Singleton makes exactly-one an invariant the type enforces and hands back the same object everywhere, where a plain global object risks a second copy and suffers the static initialization order fiasco, and threading the one handle through every constructor is pure churn when it is genuinely process-global."
+  signal: "a handle or context passed down through many layers only to reach a few leaves, or several globals that each open the same singular device"
+
+- problem: "A registry populated during static initialization and only read afterwards -- self-registering factories keyed by a type name for deserialization, a table of plugins or message handlers discovered at startup -- must be one shared table the whole process sees."
+  why: "a function-local static builds the registry lazily on first use, so it is guaranteed to exist before the first lookup regardless of translation-unit initialization order, where a namespace-scope global map can be read by another translation unit's static initializer before it has been constructed (the static init order fiasco)."
+  signal: "a global std::map filled by static initializers in several files and read during startup, with construction order it silently depends on"
+
+- problem: "An expensive, read-mostly resource shared across the whole process -- a loaded ML model, a decoded Unicode or ICU table, a compiled regex ruleset -- is costly to build and there must be exactly one copy for memory reasons."
+  why: "a Singleton builds the resource once on first use and shares one immutable copy, where constructing it per caller multiplies a large cost and holding several copies wastes the memory the single-copy requirement exists to save; because it is read-only after load, the usual global-mutable-state objections do not bite."
+  signal: "a heavy object rebuilt on each call or stored in several places, whose contents never change after construction"
+
+- problem: "A game or desktop app has settings many unrelated subsystems read and a few places write -- master volume, resolution, difficulty, feature flags -- and there is genuinely one settings store for the running process."
+  why: "a Singleton gives every subsystem the same store through one access point, so a change is visible everywhere with no settings object threaded through each constructor, where a plain global risks the static initialization order fiasco and passing a Settings reference down every layer is churn when there is only ever one -- keep it read-mostly or the global-mutable-state objections return."
+  signal: "a Settings or Config object passed into nearly every constructor only to be read, or scattered globals that each hold a slice of the app configuration"

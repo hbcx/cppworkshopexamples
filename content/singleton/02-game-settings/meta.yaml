@@ -1,0 +1,11 @@
+title: "A game settings store as a Singleton"
+standard: "C++11"
+difficulty: 2
+summary: "A realistic use of the Singleton: one process-wide settings store with typed accessors and defaults, reached by unrelated subsystems -- audio, renderer -- through instance(), so they share one source of truth without being wired to each other."
+notes: "This is the shape Singleton is genuinely reached for: a set of application or game settings -- master volume, resolution, fullscreen, difficulty -- that many subsystems read and a few places write, where there is honestly one settings store for the whole process. The Meyers Singleton gives typed accessors over that store (float masterVolume(), bool fullscreen(), ...) each with a baked-in default, so a caller never sees an unset value, and the private constructor seeds those defaults once. The value the pattern delivers here is that the audio subsystem and the renderer both call GameSettings::instance() and observe the same object: a change made in one place is visible everywhere, with no settings pointer threaded through every constructor. That convenience is also the trap the anti-patterns cover -- reaching for the global everywhere hides the dependency and makes those subsystems hard to test in isolation -- so treat this as the legitimate end of the spectrum: exactly-one is real (there is a single running game), the data is read-mostly, and the alternative of passing a Settings reference through every layer buys little. Prefer typed getters over a stringly-typed key/value map so a misspelled key is a compile error, not a silent default. This example loads defaults, lets the user override a few, and runs two subsystems that read the shared instance to show the single source of truth."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static local variable", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "deleted function", url: "https://en.cppreference.com/w/cpp/language/function#Deleted_functions" }

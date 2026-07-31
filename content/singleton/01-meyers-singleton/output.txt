@@ -1,0 +1,4 @@
+Config constructed
+theme = dark
+same instance from two calls: yes
+retries = 3

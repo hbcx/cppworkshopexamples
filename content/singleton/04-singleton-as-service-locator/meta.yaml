@@ -1,0 +1,12 @@
+title: "Anti-pattern: the Singleton as a hidden global dependency"
+standard: "C++11"
+difficulty: 3
+summary: "Reaching for a Singleton deep inside a function makes it a hidden dependency the signature does not declare and a test cannot substitute; injecting the collaborator instead makes the need explicit and lets a test pass a stub."
+notes: "The most damaging misuse of Singleton is not a mechanical bug, it is a design one: using it as a global service locator. When a function calls Clock::instance() or Database::instance() in its body, the dependency is invisible -- the signature says the function needs nothing, but it silently reaches into global state. Two costs follow. Coupling: every caller is now tied to that one concrete global, so the function cannot run against a different implementation. Testability: a unit test cannot make the clock return a fixed time or the database a canned row, because there is no seam to substitute at -- the singleton is baked in, and worse it persists across tests, so state set by one test leaks into the next. The fix is dependency injection: pass the collaborator as a parameter (ideally behind an interface). Now the signature declares the need, the caller chooses the implementation, and a test passes a stub returning a fixed value. This does not mean never have one instance -- it means don't reach for it globally; construct the one instance at the top of the program (composition root) and hand it down. This example computes a receipt two ways: one that grabs a global clock singleton and cannot be tested with a fixed time, and one that takes a Clock reference and is trivially tested with a stub clock. The point is the seam, not the clock."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static local variable", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "deleted function", url: "https://en.cppreference.com/w/cpp/language/function#Deleted_functions" }

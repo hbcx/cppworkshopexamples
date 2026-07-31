@@ -1,0 +1,5 @@
+[legacy] constructed
+[legacy] writing a line
+[modern] constructed
+[modern] writing a line
+[modern] destructor (flush/close)

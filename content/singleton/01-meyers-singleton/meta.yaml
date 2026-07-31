@@ -1,0 +1,12 @@
+title: "Singleton (the Meyers Singleton)"
+standard: "C++11"
+difficulty: 2
+summary: "The one-instance pattern done the modern C++ way: a function-local static created lazily on first use, whose initialization C++11 guarantees to be thread-safe, with copy and move deleted so a second instance cannot exist."
+notes: "A Singleton guarantees a type has exactly one instance and a global point of access to it. The modern C++ implementation is the Meyers Singleton: a static function returning a reference to a function-local static object. That single line carries three guarantees. Lazy -- the object is constructed on the first call to instance(), not at program start, which sidesteps the static initialization order fiasco (the order of construction of globals across translation units is unspecified, but a function-local static is built the first time control passes through it). Thread-safe -- since C++11 the initialization of a function-local static is required to be data-race-free: concurrent first calls block until one thread finishes construction, so no mutex or double-checked locking is needed (that hand-rolled machinery is a pre-C++11 relic and a classic bug source). Single -- the constructor is private and the copy and move operations are deleted, so no other instance can be made or copied out. Destruction happens at program exit in reverse order of completion of construction. The costs are real and are why Singleton is the most criticised pattern: it is global mutable state, it hides a dependency (a function reaching for instance() does not declare that it needs a Config), and it makes unit testing hard because the instance persists across tests and cannot be substituted. Prefer passing the dependency in; reach for a Singleton only when exactly-one is a true invariant of the domain (a hardware device, a process-wide registry) and threading it through every call is genuinely worse. This example proves the single lazy construction and the shared identity across calls."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static local variable", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "deleted function", url: "https://en.cppreference.com/w/cpp/language/function#Deleted_functions" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

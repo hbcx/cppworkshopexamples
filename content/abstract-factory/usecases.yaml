@@ -1,16 +1,5 @@
-# Where to reach for a creational pattern -- problem -> pattern, with the
-# alternative each beats. Grows as patterns are added to this section.
+# Where to reach for Abstract Factory -- problem -> pattern, with the alternative it beats.
 
-# --- Factory Method ---
-- problem: "An algorithm must create a collaborator, but which concrete type depends on a subclass, a platform or a configuration -- a Dialog that builds a native vs a web Button -- and the algorithm must not name the concrete type."
-  why: "Factory Method puts the construction behind a virtual method the subclass overrides, so the shared algorithm depends only on the product interface, where a switch or if over a type tag inside the algorithm couples it to every concrete type and must be edited for each new product added."
-  signal: "a construction site with a switch or if on a type enum returning new Derived, sitting inside otherwise type-agnostic code"
-
-- problem: "A framework defines a workflow but must let applications plug in the objects it creates -- a base document, view or connection the app supplies -- without the framework knowing the application's types."
-  why: "the framework's base class calls a virtual create* method that the application overrides to return its own type, so the framework stays ignorant of concrete app classes, where hard-coding the creatable types would force the framework to depend on every application that uses it."
-  signal: "a library base class with a create* or make* hook that applications override to supply their own concrete type"
-
-# --- Abstract Factory ---
 - problem: "A cross-platform or themeable UI must render a whole set of matching widgets -- button, checkbox, menu -- and every widget on a screen has to belong to the same look, whether that is a native platform toolkit or a light vs dark theme."
   why: "Abstract Factory selects the family once and every product comes from that one factory, so a screen physically cannot mix a native button with a web checkbox, where picking each widget with its own platform switch lets the choices drift out of sync as new widgets are added and one call site is forgotten."
   signal: "several independent make<Widget>(platform) or if (theme == dark) calls scattered across the UI, each re-deciding the same family"

@@ -1,4 +1,0 @@
-title: "Creational patterns"
-description: "Patterns for creating objects while keeping code independent of how they are made: Factory Method, Abstract Factory, Builder, Prototype and Singleton -- each decoupling what is constructed from where and how, shown in idiomatic modern C++ (smart pointers, value semantics, the rule of zero) with the trade-offs and the language features that often replace them."
-sort_order: 21
-category: "Design patterns"

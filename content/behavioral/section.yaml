@@ -1,4 +1,0 @@
-title: "Behavioral patterns"
-description: "Patterns for how objects communicate and share responsibility: Chain of Responsibility, Command, Iterator, Mediator, Memento, Observer, State, Strategy, Template Method and Visitor -- their idiomatic C++ implementations, and where a modern language feature (std::function, std::variant with std::visit, standard iterators and ranges) is the better answer."
-sort_order: 23
-category: "Design patterns"
