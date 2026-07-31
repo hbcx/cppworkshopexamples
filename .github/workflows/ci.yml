@@ -28,6 +28,20 @@ jobs:
           g++ --version | head -1
           clang++ --version | head -1
 
+      # ubuntu-latest ships clang 18, which pairs with the newest installed
+      # libstdc++ (v14) and there fails to enable C++23 std::expected -- the
+      # <expected> declaration is guarded out (clang <=18 + libstdc++14 gap),
+      # breaking the whole `expected` chapter while g++ (on libstdc++13) is fine.
+      # Install a newer clang (matches local dev, keeps libstdc++ so cross-compiler
+      # output stays identical) and make it the default clang++.
+      - name: Install clang 20 (Ubuntu's clang 18 lacks C++23 std::expected on libstdc++14)
+        run: |
+          wget -qO llvm.sh https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 20
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 100
+          clang++ --version | head -1
+
       - name: Compile every example with g++ AND clang++
         # --strict: a missing requested compiler is an error (both are required
         # on CI, unlike local dev where one may be skipped).
