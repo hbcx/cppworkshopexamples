@@ -1,0 +1,12 @@
+title: "Anti-pattern: independent factory calls let families drift apart"
+standard: "C++14"
+difficulty: 3
+summary: "Building each product with its own free factory function keyed by a platform argument lets a caller pass a different platform to each call, silently assembling a mismatched set -- a Windows button next to a web checkbox -- which is exactly the guarantee Abstract Factory exists to enforce."
+notes: "The point of Abstract Factory is that choosing the family happens ONCE and fixes the whole product set. Replace it with a pile of independent factory functions -- makeButton(os), makeCheckbox(os) -- and the family choice is repeated at every call site, so nothing stops a caller from passing OS::Windows to one and OS::Web to the other. The result compiles, runs, and quietly renders a Windows button above a web checkbox: an inconsistent UI, or in a database layer a connection from one driver handed a command from another. The bug is not a crash, it is a mismatch the type system was never asked to prevent. The fix is to make the family unrepresentable-when-wrong: bind the products behind one factory object (const GUIFactory&), select the concrete factory a single time, and build every product through that one reference -- now a mixed set cannot be expressed. This is the difference between passing the same enum to N functions and hoping they agree, and passing one object that already knows its whole family. Keep free factory functions only when the products are genuinely independent; the moment they must match, the choice belongs in one place. This example builds a form both ways -- the drifted pair and the bound pair -- to show the mismatch appear and then be designed out."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

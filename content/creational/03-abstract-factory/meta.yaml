@@ -1,0 +1,13 @@
+title: "Abstract Factory"
+standard: "C++14"
+difficulty: 2
+summary: "One factory object creates a whole FAMILY of related products through several factory methods, so a client builds a matching set -- a button and a checkbox from the same toolkit -- without ever naming a concrete class or being able to mix families."
+notes: "Abstract Factory is Factory Method scaled from one product to a family. The abstract factory (GUIFactory) declares one creator per product kind -- createButton and createCheckbox -- and each concrete factory (WindowsFactory, WebFactory) returns the matching members of a single family. The client takes a GUIFactory reference and builds the whole UI through it, so it depends only on the product interfaces and cannot accidentally pair a Windows button with a web checkbox: the factory makes the mismatch unrepresentable. That family guarantee is the whole point and the reason to prefer it over calling several independent Factory Methods -- picking the factory once fixes the entire product set to one variant. The difference from Factory Method: Factory Method varies a single product via inheritance in the creator, while Abstract Factory groups several factory methods into one object you pass around, choosing the family by composition rather than by subclassing the client. Modern C++ shape: products are returned as std::unique_ptr behind an interface with a virtual destructor (rule of zero factories), so ownership is explicit and deleting through the base is defined. Reach for it when products come in interchangeable families -- widget toolkits, database drivers (connection plus command plus reader), cross-platform backends -- and adding a new family should be one new factory, not an edit to the client."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

@@ -1,0 +1,13 @@
+title: "Factory Method"
+standard: "C++14"
+difficulty: 2
+summary: "A base class defines an algorithm that needs to create a collaborator but defers WHICH concrete type to a virtual factory method, so subclasses decide the product while the shared code depends only on the product interface."
+notes: "Factory Method separates an algorithm from the construction of the objects it works with. The creator base class declares a virtual factory method returning the product interface (here std::unique_ptr<Button>) and writes its real logic -- renderWindow() -- entirely against that interface, never naming a concrete product. Each concrete creator overrides the factory method to return a specific product, so adding a new product-and-creator pair does not touch the shared algorithm. The modern C++ shape matters: the factory returns std::unique_ptr, so ownership is explicit and there is no delete to forget; the product base has a virtual destructor, so deleting through the base is well defined; and the creators hold no state, following the rule of zero. Contrast with a switch or if over a type tag inside the algorithm -- that couples the algorithm to every concrete type and must be edited for each new one, which is exactly what Factory Method removes. It is the right tool when the varying part is which object to create and that choice belongs to a subclass or a framework extension point; when the choice is a simple runtime value, a plain factory function or a std::function is lighter (the subject of a candidate anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

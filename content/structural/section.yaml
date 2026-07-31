@@ -1,0 +1,4 @@
+title: "Structural patterns"
+description: "Patterns for composing objects and classes into larger structures: Adapter, Bridge, Composite, Decorator, Facade, Flyweight and Proxy -- how to add behaviour, bridge interfaces, share state and control access without rigid inheritance, in idiomatic C++ and with the correctness traps (virtual destructors, ownership, slicing) each one raises."
+sort_order: 22
+category: "Design patterns"

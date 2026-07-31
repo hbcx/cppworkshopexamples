@@ -1,0 +1,24 @@
+# Where to reach for a creational pattern -- problem -> pattern, with the
+# alternative each beats. Grows as patterns are added to this section.
+
+# --- Factory Method ---
+- problem: "An algorithm must create a collaborator, but which concrete type depends on a subclass, a platform or a configuration -- a Dialog that builds a native vs a web Button -- and the algorithm must not name the concrete type."
+  why: "Factory Method puts the construction behind a virtual method the subclass overrides, so the shared algorithm depends only on the product interface, where a switch or if over a type tag inside the algorithm couples it to every concrete type and must be edited for each new product added."
+  signal: "a construction site with a switch or if on a type enum returning new Derived, sitting inside otherwise type-agnostic code"
+
+- problem: "A framework defines a workflow but must let applications plug in the objects it creates -- a base document, view or connection the app supplies -- without the framework knowing the application's types."
+  why: "the framework's base class calls a virtual create* method that the application overrides to return its own type, so the framework stays ignorant of concrete app classes, where hard-coding the creatable types would force the framework to depend on every application that uses it."
+  signal: "a library base class with a create* or make* hook that applications override to supply their own concrete type"
+
+# --- Abstract Factory ---
+- problem: "A cross-platform or themeable UI must render a whole set of matching widgets -- button, checkbox, menu -- and every widget on a screen has to belong to the same look, whether that is a native platform toolkit or a light vs dark theme."
+  why: "Abstract Factory selects the family once and every product comes from that one factory, so a screen physically cannot mix a native button with a web checkbox, where picking each widget with its own platform switch lets the choices drift out of sync as new widgets are added and one call site is forgotten."
+  signal: "several independent make<Widget>(platform) or if (theme == dark) calls scattered across the UI, each re-deciding the same family"
+
+- problem: "A data-access layer supports several database backends, and a backend's connection, command and result reader are a matched set -- a Postgres command run on a MySQL connection is nonsense -- so the three objects must always come from the same driver."
+  why: "one abstract factory per backend hands out a connection, command and reader that are guaranteed to belong together, where free functions returning each object independently allow a caller to pair objects from different drivers, a mismatch the type system was never asked to prevent."
+  signal: "connection, command and reader objects built by separate factory functions that each take a backend id, with nothing tying the three choices together"
+
+- problem: "An application must swap an entire family of collaborators at once -- real services in production, in-memory fakes in tests -- and the swap has to be all-or-nothing so a test never accidentally runs one real and one fake component together."
+  why: "injecting a single abstract factory flips the whole family at one seam, so choosing the fake factory guarantees every collaborator is a fake, where wiring each dependency separately makes a half-real, half-fake configuration expressible and easy to create by mistake."
+  signal: "a test setup that constructs many dependencies one by one, each chosen real-or-fake independently, instead of selecting one family object"

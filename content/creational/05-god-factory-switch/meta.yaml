@@ -1,0 +1,12 @@
+title: "Anti-pattern: one god factory switching on a family enum"
+standard: "C++14"
+difficulty: 3
+summary: "Collapsing the concrete factories into a single class that switches on a platform enum inside every create method reintroduces the coupling Abstract Factory removes: adding a family means editing every method, and every method must handle every family."
+notes: "Abstract Factory replaces conditional creation with polymorphism -- one concrete factory subclass per family, no switch anywhere. The god-factory anti-pattern throws that away: a single Factory class holds a platform enum and each method -- createButton, createCheckbox, and every future one -- switches on it. Now the two axes that should stay separate are tangled in one place. Adding a family (say macOS) means editing every method to add a case, and forgetting one is a latent bug the compiler will not catch unless the enum switch is exhaustively checked; adding a product means every family branch in that new method must be filled in. The class also depends on every concrete widget of every family at once, so it never shrinks. The fix is the polymorphic shape: an abstract GUIFactory with one concrete subclass per family, each returning only its own products and switching on nothing -- a new family is one new class the client never has to know about, and the compiler enforces that a factory implements the whole product set. Keep a switch only at the single point where the family is first chosen (a make_factory(os) returning the right subclass); do not let it metastasize into every creation method. This example builds the same widgets both ways to show the switch-per-method factory collapse into one subclass per family."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

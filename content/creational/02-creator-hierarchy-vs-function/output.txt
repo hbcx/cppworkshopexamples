@@ -1,0 +1,4 @@
+[hierarchy] Dialog: [ OK ]
+[hierarchy] Dialog: <button>OK</button>
+[function]  Dialog: [ OK ]
+[function]  Dialog: <button>OK</button>

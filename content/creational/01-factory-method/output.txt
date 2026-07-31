@@ -1,0 +1,2 @@
+Dialog with button: [ OK ]
+Dialog with button: <button>OK</button>

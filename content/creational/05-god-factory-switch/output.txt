@@ -1,0 +1,9 @@
+[god]   form:
+  [ OK ]
+  [x] Enabled
+[poly]  windows form:
+  [ OK ]
+  [x] Enabled
+[poly]  web form:
+  <button>OK</button>
+  <input type=checkbox checked>

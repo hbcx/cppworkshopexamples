@@ -1,0 +1,12 @@
+title: "Anti-pattern: a creator hierarchy where a factory function would do"
+standard: "C++14"
+difficulty: 2
+summary: "Writing a Creator subclass per product when the only thing that varies is the one line that builds the object is ceremony with no payoff; parameterize the dialog with a factory callable instead of subclassing."
+notes: "Factory Method earns its inheritance when a subclass changes MORE than which type it creates -- it also carries extra state or overrides other steps of the algorithm. When the only difference between WindowsDialog and WebDialog is the single make_unique line, the subclass hierarchy is pure overhead: a new product means a new class that overrides one method and nothing else, and the choice of product -- which is really data -- has been encoded as a type. The lighter tool is to make the factory a value: give the dialog a std::function<std::unique_ptr<Button>()> member (or, for keyed creation, a map from a tag to a factory), so a new product is just a different lambda and no new type at all. This is the modern-C++ reading of the pattern -- vary behaviour with a callable, not a subclass -- and it keeps the class count down, avoids a parallel hierarchy of creators shadowing the products, and lets the factory be chosen or swapped at runtime. Keep the virtual factory method when the creator genuinely is polymorphic for other reasons; drop to a factory function when construction is the only axis of variation. This example builds the same two dialogs both ways to show the hierarchy collapse into a single configurable type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

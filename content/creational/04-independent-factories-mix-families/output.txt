@@ -1,0 +1,6 @@
+[trap]  mismatched form:
+  [ OK ]
+  <input type=checkbox checked>
+[fix]   consistent form:
+  [ OK ]
+  [x] Enabled

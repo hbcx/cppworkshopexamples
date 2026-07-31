@@ -1,0 +1,6 @@
+[windows] Rendering form:
+  [ OK ]
+  [x] Enabled
+[web] Rendering form:
+  <button>OK</button>
+  <input type=checkbox checked>
