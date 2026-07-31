@@ -1,0 +1,12 @@
+title: "Fluent Builder"
+standard: "C++11"
+difficulty: 2
+summary: "Assemble an immutable object with many optional fields through a chain of named setters that each return the builder, ending in build() -- replacing a telescoping constructor whose long list of positional arguments is unreadable and easy to transpose."
+notes: "Builder separates constructing an object from its representation. The problem it solves is the object with a few required and many optional fields: a single constructor forces either a telescoping set of overloads or one long positional argument list where HttpRequest(url, method, 30, true, body) is unreadable and two same-typed arguments are trivially swapped with no compiler complaint. The fluent Builder gives each field a named setter that returns the builder by reference, so construction reads as request.method(POST).timeout(10).body(...) and only the fields you care about appear. build() then produces the finished object. The modern C++ shape: the product is immutable -- only const getters, no public constructor -- and is built solely through its nested Builder (a friend that calls the private all-fields constructor), so a half-configured product cannot exist and defaults live in one place (the builder's member initializers). Each setter returns Builder& (not a copy) so the chain mutates one builder; return the built product by value. Compared with designated initializers (C++20, aggregate only) or a plain options struct, the Builder also lets build() validate and normalize before the object exists. Prefer it when a type has more than a handful of fields, several optional, and you want the call site to name what it sets. This example builds a request with all defaults and one with several options overridden."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "method chaining", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members#Member_initialization" }
+  - { name: "friend declaration", url: "https://en.cppreference.com/w/cpp/language/friend" }

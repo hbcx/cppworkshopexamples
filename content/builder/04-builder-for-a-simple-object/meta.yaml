@@ -1,0 +1,11 @@
+title: "Anti-pattern: a Builder for a trivially simple object"
+standard: "C++11"
+difficulty: 3
+summary: "A nested Builder with one setter per field for a type that has two or three required fields is ceremony that buys nothing; a plain constructor or an aggregate is shorter, clearer and needs no build() call."
+notes: "Builder earns its weight when a type has several fields, several of them optional, or an invariant to validate. Apply it to a small value with a couple of required fields and it is pure overhead: a Point needs an x and a y, both required, no defaults and no validation, so Point{3, 4} already says everything. Wrapping that in Point::Builder().x(3).y(4).build() adds a whole nested class, four extra member functions, a friend declaration and a mandatory terminal call, and the reader gains nothing -- there are no optional fields to omit and no illegal combination to prevent. Worse, the builder reintroduces the very failure it is sold as preventing: with two same-typed setters a caller can still forget one, and now the object is half-built until build() papers over it with a default, where the aggregate Point{3, 4} makes both coordinates required at the call site. The heuristic: reach for a Builder when the constructor would be a long or ambiguous positional list, or when construction needs defaults or validation; for a handful of required fields, a constructor or aggregate initialization is the right tool. This example builds the same point both ways to show the builder collapse into a single brace-init."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "method chaining", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "aggregate initialization", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }

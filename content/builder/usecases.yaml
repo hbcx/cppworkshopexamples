@@ -1,0 +1,17 @@
+# Where to reach for Builder -- problem -> pattern, with the alternative it beats.
+
+- problem: "An immutable configuration or request object has a few required fields and many optional ones -- an HTTP client request, a database connection config, a render or codec setup -- and call sites want to name only the fields they change."
+  why: "a Builder gives each field a named setter and one place for defaults, so the call site reads what it sets and build() can normalize before the object exists, where a telescoping constructor becomes a long positional list two same-typed arguments are trivially swapped in, and an options struct is default-constructed with every field independently settable so an inconsistent combination is representable."
+  signal: "a constructor with a long positional parameter list of mostly optional or same-typed arguments, or a mutable options struct passed in and hoped to be filled correctly"
+
+- problem: "Tests must assemble complex domain objects -- an Order with a customer, line items, addresses and a status -- where each test cares about one or two fields and the rest just need to be valid."
+  why: "a test-data Builder supplies sensible defaults and lets a test override only the field under test, so the test states its intent in one line and does not break when an unrelated constructor argument is added, where constructing the full object by hand in every test buries the relevant field in noise and forces edits across the whole suite whenever the type gains a field."
+  signal: "many tests constructing the same aggregate with long argument lists that repeat boilerplate values, all needing edits when a constructor parameter is added"
+
+- problem: "A document, query or message is assembled step by step and the same assembly must target more than one representation -- a SQL string for different dialects, a report as HTML or plain text, a serialized message in one of several formats."
+  why: "an abstract Builder puts the steps behind an interface and a Director writes the step sequence once, so a new representation is a new concrete builder and the assembly logic is not duplicated, where building each representation with ad hoc string concatenation repeats the ordering and escaping rules in every branch and drifts out of sync as steps are added."
+  signal: "several functions that build the same structure for different outputs, each re-implementing the field order and formatting with string concatenation"
+
+- problem: "An object is only valid under a cross-field rule -- exactly one of two transports, a start before an end, a total matching its line items -- and an invalid combination must be impossible to construct, not merely caught later."
+  why: "because every product goes through build(), the builder validates the whole combination once and refuses to produce an inconsistent object, reporting the error at the configuration site, where a plain struct or an aggregate has no hook to reject a bad combination and a positional constructor ties the check to one signature while leaving the arguments an unreadable list."
+  signal: "a struct assembled field by field and then validated somewhere downstream, or a connect/commit step that fails because two fields disagree with each other"

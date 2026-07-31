@@ -1,0 +1,3 @@
+config: tcp db.internal:5432
+rejected: set exactly one of tcp() or unixSocket()
+rejected: tcp port out of range

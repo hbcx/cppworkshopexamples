@@ -1,0 +1,4 @@
+- slug: "factory-method"
+  note: "The single-product building block: Abstract Factory is essentially several factory methods bundled into one object, so start here for the one-product case and the virtual-creator mechanic."
+- slug: "builder"
+  note: "The other multi-object creational pattern: Builder assembles one complex product over several steps, where Abstract Factory returns a matching family in a single call -- different axis, construction sequence vs family consistency."

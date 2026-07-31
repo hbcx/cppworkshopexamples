@@ -1,0 +1,4 @@
+- slug: "abstract-factory"
+  note: "Scale Factory Method from one product to a whole family: several factory methods grouped into one object that builds a matching set, chosen by composition rather than by subclassing the client."
+- slug: "builder"
+  note: "When the object is not merely chosen but assembled field by field, Builder constructs it step by step instead of returning it from a single virtual method."

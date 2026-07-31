@@ -1,0 +1,2 @@
+GET https://example.com/data  timeout=30s redirects=on body=""
+POST https://api.example.com/users  timeout=10s redirects=off body="{name:Ada}"

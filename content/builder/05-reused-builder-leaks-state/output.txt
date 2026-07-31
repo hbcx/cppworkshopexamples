@@ -1,0 +1,5 @@
+to=ada body="hello"
+to=bob body="hello"
+-- fresh builder per message --
+to=ada body="hello"
+to=bob body=""

@@ -1,0 +1,15 @@
+--- HTML ---
+<h1>Quarterly Report</h1>
+<h2>Revenue</h2>
+<p>Up 12% over the previous quarter.</p>
+<h2>Outlook</h2>
+<p>Steady growth expected.</p>
+--- TEXT ---
+Quarterly Report
+================
+
+## Revenue
+Up 12% over the previous quarter.
+
+## Outlook
+Steady growth expected.

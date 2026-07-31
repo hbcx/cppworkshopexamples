@@ -1,0 +1,11 @@
+title: "Anti-pattern: reusing one builder leaks fields between products"
+standard: "C++11"
+difficulty: 3
+summary: "A fluent builder accumulates state, so calling build() twice on the same builder without resetting lets a field set for the first product silently carry into the second -- a stale value nobody assigned to it."
+notes: "A fluent builder holds the fields you set until build() reads them, and build() does not clear them. That is fine for one product, but the moment a single builder is reused to make several objects the accumulated state becomes a trap: set body on the first request, build it, then build a second request without touching body, and the second silently inherits the first body. The compiler sees nothing wrong -- the field was validly set -- and the bug surfaces as a second object carrying data that belongs to the first, often far from the construction site. It shows up wherever a builder is hoisted to a member or a loop variable to avoid re-creating it, exactly the innocent-looking optimization that introduces the aliasing. The fix is to treat a builder as single-use: construct a fresh builder per product so each starts from clean defaults, or, if reuse is deliberate, make build() consume the builder (return and reset) so leftover state cannot leak. This example builds two requests from one reused builder to show the first product's body reappear in the second, then rebuilds them with a fresh builder each to show the leak gone. The values are defined and deterministic -- this is a logic bug, not undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "method chaining", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members#Member_initialization" }

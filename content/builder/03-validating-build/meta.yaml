@@ -1,0 +1,12 @@
+title: "Validating build(): enforce invariants before the object exists"
+standard: "C++11"
+difficulty: 3
+summary: "Because construction runs through build(), the builder can validate cross-field invariants -- exactly one of TCP or Unix-socket, a port in range -- and refuse to produce an inconsistent object, which a plain options struct or a positional constructor cannot express."
+notes: "A Builder is not only about readability -- because every product goes through build(), that one function is a checkpoint where invariants spanning several fields can be enforced before the object exists. This DatabaseConfig must be reached either over TCP (host plus port) or a Unix socket, never both and never neither, and the port must be in range. A plain options struct cannot state that: it is default-constructed with every field settable independently, so an inconsistent combination is representable and only blows up later at connect time. A positional constructor can check in its body, but then the check is tied to that one signature and the arguments are still an unreadable list. The Builder centralizes it: setters record intent, and build() validates the whole picture and throws std::invalid_argument on a violation, so an invalid DatabaseConfig is never constructed and the error is reported at the configuration site, not deep in the network layer. The product stays immutable with only const getters. Note the throw here is a deterministic, defined error path (not undefined behaviour) -- the example triggers two invalid configurations and catches them to show the guard firing, then builds a valid one. Validating in build() is the Builder advantage that an aggregate with designated initializers (C++20) does not give you, since an aggregate has no hook to reject a bad combination."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "method chaining", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "std::invalid_argument", url: "https://en.cppreference.com/w/cpp/error/invalid_argument" }
+  - { name: "member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members#Member_initialization" }

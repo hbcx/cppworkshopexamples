@@ -1,0 +1,12 @@
+title: "Abstract Builder and Director"
+standard: "C++11"
+difficulty: 2
+summary: "The classic GoF Builder: a builder interface with construction steps, several concrete builders that each render a different representation, and a Director that runs the same steps in a fixed order -- so one construction process yields an HTML report or a plain-text one."
+notes: "The fluent builder solves the many-optional-fields problem for a single product; the GoF Builder aims at a different target -- the same construction process producing different representations. Here an abstract ReportBuilder declares the steps (addTitle, addSection, result), and two concrete builders implement them: HtmlReportBuilder emits markup, TextReportBuilder emits plain text. A Director owns the recipe: its buildStandardReport() calls the steps in a fixed order, ignorant of which representation results. Point a Director at an HtmlReportBuilder and you get HTML; point it at a TextReportBuilder and the same calls yield text -- the construction logic is written once and reused across outputs. This is the axis that separates Builder from Abstract Factory: Abstract Factory returns a product in one step and its value is that the product family matches; Builder assembles the product over several steps and its value is that the step sequence is decoupled from the representation. The Director is optional -- callers can drive a builder directly -- but it pays off when the same assembly sequence is reused from many places, so the order lives in one spot instead of being re-typed. Concrete builders return their product through the interface (here a std::string), with a virtual destructor so deleting through the base is defined. This example runs one Director recipe against both builders and prints the two representations."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
