@@ -1,0 +1,2 @@
+cloned Circle(r=7)
+cloned Rectangle(w=2,h=9)

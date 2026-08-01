@@ -1,0 +1,2 @@
+original: Circle(r=5)   clone (grown): Circle(r=6)
+original: Rectangle(w=3,h=4)   clone (grown): Rectangle(w=4,h=5)

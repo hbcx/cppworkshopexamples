@@ -1,0 +1,4 @@
+- slug: "object-pool"
+  note: "A pool is the usual reason to want one shared instance: it recycles a fixed set of objects behind a single service, so it turns the singleton's global access into a concrete reuse mechanism -- go there for the acquire/release machinery."
+- slug: "abstract-factory"
+  note: "A factory is one of the most common things wrapped in a singleton; go there for the family-creation mechanic that a single global factory hands out to the whole program."

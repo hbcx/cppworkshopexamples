@@ -1,0 +1,13 @@
+title: "Anti-pattern: an unbounded pool pins its peak memory forever"
+standard: "C++14"
+difficulty: 3
+summary: "A pool that always keeps returned objects grows to the peak number ever in use at once and never gives that memory back, so a one-time burst leaves a high-water mark pinned for the life of the process even after demand drops to near zero."
+notes: "A pool that never discards is a memory ratchet: release() always keeps the object, so the free list only grows, and it grows to the largest number of objects ever concurrently in use. After a single traffic spike -- a burst of connections, a flood of frames -- the pool holds that peak forever, occupying memory that idle demand does not need. It is not a leak in the strict sense (the objects are reachable and reused), but the effect on a long-running service is the same: resident memory stuck at the worst moment the process ever saw. The fix is a capacity bound: past a limit, release() destroys the returned object instead of hoarding it, so the pool shrinks back toward its steady-state size when the burst passes (tune the cap to expected concurrency, not to the peak). This example drives a burst of five simultaneous handles through an unbounded pool and shows it retains all five afterward, then does the same through a pool capped at two and shows it falls back to two. The counts are deterministic. The mirror image is a pool sized too small, which thrashes -- construct and destroy on every acquire because nothing is ever kept; the cap is the knob between the two failure modes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::unique_ptr::release", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/release" }
+  - { name: "new expression", url: "https://en.cppreference.com/w/cpp/language/new" }

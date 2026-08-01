@@ -1,0 +1,13 @@
+title: "A prototype registry: build by cloning a named template"
+standard: "C++14"
+difficulty: 2
+summary: "A registry maps a name to a pre-configured prototype object and hands out fresh copies via clone(), so callers create fully-set-up instances by key without knowing the concrete class or repeating its configuration."
+notes: "Once objects can clone themselves, a registry turns Prototype into a factory keyed by data. The registry stores one pre-configured instance per name -- a small red circle, a wide grid tile -- and create(name) returns a clone of the matching prototype. The caller names a string and gets a ready object of the right concrete type, without a switch that maps names to constructors and without repeating the configuration every time. This is the shape behind spawning game entities from templates, instantiating widgets from a palette, or rebuilding an object from a saved template: the expensive or fiddly setup is done once when the prototype is registered, and every instance is a cheap copy. It differs from Abstract Factory in what varies: a factory hard-codes which types it can make in code, while a prototype registry is populated at runtime, so adding a new kind is registering another prototype -- no new class and no edit to the registry. The stored prototypes are owned as unique_ptr<Shape> and cloned on demand; an unknown name returns null rather than fabricating a default. This example registers two configured prototypes and creates several independent instances from them by name."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }

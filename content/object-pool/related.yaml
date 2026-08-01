@@ -1,0 +1,6 @@
+- slug: "prototype"
+  note: "The clone-based way to dodge expensive construction: Prototype copies an already-configured object, where a pool reuses a live one and takes it back afterward -- duplicate vs recycle."
+- slug: "singleton"
+  note: "A pool is almost always exposed as one shared service, so it inherits the singleton's global-access and lifetime questions; go there for how a single shared instance is created and controlled."
+- slug: "factory-method"
+  note: "The other side of asking for an object instead of newing it yourself: a factory method decides which object to make, where a pool decides which existing one to lend -- creation vs reuse behind the same acquire-style call."

@@ -1,0 +1,9 @@
+  constructed Connection #1
+  Connection #1 sends: hello
+  constructed Connection #2
+  Connection #2 sends: world
+  returned Connection #2 to pool
+  Connection #2 sends: reused #2
+  returned Connection #2 to pool
+  returned Connection #1 to pool
+objects ever constructed: 2

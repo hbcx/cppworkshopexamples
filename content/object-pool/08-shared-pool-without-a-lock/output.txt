@@ -1,0 +1,2 @@
+unsynchronized -> A got #1, B got #1  (same slot handed out twice)
+synchronized   -> A got #1, B got nothing  (slot issued once)

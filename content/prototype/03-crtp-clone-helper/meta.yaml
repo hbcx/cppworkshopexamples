@@ -1,0 +1,13 @@
+title: "Writing clone() once with a CRTP helper"
+standard: "C++14"
+difficulty: 3
+summary: "Every concrete class in a Prototype hierarchy needs an identical clone() -- make_unique<Self>(*this) -- so a CRTP base that knows its own derived type implements it once, and concrete classes inherit the correct clone with no boilerplate."
+notes: "The Prototype boilerplate is that every derived class must write the same clone() body, differing only in its own type: Circle returns make_unique<Circle>(*this), Rectangle returns make_unique<Rectangle>(*this). Copy-pasting it invites the classic bug where a new class inherits a base clone() and forgets to override it, so cloning a Triangle silently produces a base object -- a slice the compiler never flags. The curiously recurring template pattern removes the repetition: an intermediate template CloneableShape<Derived> derives from Shape and implements clone() once as make_unique<Derived>(static_cast<const Derived&>(*this)), using its template argument to name the concrete type. Each concrete class then derives from CloneableShape<Itself> and writes no clone() at all, yet gets one that returns its exact type -- the boilerplate exists in a single place and cannot be forgotten. The trade-off: this works cleanly for leaf classes (the common Prototype shape); a hierarchy more than one level deep needs care, because CloneableShape<Middle> would clone a Middle even for a class derived from Middle, so the helper is applied at the leaf. This is the idiomatic way to make a whole hierarchy cloneable without hand-writing each clone. This example gives two shapes a clone through the CRTP helper and copies them through the base to show it deduces the right type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "CRTP", url: "https://en.cppreference.com/w/cpp/language/templates" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }

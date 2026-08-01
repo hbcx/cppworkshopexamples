@@ -1,0 +1,13 @@
+title: "Anti-pattern: sharing a pool across threads without a lock"
+standard: "C++14"
+difficulty: 3
+summary: "acquire() reads a free slot and then removes it in two separate steps; two unsynchronized threads can both read the same slot before either removes it, so the pool hands one object to two owners -- the classic reason a shared pool needs a mutex."
+notes: "A pool is most useful exactly where it is most dangerous: a multithreaded server handing connections or buffers to many worker threads at once. But its free list is ordinary mutable state, and acquire() is not one atomic action -- it looks at a free slot and then takes it off the list. Two threads running that concurrently can both observe the same slot as free before either removes it, and both walk away owning it; a moment later two workers write through one object, or one object is returned to the free list twice and later issued to a third thread. None of this is caught by the compiler and it is intermittent, so it survives testing and surfaces as impossible-looking corruption under load. This example reproduces the interleaving deterministically -- it performs the two steps (peek, then take) in the order two racing threads would, so you can see both callers receive the same slot id without spawning threads or relying on a sanitizer (a real data race is undefined behaviour and must never be executed for a demo). The fix is to make look-and-take a single atomic step: guard the free list with a std::mutex (shown via std::lock_guard) or use a lock-free stack; the synchronized path here hands the single free slot to exactly one caller and correctly gives the second nothing. Never expose an unguarded pool to more than one thread."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "data race", url: "https://en.cppreference.com/w/cpp/language/memory_model" }

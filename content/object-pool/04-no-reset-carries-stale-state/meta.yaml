@@ -1,0 +1,13 @@
+title: "Anti-pattern: a pool that skips reset leaks state between borrowers"
+standard: "C++14"
+difficulty: 3
+summary: "A pool returns objects to the free list without clearing them, so the next borrower inherits whatever the previous one left behind -- a defect that reads as one user seeing another user's data, because a recycled buffer is not a fresh one."
+notes: "The whole value of a pool is that it does NOT construct a fresh object -- which means a recycled object arrives holding its previous borrower's state unless something scrubs it. Putting an object straight back on the free list in release() is the bug: the next acquire hands out a buffer still containing the last request body, a connection still inside a transaction, a session still logged in as someone else. It compiles, it passes a single-user test (the first borrower always sees a clean object), and it fails in production as cross-request data bleed -- one of the more dangerous pool bugs because it looks like a clean object and is a security problem, not just a correctness one. The fix is to make the pool own the invariant: reset the object on release (or on acquire), in one place, so no borrower can forget. This example lends a Message from a leaky pool, writes a secret, returns it, then borrows again and reads the secret back out of the recycled object; the fixed pool resets on release and the second borrower sees an empty message. The values are defined and deterministic -- the object is alive the whole time, this is a logic bug, not undefined behaviour. The positive form of this fix is example 03."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }

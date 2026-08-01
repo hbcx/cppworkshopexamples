@@ -1,0 +1,2 @@
+unbounded  -> retained after burst = 5
+bounded(2) -> retained after burst = 2

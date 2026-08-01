@@ -1,0 +1,13 @@
+title: "Virtual clone(): copy a polymorphic object through its base"
+standard: "C++14"
+difficulty: 2
+summary: "A virtual clone() lets you copy an object you only hold as a base pointer -- the copy is the right concrete type and is fully independent -- solving the problem that a plain copy through Base& slices the object down to the base part."
+notes: "Prototype creates a new object by copying an existing one rather than constructing it from scratch, and its core C++ job is copying a polymorphic object you only know through its base. You cannot write Shape s2 = s1 when s1 is a Shape& -- that slices, copying only the Shape sub-object and dropping the Circle. The fix is a virtual clone() that each derived class overrides to return a copy of its own concrete type (make_unique<Circle>(*this)), handed back as unique_ptr<Shape>. Now duplicate(const Shape&) can copy any shape without a switch on the type, the clone is the correct dynamic type, and because make_unique<Circle>(*this) runs Circle's copy constructor the clone is a full independent object -- mutating it leaves the original untouched. This is the polymorphic answer to what a copy constructor does for a concrete type: the copy constructor is not virtual, so it cannot see the derived part through a base reference, and clone() is the virtual indirection that can. The product needs a virtual destructor so deleting a Circle through unique_ptr<Shape> is defined. Reach for it whenever code holds objects by base pointer and needs a copy -- an undo stack duplicating the current document, a scene graph copying a subtree -- without knowing or naming the concrete types. This example clones a Circle and a Rectangle through Shape and grows each clone to show the originals are independent."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "object slicing", url: "https://en.cppreference.com/w/cpp/language/object" }

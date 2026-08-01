@@ -1,0 +1,2 @@
+pooled sum = 66
+stack sum  = 66

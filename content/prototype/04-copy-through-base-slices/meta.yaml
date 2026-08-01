@@ -1,0 +1,12 @@
+title: "Anti-pattern: copying through the base slices the object"
+standard: "C++14"
+difficulty: 3
+summary: "Assigning or passing a derived object by its base value copies only the base sub-object and drops everything the derived class added -- a silent slice the compiler never flags, which is exactly the copy Prototype's virtual clone() replaces."
+notes: "This is the failure Prototype exists to prevent, shown directly. When a derived object is copied through a base value -- Shape s = circle, or a function taking Shape by value, or a std::vector<Shape> holding derived objects -- only the Shape sub-object is copied and the Circle part is sliced away. The result is a valid Shape, not a broken pointer, so nothing warns: describe() now runs the base version and the radius is gone. The cause is that the copy constructor is not virtual, so a copy made through a base reference can only see and copy the base. Prototype's virtual clone() is the fix: each class overrides it to copy its own concrete type and returns unique_ptr<Shape>, so the copy keeps its dynamic type and its data. The rule that avoids the slice entirely is to handle polymorphic objects through pointers or references, never by base value, and to copy them with clone(); a container of polymorphic objects holds unique_ptr<Shape>, not Shape. This example makes a base-value copy of a Circle to show describe() collapse to the base, then clones the same Circle to show the type and radius preserved. The sliced object is well defined -- this is a logic bug, not undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "object slicing", url: "https://en.cppreference.com/w/cpp/language/object" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

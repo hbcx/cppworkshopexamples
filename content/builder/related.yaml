@@ -2,3 +2,5 @@
   note: "The other multi-object creational pattern: Abstract Factory returns a matching product family in one step, where Builder assembles a single complex product over several steps -- reach for it when the pain is the construction sequence, not family consistency."
 - slug: "factory-method"
   note: "The simplest creational pattern: one virtual step decides which product a subclass makes, a good contrast with Builder when the object is chosen rather than assembled field by field."
+- slug: "prototype"
+  note: "The other way to avoid rebuilding from scratch: Prototype copies an already-configured object, where Builder assembles one step by step -- duplicate an existing baseline vs construct a new one."

@@ -1,0 +1,2 @@
+leaky pool -> new borrower sees: [user-A secret]
+clean pool -> new borrower sees: []

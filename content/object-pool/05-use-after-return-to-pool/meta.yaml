@@ -1,0 +1,13 @@
+title: "Anti-pattern: using an object after it returned to the pool"
+standard: "C++14"
+difficulty: 3
+summary: "A raw pointer stashed out of the handle keeps being used after the handle returned the object, so it silently aliases whatever the pool lends out next -- two unrelated borrowers writing through one object, with no compiler complaint."
+notes: "The RAII handle makes the loan safe only as long as you access the object THROUGH it. The moment a raw pointer or reference escapes the handle and outlives it, you have recreated the use-after-free bug -- except the object is still alive (the pool owns it), so nothing crashes and the corruption is silent. Once the handle returns the object, the pool is free to hand that same object to a completely different borrower; the escaped pointer now aliases the new borrower's object, and a write on either side is seen by both. This example stashes a raw pointer from a handle, lets the handle return the object, then acquires again as a different borrower -- the pool legitimately hands back the same slot, so the two pointers refer to one Session and the second borrower's write shows up through the first pointer. The ids and values are defined and deterministic (the object is never destroyed while the pool lives, so this is not undefined behaviour -- it is an aliasing logic bug). The fix is discipline the handle already enforces: keep the object only through the move-only Handle for exactly as long as you use it, and never let a raw pointer to a pooled object outlive its loan."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::unique_ptr::get", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/get" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }

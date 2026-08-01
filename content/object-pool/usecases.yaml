@@ -1,0 +1,21 @@
+# Where to reach for an Object Pool -- problem -> pattern, with the alternative it beats.
+
+- problem: "A web or database service handles thousands of requests per second, each needing a connection whose setup -- TCP handshake, TLS negotiation, authentication -- costs tens of milliseconds. Opening one per request dominates latency and hammers the backend with handshakes."
+  why: "a pool keeps a fixed set of live connections and lends a free one per request, so the handshake cost is paid once at startup instead of on every request, where connecting per request pays it every time and caps throughput at the connection-setup rate rather than the query rate."
+  signal: "a connect or open call at the top of a request handler and a close at the bottom, or a per-request client object whose constructor does network or auth work."
+
+- problem: "A packet processor, codec, or audio/video pipeline runs a hot loop that needs a working buffer of the same size every iteration. Allocating and freeing it per frame causes heap contention and fragmentation that shows up as jitter under load."
+  why: "a pool of reusable buffers recycles a handful of allocations across the whole run, and clearing a buffer keeps its capacity so no reallocation happens, where a fresh std::vector or new[] per iteration returns to the allocator every frame and fragments the heap over time."
+  signal: "a heap allocation of a same-sized buffer inside a per-frame or per-packet loop, or allocator time visible in a profile of an otherwise arithmetic-bound loop."
+
+- problem: "A game spawns and despawns thousands of short-lived entities per frame -- bullets, particles, damage numbers. new and delete on every spawn cause allocator stalls and fragmentation that surface as frame-time spikes during bursts."
+  why: "a pool pre-allocates the entities and recycles them, turning a spawn into taking a free slot and a despawn into returning one, so no allocation happens in the frame loop, where make_unique per spawn puts the allocator on the critical path exactly when the most objects are being created at once."
+  signal: "new/delete or make_unique of the same entity type inside the game loop, or frame-time spikes that correlate with spawn-heavy moments."
+
+- problem: "A server must run many independent tasks concurrently but cannot afford a fresh OS thread per task -- thread creation costs kernel resources and startup latency, and unbounded threads exhaust the machine under load."
+  why: "a thread pool -- an object pool whose reused objects are worker threads -- creates a bounded set of workers once and feeds them tasks from a queue, so task dispatch costs a queue push instead of a thread spawn, where std::thread per task pays creation and teardown every time and lets a burst create more threads than the machine can schedule."
+  signal: "std::thread constructed and joined per unit of work, or a task count that scales with live threads instead of a fixed worker count."
+
+- problem: "A frequently-called routine needs a heavyweight context object that is expensive to build -- an FFT plan, a compiled regex, a cryptographic or compression context -- but cheap to reuse once built."
+  why: "a pool (or cache) of ready contexts hands each call a pre-built one to borrow and return, so the costly build runs a bounded number of times, where constructing the context at the top of the function rebuilds it on every call and repeats setup that produces the same reusable state each time."
+  signal: "a heavyweight init call -- plan, compile, key-schedule -- at the start of a function that is on a hot path, producing an object discarded at the end of the call."

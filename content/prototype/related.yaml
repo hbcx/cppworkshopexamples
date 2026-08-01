@@ -1,0 +1,6 @@
+- slug: "abstract-factory"
+  note: "The compile-time counterpart to a prototype registry: Abstract Factory fixes the set of products in code, where Prototype clones runtime-registered instances -- reach there when the families are known and must match, here when the kinds are data."
+- slug: "builder"
+  note: "The other way to avoid re-running expensive construction: Builder assembles a complex object step by step, where Prototype copies an already-built one -- assemble vs duplicate."
+- slug: "object-pool"
+  note: "The reuse-not-rebuild neighbour: an Object Pool recycles a live instance and hands it back afterward, where Prototype copies a configured template -- both dodge expensive construction, one by recycling, one by cloning."

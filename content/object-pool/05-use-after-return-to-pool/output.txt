@@ -1,0 +1,2 @@
+other sees user=bob (Session #1)
+stale sees user=bob (Session #1)

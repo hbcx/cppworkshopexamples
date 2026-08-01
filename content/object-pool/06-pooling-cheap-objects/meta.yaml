@@ -1,0 +1,13 @@
+title: "Anti-pattern: pooling a cheap-to-construct object"
+standard: "C++14"
+difficulty: 3
+summary: "Wrapping a trivially-constructed value in a pool adds a heap, a free list, handles, and lifetime management to an object whose construction was two integer stores -- more code, more indirection, and slower than just putting it on the stack."
+notes: "A pool is a trade: it saves construction cost at the price of bookkeeping (a free list, a return path, a handle, and heap storage the pool controls). That trade only pays when construction is genuinely expensive -- a socket handshake, a large allocation, a decoded resource. Applied to a cheap object it is pure loss: pooling a Point, an int, a small POD adds every one of those costs to save a construction that was two register stores and no allocation to begin with. The pooled version is longer, forces indirection through a handle, introduces a lifetime you can get wrong (see the previous anti-patterns), and is measurably SLOWER than a stack object because it added a heap and a free-list lookup where there was none. This example computes the same result twice -- once routing every Point through a pool, once just constructing it on the stack -- to show the pool buys nothing but complexity. The rule: reach for a pool only when a profiler shows construction or destruction is the cost; for cheap objects, the stack is faster and simpler. This mirrors the reserve-when-measured discipline -- do not pay for a pool you cannot show you need."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "aggregate initialization", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }

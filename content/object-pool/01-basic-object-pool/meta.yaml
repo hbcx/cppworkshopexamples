@@ -1,0 +1,12 @@
+title: "Acquire, release, reuse: the pool mechanic"
+standard: "C++14"
+difficulty: 1
+summary: "A pool owns a set of objects and hands out free ones on acquire, taking them back on release, so a burst of acquisitions after some releases reuses the same objects instead of constructing new ones -- the whole point when construction is the expensive part."
+notes: "Object Pool trades construction cost for a small amount of bookkeeping: instead of creating and destroying an object every time you need one, you keep a set of them alive and lend them out. acquire() returns a free object, constructing one only when none are free; release() marks it free again so the next acquire reuses it. This example gives each Connection a stable id and counts how many were ever constructed, then acquires two, releases them, and acquires two more -- the second pair reuses the first pair (ids come back, no new construction), so four acquisitions cost only two constructions. The free list is LIFO here (a plain vector used as a stack), which is why the object released last is handed out first; a pool is free to choose any policy. The pool OWNS every object through unique_ptr and lends raw pointers, which are non-owning views into storage the pool controls -- the caller must not delete them, only release them. This explicit acquire/release form is the mechanic; the next example makes the release automatic and exception-safe with an RAII handle. Reach for a pool only when profiling shows construction or destruction is the cost -- for cheap objects the bookkeeping is pure overhead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }

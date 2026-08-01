@@ -1,0 +1,4 @@
+spawned grunt: Grunt(hp=30,weapon=pistol)
+spawned grunt: Grunt(hp=30,weapon=pistol)
+spawned boss: Boss(hp=500,phases=3)
+unknown key -> null

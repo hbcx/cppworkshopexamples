@@ -1,0 +1,2 @@
+base-value copy: Shape(base)
+clone() copy:    Circle(r=5)

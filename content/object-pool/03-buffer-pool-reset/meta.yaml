@@ -1,0 +1,13 @@
+title: "Reset on return: a recycled object must start clean"
+standard: "C++14"
+difficulty: 3
+summary: "A hot loop borrows a scratch buffer, fills it, and returns it; the pool resets each buffer on release so the next borrower never sees leftover bytes -- the recycling that makes a pool safe belongs in the pool, not scattered across every call site."
+notes: "A pooled object is reused, so unlike a freshly constructed one it can arrive carrying whatever its previous borrower left in it. Making every borrower remember to clear it before use is the same mistake as making every caller remember to free memory -- it will be forgotten somewhere. The pool owns the invariant instead: release() resets the object to a clean state before it goes back on the free list, so acquire() always hands out something empty. This example is the realistic shape of a pool -- a hot loop processing packets, borrowing a Buffer per iteration through the RAII handle from the previous example. One buffer serves all three packets (only one is ever constructed), and because release() clears it, the POST packet does not see the GET packet's bytes. Reset, not reconstruct, is the whole benefit: clearing a std::string keeps its allocated capacity, so the reused buffer skips the reallocation a fresh one would pay -- that retained capacity is often the real reason to pool. Where reset lives is a design choice: on release (shown here, so a returned object is immediately safe to inspect), or on acquire (lazier, and it also scrubs objects that were never returned cleanly); pick one and keep it consistent. Skipping reset entirely is a classic pool bug -- a recycled object silently carrying stale state -- shown in this section's anti-patterns."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

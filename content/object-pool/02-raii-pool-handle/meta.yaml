@@ -1,0 +1,13 @@
+title: "RAII handle: return to the pool automatically"
+standard: "C++14"
+difficulty: 2
+summary: "Hand out a unique_ptr with a custom deleter that returns the object to the pool instead of freeing it, so recycling happens on every scope exit -- including exceptions -- and a borrower can never forget to release or release twice."
+notes: "The explicit acquire/release pair from the previous example has the same flaw as manual new/delete: an early return or a thrown exception between acquire and release leaks the object out of the pool forever, and a double release corrupts the free list. The fix is the same as for memory -- make return-to-pool a destructor. acquire() hands back a std::unique_ptr with a CUSTOM DELETER: instead of calling delete, the deleter calls pool.release(). The object is never actually deleted while the pool lives; the smart pointer's destructor just recycles it. Now every exit path returns the object automatically, it is exception-safe for free, and the type system prevents both forgetting to release and using the handle after release (moving the handle transfers the sole ticket). The deleter is a small functor holding a pointer back to the pool; because it is a nested class it may call the pool's private release() without a friend declaration. A unique_ptr with a stateful deleter is the idiomatic modern shape of a pool handle -- it is exactly how a scoped database connection or a pooled buffer is lent out in real code. This example nests scopes so you can watch objects return and immediately get reused: the inner buffer comes back and the next acquire hands the very same object out again, with no new construction."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "custom deleter", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

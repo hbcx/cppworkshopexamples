@@ -1,0 +1,13 @@
+title: "Anti-pattern: a shallow clone shares the original's state"
+standard: "C++14"
+difficulty: 3
+summary: "If a class owns a handle to a resource and clone() just runs the default copy constructor, the clone copies the handle, not the resource -- so clone and original alias the same state and a change through one is seen by the other."
+notes: "Prototype is only correct if the clone is independent, and that depends entirely on how the object's members are copied. When a class holds a handle to a resource -- a shared_ptr, a raw pointer, a file or socket -- the default copy constructor copies the handle, so make_unique<T>(*this) produces a clone that points at the SAME underlying state as the original. That is a shallow clone: mutate the clone and the original changes too, because there is one resource behind two objects. The bug is silent and surfaces far from the clone, as spooky action where editing a duplicated document mutates the one it was copied from. The fix is a deep copy: give the class a copy constructor (or a clone body) that duplicates the resource into a fresh handle, so each object owns its own. The rule of three/five is the reminder -- a class that manages a resource and does not define its copy semantics inherits the shallow member-wise one. This example uses a shared_ptr member so the aliasing is well defined (no double free) and observable: a shallow node and its clone both change when only the clone is appended to, while a deep node and its clone stay independent. The values are deterministic -- the trap is aliasing, not undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "rule of three", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }

@@ -1,0 +1,17 @@
+# Where to reach for Prototype -- problem -> pattern, with the alternative it beats.
+
+- problem: "Code holds objects only through a base pointer and must copy one without knowing its concrete type -- an undo stack snapshotting the current document, a scene graph duplicating a selected subtree, an editor copying a shape the user picked."
+  why: "a virtual clone() copies the object as its real dynamic type through the base interface, where copying through a base value slices the derived part away silently and a switch that maps each type to its copy must be edited for every new type and sits far from the classes it names."
+  signal: "a copy path with a dynamic_cast or type switch that reconstructs each concrete type by hand, or a std::vector<Base> holding derived objects by value"
+
+- problem: "Objects must be instantiated from templates chosen at runtime -- spawning game entities or particles from data-driven definitions, a widget palette, kinds contributed by plugins loaded after the program starts."
+  why: "a registry of prototypes cloned by key is populated at runtime, so a new kind is a registered instance with no new class and no edit, where an Abstract Factory or a switch hard-codes the set of types it can make at compile time and cannot be extended by data or a plugin."
+  signal: "a factory with a switch or if-chain over a type name returning new Derived, that must be edited whenever a new kind is added"
+
+- problem: "Constructing an object from scratch is expensive -- parsing a config, loading and decoding resources, computing derived state or warming a cache -- and the program needs many similar instances."
+  why: "cloning a fully-initialized prototype copies the finished state, so the expensive setup runs once and each instance is a cheap copy, where constructing every instance from scratch repeats the costly work and re-derives state that was already computed on the prototype."
+  signal: "a constructor or factory that repeats a heavy load-parse-compute sequence to produce objects that differ only slightly from one another"
+
+- problem: "Callers need a pre-configured baseline object they then tweak -- a default HTTP request or settings object with sensible fields already set, copied and adjusted per call site."
+  why: "cloning a configured prototype hands each caller an independent copy of the baseline to modify, where re-specifying the defaults at every call site duplicates them and lets the baselines drift apart when one copy of the defaults is updated and another is missed."
+  signal: "the same default field values re-typed at many construction sites, or a global default object that callers mutate in place instead of copying"

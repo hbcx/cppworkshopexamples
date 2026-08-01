@@ -1,0 +1,2 @@
+shallow -> original: doc!   clone: doc!
+deep    -> original: doc   clone: doc!

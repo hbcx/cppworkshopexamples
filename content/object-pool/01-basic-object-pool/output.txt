@@ -1,0 +1,7 @@
+  constructed Connection #1
+  constructed Connection #2
+  Connection #1 sends: hello
+  Connection #2 sends: world
+  Connection #2 sends: again
+  Connection #1 sends: reused
+objects ever constructed: 2
