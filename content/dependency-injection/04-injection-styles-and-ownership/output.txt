@@ -1,0 +1,6 @@
+t=1 handled GET /
+  metric: handled
+t=2 handled GET /health
+t=3 handled POST /login
+  metric: handled
+clock owners: 3 (a, b, and the local)

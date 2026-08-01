@@ -4,3 +4,5 @@
   note: "A pool is almost always exposed as one shared service, so it inherits the singleton's global-access and lifetime questions; go there for how a single shared instance is created and controlled."
 - slug: "factory-method"
   note: "The other side of asking for an object instead of newing it yourself: a factory method decides which object to make, where a pool decides which existing one to lend -- creation vs reuse behind the same acquire-style call."
+- slug: "dependency-injection"
+  note: "How a pool reaches its consumers: build it once at the composition root and inject the one instance into every consumer, instead of each reaching for it through a global -- go there for wiring a shared resource in."

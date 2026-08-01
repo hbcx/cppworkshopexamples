@@ -1,0 +1,14 @@
+title: "The composition root: wire the object graph in one place"
+standard: "C++14"
+difficulty: 2
+summary: "Concentrate every decision about which concrete types to build and how to connect them in a single place near main, so the rest of the program depends only on interfaces and nothing below the root names an implementation."
+notes: "Injection pushes the choice of implementation outward -- but if every class pushes it to its own caller, the choices scatter and each layer ends up newing the next, coupling the whole graph again. The discipline that prevents this is the composition root: one place, as close to main as possible, that names the concrete types, constructs them, and wires them together; everything below it receives dependencies and names no implementation. This example builds a small graph -- a Welcomer that needs a UserRepository and a Mailer -- entirely in main. Welcomer owns its dependencies via unique_ptr (owning injection: the object's lifetime governs its collaborators), and main hands in make_unique-constructed implementations that are moved in. Swapping InMemoryUsers for a real database, or ConsoleMailer for an SMTP client, is a one-line edit at the root; not a single line of Welcomer changes, because Welcomer depends only on the interfaces. This is why frameworks talk about a container, but you do not need one: in C++ the composition root is usually just the top of main (or a small factory function it calls) doing explicit construction. The rule of thumb -- resolve dependencies once, at the edge; never reach for them from the middle. Owning vs non-owning and shared dependencies are the next example."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

@@ -4,3 +4,5 @@
   note: "The other multi-object creational pattern: Builder assembles one complex product over several steps, where Abstract Factory returns a matching family in a single call -- different axis, construction sequence vs family consistency."
 - slug: "prototype"
   note: "The runtime-data alternative to a compile-time factory: Prototype clones registered instances chosen by key, so a new kind is data rather than a new factory the client must know about."
+- slug: "dependency-injection"
+  note: "Where the factory's products go: a factory decides which implementation to build, and injection hands that implementation to the consumers -- go there for wiring the product into the object graph at a composition root."

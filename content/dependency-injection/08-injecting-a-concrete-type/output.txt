@@ -1,0 +1,3 @@
+concrete dep        -> pg[SELECT count(*)]
+abstract dep (test) -> fake[SELECT count(*)]
+abstract dep (prod) -> pg[SELECT count(*)]

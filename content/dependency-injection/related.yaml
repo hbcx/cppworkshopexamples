@@ -1,0 +1,6 @@
+- slug: "singleton"
+  note: "The pattern DI is the standard answer to: a global singleton hides a dependency and defeats testing, where injection makes the same collaborator explicit and substitutable -- go there for the trap this technique exists to replace."
+- slug: "abstract-factory"
+  note: "Where the concrete implementations DI injects usually come from: a factory builds the product, the composition root injects it -- the two compose, factory decides which, injection delivers it."
+- slug: "object-pool"
+  note: "A shared resource is a classic injected dependency: a pool is built once at the composition root and injected into every consumer as one shared instance instead of each fetching its own."

@@ -1,0 +1,21 @@
+# Where to reach for Dependency Injection -- problem -> technique, with the alternative it beats.
+
+- problem: "A service mixes business logic with a side effect -- writing to a database, calling an HTTP API, reading the clock or filesystem -- and you need fast, deterministic unit tests of the logic without touching the real system."
+  why: "injecting the collaborator behind an interface gives the test a seam to pass a recording fake, so the logic is verified with no I/O, where a service that constructs or looks up its own dependency forces the test through the real thing -- slow, flaky, and dependent on an environment being present."
+  signal: "a class that news a DB or HTTP client, or calls std::chrono::system_clock::now() or a global, directly inside the logic you want to test."
+
+- problem: "The same code must run against different implementations chosen at deploy time -- an in-memory store in dev and a real database in prod, or one of two payment providers behind a feature flag -- without editing the business logic for each."
+  why: "depending on an interface and selecting the concrete type at the composition root turns the choice into one line at the edge, where an if-else or #ifdef over a global buried in the logic scatters the decision across the code and has to be found and changed in every place it leaked to."
+  signal: "a factory branch, environment check, or compile-time switch selecting a concrete backend from inside business rules rather than at startup."
+
+- problem: "A large codebase must keep high-level policy from depending on low-level detail so modules build and change independently -- the domain layer must not be recompiled or relinked every time an infrastructure class changes."
+  why: "having the high-level module depend on an interface it defines and receive the implementation (dependency inversion) lets the two sides compile against only the interface, where a domain class that includes and links a concrete infrastructure header drags the whole low-level module into every build and couples their release cycles."
+  signal: "a domain or business-logic class that #includes a concrete infrastructure header (a specific database, network, or file-system class)."
+
+- problem: "Behaviour depends on time or randomness -- a scheduler, a retry-with-backoff loop, a simulation, a token with an expiry -- and it must be reproducible in tests and across runs."
+  why: "injecting a Clock or RNG interface lets a test drive time and randomness to fixed values, making the outcome deterministic, where calling now() or rand() directly bakes real wall-clock time and entropy into the logic so the same input can produce different results and the test cannot pin one."
+  signal: "direct calls to system_clock::now(), steady_clock::now(), or rand() in code whose result or control flow depends on the returned value."
+
+- problem: "Many consumers need the same expensive or stateful resource -- a connection pool, a parsed configuration, a shared cache -- and it must be created once and used consistently everywhere."
+  why: "constructing the resource once at the composition root and injecting that one instance into every consumer gives them a shared, consistent object with clear ownership, where letting each consumer create or globally fetch its own duplicates the resource or reintroduces a singleton, with the divergence and hidden-state problems that brings."
+  signal: "several classes each constructing or fetching the same resource, or reaching for a shared instance through a global or singleton accessor."

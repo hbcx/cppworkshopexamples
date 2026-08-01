@@ -1,0 +1,4 @@
+calls: 1
+to:    alice@corp.example
+body:  Reset your password, alice
+test PASSED

@@ -1,0 +1,3 @@
+located  -> charged 500 via bank
+(global Locator::gateway still set: yes)
+injected -> fake-ok 500

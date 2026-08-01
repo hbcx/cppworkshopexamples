@@ -1,0 +1,12 @@
+title: "Anti-pattern: constructing the concrete dependency inside"
+standard: "C++11"
+difficulty: 3
+summary: "A class news its own concrete collaborator in its method, so there is no seam: it can never run against a different implementation and a test cannot avoid the real one -- the situation dependency injection exists to undo."
+notes: "This is the before-picture that injection fixes. When Report builds a PdfRenderer inside its own method, the concrete type is welded in: the class and its one implementation are inseparable. You cannot render the report any other way, and a test of Report is forced through the real renderer -- which may write files, be slow, or need fonts installed -- because there is no point at which a substitute could be supplied. The tell is a constructor or method body that news a concrete service (a database client, an HTTP client, a file writer, a clock). The fix is mechanical: name the dependency as an interface, take it in through the constructor, and let the caller decide the implementation; the class shrinks to logic and the concrete choice moves to the composition root. This example contrasts a Report that hard-codes PdfRenderer with one that receives a Renderer interface, then injects a FakeRenderer to show the seam a test needs. Note the difference from the service-locator anti-pattern: there the dependency is global and hidden, here it is local and hidden -- both remove the seam, and both are fixed the same way, by handing the collaborator in."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

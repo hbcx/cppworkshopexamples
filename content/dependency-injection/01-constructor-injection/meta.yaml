@@ -1,0 +1,12 @@
+title: "Constructor injection: receive the dependency, do not make it"
+standard: "C++11"
+difficulty: 1
+summary: "A class depends on an interface and takes the implementation through its constructor instead of constructing one itself, so the same class runs against any implementation and the caller -- not the class -- decides which."
+notes: "Dependency injection is one small inversion: a class does not create or look up its collaborators, it receives them. Instead of newing a concrete ConsoleNotifier inside itself, Alarm declares that it needs a Notifier (an interface) and takes one through its constructor; whoever builds the Alarm supplies the implementation. Two things fall out immediately. The class names no concrete type, so it is decoupled -- it compiles and works against any Notifier, present or future. And the choice moves outward to the caller, which is exactly where a choice about which email service or which logger to use belongs. This example injects the dependency by non-owning reference: the caller owns the Notifier and the Alarm just borrows it, which is the lightest form and fine when lifetimes are clear (the dependency outlives the consumer). The same Alarm is then built twice with two different notifiers, with no change to Alarm -- the wiring, not the class, decides the behaviour. Ownership variants (owning the dependency via unique_ptr, sharing it via shared_ptr) and where the wiring lives come in the later examples; this one is just the core move of handing a dependency in rather than reaching for it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

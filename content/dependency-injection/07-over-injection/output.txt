@@ -1,0 +1,4 @@
+  email -> alice
+fat  (6 deps) total = 120
+  email -> alice
+lean (2 deps) total = 120

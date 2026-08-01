@@ -1,0 +1,11 @@
+title: "Anti-pattern: a constructor with too many dependencies"
+standard: "C++11"
+difficulty: 3
+summary: "A constructor that takes half a dozen collaborators is a design smell, not a wiring inconvenience: the long list means the class does too many jobs, and injection just makes the violation of single-responsibility visible."
+notes: "Dependency injection does not cause over-injection -- it reveals it. A class whose constructor takes six or eight collaborators is telling you it has six or eight reasons to change: it is doing pricing and fulfilment and notification all at once, a single-responsibility violation that a hard-coded design would have hidden inside the class. The pain of wiring and mocking all of them is the symptom; the disease is that the class is too big. The wrong fix is to hide the parameters -- pass a giant context object or reach for a service locator -- which just buries the dependencies again (see the locator anti-pattern). The right fix is to make the class smaller: group the fine-grained collaborators into cohesive services, each with its own responsibility, so the top-level class depends on a few meaningful things instead of many primitive ones. This example shows an order service that takes six collaborators, then refactors them into a Pricing facade (catalog, tax, discount) and a Fulfilment facade (inventory, shipping, email); the order service now depends on two things it can name, each independently testable, and both versions compute the same total. Rule of thumb: when the constructor list grows past three or four, do not reach for a container -- split the class."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members#Member_initialization" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: a service locator hides the dependency it injects"
+standard: "C++11"
+difficulty: 3
+summary: "Pulling a collaborator from a global service locator instead of receiving it makes the dependency invisible in the type, reintroduces global state, and forces a test to mutate that global (which then leaks) to substitute a fake."
+notes: "A service locator looks like the opposite of the hard-coded dependency -- the concrete type is not baked in, it is fetched from a registry -- but it recreates every problem injection solves. When checkout() reaches into Locator::gateway in its body, its signature declares that it needs nothing, so the dependency is hidden: a caller reading the type cannot see it, and static analysis cannot follow it. It is global mutable state, so two unrelated pieces of code share one slot and order-of-setup bugs appear. And it is barely testable: to substitute a fake a test must write to the global before the call and remember to restore it after, because whatever it set leaks into the next test. This example contrasts a checkout that locates its gateway from a global -- and leaves that global set afterwards -- with one that takes the gateway as a constructor parameter, where the dependency is declared in the type, supplied locally, and nothing global is touched. The locator is sometimes defended as dependency injection; it is not -- injection makes the need explicit at the seam, the locator hides it behind a global lookup. The fix is the same as always: pass the collaborator in. This is the general form of the singleton-as-hidden-dependency trap: the singleton is one specific global well, the locator is the generalized one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

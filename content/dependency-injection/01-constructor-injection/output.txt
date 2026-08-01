@@ -1,0 +1,2 @@
+[console] ALARM: disk almost full
+[email] to ops: ALARM: disk almost full

@@ -1,0 +1,12 @@
+title: "Inject a fake to make a unit deterministic"
+standard: "C++11"
+difficulty: 2
+summary: "A service mixes logic worth testing with a side effect (sending email); injecting the gateway behind an interface lets a test pass a recording fake, so the logic is verified with no network and no flakiness -- the reason DI exists."
+notes: "The payoff that makes injection worth the indirection is testability. A real service usually interleaves logic (build the reset message, pick the recipient) with a side effect (send it over the network). If the service constructs its own EmailGateway, a test has no way in: it either sends real mail or does not run. Inject the gateway behind an interface and the seam appears -- a unit test constructs the service with a test double that records what it was asked to do instead of doing it, runs the logic, and asserts on the capture. No socket, no external service, no intermittent failure, and the assertion pins the exact behaviour. This example is a password-reset service whose only dependency is an EmailGateway; the fake records the last recipient, body, and call count, and main plays the role of a test: inject the fake, call request(), then assert the message was built and addressed correctly. This is the standard mock/stub/spy technique from unit testing expressed in plain C++ -- no framework needed for the mechanic, just an interface and a recording implementation. It is also the concrete reason the singleton-as-global-dependency anti-pattern is criticised: a hard-wired dependency removes exactly this seam."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

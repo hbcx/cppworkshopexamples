@@ -1,0 +1,2 @@
+hard-coded -> PDF{report:q3}
+injected   -> FAKE{report:q3}

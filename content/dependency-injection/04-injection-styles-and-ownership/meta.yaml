@@ -1,0 +1,14 @@
+title: "Ownership and style: shared dependency, constructor vs setter"
+standard: "C++14"
+difficulty: 3
+summary: "One clock shared by several services via shared_ptr, a required dependency taken in the constructor and an optional one through a setter -- the choices of who owns the dependency and how it is injected, and when each fits."
+notes: "Injecting raises two design choices beyond the core move. First, ownership: a non-owning reference or raw pointer (example 01) is lightest and right when the dependency clearly outlives the consumer; unique_ptr (example 03) gives the consumer sole ownership; shared_ptr fits the case here -- one dependency legitimately shared by several consumers, kept alive as long as any of them lives. This example gives two services the same Clock through a shared_ptr, and the monotonic ticks continue across both, proving they hold one instance (use_count confirms it). Prefer a reference for a borrowed dependency and reserve shared_ptr for genuinely shared ownership -- reaching for shared_ptr by default hides lifetime and invites cycles. Second, style: a REQUIRED dependency belongs in the constructor, so the object cannot be built in an unusable state (the clock here). An OPTIONAL one -- a metrics sink the service runs fine without -- can be supplied by a setter after construction; the cost is that the object is briefly half-configured and a caller can forget to wire it, so use setter injection sparingly and only for the genuinely optional. This example wires metrics into one service and not the other to show the optional path. The comparison in one line: constructor injection for what you must have, setter injection for what you might, references for borrowing, shared_ptr for sharing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

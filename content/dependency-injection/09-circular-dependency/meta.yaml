@@ -1,0 +1,11 @@
+title: "Anti-pattern: a dependency cycle with no construction order"
+standard: "C++11"
+difficulty: 3
+summary: "Two services that each take the other in their constructor cannot be built at all -- neither can be first, because each needs an already-constructed instance of the other -- and the cycle is really a design smell pointing at a missing seam."
+notes: "Constructor injection has one hard limit: it needs a valid construction order, and a cycle destroys it. If Orders takes an Inventory and Inventory takes an Orders, both by constructor, there is no way to build either -- constructing Orders needs an Inventory that does not exist yet, and constructing Inventory needs the Orders you are still trying to build. It is a chicken-and-egg the compiler cannot resolve (shown here only in a comment, because it genuinely will not construct). The cycle is usually a signal that the two classes are too entangled, and the deeper fix is to break the mutual knowledge: introduce an interface one side depends on, or invert the callback into an event the other side subscribes to (dependency inversion), so the dependency runs one way. The minimal mechanical fix, shown here, is to inject one side after construction: build Inventory alone, build Orders with Inventory, then wire Orders back into Inventory with a setter -- a valid order now exists (build the independent side, then the dependent side, then close the loop). This example runs that fixed wiring so an order reserves stock and a restock notifies the order, the mutual calls working without a construction paradox. If setter injection is the only way to build your graph, treat it as a prompt to question whether the cycle should exist at all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members#Member_initialization" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
