@@ -1,0 +1,11 @@
+title: "Anti-pattern: a fat adapter that does more than translate"
+standard: "C++11"
+difficulty: 3
+summary: "An adapter that adds business logic on top of the interface translation stops being a thin seam and becomes a second implementation: it bakes a rule into the data, hides the raw value from other consumers, and duplicates a policy that will drift from the real one."
+notes: "An adapter has exactly one job: present the Target interface by translating calls to the Adaptee. The moment it also applies business logic -- validation, clamping, a discount, a default -- it becomes a second, hidden implementation of that logic, and two problems follow. It pollutes the data: this example clamps the temperature to a safe maximum of 100 C inside celsius(), so a consumer that needs the true reading (to log it, to raise a hardware fault) gets 100 and the real 130 is gone. And it duplicates policy: the clamp now lives in the adapter and wherever the real safety rule lives, so the two drift the first time one is changed and the other is forgotten. The fix is to keep the adapter thin -- translate only -- and apply the rule where it belongs, once, so the raw translated value stays available to everyone and the policy has a single home. This example contrasts a fat adapter that clamps inside the translation with a thin adapter that returns the true Celsius and a separate safeCap() policy applied only at the alarm display. The tell is an adapter method with an if, a calculation beyond unit conversion, or a magic number -- logic that has no business inside a translation layer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "std::min", url: "https://en.cppreference.com/w/cpp/algorithm/min" }

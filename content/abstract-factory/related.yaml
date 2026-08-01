@@ -6,3 +6,5 @@
   note: "The runtime-data alternative to a compile-time factory: Prototype clones registered instances chosen by key, so a new kind is data rather than a new factory the client must know about."
 - slug: "dependency-injection"
   note: "Where the factory's products go: a factory decides which implementation to build, and injection hands that implementation to the consumers -- go there for wiring the product into the object graph at a composition root."
+- slug: "adapter"
+  note: "A common thing a factory builds: when several backends are unified behind one interface, the factory picks the backend and returns it already wrapped in an adapter -- go there for the wrapping the factory hands out."

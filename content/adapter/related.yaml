@@ -1,0 +1,6 @@
+- slug: "queues"
+  note: "The standard library's own adapters: std::stack and std::queue are container adapters -- the same idea applied to a container, presenting a small interface over an underlying one you can choose."
+- slug: "dependency-injection"
+  note: "How an adapter reaches the rest of the app: build it at the composition root and inject it as the Target interface, so consumers depend on the interface and never see the adaptee."
+- slug: "abstract-factory"
+  note: "When several backends are each adapted to one Target, a factory picks and builds the right adapter, so the client selects a backend by name and receives it already wrapped."

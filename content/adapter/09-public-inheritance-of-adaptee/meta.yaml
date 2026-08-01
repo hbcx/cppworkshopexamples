@@ -1,0 +1,11 @@
+title: "Anti-pattern: a class adapter that publicly inherits the adaptee"
+standard: "C++11"
+difficulty: 3
+summary: "Building a class adapter by inheriting the adaptee publicly makes the adapter an is-a of the adaptee: its whole interface leaks through, the translation can be bypassed, and callers start depending on the adaptee -- defeating the reason to adapt. Inherit privately or compose."
+notes: "A class adapter inherits the Target (it IS a Target) and gets the adaptee's implementation by inheritance. The mistake is inheriting the adaptee PUBLICLY, which says the adapter also IS-A adaptee -- an is-a lie, since an adapter is implemented in terms of the adaptee, not a kind of it. The concrete damage: every adaptee method leaks through the adapter (here write() and setRaw() are callable directly on the adapter), so the translation you built can be bypassed entirely, and callers can come to depend on the adaptee's interface -- the exact coupling the adapter was supposed to remove. The fix is private inheritance (implemented-in-terms-of: the adapter uses the adaptee internally but is not one to the outside) or, better by default, composition (hold the adaptee as a member). This example puts a leaky public-inheritance adapter next to a tight private-inheritance one: on the leaky adapter you can call write() and setRaw() straight through, bypassing log(); on the tight adapter only log() is reachable and the adaptee stays encapsulated. The rule: model implemented-in-terms-of with private inheritance or a member, never public inheritance -- public inheritance is for genuine is-a substitutability, which an adapter and its adaptee do not have."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

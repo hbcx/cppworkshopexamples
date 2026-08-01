@@ -1,0 +1,2 @@
+LEGACY| [INFO] app started
+LEGACY| [ERROR] out of memory

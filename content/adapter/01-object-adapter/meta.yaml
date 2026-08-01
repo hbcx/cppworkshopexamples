@@ -1,0 +1,12 @@
+title: "Object adapter: wrap the adaptee and translate"
+standard: "C++11"
+difficulty: 1
+summary: "A client expects one interface, an existing class offers another; the adapter implements the expected interface by holding an instance of the existing class and translating each call to it -- so incompatible code works together without either side changing."
+notes: "Adapter is the plug converter of design patterns: the client speaks one interface (the Target), the class you want to use speaks another (the Adaptee), and neither can change -- so you insert a piece that presents the Target and forwards to the Adaptee, translating as it goes. This example has client code that logs through a Logger interface (level plus message) and a LegacyLog that only knows write(line); the LegacyLogAdapter implements Logger, holds a LegacyLog, and turns each log(level, msg) into a single formatted write. This is the OBJECT adapter: it wraps an instance by composition, which is the form to reach for by default -- it can adapt any Adaptee handed to it (even one chosen at runtime), works when the Adaptee is final or when several must be composed, and keeps the two classes loosely coupled. The client never names LegacyLog; it depends only on Logger, so the legacy class is now usable everywhere the modern interface is expected. The inheritance-based alternative (the class adapter) and its trade-offs are the next example. Keep the adapter thin -- pure translation, no business logic -- or it stops being an adapter and becomes a second implementation that drifts from the first."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

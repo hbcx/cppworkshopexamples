@@ -1,0 +1,21 @@
+# Where to reach for Adapter -- problem -> pattern, with the alternative it beats.
+
+- problem: "You must integrate a third-party SDK or vendor library whose interface you cannot change -- a payment provider, a cloud storage client, a sensor driver -- and you do not want its types spreading through your codebase."
+  why: "wrapping the vendor behind your own domain interface quarantines its types in one place, so the rest of the code depends on your interface and swapping the vendor later is a new adapter plus a one-line wiring change, where calling the vendor directly from many modules is vendor lock-in that forces a sweep through every call site to replace."
+  signal: "vendor types or headers referenced directly across several modules, rather than behind a single wrapper."
+
+- problem: "You are migrating off a legacy API incrementally: new code should target a clean new interface, but the old implementation must keep working until it is replaced."
+  why: "adapting the old API to the new interface lets new code depend only on the new shape while the legacy implementation still runs behind it, and you swap the implementation later without touching callers, where a big-bang rewrite changes the interface and its implementation at once and cannot ship until all of it is done."
+  signal: "new code calling the old API directly, or one-off inline shims translating between old and new scattered at call sites."
+
+- problem: "An existing type must work with STL algorithms or a range-for but does not model the required interface -- it has index-based access but no iterators, or the wrong callable or hashing shape."
+  why: "an adapter that supplies the expected interface (begin/end, a compatible callable) lets the algorithms consume the type in place, where copying its contents into a std::vector just to iterate allocates and duplicates the data on every pass and creates a second source of truth to keep in sync."
+  signal: "a manual index loop over a type a range-for or algorithm cannot touch, or data copied into a std::vector purely to run standard algorithms on it."
+
+- problem: "Several interchangeable backends each have their own incompatible API -- multiple payment gateways, storage providers, or notification channels -- and the application should treat them uniformly."
+  why: "adapting each backend to one common Target interface lets the app hold a Target and stay ignorant of which backend it is, where branching on the backend type inside business logic scatters per-vendor if-else and type switches through code that should not know a vendor exists."
+  signal: "a type switch or per-backend branch inside business logic selecting which vendor's API to call."
+
+- problem: "Two sides of a boundary speak different units, formats, or protocols -- Fahrenheit vs Celsius, one JSON shape vs another, host vs network byte order -- and values must cross cleanly."
+  why: "an adapter at the boundary performs the translation in one place, so every crossing is consistent and the conversion has a single home, where doing the conversion inline at each call site duplicates the same expression everywhere and lets the copies diverge when the rule changes in one place and not another."
+  signal: "the same unit or format conversion expression repeated at multiple points where the two sides meet."

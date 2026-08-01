@@ -1,0 +1,2 @@
+adapter (needless) -> hi
+fixed interface    -> hi

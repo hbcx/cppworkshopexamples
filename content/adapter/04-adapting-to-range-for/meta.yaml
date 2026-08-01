@@ -1,0 +1,11 @@
+title: "Adapting a legacy collection to range-for"
+standard: "C++11"
+difficulty: 3
+summary: "A legacy collection offers only index-based access (count and at), so a range-for loop or an STL algorithm cannot touch it; a small range adapter supplies the begin and end iterators they expect, making the old type work with modern iteration without copying its contents."
+notes: "Adapting to a standard, generic interface is the same pattern turned toward the language and library rather than another class. A range-for loop, and every STL algorithm, requires the iterator interface -- begin(), end(), and an iterator with operator*, operator++, and operator!=. A legacy collection that exposes only count() and at(i) has none of that, so it is locked out of range-for, std::accumulate, std::find, and the rest. The wrong workaround is to copy its contents into a std::vector just to iterate -- an allocation and a full copy on every pass, and now two sources of truth. The adapter instead teaches the old type the iterator protocol: BagRange wraps the collection and exposes a minimal iterator over (collection, index), so for (int v : BagRange(bag)) just works and any algorithm can consume it, with no copy and no change to the legacy class. This is exactly how std::stack and std::queue are built -- they are container adapters presenting a small interface over an underlying container -- and how iterator adapters like reverse and insert iterators work. Keep the iterator minimal but correct for how it is used; a fuller adapter would model a standard iterator category so more algorithms accept it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+detailed_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }

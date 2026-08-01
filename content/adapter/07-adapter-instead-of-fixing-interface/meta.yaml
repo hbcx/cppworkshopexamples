@@ -1,0 +1,11 @@
+title: "Anti-pattern: adapting an interface you own instead of fixing it"
+standard: "C++11"
+difficulty: 3
+summary: "When you control both sides of a mismatch, wrapping one in an adapter is needless indirection that hides a fixable design flaw; an adapter earns its keep only at a boundary you cannot change -- for code you own, change the interface."
+notes: "Adapter is a tool for boundaries you do not control: a third-party SDK, a legacy module you must not touch, the standard library's expected shape. Reaching for it when you own both sides is a smell. If your own service exposes sayHello() and your own client wants greet(), the honest fix is to rename the method so it presents the interface directly -- not to introduce a third type whose whole job is to forward one call to the other. The adapter there is dead weight: an extra class to maintain, an extra indirection at every call, and a design flaw preserved rather than removed, because the two interfaces still disagree and you have simply papered over it. This example shows a SelfAdapter bridging a Greeter the client wants to a MyServiceOld you also own, then the fix: make MyService present greet() itself, deleting the adapter and one whole type. The rule is a question -- can I change this interface? If yes, change it; if no (it is someone else's, or freezing it is a deliberate compatibility promise), adapt it. An adapter between two things you control is usually a refactor you have not done yet."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

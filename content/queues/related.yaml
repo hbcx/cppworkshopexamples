@@ -4,3 +4,5 @@
   note: "One of the containers a queue can wrap (deque by default, list yes, vector never), and where a general list picks up."
 - slug: "vectors"
   note: "Why a std::vector can never back a queue: it has no pop_front, which is exactly what the FIFO adaptor needs."
+- slug: "adapter"
+  note: "The general pattern behind std::stack and std::queue: the Adapter design pattern presents one interface over another, of which these container adapters are the standard library's built-in case."

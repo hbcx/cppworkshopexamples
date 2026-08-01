@@ -1,0 +1,12 @@
+title: "Class adapter: inherit the target, privately inherit the adaptee"
+standard: "C++11"
+difficulty: 2
+summary: "The inheritance form of Adapter: inherit the Target publicly (the adapter IS a Target) and the Adaptee privately (implemented in terms of it), so the override calls the inherited adaptee method directly -- leaner, but bound to one adaptee type at compile time."
+notes: "The class adapter is the same idea by inheritance instead of composition. The adapter inherits the Target publicly -- it IS a Logger -- and the Adaptee PRIVATELY, which in C++ means implemented-in-terms-of: the adapter can call LegacyLog::write internally, but the outside world does not see a LegacyLog, so the adaptee interface does not leak (a caller cannot do adapter.write(...); public inheritance there would be an is-a lie and is a known anti-pattern). Weigh it against the object adapter. Object adapter (composition): adapts any instance including one chosen at runtime, adapts a final adaptee, can wrap several adaptees, keeps coupling loose -- prefer it by default. Class adapter (inheritance): slightly leaner (no wrapped member, no forwarding indirection) and it can override the adaptee's own virtual behaviour, but it binds to one concrete adaptee at compile time, cannot adapt a final class, and in C++ needs multiple inheritance which many codebases avoid. This example builds the same Logger-over-LegacyLog adapter by private inheritance and shows the adaptee interface stays hidden. Rule of thumb: reach for the object adapter unless you specifically need to override the adaptee's virtuals."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

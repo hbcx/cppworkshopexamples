@@ -1,0 +1,2 @@
+fat adapter  -> logged temp: 100 C  (true reading lost)
+thin adapter -> logged temp: 130 C ; alarm shows capped 100 C

@@ -1,0 +1,11 @@
+title: "Adapting a third-party type you cannot modify"
+standard: "C++11"
+difficulty: 2
+summary: "A vendor class reports Fahrenheit; the domain speaks Celsius through its own interface; the adapter wraps the vendor type and converts units on the way out, so the rest of the code depends on the domain interface and never touches the vendor at all."
+notes: "The most common real reason to write an adapter is a boundary you do not own: a third-party SDK, a vendor sensor library, an operating-system handle. You cannot edit its header, and you do not want its type spreading through your codebase, because that is vendor lock-in -- swapping the vendor later would mean touching every call site. The adapter is the seam: it is the single place that knows the vendor type, presents your domain interface to everyone else, and translates (here, Fahrenheit to Celsius) at the crossing. This example wraps an untouched VendorThermometer behind a Thermometer interface that returns Celsius; the reporting code takes a Thermometer and never sees Fahrenheit or the vendor class. Replacing the vendor with another becomes a new adapter and a one-line wiring change, not a sweep through the code. This pairs naturally with dependency injection -- the adapter is constructed at the composition root and injected as the domain interface -- and it is also where unit, format, and protocol translation belongs so the conversion lives in one place instead of being duplicated at every boundary crossing. Keep the vendor type quarantined behind the adapter; do not let it leak into the interface you expose."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

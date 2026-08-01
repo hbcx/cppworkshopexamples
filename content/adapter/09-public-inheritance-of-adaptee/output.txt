@@ -1,0 +1,5 @@
+LEGACY| [log] hello
+LEGACY| bypassed the adapter entirely
+leaky exposes adaptee: write() and setRaw() callable directly
+LEGACY| [log] hello
+tight hides adaptee: only log() is callable

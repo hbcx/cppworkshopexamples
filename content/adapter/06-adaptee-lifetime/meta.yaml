@@ -1,0 +1,13 @@
+title: "Anti-pattern: the adapter outlives the adaptee it references"
+standard: "C++14"
+difficulty: 3
+summary: "An object adapter that stores a reference to an adaptee living in a shorter scope dangles the moment the adaptee is destroyed; the fix is to make ownership explicit -- the adapter owns the adaptee, or the lifetime contract is intended rather than accidental."
+notes: "The object adapter wraps an adaptee, and the question that decides its correctness is who owns that adaptee. Storing a bare reference (or raw pointer) is the lightest choice and fine WHEN the adaptee provably outlives the adapter -- but it is a lifetime contract, and when it is accidental rather than intended it becomes a dangling-reference bug: build the adapter over a local adaptee, let that local go out of scope, and every later call reads freed memory. It is undefined behaviour, so it may appear to work, crash, or differ between compilers -- which is exactly why this example only DESCRIBES the dangling case in a comment and does not run it. The fix is to make ownership explicit and match the lifetimes: when the adapter must outlive the caller's scope (returned from a factory, stored in a container), it OWNS the adaptee -- here via unique_ptr -- so the adaptee lives exactly as long as the adapter and returning the adapter out of a function is safe. A reference is still correct when the adaptee genuinely outlives the adapter (a long-lived service injected in), but that must be a decision, not an accident. This example runs the owning adapter returned safely from a factory; the raw-reference trap is shown only as commented code with its lifetime explained."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
