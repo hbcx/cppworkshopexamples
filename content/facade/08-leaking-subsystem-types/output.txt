@@ -1,0 +1,2 @@
+bad:  status=200 body=payload for /a
+good: ok=true text=payload for /a

@@ -1,0 +1,11 @@
+title: "Anti-pattern: leaking subsystem types through the facade"
+standard: "C++11"
+difficulty: 3
+summary: "A facade whose method signatures return or accept subsystem types couples the client to the subsystem anyway: the client must know those types and breaks when they change, so the facade decouples nothing despite looking like a boundary."
+notes: "The decoupling a facade promises depends entirely on its surface. If the facade's own signatures speak in subsystem types, the client is coupled to the subsystem through the facade, and the boundary is decorative. GatewayBad returns a RawResponse -- the HTTP engine's own type -- so every caller includes that header, reads status and body, and is written against the engine's shape; swap the engine for one with a different response type and all of them break, exactly as if the facade were not there. GatewayGood returns its own small Result: the RawResponse never crosses the facade, callers depend only on Result, and the engine behind the facade can be replaced with the client untouched. This is what makes the difference between a facade that is a real seam and one that is a pass-through with extra steps. The rule is that a facade must be expressible in its own vocabulary -- primitives, its own small value types, its own enums -- and must not expose the subsystem's types, handles, or error codes in any signature. It is easy to violate accidentally when the subsystem type is convenient (it already has the fields you want), which is precisely when to define the facade's own type instead. The tell: a facade method whose parameter or return type comes from the subsystem it is supposed to hide, or a client that includes a subsystem header only to talk to the facade."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

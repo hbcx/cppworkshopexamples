@@ -1,0 +1,14 @@
+== sealed: every new case needs a new facade method ==
+render
+stamp
+compress
+contract[r][SECRET][z]
+
+== open: an unforeseen case uses the parts directly ==
+render
+compress
+report[r][z]
+render
+stamp
+compress
+contract[r][SECRET][z]

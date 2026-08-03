@@ -6,3 +6,5 @@
   note: "When several backends are each adapted to one Target, a factory picks and builds the right adapter, so the client selects a backend by name and receives it already wrapped."
 - slug: "decorator"
   note: "The sibling wrapper that keeps the interface: where Adapter changes an object's interface to fit a client, Decorator preserves it and stacks added behaviour -- reach for it when the interface is already right and you only need to add responsibilities."
+- slug: "facade"
+  note: "The subsystem-scale wrapper: where Adapter fits one class to an interface, Facade puts one simplified front over many classes -- reach for it when the problem is a tangle of classes to coordinate, not a single mismatched one."

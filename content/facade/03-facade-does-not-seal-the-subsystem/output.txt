@@ -1,0 +1,10 @@
+== common path ==
+render: laying out report
+compress: shrinking
+result: report[rendered][zip]
+
+== advanced path (watermarked) ==
+render: laying out contract
+watermark: stamping CONFIDENTIAL
+compress: shrinking
+result: contract[rendered][CONFIDENTIAL][zip]

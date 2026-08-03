@@ -1,0 +1,4 @@
+fat facade total:  ledger: recording 900 cents
+900 cents
+thin facade total: ledger: recording 850 cents
+850 cents

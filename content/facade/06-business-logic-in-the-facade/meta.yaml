@@ -1,0 +1,11 @@
+title: "Anti-pattern: business logic inside the facade"
+standard: "C++11"
+difficulty: 3
+summary: "A facade that computes a business rule itself instead of delegating to the subsystem becomes a second home for that rule; the two copies drift, and the facade -- which should only orchestrate -- silently returns a different answer than the subsystem that owns the policy."
+notes: "A facade's job is to orchestrate: decide which subsystem parts to call and in what order, and delegate the actual work to them. When it starts making the decisions itself -- computing a discount, validating a rule, defaulting a value -- it becomes a second implementation of logic that already has a home, and the two drift the moment either changes. OrderFacadeBad here hardcodes a 10% bulk discount; the real PricingService uses 15%; the facade therefore charges the wrong price -- 900 cents where the correct total is 850 -- and nobody edited PricingService to make that happen, the duplication did. The failure is quiet because both numbers are plausible; only a test that compares the facade against the subsystem catches it. The fix is that OrderFacadeGood asks PricingService for the price and only orchestrates around it (price, then record), so the rule has exactly one home and the facade cannot disagree with it. This is the same discipline as the fat adapter and the fat decorator: a structural wrapper translates, forwards, or orchestrates, but it does not own business rules. The tell is a facade method containing an if on a domain condition, an arithmetic policy, or a magic number -- logic that should have been a call into the subsystem. Keeping the facade thin is also what lets it stay a stable front door: rules change in the subsystem, and the facade, which only wires calls together, does not."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

@@ -1,0 +1,11 @@
+title: "Orchestrating a multi-step workflow behind a facade"
+standard: "C++11"
+difficulty: 2
+summary: "The realistic job of a facade: encode a multi-step workflow with an order and dependencies -- reserve, charge, ship, and roll back on failure -- so every caller runs the same correct sequence through one method instead of re-deriving it and getting the order or the rollback wrong."
+notes: "Facade earns its keep most when the subsystem is not just several classes but a sequence with rules between the steps. Placing an order means reserving stock, then charging, then shipping -- and if the charge fails, releasing the reservation that already succeeded. That ordering and that rollback are business-critical and easy to get wrong, and if every caller wires the three services itself, every caller carries a copy of the sequence that can drift: one forgets the rollback, another charges before checking stock. The Checkout facade puts the whole dance in one place and hands the client a single placeOrder that returns yes or no. This is the difference between Facade and a plain grouping of calls: the value is not only fewer classes to see, it is that the correct order and the failure handling live once, at the front door, and cannot be reimplemented inconsistently. Note the facade still only orchestrates -- it decides the sequence and the rollback, but the actual stock check, charge, and scheduling stay in the subsystem services where they belong; the facade does not compute prices or talk to a card network itself. When the rollback grows beyond one undo step, this is exactly where a transaction or a Command-based unit-of-work gets introduced, still behind the same facade method so the client is untouched. The tell that a workflow wants a facade: the same ordered sequence of subsystem calls copy-pasted at several call sites."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

@@ -1,0 +1,25 @@
+# Where to reach for Facade -- problem -> pattern, with the alternative it beats.
+
+- problem: "Your code drives a verbose C or system API -- libcurl, OpenGL, POSIX sockets, a cloud SDK -- where a single logical operation takes a fixed dance of a dozen setup calls in a required order."
+  why: "a facade that exposes one domain call (http.get(url)) and performs the dance internally puts that boilerplate and its ordering in one place, so callers state intent -- where spreading the raw setup across call sites duplicates the sequence everywhere, lets copies drift as options are added, and turns every caller into someone who must know the library's internals."
+  signal: "the same multi-call setup sequence for one third-party or system API repeated at several call sites, rather than behind a single wrapper method."
+
+- problem: "A web controller or request handler needs to fulfil a use case that touches several domain services -- inventory, payment, shipping -- in a specific order with rollback, and the same use case is invoked from more than one entry point."
+  why: "an application-service facade encodes the sequence and the failure handling once and hands the controller a single call, which is the service layer of a layered architecture -- where letting each controller orchestrate the repositories itself spreads the transaction and ordering logic across controllers (the fat-controller smell) and lets two of them handle the same failure differently."
+  signal: "a controller that calls three or more repositories or services in sequence and handles their partial-failure rollback inline, duplicated across handlers."
+
+- problem: "You are strangling a tangled legacy module: new code must be written against something clean while the old implementation keeps running and is refactored behind the scenes."
+  why: "a facade in front of the legacy module gives new code one clean interface to depend on, so the mess is quarantined and can be rewritten behind the facade without touching callers -- where letting new code call the legacy internals directly spreads dependencies on the very code you intend to delete, and each such call site must then be found and rewritten during the migration."
+  signal: "new modules including legacy headers and calling legacy internals directly, instead of a single wrapper standing between the new code and the old subsystem."
+
+- problem: "A library has many internal classes -- a database client with connection, statement, transaction, and result-set types -- and users need one obvious entry point rather than having to assemble the internals in the right order."
+  why: "a small facade class (Database with query() and execute()) is the published API, so users depend on that stable surface and the library is free to rearrange its internals -- where exposing the internal classes as the public API forces users to wire them correctly themselves and freezes those classes, since any change to them is now a breaking change to every user."
+  signal: "a library whose public headers expose its internal collaborators, so users construct and sequence several internal objects to perform one common task."
+
+- problem: "Application start-up must bring subsystems up in a strict order -- read config, then start logging, then open the database, then warm the cache, then bind the server -- and getting the order wrong fails at runtime, not compile time."
+  why: "an Application.start() facade encodes the boot order once so it cannot be got wrong per entry point, which matters because there are usually several (the server, an admin CLI, integration tests) -- where each entry point deriving the start-up sequence itself means several copies of a fragile order that drift, and a new subsystem must be slotted correctly into every one of them."
+  signal: "subsystem initialisation calls in a hand-maintained order repeated in main, in a test harness, and in a secondary entry point, rather than in one start-up routine they all call."
+
+- problem: "A component under test depends on a whole subsystem -- a payments stack, a rendering pipeline -- and constructing that subsystem in every test is slow, brittle, and drags in real I/O."
+  why: "defining the facade as an interface lets a test substitute the entire subsystem with one fake behind that interface, so the component is tested in isolation with no internal collaborators wired up -- where depending on the concrete subsystem forces every test to build the full object graph (and stub each real dependency), coupling the tests to the subsystem's construction details."
+  signal: "test setup that constructs several internal collaborators to stand up one dependency, or a component that names concrete subsystem classes instead of a facade interface it could be handed a fake of."

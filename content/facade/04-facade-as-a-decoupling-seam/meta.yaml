@@ -1,0 +1,15 @@
+title: "The facade as a decoupling seam"
+standard: "C++14"
+difficulty: 3
+summary: "Make the facade an interface and the client depends on that interface instead of the subsystem, so the whole subsystem becomes a swappable, fakeable unit -- the decoupling only holds if the facade's own signatures expose no subsystem types."
+notes: "The plain facade of the earlier examples already reduces how much a client must know, but a concrete facade is still a hard dependency: the client names RealReportFacade and, through it, is compiled against the subsystem. Promoting the facade to an interface turns it into a seam. Here ReportFacade is an abstract interface with one method; RealReportFacade orchestrates the real DataSource and Formatter behind it; the client (printReport) depends only on ReportFacade. Because of that, the entire subsystem is now a unit you can replace -- a FakeReportFacade with no data source or formatter lets the client be tested in isolation, and a second real implementation over a different backend would drop in with the client untouched. This is Facade meeting Dependency Injection: the facade is the interface, the composition root chooses which implementation to build, and the client receives it. The decoupling has one strict condition, which is the anti-pattern to avoid: the facade's own signatures must not leak subsystem types. The moment build() returned a Formatter::Result or took a DataSource&, the client would be coupled to the subsystem again and the interface would be decoupling nothing. Keep the facade's surface in its own simple vocabulary -- strings, small value types, its own enums -- so the interface is a real boundary. This is the most valuable form of Facade in a layered architecture: each layer talks to the next only through a facade interface, so a layer can be rewritten, mocked, or benchmarked behind its front door without the layers around it noticing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

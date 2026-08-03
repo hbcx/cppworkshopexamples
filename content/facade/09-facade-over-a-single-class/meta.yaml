@@ -1,0 +1,11 @@
+title: "Anti-pattern: a facade over a single class"
+standard: "C++11"
+difficulty: 3
+summary: "Wrapping one already-simple class in a facade that forwards one-to-one hides no complexity and coordinates nothing; it adds a layer, an indirection, and a file to maintain in exchange for no simplification -- a facade with nothing to simplify."
+notes: "Facade exists to unify a SUBSYSTEM -- several classes and the order and dependencies between them -- behind one simpler call. Its value is proportional to the complexity it hides. Point it at a single, already-simple class and there is nothing to hide: LoggerFacade here forwards log() straight to FileLogger, so it adds an indirection, a second type to keep in sync when FileLogger's interface changes, and a file, while simplifying nothing. The two calls in the example produce identical output because the facade does identically nothing. This is speculative structure -- a layer added in case it is needed later -- and it has a real cost: every caller now goes through an extra hop, and every change to the wrapped class is a change to two classes. The fix is to use the class directly and introduce a facade only when there genuinely are several classes to coordinate, at which point it starts earning the layer. There is one honest exception worth naming so the rule is not overapplied: a one-to-one wrapper introduced specifically to be an INTERFACE seam -- so the single dependency can be swapped or faked -- is a legitimate design, but that is Adapter or dependency inversion doing a different job, not Facade simplifying complexity. The tell for the anti-pattern: a facade with one subsystem member and methods that each forward to exactly one call on it, with no ordering, no combination, and no new vocabulary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

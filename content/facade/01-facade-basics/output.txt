@@ -1,0 +1,5 @@
+-- making espresso --
+grinder: grinding beans
+boiler: heating water to 92C
+pump: forcing hot water through grounds
+served: espresso

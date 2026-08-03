@@ -1,0 +1,4 @@
+== needless facade ==
+log: started
+== the class, used directly ==
+log: started

@@ -1,0 +1,11 @@
+title: "A facade simplifies but does not seal the subsystem"
+standard: "C++11"
+difficulty: 2
+summary: "A facade offers a convenient default over a subsystem; it does not hide or forbid the subsystem, so a client with a need the facade does not cover can still use the subsystem classes directly -- the facade adds an easy path without removing any capability."
+notes: "A common misreading of Facade is that it is an encapsulation wall -- that once a facade exists, the subsystem is off-limits and everything must go through it. That is not the pattern. The Gang of Four are explicit that a facade does not prevent clients from using subsystem classes directly when they need to; it offers a simpler default for the common case and leaves the full power of the subsystem available for the uncommon one. Here PdfExporter.exportDoc covers the frequent render-then-compress path in one call, and most code will only ever use that. But when a client needs a watermark -- something the facade deliberately does not expose -- it reaches past the facade and drives Renderer, Watermark, and Compressor itself. The subsystem classes are public and were never hidden, so the facade cost nothing in capability while adding convenience. This matters for how you design the facade: resist the urge to grow a parameter or a method for every possible subsystem feature just so nothing bypasses it, because that turns the simplifying front door into a second copy of the whole subsystem API. Cover the common cases well and let the rare ones use the subsystem directly. The separate question of ENFORCING that clients cannot touch the subsystem -- true information hiding -- is a different goal, met by access control, separate modules, or a published API boundary, not by Facade. Facade is about ease of use, not about locking the door."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

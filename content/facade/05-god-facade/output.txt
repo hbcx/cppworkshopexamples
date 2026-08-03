@@ -1,0 +1,7 @@
+== god facade ==
+billing: charged 1800 cents
+mailer: mail to alice
+reporting: daily figures
+== focused facades ==
+billing: charged 1800 cents
+mailer: mail to alice

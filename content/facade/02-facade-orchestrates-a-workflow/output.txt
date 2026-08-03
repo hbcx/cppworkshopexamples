@@ -1,0 +1,10 @@
+== order 1 ==
+inventory: reserving 2 x BOOK-42
+payment: charging 1800 cents to alice
+shipping: scheduling delivery of 2 x BOOK-42
+checkout: order placed
+== order 2 ==
+inventory: reserving 2 x BOOK-42
+payment: charging 9000 cents to bob
+checkout: payment declined, rolling back
+inventory: releasing 2 x BOOK-42

@@ -1,0 +1,11 @@
+title: "Facade basics: one call over a subsystem"
+standard: "C++11"
+difficulty: 1
+summary: "A facade is a single class that offers one simplified entry point over a subsystem of several classes: it knows which parts to call, in what order, and how their outputs connect, so a client makes one call instead of orchestrating the parts itself."
+notes: "Facade gives a subsystem a front door. Behind it are several classes -- here a Grinder, a Boiler, and a Pump -- each with its own small job, and using them means calling them in the right order and feeding one result into the next. The CoffeeMachine facade holds those parts and exposes one method, makeEspresso(), that encodes the sequence once; the client calls it and never learns the subsystem exists. This is what separates Facade from its structural cousins. Adapter wraps ONE class to change its interface to a shape a client expects; Facade wraps a WHOLE subsystem to simplify it, and it does not have to match any pre-existing interface -- it invents a convenient one. Decorator wraps one object and keeps its interface while adding behaviour; Facade presents a new, smaller interface and adds no behaviour of its own beyond orchestration. A facade is usually a plain concrete class (no inheritance needed) that holds its subsystem parts by composition, as here. The one rule that keeps it honest is that it should orchestrate and delegate, not implement business logic -- the moment it starts making real decisions it becomes a second home for behaviour that belongs in the subsystem. Keeping it thin is what lets it stay a simplifying front door rather than a god object that everything depends on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

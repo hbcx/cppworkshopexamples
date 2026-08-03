@@ -1,0 +1,11 @@
+title: "Anti-pattern: clients bypass the facade on the common path"
+standard: "C++11"
+difficulty: 3
+summary: "When clients skip the facade and orchestrate the subsystem themselves on the common path, they duplicate the sequence and rollback the facade centralises -- and each hand-rolled copy can get the order wrong, here charging before checking stock and forgetting to refund."
+notes: "The point of a workflow facade is that the correct order and the failure handling live in one place. That guarantee only holds if the common path actually goes through the facade. When a client bypasses it and drives the subsystem directly -- because it is right there, or to save a call -- it re-creates the workflow by hand, and every hand-rolled copy is a chance to get it wrong. Here the bypassing client charges first and reserves second, then finds there is no stock, and its copy of the sequence forgot the rollback: the customer is charged with nothing reserved. The facade's place() does the same job correctly -- reserve first, and never charge when the stock is not there -- because the rule lives there once. This is the mirror image of the earlier lesson that a facade must not seal the subsystem: the subsystem is rightly accessible for cases the facade does not cover, but the COMMON case should still go through the facade, precisely so its order and rollback are not reimplemented inconsistently at each call site. The two together define the intended use: facade for the frequent path, direct subsystem access for the rare one the facade does not offer -- not direct access for the frequent path out of convenience. The tell: the same ordered sequence of subsystem calls appearing at call sites next to a facade that already encodes it, especially copies that differ in their error handling."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

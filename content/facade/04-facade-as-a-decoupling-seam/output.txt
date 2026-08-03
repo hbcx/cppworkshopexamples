@@ -1,0 +1,2 @@
+Sales {rows=3}
+Sales {stub}

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a facade that seals the subsystem"
+standard: "C++11"
+difficulty: 3
+summary: "Making the subsystem reachable only through the facade -- private nested parts, no other way in -- means every case the facade did not foresee forces the facade to grow another method, until the simplifying front door is the whole subsystem API plus a layer."
+notes: "This is the inverse of the lesson that a facade does not seal its subsystem, shown as the mistake. SealedExporter hides its parts as private nested classes, so the facade is the only door. That feels clean until a need arrives that the facade did not anticipate -- a watermark, a different order, one extra step -- and there is no way to meet it except to add a method to the facade. Do that a few times and the facade has a method per case: it has become the entire subsystem API with an extra indirection, the opposite of simplification, and the one class everyone must edit for every new requirement. The GoF are explicit that Facade should not prevent direct use of the subsystem; it offers an easy default and leaves the parts available. OpenExporter keeps Renderer, Watermark, and Compressor public: the common path goes through exportDoc, and the unforeseen watermark case drives the parts directly with no change to the facade at all. Note the distinction this example is careful about: wanting to genuinely FORBID access to the subsystem -- true information hiding across a module or API boundary -- is a legitimate goal, but it is met with access control and published interfaces, not by calling the wall a facade. Facade is about ease of use; when a class both simplifies AND forbids, at least be clear it is doing two jobs, and expect the forbidding half to generate exactly the growth shown here. The tell: a facade whose subsystem has no public entry point, and which gains a method every time a new requirement appears."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

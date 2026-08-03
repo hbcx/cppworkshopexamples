@@ -1,0 +1,7 @@
+== client bypasses the facade ==
+payment: charge 1800 cents
+inventory: reserve 5
+bypass: out of stock -- but already charged, no refund issued!
+== through the facade ==
+inventory: reserve 5
+facade: out of stock, nothing charged

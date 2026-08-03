@@ -8,3 +8,5 @@
   note: "What is often injected: an adapter wrapping a third-party or legacy type presents your domain interface, and it is constructed at the composition root and injected as that interface -- the two patterns compose."
 - slug: "decorator"
   note: "A decorator is a dependency you inject: wrap a service in a caching or logging decorator at the composition root and inject it behind its interface, adding a cross-cutting concern without the consumers or the implementation changing."
+- slug: "facade"
+  note: "A facade interface is a natural injection boundary: inject a facade so a whole subsystem is swappable and fakeable behind one dependency, and the composition root chooses which implementation the consumers receive."

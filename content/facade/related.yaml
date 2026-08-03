@@ -1,0 +1,6 @@
+- slug: "adapter"
+  note: "The single-object wrapper next to this subsystem-wide one: Adapter reshapes ONE class to an interface a client already expects, where Facade invents one simpler interface over MANY -- read it when the problem is a mismatched class, not a tangle of them."
+- slug: "decorator"
+  note: "The other structural wrapper, by intent: Decorator keeps a component's interface and layers behaviour on one object, where Facade presents a new, smaller interface over a subsystem and adds only orchestration -- go there for the added-behaviour wrapper."
+- slug: "dependency-injection"
+  note: "How a facade interface reaches the app: define the facade as an interface, build the concrete facade at the composition root, and inject it -- the decoupling-seam example made concrete across the whole object graph."

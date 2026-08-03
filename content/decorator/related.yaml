@@ -4,3 +4,5 @@
   note: "How a decorated object reaches the app: build the chain at the composition root and inject it behind the Component interface, so consumers get the wrapped object -- caching, logging, retry -- without knowing it is wrapped."
 - slug: "abstract-factory"
   note: "When the stack to apply is chosen from a set of options, a factory can assemble the right decorator chain, so the client asks for a configured component and receives it already wrapped in the correct order."
+- slug: "facade"
+  note: "The other structural wrapper, by intent: where Decorator keeps a component's interface and layers behaviour on one object, Facade presents a new, smaller interface over a whole subsystem and adds only orchestration -- go there when the goal is to hide complexity, not add responsibilities."
