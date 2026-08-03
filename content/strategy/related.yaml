@@ -4,3 +4,5 @@
   note: "Injecting a behaviour is Strategy: when the dependency handed to an object is an algorithm -- a comparator, a pricing rule, a backoff policy -- that is this pattern, wired at the composition root; go there for the general injection mechanics."
 - slug: "unique-ptr"
   note: "A strategy baked into a type: std::unique_ptr's second template parameter is a Deleter -- a compile-time strategy for how the pointer frees its object -- the policy form of Strategy applied to cleanup."
+- slug: "observer"
+  note: "The broadcast sibling: where Strategy injects one algorithm a context calls, Observer notifies many listeners of an event -- go there for one-to-many notification and the C++ lifetime problem it raises."

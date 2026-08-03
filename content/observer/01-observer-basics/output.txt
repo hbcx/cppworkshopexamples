@@ -1,0 +1,3 @@
+display: 25 C
+display: 35 C
+alarm: too hot (35 C)!

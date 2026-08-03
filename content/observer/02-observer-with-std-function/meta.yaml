@@ -1,0 +1,15 @@
+title: "Observers as std::function callbacks"
+standard: "C++11"
+difficulty: 2
+summary: "In modern C++ an observer is often just a callback: the subject stores a list of std::function and calls each on an event, so a subscriber is any callable -- a lambda, a free function, a bound method -- with no Observer interface and no class per listener, and lambdas can capture the state they need to react."
+notes: "The classic form needs an Observer interface and a class for every subscriber; std::function collapses that just as it does for Strategy. Button here keeps a vector of std::function<void(const std::string&)> and invokes each on click, so subscribing is passing a lambda -- one logs, one closes over a local counter and increments it -- with no interface to implement and no observer class to declare. This is how most C++ event and signal systems present themselves, and it is the right default when listeners are small and numerous: least ceremony, full access to lambdas and captures, and any callable fits. The trade-offs against the object form are the same as everywhere std::function appears. It is type-erased, so each call is an indirect call and a large capture may heap-allocate; for an event fired at very high frequency that cost can matter. And -- the point that dominates Observer specifically -- a std::function subscriber captures by value or by reference, and a capture BY REFERENCE to an object that is later destroyed is a dangling reference the next emit will use, exactly the lifetime hazard the object form has with raw observer pointers. Neither form escapes the lifetime question; this example keeps it visible by capturing a local (clicks) that outlives the calls, but a real system must ensure every captured reference outlives every emit, which is what subscription tokens (the fourth example) manage. The object form still earns its place when a listener needs several methods, its own rich state, or a name in a hierarchy; the callback form wins on brevity for the common one-method listener."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

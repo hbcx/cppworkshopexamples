@@ -1,0 +1,5 @@
+== mutating the list during notify ==
+A (removes first)
+== iterating a snapshot ==
+A (removes first)
+B

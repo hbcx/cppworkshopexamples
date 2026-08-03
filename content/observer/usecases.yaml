@@ -1,0 +1,25 @@
+# Where to reach for Observer -- problem -> pattern, with the alternative it beats.
+
+- problem: "A UI widget produces events -- a button click, a text field changing, a slider moving -- and several unrelated parts of the app must react, and which parts react changes as the app grows."
+  why: "the widget exposing an event that any number of handlers subscribe to lets it stay a pure UI element that knows nothing about what its events trigger, so a new reaction is a new subscription -- where the widget calling the reactions directly couples the UI to business logic, and adding a reaction means editing the widget, which then cannot be reused anywhere the reaction does not apply."
+  signal: "a widget or control that calls named application services in its event handler, rather than emitting an event others subscribe to."
+
+- problem: "A model holds application state that several views display -- a table, a chart, a status bar on the same data -- and every view must stay in sync when the model changes."
+  why: "the model notifying observers on change lets each view redraw itself and lets views be added or removed without the model knowing, which is the heart of MVC -- where the model calling each view directly couples the data layer to the presentation, caps the views at the ones it was written for, and forces a model edit to add a view."
+  signal: "a model or store that holds pointers to specific views and calls their refresh methods, instead of publishing a change others observe."
+
+- problem: "A domain action has many downstream effects that keep multiplying -- placing an order must email the customer, decrement inventory, notify shipping, and update analytics -- and the effects differ by deployment and feature flags."
+  why: "publishing a domain event that subscribers react to keeps the order code focused on placing the order and makes each effect an independent subscriber wired at startup, so effects are added, removed, or toggled without touching the action -- where the order code calling each service directly turns it into a hub coupled to every downstream system, edited on every new effect."
+  signal: "a core operation followed by a growing list of direct calls to unrelated services, rather than one event published to subscribers."
+
+- problem: "Values depend on other values and must recompute when their inputs change -- spreadsheet cells, a reactive UI's derived fields, a settings panel whose preview updates live."
+  why: "having each value observe the inputs it depends on and recompute on notification propagates changes automatically along the dependency graph, so only what depends on a change is recomputed -- where recomputing everything on any change wastes work and does not scale, and hardcoding which outputs to refresh after each input scatters the dependency graph through the update code and drifts as dependencies change."
+  signal: "a change handler that manually recomputes or refreshes a fixed list of dependent values, rather than dependents observing their inputs."
+
+- problem: "You need to add logging, metrics, or auditing around a component's activity -- lifecycle events, state transitions, requests handled -- without entangling that cross-cutting concern with the component's own code."
+  why: "the component emitting events that a monitoring observer subscribes to keeps instrumentation entirely outside it, so metrics and audit are attached and detached without editing the component and without it depending on the logging stack -- where adding logging calls inside the component mixes the concern into the business logic and must be repeated at every point of interest."
+  signal: "logging or metric calls interleaved through a component's methods, where the component could instead emit events a separate observer records."
+
+- problem: "Parts of a system must react to external changes they do not control -- a file being modified, a sensor reading arriving, a network connection dropping, a config file reloading."
+  why: "a watcher that observes the source and notifies subscribers turns the change into a push that interested parties react to once, centralising the detection -- where each interested party polling the source in its own loop duplicates the watch logic, wastes cycles checking for changes that rarely happen, and reacts only as often as it happens to poll rather than when the change occurs."
+  signal: "several components each polling the same external resource in a loop to detect changes, instead of one watcher notifying them when a change occurs."

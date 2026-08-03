@@ -1,0 +1,7 @@
+== one throw abandons the rest ==
+bad A
+notify aborted by: boom
+== failures isolated per observer ==
+good A
+observer failed: boom (others still notified)
+good C (still reached)

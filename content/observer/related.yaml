@@ -1,0 +1,6 @@
+- slug: "weak-ptr"
+  note: "The other fix for the dangling observer: hold observers as weak_ptr so the subject skips and prunes ones whose owner has dropped them, instead of dangling or leaking -- go there for lock(), expired(), and the non-owning reference."
+- slug: "strategy"
+  note: "The sibling behavioural pattern with an injected object: Strategy is one algorithm the context calls for a result, where Observer is many listeners the subject notifies of an event and whose results it ignores -- go there for the one-to-one form."
+- slug: "unique-ptr"
+  note: "The move-only RAII handle underneath a subscription token: the token that auto-unsubscribes on destruction is move-only for the same reason unique_ptr is -- one owner of the registration; go there for that ownership model."

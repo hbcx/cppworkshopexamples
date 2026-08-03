@@ -1,0 +1,15 @@
+title: "Observer basics: one-to-many notification"
+standard: "C++11"
+difficulty: 1
+summary: "Observer sets up a one-to-many dependency: a subject keeps a list of observers and, when its state changes, notifies them all through a common interface -- so the subject stays ignorant of who reacts, and reactors are added without touching it."
+notes: "Observer decouples a thing that changes from the things that must react to it. The Subject (Thermometer) holds a list of observers and, on a state change, calls update() on each; the Observer interface is all the subject knows, so it broadcasts to a Display and an Alarm without naming either, and a new reactor is a new class the subject never sees. This is the shape behind every event system: one source of change, many independent listeners. The value over the obvious alternative -- the subject calling each dependent directly -- is that the subject does not depend on its dependents, so it can be reused, tested, and changed without them, and they can come and go at runtime; hardcoding the calls is this chapter's tight-coupling anti-pattern. Observer is easy to place among its neighbours by what flows and in which direction. Mediator also connects many objects, but it centralises many-to-many communication through a hub, where Observer is one-to-many broadcast from a subject. Strategy and Observer both hold injected objects, but a Strategy is one algorithm the context calls to get a result, where observers are many listeners the subject notifies of an event and whose results it ignores. The elephant in the room, and the reason Observer is harder in C++ than in garbage-collected languages, is lifetime: here observers are held by raw non-owning pointer, so they MUST outlive the subject or be unsubscribed first -- an observer destroyed while still subscribed leaves a dangling pointer the next notification will call. That problem, and its RAII solution, are the subject of the later examples and anti-patterns; get the broadcast mechanic first."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }

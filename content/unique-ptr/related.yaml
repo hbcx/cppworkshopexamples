@@ -12,3 +12,5 @@
   note: "A real use of move-only ownership: the pimpl idiom (a compile-firewall Bridge) holds its implementation in a unique_ptr, which is why its destructor and moves must be declared in the header but defined where the impl is complete."
 - slug: "strategy"
   note: "The Deleter is a Strategy: unique_ptr's second template parameter is a compile-time strategy for how the object is freed -- see Strategy for the pattern in general, in its object, std::function, and policy forms."
+- slug: "observer"
+  note: "A move-only RAII handle in the wild: an Observer subscription token unsubscribes in its destructor and is move-only for the same reason unique_ptr is -- one owner of the registration."

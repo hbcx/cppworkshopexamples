@@ -1,0 +1,3 @@
+live at start: 0
+after weak-subject scope: 0
+after strong subject kept it: 1

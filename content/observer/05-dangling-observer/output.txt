@@ -1,0 +1,3 @@
+a leaky observer would leave a dangling pointer (not run)
+safe sees 1
+after the safe observer left, notify(2) reached 0 observers

@@ -1,0 +1,14 @@
+title: "Anti-pattern: the lapsed listener leak"
+standard: "C++11"
+difficulty: 3
+summary: "When the subject owns its observers with shared_ptr and they never unsubscribe, an observer that is logically finished is still held by the subject and never freed -- the lapsed-listener leak -- so a long-lived subject accumulates dead observers; holding them by weak_ptr lets each go when its real owner does."
+notes: "The dangling-observer bug is one failure of Observer lifetime; this is the opposite one. There, the subject held a non-owning pointer and the observer died under it; here, the subject OWNS the observers via shared_ptr, so they cannot dangle -- but they also cannot be reclaimed, because the subject's strong reference keeps every observer alive for the subject's whole life even after the observer is logically done and its original owner has dropped it. This is the lapsed listener: a listener that should be gone but lingers in the subject's list, still notified, still consuming memory, and in a long-running subject (a global event bus, a service that outlives the UI screens subscribing to it) the leak grows without bound. The counter here makes it visible -- under the strong subject a live observer remains after its owner's scope ends. The fix is to make the subject a non-owning observer of its observers: hold weak_ptr, and notify() locks each to a temporary shared_ptr, calls it if still alive, and skips (and ideally erases) it if expired. Now the observer's real owner controls its lifetime, and dropping it removes it from the broadcast automatically -- the weak subject returns to zero live observers when the scope ends. The trade-off to accept: weak_ptr requires the observers to be managed by shared_ptr, and the subject should occasionally prune expired slots so the vector of dead weak_ptrs does not itself grow. The alternative, explicit unsubscribe via a token or a destructor call, avoids the weak_ptr machinery but reintroduces the who-remembers-to-remove problem the lapsed listener came from. The tell: a subject that stores observers by shared_ptr (or by value) with a subscribe but no matching unsubscribe, held by an object that outlives its subscribers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::weak_ptr", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::weak_ptr::lock", url: "https://en.cppreference.com/w/cpp/memory/weak_ptr/lock" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }

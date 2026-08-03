@@ -1,0 +1,13 @@
+title: "Anti-pattern: the subject calls its dependents directly"
+standard: "C++11"
+difficulty: 3
+summary: "Hardcoding calls to each concrete dependent inside the subject is the design Observer replaces: the subject depends on all of them, adding a reaction edits it, and it cannot be reused or tested without those exact services -- a broadcast to an observer list decouples it from every reactor."
+notes: "This is Observer seen from the wrong side, the coupling the pattern exists to dissolve. OrderServiceBad places an order and then directly calls email.send and analytics.track, so the order service depends on the email service AND the analytics service: it cannot be compiled, reused, or unit-tested without both, a fourth reaction (SMS, inventory, an audit log) means opening this class and adding another line, and a change to any dependent's interface ripples into the subject. The order service has taken on knowledge of everything that cares about an order, which is exactly backwards -- the thing that changes should not know the things that react. OrderServiceGood inverts the dependency: it exposes onPlaced to register listeners and broadcasts to them, knowing none of their concrete types, so email, analytics, and a brand-new audit reaction are all just subscribers, and adding the third one touches no line of the order service. The subject now depends on nothing downstream; the wiring (which reactions are attached) moves to a composition root, where it belongs. This is the same open/closed win Strategy gives for a single algorithm, applied to a fan-out of reactions: behaviour is added by adding subscribers, not by editing the source of the event. The honest caveat mirrors the other patterns' -- if there is exactly one dependent and there will only ever be one, a direct call is simpler and fine; Observer earns its indirection when the set of reactions is open, varies by configuration, or should not be known to the subject. The tell: a class that performs an action and then calls two or more unrelated services by name to react to it, so every new reaction is a new hardcoded call inside it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }

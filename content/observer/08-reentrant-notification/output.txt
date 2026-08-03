@@ -1,0 +1,10 @@
+== re-entrant: setValue recurses through the observer ==
+bad sees 1
+bad sees 2
+bad sees 3
+bad final value: 3
+== guarded: the change is coalesced, no recursion ==
+good sees 1
+good sees 2
+good sees 3
+good final value: 3

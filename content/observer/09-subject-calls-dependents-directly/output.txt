@@ -1,0 +1,9 @@
+== hardcoded dependents ==
+order placed: 1
+email for order 1
+analytics for order 1
+== observer list ==
+order placed: 2
+email for order 2
+analytics for order 2
+audit for order 2

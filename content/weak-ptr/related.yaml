@@ -8,3 +8,5 @@
   note: "A real use of the weak back-pointer: a Composite node that points back at its parent uses weak_ptr to avoid the ownership cycle a strong pointer would leak -- see the pattern's cycle anti-pattern for the concrete case."
 - slug: "flyweight"
   note: "Weak references as a cache-eviction tool: a Flyweight factory holds weak_ptr so an interned object is dropped once no client holds it, keeping the intern table from growing without bound."
+- slug: "observer"
+  note: "A real use of non-owning observation: an Observer subject can hold its observers as weak_ptr so a dead observer is skipped and pruned instead of dangling or leaking -- the fix for the lapsed-listener and dangling-observer bugs."

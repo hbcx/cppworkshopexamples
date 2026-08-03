@@ -1,0 +1,14 @@
+title: "Anti-pattern: an observer that dangles"
+standard: "C++11"
+difficulty: 3
+summary: "The signature Observer bug in C++: an observer destroyed while still subscribed leaves the subject holding a dangling pointer, and the next notification calls a dead object -- undefined behaviour -- so an observer must unsubscribe before it dies, ideally in its own destructor."
+notes: "In a garbage-collected language a subject holding a reference to a dead observer merely keeps it alive; in C++ the observer is destroyed on schedule and the subject is left with a dangling pointer, so the next notify() dereferences freed memory -- undefined behaviour that may crash, may silently corrupt, and may differ between builds. This is the number-one Observer defect, and it is entirely a lifetime problem: the subject stores raw Observer* (or callbacks that captured references), and nothing ties the registration to the observer's life. LeakyObserver shows the shape -- it subscribes but never removes itself, so destroying it while registered arms the trap; that path is described in a comment and not executed, because running undefined behaviour is nondeterministic and would corrupt the compile gate. SafeObserver shows the direct fix: it unsubscribes in its destructor, so it is gone from the subject's list before it can be called dead, and the run proves a notify after it leaves reaches zero observers with nothing dangling. Destructor-based unsubscribe works but has a sharp edge -- the observer must hold a valid reference to the subject for its whole life, and if the SUBJECT dies first the observer's destructor then touches a dead subject, so who-outlives-whom must be settled. The more composable fixes remove that coupling: a subscription token whose destructor unsubscribes (the tokens example) ties the registration to a scope or owner without the observer needing a back-reference, and holding observers as weak_ptr lets the subject skip and prune ones whose owner has dropped them (the lapsed-listener example). The rule: a subscription must be released before the observer's memory is, and the reliable way to guarantee that is to bind the unsubscribe to a destructor rather than trusting every code path to call remove()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }

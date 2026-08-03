@@ -1,0 +1,13 @@
+title: "Push versus pull notification"
+standard: "C++11"
+difficulty: 2
+summary: "A subject can PUSH the changed data to observers in the notification, or just signal that it changed and let each observer PULL what it needs by querying the subject back -- push is simplest when observers want the same small payload, pull scales better when they want different or expensive subsets."
+notes: "Once the broadcast works, the design choice is what travels with the notification. In the push model the subject sends the changed data as arguments -- onChanged(temperature, humidity) -- so observers get everything immediately and need no reference back to the subject; it is the simplest form and ideal when the change is a small, well-defined payload every observer cares about. Its costs appear as the subject grows: the notification signature carries all the data any observer might want, so observers that need only the temperature still receive the humidity, adding a new field means changing the interface and every observer, and computing an expensive value to push is wasted on observers that ignore it. In the pull model the subject notifies only that it changed and passes a reference to itself; each observer then reads exactly the fields it needs via the subject's getters -- onChanged(const Station&) -- so the notification is uniform regardless of what observers want, new data is a new getter that existing observers ignore, and expensive values are computed only by observers that actually ask. Pull's costs are the mirror: observers are coupled to the subject's query interface, they may need to figure out WHAT changed (the notification does not say), and a naive observer that re-reads everything on every change can do redundant work. The rule of thumb: push when the payload is small, fixed, and universally wanted; pull when observers want different subsets, the data is expensive, or the set of published fields changes often. Many real systems blend the two -- push a small hint of what changed (a field id or an event type) and let observers pull the details -- which keeps the notification light while avoiding blind re-reads."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

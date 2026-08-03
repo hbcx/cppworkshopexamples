@@ -1,0 +1,15 @@
+title: "RAII subscription tokens that auto-unsubscribe"
+standard: "C++11"
+difficulty: 3
+summary: "Return a subscription token from subscribe() that unsubscribes in its destructor, so an observer's registration is tied to a scope or an owner and can never outlive it -- the RAII answer to the dangling-observer problem, and the model behind boost::signals2's scoped connection."
+notes: "The recurring danger in Observer is lifetime: a subject holding raw observer pointers (or callbacks that captured references) will call a dead observer if one is destroyed while still subscribed. Manual unsubscribe -- remembering to call remove() before the observer dies -- is the bug waiting to happen, because the one path that forgets it is undefined behaviour. RAII removes the manual step. subscribe() here returns a Subscription token that holds the signal and the handler's id; its destructor erases the handler, so the registration lives exactly as long as the token. Store the token as a member of the observer and the subscription is bound to the observer's lifetime -- when the observer is destroyed, its token is destroyed, and it unsubscribes before it can be called dead. Scope the token in a block, as the temporary here does, and the handler is removed at the closing brace: the subscriber count drops from two to one and the next emit reaches only the kept one. The token is deliberately move-only -- copying a subscription would mean two owners of one registration and a double-unsubscribe -- so it moves like unique_ptr and, on a moved-from token, does nothing. This is exactly how mature signal libraries work: boost::signals2 returns a connection (and a scoped_connection that disconnects on destruction), Qt manages connection lifetimes, and every robust callback system provides some unsubscribe handle rather than a fire-and-forget register(). The alternative solutions are worth knowing: hold observers as weak_ptr so the subject skips and prunes expired ones, or have the observer's own destructor call unsubscribe directly; the token is the most composable because the subscriber does not have to remember anything -- ownership does the remembering. The rule: a subscribe() that returns nothing is a lifetime bug generator; return a token, and tie it to the owner."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }
+  - { name: "std::map::erase", url: "https://en.cppreference.com/w/cpp/container/map/erase" }
+  - { name: "std::map::emplace", url: "https://en.cppreference.com/w/cpp/container/map/emplace" }
