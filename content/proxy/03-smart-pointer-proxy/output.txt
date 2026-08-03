@@ -1,0 +1,4 @@
+[access 1] service: ping
+[access 2] service: ok
+[access 3] service: ping
+total accesses: 3

@@ -1,0 +1,8 @@
+== eager proxy: cost paid at construction ==
+building report from db (expensive)
+(proxy constructed)
+show report(db)
+== lazy proxy: cost deferred to first use ==
+(proxy constructed)
+building report from db (expensive)
+show report(db)

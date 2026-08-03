@@ -1,0 +1,4 @@
+reading: (empty)
+denied: role 'viewer' cannot write
+wrote: hello
+reading: hello

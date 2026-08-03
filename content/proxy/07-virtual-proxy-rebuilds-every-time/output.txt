@@ -1,0 +1,12 @@
+== rebuilding proxy ==
+loading a.png
+drawing a.png
+loading a.png
+drawing a.png
+loading a.png
+drawing a.png
+== caching proxy ==
+loading b.png
+drawing b.png
+drawing b.png
+drawing b.png

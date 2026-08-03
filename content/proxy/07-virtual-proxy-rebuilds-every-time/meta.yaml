@@ -1,0 +1,13 @@
+title: "Anti-pattern: a virtual proxy that rebuilds every call"
+standard: "C++14"
+difficulty: 3
+summary: "A virtual proxy exists to build an expensive object once, on first use; one that constructs the real object inside each call and discards it rebuilds on every access -- paying the load cost repeatedly, which is worse than never having a proxy at all."
+notes: "The value of a virtual proxy is amortisation: the first call pays to build the real object, and every call after that reuses it, so an object that is expensive to create becomes cheap to reference. That only works if the proxy STORES what it built. RebuildingProxy here constructs a fresh RealImage inside display() as a local and lets it die at the end of the call, so the load runs on every single display -- three calls, three loads. This is strictly worse than eager construction, which at least pays once, and worse than no proxy at all, because the client thinks it is getting laziness and is getting repetition. The output makes it plain: the rebuilding proxy prints loading three times, the caching proxy prints it once. The fix is the one-line difference that defines the pattern: keep the created object in a member (here a std::unique_ptr), build it on first use, and reuse it thereafter. The bug usually enters through a refactor that moves construction into the call for readability, or from confusing the proxy with a factory -- a factory is meant to produce a new object each call, a virtual proxy is meant to produce the same one lazily. If the object genuinely must be rebuilt each time (its inputs change), it is not a virtual-proxy situation at all. One more subtlety this simple version ignores: when a single lazy object is shared across threads, first-use construction is a race, and the create-once step needs std::call_once or a mutex -- lazy done wrong is either a rebuild or a data race. The tell: a proxy whose lazy object is a local inside the accessor rather than a member that outlives the call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

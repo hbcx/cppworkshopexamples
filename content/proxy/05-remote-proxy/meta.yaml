@@ -1,0 +1,14 @@
+title: "Remote proxy: a local stand-in that hides the wire"
+standard: "C++14"
+difficulty: 3
+summary: "A remote proxy is a local object with the subject's interface that represents an object living elsewhere: it marshals each call, sends it over the transport, and returns the reply, so the client makes an ordinary method call and never writes any networking -- the shape of every generated RPC stub."
+notes: "The remote proxy is the surrogate taken to its logical end: the real subject is not just expensive or protected, it is in another process or on another host, and the proxy is the client's local representative of it. CalculatorStub implements the same Calculator interface, holds a way to reach the server, and inside add() does the marshalling -- serialise the arguments, send them, receive and deserialise the reply -- so the call site is a plain calc->add(2, 3) with no sockets in sight. This is precisely what code generators for gRPC, Thrift, CORBA, and COM produce: a client-side stub class that looks like the service and turns each method into a request/response over the wire. The network is simulated in-process here to keep the example runnable and deterministic, but the structure is the real one, and separating the interface from the transport is what lets you test the client against an in-process fake and deploy it against a real connection with no change at the call sites. That transparency is also the danger, and the subject of this chapter's leaky-abstraction anti-pattern: a remote call can be slow and can fail in ways a local call cannot, and an interface identical to a local one gives the caller no place to see latency or handle a timeout. A production remote proxy therefore usually does NOT pretend to be a local method returning a bare int -- it surfaces failure through a result type, an error code, or a documented exception, so the caller cannot forget that the wire is there. Use a remote proxy to give distributed code a clean local seam; just do not let the seam hide that the object is remote."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

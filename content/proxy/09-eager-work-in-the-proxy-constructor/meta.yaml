@@ -1,0 +1,14 @@
+title: "Anti-pattern: eager work in a virtual proxy's constructor"
+standard: "C++14"
+difficulty: 3
+summary: "A virtual proxy is supposed to make construction cheap and defer the cost to first use; one that builds the real object in its own constructor pays the full cost up front, so it delivers no laziness at all -- just an eager object with an extra layer of indirection."
+notes: "The contract of a virtual proxy is that creating it is cheap: it captures whatever it needs to build the real object later and does the expensive work only on first use. EagerProxy violates that in the most direct way -- it constructs the RealReport in its own constructor, so the moment you create the proxy, the expensive build has already run. The output shows the build happening BEFORE the '(proxy constructed)' line, where the lazy version does it after, on the first show(). The point of the proxy is defeated: if you were going to pay the cost immediately, you did not need a proxy, you needed the real object. This is a quiet mistake because the code looks reasonable -- initialising a member in the constructor is normally good style -- and it still produces correct results; only the timing, the entire reason the proxy exists, is wrong. It usually creeps in when someone 'tidies up' by moving the lazy build into the initializer list, or wants the proxy to fail fast if the source is bad, and validating eagerly quietly re-loads everything. The fix is to keep the constructor cheap: store the inputs (here just the source string) and build in the accessor on first use, guarding with a null check so it happens once. If there is a genuine need to validate early, validate cheaply -- check the source exists, not load its full contents. The tell: a proxy whose constructor already touches, opens, connects to, or builds the expensive subject, rather than only recording how to build it later."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

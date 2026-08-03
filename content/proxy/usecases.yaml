@@ -1,0 +1,25 @@
+# Where to reach for Proxy -- problem -> pattern, with the alternative it beats.
+
+- problem: "An object is expensive to create -- a large asset, a database connection, an ORM association -- and many of the ones you construct are never actually used on a given run or screen."
+  why: "a virtual proxy defers the cost to the first real use and pays it once, so a list of a thousand rows or sprites builds its heavy objects only for the few that are opened -- where eagerly constructing them all makes start-up slow and burns memory on objects that are referenced but never touched, and hand-rolled if-not-loaded checks scattered at each use site duplicate the same lazy logic and drift."
+  signal: "an object built up front whose heavy field is guarded by a null check at every use, or a collection whose elements are all constructed eagerly but only a few are ever accessed."
+
+- problem: "A service or resource must enforce who may do what -- read versus write, role-gated operations, a read-only view of a mutable object -- and you do not want that authorization woven through the domain code."
+  why: "a protection proxy holds the access rule in one place in front of the subject, so the real object stays free of permission logic and different callers get different proxies over the same subject -- where putting the checks inside the service mixes authorization into business logic, and repeating them at each call site means one forgotten check is a hole, with no single place to audit the rule."
+  signal: "the same permission or role check repeated before calls into one object across several call sites, or authorization logic interleaved with the domain logic inside the object itself."
+
+- problem: "Client code needs to call a service that lives in another process or on another host, and you do not want networking and serialization spelled out at every call site."
+  why: "a remote proxy (an RPC stub) gives the client a local object with the service's interface and hides the marshalling, so the call site is an ordinary method call and the transport is one testable seam -- where writing sockets and (de)serialization inline at each call couples business code to the wire format and duplicates the request/response plumbing everywhere the service is used."
+  signal: "serialization and socket or HTTP calls written inline wherever a remote service is used, rather than behind one client object that exposes the service's interface."
+
+- problem: "An expensive read -- a slow query, a recomputed aggregate, a rendered thumbnail -- is requested repeatedly with the same inputs, and the subject and its callers should stay unaware that caching exists."
+  why: "a caching proxy in front of the subject serves repeats without calling it, transparently behind the same interface, so neither the subject nor the callers change -- where inlining the cache in the subject mixes a caching concern into its core, and duplicating the memoization at call sites spreads cache keys and invalidation logic that then disagree; note this is a proxy, not a decorator, when the point is to govern access to one subject rather than to stack behaviours."
+  signal: "a memoization map and lookup repeated around calls to one expensive operation at several sites, or caching code embedded in a class whose real job is the computation."
+
+- problem: "An object needs bookkeeping on every access -- reference counting so it is freed exactly once, a mutex taken for the duration of a call, copy-on-write sharing, a null check -- without changing the object or its call sites."
+  why: "a smart-reference proxy via operator-> intercepts each use while the call site still reads like a pointer, which is why std::shared_ptr (ref-counting) and a lock-guarding handle are built this way -- where doing it by hand means manual new/delete that leaks on an early return, or a lock/unlock pair around every access that one code path forgets, with the bookkeeping smeared across all callers instead of living in the handle."
+  signal: "manual acquire/release or lock/unlock pairs bracketing every use of an object, or raw owning pointers with delete on some but not all return paths."
+
+- problem: "A large value is shared among many readers and only occasionally modified -- a string, a document buffer, an image -- and copying it eagerly on every share wastes memory and time when most copies are never written to."
+  why: "a copy-on-write proxy lets all readers share one underlying buffer and clones it only on the first write, so the common read-only sharing is free and the copy cost is paid only when a writer actually needs isolation -- where copying up front on every hand-off duplicates data that is usually only read, and sharing a raw pointer without the copy-on-write guard means one writer silently corrupts every other holder's view."
+  signal: "a large buffer or value copied defensively on every assignment or hand-off although the vast majority of holders only read it, or shared by pointer with no guard against a writer mutating everyone's copy."

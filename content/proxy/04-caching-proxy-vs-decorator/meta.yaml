@@ -1,0 +1,15 @@
+title: "Caching proxy, and how it differs from a decorator"
+standard: "C++14"
+difficulty: 2
+summary: "A caching proxy shares the subject's interface and serves repeated queries from a cache, skipping the real call entirely on a hit; the code is identical to a caching decorator, and the only real difference is intent -- a proxy stands in for the subject and controls access, a decorator adds behaviour to the result."
+notes: "This example exists to settle the question every reader of both chapters asks: how is a caching proxy different from the caching decorator I already saw. Structurally, it is not -- both implement the subject's interface, hold the real object, and memoise results, and you could rename this class CachingDecorator and the code would be unchanged. The distinction is intent, and the GoF are explicit that Proxy and Decorator are told apart by purpose, not shape. A decorator's job is to ADD behaviour to an operation, so a caching decorator is framed as enriching the call with a memoised result. A proxy's job is to CONTROL ACCESS to the subject as a stand-in for it, so the same class framed as a proxy emphasises that on a cache hit the real subject is not called at all -- the proxy decided the real access should not happen. Here CachingFeed answers five queries with only two real lookups; the three cache hits never reach RemoteFeed. When does the name matter in practice? Reach for the proxy framing when the point is governing access to a subject that is expensive, remote, protected, or slow to create -- caching, lazy loading, access checks, remote stubs. Reach for the decorator framing when the point is stacking optional behaviours that each transform the result -- and note the giveaway that you have a decorator not a proxy: decorators are designed to be stacked several deep and reordered, while a proxy is usually a single stand-in with one job. If you find yourself layering three caching wrappers, you wanted a decorator; if you have one guard in front of one subject, you have a proxy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }
+  - { name: "std::map::emplace", url: "https://en.cppreference.com/w/cpp/container/map/emplace" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }

@@ -1,0 +1,6 @@
+creating proxy (no load yet)
+first display:
+RealImage: loading photo.png from disk
+RealImage: drawing photo.png
+second display:
+RealImage: drawing photo.png

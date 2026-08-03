@@ -1,0 +1,12 @@
+title: "Smart-reference proxy via operator->"
+standard: "C++11"
+difficulty: 2
+summary: "Overloading operator-> turns a wrapper into a smart-reference proxy: every member access through it is intercepted -- counted, logged, locked, checked -- while the call site still reads like a pointer, which is exactly how std::shared_ptr and other smart pointers are proxies for the object they hold."
+notes: "A smart reference is the C++-idiomatic Proxy: instead of a virtual interface, it uses operator-> so that member access itself is the interception point. When you write svc->ping(), the compiler first calls the proxy's operator->, then applies -> to whatever it returns; that first call is a hook the proxy uses to do work on every access -- here incrementing a counter and printing a tag -- before forwarding to the real object transparently. The call site is unchanged from using a raw pointer, which is the whole appeal. This is not a toy: std::shared_ptr is a smart-reference proxy that adjusts a reference count as it is copied and destroyed; std::unique_ptr is one that deletes on destruction; a locking handle can take a mutex in operator-> and release it when the temporary it returns is destroyed, so a member call is automatically synchronised. The technique generalises: operator-> can return a raw pointer (as here) for a before-the-call hook, or a small temporary helper object whose destructor runs AFTER the member call, letting the proxy bracket the access on both sides -- the mechanism behind those auto-locking wrappers. Two caveats worth knowing: operator-> chains until it reaches a real pointer, so returning another proxy still works; and this proxy is a class template so the interception is written once and reused for any T. Reach for a smart-reference proxy when you need to attach bookkeeping -- counting, logging, locking, copy-on-write, null-checking -- to every use of an object without editing the object or the call sites."
+run: true
+sanitizers: []
+main_tags:
+detailed_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

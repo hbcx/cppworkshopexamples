@@ -1,0 +1,8 @@
+- slug: "decorator"
+  note: "The structural twin: Decorator and Proxy share the same wrap-and-forward shape and differ only in intent -- Decorator ADDS behaviour and is built to stack, Proxy stays transparent and CONTROLS access -- read it for the side-by-side that the caching example draws out."
+- slug: "adapter"
+  note: "The wrapper that changes the interface: where a Proxy keeps the subject's interface identical, Adapter reshapes one class's interface to what a client expects -- go there when the interface is wrong, not the access to it."
+- slug: "shared-ptr"
+  note: "The standard library's smart-reference proxy: std::shared_ptr is exactly this pattern -- a stand-in that controls access to the object, here reference-counting it on copy and destruction -- go there for the mechanics behind the smart-pointer proxy."
+- slug: "dependency-injection"
+  note: "How a proxy reaches the app: build the proxy -- lazy, protection, or remote -- at the composition root and inject it behind the subject's interface, so consumers depend on the interface and get the stand-in transparently."

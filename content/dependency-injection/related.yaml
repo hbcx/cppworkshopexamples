@@ -10,3 +10,5 @@
   note: "A decorator is a dependency you inject: wrap a service in a caching or logging decorator at the composition root and inject it behind its interface, adding a cross-cutting concern without the consumers or the implementation changing."
 - slug: "facade"
   note: "A facade interface is a natural injection boundary: inject a facade so a whole subsystem is swappable and fakeable behind one dependency, and the composition root chooses which implementation the consumers receive."
+- slug: "proxy"
+  note: "A proxy is a dependency you inject: build a lazy, access-controlled, or remote stand-in at the composition root and inject it behind the subject's interface, so consumers get the guarded or deferred object without knowing it is a proxy."

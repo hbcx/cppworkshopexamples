@@ -1,0 +1,6 @@
+AAA -> 300
+BB -> 200
+AAA -> 300
+AAA -> 300
+BB -> 200
+real lookups: 2

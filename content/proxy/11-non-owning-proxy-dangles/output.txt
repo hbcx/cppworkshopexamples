@@ -1,0 +1,2 @@
+ref proxy:    7
+owning proxy: 42

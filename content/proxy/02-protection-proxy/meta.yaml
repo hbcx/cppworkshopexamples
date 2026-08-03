@@ -1,0 +1,13 @@
+title: "Protection proxy: control access by permission"
+standard: "C++11"
+difficulty: 2
+summary: "A protection proxy shares the subject's interface but checks the caller's rights before forwarding each call, so authorization lives in the proxy and the real object stays free of permission code -- readers may read, only editors may write, and the subject never knows the rule exists."
+notes: "The protection proxy uses the access-control trait of Proxy to enforce permissions. ProtectedDocument implements the same Document interface as RealDocument, holds the real one, and gates each operation on the caller's role: read is always forwarded, write is forwarded only for an editor and otherwise refused. The value is separation of concerns: the real document contains no authorization logic at all, so it stays simple and testable, and the rule has a single home in the proxy rather than being scattered as an if at every call site that touches the document. It also composes -- a viewer and an editor are just two proxies over the same real object, so the same subject serves different callers under different rules without duplicating it. Because a proxy is transparent, the client codes against Document and does not need to know whether it holds the real object or a guarded one; swapping a raw RealDocument for a ProtectedDocument changes nothing at the call site but the permissions. The one rule that makes this safe is the subject of a later anti-pattern: the proxy must never hand out the real object (no getter returning it, no leaking reference), or a caller can reach past the guard and the protection is gone. A protection proxy is how capability wrappers, read-only views, and role-gated service facades are built without threading permission checks through the domain code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

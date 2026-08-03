@@ -1,0 +1,4 @@
+stale proxy first read: 30
+real value now:         60
+stale proxy still says: 30
+transparent proxy says: 60

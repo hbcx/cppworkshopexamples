@@ -1,0 +1,14 @@
+title: "Virtual proxy: defer creation until first use"
+standard: "C++14"
+difficulty: 1
+summary: "A proxy is a surrogate that shares the real object's interface and controls access to it; a virtual proxy uses that to defer building an expensive object until the first call actually needs it, then reuses it -- so constructing the proxy is free and the cost is paid once, on demand."
+notes: "Proxy puts a stand-in in front of a real object. The proxy implements the same interface as the subject, holds (or can create) the real one, and forwards calls to it -- but on the way it controls access: it can decide whether, when, and how the real call happens. This is the trait that defines the pattern and separates it from its structural twins. Adapter also wraps one object but CHANGES the interface to fit a client; Proxy keeps the interface identical. Decorator also keeps the interface but ADDS behaviour to the result; a Proxy is meant to be transparent -- it stands in for the subject and controls access to the same operation, not to change what the operation returns. The virtual proxy here is the most common kind: ImageProxy shares the Image interface but does not build the heavy RealImage until display() is first called, and once built it reuses it. Creating the proxy loads nothing; the first display triggers the load; the second skips it. That is how ORMs lazy-load associations, how engines defer texture loads, and how any surrogate makes an object that is expensive to create cheap to reference. The GoF name the four classic kinds: virtual (lazy creation, this example), protection (access control), remote (a local stand-in for an object elsewhere), and smart reference (extra bookkeeping on access, as std::shared_ptr does). Keep the proxy transparent -- same observable behaviour as the subject -- or it stops being a proxy and becomes a decorator or, worse, a bug."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

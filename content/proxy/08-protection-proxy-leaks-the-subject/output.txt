@@ -1,0 +1,5 @@
+== leaky proxy ==
+denied
+withdrew 100, balance 900
+== tight proxy ==
+denied

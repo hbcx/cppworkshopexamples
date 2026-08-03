@@ -1,0 +1,6 @@
+== transparent stub (loses the error) ==
+AAA  -> 300
+DOWN -> 0  (a real price, or a failure?)
+== honest stub (surfaces the error) ==
+AAA  -> ok=true price=300
+DOWN -> ok=false price=0

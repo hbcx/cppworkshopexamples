@@ -1,0 +1,13 @@
+title: "Anti-pattern: a proxy that breaks the subject's contract"
+standard: "C++11"
+difficulty: 3
+summary: "A proxy must be transparent -- substitutable for the subject -- so when it returns a different answer than the subject would, it stops being a proxy and becomes a bug; a cache that never invalidates is the classic case, serving stale data the client cannot distinguish from the truth."
+notes: "The defining promise of a proxy is transparency: a client holds the subject's interface and must not be able to tell whether it has the real object or a stand-in, which means the proxy has to preserve the subject's observable behaviour. Break that and the pattern turns into a defect, because callers rely on substitutability. The most common way to break it is a caching proxy over data that changes: StaleProxy here caches the first value it reads and never invalidates, so after the live config changes from 30 to 60 the proxy still reports 30 while the real subject reports 60 -- proxy and subject now disagree, and the client, which cannot see the difference, acts on stale data. Nothing crashes; the answer is simply wrong, which is why it survives testing that only checks a fresh read. The fix is to keep the proxy transparent: ForwardingProxy just forwards, so it always matches the subject. Caching is only safe for values the subject guarantees are immutable, or when the proxy has an invalidation hook (a version check, a TTL, a change notification) that keeps it in step. The same rule rules out the other transparency breaks -- a logging proxy that swallows an exception the subject would have thrown, a proxy that quietly substitutes a default on error, a protection proxy that returns fabricated data instead of denying. A proxy may control WHEN and WHETHER the real call happens; it must not change WHAT the client observes when it does. The tell: a proxy whose return value can differ from a direct call on the subject at the same moment."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }
