@@ -1,0 +1,4 @@
+== empty strategy invoked ==
+caught: std::bad_function_call
+== strategy required at construction ==
+member: 90

@@ -1,0 +1,4 @@
+== strategy coupled to the whole context ==
+cost: 10
+== strategy takes only what it needs ==
+cost: 10

@@ -1,0 +1,12 @@
+title: "Strategy basics: an interchangeable algorithm"
+standard: "C++11"
+difficulty: 1
+summary: "Strategy makes an algorithm a plug-in object: a family of algorithms share one interface, and a context holds one and delegates the varying step to it, so the behaviour can be swapped -- at runtime here -- without changing the context or branching on a type."
+notes: "Strategy turns a varying algorithm into an object you can swap. A Strategy interface declares the one operation that differs (priceFor); concrete strategies each implement it (regular, member, clearance pricing); and a Context holds a strategy and delegates to it, keeping its own logic fixed while the injected algorithm decides the result. Here the same Checkout produces three totals purely by swapping its pricing strategy at runtime. The value is that adding a fourth pricing rule is a new class that the checkout never sees -- no edit to the context, no new branch -- which is the open/closed principle, and the alternative it replaces (an enum plus a switch inside the context) is this chapter's first anti-pattern. Strategy is easy to confuse with its structural twins because they share the hold-a-pointer-to-an-interface shape, and the difference is intent. Bridge separates a whole abstraction hierarchy from a whole implementation hierarchy -- two dimensions varying at once -- where Strategy swaps one algorithm along one dimension. State has the identical structure but the object changes its own strategy as its internal state transitions, where a Strategy is chosen by the client and does not usually reassign itself. Template Method reaches the same goal by inheritance -- a base class calls an overridable step -- where Strategy uses composition and injects the step, the composition-over-inheritance form. This first example uses a classic object interface; the next examples show the two other C++ forms (a std::function and a compile-time policy) and when each fits. The context here holds the strategy by non-owning pointer, so the strategies must outlive it -- owning it via a smart pointer is the variant when the context should manage the strategy's lifetime."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

@@ -1,0 +1,2 @@
+by score: bo(50) cy(40) ada(30) 
+by name:  ada(30) bo(50) cy(40) 

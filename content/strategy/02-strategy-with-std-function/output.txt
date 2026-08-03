@@ -1,0 +1,3 @@
+regular:   100
+member:    90
+coupon 50: 50

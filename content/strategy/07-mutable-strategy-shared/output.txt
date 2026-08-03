@@ -1,0 +1,6 @@
+== mutable strategy shared by two contexts ==
+a.run(10) = 10
+b.run(10) = 20
+== stateless strategy shared safely ==
+c.run(10) = 20
+d.run(10) = 20

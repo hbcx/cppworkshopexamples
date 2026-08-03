@@ -1,0 +1,7 @@
+== strategy that transitions itself (really State) ==
+placed, advancing to shipped
+shipped
+client's chosen step stayed put? no, it advanced
+== modelled as State ==
+placed, advancing to shipped
+shipped

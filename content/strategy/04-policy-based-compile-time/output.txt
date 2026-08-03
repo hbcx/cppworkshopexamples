@@ -1,0 +1,2 @@
+regular: 100
+member:  90

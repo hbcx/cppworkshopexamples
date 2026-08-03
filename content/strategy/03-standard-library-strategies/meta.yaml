@@ -1,0 +1,13 @@
+title: "Strategy in the standard library: comparators"
+standard: "C++11"
+difficulty: 2
+summary: "You already use Strategy every time you pass a comparator to std::sort: the algorithm is fixed and the comparator is the injected strategy that decides the order, so swapping it reorders without changing sort -- and the same shape appears across the library as hashers, predicates, and deleters."
+notes: "Strategy is not an exotic pattern to reach for on special occasions; the standard library is built on it, and recognising that is the point of this example. std::sort is one algorithm, and the comparator you hand it is a strategy for ordering -- pass a by-score comparator and it sorts by score, pass a by-name one and it sorts by name, with sort's own partitioning logic untouched. The comparator is exactly a Strategy object (here a lambda, the std::function-free callable form), injected per call. Once you see it, the library is full of the same move: std::map and std::set take a Compare strategy as a template parameter that fixes their ordering; std::unordered_map takes a Hash and a KeyEqual strategy; the numeric and searching algorithms take predicates and binary operations (std::accumulate's operation, std::find_if's predicate); and std::unique_ptr takes a Deleter strategy so the same owning pointer can free with delete, free(), fclose, or a custom reclaim. This breadth is also a lesson in the two C++ delivery mechanisms for a strategy: std::sort and the algorithms take the comparator as a runtime callable argument, while std::map and unique_ptr take it as a compile-time template parameter -- the runtime and compile-time forms of the same pattern, which the surrounding examples cover in their own right. The practical takeaway: when you find yourself about to hardcode one ordering, one hash, or one cleanup, the library's convention is to accept it as an injected strategy, and your own code reads better following the same convention."
+run: true
+sanitizers: []
+main_tags:
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }

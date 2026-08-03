@@ -10,3 +10,5 @@
   note: "A tree that owns itself: a Composite node owns its children through unique_ptr, so the whole part-whole hierarchy frees in one step -- go there for a real use of recursive unique_ptr ownership."
 - slug: "bridge"
   note: "A real use of move-only ownership: the pimpl idiom (a compile-firewall Bridge) holds its implementation in a unique_ptr, which is why its destructor and moves must be declared in the header but defined where the impl is complete."
+- slug: "strategy"
+  note: "The Deleter is a Strategy: unique_ptr's second template parameter is a compile-time strategy for how the object is freed -- see Strategy for the pattern in general, in its object, std::function, and policy forms."

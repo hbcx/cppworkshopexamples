@@ -4,3 +4,5 @@
   note: "How the implementor is supplied: the abstraction depends on the implementor interface and receives a concrete one injected at the composition root, so the backend is chosen in one place -- the wiring side of keeping the two hierarchies independent."
 - slug: "unique-ptr"
   note: "The pimpl hand: the compile-firewall Bridge holds its hidden implementation through unique_ptr, whose move-only ownership is exactly why the destructor and moves must be defined where the impl is complete -- go there for that ownership model."
+- slug: "strategy"
+  note: "The one-dimension relative, same shape: where Bridge separates two hierarchies, Strategy swaps a single interchangeable algorithm a context delegates to -- go there for the object, std::function, and policy forms of injecting one varying behaviour."

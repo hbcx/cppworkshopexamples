@@ -1,0 +1,25 @@
+# Where to reach for Strategy -- problem -> pattern, with the alternative it beats.
+
+- problem: "Pricing, discount, or tax rules vary by customer tier, region, or promotion, and the rules change often, but the checkout flow around them is stable."
+  why: "making each rule a strategy the order delegates to lets a new rule be a new class (or lambda) that the checkout never sees, so the stable flow stops changing every time pricing does -- where an if or switch on customer type sprawled through the order code edits the checkout on every rule change and scatters the same branch across every method that prices, formats, or logs."
+  signal: "an if/switch on a customer-type or promotion enum repeated across the methods of an order or invoice class."
+
+- problem: "A list must be ordered by different criteria in different places -- by date, by price, by name, ascending or descending -- and the collection and its display are otherwise identical."
+  why: "injecting a comparator (the std::sort strategy) selects the ordering per call while the sort and the collection stay untouched, so a new ordering is one comparator -- where a hand-written sort routine per ordering, or a sort-mode flag threaded into the sort, duplicates the sorting logic and grows a branch for each new criterion."
+  signal: "several near-identical sort functions differing only in the comparison, or a sort routine that takes a mode flag and branches on it."
+
+- problem: "A service supports several interchangeable encodings and must choose at runtime -- gzip versus zstd for compression, JSON versus protobuf for serialization, one cipher versus another -- selected by config, content type, or a negotiated header."
+  why: "a codec strategy chosen at runtime lets the pipeline hold one interface and stay ignorant of the format, so adding zstd is one strategy and one registration -- where format branches inside the read/write code scatter per-encoding logic through the pipeline and must all be edited to add or drop a format."
+  signal: "a switch on a format or content-type enum inside the encode/decode or read/write methods, rather than a codec selected once and delegated to."
+
+- problem: "A network or job client must retry failed operations, and the right backoff differs by environment and endpoint -- fixed delay in tests, exponential with jitter against a flaky upstream, none for a fast idempotent call."
+  why: "injecting the backoff as a strategy lets the same retry loop run any policy and lets tests substitute a zero-delay one, so the retry logic is written once -- where hardcoding one backoff formula in the loop forces a fork of the retry code per policy and makes tests wait real seconds, or bakes the delays into the client where they cannot be tuned per endpoint."
+  signal: "a retry loop with a hardcoded sleep or delay computation, rather than a backoff policy passed in that the loop asks for the next delay."
+
+- problem: "A request must pass validation or routing rules that are configured per tenant, per environment, or per feature flag, and the set of active rules is decided at startup or changes without a redeploy."
+  why: "composing the active rules as strategies selected from configuration lets the validator or router hold a list of strategies chosen at runtime, so enabling a rule is data -- where a monolithic validate() that hardcodes every rule cannot vary the active set per tenant without threading flags through it, and must be edited and redeployed to change which rules run."
+  signal: "a validate or route method containing every rule inline with flag checks, rather than a set of rule strategies assembled from config."
+
+- problem: "Game or simulation entities need different behaviours for movement, targeting, or decision-making -- aggressive, defensive, patrolling -- switchable at runtime as the situation changes."
+  why: "an entity that holds a behaviour strategy and delegates its update to it can swap behaviour by swapping the strategy, and a new behaviour is one class, so the entity's update loop stays fixed -- where a behaviour enum and a switch in update() grows an arm per behaviour and edits the entity for every new one, the exact class explosion the pattern removes."
+  signal: "an entity update() that switches on a behaviour/AI-state enum to decide how to move or target, rather than delegating to a swappable behaviour object."

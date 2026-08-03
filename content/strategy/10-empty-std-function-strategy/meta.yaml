@@ -1,0 +1,11 @@
+title: "Anti-pattern: invoking an empty std::function strategy"
+standard: "C++11"
+difficulty: 3
+summary: "A std::function strategy that is default-constructed, never set, or moved-from is empty, and calling an empty std::function throws std::bad_function_call -- a runtime failure the type system does not prevent, avoided by requiring the strategy at construction rather than defaulting it."
+notes: "The std::function form of Strategy is convenient but adds a failure mode the object-interface form does not have: a std::function can be empty, and calling an empty one throws std::bad_function_call. CheckoutBad default-constructs its pricing_, so a freshly built CheckoutBad looks complete -- it compiles, it constructs, it has a total() method -- but total() dereferences an empty function and throws at runtime, often far from where the object was created and the strategy was forgotten. The same trap springs from a std::function that was moved from (a moved-from std::function is left empty) or explicitly reset. The fix is to make an unset strategy unrepresentable: require it in the constructor, as CheckoutGood does, so there is no moment when the object exists without a strategy. When a default genuinely makes sense, set the member to a real default strategy (an identity pricing that returns base unchanged) rather than leaving it empty, so calling it is always defined. When neither is possible -- the strategy is optional and legitimately absent sometimes -- guard the call with if (pricing_) and define what happens when it is empty, turning the throw into an explicit decision. What you must not do is leave a std::function member default-constructed and hope every path sets it before the first call, which is the shape here. This is the std::function analogue of a dangling or null pointer, and the remedy is the same discipline: establish the invariant at construction so the invalid state cannot occur. The tell: a class with a std::function member that is not initialised in every constructor, and a method that calls it without checking, so an unset instance throws on first use."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
