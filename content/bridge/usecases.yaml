@@ -1,0 +1,25 @@
+# Where to reach for Bridge -- problem -> pattern, with the alternative it beats.
+
+- problem: "A rendering engine or GUI toolkit must run on several graphics or windowing backends -- OpenGL, DirectX, Vulkan, or Win32, Cocoa, GTK -- while offering the same shapes or widgets on all of them."
+  why: "keeping the shape/widget hierarchy and the backend hierarchy separate and joined by a pointer means M widgets and N backends cost M + N classes, and a new backend is one class that instantly serves every widget -- where a subclass per (widget, backend) pair is M times N classes that all change when either a widget or a backend is added, the explosion that sinks such codebases."
+  signal: "class names that concatenate a widget and a platform (Win32Button, CocoaButton), or a new backend requiring a new subclass of every widget."
+
+- problem: "An application must work against several database or storage engines -- MySQL, PostgreSQL, SQLite -- without rewriting its data-access logic for each, the concern JDBC and ODBC exist to solve."
+  why: "a data-access abstraction over a driver interface lets the query and repository logic be written once and run over any driver, so adding SQLite is one implementor -- where coding the access logic separately per engine duplicates it three ways and lets the copies drift, and a subclass per (repository, engine) multiplies the two axes together."
+  signal: "repository or query code duplicated per database engine, or a driver type named directly in business logic instead of behind a driver interface."
+
+- problem: "A system controls many kinds of hardware or external devices -- printers, GPUs, sensors, instruments -- through high-level operations that must work across every device, a classic hardware abstraction layer."
+  why: "putting the high-level control on an abstraction hierarchy and the device specifics behind a small device interface lets one advanced controller work with every device, and a new device is one implementor serving all controllers -- where per-device control classes reimplement the high-level logic for each, so a change to that logic must be repeated in every device class."
+  signal: "high-level control logic copied into each device-specific class, or a control feature added by editing every device implementation."
+
+- problem: "A notification or messaging system sends several kinds of message -- alert, digest, reminder -- over several transports -- email, SMS, push -- and both the message kinds and the transports keep growing."
+  why: "a message abstraction over a transport interface lets any message go over any transport, so a new transport is one class serving every message kind and a new message kind is one class using every transport -- where a class per (message, transport) pair grows as their product, and adding a transport means writing it once for each existing message kind."
+  signal: "a class per message-and-channel combination, or channel-specific branches inside message-formatting code."
+
+- problem: "A library ships a public class whose implementation will change over releases, and you must not force every client to recompile on each internal change, nor break binary compatibility when a private field is added."
+  why: "the pimpl idiom -- a Bridge with one hidden implementation -- keeps all implementation detail out of the header, so changing internals recompiles only the library's .cpp and the class's size and layout stay fixed, preserving the ABI -- where putting the implementation (fields, includes) in the header recompiles every client on any change and breaks binary compatibility the moment a member is added."
+  signal: "a public header that declares private data members and includes heavy implementation headers, so every client recompiles when internals change."
+
+- problem: "A document or object model must be persistable to several formats -- JSON, XML, a binary encoding -- and the serialization target should be selectable without threading format logic through the document classes."
+  why: "a document abstraction over a writer interface lets each node serialize itself through writer primitives, so a new format is one writer serving every node type -- where a format branch inside each node's serialize method scatters per-format code across the model, and every new format edits every node."
+  signal: "if-on-format or switch-on-format branches inside the serialize/write methods of many model classes, rather than one writer per format."

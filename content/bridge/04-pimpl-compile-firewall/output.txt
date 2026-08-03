@@ -1,0 +1,3 @@
+hello from panel (greeting #1)
+hello from panel (greeting #2)
+hello from panel (greeting #3)

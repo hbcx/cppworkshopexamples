@@ -1,0 +1,14 @@
+title: "pimpl: a Bridge as a compile firewall"
+standard: "C++14"
+difficulty: 3
+summary: "The pimpl idiom is a degenerate Bridge whose second hierarchy has one member: a public class holds a unique_ptr to a hidden Impl struct, so the header exposes no implementation detail -- changing internals recompiles only the .cpp and keeps the class's ABI stable, at the cost of a heap allocation and an indirection per access."
+notes: "Bridge is usually about runtime variation across two dimensions; pimpl is the same structure aimed at a compile-time goal. The public Widget is the abstraction, the hidden Widget::Impl is its single implementation, and the unique_ptr between them is the bridge -- but there is no second implementor and no runtime choice; the point is decoupling the header from the implementation. Because widget.hpp only forward-declares Impl and stores a pointer to it, the header names none of Impl's fields or includes, so changing Impl -- adding members, swapping algorithms, pulling in a heavy library -- recompiles only widget.cpp, not the potentially hundreds of files that include the header, and the size and layout the header presents never change, which keeps the class's ABI stable across such edits. That is why widely used libraries put pimpl on their public types. The C++ detail that trips everyone: the destructor, move constructor, and move assignment must be DECLARED in the header but DEFINED in the .cpp. Destroying a unique_ptr<Impl> instantiates Impl's destructor, which requires Impl to be a complete type; it is complete only in widget.cpp where the struct is defined, so defaulting these members in the header (or letting the compiler generate them there) fails to compile at every include site -- the subject of this chapter's pimpl anti-pattern. The costs are real: an extra heap allocation per object, an indirection on every member access that touches the impl, and loss of inlining across the boundary, so pimpl is for types where compile-time decoupling or ABI stability is worth that, not for small hot value types. Note too that unique_ptr's operator-> is const but yields a non-const Impl*, so a const member function can still mutate the impl -- pimpl quietly widens const, and const-correctness must be minded by hand."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

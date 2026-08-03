@@ -1,0 +1,5 @@
+title: "Bridge"
+description: "Decouple an abstraction from its implementation so the two vary independently: the abstraction holds a pointer to an implementor interface and expresses its high-level operations in terms of the implementor's primitives, so M abstractions and N implementations need M+N classes instead of the M times N an inheritance combination would demand. Shown as one shape over two renderers, both hierarchies growing independently, a refined-abstraction remote over devices, and the pimpl idiom as a compile-firewall Bridge."
+sort_order: 33
+category: "Design patterns"
+family: "Structural"

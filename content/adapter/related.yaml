@@ -10,3 +10,5 @@
   note: "The subsystem-scale wrapper: where Adapter fits one class to an interface, Facade puts one simplified front over many classes -- reach for it when the problem is a tangle of classes to coordinate, not a single mismatched one."
 - slug: "proxy"
   note: "The same-interface wrapper: a Proxy keeps the subject's interface (unlike Adapter, which changes it) and controls access to it -- lazy loading, permission checks, remote stubs -- go there when the interface is right and it is access you need to govern."
+- slug: "bridge"
+  note: "The planned-decoupling cousin: where Adapter reconciles two interfaces after the fact, Bridge separates an abstraction from its implementation by design so both vary independently -- go there when you control both sides and want them to evolve apart."

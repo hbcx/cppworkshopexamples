@@ -1,0 +1,4 @@
+vector circle(5)
+raster circle(5)
+vector square(3)
+raster square(3)

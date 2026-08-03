@@ -1,0 +1,6 @@
+- slug: "adapter"
+  note: "The after-the-fact cousin: Adapter reconciles two EXISTING incompatible interfaces once they already clash, where Bridge is planned up front so an abstraction and an implementation can vary apart -- read it for the difference between fixing a mismatch and designing for independent change."
+- slug: "dependency-injection"
+  note: "How the implementor is supplied: the abstraction depends on the implementor interface and receives a concrete one injected at the composition root, so the backend is chosen in one place -- the wiring side of keeping the two hierarchies independent."
+- slug: "unique-ptr"
+  note: "The pimpl hand: the compile-firewall Bridge holds its hidden implementation through unique_ptr, whose move-only ownership is exactly why the destructor and moves must be defined where the impl is complete -- go there for that ownership model."

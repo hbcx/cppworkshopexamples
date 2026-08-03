@@ -1,0 +1,14 @@
+title: "Two dimensions: escaping the class explosion"
+standard: "C++11"
+difficulty: 2
+summary: "When a design varies along two axes at once -- shape and renderer, message and transport, widget and platform -- combining them by inheritance needs a class per pair (M times N); Bridge keeps the axes as separate hierarchies joined by a pointer, so M plus N classes cover every combination and a new option on either axis is one class."
+notes: "This is the problem Bridge exists to solve, and the reason to prefer it over inheritance. When two things vary independently -- here a shape (circle, square) and a rendering backend (vector, raster) -- expressing every combination as its own class means CircleVector, CircleRaster, SquareVector, SquareRaster, and the set is the product of the two axes: M shapes times N renderers. Add one renderer and you add a class for every shape; add one shape and you add a class for every renderer. The count explodes and every combination is a place a bug can hide. Bridge keeps the two axes as separate hierarchies connected by a pointer: a Shape holds a Renderer and draws through it, so the four combinations here come from 2 + 2 classes, and a third renderer is a single new class that instantly works with every shape, while a third shape is one class that works with every renderer. M + N instead of M times N. The two hierarchies meet only at the narrow Renderer interface, so they are developed, tested, and shipped independently -- a graphics team can add a backend without touching a shape. The trade-off is one level of indirection (a virtual call through the implementor) and the discipline of keeping the Implementor interface small: it should offer primitives the abstractions compose, not one method per shape, or the two axes recouple. Reach for Bridge the moment you notice class names that concatenate two independent adjectives -- that concatenation is the M times N explosion beginning."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

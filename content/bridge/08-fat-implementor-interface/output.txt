@@ -1,0 +1,8 @@
+== fat implementor: a method per shape ==
+vector: circle
+vector: square
+== lean implementor: primitives the shapes compose ==
+vector: arc
+vector: line
+vector: line
+vector: line

@@ -1,0 +1,14 @@
+title: "Anti-pattern: a Bridge with only one implementation"
+standard: "C++14"
+difficulty: 3
+summary: "Introducing the two-hierarchy Bridge machinery -- an implementor interface, a concrete implementor, an abstraction that holds a pointer -- when there is only one implementation and no second dimension in sight is speculative generality: it pays for a variation that never comes with an interface, a virtual call, and an allocation."
+notes: "Bridge earns its indirection by letting two dimensions vary independently. Remove one of those dimensions -- there is exactly one implementation and no credible second -- and the machinery is cost with no benefit. DocumentBad here defines a Storage interface with a single FileStorage behind it and threads it through a unique_ptr, so every write pays a virtual dispatch and every document pays a heap allocation, all to enable a swap that will never be made. DocumentGood does the same job as a plain class: no interface, no pointer, no allocation, and the code is shorter and easier to read. This is the YAGNI principle applied to Bridge -- do not build the abstraction for a second implementor until a real second implementor exists; when it does, extracting the interface is a small, safe refactor done with the actual variation in hand, which also produces a better interface than one guessed in advance. The judgment call is honest: if you KNOW a second backend is coming this quarter, building the seam now is reasonable; the anti-pattern is the interface-with-one-impl that has sat unchanged for years. One important exception keeps this from being a blanket rule: pimpl is a Bridge with a single implementation ON PURPOSE, because its goal is not runtime variation but a compile firewall and a stable ABI -- there the one-implementor indirection buys decoupling of a different kind. The tell for the anti-pattern: an interface with a single implementer, injected through a pointer, where no second implementer is planned and the indirection is not bought for compile-time or ABI decoupling."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

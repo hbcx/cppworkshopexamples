@@ -1,0 +1,12 @@
+title: "Anti-pattern: a fat, abstraction-aware implementor interface"
+standard: "C++11"
+difficulty: 3
+summary: "If the implementor interface has a method per abstraction rather than a set of primitives, the two hierarchies are recoupled at the interface: adding one shape forces a new method onto the implementor and every backend that implements it, so the implementation hierarchy churns whenever the abstraction side grows."
+notes: "Bridge keeps M abstractions and N implementations independent only if the implementor exposes PRIMITIVES that the abstractions compose. Give the implementor a method per abstraction instead -- FatRenderer with drawCircle, drawSquare -- and the interface itself couples the two axes: a new Triangle shape now needs drawTriangle added to the Renderer interface and implemented in every concrete renderer, so an abstraction-side change ripples through the whole implementation hierarchy, which is exactly the independence the pattern promised to protect. The class count may still be M + N, but the axes are no longer free: growth on one side edits the other. The lean fix gives the implementor primitives -- line, arc -- that know nothing of shapes, and each shape composes them (a Circle is an arc, a Triangle is three lines), so a new shape adds a class on the abstraction side and touches no renderer at all. The design question is where the vocabulary lives: the implementor should speak in the small, stable language of the medium (draw a line, fill a region, send a byte), and the abstraction should speak in the language of the domain (a circle, an alert) built from that vocabulary. Getting this boundary right is the harder half of a Bridge, and it is a spectrum -- a genuinely small, closed set of shapes may justify shape-named primitives, but an open-ended one must not, or every new abstraction reopens the implementor. The tell: an implementor interface whose method names mirror the abstraction hierarchy one-for-one, so each new abstraction adds a method the implementors must all grow."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+detailed_tags:
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

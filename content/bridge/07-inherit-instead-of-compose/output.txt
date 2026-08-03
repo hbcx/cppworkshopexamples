@@ -1,0 +1,6 @@
+== inheritance: a class per (shape, backend) pair ==
+vector circle(5)
+raster circle(5)
+== composition: one Circle over any backend ==
+vector circle(5)
+raster circle(5)

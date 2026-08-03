@@ -1,0 +1,13 @@
+title: "Anti-pattern: an abstraction welded to a concrete implementation"
+standard: "C++11"
+difficulty: 3
+summary: "A Bridge only decouples the two hierarchies if the abstraction depends on the implementor INTERFACE; write the abstraction against a concrete implementor instead and the bridge is nominal -- the abstraction is pinned to one backend and cannot vary independently, which is the whole reason the pattern existed."
+notes: "The structure of a Bridge -- an abstraction holding an implementor -- does not by itself decouple anything; what decouples is the abstraction depending on the implementor INTERFACE, not a concrete implementor. CircleBad here holds a VectorRenderer by concrete type, so despite looking like a bridge it is welded to one backend: it cannot be constructed with a RasterRenderer, and if VectorRenderer pulls in heavy headers, so does every file that touches CircleBad. The two hierarchies are not independent -- the abstraction has picked a side. CircleGood holds a const Renderer&, so the same shape runs over any renderer and a new backend needs no change to the shape; that single edit, interface instead of concrete type, is the difference between a real bridge and a decorative one. The same mistake wears other clothes: an abstraction whose public signatures return or accept a concrete implementor type leaks it to clients (they now depend on the backend too), and an implementor method that takes the abstraction couples the axes in the other direction -- either way the two can no longer move apart. The rule is that the abstraction and the implementor meet ONLY at the narrow implementor interface, and neither one's public surface mentions the other's concrete types. This is the Dependency Inversion Principle at the heart of Bridge: the high-level abstraction and the low-level implementation both depend on the abstraction between them, not on each other. The tell: an abstraction with a member, parameter, or return type that names a concrete implementor rather than its interface."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

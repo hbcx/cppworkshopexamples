@@ -1,0 +1,4 @@
+TV power on
+Radio power on
+muting Radio
+Radio volume 0

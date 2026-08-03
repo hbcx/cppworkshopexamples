@@ -1,0 +1,14 @@
+title: "Bridge basics: an abstraction over an implementation"
+standard: "C++11"
+difficulty: 1
+summary: "Bridge splits a design into two hierarchies -- an abstraction and an implementation -- linked by a pointer, so each can vary on its own: the abstraction holds an implementor and expresses its operations through the implementor's primitives, and neither side knows the other's concrete type."
+notes: "Bridge decouples an abstraction from its implementation so that the two can vary independently. Two hierarchies: the Implementor (a low-level interface -- here Renderer, with rendering primitives) and the Abstraction (the higher-level thing the client uses -- here Circle), and the abstraction holds a pointer or reference to an implementor and defines its operations in terms of the implementor's. The link between them is the bridge. Here a Circle draws itself by calling renderCircle on whatever Renderer it was given, so the same Circle runs over a VectorRenderer or a RasterRenderer chosen at runtime, and the shape hierarchy and the renderer hierarchy neither know nor depend on each other's concrete types. Why this matters becomes clear when both sides grow, which the next example shows; the mechanic to grasp first is the composition -- the abstraction HAS-A implementor, it does not inherit one. That is what separates Bridge from the look-alikes. Adapter also puts an interface in front of an implementation, but it does so after the fact to make two existing, incompatible interfaces work together; Bridge is designed up front so a planned abstraction and a planned implementation can evolve apart. Strategy has the same pointer-to-an-interface shape, but it swaps a single interchangeable behaviour, whereas Bridge separates a whole abstraction hierarchy from a whole implementation hierarchy -- two dimensions, not one. Keep the Implementor interface small and primitive; the abstraction is where the high-level operations live."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

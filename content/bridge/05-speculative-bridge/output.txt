@@ -1,0 +1,2 @@
+saved: bridge with one impl
+saved: plain class

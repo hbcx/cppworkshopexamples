@@ -1,0 +1,5 @@
+== welded to the concrete implementor ==
+vector circle(5)
+== depends on the interface: any backend works ==
+vector circle(5)
+raster circle(5)

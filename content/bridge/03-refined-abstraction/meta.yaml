@@ -1,0 +1,14 @@
+title: "Refining the abstraction independently of the implementation"
+standard: "C++11"
+difficulty: 2
+summary: "The abstraction side of a Bridge is a hierarchy too: a refined abstraction adds higher-level operations built on the same implementor primitives, so a richer remote works over every device that exists, and adding it touches no device -- the two axes grow on their own."
+notes: "The earlier examples varied the implementation; this one varies the abstraction, showing that a Bridge has TWO hierarchies that each grow independently. The Implementor is a Device with primitives -- setPower, setVolume; the Abstraction is a RemoteControl that holds a Device and offers togglePower in terms of those primitives. A refined abstraction, AdvancedRemote, extends the abstraction side with mute, still expressed through the same Device interface, so it works over a TV or a Radio without either device knowing a new remote type exists. This is the payoff of separating the two hierarchies made concrete on the abstraction axis: high-level features accrue on the remote side (basic remote, advanced remote, parental-control remote) while backends accrue on the device side (TV, radio, streaming box), and any remote pairs with any device because they meet only at the Device interface. Contrast this with putting the high-level behaviour on the implementor: if mute lived on Device, every device would reimplement it and every new high-level feature would edit every device -- the two axes recoupled. Keeping togglePower and mute on the abstraction, and setPower and setVolume on the implementor, is the division that makes both sides free to move. The abstraction inherits the implementor's constructor via a using-declaration here because a refined abstraction usually adds behaviour, not new construction. When the abstraction must OWN its implementor rather than borrow it, it holds a smart pointer instead of a reference -- the same bridge, with the abstraction managing the implementor's lifetime."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "inheriting constructors", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

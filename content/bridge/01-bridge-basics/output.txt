@@ -1,0 +1,2 @@
+vector circle of radius 5
+raster circle of radius 5

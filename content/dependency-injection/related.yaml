@@ -12,3 +12,5 @@
   note: "A facade interface is a natural injection boundary: inject a facade so a whole subsystem is swappable and fakeable behind one dependency, and the composition root chooses which implementation the consumers receive."
 - slug: "proxy"
   note: "A proxy is a dependency you inject: build a lazy, access-controlled, or remote stand-in at the composition root and inject it behind the subject's interface, so consumers get the guarded or deferred object without knowing it is a proxy."
+- slug: "bridge"
+  note: "Where the injected implementation lands: a Bridge's abstraction depends on an implementor interface and is handed a concrete one -- injection at the composition root is how the two hierarchies stay independent and the backend is chosen in one place."

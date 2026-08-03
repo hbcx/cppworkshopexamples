@@ -1,0 +1,13 @@
+title: "Anti-pattern: inheriting the implementation instead of composing it"
+standard: "C++11"
+difficulty: 3
+summary: "Making a shape inherit its rendering backend instead of holding one turns every shape-backend pair into its own class, re-creating the M times N explosion Bridge exists to remove -- the single choice of inheritance over composition is what collapses the two independent axes back into one product."
+notes: "Bridge is composition over inheritance made concrete. The whole benefit -- M + N classes instead of M times N -- comes from the abstraction HOLDING an implementor rather than BEING one. Choose inheritance instead, as CircleVector and CircleRaster do here by deriving from a backend, and you bind the two axes together: each shape-backend pairing is a distinct class, so a Square needs SquareVector and SquareRaster, a third backend doubles the shape classes again, and the count is back to the product of the two dimensions. The composition fix collapses that: one Circle holds a Renderer, so it works with every backend, and a new backend is one class that works with every shape. Beyond the class count, inheriting the implementation leaks it -- the shape now IS-A backend, inheriting its public surface and its dependencies, and callers can treat a Circle as a VectorBackend, which is rarely intended. This is the canonical case for the guideline prefer composition to inheritance: inheritance fixes the relationship at compile time and multiplies types, composition keeps it a runtime link between two hierarchies that each stay small. The mistake is easy to make because inheritance looks like less code for the first pairing -- CircleVector needs no member and no forwarding -- and the cost only appears at the second and third backend, by which point the hierarchy is entrenched. The tell: a domain abstraction (shape, message, remote) that inherits from an implementation type (a renderer, a transport, a device) rather than holding one, especially when you can see the class names starting to concatenate two dimensions."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
