@@ -8,3 +8,5 @@
   note: "Where the factory's products go: a factory decides which implementation to build, and injection hands that implementation to the consumers -- go there for wiring the product into the object graph at a composition root."
 - slug: "adapter"
   note: "A common thing a factory builds: when several backends are unified behind one interface, the factory picks the backend and returns it already wrapped in an adapter -- go there for the wrapping the factory hands out."
+- slug: "decorator"
+  note: "Another thing a factory can assemble: once it has built the product, it can layer optional responsibilities on it -- combine the two to select a family AND wrap the result in the right decorator chain."

@@ -1,0 +1,3 @@
+espresso = 200 cents
+espresso + milk + sugar = 260 cents
+espresso + cream + milk + milk = 370 cents

@@ -1,0 +1,5 @@
+title: "Decorator"
+description: "Attach responsibilities to an object dynamically by wrapping it in another object that shares its interface: the decorator holds a component, forwards each call, and adds behaviour around it -- so behaviour is composed at runtime and stacked, instead of frozen into a subclass per combination. Shown as the basic wrap, an owning stack whose order matters, decorator versus the subclass explosion, a transparent caching layer over a service, and a chain assembled from runtime configuration."
+sort_order: 29
+category: "Design patterns"
+family: "Structural"

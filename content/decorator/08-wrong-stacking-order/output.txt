@@ -1,0 +1,3 @@
+payload:               16 bytes
+compress then encrypt: 6 bytes
+encrypt then compress: 32 bytes

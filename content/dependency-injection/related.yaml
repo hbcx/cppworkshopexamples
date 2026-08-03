@@ -6,3 +6,5 @@
   note: "A shared resource is a classic injected dependency: a pool is built once at the composition root and injected into every consumer as one shared instance instead of each fetching its own."
 - slug: "adapter"
   note: "What is often injected: an adapter wrapping a third-party or legacy type presents your domain interface, and it is constructed at the composition root and injected as that interface -- the two patterns compose."
+- slug: "decorator"
+  note: "A decorator is a dependency you inject: wrap a service in a caching or logging decorator at the composition root and inject it behind its interface, adding a cross-cutting concern without the consumers or the implementation changing."

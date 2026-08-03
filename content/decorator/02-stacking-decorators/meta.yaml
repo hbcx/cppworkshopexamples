@@ -1,0 +1,15 @@
+title: "Stacking decorators: ownership and why order matters"
+standard: "C++14"
+difficulty: 2
+summary: "A base decorator that owns the wrapped component through a unique_ptr lets decorators stack into a chain that manages its own lifetime; because each layer transforms the result of the one below it, the order in which they are stacked changes the output."
+notes: "The reference-held decorator of the first example cannot stack safely -- each layer must keep the one below it alive. The fix is a base decorator that OWNS its wrapped component via std::unique_ptr, so a chain of decorators is a chain of ownership: the outermost owns the next, and destroying it destroys every layer beneath, in order, with no manual delete. Concrete decorators (Quoted, Shouted) inherit that constructor with a using-declaration and only override text(), reaching the layer below through the protected inner(). The example also shows the property that surprises people: decorators are not commutative. Each layer runs its transformation on whatever the layer below already produced, so stacking Shouted outside Quoted upper-cases the note: tag that Quoted added (NOTE: OK), while stacking Quoted outside Shouted adds the tag after the upcasing, leaving it lower-case (note: OK). Same layers, same input, different result -- the stack order is part of the behaviour, not an implementation detail. std::make_unique (C++14) builds the chain inside-out in one expression; each new decorator takes ownership of the sub-chain by move. Keep each decorator responsible for exactly one transformation, so the composition stays predictable as the stack grows."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "inheriting constructors", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

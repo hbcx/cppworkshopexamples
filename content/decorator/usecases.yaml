@@ -1,0 +1,21 @@
+# Where to reach for Decorator -- problem -> pattern, with the alternative it beats.
+
+- problem: "A service needs cross-cutting concerns -- logging, metrics, retry, caching, authorisation -- added around its operations, and you want them optional, combinable, and off in tests, without editing the service or its callers."
+  why: "wrapping the service in a decorator per concern, behind its own interface, adds each concern at the composition root and nowhere else, so tests wire the bare service and production wraps it -- where baking the logging or caching into the service itself mixes concerns into the business code, repeats the same plumbing in every service, and cannot be toggled per environment without a flag."
+  signal: "logging, timing, or caching code interleaved with business logic inside a service method, or the same such block copy-pasted across several services."
+
+- problem: "A byte or record pipeline layers transformations -- buffering, compression, encryption, framing, checksums -- and different callers need different subsets in different orders."
+  why: "a chain of decorators over one stream interface lets each stage be a small reusable object and the caller compose the exact pipeline it needs, the way std::streambuf filters and boost::iostreams are built -- where one stream class carrying every option as a flag becomes a monolith whose flag combinations no one fully tests, and whose fixed internal order cannot serve callers who need the stages arranged differently."
+  signal: "a single stream or codec class with many boolean options, or a fixed compress-then-encrypt sequence hard-coded where a different order is sometimes needed."
+
+- problem: "A UI toolkit must add optional visual embellishments -- borders, scrollbars, shadows, tooltips -- to widgets in any combination, and new embellishments keep arriving."
+  why: "a decorator per embellishment, sharing the widget interface, composes any combination at runtime and adds a new one as a new class, which is the pattern's original motivating case -- where a subclass per visual combination (BorderedScrollableTextView) explodes into 2^N leaf classes and forces a fresh subclass for every new drink of border and scrollbar."
+  signal: "a widget subclass whose name concatenates visual features, or a class hierarchy that grows a new leaf for each combination of decorations."
+
+- problem: "An HTTP or RPC server runs each request through a stack of middleware -- authentication, gzip, rate limiting, request logging -- and the stack, and its order, are configured per route or per deployment."
+  why: "each middleware is a decorator wrapping the next handler behind one handler interface, so the stack is assembled as data and its order is explicit and changeable, which is how web frameworks build their pipelines -- where a handler that hard-codes every concern in a fixed sequence cannot reorder auth relative to rate limiting per route, and forces edits to the core handler to add or drop a concern."
+  signal: "a request handler that inlines auth, compression, and logging in a fixed order, rather than composing a list of wrapping handlers built from config."
+
+- problem: "Optional behaviours must be enabled per instance at runtime -- premium features for some users, extra instrumentation for a sampled fraction of requests, feature flags -- not fixed when the program is compiled."
+  why: "conditionally wrapping the object in the relevant decorators lets the exact same code path carry different behaviour per user or request, decided from data, and even apply a layer twice -- where selecting a subclass is fixed at compile time and cannot vary per instance, and scattering if (premium) branches through the core duplicates the toggle at every site that must respect it."
+  signal: "if (feature-enabled) branches repeated through core logic to gate optional behaviour, or a compile-time type choice standing in for a decision that actually varies per request or per user."

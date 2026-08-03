@@ -1,0 +1,13 @@
+title: "Anti-pattern: a fat decorator that does several jobs"
+standard: "C++14"
+difficulty: 3
+summary: "A decorator that bundles several transformations into one loses the property that makes the pattern worth using: the parts cannot be reused, reordered, or turned off independently, so it is a monolithic class with a decorator's shape and none of its composability."
+notes: "The value of Decorator is that behaviour is broken into small, single-purpose layers that a caller composes freely -- pick the ones you want, in the order you want. A fat decorator throws that away. FancyBad here tags, upper-cases, and exclaims in one render(): you cannot ask for just the upper-casing, you cannot change the order of its three steps without editing it, and to make any step optional you are back to constructor flags -- the very anti-pattern the pattern replaces. It compiles and produces the right answer, which is why it slips in; the loss is structural, not behavioural. The fix is one responsibility per decorator -- Tag, Upper, Bang -- each reusable and composable. The example shows the composed stack reproducing the fat decorator's output exactly, and then reusing two of the three pieces on their own to produce a different result, which the fat version simply cannot express. The discipline is the same one behind the single-responsibility principle: a decorator should have one reason to change and add one behaviour. If a decorator's name needs an 'and' -- a TagAndUpperAndBang -- it is doing too much and should be that many decorators. The tell: a single decorator whose method performs several unrelated transformations, or whose name enumerates more than one concern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "inheriting constructors", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }

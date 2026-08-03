@@ -1,0 +1,14 @@
+title: "Anti-pattern: stacking order-dependent decorators wrongly"
+standard: "C++14"
+difficulty: 3
+summary: "Decorators are not commutative: each layer transforms the output of the one below it, so stacking order-sensitive decorators in the wrong order produces a result that is still valid but silently worse, with no error to point at."
+notes: "Because each decorator runs its transformation on whatever the layer beneath already produced, the order in which decorators are stacked is part of the behaviour, not a free choice. When two decorators interact, the wrong order is not a crash -- it is a quietly worse result, which is harder to catch than a failure. The classic case is compress and encrypt. Compressing then encrypting is correct: repetition is squeezed out first, then the small result is scrambled. Encrypting then compressing is the trap: encryption makes the bytes look random and destroys the runs that compression relies on, so the compressor shrinks nothing and, with per-symbol overhead, actually expands the data. This example shows exactly that -- a 16-byte repetitive payload becomes 6 bytes the right way and grows the wrong way, from the same two decorators over the same input. The lesson is not that one order is always right but that order-dependent decorators carry an ordering CONTRACT the wiring must honour, and the contract lives at the composition site where the chain is built, not inside the decorators. Make the required order explicit -- a builder or factory that assembles the chain correctly, a comment or an assertion at the wiring point -- so the constraint is not left to whoever nests the make_unique calls. The same reasoning covers any interacting pair: a retry decorator outside a timeout behaves differently from one inside it, and a caching layer above an authorisation check serves results the check would have denied."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "inheriting constructors", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }
+  - { name: "std::string::size", url: "https://en.cppreference.com/w/cpp/string/basic_string/size" }

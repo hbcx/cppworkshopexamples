@@ -1,0 +1,16 @@
+title: "A transparent caching decorator over a service"
+standard: "C++14"
+difficulty: 2
+summary: "A decorator that shares a service's interface can add a cross-cutting concern -- caching, logging, retry, metrics -- around it without the service or its clients changing, because the wrapper is indistinguishable from the thing it wraps."
+notes: "This is Decorator as it most often appears in application code: not to decorate strings, but to add a cross-cutting concern to a service transparently. PriceService is the interface; RemotePriceService is an expensive backend that counts its real calls; CachingPriceService implements the same PriceService, holds one inside, and memoises results in a std::map -- a repeated query is answered from the cache and the backend is never touched. The client holds a PriceService and cannot tell it is talking to a cache; the backend does not know it is being cached. Six queries over three distinct ids hit the backend three times. The power is that the concern is added at the wiring point (the composition root) and nowhere else: to turn caching off you drop the wrapper, to add logging you wrap once more, and the business code is untouched either way -- the same reason middleware and interceptor stacks are built this way. This is exactly what Proxy does structurally too; the names differ by intent -- a caching or logging wrapper that ADDS behaviour is spoken of as a decorator, while one that CONTROLS access to the same operation (lazy load, permission check, remote stub) is spoken of as a proxy. A real cache needs an eviction policy and, if shared across threads, synchronisation; both belong in the decorator, still behind the same interface, so the rest of the system stays oblivious."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }
+  - { name: "std::map::emplace", url: "https://en.cppreference.com/w/cpp/container/map/emplace" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::unique_ptr::get", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/get" }

@@ -1,0 +1,6 @@
+log: writing a
+log: writing b
+stored (broken): 0
+log: writing a
+log: writing b
+stored (fixed): 2

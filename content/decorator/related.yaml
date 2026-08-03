@@ -1,0 +1,6 @@
+- slug: "adapter"
+  note: "The other wrapping pattern, and the sharpest contrast: Adapter changes an object's interface so incompatible code fits, where Decorator keeps the interface identical and only layers behaviour on -- read it to see the two wrappers side by side."
+- slug: "dependency-injection"
+  note: "How a decorated object reaches the app: build the chain at the composition root and inject it behind the Component interface, so consumers get the wrapped object -- caching, logging, retry -- without knowing it is wrapped."
+- slug: "abstract-factory"
+  note: "When the stack to apply is chosen from a set of options, a factory can assemble the right decorator chain, so the client asks for a configured component and receives it already wrapped in the correct order."

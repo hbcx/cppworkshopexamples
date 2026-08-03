@@ -1,0 +1,12 @@
+title: "Decorator basics: wrap the component and add behaviour"
+standard: "C++11"
+difficulty: 1
+summary: "A decorator implements the same interface as the object it wraps, holds an instance of it, forwards each call, and adds behaviour around the result -- so a client cannot tell a decorated object from a plain one, and behaviour is added without touching either the component or the client."
+notes: "Decorator attaches extra behaviour to an object by wrapping it in another object that shares its interface. The three roles: a Component (the interface the client depends on), a Concrete Component (the object being decorated), and a Decorator that also implements Component, holds a Component inside it, and in each method forwards to the held object and adds its own behaviour. Here the Greeting interface has one method text(); PlainGreeting is the concrete object; Excited is a decorator that returns the wrapped text with a trailing exclamation mark. The client function announce() takes a Greeting and cannot tell whether it received a plain or a decorated one -- this interface transparency is exactly what lets decorators stack and what separates Decorator from its look-alikes. Adapter also wraps, but it CHANGES the interface so incompatible code fits together; Decorator KEEPS the interface identical and only grows behaviour. Proxy also keeps the interface, but it controls access to the same operation (lazy loading, access checks) rather than adding new behaviour to the result. Strategy changes an object's guts; Decorator changes its skin. This first example holds the wrapped object by const reference for simplicity -- the owning, stackable form with std::unique_ptr is the next example. The rule that keeps a decorator honest: stay on the Component interface and add behaviour only -- the moment it exposes new public methods, clients that stack it can no longer reach them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

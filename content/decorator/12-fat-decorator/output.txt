@@ -1,0 +1,3 @@
+fat:       note: OK!
+composed:  note: OK!
+just loud: HI!

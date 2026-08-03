@@ -1,0 +1,14 @@
+title: "Decorator vs subclassing: escaping the class explosion"
+standard: "C++14"
+difficulty: 2
+summary: "Extending an object by subclassing every feature combination multiplies classes with each new option; a decorator adds each feature once and composes the combinations at runtime, and can even apply the same feature twice, which a fixed hierarchy cannot express."
+notes: "This is the problem Decorator was invented to solve, and the clearest way to see why to prefer it. A beverage with optional condiments, done by inheritance, needs a class for every combination -- EspressoWithMilk, EspressoWithMilkAndSugar, EspressoWithMilkAndSugarAndCream -- and the set multiplies: N condiments give on the order of 2^N leaf classes, and adding one new drink or one new condiment forces a fresh sweep through the hierarchy. The decorator version writes each condiment once (Milk, Sugar, WhippedCream), each adding its own price and name to whatever it wraps, and builds any combination by nesting them at runtime. Trade-offs, honestly: subclassing is simpler to read for two or three fixed shapes and resolves at compile time, so a bad combination cannot be built; decorators win once the combinations are many, chosen at runtime, or open-ended, and they can do things a hierarchy cannot -- here, apply Milk twice for a double-milk order, a combination no single subclass represents. The cost of decorators is indirection (a virtual call per layer) and that ordering-sensitivity and object lifetime now matter. Rule of thumb: reach for Decorator when behaviour is optional, combinable, and selected at runtime; reach for a subclass when there is one fixed extension and no combination to manage."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "inheriting constructors", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

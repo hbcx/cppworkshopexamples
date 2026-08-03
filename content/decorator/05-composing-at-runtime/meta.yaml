@@ -1,0 +1,17 @@
+title: "Composing a decorator chain at runtime"
+standard: "C++14"
+difficulty: 3
+summary: "Because decorators are ordinary objects, a chain can be assembled from data known only at runtime -- a config list, feature flags, a request's options -- by folding a loop over an identity base; a compile-time subclass hierarchy cannot vary its shape this way."
+notes: "This is the pay-off of Decorator that inheritance cannot match: the stack is data, so it can be decided at runtime. build() starts from an Identity filter (a component that returns its input unchanged, so a chain of zero decorators is still valid) and folds a list of feature names into a chain, wrapping one more decorator per entry. The same code produces trim-then-upper for one config and upper-then-exclaim for another, and an empty list yields the bare identity -- all chosen while the program runs, from a vector that could come from a file, a database, or an HTTP request. A subclass hierarchy is fixed when you compile it; it cannot grow a TrimThenUpper type on demand from a config value. The identity base is the idiom that makes the fold clean: without it the loop needs a special case for the first element. Note the ordering property from the stacking example still holds -- the features are applied in the order build() wraps them, so the config list is not just a set of switches but an ordered pipeline, and the caller controls behaviour by controlling that order. This is how middleware stacks, image or audio filter graphs, and stream pipelines are configured: register the stages as data, build the chain once, run many inputs through it. Validate the feature names when building -- an unknown name here is silently skipped, which for real config should be a reported error instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+  - { name: "std::string::find_first_not_of", url: "https://en.cppreference.com/w/cpp/string/basic_string/find_first_not_of" }
+  - { name: "std::string::substr", url: "https://en.cppreference.com/w/cpp/string/basic_string/substr" }

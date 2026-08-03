@@ -1,0 +1,15 @@
+title: "Anti-pattern: a decorator that forgets to forward"
+standard: "C++14"
+difficulty: 3
+summary: "A decorator that runs its own behaviour but does not delegate to the wrapped component replaces the operation instead of extending it: the inner behaviour is silently dropped, and because the decorator still produces output the bug looks like it works."
+notes: "A decorator's contract is to add behaviour AROUND the wrapped operation, then forward to it -- never INSTEAD of it. Drop the forwarding call and the decorator quietly swallows the real work. Here LoudSinkBad logs each write and returns, but never calls inner_->write(line), so the MemorySink beneath it stores nothing: two writes, zero stored. The reason this bug survives review is that the decorator is not silent -- it prints its log line, so a quick glance shows activity and the missing effect only surfaces downstream when the data that was supposedly written is not there. It is especially easy to introduce when the added behaviour and the forwarded call look similar, or when a refactor moves the forwarding into a branch that some path skips. The fix is the discipline the pattern is built on: every decorator method forwards to the wrapped component (before, after, or around its own behaviour), and a decorator that does not call inner is a red flag by itself. When the whole decorator is pass-through except one method, forward every other method explicitly rather than leaving them to a default -- a decorator that silently no-ops part of the interface is the same bug wearing a different method name."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::unique_ptr::get", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/get" }

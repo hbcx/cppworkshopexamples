@@ -1,0 +1,13 @@
+title: "Anti-pattern: a decorator that changes the interface"
+standard: "C++14"
+difficulty: 3
+summary: "A decorator that adds public methods beyond the Component interface can only be used while held by its concrete type; once it is wrapped by another decorator or passed as the interface, the extra methods are unreachable -- the interface is the only thing that survives stacking."
+notes: "The one rule that makes a decorator composable is that it stays on the Component interface: it adds behaviour to the operations already there, it does not add new operations. Break that rule and the decorator stops stacking. Here SizedBad adds a public sizeOz() that Coffee does not declare. You can call it on a SizedBad, but the instant it is wrapped by another decorator, or handed to code that holds a Coffee&, sizeOz() is gone -- every layer above it sees only the Coffee interface, and the interface is the sole thing that survives being stacked. This is the same reason Liskov substitutability matters: a decorator must be usable anywhere its component is, and an out-of-interface method is a capability the substitute has but the type does not promise. The fix is to decide where the capability belongs. If clients genuinely need the size, it is part of the contract: put sizeOz() on the Component interface (the Drink example), and every decorator forwards it, so it survives any stack. If only the construction site needs it, keep a typed handle to the concrete object before wrapping (as the caching example keeps a raw backend pointer) rather than reaching for it through the interface. What you must not do is add public API to a decorator and assume callers will always hold the concrete type -- the first time it is wrapped, that assumption is silently false. The tell: a decorator with a public method that the base interface does not declare."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }

@@ -4,3 +4,5 @@
   note: "How an adapter reaches the rest of the app: build it at the composition root and inject it as the Target interface, so consumers depend on the interface and never see the adaptee."
 - slug: "abstract-factory"
   note: "When several backends are each adapted to one Target, a factory picks and builds the right adapter, so the client selects a backend by name and receives it already wrapped."
+- slug: "decorator"
+  note: "The sibling wrapper that keeps the interface: where Adapter changes an object's interface to fit a client, Decorator preserves it and stacks added behaviour -- reach for it when the interface is already right and you only need to add responsibilities."

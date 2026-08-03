@@ -1,0 +1,14 @@
+title: "Anti-pattern: a Component base with no virtual destructor"
+standard: "C++14"
+difficulty: 3
+summary: "Decorators are held and deleted through the Component interface, so if the Component base has a non-virtual destructor, deleting a decorated chain runs only the base destructor and skips every decorator's -- leaking their resources and their owned inner components, which is undefined behaviour."
+notes: "A decorator chain is owned and destroyed through the Component interface -- that is how the pattern hides the layering from clients. That makes the base class destructor load-bearing. If Handle had a non-virtual destructor, then deleting a TracingHandle through a Handle* (which is what unique_ptr<Handle> does, and what every client holds) would run only ~Handle and skip ~TracingHandle: the tracing layer's cleanup never runs, and the inner Handle it owns is never freed. Deleting a derived object through a base pointer without a virtual destructor is undefined behaviour, so this example does not execute it -- it runs the fixed version and describes the broken one in a comment. The fix is a single word: give the Component base a virtual destructor (virtual ~Handle() = default). With it, destruction is dispatched to the most-derived type and unwinds the whole chain in order -- here the run prints the outer layer's release before the inner one's. This is the general rule for any base class deleted polymorphically, but Decorator makes it acute because deletion through the base pointer is not an edge case here, it is the normal path: the client is supposed to hold the interface and nothing else. The tell: a polymorphic base whose destructor is not virtual -- and with decorators, an owned inner member whose destructor you are relying on to release the layer below."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
