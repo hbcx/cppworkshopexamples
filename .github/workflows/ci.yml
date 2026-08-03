@@ -5,9 +5,9 @@
 # checks out this repo and runs driver/build.py against its own content/.
 #
 # ubuntu-latest ships g++, clang++ and python3 preinstalled (both compilers here
-# are "normal" -- no MSYS/cygwin path quirks). The one addition is libc++: clang
-# on ubuntu's libstdc++ cannot see C++23 std::expected, so the driver builds
-# clang's C++23/26 examples against libc++ instead (see the install step below).
+# are "normal" -- no MSYS/cygwin path quirks). The one addition is a newer clang
+# (20) because the preinstalled clang 18 cannot compile C++23 std::expected on
+# ubuntu's libstdc++14; see the install step below.
 
 name: build-examples
 
@@ -30,17 +30,24 @@ jobs:
           g++ --version | head -1
           clang++ --version | head -1
 
-      # Ubuntu's clang paired with the preinstalled libstdc++ (v14) guards out
-      # C++23 std::expected -- the <expected> declaration disappears for clang,
-      # breaking the `expected` chapter, while g++ compiles it fine. Upgrading
-      # clang does NOT help (clang 18 and 20 both fail on libstdc++14); the fix is
-      # to give clang libc++, which has std::expected, and let the driver use
-      # -stdlib=libc++ for clang on C++23/26 examples only (--clang-cxx23-libcxx).
-      # Every other example, and both compilers elsewhere, keep the default libstdc++.
-      - name: Install libc++ (for clang's C++23 std::expected examples)
-        run: sudo apt-get update && sudo apt-get install -y libc++-dev libc++abi-dev
+      # ubuntu-latest ships clang 18, and clang <=18 paired with libstdc++14
+      # guards out C++23 std::expected (the <expected> declaration disappears),
+      # which breaks the whole `expected` chapter; g++ compiles it fine. Install
+      # clang 20 from apt.llvm.org. IMPORTANT: it is invoked DIRECTLY as
+      # clang++-20 in the compile step below -- the previous update-alternatives
+      # approach silently did nothing, because /usr/bin/clang++ is a plain symlink
+      # (clang 18), not an alternatives-managed link, so `clang++` stayed on 18
+      # and the fix never took effect.
+      - name: Install clang 20 (Ubuntu's clang 18 lacks C++23 std::expected on libstdc++14)
+        run: |
+          wget -qO llvm.sh https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 20
+          clang++-20 --version | head -1
 
-      - name: Compile every example with g++ AND clang++
-        # --strict: a missing requested compiler is an error (both required on CI).
-        # --clang-cxx23-libcxx: clang builds C++23/26 against libc++ (see above).
-        run: python3 driver/build.py --strict --clang-cxx23-libcxx
+      - name: Compile every example with g++ AND clang++-20
+        # --strict: a missing requested compiler is an error (both are required
+        # on CI, unlike local dev where one may be skipped). clang++-20 is named
+        # explicitly so the newer clang is definitely the one used, with no
+        # dependence on update-alternatives having taken over `clang++`.
+        run: python3 driver/build.py --strict --compilers g++,clang++-20

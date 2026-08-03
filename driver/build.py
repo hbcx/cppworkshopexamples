@@ -103,12 +103,6 @@ OPT_LEVELS = ("O0", "O1", "O2", "O3", "Os", "Og")
 SHARED_DIRNAME = "_shared"
 _shared_dir: Path | None = None
 
-# CI-only opt-in (see --clang-cxx23-libcxx): when set, clang compiles C++23/26
-# examples against libc++. Ubuntu's libstdc++ (v14) guards out std::expected for
-# clang, but libc++ has it; a clang paired with a working libstdc++ (e.g. local
-# cygwin clang) keeps libstdc++, so this stays off by default.
-_clang_cxx23_libcxx: bool = False
-
 
 # --- tiny YAML reader for our controlled meta.yaml --------------------------
 # We only need a handful of scalar/list fields; a full YAML lib would be an
@@ -266,12 +260,6 @@ def compile_cmd(cc: str, std_flag: str, ex: Example, sources: list[Path],
     if _shared_dir is not None:
         cmd += ["-I", to_compiler_path(_shared_dir, flavor)]
     cmd += ["-Wall", "-Wextra", "-pedantic"]
-    # See _clang_cxx23_libcxx: on the CI toolchain, build clang's C++23/26
-    # examples against libc++ (ubuntu's libstdc++14 hides std::expected from clang).
-    if (_clang_cxx23_libcxx
-            and "clang" in Path(cc).name.lower()
-            and ex.meta.get("standard") in ("C++23", "C++26")):
-        cmd.append("-stdlib=libc++")
     opt = ex.meta.get("optimize") or ""
     if opt:
         cmd.append(f"-{opt}")
@@ -568,9 +556,6 @@ def main() -> int:
     ap.add_argument("--keep", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--strict", action="store_true")
-    ap.add_argument("--clang-cxx23-libcxx", action="store_true",
-                    help="compile clang's C++23/26 examples with -stdlib=libc++ "
-                         "(CI: ubuntu's libstdc++ hides std::expected from clang)")
     ap.add_argument("--write-output", action="store_true")
     ap.add_argument("--write-trace", action="store_true")
     ap.add_argument("--bench", action="store_true")
@@ -583,10 +568,9 @@ def main() -> int:
         print(f"ERROR: no content/ dir under {content_repo}", file=sys.stderr)
         return 2
 
-    global _shared_dir, _clang_cxx23_libcxx
+    global _shared_dir
     shared = content_dir / SHARED_DIRNAME
     _shared_dir = shared if shared.is_dir() else None
-    _clang_cxx23_libcxx = args.clang_cxx23_libcxx
 
     requested = [c.strip() for c in args.compilers.split(",") if c.strip()]
     if args.dry_run:
