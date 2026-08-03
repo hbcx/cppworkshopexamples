@@ -1,0 +1,14 @@
+title: "Child management: transparency versus safety"
+standard: "C++14"
+difficulty: 3
+summary: "Where do add and remove belong -- on the Component so leaves and composites share one interface (transparent, but a leaf must reject children at runtime), or only on the Composite so misuse cannot compile (safe, but the client must distinguish the two)? The Gang of Four call this Composite's central trade-off."
+notes: "Every operation meaningful for both a leaf and a composite belongs on the Component -- that is what makes them interchangeable. Child management is the operation that is NOT meaningful for both: only a composite can hold children, so the design must decide where add() and remove() live, and the two answers trade uniformity against type safety. The transparent design puts add() on the Component: a leaf and a composite have exactly the same interface, so a client can call add() on anything and never downcast -- but a leaf cannot really accept a child, so it must reject the call at runtime (return false, throw, or no-op), and the compiler cannot catch a nonsensical add on a file. The safe design puts add() only on the composite: a leaf has no add() at all, so misusing it is a compile error, not a runtime one -- but now the client must hold the composite type to add children, so a leaf and a composite are no longer fully interchangeable, and building the tree involves knowing which is which. The Gang of Four name this explicitly and lean toward transparency because uniformity is the reason to use Composite at all, accepting that leaf child-operations must fail safely; many modern codebases prefer the safe form to move errors to compile time. There is no universally right answer -- it depends on whether your clients build trees (favouring safety, since builders know the concrete types) or mostly traverse already-built ones (favouring transparency). What is always wrong is the middle path a later anti-pattern shows: putting add() on the Component and having a leaf silently ignore it, so the failure is neither prevented nor reported."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

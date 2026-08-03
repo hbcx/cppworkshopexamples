@@ -1,0 +1,6 @@
+- slug: "decorator"
+  note: "The single-child relative: a Decorator is structurally a Composite with exactly one child, wrapping one component to add behaviour rather than branching into a tree -- read it for the one-child wrapper beside this many-child hierarchy."
+- slug: "unique-ptr"
+  note: "How a Composite owns its tree: each node owns its children through unique_ptr, so the whole tree frees in one step with no manual cleanup -- go there for the single-owner model and rule of zero this relies on."
+- slug: "weak-ptr"
+  note: "For parent back-pointers and shared leaves: when a node must point back at its parent, a weak_ptr avoids the ownership cycle that a strong back-pointer would leak -- see this chapter's cycle anti-pattern, then weak_ptr for the mechanics."

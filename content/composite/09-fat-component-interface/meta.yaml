@@ -1,0 +1,14 @@
+title: "Anti-pattern: a fat Component interface"
+standard: "C++14"
+difficulty: 3
+summary: "Piling every operation onto the Component so leaves and composites stay uniform -- child management plus domain queries -- forces each leaf to implement methods it cannot honour, so a leaf fills up with add/remove/child overrides that throw or lie, dead code that also invites misuse."
+notes: "The uniformity Composite offers is a means, not a licence to make the Component interface enormous. The mistake is to put on the Component every method any node might ever need, so that leaf and composite share ALL of it -- including the child-management methods that only a composite can implement. Then every leaf must override add, remove, and child with something, and since it has no children that something is a throw or a lie. FatFile here implements three child methods that all throw, so most of the class is dead code that exists only to satisfy an interface it cannot honour, and a caller reading the interface is invited to call methods that will fail at runtime. This is the Interface Segregation Principle stated for Composite: no client -- and no leaf -- should be forced to depend on methods it does not use. The fix is to keep the Component to exactly the operations that are genuinely uniform across all nodes -- here size() -- and to leave child management on the composite type where it can be implemented honestly. That is the safe design from the transparency-versus-safety example, seen from the interface's side: a lean Component means leaves have nothing to fake. Note this is a different mistake from the god facade, though both are bloat: the god facade fronts too many subsystems, while the fat Component forces too many methods onto types that cannot honour them. The tell: a Composite's base interface that declares child-management (or other composite-only) operations as pure virtual, so every leaf must override them with a throw, a no-op, or a fabricated return."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

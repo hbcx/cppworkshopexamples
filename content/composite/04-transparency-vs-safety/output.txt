@@ -1,0 +1,5 @@
+== transparent: one interface, rejection at runtime ==
+cannot add a child to a file
+folder leaves: 1
+== safe: add only on the composite, checked at compile time ==
+sfolder leaves: 2

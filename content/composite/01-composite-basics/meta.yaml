@@ -1,0 +1,16 @@
+title: "Composite basics: a part-whole tree with one interface"
+standard: "C++14"
+difficulty: 1
+summary: "Composite gives the parts and the wholes of a tree one interface: a Component the client talks to, Leaf nodes with no children, and Composite nodes that hold children and define each operation as the combination of their children's -- so a file and a whole directory answer size() the same way."
+notes: "Composite represents a part-whole hierarchy as a tree and lets a client treat a single object and a group of objects uniformly. Three roles: a Component (the interface every node shares -- here Node, with size() and print()), a Leaf (a node with no children whose operation is self-contained -- File returns its own size), and a Composite (a node that holds children and implements each operation in terms of theirs -- Directory sums its children's sizes and recurses its print). The key move is that the composite defines its behaviour by delegating the same call to each child, so the recursion lives in one place and the client just asks the root. Because a File and a Directory are both a Node, code that walks or queries the structure never branches on which kind it has -- that uniformity is the whole point, and it is what separates Composite from an ad-hoc tree of tagged structs that the client must switch over. This is where the filesystem du, a widget tree's layout, and a scene graph's draw all come from. Ownership follows the tree: each composite owns its children through std::unique_ptr, so destroying the root destroys the whole tree in one step with no manual cleanup (rule of zero). A leaf and a composite differ in one awkward respect -- only a composite can hold children -- and where to put add()/remove() is a real design choice (transparency versus safety) that a later example examines. Start by getting the Component interface right: put on it exactly the operations that are meaningful for every node."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }

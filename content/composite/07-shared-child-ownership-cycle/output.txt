@@ -1,0 +1,3 @@
+live at start: 0
+live after weak-parent scope: 0
+live after cyclic scope: 2

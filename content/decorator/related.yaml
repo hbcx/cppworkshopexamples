@@ -8,3 +8,5 @@
   note: "The other structural wrapper, by intent: where Decorator keeps a component's interface and layers behaviour on one object, Facade presents a new, smaller interface over a whole subsystem and adds only orchestration -- go there when the goal is to hide complexity, not add responsibilities."
 - slug: "proxy"
   note: "The transparent twin: Proxy shares Decorator's wrap-and-forward shape but stays transparent and controls access to the subject -- lazy loading, permissions, remote stubs, caching -- instead of adding behaviour to the result; go there when the goal is to govern access, not enrich it."
+- slug: "composite"
+  note: "The many-child generalisation: where a Decorator wraps exactly one component, a Composite branches into a tree of children treated uniformly -- go there for part-whole hierarchies like filesystems, scene graphs, and expression trees."

@@ -1,0 +1,8 @@
+before:
+A at (0,0)
+B at (10,10)
+C at (20,20)
+after translate(5,5):
+A at (5,5)
+B at (15,15)
+C at (25,25)

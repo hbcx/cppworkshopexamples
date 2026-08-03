@@ -1,0 +1,13 @@
+title: "An expression tree that evaluates itself"
+standard: "C++14"
+difficulty: 2
+summary: "An arithmetic expression is a Composite: literals are leaves, operators are composites holding sub-expressions, and eval() recurses through the tree uniformly -- the same shape behind interpreters, query planners, and spreadsheet formulas, where a node never switches on what kind of child it holds."
+notes: "This is Composite in the form it takes at the heart of compilers, interpreters, database query planners, and spreadsheet engines: an abstract syntax tree. A literal (Num) is a leaf; a binary operator (Add, Mul) is a composite holding two sub-expressions, each of which is itself a leaf or another operator. eval() is defined on the Component, so evaluating the tree is one recursive call that fans out -- Mul asks its two children to eval and multiplies, Add asks its two and sums, Num just returns its value -- and no node ever inspects the concrete type of its operands, because they are all just Expr. That uniformity is what makes the design scale: adding a Sub or a Neg is a new leaf-or-composite class implementing eval(), with no change to any existing node and no central switch to update. The alternative it replaces is a tagged union walked by a big switch on the node kind, which grows an arm per operator in every function that traverses it -- eval, print, optimise, type-check -- so the operator set and the traversals are coupled and every new operator edits them all. The tree's ownership is the tree itself: each operator owns its operands through std::unique_ptr, so the whole expression frees in one step. The recursion here is the tree walk; when the trade-off is instead adding many NEW operations over a fixed node set, Visitor is the companion pattern that externalises those operations without touching the nodes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

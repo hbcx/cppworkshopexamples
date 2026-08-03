@@ -1,0 +1,6 @@
+root/
+  a.txt (100)
+  sub/
+    b.txt (30)
+    c.txt (70)
+total size: 200 bytes

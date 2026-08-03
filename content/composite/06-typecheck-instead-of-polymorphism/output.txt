@@ -1,0 +1,2 @@
+sum via dynamic_cast: 60
+sum via virtual call: 60

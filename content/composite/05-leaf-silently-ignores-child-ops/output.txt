@@ -1,0 +1,4 @@
+== silent no-op leaf ==
+leaves after adding to a file: 1 (the child was dropped, with no error)
+== explicit rejection ==
+add to a file refused -- the caller can handle it

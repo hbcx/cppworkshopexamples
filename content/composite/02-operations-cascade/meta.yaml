@@ -1,0 +1,14 @@
+title: "Operations that cascade through the tree"
+standard: "C++14"
+difficulty: 2
+summary: "A composite implements an operation by applying it to every child, so one call on a group cascades through the whole subtree -- translate a scene graph, draw a widget tree, delete an assembly -- and the client acts on a group exactly as it acts on a single element."
+notes: "The first example aggregated a value UP the tree (size). This one pushes an operation DOWN it: Group::translate moves itself by translating each child, and because a child may itself be a Group, one translate on the root ripples through every level to reach every Dot. That is the daily payoff of Composite in graphics and UI code -- a scene graph moves, scales, or hides a hundred shapes with a single call on their group, a widget tree lays out or repaints a whole panel by calling one method on the container, and each cascades because the composite forwards the call to its children and the leaves do the actual work. The client never writes a loop over the shapes and never asks whether it holds one shape or a group; scene->translate(5,5) reads the same whether scene is a Dot or a deeply nested Group, which is exactly the uniformity the pattern buys. Two operations share the structure here -- draw (const, read-only) and translate (mutating) -- to show that both aggregating queries and mutating commands fit the same shape. The recursion terminates at the leaves, which have no children to forward to. When an operation needs to run on the way down AND collect something on the way up (render with an accumulated transform, then report a bounding box), the composite does both around the child loop -- the tree walk is still written once, in the composite, not at the call site."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }

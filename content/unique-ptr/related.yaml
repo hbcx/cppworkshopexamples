@@ -6,3 +6,5 @@
   note: "Where owning pointers get collected: a vector of unique_ptr holds polymorphic or non-copyable objects by base pointer, each still deleted automatically."
 - slug: "shared-ptr"
   note: "When one owner is not enough: shared_ptr adds a reference count so several owners can share an object, with weak_ptr to break the cycles that creates -- at the cost of an atomic count."
+- slug: "composite"
+  note: "A tree that owns itself: a Composite node owns its children through unique_ptr, so the whole part-whole hierarchy frees in one step -- go there for a real use of recursive unique_ptr ownership."

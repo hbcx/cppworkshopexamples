@@ -1,0 +1,25 @@
+# Where to reach for Composite -- problem -> pattern, with the alternative it beats.
+
+- problem: "You model a filesystem or any hierarchical store -- files and directories, a tree of pages, nested folders -- and need operations that run over the whole tree: total size, a count, a recursive copy or delete."
+  why: "one Component interface with File as a leaf and Directory as a composite lets each operation be written once as a recursion the directory drives, and the client just asks the root -- where keeping files and folders as separate types with separate code paths duplicates the tree walk in every operation and forces each new operation to handle the two kinds and their nesting by hand."
+  signal: "code that branches on is-this-a-file-or-a-folder while walking a directory tree, or a recursive size/copy routine reimplemented in several places."
+
+- problem: "A GUI toolkit or a game renderer arranges elements in a containment tree -- panels holding widgets, groups holding sprites -- and must lay out, draw, hit-test, or transform whole subtrees as a unit."
+  why: "making a container a composite over the same Component as a leaf widget lets one call on a group cascade to every descendant, so moving or repainting a panel is a single method call -- where a parent that special-cases each child kind must know every widget type, and applying a transform means the caller walking the children itself and losing the group as a single addressable thing."
+  signal: "a container that switches on child widget type to lay out or draw it, or transform code that manually iterates a group's elements instead of calling one method on the group."
+
+- problem: "You build an interpreter, a compiler, a query planner, or a spreadsheet engine, and need to represent and evaluate nested expressions where an operand may itself be an expression."
+  why: "an abstract syntax tree is a Composite -- literals are leaves, operators are composites -- so eval, print, and optimise are each one recursive virtual call, and a new operator is a new class touching nothing else -- where a tagged union walked by a switch on node kind grows an arm in every traversal for every operator, coupling the operator set to every function that walks the tree."
+  signal: "a node struct with a type enum and a switch on that enum repeated across eval, print, and type-check functions."
+
+- problem: "You process a nested document -- an HTML or XML DOM, rich text with nested spans, a JSON-like tree -- and need uniform operations such as render, serialize, or word-count over arbitrary nesting."
+  why: "a Composite of element nodes (which contain children) and text nodes (leaves) lets render and serialize recurse uniformly regardless of depth, and new element kinds slot in as new leaf-or-composite classes -- where walking the document with casts or type tags spreads per-node-type branches through every operation and breaks the moment a new element type appears in the middle of the tree."
+  signal: "document-walking code that inspects each node's tag/type to decide how to render or serialize it, rather than asking the node."
+
+- problem: "An engineering or commercial system computes roll-ups over a bill of materials or an assembly: an assembly's cost, weight, or part count is the sum over its sub-assemblies and parts, nested to any depth."
+  why: "modelling parts as leaves and assemblies as composites makes cost() a recursion the assembly drives, so an assembly's total is defined once and any depth of nesting just works, and a subassembly can be moved or priced as a unit -- where flattening the structure to iterate and sum by hand loses the assembly boundary and must be redone for every roll-up (cost, weight, count), each a fresh chance to mishandle the nesting."
+  signal: "a manual loop that flattens an assembly to total its parts, or a separate summation routine per roll-up quantity that each re-walks the structure."
+
+- problem: "You roll values up or push settings down an organization or category hierarchy -- headcount and budget summed up a reporting tree, or effective permissions inherited down a folder or group tree."
+  why: "a Composite where a team is a node over sub-teams and members lets a roll-up (sum headcount) or a push-down (accumulate inherited permissions) be one recursive operation that works at any depth -- where distinguishing a leaf member from a sub-team at every level scatters that distinction through the aggregation code, and a reorganization that deepens the tree breaks logic that assumed a fixed number of levels."
+  signal: "aggregation code that hard-codes how many levels the hierarchy has, or that separates member from sub-team handling at each level of the walk."

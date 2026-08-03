@@ -1,0 +1,5 @@
+== fat interface: the leaf carries methods it cannot honour ==
+fat file size: 100
+fat file add() throws: a file has no children
+== lean interface: the leaf implements only what it can ==
+folder size: 100
