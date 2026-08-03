@@ -1,0 +1,4 @@
+shared glyph symbol: a
+a1 and a2 are the same object: yes
+a1 and b are the same object: no
+glyphs actually built: 2

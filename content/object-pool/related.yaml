@@ -6,3 +6,5 @@
   note: "The other side of asking for an object instead of newing it yourself: a factory method decides which object to make, where a pool decides which existing one to lend -- creation vs reuse behind the same acquire-style call."
 - slug: "dependency-injection"
   note: "How a pool reaches its consumers: build it once at the composition root and inject the one instance into every consumer, instead of each reaching for it through a global -- go there for wiring a shared resource in."
+- slug: "flyweight"
+  note: "The sharing cousin: where an Object Pool recycles mutable objects one owner at a time, Flyweight shares immutable objects concurrently across many owners -- go there when duplication, not creation, is the cost you are fighting."

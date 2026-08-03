@@ -6,3 +6,5 @@
   note: "The other end of the family: a single owner with no reference count, so there is nothing for a weak_ptr to observe -- reach for it when exactly one owner is right."
 - slug: "composite"
   note: "A real use of the weak back-pointer: a Composite node that points back at its parent uses weak_ptr to avoid the ownership cycle a strong pointer would leak -- see the pattern's cycle anti-pattern for the concrete case."
+- slug: "flyweight"
+  note: "Weak references as a cache-eviction tool: a Flyweight factory holds weak_ptr so an interned object is dropped once no client holds it, keeping the intern table from growing without bound."

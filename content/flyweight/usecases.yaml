@@ -1,0 +1,25 @@
+# Where to reach for Flyweight -- problem -> pattern, with the alternative it beats.
+
+- problem: "A text editor or document renderer must handle files with millions of characters, each of which could carry font, glyph shape, and metrics, and holding a full styled object per character would exhaust memory."
+  why: "sharing one glyph flyweight per distinct character and passing position and run-level style as extrinsic state keeps memory proportional to the alphabet and the styling, not the document length -- where a full object per character stores the same glyph shape and metrics millions of times over, the original motivating case for the pattern."
+  signal: "a per-character object that stores font, glyph, or metric data inline, so the same shape is duplicated once per character in the document."
+
+- problem: "A game or simulation renders vast numbers of similar entities -- a forest of trees, a particle system, a tile map -- each needing a mesh and textures that are identical across all instances of a kind."
+  why: "sharing a type flyweight (mesh, textures, material) per kind and storing only the per-instance transform makes a hundred thousand trees cost ten meshes plus a hundred thousand small transforms -- where a mesh and texture set per instance duplicates megabytes of GPU data across identical entities and blows the memory budget."
+  signal: "an entity struct that embeds its full mesh or texture data rather than a pointer to a shared type, so identical entities each carry a copy."
+
+- problem: "A compiler, interpreter, or query engine handles source or queries where the same identifiers and keywords recur constantly, and it compares them by name over and over while building symbol tables and resolving references."
+  why: "interning each distinct string once and handing back a shared handle deduplicates the text AND turns every later name comparison into an O(1) pointer compare, the technique behind Java String.intern, CPython's interned strings, and LLVM's string pool -- where storing each occurrence and comparing character by character makes the symbol table's millions of comparisons a hot path."
+  signal: "identifier strings stored per occurrence and compared with string equality in a symbol table or resolver, rather than interned to a canonical handle."
+
+- problem: "A system boxes or wraps huge numbers of small immutable values -- small integers, booleans, enum-like tags, currency codes -- where most of the values that occur come from a tiny fixed set."
+  why: "caching one shared immutable instance per distinct small value (as Java's Integer.valueOf does for -128..127) avoids an allocation per occurrence and lets equal values share identity -- where allocating a fresh boxed object for every small value churns the allocator and the heap for values that are almost all duplicates."
+  signal: "a factory or box that heap-allocates a new object for each small value from a small recurring domain, instead of returning a shared cached instance."
+
+- problem: "A columnar store, dataframe, or analytics engine holds columns with low cardinality -- a country, status, or category field repeated across millions of rows from a handful of distinct values."
+  why: "dictionary encoding stores each distinct value once and each row a small index or shared handle into that dictionary, which is Flyweight over the column -- where storing the full value in every row duplicates the same few strings millions of times, inflating memory and slowing scans that could instead compare small codes."
+  signal: "a column that stores the full value per row despite having very few distinct values, rather than a dictionary of distinct values plus per-row codes."
+
+- problem: "A spreadsheet or data grid lets every cell carry formatting -- font, colour, borders, number format -- but in practice whole regions share the same style, and a full style object per cell would dominate the workbook's memory."
+  why: "sharing one immutable style flyweight per distinct format and pointing each cell at it keeps memory proportional to the number of DISTINCT styles, not the number of cells -- where a style object per cell stores the same format millions of times for a sheet that really uses a dozen styles."
+  signal: "a cell type that embeds its full formatting inline, so a uniformly formatted region holds one identical style copy per cell instead of one shared style."

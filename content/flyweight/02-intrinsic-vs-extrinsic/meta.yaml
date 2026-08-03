@@ -1,0 +1,16 @@
+title: "Intrinsic vs extrinsic: a forest of trees"
+standard: "C++11"
+difficulty: 2
+summary: "Flyweight's core move is splitting state into intrinsic (shared, immutable -- a tree's species, mesh, textures) and extrinsic (per-instance -- its position): the heavy intrinsic part is interned and shared, and each object keeps only its cheap extrinsic state plus a pointer to the shared part, so a forest of thousands costs a handful of species."
+notes: "The design decision that makes Flyweight work is drawing the line between intrinsic and extrinsic state. Intrinsic state is what every instance of a kind shares and never changes with context -- for a tree, its species, and in a real engine the mesh and textures that species uses, which are megabytes. Extrinsic state is what differs per instance and depends on context -- here the tree's x and y. Flyweight interns the intrinsic part so all trees of a species point at one shared TreeType, and each Tree stores only its position and that pointer. The payoff is the whole reason the pattern exists: six trees here are backed by three tree types, and at the scale this is meant for -- a forest of a hundred thousand trees, ten species -- the difference is between ten meshes in memory and a hundred thousand copies of them, gigabytes of duplicated vertex and texture data versus a few. Getting the split right is the skill: put too much in the flyweight and instances that should differ end up sharing (a tree that should be at a different position is not intrinsic); put too little and the shared saving evaporates. The test for intrinsic state is that it is identical for every instance of the kind AND never mutated -- if either fails, it is extrinsic and belongs with the instance or is passed to the operation, which the next example shows. Note the two kinds of sharing this uses: the map interns the TreeType, and shared_ptr reference-counts it so it is freed only when the last tree of that species is gone."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::map::operator[]", url: "https://en.cppreference.com/w/cpp/container/map/operator_at" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

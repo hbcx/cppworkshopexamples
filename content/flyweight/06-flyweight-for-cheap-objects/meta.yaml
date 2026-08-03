@@ -1,0 +1,15 @@
+title: "Anti-pattern: a flyweight for cheap objects"
+standard: "C++11"
+difficulty: 3
+summary: "Flyweight trades a pointer indirection and a factory lookup for the memory saved by sharing; when the shared object is tiny, that trade is a loss -- the shared_ptr handle is already as big as the value, and the control block, map node, and per-access lookup cost more than copying the value would."
+notes: "Flyweight is a memory optimisation, and like every optimisation it has a break-even point. The saving is the intrinsic state you no longer duplicate; the cost is a handle per user (a pointer, or a shared_ptr which is two), a heap control block and a map node per distinct value, and a factory lookup on every access. That is a clear win when the intrinsic state is large -- a mesh, a texture, a long string shared by thousands of objects. It is a clear loss when the object is tiny: interning an 8-byte Point behind a shared_ptr means the handle alone is at least as big as the value it points at, and you have added a heap allocation, a map entry, and a lookup to avoid copying eight bytes that a register move would handle for free. This example makes the sizes concrete -- the value is 8 bytes, the shared_ptr handle is bigger -- and the fix is simply to store the value inline: no heap, no lookup, no sharing needed. The same misjudgement sinks pooling cheap objects: the machinery costs more than the thing it manages. The rule is to reach for Flyweight only when two conditions hold together -- there are very MANY objects, and each shares a LARGE intrinsic part -- and to confirm with a measurement rather than a feeling, because the overhead is easy to picture as free and is not. For small trivially-copyable values, copy them; for a handful of large ones, sharing barely matters; Flyweight is for the case where large and many meet. The tell: a factory interning a small, trivially-copyable value whose handle rivals the value in size."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "sizeof", url: "https://en.cppreference.com/w/cpp/language/sizeof" }
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+  - { name: "std::make_pair", url: "https://en.cppreference.com/w/cpp/utility/pair/make_pair" }

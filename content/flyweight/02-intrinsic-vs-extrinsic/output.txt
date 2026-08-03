@@ -1,0 +1,7 @@
+oak at (0,0)
+pine at (1,2)
+oak at (2,4)
+pine at (3,6)
+oak at (4,8)
+birch at (5,10)
+6 trees, but only 3 tree types built

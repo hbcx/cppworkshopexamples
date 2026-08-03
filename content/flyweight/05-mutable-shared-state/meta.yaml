@@ -1,0 +1,14 @@
+title: "Anti-pattern: mutable state on a shared flyweight"
+standard: "C++11"
+difficulty: 3
+summary: "Storing per-use, mutable state on the flyweight breaks the pattern: because one object is shared by every use, setting that state for one occurrence changes it for all of them -- the flyweight has no per-instance identity to hold context, so anything context-dependent must be extrinsic."
+notes: "This is the defining Flyweight bug, and it follows directly from what a flyweight is: one physical object shared by many logical uses. Put mutable, per-use state on it and every use sees the same field, so a change made for one occurrence silently changes all of them. GlyphBad here stores a colour; because the factory returns the same shared 'a' for every request, setting it red and then blue leaves both handles -- and every other 'a' in the document -- blue, and the red is simply lost. Nothing crashes; the colours are just wrong, which is the hard kind of bug to trace back to its cause. The fix is the intrinsic/extrinsic discipline stated as a rule: a flyweight holds ONLY intrinsic state, which is identical for every instance and never mutated, so GlyphGood keeps just the character and takes the colour as an argument to the operation, and each use supplies its own. The test for whether a field belongs on the flyweight is exactly this: if two uses could ever want different values for it, or if any code path writes to it after construction, it is extrinsic and must live with the client or be passed in. The safest way to enforce this in C++ is to make the flyweight immutable -- const data members, or expose it only through const references and const methods as the factories in the earlier examples do -- so the compiler rejects the mutation instead of letting it corrupt shared state at runtime. The tell: a flyweight, returned shared from a factory, with a setter or a non-const method that writes a member."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

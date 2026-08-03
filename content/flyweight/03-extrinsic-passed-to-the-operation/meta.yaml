@@ -1,0 +1,16 @@
+title: "Passing extrinsic state to the operation"
+standard: "C++11"
+difficulty: 2
+summary: "Extrinsic state need not be stored anywhere -- in the classic form it is passed to the flyweight's operation as an argument, so one shared object serves every context: here one 'a' glyph draws at every column an 'a' appears, and a four-character string renders through two glyph objects."
+notes: "The forest example kept extrinsic state (position) in a small per-instance object next to a pointer to the flyweight. This example shows the other, purer form: the extrinsic state is not stored at all -- it is handed to the operation each time it runs. Glyph holds only the character; drawAt takes the column as an argument, so the single shared 'a' glyph draws itself at column 0 and again at column 3, and 'b' at columns 1 and 2, with four characters rendered through just two glyph objects. This is the original Gang of Four formulation, where a document of thousands of characters is drawn by a few dozen glyph flyweights, each asked to draw at a position the layout engine computes and passes in. The two forms are a genuine design choice. Storing extrinsic state in a context object (the forest's Tree) is convenient when the objects persist and you iterate them -- the position lives somewhere and travels with the instance. Passing it to the operation keeps the per-item footprint at literally one pointer and suits a transient render pass that computes positions on the fly and never stores them. Both keep the flyweight itself free of context, which is the invariant that matters: the flyweight is shared, so anything that varies per use must come from outside it, whether from a neighbouring context object or from the call. The factory here returns a const reference to the shared glyph -- const because a flyweight must not be mutated through it, the subject of this chapter's central anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::map::emplace", url: "https://en.cppreference.com/w/cpp/container/map/emplace" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

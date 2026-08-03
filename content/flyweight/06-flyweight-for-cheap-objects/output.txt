@@ -1,0 +1,7 @@
+== flyweight for a tiny value ==
+sizeof(Point)              = 8 bytes
+sizeof(shared_ptr handle)  = 16 bytes (the handle alone is at least as big as the value)
+...plus a heap control block and a map node per distinct value
+== fix: store the value directly ==
+Point stored inline        = 8 bytes
+point is (1,2)

@@ -1,0 +1,5 @@
+col 0: a
+col 1: b
+col 2: b
+col 3: a
+4 characters drawn using 2 glyph objects

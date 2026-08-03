@@ -1,0 +1,6 @@
+== mutable shared state ==
+a in blue
+a in blue
+== colour as extrinsic state ==
+a in red
+a in blue

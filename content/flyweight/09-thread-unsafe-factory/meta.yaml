@@ -1,0 +1,15 @@
+title: "Anti-pattern: an unsynchronised flyweight factory"
+standard: "C++11"
+difficulty: 3
+summary: "A flyweight factory shared across threads without a lock has a check-then-create race: two threads can both find a key missing and both build it, breaking the one-instance-per-key invariant, and the concurrent writes to the map are a data race and undefined behaviour -- a mutex around check-and-create fixes both."
+notes: "The factory's core step is check-then-create: look up the key, and if it is absent, build and insert. That sequence is not atomic, so when two threads run it at once on the same missing key, both can pass the check before either inserts, and both then build -- two objects for one key, the sharing invariant broken and one construction lost. Worse, std::map is not safe for concurrent modification, so two threads inserting at the same time is a data race: undefined behaviour that can corrupt the tree, not merely duplicate an object. Because ThreadSanitizer is not part of this local toolchain, the example does not spawn real threads; it reproduces the vulnerable interleaving deterministically in one thread -- A checks (missing), B checks (still missing), both create -- so the lost update is visible (two builds for one key) without invoking the actual race. The fix is to make check-and-create a single critical section: SyncedFactory takes a std::mutex with a lock_guard around the whole lookup-or-build, so the first caller builds and inserts while others wait, then find the entry and share it -- one build per key, and no concurrent map mutation. Two refinements a production factory weighs: the lock serialises every access, so under heavy contention a reader-writer lock or a sharded map reduces the bottleneck; and holding the lock across the object's CONSTRUCTION can be costly if construction is slow, which is where double-checked patterns or per-key locks come in -- but the naive unlocked factory is simply wrong, not merely slow. Note this is the same shape as the shared-pool-without-a-lock trap: shared mutable structure plus a check-then-act sequence equals a race. The tell: a Flyweight (or any interning cache) with a plain map or unordered_map reachable from multiple threads and no mutex around its get()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "data race", url: "https://en.cppreference.com/w/cpp/language/memory_model" }
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }

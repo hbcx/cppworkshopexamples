@@ -1,0 +1,6 @@
+- slug: "object-pool"
+  note: "The reuse cousin, and the sharp contrast: an Object Pool recycles MUTABLE objects checked out and returned one owner at a time, where Flyweight shares IMMUTABLE objects concurrently and never returns them -- reach for the pool when creation is the cost, Flyweight when duplication is."
+- slug: "shared-ptr"
+  note: "The sharing mechanism underneath: the factory hands out shared_ptr to interned flyweights, reference-counted so one lives as long as any user holds it and is freed when the last drops it -- go there for that ownership model."
+- slug: "weak-ptr"
+  note: "The eviction fix in depth: a flyweight factory that must not grow forever holds weak_ptr, so an interned object expires with its last user -- see this chapter's unbounded-pool anti-pattern, then weak_ptr for lock() and expired()."

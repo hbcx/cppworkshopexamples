@@ -1,0 +1,4 @@
+== strong cache: entries never released ==
+pool size after users gone: 2
+== weak cache: entries expire with their last user ==
+live entries after users gone: 0

@@ -1,0 +1,13 @@
+title: "Flyweight basics: an interning factory"
+standard: "C++11"
+difficulty: 1
+summary: "Flyweight supports vast numbers of fine-grained objects by sharing: a factory interns them by key, so every request for the same key returns one shared object instead of allocating a new one -- here three glyph requests over two distinct characters build only two Glyph objects."
+notes: "Flyweight is a memory-optimisation pattern: when a program would otherwise hold millions of objects that are mostly identical, it shares the identical part so few physical objects back many logical ones. The mechanism is an interning factory. GlyphFactory keeps a pool keyed by character; get() returns the existing glyph if one was already built for that key, and only constructs a new one otherwise. So requesting a, then b, then a again yields two Glyph objects, not three, and the two a requests hand back the very same shared object -- proven here by pointer equality (a1 == a2) and by the construction counter, not by printing addresses, which would not be reproducible. The state a flyweight holds must be INTRINSIC: shared, context-independent, and immutable, because every user sees the same instance -- the next examples make the intrinsic-versus-extrinsic split explicit, and mutating shared state is this chapter's central anti-pattern. This is why the factory is not optional decoration but the pattern itself: it is the single point that guarantees one instance per distinct value, and without it callers would each build their own and the sharing would not happen. Flyweight is easy to confuse with its neighbours. A Singleton is ONE instance for the whole program; a Flyweight factory holds a small POOL, one instance per distinct intrinsic value. An Object Pool reuses mutable objects that are checked out and returned one owner at a time; a Flyweight shares immutable objects concurrently and they are never returned. The factory here uses shared_ptr so the shared glyphs are reference-counted and freed when the last user drops them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }

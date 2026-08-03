@@ -1,0 +1,14 @@
+title: "String interning: Flyweight for identifiers"
+standard: "C++11"
+difficulty: 3
+summary: "String interning is Flyweight applied to strings: a table stores each distinct string once and hands back a shared handle, so equal text is the same object -- storage is deduplicated and equality becomes an O(1) pointer comparison instead of a character-by-character scan."
+notes: "Interning is the most widespread real use of Flyweight, and this is how compilers, interpreters, and language runtimes handle identifiers. A SymbolTable stores each distinct string once and returns a shared handle to it, so parsing source where width appears a thousand times keeps one copy of the text and a thousand cheap handles to it. Two benefits follow, and the second is the one people reach for. Memory: the string data is stored once regardless of how often it recurs. Speed: because equal identifiers are now the SAME object, comparing two symbols is comparing two pointers -- O(1), one instruction -- instead of scanning characters until they differ, which is what turns a symbol table's millions of name comparisons from a hot spot into nothing. This is why Java has String.intern, why CPython interns identifier-like strings automatically, and why compilers like LLVM keep a string pool: an interned name is a canonical, comparable-by-identity token. The invariant that makes it sound is immutability -- the stored strings are const and shared, so no holder can change text out from under another, which is exactly the intrinsic-state rule of Flyweight. Two cautions this example is small enough to gloss but production interning must not: the table here keeps every string forever, so a long-running process that interns unbounded distinct text grows without bound (this chapter's eviction anti-pattern, fixed with weak references); and a shared table mutated from several threads needs synchronisation. Reach for interning when a small set of values recurs enormously and you compare them constantly -- identifiers, enum-like tags, repeated categorical data in a column."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "std::unordered_map::find", url: "https://en.cppreference.com/w/cpp/container/unordered_map/find" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

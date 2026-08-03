@@ -8,3 +8,5 @@
   note: "The non-owning companion, in depth: observe a shared object without keeping it alive -- lock() versus expired(), weak caches, back-pointers, and weak_from_this."
 - slug: "proxy"
   note: "The design pattern it embodies: std::shared_ptr is a smart-reference proxy -- a stand-in that controls access to an object, here managing its lifetime by reference count -- see Proxy for the pattern in general (virtual, protection, remote, smart reference)."
+- slug: "flyweight"
+  note: "A real interning use: a Flyweight factory hands out shared_ptr to interned objects so many logical objects share few physical ones, and the reference count frees a flyweight when its last user is gone."

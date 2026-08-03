@@ -1,0 +1,2 @@
+bad widget font: Sans
+good widget font: Serif

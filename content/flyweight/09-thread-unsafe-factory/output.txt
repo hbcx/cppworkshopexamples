@@ -1,0 +1,4 @@
+== unsynchronised: the check-then-create race, reproduced ==
+objects built for one key: 2
+== synchronised: check-and-create under a lock ==
+objects built for one key: 1
