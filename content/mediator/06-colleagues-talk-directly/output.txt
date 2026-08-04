@@ -1,0 +1,6 @@
+-- bad (mesh) --
+  submit enabled
+  submit disabled
+-- good (hub) --
+  submit enabled
+  submit disabled

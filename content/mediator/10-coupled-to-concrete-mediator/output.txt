@@ -1,0 +1,5 @@
+-- bad (welded to ConcreteHub) --
+  hub saw bad-field change
+-- good (same field, two mediators) --
+  real hub: good-field
+  test double logged: good-field

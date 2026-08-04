@@ -1,0 +1,6 @@
+publish order.placed A100
+  email: confirm order A100
+  inventory: reserve stock for A100
+publish order.cancelled A100
+  refund: process for A100
+publish shipping.delayed A100 (no subscribers)

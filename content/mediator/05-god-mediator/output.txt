@@ -1,0 +1,18 @@
+-- god mediator --
+motion:
+  lights on
+  log motion
+smoke:
+  ALARM
+  hvac off
+cold:
+  heater on
+-- split mediators --
+motion:
+  lights on
+  log motion
+smoke:
+  ALARM
+  hvac off
+cold:
+  heater on

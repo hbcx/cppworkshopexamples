@@ -1,0 +1,5 @@
+-- bad (no guard): set USD = 10 --
+  ...aborted (runaway loop)
+  updates: 13
+-- good (guard): set USD = 10 --
+  USD=10 EUR=9 in 2 updates

@@ -1,0 +1,6 @@
+-- bad (rule in mediator) --
+  ledger: recorded -30
+  denied: insufficient funds
+-- good (rule in account) --
+  ledger: recorded -30
+  denied: insufficient funds

@@ -8,3 +8,5 @@
   note: "The behavioural sibling that also replaces a type/status switch with polymorphism: State swaps the object's mode as its status changes, where Command reifies one request to trigger or undo -- go there for the delegating-context machine and its transition traps."
 - slug: "chain-of-responsibility"
   note: "Where a reified request gets routed: Chain of Responsibility passes a request along handlers until one acts, and that request is frequently a Command object -- go there for the sender-decoupled routing that decides WHO handles what this chapter packages."
+- slug: "mediator"
+  note: "The other place reified requests flow: a Mediator coordinates a set of colleagues, and its event-bus form routes the requests they send -- go there for hub-and-spoke coordination, where Command supplies the request objects that travel between colleagues."

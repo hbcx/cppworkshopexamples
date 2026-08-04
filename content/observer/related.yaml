@@ -8,3 +8,5 @@
   note: "The sibling that reifies one request rather than broadcasting an event: Command packages a request as an object to queue, log, or undo, where Observer notifies many listeners -- go there for stored, undoable, replayable requests."
 - slug: "chain-of-responsibility"
   note: "The one-versus-many contrast from the other side: Observer notifies ALL registered listeners, where Chain of Responsibility passes a request until exactly ONE handler takes it -- go there when a request should be handled once by the first capable handler rather than broadcast to everyone."
+- slug: "mediator"
+  note: "The coordination relative built on the same notification idea: Observer broadcasts one-way and listeners react independently, where Mediator adds two-way logic about how colleagues interact -- go there when participants must be coordinated, not merely notified, and its event-bus form is Observer at scale."

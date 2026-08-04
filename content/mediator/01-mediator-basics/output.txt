@@ -1,0 +1,6 @@
+Alice: hi all
+  [Bob sees] Alice: hi all
+  [Carol sees] Alice: hi all
+Bob: hey Alice
+  [Alice sees] Bob: hey Alice
+  [Carol sees] Bob: hey Alice

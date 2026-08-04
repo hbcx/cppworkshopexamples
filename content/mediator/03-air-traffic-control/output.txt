@@ -1,0 +1,11 @@
+  AA1 cleared to land
+  BB2 holding
+  CC3 holding
+  AA1 landing
+  AA1 cleared the runway
+  BB2 cleared to land
+  BB2 landing
+  BB2 cleared the runway
+  CC3 cleared to land
+  CC3 landing
+  CC3 cleared the runway

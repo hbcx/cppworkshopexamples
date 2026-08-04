@@ -1,0 +1,4 @@
+-- bad (mediator for two) --
+  label: clicked!
+-- good (direct) --
+  label: clicked!

@@ -1,0 +1,5 @@
+type username 'alice'
+type password 'secret'
+  submit enabled
+clear password
+  submit disabled

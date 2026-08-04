@@ -1,0 +1,27 @@
+- problem: "A form or dialog has widgets whose state depends on each other -- submit enabled only when required fields are filled, one checkbox disabling a group, a dropdown changing which fields are visible -- and the rules keep changing as the screen evolves."
+  why: "A dialog mediator holds all the inter-widget rules in one place, so widgets stay dumb and independent and a rule change touches only the mediator; wiring each widget to poke the others spreads the rules across the widgets and makes every screen change edit several of them."
+  signal: "Widgets holding references to sibling widgets to enable, disable, or update them, or the same enable/visibility rule duplicated across several widgets' change handlers."
+
+- problem: "Participants in a chat, collaboration session, or multiplayer lobby need to communicate, but should not each maintain a list of every other participant."
+  why: "A room or server mediator routes messages and can enforce policy (moderation, presence, history) in one place, so a participant only knows the room; peer-to-peer wiring means every participant tracks every other and the routing and policy are duplicated across them."
+  signal: "Each participant object holding a collection of the other participants and looping over them to broadcast, rather than sending to a central room or server."
+
+- problem: "Several agents contend for a shared resource with real scheduling rules -- planes for a runway, jobs for a printer, cabins for an elevator, transactions for a lock -- and the contention must be arbitrated in a defined order."
+  why: "A controller mediator owns the resource's state and the scheduling policy, so agents just request and wait and the arbitration lives in one authority that can evolve (priorities, preemption); letting agents negotiate pairwise recreates the n-to-n mesh and scatters -- and races -- the scheduling logic."
+  signal: "Agents that must know about each other or poll shared state to decide who goes next, instead of asking one controller that grants access and queues the rest."
+
+- problem: "A business transaction spans several services -- reserve inventory, charge payment, schedule shipping -- and the steps must run in order with compensation on failure, without each service calling the next."
+  why: "An orchestrator mediator sequences the steps and handles rollback centrally (the saga orchestration style), so services stay independent and the workflow is readable in one place; having each service call the next (choreography) couples them into a chain that is hard to follow and to change."
+  signal: "Services that directly invoke the next service in a business process, so the end-to-end flow is spread across services and no single place describes the whole transaction."
+
+- problem: "Independent subsystems in a game or application -- input, physics, audio, UI, scoring -- must react to each other's events without being wired together into a dependency tangle."
+  why: "A central event bus or coordinator lets each subsystem publish and subscribe without referencing the others, so subsystems can be added, removed, or reordered freely; direct subsystem-to-subsystem calls create a mesh that makes any subsystem hard to change or test in isolation."
+  signal: "Subsystems holding references to other subsystems to notify them, or a growing set of cross-subsystem calls that make the modules impossible to compile or test separately."
+
+- problem: "Smart-home or IoT devices should coordinate -- a motion sensor turning on lights and arming logic, a smoke alarm shutting the HVAC -- but the set of devices and rules changes constantly and device-to-device wiring does not scale."
+  why: "A hub mediator holds the automation rules and the devices only report events and expose actions, so a new rule or device is a change in the hub, not a rewiring of devices; pairing devices directly (this sensor knows those lights) creates brittle wiring that breaks whenever the home changes."
+  signal: "Devices configured with direct references to the specific devices they control, so adding a device or changing a rule means re-pairing several devices rather than editing one hub."
+
+- problem: "Modules or plugins that come and go at runtime need to react to each other's events, and you do not want a fixed compiled-in set of participants or direct references between them."
+  why: "A publish-subscribe event bus is the loosest Mediator: publishers emit topics and subscribers register callbacks, so participants are fully independent and dynamic; the cost is that the coupling moves into topic strings the compiler cannot check, so it fits when independence and extensibility outweigh traceability."
+  signal: "A desire to add reactions to events without touching the emitter, or plugins that must interoperate without knowing about each other at compile time -- weighed against needing to trace exactly who handles what."

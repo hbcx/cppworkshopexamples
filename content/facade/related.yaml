@@ -4,3 +4,5 @@
   note: "The other structural wrapper, by intent: Decorator keeps a component's interface and layers behaviour on one object, where Facade presents a new, smaller interface over a subsystem and adds only orchestration -- go there for the added-behaviour wrapper."
 - slug: "dependency-injection"
   note: "How a facade interface reaches the app: define the facade as an interface, build the concrete facade at the composition root, and inject it -- the decoupling-seam example made concrete across the whole object graph."
+- slug: "mediator"
+  note: "The behavioural relative that also centralises, by intent: a Facade simplifies a subsystem for outside clients one way in, where a Mediator coordinates the mutual interaction among a set of peers -- go there when members need to be wired together, not just hidden behind one interface."

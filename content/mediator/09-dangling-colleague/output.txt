@@ -1,0 +1,5 @@
+with guest present:
+  Alice got: hello
+  Guest got: hello
+after guest left:
+  Alice got: still here?
