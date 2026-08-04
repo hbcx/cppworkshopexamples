@@ -1,0 +1,7 @@
+start: Locked
+push  Locked (stay)
+coin  Locked -> Unlocked
+push  Unlocked -> Locked
+coin  Locked -> Unlocked
+coin  Unlocked (stay)
+end:   Unlocked

@@ -1,0 +1,10 @@
+--- bad ---
+do A
+do B
+do C
+end: C
+--- good ---
+do A
+do B
+do C
+end: C

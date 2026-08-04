@@ -8,3 +8,5 @@
   note: "The broadcast sibling: where Strategy injects one algorithm a context calls, Observer notifies many listeners of an event -- go there for one-to-many notification and the C++ lifetime problem it raises."
 - slug: "command"
   note: "The reified-request sibling: where Strategy injects one algorithm to call now, Command packages a whole request as an object to store, queue, log, or undo later -- go there for undo/redo, job queues, and macros."
+- slug: "state"
+  note: "The structural twin with the opposite intent: State has the identical context-delegates-to-an-interface shape, but the object transitions its OWN state instead of the client picking a fixed one -- go there when the behaviour should advance with the object's status, which this chapter's it-is-really-State anti-pattern points straight at."

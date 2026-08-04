@@ -1,0 +1,7 @@
+--- bad ---
+playing while power is off: inconsistent
+--- good ---
+play denied: power is off
+power on
+playing
+isPlaying=yes

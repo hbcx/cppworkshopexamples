@@ -1,0 +1,13 @@
+title: "One interface, different behaviour and legality per state"
+standard: "C++11"
+difficulty: 2
+summary: "A media player where play, pause and stop each mean something different in every state -- and some are outright illegal -- is the case State is built for: each state answers the commands its own way and rejects the ones that do not apply, so the context needs no status field and no per-method switch."
+notes: "This is the heart of the pattern: the same command does different work depending on the object's state, and the illegal combinations are refused rather than silently mishandled. A Stopped player starts playback from zero on play and refuses pause; a Playing one advances, honours pause by freezing at the current position, and rewinds on stop; a Paused one resumes on play and stays frozen on tick. Each of those rules lives in the state class it belongs to, so the Player context holds only the shared data (the playback position the states read and write) and forwards commands -- there is no switch(status) repeated in play(), pause() and stop(). Two things this example makes concrete beyond the basics. First, legality is part of behaviour: a state that cannot honour a command handles it explicitly (prints the refusal and stays put by returning nullptr) instead of leaving an illegal transition undefined -- deciding what an illegal event does, per state, is exactly what a switch-based version tends to forget. Second, the states operate on the context's data without owning it: pause reads the position through the Player, stop resets it, and tick advances it only in Playing, so the mutable per-object data stays in the one context while the states stay stateless and therefore shareable -- the property the next example turns into shared singletons. The transitions still flow the safe way, returned from the handler and applied by the context after the call, never by a state reassigning the context from inside its own method. The tell that a class wants this pattern: several methods that each begin with the same switch on a status enum, and a scatter of if-this-state-then-reject guards that are easy to get inconsistent."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

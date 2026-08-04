@@ -1,0 +1,13 @@
+title: "State basics: behaviour that depends on the current state"
+standard: "C++11"
+difficulty: 1
+summary: "State makes each state an object: a family of state classes share one interface, the context holds one and delegates every event to it, and each state handles the event and returns the next state -- so the object changes what it does as its status changes, with no state-checking branch in the context."
+notes: "State turns a state machine into a set of objects. A State interface declares the events (coin, push); each concrete state implements them for its own case; and the context (Turnstile) holds one state and forwards events to it, keeping no logic of its own. A Locked turnstile treats coin as unlock and push as denied; an Unlocked one treats push as go-through-and-relock and coin as a no-op -- the same two calls do different things purely because the current state object is different, which is what is meant by the object appearing to change its class. The transitions live inside the states, not in the context: each handler returns the next state (or nullptr to stay), and the context swaps to it. That return-the-next-state shape is deliberate and safer than the textbook alternative of a state calling context.setState(...) from inside its own method -- there the context can destroy the current state while its method is still running, a use-after-free this chapter's last anti-pattern is about; returning defers the swap until the handler has finished. The value of the pattern is the same open/closed win as Strategy: adding a state is a new class the context never sees, no switch to extend. State and Strategy are in fact structurally identical -- a context delegating to an interface -- and differ only in intent: a Strategy is chosen by the client and stays put, where a State is the object's own status and it transitions itself, which is exactly the case here. This first example owns its states through unique_ptr and allocates a fresh one per transition; when the states are stateless the far cheaper move is to share one instance of each, which a later example shows."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

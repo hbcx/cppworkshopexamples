@@ -1,0 +1,12 @@
+--- bad ---
+cannot approve a draft
+submitted for review
+approved and published
+cannot submit a published document
+label: Published
+--- good ---
+cannot approve a draft
+submitted for review
+approved and published
+cannot submit a published document
+label: Published

@@ -1,0 +1,3 @@
+a: Locked
+b: Locked
+state objects ever constructed: 2

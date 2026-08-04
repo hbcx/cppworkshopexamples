@@ -1,0 +1,8 @@
+--- bad (entangled) ---
+a sees hits=1
+a sees hits=2
+b sees hits=3
+--- good (independent) ---
+c sees hits=1
+c sees hits=2
+d sees hits=1

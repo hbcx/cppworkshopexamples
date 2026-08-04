@@ -1,0 +1,9 @@
+start: Locked
+push  -> denied, pay first
+coin  -> unlock
+now:   Unlocked
+push  -> go through, lock behind you
+now:   Locked
+coin  -> unlock
+coin  -> thanks, already unlocked
+end:   Unlocked

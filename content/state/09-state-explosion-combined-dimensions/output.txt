@@ -1,0 +1,8 @@
+--- bad ---
+Down/Anon
+Down/Auth
+Up/Auth
+--- good ---
+Down/Anon
+Down/Auth
+Up/Auth

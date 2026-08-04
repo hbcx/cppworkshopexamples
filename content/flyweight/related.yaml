@@ -4,3 +4,5 @@
   note: "The sharing mechanism underneath: the factory hands out shared_ptr to interned flyweights, reference-counted so one lives as long as any user holds it and is freed when the last drops it -- go there for that ownership model."
 - slug: "weak-ptr"
   note: "The eviction fix in depth: a flyweight factory that must not grow forever holds weak_ptr, so an interned object expires with its last user -- see this chapter's unbounded-pool anti-pattern, then weak_ptr for lock() and expired()."
+- slug: "state"
+  note: "Flyweight in the wild: because a stateless state object is identical for every context, the State pattern shares one immutable instance per state as a singleton and a transition becomes a pointer reassignment -- go there to see intrinsic-only sharing applied to a behavioural pattern."

@@ -1,0 +1,10 @@
+--- bad ---
+reject: not open
+open
+send
+reject: already open
+--- good ---
+reject: cannot send here
+open
+send
+reject: cannot open here

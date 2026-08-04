@@ -1,0 +1,5 @@
+start: A
+A handled, moving to B
+now:   B
+B handled, staying
+end:   B

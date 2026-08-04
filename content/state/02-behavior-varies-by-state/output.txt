@@ -1,0 +1,8 @@
+[Stopped]
+pause -> nothing to pause (stopped)
+play  -> start from 0
+pause -> hold at 2
+[Paused pos=2]
+play  -> resume
+stop  -> stop and rewind
+[Stopped pos=0]

@@ -1,0 +1,27 @@
+- problem: "A TCP-style connection or any wire protocol moves through Closed, Listen, SynSent, Established and Closing, and send, recv and close mean different things in each -- many of them illegal (you cannot send on a socket that has not finished its handshake)."
+  why: "The obvious version scatters if (state == ...) guards through send(), recv() and close(), and the illegal combinations are the ones that get forgotten; a state class per connection state puts each state's legal operations and its transitions in one place, and an unhandled event is a rejection you wrote, not a guard you missed."
+  signal: "A socket or protocol class with a status enum and the same switch on it at the top of send(), recv() and close(), plus scattered checks like if (status != Established) return."
+
+- problem: "An order in a checkout system runs Cart -> Placed -> Paid -> Shipped -> Delivered, with Cancelled reachable only from some of them, and each transition has rules: you cannot ship an unpaid order or cancel a delivered one."
+  why: "Encoding the rules as guard conditions duplicated across every service method (pay(), ship(), cancel()) means the legal-transition graph lives nowhere and drifts; a state object per status makes the set of legal next steps explicit and refuses the rest, so the business rule is enforced in one place rather than re-checked everywhere."
+  signal: "An order or workflow entity with a status field and methods that each begin by validating the current status against a hardcoded set before proceeding."
+
+- problem: "A drawing or map editor has tools -- Select, Draw, Pan, Text -- and a mouse-down, mouse-move and mouse-up mean something completely different depending on which tool is active."
+  why: "A switch on the current tool inside every input handler grows unreadable and couples all tools together in three giant methods; a state (tool) object per mode keeps each tool's handling of the three events together, and adding a tool is a new class the input layer never sees."
+  signal: "Mouse or key event handlers whose body is a large switch on a currentTool enum, repeated across onMouseDown, onMouseMove and onMouseUp."
+
+- problem: "A media player is Stopped, Playing, Paused or Buffering, and play, pause, stop and seek behave differently in each -- some are no-ops, some are illegal, and the transitions depend on the current one."
+  why: "The naive player is a knot of booleans (isPlaying, isPaused) whose combinations include impossible ones, and every method branches on them; a state object makes the illegal combinations unrepresentable and gives each command one obvious meaning per state."
+  signal: "A player or stream class with several boolean flags for mode and methods that check combinations of them, including guards against states that should not be able to coexist."
+
+- problem: "A non-player character or AI agent in a game cycles through Idle, Patrol, Chase, Attack and Flee, and its per-frame update() does entirely different work in each, transitioning on events like spotting or losing the player."
+  why: "A finite state machine is the standard model here precisely because the behaviour is state-dependent and the transitions are the design; a switch in the update loop works for three states and collapses under the real dozen, where a state object per behaviour keeps each behaviour and its transitions together and is what behaviour-tree and FSM engines formalise."
+  signal: "An entity update() that is one large switch on an AI-state enum, with transition assignments to that enum sprinkled through the cases."
+
+- problem: "A document, ticket or article moves through an editorial workflow -- Draft, Review, Approved, Published, Archived -- where who may do what, and which transitions are allowed, depend entirely on the current stage."
+  why: "CMS and issue-tracker workflows are transition graphs with permissions attached, and expressing them as status-checking conditionals spread across controllers makes the allowed graph invisible and easy to violate; a state per stage names the legal transitions and the actions permitted in that stage in one auditable place."
+  signal: "A content or ticket entity whose methods repeatedly check a stage/status enum to decide both what to do and whether the current user is allowed to do it."
+
+- problem: "A byte-stream decoder -- a lexer, a protocol framer, an escape-sequence parser -- reads one byte at a time and its interpretation of that byte depends on where it is: reading a header, a length, a body, or an escape."
+  why: "This is a state machine by nature, and the fast, transition-heavy version is often a table (see the table-driven example), but once each mode does real work -- accumulating a field, validating, emitting a token -- a state object per mode keeps that work with its transitions instead of scattering it across parallel action tables; the choice between the two is itself a lesson this chapter draws."
+  signal: "A parse or decode loop with a mode enum and a switch per byte, where the cases both transition the mode and accumulate into buffers, growing action code inside what began as a pure transition switch."
