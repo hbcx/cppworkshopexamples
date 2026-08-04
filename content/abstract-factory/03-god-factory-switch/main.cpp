@@ -82,7 +82,7 @@ void showForm(const std::string& label, const GUIFactory& f) {
 }
 
 int main() {
-    // God factory: works, but the switch is smeared across every method.
+    // God factory: works, but the switch is spread across every method.
     GodFactory god(OS::Windows);
     std::cout << "[god]   form:\n";
     std::cout << "  " << god.createButton()->render() << '\n';

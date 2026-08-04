@@ -11,7 +11,7 @@
   signal: "Mouse or key event handlers whose body is a large switch on a currentTool enum, repeated across onMouseDown, onMouseMove and onMouseUp."
 
 - problem: "A media player is Stopped, Playing, Paused or Buffering, and play, pause, stop and seek behave differently in each -- some are no-ops, some are illegal, and the transitions depend on the current one."
-  why: "The naive player is a knot of booleans (isPlaying, isPaused) whose combinations include impossible ones, and every method branches on them; a state object makes the illegal combinations unrepresentable and gives each command one obvious meaning per state."
+  why: "The naive player is a mess of booleans (isPlaying, isPaused) whose combinations include impossible ones, and every method branches on them; a state object makes the illegal combinations unrepresentable and gives each command one obvious meaning per state."
   signal: "A player or stream class with several boolean flags for mode and methods that check combinations of them, including guards against states that should not be able to coexist."
 
 - problem: "A non-player character or AI agent in a game cycles through Idle, Patrol, Chase, Attack and Flee, and its per-frame update() does entirely different work in each, transitioning on events like spotting or losing the player."

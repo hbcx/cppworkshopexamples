@@ -10,7 +10,7 @@
 
 - problem: "A compiler, interpreter, or query engine handles source or queries where the same identifiers and keywords recur constantly, and it compares them by name over and over while building symbol tables and resolving references."
   why: "interning each distinct string once and handing back a shared handle deduplicates the text AND turns every later name comparison into an O(1) pointer compare, the technique behind Java String.intern, CPython's interned strings, and LLVM's string pool -- where storing each occurrence and comparing character by character makes the symbol table's millions of comparisons a hot path."
-  signal: "identifier strings stored per occurrence and compared with string equality in a symbol table or resolver, rather than interned to a canonical handle."
+  signal: "identifier strings stored per occurrence and compared with string equality in a symbol table or resolver, rather than interned to a classic handle."
 
 - problem: "A system boxes or wraps huge numbers of small immutable values -- small integers, booleans, enum-like tags, currency codes -- where most of the values that occur come from a tiny fixed set."
   why: "caching one shared immutable instance per distinct small value (as Java's Integer.valueOf does for -128..127) avoids an allocation per occurrence and lets equal values share identity -- where allocating a fresh boxed object for every small value churns the allocator and the heap for values that are almost all duplicates."

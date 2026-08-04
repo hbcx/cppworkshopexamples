@@ -3,4 +3,4 @@
 - slug: "flyweight"
   note: "Why stateless states can be shared as singletons: interning one immutable instance per state and handing out pointers is the Flyweight optimisation this chapter's shared-state example uses -- go there for the intrinsic-vs-extrinsic split and the factory that keeps the shared objects unique."
 - slug: "command"
-  note: "The other behavioural pattern that reifies something as an object: Command packages a request to store, queue and undo, where State packages a mode to switch between -- both replace a status/type switch with polymorphism; go there for execute-plus-undo and the invoker."
+  note: "The other behavioural pattern that packages something as an object: Command packages a request to store, queue and undo, where State packages a mode to switch between -- both replace a status/type switch with polymorphism; go there for execute-plus-undo and the invoker."

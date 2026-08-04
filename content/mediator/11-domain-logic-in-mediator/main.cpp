@@ -1,8 +1,8 @@
-// Anti-pattern: domain logic in the mediator, anemic colleagues.
+// Anti-pattern: domain logic in the mediator, empty colleagues.
 //
 // A mediator should coordinate INTERACTIONS, not own the colleagues' own rules.
 // When a colleague's business logic -- here an account's overdraft rule -- is
-// lifted into the mediator, the colleague becomes anemic (just getters and
+// lifted into the mediator, the colleague becomes empty (just getters and
 // setters) and the rule ends up somewhere it cannot be reused or enforced
 // independently. The fix is to keep each colleague's rules inside the colleague
 // and let the mediator only coordinate: on a successful withdrawal, record it.

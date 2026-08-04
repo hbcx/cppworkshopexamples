@@ -23,7 +23,7 @@ private:
 
 // FIX: guard against re-entrancy. While a notification is in progress, setValue
 // only records the pending value; the in-flight loop applies it, so a change made
-// from an observer is COALESCED into the running broadcast instead of recursing --
+// from an observer is Merged into the running broadcast instead of recursing --
 // the call stack stays flat no matter how observers react.
 class SubjectGood {
 public:

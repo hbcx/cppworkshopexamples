@@ -1,7 +1,7 @@
 // Anti-pattern: Interpreter for a single fixed expression.
 //
 // Interpreter earns its machinery when a language is evaluated at runtime with
-// inputs that vary. Building the grammar-class apparatus to compute one fixed,
+// inputs that vary. Building the grammar-class setup to compute one fixed,
 // hard-coded expression is pure ceremony -- there is no language, no input, no
 // runtime variation, so the tree computes a constant that the expression itself
 // would state directly. If the formula is fixed and known at compile time, just

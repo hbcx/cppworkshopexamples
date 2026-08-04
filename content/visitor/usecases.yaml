@@ -1,5 +1,5 @@
 - problem: "A compiler or interpreter has an AST of node types and runs many passes over it -- type-check, constant-fold, optimize, generate code, pretty-print -- while the node types themselves rarely change."
-  why: "Each pass is a visitor, so a new pass is a new class and the node types stay put, which is exactly Visitor's good side of the expression problem; scattering each pass as a method on every node type would smear one pass across the whole hierarchy and make passes hard to read as a unit."
+  why: "Each pass is a visitor, so a new pass is a new class and the node types stay put, which is exactly Visitor's good side of the expression problem; scattering each pass as a method on every node type would spread one pass across the whole hierarchy and make passes hard to read as a unit."
   signal: "A fixed set of AST or IR node classes with a growing list of operations over them, or passes currently written as a method-per-node that would read better gathered per pass."
 
 - problem: "A document or scene tree must be rendered or exported to several targets -- HTML, PDF, plain text, an image -- from the same node structure, and new export formats keep being requested."

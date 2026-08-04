@@ -3,4 +3,4 @@
 - slug: "facade"
   note: "The other centralising pattern, by intent: a Facade offers a simpler one-way interface INTO a subsystem for outside clients, where a Mediator coordinates the mutual interaction AMONG a set of peers -- go there when the goal is to hide a subsystem's complexity, not to wire its members together."
 - slug: "command"
-  note: "What colleagues often send through the hub: a Command reifies a request as an object, and a mediator (especially an event bus) is a natural place to route or dispatch such requests -- go there for the request-as-object side of what flows between colleagues."
+  note: "What colleagues often send through the hub: a Command packages a request as an object, and a mediator (especially an event bus) is a natural place to route or dispatch such requests -- go there for the request-as-object side of what flows between colleagues."

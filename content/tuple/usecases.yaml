@@ -16,5 +16,5 @@
   signal: "an operator< or comparator lambda with a nested if a.x != b.x ... chain comparing several members in sequence"
 
 - problem: "A small in-memory table of mixed-type columns is needed briefly -- a lookup fixture in a test, a handful of parsed rows -- not worth a dedicated row type."
-  why: "A vector of tuples keeps each row's columns together and type-safe with zero boilerplate, where several parallel vectors indexed in lockstep can silently desynchronize and a named row struct is overkill for throwaway data."
+  why: "A vector of tuples keeps each row's columns together and type-safe with zero boilerplate, where several parallel vectors indexed together can silently desynchronize and a named row struct is overkill for throwaway data."
   signal: "several vectors of equal length indexed by one shared loop variable, or a struct defined only to populate one local table"

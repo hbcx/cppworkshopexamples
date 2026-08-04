@@ -5,7 +5,7 @@
 - slug: "unique-ptr"
   note: "The move-only RAII handle underneath a subscription token: the token that auto-unsubscribes on destruction is move-only for the same reason unique_ptr is -- one owner of the registration; go there for that ownership model."
 - slug: "command"
-  note: "The sibling that reifies one request rather than broadcasting an event: Command packages a request as an object to queue, log, or undo, where Observer notifies many listeners -- go there for stored, undoable, replayable requests."
+  note: "The sibling that packages one request rather than broadcasting an event: Command packages a request as an object to queue, log, or undo, where Observer notifies many listeners -- go there for stored, undoable, replayable requests."
 - slug: "chain-of-responsibility"
   note: "The one-versus-many contrast from the other side: Observer notifies ALL registered listeners, where Chain of Responsibility passes a request until exactly ONE handler takes it -- go there when a request should be handled once by the first capable handler rather than broadcast to everyone."
 - slug: "mediator"

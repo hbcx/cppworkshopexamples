@@ -37,7 +37,7 @@ Combined loginBad(Combined c) {            // "login" -- once per link value
     }
 }
 
-// ---------- GOOD: two orthogonal state variables ----------
+// ---------- GOOD: two independent state variables ----------
 enum class Link { Down, Up };
 enum class Auth { Anon, Authed };
 

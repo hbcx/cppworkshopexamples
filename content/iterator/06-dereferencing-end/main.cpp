@@ -22,7 +22,7 @@ int main() {
     //
     //   std::cout << *miss;   // miss == end(): dereferences one-past-the-last -> UB
     //
-    // It often prints a plausible-looking garbage number, which is what makes it
+    // It often prints a believable-looking garbage number, which is what makes it
     // dangerous: the bug hides until the value happens to matter.
 
     // ---- GOOD: check against end() first ----

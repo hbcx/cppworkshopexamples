@@ -1,7 +1,7 @@
 title: "Raw string literals: R\"(...)\" without escaping"
 standard: "C++11"
 difficulty: 1
-summary: "A raw string literal takes its text verbatim -- backslashes, quotes and newlines are literal -- so paths, regexes and JSON stop needing a wall of escape sequences."
+summary: "A raw string literal takes its text exactly -- backslashes, quotes and newlines are literal -- so paths, regexes and JSON stop needing a wall of escape sequences."
 notes: "R\"(...)\" is a C++11 literal whose body is copied character for character: no escape processing at all, so a Windows path is R\"(C:\\folder\\file)\" with the backslashes standing for themselves, and a regex like R\"(\\d+\\.\\d+)\" reads the way the regex engine will see it instead of being doubled. It spans multiple lines too -- a newline inside the parentheses is part of the string -- which suits embedded snippets of SQL, HTML or JSON. When the text itself contains the )\" sequence, you add a custom delimiter between the quote and the parenthesis: R\"json(...)json\", where json is any short tag of your choosing that must match on both ends, so the literal ends only at the exact )json\". The result is an ordinary std::string / const char*; raw only changes how the SOURCE is read, not the bytes produced. Reach for it wherever escaping is obscuring the content -- it removes a whole class of miscounted-backslash bugs."
 run: true
 sanitizers: []

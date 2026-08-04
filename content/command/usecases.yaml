@@ -9,7 +9,7 @@
   signal: "the same action logic pasted into a menu handler, a button handler, and a shortcut handler, instead of all three invoking one command."
 
 - problem: "Work must be decoupled in time or across threads from where it is requested -- a task queue drained by worker threads, a job scheduler, deferred/batched rendering, a retry queue."
-  why: "reifying each unit of work as a command object lets it be enqueued, scheduled, prioritised, retried, and carried across a thread boundary with its receiver and arguments intact -- where passing a raw function pointer plus a void* context loses type safety and names, and inlining the work at the call site cannot defer, reorder, or retry it."
+  why: "packaging each unit of work as a command object lets it be enqueued, scheduled, prioritised, retried, and carried across a thread boundary with its receiver and arguments intact -- where passing a raw function pointer plus a void* context loses type safety and names, and inlining the work at the call site cannot defer, reorder, or retry it."
   signal: "a producer that does work inline where it could enqueue it, or a queue of function-pointer-plus-context pairs rather than self-contained command objects."
 
 - problem: "Users need to record a sequence of operations and replay it -- a macro, a batch action applied to many items, an automation script, a test that drives the app through recorded steps."

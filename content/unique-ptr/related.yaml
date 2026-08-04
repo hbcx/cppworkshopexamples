@@ -1,7 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
 - slug: "move-semantics"
-  note: "The mechanism underneath: unique_ptr is the canonical move-only type, and every ownership transfer here is exactly the move that section builds."
+  note: "The mechanism underneath: unique_ptr is the classic move-only type, and every ownership transfer here is exactly the move that section builds."
 - slug: "vectors"
   note: "Where owning pointers get collected: a vector of unique_ptr holds polymorphic or non-copyable objects by base pointer, each still deleted automatically."
 - slug: "shared-ptr"

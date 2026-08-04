@@ -1,6 +1,6 @@
 // A real object structure: an expression tree with two visitors.
 //
-// The canonical Visitor use is a tree of node types visited by different
+// The classic Visitor use is a tree of node types visited by different
 // operations. Here an arithmetic expression -- Number, Add, Mul -- is walked by
 // a Printer (renders it) and an Evaluator (computes its value). Both are visitors
 // over the same nodes, added without changing the nodes. The tree is recursive,

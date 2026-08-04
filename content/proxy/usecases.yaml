@@ -17,7 +17,7 @@
   signal: "a memoization map and lookup repeated around calls to one expensive operation at several sites, or caching code embedded in a class whose real job is the computation."
 
 - problem: "An object needs bookkeeping on every access -- reference counting so it is freed exactly once, a mutex taken for the duration of a call, copy-on-write sharing, a null check -- without changing the object or its call sites."
-  why: "a smart-reference proxy via operator-> intercepts each use while the call site still reads like a pointer, which is why std::shared_ptr (ref-counting) and a lock-guarding handle are built this way -- where doing it by hand means manual new/delete that leaks on an early return, or a lock/unlock pair around every access that one code path forgets, with the bookkeeping smeared across all callers instead of living in the handle."
+  why: "a smart-reference proxy via operator-> intercepts each use while the call site still reads like a pointer, which is why std::shared_ptr (ref-counting) and a lock-guarding handle are built this way -- where doing it by hand means manual new/delete that leaks on an early return, or a lock/unlock pair around every access that one code path forgets, with the bookkeeping spread across all callers instead of living in the handle."
   signal: "manual acquire/release or lock/unlock pairs bracketing every use of an object, or raw owning pointers with delete on some but not all return paths."
 
 - problem: "A large value is shared among many readers and only occasionally modified -- a string, a document buffer, an image -- and copying it eagerly on every share wastes memory and time when most copies are never written to."

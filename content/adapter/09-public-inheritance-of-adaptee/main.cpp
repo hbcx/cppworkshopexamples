@@ -25,7 +25,7 @@ public:
 
 // Fix: inherit the adaptee PRIVATELY (implemented-in-terms-of). The adapter is
 // only a Logger to the outside; the adaptee stays encapsulated and the
-// translation cannot be sidestepped. (Composition -- a LegacyLog member -- is
+// translation cannot be avoided. (Composition -- a LegacyLog member -- is
 // the other, usually preferable, fix.)
 class TightAdapter : public Logger, private LegacyLog {
 public:

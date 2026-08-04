@@ -1,6 +1,6 @@
 - problem: "A product needs user- or admin-defined business rules -- eligibility for a discount, when to fire an alert, whether a transaction is flagged -- that change without a code deploy and must run over many records."
   why: "Modelling the rules as a small predicate language parsed into trees lets non-developers edit them in config or an admin UI and lets the engine run each rule over every record; hard-coding the conditions as if-chains means every rule change is a developer task and a redeploy."
-  signal: "A growing thicket of hard-coded if statements encoding business conditions, or a feature request to let rules be configured rather than compiled in."
+  signal: "A growing tangle of hard-coded if statements encoding business conditions, or a feature request to let rules be configured rather than compiled in."
 
 - problem: "A search or listing endpoint accepts filter expressions from clients -- status = open AND priority > 3 -- that must be validated and evaluated against records."
   why: "Parsing the filter into an expression tree once and interpreting it per record gives a safe, structured evaluation and a place to validate before running; string-concatenating the filter into a query or eval-ing it invites injection and offers no validation seam."

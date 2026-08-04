@@ -3,7 +3,7 @@
 // The Gang of Four separate the grammar's REPRESENTATION and interpretation from
 // how a sentence is PARSED. Fusing them -- a single pass that scans text and
 // computes an answer, leaving no tree behind -- works for one evaluation but
-// forfeits everything the tree buys you: you cannot reuse the parse, run a second
+// gives up everything the tree buys you: you cannot reuse the parse, run a second
 // operation over it (print, validate, optimise), or inspect it. Here the bad
 // version evaluates in the scan; the good version parses to a tree first, which
 // it can then both interpret AND print.

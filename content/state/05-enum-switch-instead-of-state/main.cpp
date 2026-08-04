@@ -5,7 +5,7 @@
 // enum, three times. It works, and for three states it looks fine. The cost is
 // that the state-dependent behaviour is scattered across the methods instead of
 // gathered per state, so adding a status means finding and editing every switch
-// in lockstep, and a forgotten case falls through to a wrong-but-quiet default.
+// together, and a forgotten case falls through to a wrong-but-quiet default.
 // The fix (DocumentGood) is one class per state; adding a state is a new class.
 
 #include <iostream>

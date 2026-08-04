@@ -1,4 +1,4 @@
-// The canonical Mediator: a dialog coordinating its widgets.
+// The classic Mediator: a dialog coordinating its widgets.
 //
 // This is the example from the Gang of Four. Widgets in a form depend on each
 // other -- the submit button should be enabled only when both fields are filled

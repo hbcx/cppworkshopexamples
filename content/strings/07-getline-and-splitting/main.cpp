@@ -15,7 +15,7 @@ static std::vector<std::string> split(const std::string& s, char delim) {
 }
 
 int main() {
-    // The canonical line loop, over an in-memory stream (no real stdin needed).
+    // The classic line loop, over an in-memory stream (no real stdin needed).
     std::string document = "first line\nsecond line\nthird line";
     std::istringstream lines(document);
     std::string line;

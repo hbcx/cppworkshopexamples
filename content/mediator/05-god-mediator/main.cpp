@@ -1,7 +1,7 @@
 // Anti-pattern: the god mediator.
 //
 // Mediator centralises interaction, and its failure mode is centralising too
-// much: the mediator swells into a single class that knows every subsystem's
+// much: the mediator grows into a single class that knows every subsystem's
 // rules, so every feature touches it, it cannot be understood in one sitting,
 // and it becomes the bottleneck the pattern was supposed to remove. HomeHubGod
 // below mixes lighting, security and climate rules in one method. The fix is to

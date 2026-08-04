@@ -1,7 +1,7 @@
 // Anti-pattern: a mediator for two objects that could just talk.
 //
 // Mediator pays off when many colleagues interact in tangled ways. For two
-// objects with a single, simple interaction, the full apparatus -- a Mediator
+// objects with a single, simple interaction, the full setup -- a Mediator
 // interface, colleague registration, a notify round-trip -- is pure ceremony
 // around what a direct call (or one callback) does in a line. Below, a button
 // updating a label is wrapped in a mediator for no benefit; the direct version

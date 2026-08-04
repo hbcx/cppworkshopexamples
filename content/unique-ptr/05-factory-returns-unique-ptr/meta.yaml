@@ -2,7 +2,7 @@ title: "A factory that returns unique_ptr<Base>"
 standard: "C++11"
 difficulty: 2
 summary: "Returning unique_ptr<Base> from a factory hands the caller sole ownership of a polymorphic object, which is why the base needs a virtual destructor."
-notes: "This is the canonical use of unique_ptr: a function that decides the concrete type at runtime and returns unique_ptr<Base>. The caller owns exactly one object and cannot leak it, and the pointer moves cleanly out of the factory on return. Because the object is deleted through a Base pointer, Base must declare a virtual destructor, or destroying it is undefined behaviour and the derived part never runs. Returning a raw Base pointer instead leaves ownership to a comment and leaks on any path that forgets to delete; returning shared_ptr pays for an atomic reference count a single owner does not need."
+notes: "This is the classic use of unique_ptr: a function that decides the concrete type at runtime and returns unique_ptr<Base>. The caller owns exactly one object and cannot leak it, and the pointer moves cleanly out of the factory on return. Because the object is deleted through a Base pointer, Base must declare a virtual destructor, or destroying it is undefined behaviour and the derived part never runs. Returning a raw Base pointer instead leaves ownership to a comment and leaks on any path that forgets to delete; returning shared_ptr pays for an atomic reference count a single owner does not need."
 run: true
 sanitizers: []
 main_tags:

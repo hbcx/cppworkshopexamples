@@ -9,7 +9,7 @@ struct Config {
 // Anti-pattern: a shared_ptr that is never actually shared. If the object has a
 // single owner for its whole life, shared_ptr pays for a heap-allocated control
 // block and atomic reference counting that buy nothing -- and it hides that the
-// ownership is really unique. The tell is a use_count() that is always 1.
+// ownership is really unique. The sign is a use_count() that is always 1.
 static void useShared() {
     std::shared_ptr<Config> cfg = std::make_shared<Config>(8080);
     // ...used only here, only observed, never copied to share...

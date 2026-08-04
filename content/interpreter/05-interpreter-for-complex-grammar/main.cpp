@@ -1,4 +1,4 @@
-// Anti-pattern: Interpreter for a grammar that outgrows it.
+// Anti-pattern: Interpreter for a grammar that grows too big for it.
 //
 // Interpreter fits SMALL grammars. This example already shows the strain: even
 // basic arithmetic with precedence and parentheses needs a node class per

@@ -3,6 +3,6 @@
 - slug: "composite"
   note: "What a visitor usually walks: a Composite is the recursive tree of node types (an AST, a document, a filesystem) that a visitor traverses one operation at a time -- go there for the part-whole structure Visitor's expression-tree example is built on."
 - slug: "command"
-  note: "The sibling that also reifies something as an object: Command packages a REQUEST to trigger or undo, where Visitor packages an OPERATION to run over a structure -- go there for behaviour-as-object aimed at invocation rather than traversal."
+  note: "The sibling that also packages something as an object: Command packages a REQUEST to trigger or undo, where Visitor packages an OPERATION to run over a structure -- go there for behaviour-as-object aimed at invocation rather than traversal."
 - slug: "interpreter"
   note: "The pattern whose grammar a visitor often walks: Interpreter builds an expression tree with interpret() on each node, and when you need more operations over it (print, optimise, type-check) you layer a Visitor on top -- go there for the grammar-as-classes structure Visitor complements."

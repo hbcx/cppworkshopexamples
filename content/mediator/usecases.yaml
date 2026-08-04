@@ -19,7 +19,7 @@
   signal: "Subsystems holding references to other subsystems to notify them, or a growing set of cross-subsystem calls that make the modules impossible to compile or test separately."
 
 - problem: "Smart-home or IoT devices should coordinate -- a motion sensor turning on lights and arming logic, a smoke alarm shutting the HVAC -- but the set of devices and rules changes constantly and device-to-device wiring does not scale."
-  why: "A hub mediator holds the automation rules and the devices only report events and expose actions, so a new rule or device is a change in the hub, not a rewiring of devices; pairing devices directly (this sensor knows those lights) creates brittle wiring that breaks whenever the home changes."
+  why: "A hub mediator holds the automation rules and the devices only report events and expose actions, so a new rule or device is a change in the hub, not a rewiring of devices; pairing devices directly (this sensor knows those lights) creates fragile wiring that breaks whenever the home changes."
   signal: "Devices configured with direct references to the specific devices they control, so adding a device or changing a rule means re-pairing several devices rather than editing one hub."
 
 - problem: "Modules or plugins that come and go at runtime need to react to each other's events, and you do not want a fixed compiled-in set of participants or direct references between them."

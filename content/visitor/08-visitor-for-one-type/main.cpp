@@ -1,7 +1,7 @@
 // Anti-pattern: a visitor for a single type and a single operation.
 //
 // Visitor pays off when several operations range over several element types. For
-// one element type with one operation, the whole apparatus -- a visitor base, an
+// one element type with one operation, the whole setup -- a visitor base, an
 // accept method, a concrete visitor -- is elaborate machinery around what a plain
 // virtual method does directly. Below, computing a circle's area is wrapped in a
 // visitor for no benefit; a member function is shorter and clearer.
