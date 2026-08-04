@@ -1,0 +1,6 @@
+== fat command (logic inside the command) ==
+balance now 100
+invalid amount
+== thin command delegating to a receiver ==
+balance now 100
+invalid amount

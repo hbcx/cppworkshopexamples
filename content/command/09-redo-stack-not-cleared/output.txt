@@ -1,0 +1,4 @@
+== redo stack not cleared ==
+text: "BA" (wanted "B")
+== redo stack cleared on a new action ==
+text: "B" (wanted "B")

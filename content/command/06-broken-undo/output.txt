@@ -1,0 +1,4 @@
+== broken undo (resets to 0) ==
+after undo: 0 (wanted 10)
+== correct undo (restores the prior value) ==
+after undo: 10 (wanted 10)

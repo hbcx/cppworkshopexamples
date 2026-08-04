@@ -1,0 +1,10 @@
+title: "Anti-pattern: a fat command with no receiver"
+standard: "C++11"
+difficulty: 3
+summary: "A command that implements the work itself instead of delegating to a receiver becomes a second home for domain logic: the same rule lives in the command and the real object, the command cannot be reused or tested without embedding the domain, and it couples to everything it touches."
+notes: "Command reifies a REQUEST -- which receiver, which method, which arguments -- it is not where the work lives. DepositCommandBad breaks that: it validates the amount and mutates the balance directly, so it has absorbed account logic. Now the deposit rule exists in two places (the command and any real Account), and the copies drift the first time one is changed and the other forgotten; the command cannot be reused by anything that is not this exact balance; and testing the rule means testing it through the command. The command has stopped being a thin request and become a fat class doing the receiver's job -- the same mistake as the fat adapter and the fat decorator, in Command's clothes. The fix is the four-role structure the pattern prescribes: the Receiver (Account) owns the logic, and the command binds a receiver plus arguments and forwards execute() to it. The rule has one home, the command is a few lines, and the same Account serves direct calls, other commands, and tests. The two versions here print the same output precisely because the command should add nothing but the packaging. A practical tell that a command has grown fat: it manipulates primitive fields or references directly, contains business conditionals or calculations, or would need a copy of domain rules to unit-test -- rather than holding a receiver and calling one method on it. Keep commands thin, and if a command genuinely has no receiver to delegate to, that is often a sign the receiver has not been identified yet, not that the logic belongs in the command."
+run: true
+sanitizers: []
+main_tags:
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

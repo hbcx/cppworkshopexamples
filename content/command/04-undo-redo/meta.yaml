@@ -1,0 +1,16 @@
+title: "Undo and redo with a command history"
+standard: "C++14"
+difficulty: 3
+summary: "The reason Command usually beats a bare callable: give each command an undo() that reverses its own effect, keep executed commands on a history stack, and undo/redo become popping between that stack and a redo stack -- reversible operations a std::function cannot provide."
+notes: "Undo is the feature that makes the Command object worth its ceremony, and it is why a bare std::function is not enough: a callable can run but cannot reverse itself. The design is small and standard. Each command implements execute() and an undo() that is its exact inverse -- AppendCommand appends on execute and chops the same number of characters on undo -- so a command carries the knowledge of how to take itself back. The invoker keeps two stacks: a history of executed commands (done_) and a stack of undone ones (undone_). run() executes and pushes onto history; undo() calls undo() on the top of history and moves it to the redo stack; redo() re-executes the top of the redo stack and moves it back. The one rule that keeps redo correct is here and is a later anti-pattern in its absence: a NEW action after some undos must clear the redo stack, because the future those undone commands belonged to no longer exists. Two design points scale this up. First, a command's undo must restore the PRIOR state, not a guessed one -- append/chop is naturally symmetric, but a command that overwrites a value must capture the old value on execute to restore it on undo, which is the broken-undo anti-pattern and the point where Command meets Memento (the command stores a memento of the receiver's prior state). Second, commands must own or safely reference what they touch until they may still be undone, so the history holds unique_ptr<Command> and each command keeps its own data (the appended text) rather than assuming the receiver is unchanged. This two-stack history is exactly how editors, drawing tools, and IDEs implement Ctrl-Z and Ctrl-Y."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

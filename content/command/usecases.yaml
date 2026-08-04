@@ -1,0 +1,25 @@
+# Where to reach for Command -- problem -> pattern, with the alternative it beats.
+
+- problem: "An editor, drawing tool, CAD program, or IDE must let the user undo and redo any action, in order, across a long session of mixed operations."
+  why: "making every user action a command with execute() and undo() reduces undo/redo to popping between a history stack and a redo stack, and adding an undoable action is one command class -- where ad-hoc undo (special-casing each operation, or snapshotting the whole document per keystroke) either misses operations or costs memory proportional to document size times history length."
+  signal: "per-operation undo code scattered through the app, or whole-document snapshots taken to support undo, rather than one command history."
+
+- problem: "The same action must be triggerable from several places at once -- a menu item, a toolbar button, a keyboard shortcut, a context menu, a script -- and stay in sync (enabled state, label, behaviour)."
+  why: "binding all the triggers to one command object means the action is defined once and every trigger invokes the same command, so behaviour and enabled-state live in one place -- where each trigger calling the action code directly duplicates it per entry point, and the copies drift when the behaviour or its preconditions change."
+  signal: "the same action logic pasted into a menu handler, a button handler, and a shortcut handler, instead of all three invoking one command."
+
+- problem: "Work must be decoupled in time or across threads from where it is requested -- a task queue drained by worker threads, a job scheduler, deferred/batched rendering, a retry queue."
+  why: "reifying each unit of work as a command object lets it be enqueued, scheduled, prioritised, retried, and carried across a thread boundary with its receiver and arguments intact -- where passing a raw function pointer plus a void* context loses type safety and names, and inlining the work at the call site cannot defer, reorder, or retry it."
+  signal: "a producer that does work inline where it could enqueue it, or a queue of function-pointer-plus-context pairs rather than self-contained command objects."
+
+- problem: "Users need to record a sequence of operations and replay it -- a macro, a batch action applied to many items, an automation script, a test that drives the app through recorded steps."
+  why: "commands compose: a recorded sequence is a list of command objects, and a macro is one command that runs them, so recording is appending to a list and replay is executing it (and, with undo, the whole macro undoes as a unit) -- where a hardcoded batch routine cannot be recorded from user actions or recomposed, and must be written by hand for each sequence."
+  signal: "a fixed batch routine that repeats a sequence of operations, where users would benefit from recording and replaying their own sequences."
+
+- problem: "A system must log operations to replay state, audit changes, or recover after a crash -- event sourcing, a write-ahead log, an undo journal persisted to disk, a collaborative editor syncing edits."
+  why: "logging the COMMANDS (the intent -- deposit 100 to account 7) rather than the resulting data changes yields a compact, replayable, auditable record from which state is rebuilt by re-executing the log -- where logging raw before/after data loses the operation's intent, is larger, and cannot be re-applied against a different or partially-rebuilt state."
+  signal: "an audit or recovery log that stores raw field diffs or full snapshots, rather than the operations (commands) that produced them."
+
+- problem: "A request must cross a boundary and be handled elsewhere or later -- an RPC-style request object sent to a server, a message on a bus, a UI action dispatched to a reducer, a request that may be scheduled or retried."
+  why: "packaging the request as a command object -- receiver, operation, arguments in one value -- lets it be serialized, sent, queued, scheduled, and retried as a unit, with the handler decoupled from the sender -- where a direct method call cannot cross a process boundary, be held for later, or be retried, and spreading the request's fields across ad-hoc parameters makes it un-serializable and un-loggable."
+  signal: "request fields passed as scattered parameters through layers, rather than a single request/command object that can be dispatched, queued, or sent."

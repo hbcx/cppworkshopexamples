@@ -1,0 +1,11 @@
+title: "Anti-pattern: an action enum and switch instead of commands"
+standard: "C++11"
+difficulty: 3
+summary: "Dispatching actions with an enum and a switch in the invoker is the design Command replaces: every new action edits the switch (and any queue, log, or undo keyed on the enum), the invoker couples to every action and receiver, and an enum value cannot carry an action's arguments the way a command object can."
+notes: "Command's core move is to turn an action into a first-class value; the enum-and-switch is what you have before you make that move, and it is fine until the action set or the things you do with actions grow. RemoteBad dispatches with a switch on an Action enum: it works, and for three fixed buttons it is simple. The costs arrive with scale. Every new action edits the switch -- and if actions are dispatched in more than one place (trigger here, plus a log formatter, a queue runner, an undo handler), each of those switches must be found and extended together, the open/closed violation. The invoker is coupled to every action and every receiver it can trigger. And the decisive limitation: an enum value is just a tag -- it cannot carry the action's ARGUMENTS, so 'deposit 100 into account 7' is not representable as one Action, whereas a command object bundles receiver, method, and parameters into a single value you can store, queue, log, replay, or undo. RemoteGood makes each action a command; the invoker holds a Command and triggers it knowing none of them, a new action is a new class, and every capability the rest of this chapter builds -- queues, macros, histories -- becomes possible precisely because the action is now an object rather than a switch arm. The honest caveat matches the other patterns: for a tiny, fixed, argument-free action set that will never be queued or undone, an enum and a switch are simpler and fine. The tell that you have outgrown it: an action enum switched on in more than one place, an action that needs to carry parameters, or a feature request to queue, log, or undo actions that the enum cannot satisfy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }

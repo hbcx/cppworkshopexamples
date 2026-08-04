@@ -6,3 +6,5 @@
   note: "A strategy baked into a type: std::unique_ptr's second template parameter is a Deleter -- a compile-time strategy for how the pointer frees its object -- the policy form of Strategy applied to cleanup."
 - slug: "observer"
   note: "The broadcast sibling: where Strategy injects one algorithm a context calls, Observer notifies many listeners of an event -- go there for one-to-many notification and the C++ lifetime problem it raises."
+- slug: "command"
+  note: "The reified-request sibling: where Strategy injects one algorithm to call now, Command packages a whole request as an object to store, queue, log, or undo later -- go there for undo/redo, job queues, and macros."

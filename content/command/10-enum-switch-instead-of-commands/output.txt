@@ -1,0 +1,6 @@
+== enum + switch ==
+on
+dim
+== command objects ==
+on
+off

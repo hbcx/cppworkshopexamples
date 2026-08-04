@@ -4,3 +4,5 @@
   note: "The sibling behavioural pattern with an injected object: Strategy is one algorithm the context calls for a result, where Observer is many listeners the subject notifies of an event and whose results it ignores -- go there for the one-to-one form."
 - slug: "unique-ptr"
   note: "The move-only RAII handle underneath a subscription token: the token that auto-unsubscribes on destruction is move-only for the same reason unique_ptr is -- one owner of the registration; go there for that ownership model."
+- slug: "command"
+  note: "The sibling that reifies one request rather than broadcasting an event: Command packages a request as an object to queue, log, or undo, where Observer notifies many listeners -- go there for stored, undoable, replayable requests."

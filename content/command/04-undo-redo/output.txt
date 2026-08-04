@@ -1,0 +1,4 @@
+two appends: "Hello, world"
+after undo:  "Hello"
+after redo:  "Hello, world"
+two undos:   ""

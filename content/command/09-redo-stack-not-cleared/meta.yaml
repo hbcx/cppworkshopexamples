@@ -1,0 +1,14 @@
+title: "Anti-pattern: not clearing the redo stack on a new action"
+standard: "C++14"
+difficulty: 3
+summary: "In an undo/redo history, a fresh action after some undos must clear the redo stack; forgetting it leaves undone commands from an abandoned future on the stack, so a later redo re-applies a stale edit onto a diverged state -- corrupting the document with a command that no longer belongs."
+notes: "Undo/redo is two stacks -- executed commands and undone ones -- and there is one invariant that is easy to miss: when the user does something NEW after undoing, the redo stack must be emptied, because the undone commands describe a future that no longer exists. HistoryBad omits that one line, and the result is a subtle corruption. Type A, undo it (A moves to the redo stack), type B, then redo: instead of doing nothing, redo re-applies A onto a document that now contains B, producing BA -- a stale edit resurrected from a branch the user abandoned. It is a nasty bug because each operation individually looks correct; only the sequence undo-then-new-then-redo triggers it, and the redone command may be far more destructive than appending a character. HistoryGood fixes it with the single line the four-mechanics example already had: run() calls undone_.clear(), so a new action discards the abandoned redo branch and a subsequent redo has nothing to replay. The underlying model is a linear history with a cursor: undo moves the cursor back, redo moves it forward, and a new action truncates everything after the cursor. (Editors that keep BOTH branches implement an undo TREE instead, which is a deliberate, more complex design -- not the accidental half-tree this bug creates.) The tell: an undo/redo invoker whose execute/run path pushes onto the history but does not clear the redo stack, so redo remains reachable after an unrelated new action."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

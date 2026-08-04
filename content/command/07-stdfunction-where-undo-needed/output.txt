@@ -1,0 +1,5 @@
+== std::function: runs, but cannot undo ==
+counter: 5 (no undo available)
+== command object: execute and undo ==
+counter: 5
+after undo: 0

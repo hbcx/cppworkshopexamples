@@ -1,0 +1,6 @@
+- slug: "strategy"
+  note: "The sibling that injects an algorithm: Strategy swaps HOW a context computes a result, where Command packages a whole request -- receiver, method, arguments -- to trigger, queue, log, or undo later; go there for behaviour chosen versus behaviour reified."
+- slug: "observer"
+  note: "The event-broadcast sibling: Observer notifies many listeners that something happened, where Command hands one request from a client to one receiver through an invoker -- go there for one-to-many notification rather than a stored, undoable request."
+- slug: "unique-ptr"
+  note: "How a command history owns its commands: the undo/redo stacks hold unique_ptr<Command>, so each command lives until it can no longer be undone and frees automatically -- go there for the single-owner model behind it."

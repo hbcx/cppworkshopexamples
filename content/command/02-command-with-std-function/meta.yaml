@@ -1,0 +1,12 @@
+title: "A command as a std::function"
+standard: "C++11"
+difficulty: 2
+summary: "Since a command is basically a callable, modern C++ often skips the interface and stores a std::function: the invoker holds one, and a lambda that captures a receiver and binds its arguments is a complete command -- least ceremony, and the same trigger drives any action."
+notes: "The classic Command needs an interface and a class per action; std::function collapses that, exactly as it does for Strategy and Observer. Button here stores a std::function<void()> and calls it on press(), so a command is any callable: a lambda that captures the Document and binds the arguments (print(3)) is a whole command with no LightOn-style class to declare. This is the form most C++ codebases reach for first, and it is the right default when actions are small and fire-and-forget -- one trigger type (the Button) drives every action, and adding one is passing another lambda. The trade-offs are the usual std::function ones plus a decisive extra. The usual ones: a type-erased indirect call, a possible heap allocation for a large capture, and the lifetime hazard that a lambda capturing a receiver BY REFERENCE dangles if the receiver dies before the command runs -- which matters most when commands are stored and run later (a queue, a history), covered in this chapter's deferred-command anti-pattern. The decisive extra is what a bare callable cannot do: a std::function<void()> can be executed but it cannot UNDO itself, cannot report its name for a log, and does not compose into a typed hierarchy. The moment the feature needs reversibility, logging, serialization, or naming, the object form with an execute() AND an undo() (and possibly more) earns its keep -- the undo example makes that concrete, and choosing a bare callable where you actually need those is a later anti-pattern. Reach for the std::function command for simple triggered actions; reach for the Command object when a request must be more than a call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

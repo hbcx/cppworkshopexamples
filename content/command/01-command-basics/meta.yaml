@@ -1,0 +1,12 @@
+title: "Command basics: a request as an object"
+standard: "C++11"
+difficulty: 1
+summary: "Command turns a request into an object: a Command interface with execute(), concrete commands that bind a receiver and forward to it, and an invoker that triggers commands knowing nothing about what they do -- so the caller of an action is decoupled from the action and its target."
+notes: "Command reifies a request -- a method call plus its receiver and arguments -- as an object you can pass around, store, and trigger later. Four roles: the Receiver (Light) that does the real work; the Command interface (execute()); Concrete Commands (LightOn, LightOff) that bind a receiver and forward to it; and the Invoker (Button) that calls execute() without knowing what the command does or which object it touches. The decoupling is the point: the button depends only on the Command interface, so the same button drives any command, and a new action is a new command class the invoker never sees -- the open/closed win Strategy and Observer also give, here applied to a triggered request. That may look like a heavy way to call light.on(), and for a single immediate call it is; the payoff appears the moment a request must become a THING rather than a call -- something you can queue, log, replay, undo, or bind to several triggers, which the rest of this chapter builds on. Place it against its neighbours by what is being reified. Strategy injects an algorithm the context calls to compute a result; Command packages a whole request (receiver, method, arguments) for later triggering, and the invoker ignores any result. Observer broadcasts an event to many listeners; Command hands one request from a client through an invoker to one receiver. The classic form here uses an interface; because a command is essentially a callable, C++ often expresses it as a std::function instead -- the next example -- and the object form earns its place when a command needs more than execute(), most importantly an undo()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

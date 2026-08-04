@@ -1,0 +1,14 @@
+title: "Anti-pattern: a deferred command with a dangling receiver"
+standard: "C++11"
+difficulty: 3
+summary: "The value of Command grows with the gap between creating a request and running it, and so does a lifetime hazard: a command captured now and run later that holds its receiver by reference dangles if the receiver is destroyed before the queue drains -- shared ownership ties the receiver's life to the command that still needs it."
+notes: "A command that runs immediately can safely reference a receiver that is obviously still alive. A command that is STORED and run later cannot, and Command's best uses -- queues, histories, replay logs, deferred rendering -- are exactly the deferred ones. The trap: a command (a lambda or a bound object) captures the receiver by reference, the receiver goes out of scope, and the queued command is later invoked over freed memory -- undefined behaviour that works in tests where the receiver outlives the queue and crashes in production where it does not. The commented code shows the shape: a Worker local captured by reference into a queue that drains after the Worker's scope ends; that path is described, not executed, because running undefined behaviour is nondeterministic and would corrupt the compile gate. The fix is to make the command an OWNER of what it needs to outlive: capture a std::shared_ptr<Worker> by value (or, for the object form, store a shared_ptr member), so the Worker's lifetime is tied to the commands that still reference it and it is freed only when the last of them is gone -- the run here is safe even though the creating scope ended. The general rule for any deferred callable is the one the Observer chapter's callbacks share: a stored command must OWN or provably outlive everything it captures, and capturing by reference is safe only when the referent certainly outlives every invocation. When shared ownership is wrong (the receiver must die on schedule and pending commands should become no-ops), a weak_ptr the command locks before use, or an explicit cancel that drains the queue, is the alternative. The tell: a command placed in a queue, a history, or a thread pool that captured a local receiver by reference or stored a raw pointer to one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

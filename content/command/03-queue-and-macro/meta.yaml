@@ -1,0 +1,14 @@
+title: "Queuing commands and macro commands"
+standard: "C++11"
+difficulty: 2
+summary: "Once a request is an object it can be stored and run later: a queue collects commands and executes them in order, and a macro command bundles several commands to run as one -- Command composing with itself, which is what turns triggered actions into deferred, batchable work."
+notes: "This is the capability that a plain method call cannot give and that reifying the request unlocks. Storing commands: the Queue holds a vector of commands and runs them later, in order -- the shape of a job queue, a task list handed to a worker thread, a replay log, or a frame's worth of deferred rendering commands. Composing commands: macro() returns one command that runs several, so a sequence of actions becomes a single command that can itself be queued, triggered, or (with the object form) undone as a unit -- the Composite pattern applied to commands, which is how a macro record button, a batch operation, or a transaction groups steps. Both fall out for free once execute() is an object rather than a call, and neither is expressible with a bare method invocation. This example uses the std::function form because these examples only need to run, not undo; note the one subtlety it glosses -- deferred execution widens the lifetime window, so a command stored now and run later must keep whatever it references alive until it runs (a lambda capturing a receiver by reference can dangle by the time the queue drains), the subject of the deferred-command anti-pattern. When commands run on another thread the queue also needs synchronisation, the standard producer/consumer concern. The takeaway: the value of Command grows with the distance in time and space between creating a request and running it -- immediate calls barely need it; queued, batched, replayed, or undoable ones depend on it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }
