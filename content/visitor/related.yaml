@@ -1,0 +1,6 @@
+- slug: "variant"
+  note: "The modern Visitor's foundation: std::variant is the closed, type-safe union this chapter dispatches over with std::visit, and its compile-time exhaustiveness is what the catch-all anti-pattern throws away -- go there for the variant type itself, its alternatives, and std::get."
+- slug: "composite"
+  note: "What a visitor usually walks: a Composite is the recursive tree of node types (an AST, a document, a filesystem) that a visitor traverses one operation at a time -- go there for the part-whole structure Visitor's expression-tree example is built on."
+- slug: "command"
+  note: "The sibling that also reifies something as an object: Command packages a REQUEST to trigger or undo, where Visitor packages an OPERATION to run over a structure -- go there for behaviour-as-object aimed at invocation rather than traversal."

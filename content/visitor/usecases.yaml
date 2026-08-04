@@ -1,0 +1,27 @@
+- problem: "A compiler or interpreter has an AST of node types and runs many passes over it -- type-check, constant-fold, optimize, generate code, pretty-print -- while the node types themselves rarely change."
+  why: "Each pass is a visitor, so a new pass is a new class and the node types stay put, which is exactly Visitor's good side of the expression problem; scattering each pass as a method on every node type would smear one pass across the whole hierarchy and make passes hard to read as a unit."
+  signal: "A fixed set of AST or IR node classes with a growing list of operations over them, or passes currently written as a method-per-node that would read better gathered per pass."
+
+- problem: "A document or scene tree must be rendered or exported to several targets -- HTML, PDF, plain text, an image -- from the same node structure, and new export formats keep being requested."
+  why: "Each output format is a visitor over the node types, so adding a format touches no node class and keeps all of that format's per-node logic together; a render() method per node would spread each format across every node type and force every node to know every format."
+  signal: "A node hierarchy with several render/export operations, or a format-specific switch repeated inside each node's rendering method."
+
+- problem: "An object structure must be serialized to multiple wire formats -- JSON, XML, binary -- and the set of formats grows over time while the object types are stable."
+  why: "A serializer per format is a visitor, keeping each format's encoding in one place and leaving the data types unchanged; embedding a toJson/toXml/toBinary in every type couples the data model to every format and grows each class with each new format."
+  signal: "Data classes accumulating a serialize method per format, or serialization logic duplicated as a type-switch inside each format's writer."
+
+- problem: "A linter or static analyzer walks a fixed grammar of code or configuration nodes and applies many independent checks, with new checks added continually."
+  why: "Each check is a visitor over the node types, added without touching the grammar, and the traversal can be shared; writing checks as methods on nodes would put unrelated analysis logic inside the data types and make adding a check edit every node."
+  signal: "A stable node grammar with a rule/check set that keeps expanding, or analysis code that dispatches on node type by hand in each rule."
+
+- problem: "A closed set of message, event, or command types must be dispatched to type-specific handling -- a protocol decoder, a state machine's events, a parsed-result union -- and you want the compiler to ensure every case is handled."
+  why: "std::variant over the message types with std::visit gives type-safe dispatch and compile-time exhaustiveness, so a new message type that a handler forgets fails to build rather than being silently mishandled; a tag field plus a switch offers neither exhaustiveness nor type safety."
+  signal: "A tagged union or an enum-plus-switch over a fixed set of message/event types, where a forgotten case currently compiles and misbehaves at runtime."
+
+- problem: "A fixed set of geometric or UI element types needs a growing collection of operations -- area, bounding box, hit-test, draw, serialize -- computed over any element."
+  why: "The elements are a stable closed set and the operations multiply, which is precisely when a visitor per operation beats a method per operation on every element -- each operation's per-shape logic lives together, and adding one changes no element; if instead the SHAPE types were what kept changing, plain virtual methods would be the better arrangement."
+  signal: "A stable shape/element hierarchy with an expanding list of operations, or the same per-type computation duplicated across several standalone operations."
+
+- problem: "A heterogeneous tree or collection -- a filesystem, an org chart, a bill of materials -- must be summarized in many ways: total size, node counts by type, a formatted listing, validation."
+  why: "Each summary is a visitor that accumulates a result as it walks the structure, keeping its state and per-node logic in one class; computing each summary with a hand-written recursive type-switch repeats the traversal and the dispatch for every summary."
+  signal: "A recursive walk over a mixed node structure re-implemented for each summary, each with its own if/else on node type, where a visitor could own the traversal and the accumulation."

@@ -1,0 +1,7 @@
+bad (default visit): triangle is silently skipped
+  circle area
+  square area
+good (pure visit): every type handled
+  circle area
+  square area
+  triangle area

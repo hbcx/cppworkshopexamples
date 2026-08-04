@@ -1,0 +1,2 @@
+bad (visitor): area = 12.5664
+good (method): area = 12.5664

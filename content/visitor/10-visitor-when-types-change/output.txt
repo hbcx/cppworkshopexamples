@@ -1,0 +1,3 @@
+area=12.5664 perimeter=12.5664
+area=9 perimeter=12
+area=10 perimeter=12

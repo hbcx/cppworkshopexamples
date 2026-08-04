@@ -1,0 +1,6 @@
+bad (dynamic_cast):
+  area = 12.5664
+  area = 9
+good (visitor):
+  area = 12.5664
+  area = 9

@@ -1,0 +1,8 @@
+bad (auto catch-all swallows Square and Triangle):
+  area = 12.5664
+  area = -1
+  area = -1
+good (explicit case per alternative):
+  area = 12.5664
+  area = 9
+  area = 10

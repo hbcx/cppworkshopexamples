@@ -5,3 +5,5 @@
   note: "The two-state special case: optional<T> is essentially variant<T, nothing> with a purpose-built present-or-absent interface."
 - slug: "expected"
   note: "A purpose-built value-or-error sum type: expected<T, E> is variant-like but picks a success/error side and adds monadic chaining."
+- slug: "visitor"
+  note: "The design pattern std::visit embodies: dispatching a variant over an overload set is the Visitor pattern for a closed type set -- go there for double dispatch, the class-based form, and the expression-problem trade-off behind choosing a variant over a class hierarchy."

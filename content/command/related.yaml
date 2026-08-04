@@ -12,3 +12,5 @@
   note: "The other place reified requests flow: a Mediator coordinates a set of colleagues, and its event-bus form routes the requests they send -- go there for hub-and-spoke coordination, where Command supplies the request objects that travel between colleagues."
 - slug: "memento"
   note: "The other way to build undo: Command stores reversible operations that each know their inverse, where Memento stores whole state snapshots and restores them -- go there for snapshot-based undo/redo and when saving state beats inverting every action."
+- slug: "visitor"
+  note: "The sibling that reifies an OPERATION rather than a request: a Visitor packages an operation to run over a whole structure of element types (double dispatch), where Command packages one request to trigger or undo -- go there for operations-as-objects over an object structure."
