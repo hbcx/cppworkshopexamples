@@ -10,3 +10,5 @@
   note: "The design pattern it embodies: std::shared_ptr is a smart-reference proxy -- a stand-in that controls access to an object, here managing its lifetime by reference count -- see Proxy for the pattern in general (virtual, protection, remote, smart reference)."
 - slug: "flyweight"
   note: "A real interning use: a Flyweight factory hands out shared_ptr to interned objects so many logical objects share few physical ones, and the reference count frees a flyweight when its last user is gone."
+- slug: "memento"
+  note: "Where sharing is the wrong default: a memento that copies a shared_ptr shares the buffer instead of snapshotting it, so an edit corrupts the saved state -- go there for the shallow-copy trap and why a snapshot needs its own deep copy, not a shared handle."

@@ -1,0 +1,27 @@
+- problem: "An editor -- text, image, spreadsheet, a diagramming tool -- needs undo and redo, letting the user step backward and forward through their changes."
+  why: "Snapshotting the document's state on each change and restoring a snapshot to undo is the most direct implementation, and it handles operations that have no easy inverse; the alternative of making every operation reversible (Command) is more memory-efficient but requires writing an undo for each action, which is real work and sometimes impossible."
+  signal: "A feature request for multi-level undo/redo where the operations are varied and hard to invert, or where saving whole states is simpler than deriving an inverse for each."
+
+- problem: "A risky operation -- applying a batch of changes, running a migration, editing config -- must be reversible if it fails partway or the result is rejected, restoring the prior state exactly."
+  why: "Taking a memento before the operation and restoring it on failure is a savepoint: it gives all-or-nothing semantics without the operation itself knowing how to roll back, so the risky code stays simple and the restore is guaranteed to reinstate a known-good state; ad hoc undo-each-step logic is error-prone and easy to leave half-done."
+  signal: "Code that manually saves a few fields before a multi-step change and restores them in a catch or on a rejection, especially when the set of fields changes and the manual save drifts out of sync."
+
+- problem: "A game must support quicksave and checkpoints: capture the world state so the player can reload after a death or a bad decision without replaying from the start."
+  why: "A memento of the game state restored on load is exactly this, and because the snapshot is opaque the save system can store and version snapshots without depending on the internal layout of the world; serializing the whole world ad hoc couples the save code to every subsystem's internals."
+  signal: "A save/load system that reaches into each game subsystem to read and write its fields, rather than asking each to produce and consume an opaque snapshot of itself."
+
+- problem: "A settings dialog or multi-step form lets the user make edits and then choose Cancel, which must discard all the edits and restore exactly what was there when the dialog opened."
+  why: "Snapshotting the state on open and restoring it on Cancel makes cancellation trivial and correct, no matter how many fields changed; tracking each edit to reverse it individually, or reloading from the source, is more code and misses fields as the form grows."
+  signal: "A dialog that either cannot cleanly cancel, or reverts edits field by field, where a single snapshot-on-open and restore-on-cancel would cover every field at once."
+
+- problem: "A solver or simulation explores alternatives by trying a branch, and must be able to return to a prior state to try a different one -- backtracking search, what-if analysis, constraint solving."
+  why: "Snapshotting before a speculative step and restoring to backtrack is the standard mechanism, and incremental (delta) mementos make it cheap when each step changes little, so the search can explore deeply without copying the whole state at every node; recomputing a prior state from scratch is often far more expensive."
+  signal: "A search or simulation that must undo a tentative move to try another, especially where each move touches a small part of a large state and full recomputation would be costly."
+
+- problem: "An optimistic-concurrency or speculative execution scheme applies changes provisionally and must roll them back if a conflict is detected at commit time."
+  why: "A memento captured before the speculative changes lets the system discard them wholesale on conflict and retry from the known state, keeping the fast path (no locking) while staying correct on conflict; without a clean snapshot, rolling back partial speculative changes is intricate and easy to get wrong."
+  signal: "Provisional updates applied before a validation or commit check, with rollback logic that must undo them on conflict, where a snapshot-and-restore would replace hand-written reversal."
+
+- problem: "A long-running process or state machine takes periodic checkpoints so it can recover to the last good state after a crash or fault, rather than restarting from the beginning."
+  why: "A memento persisted periodically is the checkpoint, and restoring it on recovery resumes near where the fault occurred; opacity lets the checkpoint format evolve independently of the code that triggers a save or restore, and deltas between checkpoints bound the storage cost of frequent saves."
+  signal: "A process that would have to restart from scratch after a failure, or that saves state for recovery by manually serializing each component rather than snapshotting and restoring a whole state."

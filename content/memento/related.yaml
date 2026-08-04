@@ -1,0 +1,6 @@
+- slug: "command"
+  note: "The other way to build undo, and the sharpest contrast: Command stores reversible OPERATIONS (each knows its own inverse), where Memento stores STATE SNAPSHOTS (undo reinstates a whole past state) -- go there for the memory-cheap approach that needs every action to be invertible, which this chapter's undo/redo weighs against snapshots."
+- slug: "prototype"
+  note: "The creational cousin built on the same copy: Prototype clones a configured object to make a new one, where Memento copies an object's state to restore it later -- both live or die by deep-versus-shallow copy, the exact issue this chapter's shallow-copy anti-pattern raises."
+- slug: "shared-ptr"
+  note: "Why a memento must deep-copy an owned resource rather than share it: copying a shared_ptr shares the buffer, so an in-place edit corrupts the snapshot -- go there for the ownership model behind the shallow-copy trap, and when sharing is right versus when a snapshot needs its own copy."

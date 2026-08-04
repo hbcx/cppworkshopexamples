@@ -10,3 +10,5 @@
   note: "Where a reified request gets routed: Chain of Responsibility passes a request along handlers until one acts, and that request is frequently a Command object -- go there for the sender-decoupled routing that decides WHO handles what this chapter packages."
 - slug: "mediator"
   note: "The other place reified requests flow: a Mediator coordinates a set of colleagues, and its event-bus form routes the requests they send -- go there for hub-and-spoke coordination, where Command supplies the request objects that travel between colleagues."
+- slug: "memento"
+  note: "The other way to build undo: Command stores reversible operations that each know their inverse, where Memento stores whole state snapshots and restores them -- go there for snapshot-based undo/redo and when saving state beats inverting every action."

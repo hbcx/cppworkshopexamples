@@ -1,0 +1,2 @@
+bad restored:  (10,10) blue
+good restored: (10,10) red

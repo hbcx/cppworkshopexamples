@@ -1,0 +1,3 @@
+cell10=7 cell500=9
+after undo: cell10=0 cell500=0
+per-change delta stores 1 cell; a full snapshot would store 1000 cells

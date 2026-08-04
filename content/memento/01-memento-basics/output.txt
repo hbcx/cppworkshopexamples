@@ -1,0 +1,2 @@
+before restore: Hello, world
+after restore:  Hello

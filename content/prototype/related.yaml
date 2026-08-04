@@ -4,3 +4,5 @@
   note: "The other way to avoid re-running expensive construction: Builder assembles a complex object step by step, where Prototype copies an already-built one -- assemble vs duplicate."
 - slug: "object-pool"
   note: "The reuse-not-rebuild neighbour: an Object Pool recycles a live instance and hands it back afterward, where Prototype copies a configured template -- both dodge expensive construction, one by recycling, one by cloning."
+- slug: "memento"
+  note: "The behavioural pattern built on the same copy, for a different reason: Memento snapshots an object's state to restore it later, where Prototype copies an object to make a new one -- go there for save/restore and the deep-versus-shallow copy question both patterns share."

@@ -1,0 +1,4 @@
+typed:  abc
+undo:   ab
+undo:   a
+redo:   ab
