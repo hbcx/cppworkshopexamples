@@ -1,0 +1,14 @@
+-- dispatch 'click' at button --
+button handled 'click'
+-- dispatch 'menu' at button --
+button ignored 'menu', bubbling up
+panel handled 'menu'
+-- dispatch 'close' at button --
+button ignored 'close', bubbling up
+panel ignored 'close', bubbling up
+window handled 'close'
+-- dispatch 'resize' at button --
+button ignored 'resize', bubbling up
+panel ignored 'resize', bubbling up
+window ignored 'resize', bubbling up
+'resize' reached the top unhandled

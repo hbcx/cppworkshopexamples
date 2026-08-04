@@ -10,3 +10,5 @@
   note: "The transparent twin: Proxy shares Decorator's wrap-and-forward shape but stays transparent and controls access to the subject -- lazy loading, permissions, remote stubs, caching -- instead of adding behaviour to the result; go there when the goal is to govern access, not enrich it."
 - slug: "composite"
   note: "The many-child generalisation: where a Decorator wraps exactly one component, a Composite branches into a tree of children treated uniformly -- go there for part-whole hierarchies like filesystems, scene graphs, and expression trees."
+- slug: "chain-of-responsibility"
+  note: "The behavioural relative with the same wrap-and-forward shape: a middleware pipeline is a chain of handlers each wrapping the next, but one can STOP the request instead of always enriching and forwarding it -- go there for routing and short-circuiting rather than layering behaviour."

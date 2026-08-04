@@ -6,3 +6,5 @@
   note: "How a command history owns its commands: the undo/redo stacks hold unique_ptr<Command>, so each command lives until it can no longer be undone and frees automatically -- go there for the single-owner model behind it."
 - slug: "state"
   note: "The behavioural sibling that also replaces a type/status switch with polymorphism: State swaps the object's mode as its status changes, where Command reifies one request to trigger or undo -- go there for the delegating-context machine and its transition traps."
+- slug: "chain-of-responsibility"
+  note: "Where a reified request gets routed: Chain of Responsibility passes a request along handlers until one acts, and that request is frequently a Command object -- go there for the sender-decoupled routing that decides WHO handles what this chapter packages."

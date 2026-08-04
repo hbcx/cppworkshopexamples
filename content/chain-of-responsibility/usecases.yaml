@@ -1,0 +1,27 @@
+- problem: "A logging system routes each message by severity: debug and info go to a file, warnings to the file plus a dashboard, errors additionally page on-call -- and the routing rules change per environment."
+  why: "A chain of level handlers lets each decide whether a message meets its threshold and either act or pass it on, so adding or reordering sinks is adding or moving a handler rather than editing one growing if-else; the alternative -- a switch on level in the logger -- couples the logger to every sink and every rule."
+  signal: "A log function with a switch or if-else-if on level that decides which of several sinks to write to, growing a branch each time a sink or threshold is added."
+
+- problem: "A web service must run cross-cutting steps around every request -- authentication, rate limiting, request logging, decompression -- in a fixed order, with any step able to reject the request before it reaches the business handler."
+  why: "The middleware pipeline form wraps each step around the next, so a step can act before and after the core and short-circuit by not calling next(); writing these concerns inline in every endpoint duplicates them and lets one endpoint forget auth, which the pipeline makes structurally impossible."
+  signal: "Every request handler beginning with the same authenticate/log/validate boilerplate, or a desire to add a concern (timing, a header) to all endpoints at once without touching each."
+
+- problem: "An expense, purchase, or access request must be approved by whoever has the right authority: small amounts by a team lead, larger by a manager, larger still by a director, with escalation when the first cannot approve."
+  why: "A chain models the escalation directly -- each approver handles what is within its limit or forwards upward -- so the requester submits to the front of the chain and never encodes the approval hierarchy; a hard-coded if-ladder in the requester couples it to the org structure and breaks when limits or roles change."
+  signal: "Approval code with nested if-amount-less-than checks that names each role explicitly, or a requester that must know which approver to call based on the amount."
+
+- problem: "A GUI or game must route an input event to whichever element should handle it: the widget under the cursor first, then its container, then the window, until something consumes it."
+  why: "Event bubbling up the parent hierarchy is Chain of Responsibility with the parent link as the successor, so each element handles the events it owns and lets the rest rise, and consuming an event stops it; a central dispatcher that decides every event's target would need to know the whole widget tree and every element's interests."
+  signal: "A central input handler with a large switch mapping event types to specific widgets, or elements that cannot handle an event locally without the top-level dispatcher knowing about them."
+
+- problem: "Incoming data must pass a series of independent checks -- not empty, well-formed, within range, authorized -- and you want either to stop at the first failure or to keep the checks separate and reorderable."
+  why: "A validation chain makes each rule a focused handler that passes or stops, so rules can be reused across inputs, reordered, and tested in isolation; a single validate() function with all the checks inline is one fat handler that cannot be recombined and reopens for every new rule."
+  signal: "A validation routine that is one long method of sequential if-not-valid-return checks, where the individual rules would be useful separately or in a different order elsewhere."
+
+- problem: "A support or incident system escalates tickets through tiers: tier 1 resolves common cases, tier 2 takes what tier 1 cannot, tier 3 handles the rest, each either resolving or passing up."
+  why: "The tiers are a chain where each level tries and escalates on failure, so the submitter hands the ticket to tier 1 and the routing between tiers lives in the tiers themselves; encoding the escalation in the submitter or a central router couples it to the tier structure and the criteria for moving between them."
+  signal: "Ticket-routing logic that decides the target tier up front from the ticket's fields, rather than letting each tier attempt the work and escalate what it cannot resolve."
+
+- problem: "A read must be satisfied from the fastest source that has the data: try the in-process cache, then a shared cache, then the database, then a remote service, stopping at the first hit."
+  why: "A fallback chain lets each source attempt the lookup and pass on a miss, so adding a caching layer is inserting a handler and the caller stays unaware of the tiers; a caller that checks each source with its own if-hit-return sequence hard-codes the tier order and must change every time a layer is added or reordered."
+  signal: "A read path with a fixed sequence of if (cache.has(k)) ... else if (db.has(k)) ... spelled out in the caller, where the set or order of sources is likely to change."

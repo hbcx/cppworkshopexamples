@@ -1,0 +1,6 @@
+bad chain, severity 9:
+  PAGE on-call
+  log warning
+  log info
+good chain, severity 9:
+  PAGE on-call

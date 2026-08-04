@@ -1,0 +1,4 @@
+stapler ($20): approved by team lead
+monitor ($300): approved by manager
+server ($5000): approved by director
+datacenter ($500000): nobody could approve

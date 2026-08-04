@@ -1,0 +1,6 @@
+bad order, /admin:
+  /admin -> generic handler
+good order, /admin:
+  /admin -> admin handler
+good order, /home:
+  /home -> generic handler

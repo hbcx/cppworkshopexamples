@@ -1,0 +1,9 @@
+--- request: dashboard ---
+[log] begin
+[auth] allow
+[core] 200 handling dashboard
+[log] end
+--- request: secret ---
+[log] begin
+[auth] deny 403
+[log] end

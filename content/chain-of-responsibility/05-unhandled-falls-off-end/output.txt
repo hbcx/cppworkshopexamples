@@ -1,0 +1,7 @@
+bad chain, code 1:
+  billing handled
+bad chain, code 9:
+good chain, code 1:
+  billing handled
+good chain, code 9:
+  no handler for code 9 (sent to dead-letter)

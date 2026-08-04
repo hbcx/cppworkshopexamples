@@ -1,0 +1,6 @@
+- slug: "command"
+  note: "What flows down the chain is often a Command: Command reifies a request as an object, and Chain of Responsibility passes that request along handlers until one acts -- go there for the request-as-object side that this pattern routes."
+- slug: "decorator"
+  note: "The structural twin of the pipeline flavour: a Decorator wraps a component and delegates to the next to ADD behaviour, exactly the onion shape of middleware here -- the difference is intent, decoration enriches a result while a chain routes a request and may stop it; go there for the wrap-and-forward structure."
+- slug: "observer"
+  note: "The one-versus-many contrast: Chain of Responsibility passes a request until ONE handler takes it (the pure form), where Observer notifies ALL registered listeners of an event -- go there when every interested party should react rather than exactly one."

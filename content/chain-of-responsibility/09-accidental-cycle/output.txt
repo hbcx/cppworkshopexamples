@@ -1,0 +1,2 @@
+bad (cyclic):  a b c a b c a ...aborted (cycle suspected)
+good (acyclic): a b c [end]

@@ -1,0 +1,3 @@
+disk full: PAGE on-call
+retry storm: log as warning
+heartbeat: log as info
