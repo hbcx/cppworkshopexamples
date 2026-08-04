@@ -1,0 +1,9 @@
+-- tea --
+boil water
+steep the tea
+pour into cup
+add lemon
+-- black coffee --
+boil water
+brew the grounds
+pour into cup

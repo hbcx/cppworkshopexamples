@@ -1,0 +1,6 @@
+[log] begin
+read the resource
+[log] end
+[log] begin
+write the resource
+[log] end

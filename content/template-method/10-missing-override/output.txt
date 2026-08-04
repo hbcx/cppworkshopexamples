@@ -1,0 +1,4 @@
+--- bad (silently not overriding) ---
+base line
+--- good (override verified by the compiler) ---
+custom line

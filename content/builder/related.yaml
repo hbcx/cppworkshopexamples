@@ -4,3 +4,5 @@
   note: "The simplest creational pattern: one virtual step decides which product a subclass makes, a good contrast with Builder when the object is chosen rather than assembled field by field."
 - slug: "prototype"
   note: "The other way to avoid rebuilding from scratch: Prototype copies an already-configured object, where Builder assembles one step by step -- duplicate an existing baseline vs construct a new one."
+- slug: "template-method"
+  note: "What the Director really is: a Template Method for construction, owning a fixed sequence of build steps and calling the builder's overridable operations -- go there for the general skeleton-plus-steps pattern behind Builder's orchestration."

@@ -1,0 +1,5 @@
+Resource acquired
+derived step
+~DerivedGood
+Resource freed
+~BaseGood

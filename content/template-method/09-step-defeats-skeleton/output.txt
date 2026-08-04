@@ -1,0 +1,5 @@
+--- bad (validation overridden away) ---
+out -5
+--- good (validation not overridable) ---
+rejected -5
+out 6

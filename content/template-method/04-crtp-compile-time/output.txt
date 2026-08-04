@@ -1,0 +1,10 @@
+-- tea --
+boil water
+steep the tea
+pour into cup
+add lemon
+-- coffee --
+boil water
+brew the grounds
+pour into cup
+add sugar and milk

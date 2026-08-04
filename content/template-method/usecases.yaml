@@ -1,0 +1,27 @@
+- problem: "A unit-test framework runs each test as setup, then the test body, then teardown, and you supply only the parts that differ per test while the framework owns the fixed order and the reporting around it."
+  why: "A base fixture with a non-virtual run loop calling virtual SetUp/TestBody/TearDown is Template Method exactly: the framework guarantees teardown runs even when the body throws, which a convention of remembering to clean up in each test cannot; you override hooks, not the lifecycle."
+  signal: "A base class you inherit from to add behaviour by overriding named lifecycle methods (SetUp/TearDown, BeforeEach/AfterEach) that you never call yourself -- the framework calls them."
+
+- problem: "A serializer or report writer always opens the output, writes a header, writes the rows, writes a footer and closes -- and only the header/row/footer formatting differs between CSV, JSON and HTML."
+  why: "The open/close and the ordering are invariants every format must honour (a half-written file with no footer is corrupt), so they belong in a fixed skeleton that formats plug into; making the whole write() overridable per format would let one format forget to close, which Template Method's non-virtual skeleton prevents."
+  signal: "Several exporters that duplicate the same open/write-sections/close sequence, differing only in how a couple of the sections are rendered."
+
+- problem: "A compiler or static-analysis pass has a fixed driver -- set up state, walk the AST or basic blocks in order, finalise and emit -- and each concrete pass differs only in what it does at each node."
+  why: "The traversal order and the setup/finalise bracketing are correctness-critical and shared, so the base owns run() and the pass overrides visit(); expressing each pass as a full standalone loop would duplicate the walk and let passes diverge on traversal order, which Template Method centralises."
+  signal: "A family of passes or visitors that each re-implement the same traversal, or a base driver whose run() calls an overridable per-node step."
+
+- problem: "A game or simulation engine has one main loop -- initialise, then repeatedly process input, update the world, render -- and each game or scene customises update and render while the loop structure stays put."
+  why: "The loop order (input before update before render) and the frame bracketing are the engine's contract, so they live in a non-virtual run() and the scene overrides the two steps; letting a scene rewrite the whole loop invites frame-ordering bugs the base is meant to make impossible."
+  signal: "A base engine or scene with a fixed run()/tick() that calls overridable update() and render(), and subclasses that touch only those."
+
+- problem: "An HTTP or RPC handler must authenticate, then validate, then do the request-specific work, then format the response, with logging and error handling wrapped around all of it -- and only the middle step changes per endpoint."
+  why: "The cross-cutting steps (auth, logging, error translation) must run for every endpoint and in the same order, so they belong in a non-virtual handle() with the endpoint overriding only process() -- the Non-Virtual Interface form -- rather than each handler re-implementing auth and hoping none forgets it."
+  signal: "Request handlers that each begin with the same authenticate/validate boilerplate before their real work, or a base handler with a public non-virtual entry point calling a protected virtual core."
+
+- problem: "An iterative numerical routine -- gradient descent, a solver, a retry-with-backoff loop -- fixes the loop, the convergence or stop test, and the bookkeeping, while the per-iteration computation is what varies between problems."
+  why: "The termination logic and iteration accounting are subtle and shared (an off-by-one in the stop test is a bug you want written once), so the base owns the loop and the subclass supplies only step(); reimplementing the loop per problem re-introduces that bug repeatedly."
+  signal: "Several algorithms that share the same convergence/retry loop and differ only in the body computed each iteration."
+
+- problem: "A GUI widget participates in a fixed rendering and event pipeline -- the toolkit clears, sets up the canvas, calls your paint code, then composites -- and you override only the paint step, never the surrounding machinery."
+  why: "The setup and compositing around paint are the toolkit's responsibility and must bracket every widget's drawing identically, so paintEvent is an overridable step inside a skeleton the framework controls; a widget that took over the whole pipeline would break clipping and compositing the framework guarantees."
+  signal: "Overriding a single paint/draw method on a framework base class that the framework invokes within its own render cycle, rather than driving the render loop yourself."

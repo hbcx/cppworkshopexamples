@@ -1,0 +1,6 @@
+--- bad (skeleton overridden, header/footer lost) ---
+  rogue body, no header/footer
+--- good (skeleton fixed, steps vary) ---
+== BEGIN ==
+  sales body
+== END ==

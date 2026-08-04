@@ -1,0 +1,6 @@
+--- bad (override forgot the shared member) ---
+rushing
+serving -1
+--- good (data passed explicitly) ---
+quick
+serving 7

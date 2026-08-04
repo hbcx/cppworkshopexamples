@@ -1,0 +1,7 @@
+--- bad (a class per combination) ---
+csv via email
+html via ftp
+--- good (composed, and swappable at runtime) ---
+csv via email
+csv via ftp
+html via ftp

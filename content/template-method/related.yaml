@@ -1,0 +1,6 @@
+- slug: "strategy"
+  note: "The composition counterpart to this pattern's inheritance: Strategy injects the varying step as an object you can swap at runtime and recombine, where Template Method fixes it in a subclass at compile time -- go there when variation is multi-dimensional or must change on a live instance, which this chapter's inheritance-vs-Strategy anti-pattern points straight at."
+- slug: "factory-method"
+  note: "A Factory Method is often one step of a Template Method: when the varying step is 'create the object this algorithm works on', that overridable creator is Factory Method -- go there for the creational specialisation of the same subclass-supplies-the-step idea."
+- slug: "builder"
+  note: "Builder's Director is a Template Method for construction: it owns a fixed build sequence and calls the builder's steps, the same skeleton-plus-overridable-steps shape aimed at assembling one complex object -- go there for that creational use of an orchestrated step order."
