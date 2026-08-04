@@ -1,0 +1,2 @@
+bad (index): 1 4 3 8
+good:       1 3

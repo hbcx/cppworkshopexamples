@@ -1,0 +1,27 @@
+- problem: "You are writing a container -- a ring buffer, a tree, a graph's adjacency view, a small vector -- and want its users to loop over it, run std::find or std::accumulate on it, and use range-based for, without exposing how it stores elements."
+  why: "Providing begin()/end() and an iterator type gives all of that at once, and it keeps the representation private so it can change later; the alternative -- exposing a data pointer or forcing index access -- couples every caller to the current layout, which then cannot evolve."
+  signal: "A container class that exposes a raw buffer pointer plus a size, or a get(i)/at(i) that callers loop over with an index, instead of begin()/end()."
+
+- problem: "You have an algorithm -- a sum, a search, a transform -- that should work over many different collections (a vector, your custom list, a slice of an array) without being rewritten for each."
+  why: "Writing the algorithm against an iterator pair [first, last) instead of a concrete container decouples it from storage entirely, which is exactly how the standard algorithms achieve their reach; a version taking a specific container type has to be duplicated or overloaded for every new source."
+  signal: "The same loop logic copy-pasted for a vector, a list and an array, differing only in how the container is traversed."
+
+- problem: "The sequence you need to walk is expensive or impossible to hold in memory all at once -- the lines of a huge file, the pages of a paginated API, an unbounded numeric sequence truncated by the consumer."
+  why: "A generator-style iterator produces each element on ++ and holds only the current position's state, so memory stays constant no matter how much is traversed; materialising the whole sequence into a container first defeats the point and may not fit."
+  signal: "Code that builds and returns a full vector just so a caller can loop over it once, or that reads an entire file/result set into memory before processing it element by element."
+
+- problem: "You want to read a stream of records -- numbers from stdin, tokens from a file, rows from a socket -- and feed them straight into standard algorithms as if they were a range."
+  why: "istream_iterator and ostream_iterator model input and output iterators over a stream, so std::copy, std::accumulate and friends work directly on I/O without an intermediate container; hand-written read loops re-implement what the iterator abstraction already provides and do not compose with algorithms."
+  signal: "A while (stream >> x) loop that accumulates into a container before processing, where the algorithm could have consumed the stream's iterators directly."
+
+- problem: "A tree, graph or other non-linear structure needs to be traversed in a defined order (in-order, breadth-first) by callers who should not know its shape or rewrite the traversal each time."
+  why: "Encapsulating the traversal in an iterator -- the classic GoF motivation -- lets callers walk the structure with a plain loop while the ordering and the stack/queue bookkeeping stay inside the iterator; exposing the nodes forces every caller to duplicate the traversal and couples them to the structure's internals."
+  signal: "Callers recursively walking a tree's child pointers themselves, or a traversal routine copy-pasted at each call site instead of a begin()/end() that yields nodes in order."
+
+- problem: "A paginated API or database result set is consumed one record at a time, fetching the next page only when the current one is exhausted, and callers want to iterate it like any other range."
+  why: "An input iterator whose ++ lazily fetches the next page turns a cursor into a standard range, so the fetching stays hidden and callers use ordinary loops and algorithms; without it every caller has to interleave page-fetch logic with its processing."
+  signal: "Loops that manually track a page token or offset and re-issue a fetch when a local buffer runs dry, mixed in with the code that actually processes each record."
+
+- problem: "You need to run standard algorithms over data you do not own in a standard container -- a C array from a library, a fixed buffer, a third-party collection with its own access API."
+  why: "Wrapping the foreign data in a small iterator (often just a pointer wrapper) adapts it to the algorithm library, so std::sort, std::find and range-for apply without copying it into a std::vector first; the copy is wasteful and the adapter is a few lines."
+  signal: "Copying a C array or third-party collection into a std::vector solely to call a standard algorithm on it, rather than adapting its storage with an iterator."

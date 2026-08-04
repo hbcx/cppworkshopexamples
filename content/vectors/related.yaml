@@ -10,3 +10,5 @@
   note: "Owning heterogeneous or non-copyable elements: a vector of unique_ptr stores polymorphic objects by base pointer, each deleted automatically when the vector goes."
 - slug: "strings"
   note: "The same contiguous-growth container specialized for characters: size versus capacity, reserve, and the erase-remove idiom all reappear, plus the small-string optimization a vector has no equivalent for."
+- slug: "iterator"
+  note: "What a vector's iterators actually are and why growth or erase invalidates them: the Iterator pattern chapter covers the invalidation rules, the random-access category a vector provides, and how to write an iterator of your own."

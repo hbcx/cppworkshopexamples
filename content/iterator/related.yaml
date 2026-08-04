@@ -1,0 +1,6 @@
+- slug: "vectors"
+  note: "Where iterator invalidation bites hardest: a vector's random-access iterators are invalidated by reallocating growth and by erase, and the erase-remove idiom is the idiomatic fix this chapter's mutate-while-iterating anti-pattern points at -- go there for the container behind those rules."
+- slug: "lists"
+  note: "The real version of this chapter's hand-written linked list: std::list is node-based, so its iterators are bidirectional (not random-access) and stay valid across insert and erase of other elements -- go there for the container whose iterator category is the trade-off against a vector's."
+- slug: "associative-containers"
+  note: "Where find() returning end() is the everyday case: map and set lookups report a miss with the end iterator, the exact check this chapter's dereferencing-end anti-pattern is about -- go there for the ordered containers and the benchmark of their bidirectional iteration."

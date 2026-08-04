@@ -1,0 +1,2 @@
+bad  advance(it,3): 20 (wanted 40)
+good advance(it,3): 40

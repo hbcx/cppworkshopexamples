@@ -6,3 +6,5 @@
   note: "Why list is special for moves: splice transfers whole nodes without touching the elements, and it can hold non-movable types."
 - slug: "queues"
   note: "std::list seen from the other side: one of the containers the FIFO adaptors can be built on."
+- slug: "iterator"
+  note: "Why a list's iterators are bidirectional, not random-access, and stay valid across other elements' insert and erase: the Iterator pattern chapter builds a linked-list iterator by hand and explains the category trade-off against a vector's."

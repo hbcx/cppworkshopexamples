@@ -1,0 +1,3 @@
+count: 6
+sorted: 1 2 3 5 8 9
+index 3 after sort: 5
