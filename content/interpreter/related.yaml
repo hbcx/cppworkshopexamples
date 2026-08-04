@@ -1,0 +1,6 @@
+- slug: "visitor"
+  note: "The complement for MULTIPLE operations over the grammar: Interpreter puts interpret() as a method on each rule (right when evaluation is the one operation), where Visitor pulls operations out into visitor classes -- go there when you also need to print, type-check, or optimise the same expression tree."
+- slug: "composite"
+  note: "What an expression tree actually is: the grammar hierarchy -- terminals as leaves, non-terminals holding child expressions behind one interface -- is a Composite, so Interpreter is Composite with an interpret operation; go there for the part-whole structure and the unique_ptr ownership it shares."
+- slug: "expected"
+  note: "The clean way to report evaluation errors: instead of an ignorable error flag, have interpret return expected<value, error> so an unknown variable or a division by zero is a result the caller cannot forget to check -- go there for the value-or-error type this chapter's invalid-input anti-pattern points at."

@@ -1,0 +1,4 @@
+bad first  (x=10): 10
+bad second (x=5?): 10
+good first  (x=10): 10
+good second (x=5):  5

@@ -6,3 +6,5 @@
   note: "For parent back-pointers and shared leaves: when a node must point back at its parent, a weak_ptr avoids the ownership cycle that a strong back-pointer would leak -- see this chapter's cycle anti-pattern, then weak_ptr for the mechanics."
 - slug: "visitor"
   note: "How to run operations over the tree without bloating the nodes: a Visitor packages each operation (render, evaluate, validate) as its own class and walks the composite, so new operations do not edit every node type -- go there for double dispatch over a part-whole structure."
+- slug: "interpreter"
+  note: "A Composite with a purpose: an expression tree for a small language IS a composite of terminal and non-terminal nodes, and Interpreter adds an interpret operation that evaluates it against a context -- go there for grammars, parsing text into the tree, and rule engines."

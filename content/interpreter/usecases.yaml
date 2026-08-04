@@ -1,0 +1,23 @@
+- problem: "A product needs user- or admin-defined business rules -- eligibility for a discount, when to fire an alert, whether a transaction is flagged -- that change without a code deploy and must run over many records."
+  why: "Modelling the rules as a small predicate language parsed into trees lets non-developers edit them in config or an admin UI and lets the engine run each rule over every record; hard-coding the conditions as if-chains means every rule change is a developer task and a redeploy."
+  signal: "A growing thicket of hard-coded if statements encoding business conditions, or a feature request to let rules be configured rather than compiled in."
+
+- problem: "A search or listing endpoint accepts filter expressions from clients -- status = open AND priority > 3 -- that must be validated and evaluated against records."
+  why: "Parsing the filter into an expression tree once and interpreting it per record gives a safe, structured evaluation and a place to validate before running; string-concatenating the filter into a query or eval-ing it invites injection and offers no validation seam."
+  signal: "Client-supplied filter strings interpolated into a query, or a bespoke per-endpoint filter parser that re-tokenises the same little grammar."
+
+- problem: "Feature flags or experiment targeting need rules like country in [US, CA] AND beta == true evaluated per user, defined in configuration and changed at runtime."
+  why: "A small targeting DSL interpreted from config lets product managers change targeting without shipping code, and the same tree evaluates for every user; encoding targeting as compiled conditionals ties every rule change to a release."
+  signal: "Targeting logic expressed as nested if/else on user attributes in code, or a config format that only supports flat equality because there is no expression evaluator."
+
+- problem: "A spreadsheet, calculator, or reporting tool lets users enter formulas over named values that are recomputed as the inputs change."
+  why: "Parsing each formula into a tree and interpreting it against a context of current values is exactly the recompute-on-change model, and the tree is reused every recalculation; re-parsing the formula text on each recompute, or hand-evaluating without a tree, is slower and cannot support a second pass (dependency tracking, error highlighting)."
+  signal: "User-entered formulas evaluated by string manipulation or repeated parsing, or a recompute path that re-reads the formula text every time an input changes."
+
+- problem: "A restricted pattern language -- globs, a subset of regular expressions, a routing pattern -- must match input strings, and the pattern set is small and well-defined."
+  why: "Representing each pattern construct as a grammar class and interpreting the match is the classic Interpreter example the Gang of Four cite, and it keeps the matcher small and inspectable for a limited language; reaching for a full regex engine is overkill when the language is a handful of constructs, and hand-written ad hoc matching is error-prone."
+  signal: "A small custom pattern syntax matched by tangled string code, where a few grammar classes would make the constructs explicit and composable."
+
+- problem: "A game or simulation drives behaviour from data-defined conditions and triggers -- if health < 20 and enemies_near then flee -- authored by designers, not programmers."
+  why: "Interpreting condition trees from data lets designers tune behaviour without recompiling and lets the engine evaluate them each tick against the game state; compiling the conditions into code makes every tweak a programmer task and a build."
+  signal: "Designer-facing behaviour encoded as hard-coded conditionals, or a data format for triggers that cannot express combinations because there is no expression interpreter behind it."

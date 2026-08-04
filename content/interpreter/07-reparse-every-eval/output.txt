@@ -1,0 +1,2 @@
+bad:  eligible=550, parses=1000
+good: eligible=550, parses=1
