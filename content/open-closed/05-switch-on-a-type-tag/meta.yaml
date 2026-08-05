@@ -1,0 +1,13 @@
+title: "Anti-pattern: a switch on a type tag"
+standard: "C++11"
+difficulty: 3
+summary: "Each shape carries a Kind, and every operation switches on it, so adding a shape means editing area, name and every other switch -- and missing one is a silent wrong answer, not a compile error. The fix is polymorphism: the type IS the dispatch, and a new shape is a new class that touches nothing existing."
+notes: "This is the classic Open-Closed violation. A shape is a struct with a Kind tag, and each operation -- area, name, and every other one that will ever exist -- switches on that tag. Adding a Triangle is not one change; it is a new case in every such switch, scattered across the codebase, and the danger is the one you forget: a switch that silently falls through to a default returns a plausible wrong value rather than failing to compile, so the bug ships. The number of edit sites grows with operations times types, which is exactly the coupling OCP exists to remove. C++ does offer one partial backstop -- with -Wswitch the compiler warns about an enum value no case handles, which turns some misses into build errors -- but it does not cover switches with a default, switches on non-enum tags, or the operations you have not written yet, so it is a safety net, not the fix. The fix is to let the type system do the dispatch: an abstract Shape with virtual area and name, and each concrete shape an implementation. Now the switch is gone, adding Triangle is a single new class, and no existing function is touched or can regress. The sign of this anti-pattern: a struct or class carrying a kind, type or category enum, and more than one function that switches on it -- especially if the same set of cases appears in several places."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

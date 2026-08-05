@@ -12,3 +12,5 @@
   note: "The structural twin with the opposite intent: State has the identical context-delegates-to-an-interface shape, but the object transitions its OWN state instead of the client picking a fixed one -- go there when the behaviour should advance with the object's status, which this chapter's it-is-really-State anti-pattern points straight at."
 - slug: "template-method"
   note: "The inheritance counterpart: Template Method varies a step by overriding it in a subclass at compile time, where Strategy injects the step as an object -- go there for the fixed-skeleton form, the NVI idiom, and exactly when composition here beats that inheritance."
+- slug: "open-closed"
+  note: "The principle Strategy serves: injecting the varying algorithm is how you extend a context's behaviour without editing it -- go there for open-for-extension stated as a rule, with the registry and compile-time-policy forms alongside this one."

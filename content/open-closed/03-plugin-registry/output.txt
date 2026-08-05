@@ -1,0 +1,4 @@
+hi
+HI
+[no handler for 'shout']
+hi!!!

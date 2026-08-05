@@ -1,0 +1,4 @@
+[bad]  circle area=3.14159
+[good] circle area=3.14159
+[good] rectangle area=12
+[good] triangle area=12

@@ -6,3 +6,5 @@
   note: "The sibling that also packages something as an object: Command packages a REQUEST to trigger or undo, where Visitor packages an OPERATION to run over a structure -- go there for behaviour-as-object aimed at invocation rather than traversal."
 - slug: "interpreter"
   note: "The pattern whose grammar a visitor often walks: Interpreter builds an expression tree with interpret() on each node, and when you need more operations over it (print, optimise, type-check) you layer a Visitor on top -- go there for the grammar-as-classes structure Visitor complements."
+- slug: "open-closed"
+  note: "The principle behind Visitor's central trade-off: a class hierarchy is open to new types but closed to new operations, and Visitor flips that (open to operations, closed to types) -- go there for open-closed as the general rule this expression-problem choice bends."

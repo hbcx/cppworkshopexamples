@@ -1,0 +1,15 @@
+title: "Anti-pattern: editing tested code to extend it"
+standard: "C++11"
+difficulty: 3
+summary: "PricingService::price started with two tiers and grew a branch for each new one, so every extension reopens a class that already works and risks its tested paths. The fix moves each tier behind a PricingRule the service looks up, so a new tier is a new object and the service is never edited again."
+notes: "This is the closed for modification half of Open-Closed, violated directly. PricingService::price is a working, tested function, and the way each new customer tier gets added is by editing it -- another else-if branch bolted onto the chain. Every such edit reopens code that already passed review and its tests, so a change meant only to add a student tier can break the regular and vip paths through a typo, a wrong precedence, or a fall-through, and the blast radius of a new feature is the whole function. The point is not that if-chains are ugly; it is that modification is the risk -- touched code can regress, untouched code cannot. The fix inverts the dependency: define a PricingRule interface, make each tier a small class, and have PricingService consult a table of rules it was handed. Now the service is closed -- price is written once and never edited -- and a new tier, even one defined at the call site as the Student rule here is, is a pure addition that cannot disturb the existing tiers. The trade is the usual one: an interface, a lookup, and objects to wire, in exchange for extension that never reopens tested code. The sign: a function or class that shows up in the diff of nearly every new feature of its kind, gaining one more branch each time; version control makes this one easy to see."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

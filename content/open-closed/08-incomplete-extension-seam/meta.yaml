@@ -1,0 +1,13 @@
+title: "Anti-pattern: an incomplete extension seam"
+standard: "C++11"
+difficulty: 3
+summary: "Widget has a render seam, but the layout needs each widget's height and the interface does not expose it, so totalHeight dynamic_casts to every concrete type -- adding a widget STILL edits that function. An interface that hides something callers vary on does not actually close them. Complete it with a virtual height."
+notes: "An extension seam only closes the code that goes entirely through it. Here Widget looks like a proper interface -- an abstract base with a virtual render -- so it seems the layout should be closed. But the layout also needs each widget's height, and the interface does not provide it, so totalHeight recovers the concrete type with a chain of dynamic_casts and hardcodes a size per type. That chain is a type switch in disguise, and it means the seam leaks: adding a Slider compiles fine yet is silently sized as zero until someone remembers to edit totalHeight too. The lesson is that programming to an interface buys nothing if the interface omits what callers actually vary on -- an incomplete abstraction gives the appearance of OCP without the guarantee, which is worse than an honest switch because the missing case fails quietly instead of loudly. The fix is to complete the seam: add a virtual height to Widget so every widget answers the question the layout asks, and totalHeight becomes a closed loop that sums w->height() with no casts and no per-type knowledge. A new widget supplies its own height and the layout is untouched. The sign: dynamic_cast (or a typeid check, or a downcast) used to fetch information the base class could have exposed -- each one marks a hole in the interface where a virtual method belongs."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

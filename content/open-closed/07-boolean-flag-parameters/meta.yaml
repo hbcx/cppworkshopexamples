@@ -1,0 +1,12 @@
+title: "Anti-pattern: boolean flag parameters"
+standard: "C++11"
+difficulty: 3
+summary: "Exporter::run grew a bool for each new step -- upper-case, add a header, sort -- so every behaviour adds a parameter and a branch inside the class, which swells without bound and reopens tested code each time. The fix makes each step an object and runs a pipeline; a new step is a new object, and Exporter is closed."
+notes: "Boolean flag parameters are Open-Closed violated one argument at a time. Exporter::run takes a bool for each optional behaviour and branches on it inside the method, so supporting a new behaviour means a new parameter, a new branch, and a re-test of the one function every option runs through. The signature becomes run(rows, true, false, true) -- unreadable at the call site, because the flags are positional and their meaning is invisible -- and the body becomes a thicket of ifs whose combinations nobody has actually tested together. The class grows without bound along the axis of behaviours, which is the axis OCP wants open for extension without modification. The fix treats each behaviour as a first-class step: an operation over the data, held in a list the Exporter runs in order. Adding a step -- sort, upper-case, or a new prefix-each-line -- is appending an object, not editing run, so the class is closed and the pipeline is assembled per call from exactly the steps wanted, in a visible order. This is composition over configuration, and the same shape as a decorator chain. Not every bool is this smell -- a single genuine mode flag is fine -- but a parameter list that keeps growing with behaviours, especially several bools in a row, is the sign. When you see run(data, true, false, true), the flags are asking to become objects."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

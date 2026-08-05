@@ -1,0 +1,4 @@
+no discount: $100.00
+ten percent: $90.00
+loyalty:     $95.00
+black friday: $50.00

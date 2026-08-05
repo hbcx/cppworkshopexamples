@@ -1,0 +1,2 @@
+[bad]  Hello, Ada
+[good] Hello, Ada

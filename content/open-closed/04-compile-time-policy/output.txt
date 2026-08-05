@@ -1,0 +1,3 @@
+json: {"name":"Ada","city":"London",}
+xml:  <record><name>Ada</name><city>London</city></record>
+csv:  Ada;London;

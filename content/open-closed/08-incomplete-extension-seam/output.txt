@@ -1,0 +1,5 @@
+[bad]  totalHeight=50
+[good] totalHeight=65
+  [Button] h=30
+  Label h=20
+  ---o--- h=15

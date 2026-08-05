@@ -1,0 +1,11 @@
+title: "Compile-time extension with policies"
+standard: "C++11"
+difficulty: 3
+summary: "The Serializer is fixed; the output FORMAT is a template policy. A new format is a new policy type, resolved at compile time with no virtual calls and no edit to Serializer. Open for extension and closed for modification, done statically instead of through inheritance."
+notes: "Open-Closed does not require virtual functions -- templates give the same open-for-extension, closed-for-modification guarantee at compile time. Serializer is written once against a Format type parameter and calls Format::open, Format::pair and Format::close; each policy (JsonFormat, XmlFormat) is a small struct providing those static operations, and adding CsvFormat later is a new struct that Serializer accepts unchanged. The extension point is the template parameter, and because it is resolved when the template is instantiated there is no runtime dispatch: the calls inline, so this is the form to reach for on a hot path where a virtual call would cost too much. The trade-offs against the runtime forms are real. The set of formats is fixed at compile time -- you cannot pick a policy from a config string at runtime the way the registry example can -- and each instantiation is a distinct type (Serializer of JsonFormat and Serializer of XmlFormat are unrelated types), which can grow code size and moves errors to instantiation, where messages are harder to read. In exchange you get zero-overhead extension and full inlining. This is policy-based design, the compile-time cousin of Strategy; std::unique_ptr's Deleter parameter is the same idea applied to cleanup. Choose it when the variation is known at build time and speed matters; choose the virtual or std::function forms when it must be chosen at runtime."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

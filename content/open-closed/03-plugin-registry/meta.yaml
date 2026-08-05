@@ -1,0 +1,12 @@
+title: "A registry the dispatcher never edits"
+standard: "C++11"
+difficulty: 2
+summary: "A message dispatcher looks each type up in a table and calls its handler. Supporting a new type is registering a new handler; the dispatch code never changes. This is how plugin systems and file-format loaders stay open for extension while the router stays closed."
+notes: "A registry turns extension into data. The Dispatcher holds a map from a type name to a handler and does one fixed thing: look up the handler and call it, or report that none is registered. Adding a new message type is a call to on() with a new callable -- the dispatch method is never reopened, so the routing logic everyone depends on does not churn as features ship. This is the pattern behind plugin systems, codec and file-format loaders, and command routers: a stable core plus a table of registered extensions. Two design points matter. First, registration should be a public seam, not a private edit -- the whole benefit is lost if adding a handler means changing Dispatcher's source; here handlers come in from outside. Second, decide what happens for an unknown key -- returning a clear not-registered result (as here) is safer than a silent default that hides a missing plugin. In larger systems handlers often register themselves at startup so no central list names them all, which removes the last place that would otherwise be edited per type. The cost over a switch is a lookup and the loss of compile-time exhaustiveness -- there is no warning for a type nobody handled -- so the unknown-key path has to be handled deliberately. The signal this fits: a switch on a type or command string whose cases each dispatch to a different function and that grows on every feature."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

@@ -2,3 +2,5 @@
   note: "Single Responsibility tells you to split a class into focused collaborators; Dependency Injection is how you hand those collaborators back in from the outside instead of hard-wiring them, so the split stays testable and swappable."
 - slug: "facade"
   note: "After you split a job across several small classes, a Facade gives the caller one entry point over the pieces, so honouring SRP does not force every client to juggle five objects."
+- slug: "open-closed"
+  note: "The next SOLID principle: once responsibilities are separated, Open-Closed is about extending one of them without editing what already works -- together they push a design toward small, swappable parts."

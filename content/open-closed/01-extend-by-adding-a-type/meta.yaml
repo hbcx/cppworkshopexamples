@@ -1,0 +1,13 @@
+title: "Extend by adding a type, not by editing"
+standard: "C++11"
+difficulty: 1
+summary: "An area report sums the area of any Shape through a virtual method. Adding a Triangle is a new class; the report -- the closed part -- is never edited and cannot regress the shapes it already handled. This is the mechanic behind open for extension, closed for modification."
+notes: "Open-Closed says new behaviour should arrive as new code, not as edits to code that already works, and virtual dispatch is the plainest way to get it in C++. Shape is the extension seam: the AreaReport uses shapes only through the abstract area and name, so it does not know or care which concrete shapes exist. Circle and Rectangle are two implementations; adding Triangle later is a new class below the line, and crucially nothing above it changes -- the report is not reopened, recompiled by hand, or re-reasoned about, so the shapes it already handled cannot break. That is the whole promise: the parts that vary (the shapes) are open to extension, and the part that stays (the report loop) is closed to modification. Contrast this with the alternative the anti-patterns show -- a shape kind tag and a switch that must gain a case in every operation for each new shape. The cost of the seam is one indirection (a virtual call) and the discipline of programming to the interface, not the concrete type. The rule of thumb: when you can see an axis along which new cases will keep arriving, put that axis behind an interface so the next case is an addition, not an edit."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

@@ -1,0 +1,13 @@
+title: "Anti-pattern: speculative generality"
+standard: "C++11"
+difficulty: 3
+summary: "Open-Closed is for change that actually comes. Building an interface, a strategy and a factory for variation that never arrives is the opposite mistake: indirection wrapped around ONE implementation. Here a whole strategy-plus-factory tower produces the string Hello, name. The fix is the concrete version; add the seam when a second case really shows up."
+notes: "Open-Closed is a response to change you can see coming, not a command to make everything extensible. Applied on speculation it becomes its own anti-pattern -- sometimes called speculative generality or gold-plating -- where extension points, interfaces and factories are built for variation that never arrives, and the abstraction earns nothing while everyone pays the indirection. The bad side here is a full tower -- an abstract GreetingStrategy, one EnglishGreeting implementation, a factory to build it, and a Greeter to hold it -- all to produce one fixed string, with the reader chasing four types to answer what does this say. Every seam has a cost: a layer to read through, a type to name, an indirection to follow, more surface to test. You pay it gladly when a second and third case make the flexibility real, and you pay it for nothing when they do not, which is why premature abstraction can hurt more than a bit of duplication. The fix is to write the concrete thing -- a plain function returning the greeting -- and add the interface later, when a genuine second case (another language, a per-tenant format) actually shows up. The rule of three is the usual guide: let a variation appear for real, ideally more than once, before you generalize for it. The sign: an interface with a single implementation, a factory that can only build one product, or an abstraction whose commit history shows it never gained a second case."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

@@ -1,0 +1,15 @@
+- problem: "A checkout has to support new payment providers and shipping carriers over the life of the product -- one is added every few months by a different integration team, and each must not disturb the ones already live."
+  why: "Behind a provider interface each new one is a new class the checkout discovers, so the flow is written once and never reopened, and an added provider cannot regress an existing payment path. A switch on provider in the checkout does the opposite: every integration edits the same method, so each release risks the money paths that already work."
+  signal: "A core flow with a switch or if-chain on a provider, carrier or gateway name, edited in the commit that adds each new integration."
+
+- problem: "An import tool reads several file formats -- CSV, JSON, XML today, more later -- and the team keeps being asked to support one more, often for a single customer."
+  why: "A registry of format handlers keyed by extension turns a new format into a self-contained plugin that registers itself, leaving the importer untouched. The alternative -- a growing if-else on the extension inside the importer -- means every new format reopens and re-tests the one function all formats run through."
+  signal: "A loader with a chain of comparisons on a file extension or magic number, each branch calling a different parser."
+
+- problem: "A pricing engine applies tax and discount rules that differ by country, and new jurisdictions are onboarded regularly, each with its own rules that must not change how existing regions are billed."
+  why: "A rule strategy per region, selected by lookup, lets a new region be added as a new object with the engine closed, so onboarding one country provably cannot alter another's invoices. Editing the engine for each new region couples every jurisdiction to one file and puts the tested ones at risk on every change."
+  signal: "A tax or pricing function with region-specific branches, or a rate table interleaved with per-country special cases in the same method."
+
+- problem: "A service handles many message or command types and gains new ones as features ship, but the network receive loop that routes them must stay stable and well-tested."
+  why: "Registering a handler per message type keeps the dispatch loop closed -- a new type is a new registration, not an edit to the router -- so the hot path everyone depends on does not churn. A switch on message type inside the loop reopens that critical code for every feature and mixes routing with handling."
+  signal: "A dispatch loop with a large switch on a message type or opcode, where each case constructs and calls a different handler inline."

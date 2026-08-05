@@ -1,0 +1,11 @@
+title: "Inject the varying behaviour"
+standard: "C++11"
+difficulty: 2
+summary: "A checkout must support new discount rules over time. Instead of editing it for each one, the varying rule is injected as a std::function. A new discount is a new callable; Checkout -- the closed part -- never changes. This is Open-Closed done at runtime, which is the Strategy pattern."
+notes: "The runtime form of Open-Closed is to inject the thing that varies. Checkout does the fixed work -- take a subtotal, apply the discount, return the total -- and receives the discount as a std::function it calls without knowing what it does. Each rule (none, ten percent, loyalty) is a separate callable, and a new one such as a Black Friday half-off is just another lambda handed in at construction: Checkout is not reopened, recompiled by hand, or put at risk. That is the same guarantee example one gets from a virtual method, expressed with a callable instead of an interface -- and it is exactly the Strategy pattern, which is why OCP and Strategy are two names for the same move seen from different angles (OCP the principle, Strategy the mechanism). Use a std::function when the behaviour is a single operation and a lambda is the natural way to write it; reach for a small interface instead when the strategy carries state, needs several related methods, or you want to name and test it as a type. The trade-off against example one is dynamic flexibility (swap the rule on a live object, build it from config) versus the slight cost of type erasure and an indirect call. The signal that this fits: an if-chain or switch selecting behaviour that keeps gaining cases -- lift the varying branch out and pass it in."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
