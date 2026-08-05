@@ -1,0 +1,15 @@
+- problem: "One service class is edited by two teams for unrelated reasons -- billing changes a tax rule, the platform team changes how it logs -- and every release brings merge conflicts and regressions where one team's change breaks the other's code path."
+  why: "Splitting by actor gives each team a module it owns end to end, so their changes stop landing in the same file. A shared Manager or Utils class everyone edits does the opposite: it turns independent work into a queue of conflicts, and a bug fix for one caller silently reshapes another."
+  signal: "A class touched in commits from several teams for reasons that have nothing to do with each other, or a name ending in Manager, Service, Processor or Util whose methods operate on disjoint sets of fields."
+
+- problem: "Pricing or validation logic is spliced into the same method that talks to the database and the network, so the only way to test the math is to stand up a real database and capture what got written -- the tests are slow, flaky, and rarely run."
+  why: "Extracting the pure decision (ports and adapters) makes it a function from inputs to a result you can check in microseconds with no I/O. The alternative -- integration-only tests -- pays a live database on every assertion and still cannot exercise the odd branches, because setting up the failing state through real I/O is too hard."
+  signal: "A method that both computes a result and reads or writes an external system, and a test suite that needs a database or a network fake to check a formula."
+
+- problem: "A report's numbers come from finance rules and its layout comes from marketing, the two change on different schedules by different people, yet both live in one Report class, so a branding tweak risks breaking a calculation and every layout change goes through whoever owns the math."
+  why: "Separating the computation from the presentation lets each side change without reviewing the other, and a layout edit provably cannot alter a total because it lives in a different class. Keeping them together couples two release cadences and forces one gatekeeper on changes that should be independent."
+  signal: "A single class with both business-rule methods and formatting or rendering methods, where a change request names only one of the two but the diff has to touch the other."
+
+- problem: "The application must move its storage from flat files to a database, or its wire format from JSON to protobuf, and the change turns out to touch dozens of files because every domain entity carries its own toJson and saveToDb methods."
+  why: "Giving persistence and serialization their own classes (a repository, a serializer) localizes the swap to one place, so the entities never change. When the entity knows its own storage format, every format decision is smeared across the whole model and a single transport change becomes a project."
+  signal: "Domain classes with methods like toJson, toXml, save or writeTo, or an entity that includes a database or serialization header."

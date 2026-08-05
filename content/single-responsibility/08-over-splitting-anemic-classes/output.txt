@@ -1,0 +1,2 @@
+[bad]  four classes: 'Ada lovelace'
+[good] one class:    'Ada lovelace'

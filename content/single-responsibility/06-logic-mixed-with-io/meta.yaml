@@ -1,0 +1,12 @@
+title: "Anti-pattern: logic tangled with I/O"
+standard: "C++11"
+difficulty: 3
+summary: "One generateReport method fetches rows, sums them, and writes the output -- computation welded to input and output. To test the sum you must stand up the source and capture the write. Extract a pure summarise() and the arithmetic becomes testable with no I/O."
+notes: "This is the god class narrowed to its most damaging form: a single method that both computes and touches the outside world. generateReport in the bad version reads its rows from a data source and writes a formatted report in the same call, so the calculation cannot be exercised on its own -- to check that the total is right you have to provide a real (or faked) source, run the whole thing, and inspect what was written. That is why business logic buried in I/O ends up with slow, flaky integration tests or no tests at all: the interesting branches (an empty result, a rounding edge, a negative adjustment) are painful to reach through real input and output. It is a responsibility split hiding in one function -- fetching is one job, summarising is another, presenting a third. The fix pulls the pure core out: summarise takes rows and returns a result, with no reading and no writing, so main can check it directly in memory, while the fetch and the write stay at the edges where they belong and can be swapped or mocked. Keep the decision pure and push the effects outward -- the same seam example three drew between policy and mechanism, here stated as the anti-pattern it prevents. The sign: a method that both calls out to a database, file or socket AND computes something you would want to unit-test, and a test that needs infrastructure to check a formula."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

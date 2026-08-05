@@ -1,0 +1,11 @@
+title: "Anti-pattern: the god class"
+standard: "C++11"
+difficulty: 3
+summary: "One OrderProcessor validates, prices, formats a receipt, persists and logs -- five responsibilities, five reasons to change, all in one class. Every team that touches orders edits the same file. Split each concern into its own class over a shared Order."
+notes: "The god class is the most common SRP violation and the easiest to grow into by accident: a class starts with one job, and each new requirement gets bolted onto it because the class is already there. OrderProcessor here does five unrelated things -- input validation, pricing, receipt formatting, persistence and logging -- and each answers to a different actor, so a change to any one is a change to the whole class, and the file becomes a merge-conflict magnet where a pricing tweak sits next to a logging tweak next to a database call. It usually compiles and works; the cost is all in change and testing. You cannot test the pricing without dragging in the database and the logger, and you cannot reason about one concern without reading past the other four. The fix is to give each responsibility its own small class -- OrderValidator, PriceCalculator, ReceiptFormatter, OrderRepository -- over a plain Order, and let a thin coordinator call them in order (the next step is usually to inject those collaborators rather than construct them, and to hide the sequence behind a facade). The sign to watch for: a class whose name ends in Manager, Processor, Engine, Helper or Util; a long list of member fields that split into groups no method uses together; and methods that would each be requested by a different department."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

@@ -1,0 +1,4 @@
+self-test: ok warn crit
+[OK] boiler-1 at 22.5C
+[WARN] boiler-1 at 38C
+[CRITICAL] boiler-1 at 47C

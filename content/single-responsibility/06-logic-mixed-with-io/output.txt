@@ -1,0 +1,4 @@
+[bad] report: 3 sales, $243.50
+---
+self-test empty: ok
+[good] report: 3 sales, $243.50

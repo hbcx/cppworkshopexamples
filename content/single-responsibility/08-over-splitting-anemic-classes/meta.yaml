@@ -1,0 +1,11 @@
+title: "Anti-pattern: over-splitting into anemic classes"
+standard: "C++11"
+difficulty: 3
+summary: "SRP misread as one class, one method: a NameTrimmer, a NameLowercaser, a NameValidator and a NameCapitalizer, each stateless and one line long, wired by a coordinator that is more plumbing than logic. These share one responsibility -- normalize a name -- so they should be one cohesive class."
+notes: "SRP is about cohesion, and it is just as possible to have too little in a class as too much. Read one class, one method too literally and you shatter a single responsibility into a crowd of anemic classes -- NameTrimmer, NameLowercaser, NameCapitalizer, NameValidator here -- each holding no state, doing one trivial step, and existing mainly to be constructed and called by some coordinator. The result is worse than the god class in a quiet way: the actual work is buried under object wiring, you have to open five files to follow one operation, and nothing is more testable than a plain function would have been, because there was never more than one responsibility to separate. The tell is that the classes always travel together, are never used apart, and would all change for the SAME reason -- a change to what a valid name is touches several of them at once. That shared reason to change is the definition of one responsibility, so they belong in one cohesive class: a NameNormalizer that trims, lowercases, capitalizes and validates as steps of the single job it owns. SRP maximizes cohesion, so the fix for over-splitting is to merge by reason to change, exactly the same test that tells you when to split -- applied in the other direction. The sign: many tiny stateless classes with -er names that are only ever constructed next to each other and passed the same data in a row."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

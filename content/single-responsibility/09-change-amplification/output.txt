@@ -1,0 +1,2 @@
+[bad] view=$123.00 cart=$123.00 invoice=$123.00 receipt=$123.00  (raising VAT = 4 edits)
+[good] view=$123.00 invoice=$123.00  (raising VAT = 1 edit)

@@ -1,0 +1,6 @@
+[bad] receipt for Acme Corp: $49.92
+[bad] db: insert order for Acme Corp
+[bad] log: processed 2 items
+---
+[good] receipt for Acme Corp: $49.92
+[good] db: insert order for Acme Corp

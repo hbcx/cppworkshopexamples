@@ -16,3 +16,5 @@
   note: "Where the injected implementation lands: a Bridge's abstraction depends on an implementor interface and is handed a concrete one -- injection at the composition root is how the two hierarchies stay independent and the backend is chosen in one place."
 - slug: "strategy"
   note: "When the injected dependency is a behaviour: injecting an algorithm -- a comparator, a pricing rule, a backoff policy -- is the Strategy pattern, and go there for its object, std::function, and compile-time policy forms."
+- slug: "single-responsibility"
+  note: "The principle that tells you WHY to extract the collaborator you then inject: Single Responsibility splits a class into focused parts, and injection is how you hand those parts back in instead of hard-wiring them -- go there for how to decide what to pull out."

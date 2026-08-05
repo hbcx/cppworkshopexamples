@@ -1,0 +1,12 @@
+title: "Cohesion, not method count"
+standard: "C++11"
+difficulty: 3
+summary: "SRP is about reasons to change, not how many methods a class has. A Money value type with a dozen methods that all serve one idea is highly cohesive and correct; a three-method class that holds a socket, parses input and prices an order is the real violation. Count actors, not lines."
+notes: "The trap in SRP is reading it as one class, one method and then splitting cohesive types apart. A Money value type here has many methods -- add, subtract, scale, percent, compare, format -- and it is NOT a god class, because every one of them changes for the same reason: the definition of money arithmetic. That is high cohesion: the methods and the data belong together and move together. A big class is not automatically a violation, and a small one is not automatically clean. The genuine violation is low cohesion regardless of size -- the sketched Connection with just three methods that opens a socket, parses a request and computes a price answers to the network team, the protocol team and the pricing team all at once, so a change from any of them lands in the same class. The useful test is not how many methods do you have but how many unrelated audiences would ask you to change this -- count actors, not lines. And the reverse discipline matters too: once you have split a job across several cohesive classes, you often reassemble them behind one entry point (a facade) so the caller is not forced to wire five objects by hand, which is the subject of the next chapters. SRP maximizes cohesion; it does not maximize class count."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a domain object that serializes itself"
+standard: "C++11"
+difficulty: 3
+summary: "A Customer entity carrying toJson, toXml and saveToDb has baked storage and wire formats into the domain, so switching JSON to another format or a file to a database edits the entity and every entity like it. Keep the entity pure and move each format into its own serializer."
+notes: "It feels natural to give an object a toJson or a save method -- the data is right there. But it hands the entity extra responsibilities that belong to other actors: the JSON shape is owned by whoever consumes the API, the database schema by the DBA, and the domain rules by the business, and now all three live in one class. The reasons to change multiply: a new API version, a column rename, and a validation rule all reopen Customer, and every other entity that copied the pattern too, which is why a single format migration turns into a sweep across the whole model. The entity also drags in dependencies it should not have -- a JSON library, database headers -- so the pure business type can no longer be compiled or tested without them. The fix keeps Customer a plain data-and-rules type and moves each concern outward: a JsonSerializer, an XmlSerializer, a CustomerRepository, each owning one format and each changeable without touching the domain or the others. Adding a format is a new class, not an edit to the entity. The sign: a domain or entity type with methods named toJson, toXml, toString-for-the-wire, save, load or writeTo, or one that includes a serialization or database header -- persistence and presentation leaking into the model."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

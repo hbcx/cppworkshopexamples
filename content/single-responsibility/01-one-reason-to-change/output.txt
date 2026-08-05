@@ -1,0 +1,11 @@
+--- one class does both ---
+Invoice for Acme Corp
+  Widget x3
+  Gadget x1
+  TOTAL: 49.92
+--- data-plus-rule + formatter (same output) ---
+Invoice for Acme Corp
+  Widget x3
+  Gadget x1
+  TOTAL: 49.92
+Amount owed stays a pure number: 49.92

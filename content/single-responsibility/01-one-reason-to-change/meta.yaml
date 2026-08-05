@@ -1,0 +1,12 @@
+title: "One reason to change"
+standard: "C++11"
+difficulty: 1
+summary: "A class should have one reason to change. An Invoice that both computes the amount owed and formats itself as text has two -- a tax rule and a layout rule -- so split it into the data-plus-money-rule and a separate formatter."
+notes: "This is the mechanic behind the whole principle. The bad Invoice welds two jobs together: total() is a business rule (what is owed) and asText() is a presentation rule (how it prints), and those change for completely different reasons and usually by different people -- an accountant changes the math, a designer changes the layout. Two reasons to change in one class means either edit risks the other, and two teams end up in the same file. The fix is to give each reason its own home: Invoice keeps the data and the one rule that is truly its own (the total), and InvoiceFormatter owns how an invoice looks. Both versions print the same thing here -- the point is not the output, it is that a layout change now touches only the formatter and can be proven not to alter a total. The wording reason to change is the useful test: if you can name two audiences who would ask for changes for unrelated reasons, that is two responsibilities."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

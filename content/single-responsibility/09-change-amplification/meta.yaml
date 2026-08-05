@@ -1,0 +1,11 @@
+title: "Anti-pattern: change amplification from low cohesion"
+standard: "C++11"
+difficulty: 3
+summary: "The VAT rate is hardcoded in the price view, the cart summary, the invoice and the receipt. Raising it is a four-file edit, and missing one leaves the totals quietly disagreeing. Knowing the rate is a responsibility smeared across classes -- give it one owner, a TaxPolicy every class asks."
+notes: "Change amplification is the god class turned inside out: instead of one class with many responsibilities, one responsibility is scattered across many classes. Here the concept knowing the tax rate lives as a bare 0.23 in four unrelated places, so a single business decision -- raise VAT -- forces an edit in each, and the danger is not the typing but the miss: overlook one and the price shown, the cart total, the invoice and the receipt no longer agree, a bug that surfaces as a penny mismatch in production rather than a compile error. This is what low cohesion costs on the change axis, sometimes called shotgun surgery: a change that ought to be one edit fans out into many. Read through SRP, every one of those classes has quietly taken on a second responsibility -- being a source of truth for the tax rate -- that belongs to exactly one module. The fix gives the concept a single owner, a TaxPolicy, and has every class ask it instead of holding its own copy, so raising the rate is one edit in one place and the four numbers cannot drift apart. Do not confuse this with example one splitting Money into methods -- that was one cohesive concept; this is one concept duplicated across classes that should share it. The sign: the same literal, rule or formula copy-pasted into several files, and a one-line requirement (change the rate, the currency, the limit) whose diff touches many of them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

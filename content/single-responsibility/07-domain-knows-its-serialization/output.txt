@@ -1,0 +1,7 @@
+[bad] {"name":"Ada","points":1200}
+[bad] db: insert Ada
+---
+[good] gold? yes
+[good] json: {"name":"Ada","points":1200}
+[good] xml:  <customer name='Ada' points='1200'/>
+[good] db: insert Ada

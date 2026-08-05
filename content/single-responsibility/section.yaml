@@ -1,0 +1,4 @@
+title: "Single Responsibility Principle"
+description: "The first SOLID principle: a class should have one reason to change -- be responsible to one actor. Shown as splitting a mixed class into a data-plus-rule and a formatter, the payroll example where three actors mean three modules, separating a pure decision from its I/O, and cohesion (not method count) as the guide -- alongside the god class, logic tangled with I/O, a domain that knows its own serialization, over-splitting into anemic classes, and change amplification from low cohesion."
+sort_order: 46
+category: "Design principles"

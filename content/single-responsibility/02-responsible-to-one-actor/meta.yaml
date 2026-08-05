@@ -1,0 +1,11 @@
+title: "One module, one actor"
+standard: "C++11"
+difficulty: 2
+summary: "Robert Martin's sharper wording: a module should be responsible to one actor. An Employee with calculatePay (Accounting), reportHours (HR) and save (the DBA) answers to three actors, so a change from one can break another -- split it into three modules over shared data."
+notes: "The classic SRP story. One Employee class has three methods, and each belongs to a different part of the business: calculatePay is owned by Accounting under the CFO, reportHours feeds HR under the COO, and save is the DBA's concern. In the bad version calculatePay and reportHours both call one shared regularHours helper -- convenient, and a trap. When the CFO asks to change how overtime is counted, a developer edits regularHours, and HR's hour report silently changes too, because it was quietly leaning on the same code. Nobody asked HR, nobody told them, and the number on their report is now wrong. That is what responsible to two actors means: two reasons to change collide in one place. The fix is to separate the code each actor owns -- PayCalculator, HourReporter and EmployeeRepository -- over a shared plain EmployeeData. The two regularHours helpers now look identical but are independent: the CFO's change lands only in PayCalculator, and HR's report is untouched until HR asks for it. The duplication is not the smell here; the coupling was. This actor-based reading is more precise than reason to change, because it points at WHO asks -- when two stakeholders would request changes to the same code for their own unrelated reasons, that code is serving two masters and should be split."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

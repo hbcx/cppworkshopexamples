@@ -1,0 +1,12 @@
+title: "Separate the decision from the I/O"
+standard: "C++11"
+difficulty: 2
+summary: "A monitor that both decides an alert level and prints the alert has bound a pure rule to a side effect, so the rule cannot be tested without the output. Split it: a pure ThresholdPolicy that returns a Level, and an AlertSink that does the I/O."
+notes: "This is SRP applied to the most common tangle in real code: business logic wired straight to input and output. A TemperatureMonitor that reads a threshold, decides Ok, Warn or Critical, AND writes the alert has two responsibilities -- the decision and the I/O -- and they change for different reasons: the escalation rule is a product decision, the destination (console, file, network, a pager) is an operations decision. Worse, welding them makes the rule untestable, because the only way to check what it decides is to trigger and capture the side effect. Splitting gives a pure ThresholdPolicy::evaluate that maps a number to a Level with no I/O -- you can check every branch in-memory, as the little self-test in main does -- and an AlertSink that turns a Level into output and can be swapped without touching the rule. This is the seam that dependency injection and testing both build on: keep the decision pure, push the effects to the edges. The general shape is policy from mechanism -- WHAT to do is one responsibility, HOW to carry it out is another."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
