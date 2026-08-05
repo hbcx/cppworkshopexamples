@@ -1,0 +1,12 @@
+title: "The CRTP mechanic"
+standard: "C++11"
+difficulty: 1
+summary: "A base class is templated on its own derived class -- struct Dog : Animal<Dog> -- so the base can static_cast itself to Derived and call the derived method at compile time. speak() lives once in the base and calls the derived sound() with no virtual and no vtable."
+notes: "The Curiously Recurring Template Pattern gets its odd name from its shape: a class derives from a base templated on itself -- struct Dog : Animal<Dog>. That looping definition is what makes it work. Because the base Animal<Derived> knows the exact derived type as a template parameter, it can static_cast<Derived*>(this) to recover the concrete object and call its methods, all resolved when the template is instantiated. Here the helper self() does that cast, and the shared speak() calls self().sound(), which binds to Dog::sound or Cat::sound at compile time -- no virtual function, no vtable, and the call can be inlined as if written by hand. The result looks like polymorphism -- one speak() serving many types, each with its own sound() -- but it is STATIC polymorphism: the dispatch is chosen by the type at compile time, not by a vtable at run time, which the next example contrasts with the virtual version. Two mechanical points define the idiom. The base is a template, so Animal<Dog> and Animal<Cat> are different types with no common base -- there is no single Animal you can point at, which is the idiom's main limitation. And the static_cast is only safe because Dog really does derive from Animal<Dog>; each class must pass ITSELF as the template argument, and passing the wrong type is the classic CRTP bug the anti-patterns cover. For now this is the skeleton: a base templated on Derived, a static_cast to reach the derived methods, and dispatch that costs nothing at run time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "CRTP", url: "https://en.cppreference.com/w/cpp/language/templates" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

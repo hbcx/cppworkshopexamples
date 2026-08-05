@@ -1,0 +1,12 @@
+title: "Inject reusable behaviour as a mixin"
+standard: "C++11"
+difficulty: 2
+summary: "A CRTP base can generate boilerplate from a type's core operation: Comparable<T> defines !=, <=, > and >= in terms of the T's own == and <, so a Version type gets all six comparisons by writing only two. The generated operators bind statically and inline, with no runtime cost."
+notes: "One of the most practical uses of CRTP is as a mixin: a base that adds a bundle of operations to any type, expressed in terms of a small core the derived type provides. Comparable<T> here is the classic example. A value type usually needs all six relational operators, but they are all derivable from two -- given == and <, the other four are just negations and swaps. So Comparable<T> defines !=, <=, > and >= once, each implemented by static_casting to T and calling the T's own == or <, and any type that wants the full set inherits Comparable<Version> and writes only == and <. Version does exactly that and gets a complete, consistent comparison interface for free. Because the mixin binds through a compile-time cast rather than a virtual call, the generated operators inline into nothing more than the core comparison, so this costs no more at run time than writing them by hand -- but without the copy-paste and the bugs that come with repeating the same four definitions on every value type. The pattern generalises: a Printable<T> mixin can supply to_string from the type's stream operator, an Incrementable<T> can supply postfix ++ from prefix ++, and so on -- each writes shared behaviour once in terms of a required core, and hands it to many types with no runtime overhead. This is CRTP used for composition rather than for a Template-Method skeleton: the base is not an algorithm the derived type plugs steps into, but a capability the derived type gains by inheriting. The one requirement is that the derived type actually provide the core operations the mixin names; when it does not, you get the template-instantiation error the later anti-pattern is about."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "CRTP", url: "https://en.cppreference.com/w/cpp/language/templates" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }

@@ -1,0 +1,6 @@
+v1 == v2 : no
+v1 != v2 : yes
+v1 <  v2 : yes
+v1 <= v2 : yes
+v1 >  v2 : no
+v1 >= v2 : no

@@ -1,0 +1,13 @@
+title: "Anti-pattern: deriving from the wrong Base parameter"
+standard: "C++11"
+difficulty: 3
+summary: "CRTP works only if each class passes ITSELF as the template argument. Writing struct Bad : Base<Good> -- a copy-paste slip -- makes the base static_cast a Bad object to Good and call Good's method on it, which is undefined behaviour. The fix is to pass the class's own type, and a static_assert can catch the mistake at compile time."
+notes: "The static_cast at the heart of CRTP is unchecked: the base casts this to Derived and trusts that this really IS a Derived. That trust holds by construction as long as every class derives from Base of its own type -- but nothing in the language enforces it, so a copy-paste error where a new class keeps the previous class's template argument silently breaks the assumption. Here Bad derives from Registry<Good> instead of Registry<Bad>, usually because it was copied from Good and the argument was not updated. Now the base's register_name() does static_cast<Good&>(*this) on an object that is actually a Bad, then calls Good::name() through that wrong pointer -- reading a Good out of storage that holds a Bad, which is undefined behaviour: it may print garbage, read out of bounds, or crash, and it will differ between compilers and builds. Because it is real undefined behaviour, this example does not run the broken cast; the mistake is described and only the correct classes are exercised. The fix is simply to pass the right type -- struct Good : Registry<Good> -- but since the compiler will not catch the slip on its own, the robust defense is to make the base check it: a static_assert(std::is_base_of<Registry<Derived>, Derived>::value) style guard, or in the simple form here a check that the object really derives from the base it is casting to, turns the silent UB into a clear compile error. The sign of this bug: a family of CRTP classes where one names a different type than itself in its base clause -- almost always a class that was copied from a sibling and had everything updated except the template argument."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "CRTP", url: "https://en.cppreference.com/w/cpp/language/templates" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

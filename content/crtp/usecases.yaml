@@ -1,0 +1,15 @@
+- problem: "A polymorphic skeleton runs in a tight loop -- a numeric kernel, a per-pixel or per-sample operation, a hot serialization path -- and the virtual call per step, plus the inlining the compiler cannot do across it, shows up in a profile."
+  why: "CRTP resolves the varying step at compile time through a static_cast, so the call inlines and the indirection disappears, which on a hot path is a real speed-up. A virtual base pays a vtable lookup and blocks inlining on every call, which is fine almost everywhere but not in the innermost loop."
+  signal: "A virtual method called in a tight loop where the concrete type is fixed at the call site, showing up as indirect-call or missed-inline cost in a profile."
+
+- problem: "Many value types need the same boilerplate derived from one or two core operations -- all the comparison operators from == and <, a to-string from a stream operator, a clone from a copy -- and hand-writing it on each type is repetitive and error-prone."
+  why: "A CRTP mixin writes the boilerplate once in terms of the derived type's core operation, and each type gets it by inheriting the mixin, with no runtime cost because the calls bind statically. Repeating the operators by hand invites copy-paste bugs, and a virtual helper would add indirection to what should be trivial inlined code."
+  signal: "The same set of operators or helper methods duplicated across several value types, each defined in terms of one or two primitives."
+
+- problem: "A library needs a type to participate in a compile-time protocol -- expression templates that fuse operations, or a base that must hand out a correctly-typed pointer to itself, like enable_shared_from_this -- where the exact derived type has to be known statically."
+  why: "CRTP gives the base the derived type as a template parameter, so it can return Derived&, build Derived-typed expression nodes, or call derived operations with no virtual dispatch and full type information. A virtual base only knows the base type, so it cannot return the derived type or fuse operations at compile time."
+  signal: "A base that needs to name or return its own derived type, or an expression type that must combine with others without materialising temporaries."
+
+- problem: "Each type in a hierarchy needs its own static state -- a per-type instance count, a per-type registry entry, a per-type id -- and putting the static member in one shared base would make all types share a single counter instead of one each."
+  why: "Because Base<Derived> is a distinct type per derived class, a static member in the CRTP base exists once PER derived type, giving each type its own counter or registry slot for free. A plain base with a static member shares one instance across all subclasses, which is the opposite of what is wanted."
+  signal: "A need for per-type static data -- an instance count, an id, a registration -- where a single shared static in a common base would conflate the types."

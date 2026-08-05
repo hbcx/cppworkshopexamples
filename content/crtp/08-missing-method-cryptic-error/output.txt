@@ -1,0 +1,2 @@
+(circle)
+(a type missing draw() is rejected by static_assert, not by a wall of template errors)

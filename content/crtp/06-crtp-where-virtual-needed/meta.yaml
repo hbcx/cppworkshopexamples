@@ -1,0 +1,14 @@
+title: "Anti-pattern: CRTP where runtime polymorphism is needed"
+standard: "C++11"
+difficulty: 3
+summary: "CRTP freezes the type at compile time, so Button<...> and Slider<...> have no common base and cannot share a container or be chosen from a config value. Trying to build a heterogeneous list of CRTP widgets does not compile. When you need uniform storage or a runtime choice, the answer is a virtual base."
+notes: "CRTP is compile-time polymorphism, and its defining limitation is that each instantiation is an unrelated type -- Widget<Button> and Widget<Slider> share no base you can point at. That is fine when every object's type is known statically, but it collides head-on with the two things dynamic polymorphism is for: storing different types together, and choosing a type from a value at run time. This example makes the collision concrete. A UI needs a list of mixed widgets to render in a loop, and to build one widget per line of a config read at startup. With the CRTP design there is no common base, so you cannot declare a vector that holds both a Button and a Slider, and you cannot write a function that returns whichever widget a config string names -- the return type would have to be known at compile time. The bad namespace shows the shape and comments out the container that will not compile, because there is nothing to instantiate it with. The fix is the plain virtual interface: a Widget base with a virtual render(), Button and Slider overriding it, held uniformly through unique_ptr<Widget> in one vector and built by a factory that returns a base pointer chosen from the config value. This is not CRTP being wrong; it is CRTP being the wrong tool for a job that is inherently dynamic. The two are complementary -- reach for CRTP when the type is fixed at the call site and you want the speed, and for a virtual base when you must treat different types uniformly or decide among them at run time. The sign of this misuse: an attempt to make a container, a factory, or a non-template function work over CRTP types, which shows up as a compile error because there is no common base type to name."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "CRTP", url: "https://en.cppreference.com/w/cpp/language/templates" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

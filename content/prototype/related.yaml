@@ -6,3 +6,5 @@
   note: "The reuse-not-rebuild neighbour: an Object Pool recycles a live instance and hands it back afterward, where Prototype copies a configured template -- both dodge expensive construction, one by recycling, one by cloning."
 - slug: "memento"
   note: "The behavioural pattern built on the same copy, for a different reason: Memento snapshots an object's state to restore it later, where Prototype copies an object to make a new one -- go there for save/restore and the deep-versus-shallow copy question both patterns share."
+- slug: "crtp"
+  note: "The idiom behind this chapter's clone helper: a CRTP base writes clone() once in terms of the derived type, so every prototype gets a correctly-typed copy for free -- go to the CRTP chapter for static polymorphism, mixins, and the full idiom."

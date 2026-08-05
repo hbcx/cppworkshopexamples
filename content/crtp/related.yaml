@@ -1,0 +1,8 @@
+- slug: "template-method"
+  note: "The pattern CRTP most often implements: a fixed skeleton in the base calling steps a subclass supplies, but resolved at compile time instead of through virtual dispatch -- go there for the runtime Template Method and exactly when the compile-time CRTP form is worth it."
+- slug: "strategy"
+  note: "The other end of the same axis: Strategy injects a varying behaviour as a runtime object, CRTP and its policy cousin bind it at compile time -- go there for the object and std::function forms, and the trade-off against this one."
+- slug: "prototype"
+  note: "A concrete CRTP mixin in use: a clone() helper written once in the CRTP base gives every derived type a correctly-typed copy without repeating the boilerplate -- go there for that pattern and its polymorphic clone."
+- slug: "pimpl"
+  note: "The sibling idiom with the opposite goal: pimpl hides the implementation behind a pointer to cut compile coupling, where CRTP pulls the implementation into the header to inline it -- go there for the compile-firewall idiom and its costs."

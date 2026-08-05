@@ -1,0 +1,2 @@
+[crtp]    {user} {order} {invoice} (serialize() generated per type)
+[virtual] {user} {order} (one shared serialize())

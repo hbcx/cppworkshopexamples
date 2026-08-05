@@ -4,3 +4,5 @@
   note: "The special-member rules pimpl leans on: a pimpl class is a textbook rule-of-five type -- move-only unless you add a deep copy, every special member declared in the header and defined where Impl is complete -- go there for move constructors, the rule of five, and why moves must be out-of-line here."
 - slug: "unique-ptr"
   note: "The tool pimpl is built on: the implementation is owned by a unique_ptr<Impl>, and its incomplete-type rules are exactly what force the out-of-line destructor -- go there for unique_ptr ownership, custom deleters, and make_unique."
+- slug: "crtp"
+  note: "The sibling idiom with the opposite goal: pimpl hides the implementation behind a pointer to cut compile coupling, where CRTP pulls it into the header to inline it -- go there for static polymorphism, mixins, and per-type state."

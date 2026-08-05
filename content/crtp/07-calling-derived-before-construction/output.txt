@@ -1,0 +1,2 @@
+[bad]  constructed without touching the derived part
+[log] configured

@@ -1,0 +1,6 @@
+dynamic (virtual):
+  area = 12.5664
+  area = 9
+static (CRTP):
+  area = 12.5664
+  area = 9

@@ -1,0 +1,5 @@
+widgets alive = 2
+gadgets alive = 1
+widgets in inner scope = 3
+widgets after scope = 2
+gadgets unaffected  = 1

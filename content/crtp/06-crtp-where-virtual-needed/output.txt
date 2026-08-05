@@ -1,0 +1,7 @@
+CRTP widgets, one at a time:
+[button]
+[slider]
+virtual widgets from config:
+[button]
+[slider]
+[button]

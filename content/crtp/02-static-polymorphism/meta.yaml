@@ -1,0 +1,12 @@
+title: "Static polymorphism without virtual"
+standard: "C++11"
+difficulty: 2
+summary: "The same shared algorithm can dispatch to per-type steps two ways: a virtual base resolved at run time, or a CRTP base resolved at compile time. CRTP inlines the step and pays no vtable, at the cost that Shape<Circle> and Shape<Square> are unrelated types you cannot store together."
+notes: "This example puts the two kinds of polymorphism side by side so the trade-off is concrete. Both compute an area report through a shared describe() that defers the actual area to a per-type step. The virtual version has describe() in a base with a pure virtual area(); the call goes through the vtable at run time, and every VShape can be held behind one VShape pointer -- you can put circles and squares in the same vector and loop over them. The CRTP version templates the base on the derived type, so describe() calls self().area() bound at compile time: no vtable, the area() call inlines into describe(), and on a hot path that is the whole point. What you give up is exactly what the virtual version gained -- Shape<Circle> and Shape<Square> are distinct, unrelated types with no common base, so there is no one pointer that holds both and no runtime choice of which shape to make. This is the same runtime-versus-compile-time axis the Strategy chapter draws between a std::function and a policy template, and CRTP is the compile-time end of it for the Template-Method-shaped case. The decision rule follows from the two lists: choose CRTP when the type is known statically, the calls are hot, and you do not need to store or handle the objects uniformly; choose virtual when you must keep different types in one container, pass them through one non-template interface, or pick the type from a value at run time. Neither is more correct -- they trade speed and inlining against dynamic flexibility and uniform storage, and the right answer is set by whether the dispatch is on a hot path and whether you need a common base."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "CRTP", url: "https://en.cppreference.com/w/cpp/language/templates" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

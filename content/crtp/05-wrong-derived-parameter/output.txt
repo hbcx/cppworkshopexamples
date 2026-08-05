@@ -1,0 +1,3 @@
+describe: Good
+describe: Also
+(the Bad : Registry<Good> slip is caught by static_assert)
