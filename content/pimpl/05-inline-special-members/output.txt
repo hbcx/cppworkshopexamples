@@ -1,0 +1,2 @@
+id = g-1
+after move: g=(moved-from) h=g-1

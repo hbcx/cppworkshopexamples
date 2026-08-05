@@ -1,0 +1,13 @@
+title: "The pimpl mechanic"
+standard: "C++14"
+difficulty: 1
+summary: "A Widget holds only a unique_ptr to a forward-declared Impl struct; all the real members live in the .cpp. The one rule that makes it work: the destructor must be declared in the header and defined in the .cpp, because destroying unique_ptr<Impl> needs Impl to be a complete type."
+notes: "The pimpl idiom -- pointer to implementation -- moves a class's private members out of the header and behind a pointer. The public Widget declares nothing but its interface and a single data member, a unique_ptr to a struct Impl that is only forward-declared; the real fields live in Widget::Impl, defined in widget.cpp. A client that includes widget.hpp therefore sees none of the internals and depends on none of their headers, which is the whole point and the subject of the next example. The mechanic has exactly one rule you cannot skip, and it is the thing everyone hits first: the destructor must be declared in the header and defined in the .cpp. Destroying a unique_ptr<Impl> instantiates its deleter, which needs the complete definition of Impl to know how to destroy it; Impl is complete only in widget.cpp, so if you let the compiler generate Widget's destructor in the header it fails to compile. Declaring the destructor in the header and defining it (as = default) in the .cpp, after Impl is defined, puts the deleter where Impl is complete. The constructor lives in the .cpp too, where it can build the Impl with make_unique. One consequence to remember from the start: declaring a destructor suppresses the implicit move operations, so a bare pimpl like this one is move-only-by-suppression until you deal with the special members deliberately, which the copy and move examples do. For now this is the skeleton -- a forward-declared Impl, a unique_ptr, and an out-of-line destructor."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

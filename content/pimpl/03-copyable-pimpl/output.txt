@@ -1,0 +1,2 @@
+a.mode = fast
+b.mode = slow

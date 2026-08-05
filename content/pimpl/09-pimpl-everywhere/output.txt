@@ -1,0 +1,2 @@
+[bad]  copied via heap alloc: (1,2)
+[good] copied trivially: (1,2)

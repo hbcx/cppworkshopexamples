@@ -1,0 +1,2 @@
+after 2x peekBad on a const Counter: reads=2 (const silently violated)
+after 2x lookGood on a const Counter: reads=0 (const respected)

@@ -1,0 +1,15 @@
+title: "Move semantics done right"
+standard: "C++14"
+difficulty: 3
+summary: "A pimpl class is naturally cheap to move -- a move just steals the unique_ptr -- but the move operations have to be declared in the header and defined in the .cpp, because move assignment destroys the old Impl and destruction needs a complete type. Declare them, default them out-of-line, and moving is a pointer swap."
+notes: "Because the whole state hangs off one pointer, moving a pimpl object is almost free: transfer the unique_ptr and the source is left empty, no Impl copied. The catch is the same incomplete-type rule that governs the destructor, extended to moves. Move assignment must first destroy the object's current Impl before taking the source's, and destroying it needs Impl to be complete -- so a move assignment (and, to be safe and consistent, the move constructor) cannot be generated or defaulted in the header where Impl is only forward-declared. The recipe is fixed: DECLARE the move constructor and move assignment in the header, and DEFINE them as = default in the .cpp, after Impl is defined, exactly like the destructor. Two rules of the language make this unavoidable rather than optional. Declaring a destructor -- which pimpl always needs -- suppresses the implicit move operations, so a movable pimpl must bring them back explicitly; and defaulting them must happen where Impl is complete. Once done, Document is move-only (no copy declared, so copy stays deleted by the unique_ptr member) and moving it is a pointer steal: the program moves a into b, and a is left in a valid empty state that empty() reports. Marking the moves noexcept matters too -- it lets containers like vector move rather than copy pimpl objects on reallocation, which is most of the performance reason to bother. Pair this with the deep copy from the previous example and you have the full rule of five for pimpl: destructor, copy pair, and move pair, every one declared in the header and defined where Impl is complete."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "rule of five", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

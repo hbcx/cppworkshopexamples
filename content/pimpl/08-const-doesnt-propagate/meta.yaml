@@ -1,0 +1,12 @@
+title: "Anti-pattern: const does not propagate through the pointer"
+standard: "C++14"
+difficulty: 3
+summary: "A const member function of a pimpl class can still mutate the Impl, because calling operator-> on a const unique_ptr yields a non-const Impl pointer. So a const Counter is not deeply const: peekBad(), declared const, quietly bumps a counter. The fix is const and non-const accessors that hand a const method a const Impl."
+notes: "Const-correctness has a hole in pimpl that surprises people, because the const of the wrapper does not reach through the pointer to the Impl. In a const member function, the member impl_ is a const unique_ptr<Impl> -- but const on a pointer means the pointer cannot be reseated, not that what it points to is const, so impl_->field is a modifiable Impl member even inside a const method. The result is that a const member function can freely mutate the object's state, and the compiler will not stop it: peekBad here is declared const yet does ++impl_->reads, and the program calls it on a genuinely const Counter and watches the read count climb, which const was supposed to forbid. This is not undefined behaviour, just a silently broken guarantee -- callers who trust that a const Counter cannot change are wrong, and a shared const object can be mutated from what looks like a read-only path, which is a real hazard in multithreaded code. The idiomatic fix is to route Impl access through a pair of private accessors -- Impl& in a non-const method, const Impl& in a const method -- so that inside a const function you only see a const Impl and an accidental mutation becomes a compile error; lookGood uses the const path and stays honest. The standard library offers std::experimental::propagate_const as a wrapper that does this automatically, but it is not in the core language. The lesson: pimpl widens const, so const-correctness for the Impl must be restored by hand, whether through const and non-const accessors or a propagate_const pointer. The sign: a const member function of a pimpl class that writes through impl_ -- the compiler allowed it, but it should not have."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

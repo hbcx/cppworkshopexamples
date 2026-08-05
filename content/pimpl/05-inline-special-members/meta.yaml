@@ -1,0 +1,13 @@
+title: "Anti-pattern: special members at an incomplete type"
+standard: "C++14"
+difficulty: 3
+summary: "Letting the destructor -- or a defaulted move constructor or move assignment -- be generated in the header, where Impl is only forward-declared, tries to destroy a unique_ptr<Impl> at an incomplete type, which is a hard compile error. The fix is the fixed recipe: declare them in the header, define them in the .cpp."
+notes: "This is the mistake everyone makes the first time they write a pimpl, and it is a compile error, not a runtime bug. The header only forward-declares Impl, which is what buys the firewall and is also the trap. Destroying a unique_ptr<Impl> runs its deleter, and the default deleter contains a static_assert that Impl is complete -- deleting an incomplete type is undefined, so the standard library refuses it at compile time. If you do not declare Gadget's destructor, or you default it in the header, the compiler generates that destructor at every point a Gadget is destroyed, and at those points Impl is still incomplete, so the build fails with a message about deleting or applying sizeof to an incomplete type. The very same is true of a move constructor and move assignment defaulted in the header, because both destroy a managed object. This example does not compile the broken form -- a compile error cannot be shown running -- so the wrong header is described in a comment and only the correct form is built and run. The recipe that fixes it is mechanical: DECLARE the destructor in the header, and if the type is movable also declare the move constructor and move assignment, then DEFINE them (usually = default) in the .cpp after Impl is fully defined, where the deleter sees a complete type. Because declaring the destructor suppresses the implicit moves, a movable pimpl must declare all of them. The reason this is so confusing in practice is that the error text points into unique_ptr's internals and often fires at an innocent-looking line -- a Gadget going out of scope, or a temporary being destroyed -- far from the header that actually caused it. The sign: a class with a unique_ptr to a forward-declared type whose destructor is defaulted in the header or not declared at all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }

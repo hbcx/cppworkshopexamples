@@ -6,3 +6,5 @@
   note: "The pimpl hand: the compile-firewall Bridge holds its hidden implementation through unique_ptr, whose move-only ownership is exactly why the destructor and moves must be defined where the impl is complete -- go there for that ownership model."
 - slug: "strategy"
   note: "The one-dimension relative, same shape: where Bridge separates two hierarchies, Strategy swaps a single interchangeable algorithm a context delegates to -- go there for the object, std::function, and policy forms of injecting one varying behaviour."
+- slug: "pimpl"
+  note: "The idiom on its own terms: the two pimpl examples here are a taste of the compile-firewall Bridge -- go to the pimpl chapter for copyable and movable pimpl, the const-propagation hole, the shallow-copy double free, and when NOT to use it."

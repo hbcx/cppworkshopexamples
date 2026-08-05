@@ -1,0 +1,13 @@
+title: "Anti-pattern: leaking the Impl back into the header"
+standard: "C++14"
+difficulty: 3
+summary: "LeakyCache keeps its vector member in the header and includes vector there, so every client pulls in vector, sees the layout, and recompiles when the internals change -- the firewall is gone. CleanCache forward-declares Impl and includes vector only in the .cpp, so the header stays a pure interface."
+notes: "Pimpl only pays off if the implementation actually stays out of the header, and it is easy to undo without noticing. LeakyCache looks like a normal class: it declares its std::vector member right in the header and therefore includes vector there. Both halves of that defeat the idiom. Including vector in the header means every translation unit that includes leaky.hpp now includes vector too, so the compile-time coupling the firewall was meant to remove is back, and in real code the leaked header is a database or vendor SDK, not a cheap standard one. Exposing the member means the class's size and layout are fixed by its internals, so changing the vector to a different container, or adding a field, alters sizeof(LeakyCache) and breaks the ABI, forcing every client to recompile -- exactly what pimpl exists to prevent. CleanCache does it properly: the header forward-declares Impl and stores a unique_ptr to it, the vector and its include live in clean.cpp, and the header depends on nothing heavy. A client of clean.hpp sees only the interface, keeps compiling when the internals change, and links against a stable object size. Both classes work identically at run time -- the leak costs nothing at execution, which is why it slips through; the damage is entirely in build times and ABI. The rule the good side follows: a pimpl header must forward-declare the Impl and hold only the pointer, and every include the implementation needs belongs in the .cpp. The sign: a class advertised as pimpl whose header still includes the heavy library, or still names a private member of a non-trivial type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

@@ -1,0 +1,13 @@
+title: "Why: the compile firewall"
+standard: "C++14"
+difficulty: 2
+summary: "The payoff of pimpl is decoupling the header from the implementation. Report's header includes no heavy library and names no private field, so sizeof(Report) is just one pointer regardless of what Impl holds -- changing the internals recompiles only the .cpp and never alters the class's size or layout."
+notes: "The first example showed the mechanic; this one is why anyone pays for it. Two properties fall out of hiding the members behind a pointer. First, the header's include list collapses: report.hpp needs only memory and string, while the real dependencies -- here vector and sstream, in real code a database or JSON library -- live in report.cpp, so every file that includes the header is spared those includes and is not recompiled when they or the internals change. Second, the public object's size and layout stop depending on the internals: sizeof(Report) is the size of one pointer no matter how many fields Impl grows, which is what the program prints to make the point. That size stability is what keeps a library's ABI intact -- clients compiled against an old header keep working when the internals change, because the thing the header describes, a single pointer, did not change. The trade is spelled out across the chapter: a heap allocation per object, an indirection on every access to the internals, and lost inlining across the boundary. So the firewall is worth it exactly when compile-time coupling or ABI stability matters -- a widely included header, a shipped library, heavy private dependencies -- and not worth it for small hot types, which the over-use anti-pattern returns to. The mental model: the header is a promise about the interface only, and pimpl makes that promise independent of how the promise is kept."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

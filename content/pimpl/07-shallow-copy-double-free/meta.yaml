@@ -1,0 +1,14 @@
+title: "Anti-pattern: the shallow-copy double free"
+standard: "C++14"
+difficulty: 3
+summary: "A pimpl class that owns its Impl through a raw pointer and lets the compiler copy it gets a SHALLOW copy: both objects hold the same pointer and both delete it, a double free. The fix is to own the Impl with a unique_ptr and give the class a deep copy, or leave it move-only."
+notes: "A pimpl class owns a resource -- the Impl -- so it has to answer the rule-of-three or rule-of-five question, and getting the copy wrong here is a memory-corruption bug rather than a mere logic error. The bad Handle stores Impl* and news it in the constructor, deletes it in the destructor, and declares no copy operations, so the compiler supplies the default copy: a member-by-member copy that duplicates the POINTER, not the Impl. Two Handles now own the same Impl, and when both are destroyed the Impl is deleted twice -- undefined behaviour that typically crashes or corrupts the heap. Because that is real undefined behaviour, this example does not perform the copy; the trap is described and the bad Handle is only ever used without copying. The two correct answers both come from treating the Impl as owned. Owning it with a unique_ptr makes the class move-only by default, so an accidental copy is a compile error instead of a double free -- the compiler stops the bug. If the type is meant to be a value, you additionally provide a deep copy, as the good Handle does: the copy constructor allocates a fresh Impl from the source's, so each object owns its own and destruction is correct, which the program demonstrates by changing the copy and leaving the original intact. The underlying lesson is the rule of three and five: a class that manages a resource must define or delete its copy and move operations, and a raw owning pointer with the compiler's defaults silently violates that. The sign: a class with a raw pointer member it news and deletes, and no user-declared copy constructor -- the default shallow copy is waiting to double free."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "rule of five", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

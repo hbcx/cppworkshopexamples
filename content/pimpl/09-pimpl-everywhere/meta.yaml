@@ -1,0 +1,11 @@
+title: "Anti-pattern: pimpl on a small hot value type"
+standard: "C++14"
+difficulty: 3
+summary: "Putting pimpl on a Point -- two doubles -- adds a heap allocation per object, an indirection on every access, and blocks inlining and constexpr, all to hide internals that are the type's whole meaning and will never change. The fix is a plain struct. Invert-onto-a-pointer only when a firewall or ABI actually matters."
+notes: "Pimpl trades runtime cost for compile-time and ABI decoupling, and on the wrong type that trade is all cost. A Point is two doubles; its internals ARE its meaning and are never going to change behind a stable interface, so there is no firewall benefit to buy. Wrapping it in pimpl, as the bad Point does, imposes the full price: every construction heap-allocates an Impl, every copy allocates again, each access to x or y chases a pointer out of cache, and the type can no longer be trivially copyable, put in constexpr, or inlined across the boundary -- for a small value used in tight loops, that is a large, pointless overhead. The good Point is a plain struct: no allocation, trivially copyable, usable in constexpr, and the members inline directly. The judgement pimpl actually asks for is whether the compile-time and ABI decoupling is worth the runtime cost, and that is true for library-boundary types with heavy or volatile internals -- the widely included header, the shipped class whose fields will change -- and false for small, hot, stable value types whose whole content is their interface. This is the design-level cousin of over-inverting a stable dependency: reaching for indirection where nothing volatile needs hiding. The rule of thumb: default small value types to a plain struct, and add pimpl only when you can name the heavy include it removes, the ABI it stabilises, or the secret it hides. The sign: a pimpl class whose Impl holds a couple of primitive fields, or a value type used by the million that pays a heap allocation to store two numbers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }

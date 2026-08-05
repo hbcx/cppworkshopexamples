@@ -1,0 +1,6 @@
+- slug: "bridge"
+  note: "The pattern this idiom is a special case of: pimpl is a degenerate Bridge whose implementation side has exactly one member, using the same unique_ptr-to-hidden-Impl structure for a compile-time goal instead of runtime variation -- go there for the full two-hierarchy version and where the idea comes from."
+- slug: "move-semantics"
+  note: "The special-member rules pimpl leans on: a pimpl class is a textbook rule-of-five type -- move-only unless you add a deep copy, every special member declared in the header and defined where Impl is complete -- go there for move constructors, the rule of five, and why moves must be out-of-line here."
+- slug: "unique-ptr"
+  note: "The tool pimpl is built on: the implementation is owned by a unique_ptr<Impl>, and its incomplete-type rules are exactly what force the out-of-line destructor -- go there for unique_ptr ownership, custom deleters, and make_unique."

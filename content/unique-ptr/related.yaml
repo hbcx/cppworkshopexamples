@@ -16,3 +16,5 @@
   note: "A move-only RAII handle in the wild: an Observer subscription token unsubscribes in its destructor and is move-only for the same reason unique_ptr is -- one owner of the registration."
 - slug: "command"
   note: "Owning polymorphic objects in a container: an undo/redo history is a vector of unique_ptr<Command>, each command freed automatically once it can no longer be undone -- go there for that use."
+- slug: "pimpl"
+  note: "The classic use of unique_ptr as a class member: the pimpl idiom hides a type behind unique_ptr<Impl>, whose incomplete-type rules are exactly what force a hand-written out-of-line destructor -- go there for the compile-firewall idiom and its special-member recipe."

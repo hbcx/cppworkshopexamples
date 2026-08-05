@@ -1,0 +1,2 @@
+report: cpu=42 mem=71 
+sizeof(Report) = 8, one pointer = 8 -> stable ABI

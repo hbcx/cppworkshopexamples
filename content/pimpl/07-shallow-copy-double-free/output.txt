@@ -1,0 +1,2 @@
+[bad]  data=shared (copying it would double-free -- not done)
+[good] x=original y=changed

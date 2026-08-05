@@ -1,0 +1,2 @@
+[leaky] size=2 (header pulled in <vector> and exposes items_)
+[clean] size=3 (header hides internals behind Impl)

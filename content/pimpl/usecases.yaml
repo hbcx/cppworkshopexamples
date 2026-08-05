@@ -1,0 +1,15 @@
+- problem: "A shared library ships a public class, and its authors want to change the class's private members between versions -- add a field, swap a container -- without every program that links the library having to be recompiled and relinked."
+  why: "Behind a pimpl the public class is just a pointer, so its size and layout never change when Impl does, which keeps the binary interface stable and lets clients pick up the new library without rebuilding. Exposing the members directly means any internal change alters the class's layout and breaks the ABI, forcing a coordinated rebuild of everything downstream."
+  signal: "A widely distributed library class whose private section is expected to change, or an ABI-stability requirement on a type with real internals."
+
+- problem: "A header included across hundreds of translation units drags in heavy dependencies -- a database client, a JSON library, big system headers -- so every touch of the internals triggers a long rebuild of the whole tree."
+  why: "Moving those includes and the private data into the .cpp behind a forward-declared Impl means the header pulls in almost nothing, so a change to the internals recompiles one file instead of the tree. Keeping the heavy includes in the header couples compile time to internals that clients never even use."
+  signal: "A frequently included header that includes large third-party or system headers only because of private members."
+
+- problem: "A product ships headers to customers or other teams, and those headers must not reveal proprietary algorithms, third-party vendor types, or internal structure that the API is not meant to expose."
+  why: "Pimpl keeps the private members and their vendor headers entirely inside the .cpp, so the shipped header shows only the public interface and none of the implementation. Putting the details in the header leaks the vendor types and the design into every consumer and into anything that can read the header."
+  signal: "A public header that includes a vendor SDK header, or exposes private members that encode a proprietary layout or algorithm."
+
+- problem: "Two modules each need to refer to a type the other owns, and pulling in each other's full headers creates a heavy or circular include graph that slows builds and tangles the dependency structure."
+  why: "A forward declaration plus a hidden Impl lets a class name another type without including its definition, breaking the cycle and cutting the include down to a pointer. Including the full definitions couples the modules at compile time and can make the cycle impossible to resolve without extra indirection anyway."
+  signal: "Mutually including headers, or a header included only to name a type that a member stores by value."

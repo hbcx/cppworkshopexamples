@@ -1,0 +1,14 @@
+title: "Value semantics: a deep copy"
+standard: "C++14"
+difficulty: 2
+summary: "unique_ptr makes a pimpl class move-only, so copying is deleted by default. To give it value semantics you write a copy constructor and copy assignment that CLONE the Impl, so a copy owns its own implementation and changing one object never touches the other."
+notes: "A unique_ptr member has no copy, so a class that holds one is move-only unless you say otherwise -- try to copy the basic Widget and it will not compile. Often that is what you want, but many types are meant to be values you can copy freely, and for those you provide the copy operations yourself, and they must be DEEP. The copy constructor allocates a fresh Impl initialised from the source's Impl -- make_unique of a copy of the pointee -- so the new object owns a separate implementation; the copy assignment copies the source Impl's contents into the existing one, guarding against self-assignment. Now Config behaves like any value type: b = a gives b its own settings, and changing b leaves a alone, which the program shows. The subtlety this example quietly relies on is the ownership rule that the shallow-copy anti-pattern violates: because each Config owns its Impl through a unique_ptr and the copy clones it, there is exactly one owner per Impl and destruction is correct. Note the interaction with the special members: declaring the copy operations does NOT by itself bring back the moves, and here declaring the destructor (needed for the pimpl) already suppressed them, so this Config is copyable but not movable -- copying where a move would do. That is fine for a settings object, but a type that wants to be both is the rule-of-five case the next example handles. The recipe to remember: unique_ptr gives you move-only for free; value semantics is opt-in, and opting in means a deep copy written by hand."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
