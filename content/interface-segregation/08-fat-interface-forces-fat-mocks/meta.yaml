@@ -1,0 +1,13 @@
+title: "Anti-pattern: a fat interface forces fat test doubles"
+standard: "C++11"
+difficulty: 3
+summary: "greet uses one method of IDatabase, but a test double for it must implement all five, four of them useless stubs -- and the fake breaks whenever a method is added. A narrow UserLookup interface makes the fake a single method, so the test stays small and stable."
+notes: "A fat interface has a testing cost that is easy to miss until you feel it on every test. greet needs one thing from its dependency -- get an id to a name -- but it depends on IDatabase, which also declares put, remove, flush and count. To unit-test greet you must supply a stand-in for IDatabase, and because the interface has five methods the FakeDatabase has to implement all five, so four of them are empty stubs that exist only to make the class concrete. That is friction on the first test and a maintenance tax forever after: add a method to IDatabase and every fake of it stops compiling until someone adds another useless stub, which is exactly the churn that makes people stop writing tests. The root cause is the interface, not the test -- the code under test truly needs only get, so it should depend on an interface that offers only get. Segregating it into UserLookup, a single-method role, shrinks the fake to one line, and now adding storage methods elsewhere cannot break this test because it never depended on them. This is the test-double side of the same coin the Liskov chapter raised for fakes: a double is only easy to write and keep honest when the interface it stands in for is small. The sign: a mock or fake whose body is mostly empty or trivial overrides for methods the test never exercises -- each stub is a method the code under test did not actually need in its interface."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

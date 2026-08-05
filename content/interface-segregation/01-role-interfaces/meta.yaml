@@ -1,0 +1,13 @@
+title: "Small role interfaces"
+standard: "C++11"
+difficulty: 1
+summary: "Split a fat interface into small role interfaces -- Reader and Writer -- so a class implements only the roles it fills and a function depends only on the role it uses. A console log implements Writer alone, and the record function that takes a Writer neither needs nor sees a read method."
+notes: "Interface Segregation says no client should be forced to depend on methods it does not use, and the plainest way to honour it is to keep interfaces small and role-shaped. Here a fat read-and-write interface is split into two: Reader with read(), Writer with write(). A TextFile fills both roles and inherits both interfaces; a ConsoleLog only writes, so it implements Writer alone and is not dragged into providing a read() it has no meaning for. Just as important, the functions depend on the narrowest role they need -- dump takes a Reader and can never write, record takes a Writer and can never read -- so each function's dependency is exactly its need, and the compiler enforces it. This is the mirror image of the Single Responsibility principle: SRP keeps a class focused on one reason to change, ISP keeps an interface focused on one kind of client. In C++ a role interface is just an abstract base with a virtual destructor and the one or two pure virtuals that define the role, and a class fills several roles by inheriting several such interfaces. The immediate pay-off is that a type only implements what it can actually do, which removes the temptation to stub a method it cannot support -- the fat-interface trap the anti-patterns in this chapter make concrete. The guideline: name interfaces after what a client needs to do (Reader, Writer, Drawable), not after the concrete class that happens to implement them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

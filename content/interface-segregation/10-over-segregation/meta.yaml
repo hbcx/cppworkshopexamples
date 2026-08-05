@@ -1,0 +1,13 @@
+title: "Anti-pattern: over-segregation"
+standard: "C++11"
+difficulty: 3
+summary: "Split too far and every accessor becomes its own interface -- HasName, HasEmail, HasPhone, HasAddress -- so a contact type inherits four bases and a function that prints a card needs four references for one logical thing. When one client always uses a group together, that group is one role, not four interfaces."
+notes: "Interface Segregation says split an interface by client, and the opposite mistake is to split past the point any client cares about. Here every field of a contact is given its own one-method interface -- HasName, HasEmail, HasPhone, HasAddress -- and the result is worse than a sensibly sized interface: Contact inherits four bases, and printCard, which needs all four fields to render a single card, must take four separate references to what is really one object. The ceremony buys nothing, because there is no client that wants a name without also wanting the other contact fields -- they always travel together, so they form one cohesive role, and splitting them models a separation that does not exist. The test for whether an interface is too fat is whether its clients use disjoint subsets of it; the test for whether you have split too far is the reverse -- interfaces that are always implemented and consumed together. The fix is to group operations that share a client back into one coherent interface: a single ContactInfo with the four accessors, which printCard takes as one reference. This is the same judgement the Single Responsibility principle needs -- cohesion, not a method count -- pointed at interfaces: the goal is one reason to depend, and an interface that is always used whole has exactly that. Segregate by real client boundaries, not down to one method each. The sign: a swarm of single-method interfaces that are always inherited together and always consumed together, and functions that take several tiny-interface references to reassemble one thing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

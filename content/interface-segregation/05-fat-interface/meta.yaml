@@ -1,0 +1,13 @@
+title: "Anti-pattern: a fat interface"
+standard: "C++11"
+difficulty: 3
+summary: "IMultiFunctionDevice bundles print, scan and fax, so a SimplePrinter that can only print is forced to implement scan and fax with throwing stubs. The interface promises more than some implementers can deliver. The fix is to split it into Printer, Scanner and Fax roles a class inherits only as it supports them."
+notes: "A fat interface is one that lumps together operations no single client or implementer needs all of, and it is the core Interface Segregation violation. IMultiFunctionDevice declares print, scan and fax, which is fine for a top-end office machine but wrong as the ONE interface every device must satisfy: a SimplePrinter can only print, yet to compile it must provide scan and fax, so it stubs them with a throw. That is the same refused bequest the Liskov chapter showed, seen from the other side -- there the fault looked like a badly behaved subtype, here it is clearly the interface asking for too much, and the two are the same defect. Code written against IMultiFunctionDevice believes any device can scan, so it calls scan through the base and throws the moment it meets a plain printer, a failure that compiles cleanly and only shows at run time. The fix is to segregate the interface along the lines of what implementers actually support: a Printer role, a Scanner role, a Fax role, each a small interface, and a class inherits only the roles it fills -- SimplePrinter is a Printer, an AllInOne is a Printer and a Scanner. Now a class never implements a capability it lacks, there are no throwing stubs, and a function that needs to scan asks for a Scanner, so a printer cannot be passed to it and the mistake is caught at compile time. The sign of the fat-interface trap: an interface whose implementers differ in which methods they can meaningfully support, and overrides that throw or do nothing to satisfy the rest."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

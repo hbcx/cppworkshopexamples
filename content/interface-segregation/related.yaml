@@ -1,0 +1,8 @@
+- slug: "liskov-substitution"
+  note: "The principle that hands you straight here: an override that throws because it cannot support a base method is a Liskov violation whose cure is Interface Segregation -- split the fat interface so nobody is asked for what they cannot deliver."
+- slug: "single-responsibility"
+  note: "The same idea one level down: SRP says a class should have one reason to change, ISP says an interface should serve one kind of client -- go there for the class-level split that pairs with this interface-level one."
+- slug: "dependency-injection"
+  note: "What you inject once the interface is narrow: DI hands a collaborator to an object, and ISP is why that collaborator should be the smallest role the object needs, not a fat service -- go there for the injection mechanics."
+- slug: "open-closed"
+  note: "Another SOLID principle: OCP is about extending without editing, ISP about not depending on what you do not use -- go there for the extension seams that small interfaces make cheap to add."

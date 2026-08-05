@@ -1,0 +1,5 @@
+[log] starting up
+[log] ready
+buffer holds:
+[log] captured 1
+[log] captured 2

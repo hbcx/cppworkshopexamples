@@ -1,0 +1,2 @@
+[bad] Ada | ada@example.com | 555-0100 | 1 Analytical Way
+[good] Ada | ada@example.com | 555-0100 | 1 Analytical Way

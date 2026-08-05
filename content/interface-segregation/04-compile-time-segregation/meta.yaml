@@ -1,0 +1,11 @@
+title: "The requirement is exactly what you call"
+standard: "C++11"
+difficulty: 3
+summary: "A template consumer needs only the operations it actually calls: logLine requires just a write method, so any type with write works and none needs to inherit anything. This is Interface Segregation taken to the limit -- the required interface is the exact set of operations used, checked at compile time."
+notes: "C++ has a second way to depend on an interface: a template needs only the operations it actually names, so the required interface is implicit and as small as it can be. logLine is written against a Sink type parameter and calls one method, write, so its whole requirement on Sink is that single operation. Console and Buffer satisfy it without inheriting anything or sharing a base -- they just have a write method with the right shape -- and a type that also had scan or fax would not make logLine depend on those, because the template never mentions them. This is Interface Segregation at its logical limit: the client depends on precisely the operations it uses and not one more, enforced at compile time rather than through an abstract base. The trade-offs against the runtime, virtual form are the usual ones. The set of usable types is open (anything with a matching write works, including types written later) and the calls inline with no virtual dispatch, which suits a hot path. But the requirement is not written down as a named interface, so it is documented only by what the template body calls, and a type that fails to meet it produces an error at instantiation, which in pre-concept C++ can be long and appear far from the call. Reach for the template form when the set of implementers is open or performance matters and the requirement is small; reach for a named virtual interface when you want the contract explicit and the binding at run time. Either way the ISP lesson holds: require the least, and let types satisfy it by having what is needed, no more."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

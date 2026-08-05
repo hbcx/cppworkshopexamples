@@ -1,0 +1,4 @@
+[bad] printed: memo
+[bad] ERROR no scanner
+[good] printed: memo
+[good] scanned page

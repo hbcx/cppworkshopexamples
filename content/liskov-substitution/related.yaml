@@ -6,3 +6,5 @@
   note: "Where substitutability is the whole point: a Strategy is only interchangeable if every algorithm honours the same behavioural contract, which is exactly what Liskov demands -- go there for the swap this principle makes safe."
 - slug: "single-responsibility"
   note: "Another SOLID principle: SRP is about where behaviour lives, Liskov about whether a subtype may stand in for its base -- go there for the reason-to-change split that keeps classes small enough to reason about."
+- slug: "interface-segregation"
+  note: "The cure for the refused-bequest trap here: when a subtype cannot support a base method, the fix is a smaller interface, not a throwing override -- go there for splitting fat interfaces into client-specific roles."

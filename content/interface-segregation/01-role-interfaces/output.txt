@@ -1,0 +1,2 @@
+file holds: hello world
+[log] started

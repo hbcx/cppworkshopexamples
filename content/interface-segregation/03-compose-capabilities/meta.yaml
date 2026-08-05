@@ -1,0 +1,14 @@
+title: "Compose a type from small interfaces"
+standard: "C++11"
+difficulty: 2
+summary: "A KeyValueStore fills two roles by inheriting Reader and Writer, so a read-only consumer takes a Reader reference and a writer takes a Writer reference -- both backed by the same object. This is how the read-only view the Liskov chapter struggled with is done cleanly, with no throwing stub."
+notes: "Segregated interfaces compose: a concrete type fills as many roles as it genuinely supports by inheriting several small interfaces, and each client is handed only the role it needs. KeyValueStore inherits Reader (get) and Writer (put), so it is a full read-write store, but lookup takes a const Reader reference and physically cannot write through it, while seed takes a Writer reference and cannot read. One object, two narrow views, each enforced by the type system. This is the clean answer to a problem the Liskov chapter raised: a read-only view is not a behavioural subtype of a mutable collection, so modelling it as a subclass that throws on write breaks substitution. Interface Segregation dissolves the problem instead of patching it -- read-only is simply the Reader interface, mutable is Reader plus Writer, and a consumer that should not write is given a Reader, so the write is a compile error rather than a run-time throw. Composing roles this way is multiple inheritance used exactly as intended: the base classes are pure interfaces (all methods pure virtual, a virtual destructor, no data), which avoids the classic diamond and state problems of multiple inheritance while letting a type advertise precisely the set of capabilities it has. The pattern generalises: define capabilities as small interfaces, let concrete types inherit the ones they support, and let functions ask for the intersection of capabilities they use -- often just one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

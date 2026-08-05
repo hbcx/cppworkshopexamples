@@ -1,0 +1,3 @@
+[bad] panel: click
+[bad] clicks=2 scrolls=1
+[good] clicks=3 scrolls=2

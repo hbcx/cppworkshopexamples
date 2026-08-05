@@ -1,0 +1,13 @@
+title: "Anti-pattern: one interface, unrelated method groups"
+standard: "C++11"
+difficulty: 3
+summary: "IEmployee bundles payroll, scheduling and reporting methods, and each client uses only its own group, yet the payroll code depends on the whole interface. The method groups belong to different clients, so they belong in different interfaces -- Payable, Schedulable, Reportable -- each client depending on just one."
+notes: "This is the fat-interface trap in its quieter form: not one obviously wrong method, but several coherent GROUPS of methods packed into one interface, each group serving a different client. IEmployee here carries calculatePay for the payroll system, assignShift for scheduling, and statusReport for management reporting. Every implementer must provide all three, and every client must depend on the whole interface even though the payroll run only ever calls calculatePay -- so a change to the reporting method, or a new scheduling method, forces the payroll code to recompile and re-test for no reason. The tell that an interface should be split is exactly this: its clients use disjoint subsets of it, and no single caller needs all of it. That maps directly onto the Single Responsibility principle read at the interface level -- these are three reasons to change (a payroll rule, a scheduling rule, a reporting rule) fused into one type -- and the fix is the same move, separation by concern: Payable, Schedulable and Reportable as independent interfaces, with a Developer inheriting all three because it genuinely fills all three roles, while runPayroll depends only on Payable. Now each client sees just its slice, changes stay local to the interface that owns them, and a fake for the payroll test implements one method rather than three. The sign: an interface whose methods fall into clusters that different callers use separately, or whose name is a noun (Employee, Account, Document) rather than a role (Payable, Printable)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

@@ -1,0 +1,13 @@
+title: "Anti-pattern: partial implementers forced to stub the rest"
+standard: "C++11"
+difficulty: 3
+summary: "A fat WidgetListener declares a callback per event. FullPanel wants them all, but ClickCounter cares only about clicks and ScrollTracker only about scrolls, so each must write empty stubs for the callbacks it ignores just to compile -- and adding one event to the base breaks every listener. The fix is one small listener interface per event."
+notes: "This is the fat-interface trap seen across MANY implementers, and it is worth separating from the two nearby cases: the fat-interface printer example has one partial implementer whose stubs throw, and the fat-mock example is about test doubles, whereas here several ordinary production classes each use a slice of the interface and pad the rest with empty stubs. WidgetListener declares onClick, onScroll and onKey as pure virtual, so every listener must define all three. FullPanel genuinely wants them, but ClickCounter only counts clicks and ScrollTracker only tracks scrolls, and to compile at all each has to supply do-nothing bodies for the callbacks it does not care about. Those stubs are pure noise -- dead code that hides what the class actually reacts to -- and they hide a real bug too, because a caller can invoke onScroll on a ClickCounter and it silently does nothing rather than being a type error. Worse is the maintenance ripple: add an onResize callback to the base and every listener in the codebase stops compiling until each grows another empty stub, so a change that concerns one kind of listener is forced onto all of them. The root cause is that the interface bundles events that different listeners care about separately. The fix segregates it into one small interface per event -- ClickListener, ScrollListener -- and a widget keeps a separate list per event and notifies only the listeners that registered for it, so each listener implements exactly the events it wants with no stubs, and a brand-new event type is a new interface that leaves every existing listener untouched. The sign: overridden methods whose bodies are empty (or return a dummy) only so the class is concrete -- each empty override is a method the class was forced to depend on and did not want."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

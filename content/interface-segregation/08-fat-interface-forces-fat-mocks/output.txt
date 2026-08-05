@@ -1,0 +1,2 @@
+[bad]  Hello Ada (fake needed 5 methods)
+[good] Hello Ada (fake needed 1 method)

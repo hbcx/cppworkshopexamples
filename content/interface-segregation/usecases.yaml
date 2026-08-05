@@ -1,0 +1,15 @@
+- problem: "A function only needs to read from a repository, but it is handed the full repository interface -- read, write, delete, flush -- so nothing stops it from mutating, and a reader and a writer are impossible to tell apart at the call site."
+  why: "Passing a narrow read-only interface makes the function's needs visible in its signature and makes a write a compile error, not a code-review catch. Handing over the fat repository and trusting discipline gives up the one guarantee the type system could have enforced for free."
+  signal: "A function that takes a broad service or repository interface but calls only one or two of its methods, especially only the read-only ones."
+
+- problem: "A unit test needs to fake a dependency, but the dependency's interface has twenty methods and the code under test calls one, so the test double is twenty stubbed methods -- and it breaks every time an unrelated method is added to the interface."
+  why: "A narrow interface means the fake implements the one or two methods the test actually needs, so it is a few lines and does not churn when the fat type grows. A wide interface forces a wide mock, which is friction on every test and a reason people stop writing them."
+  signal: "A test double whose body is mostly empty or throwing stubs for methods the test never calls."
+
+- problem: "A plugin host defines one big plugin interface every plugin must implement, but most plugins support only a slice of the features, so half of each plugin is stubbed-out methods that return nothing or throw."
+  why: "Separate capability interfaces let a plugin implement only what it does, and the host queries for a capability before using it, so a missing feature is a type the plugin simply does not implement rather than a method that throws at run time. One mega-interface pushes that check to run time and fills every plugin with dead stubs."
+  signal: "A plugin or handler interface with optional-feature methods that many implementations leave empty or make throw an unsupported-operation error."
+
+- problem: "In a large C++ codebase, many translation units include one broad service header, so adding or changing a method on it triggers a recompile of everything that touches the service, even code that uses none of the changed methods."
+  why: "Depending on a narrow interface header limits the rebuild to the units that use those specific operations, which at scale is the difference between a quick build and a coffee break. A god-interface header makes every consumer a dependency of every method, so unrelated changes cascade through the build."
+  signal: "A widely included interface header that declares many unrelated methods, where a change to one forces a large rebuild."

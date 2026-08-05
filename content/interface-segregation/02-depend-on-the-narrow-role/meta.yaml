@@ -1,0 +1,13 @@
+title: "Depend on the smallest interface you need"
+standard: "C++11"
+difficulty: 2
+summary: "A save function needs only a way to turn an object into bytes, so it depends on a Serializable role with a single toBytes method -- not on the whole User class. User has many other methods, but a change to any of them cannot touch save, because save never depended on them."
+notes: "The client side of Interface Segregation is to depend on the narrowest interface that covers your need. The persistence function save wants one thing from whatever it stores: the ability to produce a byte representation. So it takes a Serializable, an interface with a single method toBytes, and nothing more. User is a rich domain type -- it greets, it has a birthday, it will grow more behaviour over time -- and it also implements Serializable, but save sees only that one role. The value is in what does NOT couple: save cannot call greet or birthday, so it does not depend on them, so a change to how User greets, or a new method added to User, cannot break save or force it to recompile. Contrast the tempting alternative of writing save to take a const User&: it would compile and work today, but it would tie the persistence layer to the entire User class, and every unrelated change to User would ripple into code that only ever wanted the bytes. This is why depending on a small interface is a decoupling tool, not just a tidiness one -- the dependency you declare is the change you are exposed to. The practice: when writing a function that consumes an object, ask what is the least it needs, define or reuse an interface that says exactly that, and take that. A function that asks for less breaks less often."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

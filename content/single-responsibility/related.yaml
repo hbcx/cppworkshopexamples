@@ -6,3 +6,5 @@
   note: "The next SOLID principle: once responsibilities are separated, Open-Closed is about extending one of them without editing what already works -- together they push a design toward small, swappable parts."
 - slug: "liskov-substitution"
   note: "Another SOLID principle: once each class has one job, Liskov governs whether a subtype may stand in for its base without breaking callers -- go there for behavioural subtyping and the contract rules."
+- slug: "interface-segregation"
+  note: "The same split one level down: SRP gives a class one reason to change, ISP gives an interface one kind of client -- go there for role interfaces and depending on the narrowest one you need."

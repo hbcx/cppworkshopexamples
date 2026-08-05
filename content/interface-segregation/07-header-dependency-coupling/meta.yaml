@@ -1,0 +1,13 @@
+title: "Anti-pattern: a fat interface couples its clients"
+standard: "C++11"
+difficulty: 3
+summary: "A client that only needs an event count depends on IAnalytics, whose other methods deal in Report and Chart types -- so the client is transitively coupled to those types and rebuilds when they change. Depending on a narrow EventCounter interface instead limits the coupling to exactly what is used."
+notes: "Interface Segregation is not only about run-time stubs; in C++ it is also about compile-time coupling, and a fat interface is a coupling magnet. IAnalytics declares eventCount alongside buildReport and buildChart, whose signatures mention the Report and Chart types. A client that only wants the count still depends on IAnalytics, and through it on Report and Chart -- their headers, their definitions, their changes. So a change to Report forces every translation unit that touches IAnalytics to recompile, including code that never builds a report, and in a large codebase that ripple is a real cost measured in build minutes. The dependency you declare is the rebuild you are exposed to. Segregating the interface cuts the coupling to what is actually used: EventCounter declares only eventCount and mentions no report or chart type, so a client written against it depends on nothing else and is untouched when Report changes. The concrete Analytics still offers reports and charts, but through separate narrow interfaces, so each consumer pulls in only the types its own role needs. This is the same benefit as depending on a small interface for decoupling, sharpened by the C++ compile model: fewer methods on the interface you depend on means fewer types dragged in, fewer headers included, and a smaller blast radius on every change. The sign: a widely used interface whose method signatures reference heavy or unrelated types, so including its header pulls a chain of other headers into code that needs none of them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

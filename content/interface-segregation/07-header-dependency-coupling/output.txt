@@ -1,0 +1,2 @@
+[bad]  count = 42
+[good] count = 42
