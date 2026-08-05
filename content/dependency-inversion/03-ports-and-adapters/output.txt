@@ -1,0 +1,4 @@
+ada registered (total 1)
+grace registered (total 2)
+[db] INSERT user linus
+linus registered (total 1)

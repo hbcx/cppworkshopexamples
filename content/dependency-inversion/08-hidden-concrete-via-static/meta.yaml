@@ -1,0 +1,14 @@
+title: "Anti-pattern: a hidden concrete dependency via a static"
+standard: "C++11"
+difficulty: 3
+summary: "PaymentProcessor takes no logger, so it looks self-contained -- but inside it calls FileLogger::instance(), a concrete singleton. The dependency is real, concrete, and invisible in the API, so the policy is coupled to FileLogger and cannot be tested without its side effect. The fix injects a Logger abstraction."
+notes: "A dependency does not have to be a constructor parameter to exist; reaching for a concrete class through a static accessor creates one that is just hidden. PaymentProcessor here has no logger field and an empty-looking interface, yet process calls FileLogger::instance().log(...), so it depends on the concrete FileLogger as surely as if it named it -- and worse, the dependency is invisible: nothing in the signature says the method writes to a file, a caller cannot substitute a different logger, and a test cannot run process without the file side effect happening. This is a Dependency Inversion violation wearing a disguise, because the arrow still points from policy straight at a concrete detail; the static call just hides it from the type system. It is worth separating from the neighbouring service-locator trap in the dependency-injection chapter: a service locator hides which INJECTED dependency you get by looking it up through a registry, whereas here there is no injection at all -- the policy hard-codes a direct call to a concrete singleton. The same shape covers std::cout hard-wired into business logic, or now() and rand() called inline. The fix is to make the dependency explicit and abstract: depend on a Logger interface passed in, so a ConsoleLogger runs in production and a silent or capturing logger runs in a test, and the method's needs are visible in its signature. The sign: business logic that calls X::instance(), a global object, or a free I/O function directly, so its real collaborators do not appear in its interface and cannot be replaced."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

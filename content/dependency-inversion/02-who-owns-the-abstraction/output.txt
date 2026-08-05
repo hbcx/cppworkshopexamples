@@ -1,0 +1,2 @@
+charge $50.00  -> order placed
+charge $2000.00 -> payment declined

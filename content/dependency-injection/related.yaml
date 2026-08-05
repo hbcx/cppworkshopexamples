@@ -22,3 +22,5 @@
   note: "What makes a swapped-in implementation trustworthy: DI hands over a collaborator behind an interface, and Liskov is the contract guaranteeing any implementation behaves as the interface promises -- go there for the substitutability injection relies on."
 - slug: "interface-segregation"
   note: "How narrow the injected interface should be: ISP says inject the smallest role the object needs, not a fat service, so the dependency is exactly the need -- go there for splitting interfaces by client."
+- slug: "dependency-inversion"
+  note: "The principle behind this technique: injection is HOW a dependency is delivered, Dependency Inversion is WHY -- so policy depends on an abstraction it owns and the arrow points away from the detail. Go there for the direction-of-dependency rule and who owns the port."

@@ -1,0 +1,2 @@
+[bad]  Hi, Ada (interface + adapter + wiring)
+[good] Hi, Ada (just std::string)

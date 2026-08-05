@@ -1,0 +1,3 @@
+issued at 980, now 1000: valid
+issued at 980, now 1015: expired
+issued at 980, now 1010: expired

@@ -1,0 +1,14 @@
+title: "Ports and adapters"
+standard: "C++11"
+difficulty: 2
+summary: "A core Registration service depends on a UserStore port it owns, and two adapters implement it: an in-memory store and one that also logs like a database. The same core runs against either adapter, and a test can drive it with the in-memory one -- the shape known as ports and adapters, or hexagonal architecture."
+notes: "Ports and adapters -- also called hexagonal architecture -- is Dependency Inversion applied to a whole application rather than a single class. The core holds the business logic and defines PORTS, which are interfaces stated in its own terms for everything it needs from the outside world: storage, messaging, time, payment. ADAPTERS live outside the core and implement those ports for concrete technologies. Here the core Registration depends on a UserStore port, and two adapters satisfy it -- MemoryStore keeps users in a vector, and DbStore stands in for a database by logging each insert. Registration works identically against either, because it only ever sees the port. The value is that the direction of dependency always points inward, toward the core: adapters depend on the core's ports, never the reverse, so the business logic has no compile-time knowledge of any database, framework, or I/O library. That buys three things at once that this chapter's use cases each lean on -- infrastructure can be swapped by writing a new adapter, the core can be tested by driving it with an in-memory or fake adapter, and the same core can sit behind a web handler, a CLI, or a test harness. It is the same inversion as the earlier examples, scaled up: many ports instead of one, and an explicit rule that all the concrete technology lives in a ring of adapters around a technology-free core. The discipline that keeps it honest is that a type or header from an adapter must never leak into the core -- the moment the core includes a database header, the hexagon has a hole in it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

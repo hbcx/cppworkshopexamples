@@ -1,0 +1,2 @@
+[email] to ada: your order shipped
+[sms] to grace: your code is 4821

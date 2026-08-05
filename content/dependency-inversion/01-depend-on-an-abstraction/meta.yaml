@@ -1,0 +1,13 @@
+title: "Depend on an abstraction, not a concrete"
+standard: "C++11"
+difficulty: 1
+summary: "NotificationService is high-level policy: it should not name a concrete sender. It depends on a MessageSender interface, and EmailSender and SmsSender implement it, so the policy talks to any sender without knowing which. Both the policy and the concrete sender depend on the abstraction between them."
+notes: "Dependency Inversion starts with a simple rule: a high-level module should depend on an abstraction, not on a concrete low-level class. NotificationService is the policy -- it decides that a user gets notified -- and how a message physically goes out (email, SMS, push) is a low-level detail. If the service named EmailSender directly, the policy would be welded to email, and adding SMS would mean editing the policy. Instead it depends on a MessageSender interface and is handed one, so it works with any sender and never changes when a new channel appears. The word inversion refers to the direction of the source-code dependency: the naive design has policy pointing DOWN at the concrete sender, while here both the policy and each concrete sender point at the abstraction in the middle -- the dependency on the detail has been turned around. This is the principle behind the whole chapter, and it is worth being clear how it relates to two neighbours. It is the D in SOLID stated as a rule about which way dependencies point; dependency injection is the usual mechanism for delivering the concrete sender to the policy (here, through the constructor), and the next examples get at what dependency injection alone does not stress -- who owns the abstraction, and keeping details out of it. The immediate pay-off is the same one Open-Closed promises: a new channel is a new class implementing MessageSender, with the policy untouched."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

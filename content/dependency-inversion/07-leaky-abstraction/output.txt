@@ -1,0 +1,2 @@
+[bad]  Hello Ada (caller had to parse a SqlRow)
+[good] Hello Ada (caller sees only a User)

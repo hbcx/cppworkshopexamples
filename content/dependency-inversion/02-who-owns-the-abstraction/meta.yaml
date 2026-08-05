@@ -1,0 +1,13 @@
+title: "The high-level module owns the port"
+standard: "C++11"
+difficulty: 2
+summary: "The real inversion is not just having an interface -- it is that the interface belongs to the high-level module and speaks its language. OrderService declares a PaymentPort with charge(cents) in domain terms; the StripeAdapter, a low-level detail, conforms to it. Policy defines the contract, and the detail depends on policy."
+notes: "It is possible to have an interface and still not have inverted anything -- the heart of Dependency Inversion is WHO owns the abstraction. Here the high-level OrderService declares the port it needs, PaymentPort with a single charge(cents), expressed entirely in the policy's own vocabulary: an amount in cents, a yes or no. It knows nothing about payment providers. The low-level StripeAdapter then implements that port, translating the domain request into whatever the vendor SDK wants. Read the direction of the source-code dependency and the inversion is visible: the adapter depends on PaymentPort, which lives with the policy, so the detail depends on the abstraction owned by the high-level module -- the opposite of the usual arrangement where business code reaches down into a vendor library. This is the point that plain dependency injection does not force. You can inject a concrete gateway, or inject an interface that was defined by the low-level layer in the vendor's terms, and in both cases the arrow still effectively points at the detail. Inversion is achieved only when the abstraction is shaped by the client's need and lives on the client's side, so that swapping Stripe for PayPal is writing a new adapter to an unchanged port, and the policy layer could be compiled and tested with no payment library present at all. The rule of thumb: define the interface where it is USED, in the language of the user, and let the provider implement it -- not the other way round. The anti-patterns in this chapter are mostly variations on getting this ownership wrong."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

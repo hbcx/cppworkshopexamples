@@ -8,3 +8,5 @@
   note: "The sibling SOLID principle: SRP puts each reason to change in its own class, OCP adds the next change without editing what is there -- together they push behaviour toward small, swappable parts."
 - slug: "liskov-substitution"
   note: "The principle that keeps your new subtypes safe: OCP adds behaviour by adding a subclass, and Liskov is the rule that the subclass must behave like its base -- go there for what makes an extension substitutable rather than a landmine."
+- slug: "dependency-inversion"
+  note: "What points the policy at an abstraction so a new implementation can slot in: OCP is the open extension seam, and Dependency Inversion is the direction-of-dependency rule that makes it possible -- go there for depending on abstractions and who owns the port."

@@ -1,0 +1,14 @@
+title: "Anti-pattern: high-level policy tied to a concrete detail"
+standard: "C++11"
+difficulty: 3
+summary: "ReportService is policy, but it holds and constructs a concrete MySqlDatabase, so the dependency arrow points down at the detail and a change to the database ripples up into the business logic. The fix is to depend on a Database abstraction and receive the concrete one, turning the arrow around."
+notes: "This is the core Dependency Inversion violation: a high-level module that names and builds a concrete low-level class. ReportService decides what a report is -- policy -- but it owns a MySqlDatabase member and constructs it, so the source-code dependency runs straight from the business logic down to a specific database. The costs are all in that direction. The policy cannot be compiled or tested without MySQL present; swapping to Postgres or an in-memory store means editing ReportService, not adding a class; and a change to MySqlDatabase's interface reaches up and touches the report logic that had no reason to care. The fix is to invert the arrow: define a Database abstraction, have ReportService depend on that, and hand it a concrete MySqlDatabase from outside. Now the policy depends on the abstraction, the concrete database depends on the abstraction, and neither depends on the other -- so the database is swappable, the policy is testable with a fake, and a change to MySQL stays in the adapter. A note on scope, because the neighbouring chapter overlaps: the mechanism for delivering the concrete database -- constructor injection, a composition root, ownership choices -- is the dependency-injection chapter's subject, and it treats the mirror-image anti-pattern of constructing a dependency inside. The emphasis HERE is the architectural direction: policy must not depend on a detail, regardless of how the concrete instance ultimately arrives. The sign: a business-logic class that includes a driver or framework header, or has a data member of a concrete infrastructure type it constructs itself."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

@@ -1,0 +1,14 @@
+title: "Anti-pattern: an abstraction owned by the detail"
+standard: "C++11"
+difficulty: 3
+summary: "There is an interface, but it was shaped around Stripe -- charge takes a StripeToken -- so OrderService depends on it and still has to know a vendor type. An interface does not invert anything if the detail defines it. The fix is a port owned by the policy and stated in domain terms."
+notes: "Adding an interface is not the same as inverting a dependency, and this is the trap that looks like Dependency Inversion but is not. The bad PaymentGateway is a genuine abstract class, and OrderService depends on it rather than on a concrete gateway, which feels correct. But the interface was designed by and for the payment vendor: its method takes a StripeToken, a type that belongs to the detail. So to call it, the policy must build a StripeToken, which means the business logic still names a vendor concept, still includes the vendor's header, and still breaks if Stripe changes its token model -- the dependency on the detail was routed through an interface, not removed. The arrow still effectively points down, because the abstraction lives on the detail's side and speaks the detail's language. Inversion requires the other ownership: the policy defines the port in its own vocabulary -- charge(cents), an amount and a yes or no -- and the StripeAdapter builds whatever token Stripe needs internally, on the far side of the port. Now nothing in the policy layer knows StripeToken exists, and swapping to another provider is a new adapter to the same port. The test is simple: look at the interface's method signatures and ask whose language they speak. If a vendor or technology type appears in them, the abstraction is owned by the detail and the inversion is incomplete. The sign: an interface that seems to decouple, yet its parameters or return types are classes from the very library it was supposed to hide."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

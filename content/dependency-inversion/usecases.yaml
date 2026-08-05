@@ -1,0 +1,15 @@
+- problem: "The business logic must keep working while the storage behind it changes -- a flat file today, Postgres next quarter, an in-memory store in tests -- and the domain code cannot be edited every time the infrastructure does."
+  why: "Letting the domain define a repository port and having each backend implement it means a storage change is a new adapter, never an edit to policy. The alternative -- domain code that includes the database driver -- ties the business rules to one technology, so a migration reaches into the core and every test needs a real database."
+  signal: "A high-level class that includes a database, network, or framework header, or constructs a concrete driver directly."
+
+- problem: "A policy depends on time, randomness, or a remote service -- token expiry, a retry backoff, a fraud check -- so its tests are slow, flaky, or impossible to make deterministic because they call the real clock, RNG, or network."
+  why: "Depending on a Clock, Rng, or gateway abstraction lets a test inject a fake that returns fixed values, so every branch is reachable in microseconds with no I/O. Calling system_clock::now() or rand() directly bakes the real world into the policy, which is exactly what makes it untestable."
+  signal: "Business logic that calls a global clock, rand(), or a network client directly, and tests that cannot pin the result because of it."
+
+- problem: "The same core application must run behind a web handler, a command-line tool, and a test harness, without the domain knowing which one is driving it or being rebuilt when the delivery mechanism changes."
+  why: "Ports and adapters keep the domain independent of I/O and frameworks: the core defines the interfaces, and thin adapters connect a web layer, a CLI, or a fake. A domain coupled to a framework's request and response types can only run inside that framework and drags it into every test."
+  signal: "Domain types that mention a web framework's request/response classes, or business logic that only compiles with the web layer present."
+
+- problem: "An application supports third-party plugins or drivers, and new ones arrive over time, but the application must never depend on any specific plugin -- the contract has to belong to the app, not to the plugins."
+  why: "When the application defines the plugin interface in its own terms and plugins implement it, the dependency points from plugin to app, so the app never names a concrete plugin and a new one changes nothing in the core. If the app depended on each plugin, adding one would edit the application."
+  signal: "An application module that names or includes concrete plugin classes, rather than a single plugin interface the plugins implement."

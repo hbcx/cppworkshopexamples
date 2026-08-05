@@ -6,3 +6,5 @@
   note: "What you inject once the interface is narrow: DI hands a collaborator to an object, and ISP is why that collaborator should be the smallest role the object needs, not a fat service -- go there for the injection mechanics."
 - slug: "open-closed"
   note: "Another SOLID principle: OCP is about extending without editing, ISP about not depending on what you do not use -- go there for the extension seams that small interfaces make cheap to add."
+- slug: "dependency-inversion"
+  note: "What you depend on once the interface is narrow: Dependency Inversion says a high-level module should depend on an abstraction it owns, and ISP keeps that abstraction small -- go there for the direction-of-dependency principle."

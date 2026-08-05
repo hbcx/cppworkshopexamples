@@ -1,0 +1,2 @@
+[bad]  order placed (policy had to build a StripeToken)
+[good] order placed (policy knows only charge(cents))

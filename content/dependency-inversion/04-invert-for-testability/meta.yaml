@@ -1,0 +1,12 @@
+title: "Invert a dependency to make policy testable"
+standard: "C++11"
+difficulty: 3
+summary: "TokenExpiry decides whether a token has expired -- a rule that depends on the current time. Instead of reading the system clock directly, it depends on a Clock abstraction, so a test injects a FakeClock and pins now() to check every case deterministically. Inverting the dependency on time is what makes the policy testable."
+notes: "Some of the most valuable inversions are of the ambient dependencies policy reaches for without thinking: the current time, a random number, the network. TokenExpiry answers a pure question -- given when a token was issued and a time-to-live, is it expired now -- but now is the trap: if the method calls the system clock directly, the rule can only be tested at real wall-clock time, so the just-expired and about-to-expire cases are almost impossible to hit reliably, and the test is slow and flaky. Inverting the dependency fixes it. The policy depends on a Clock abstraction with a single now(), and a test supplies a FakeClock whose now() returns whatever the case needs, making every boundary reachable in an instant with no waiting and no flakiness. In production a real adapter would read the system clock behind the same interface; it is kept out here so the example stays deterministic, which is itself the point -- the policy has no idea whether the clock is real or fake. This is Dependency Inversion aimed squarely at testability, and it generalises: wrap time, randomness, and external calls behind small abstractions the policy depends on, and tests become fast and deterministic because they control what those abstractions return. The related dependency-injection chapter shows the same move for a general collaborator; the emphasis here is that time and randomness are dependencies too, and inverting them is what turns untestable policy into a plain function of its inputs. The signal to reach for this: a rule whose result you cannot pin in a test because it calls now(), rand(), or a live service inside itself."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

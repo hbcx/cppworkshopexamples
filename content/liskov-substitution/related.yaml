@@ -8,3 +8,5 @@
   note: "Another SOLID principle: SRP is about where behaviour lives, Liskov about whether a subtype may stand in for its base -- go there for the reason-to-change split that keeps classes small enough to reason about."
 - slug: "interface-segregation"
   note: "The cure for the refused-bequest trap here: when a subtype cannot support a base method, the fix is a smaller interface, not a throwing override -- go there for splitting fat interfaces into client-specific roles."
+- slug: "dependency-inversion"
+  note: "Where substitutable implementations are put to work: once policy depends on an abstraction (Dependency Inversion), Liskov is what guarantees each adapter behind it is a safe stand-in -- go there for the inversion that creates the port."

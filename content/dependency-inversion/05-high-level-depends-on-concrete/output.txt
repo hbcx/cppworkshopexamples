@@ -1,0 +1,3 @@
+[bad]  report of 3 rows
+[good] report of 3 rows
+[good] with fake: report of 1 rows

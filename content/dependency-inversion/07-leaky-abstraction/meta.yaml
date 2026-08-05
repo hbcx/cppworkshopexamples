@@ -1,0 +1,14 @@
+title: "Anti-pattern: a leaky abstraction"
+standard: "C++11"
+difficulty: 3
+summary: "UserRepository is an interface, but findUser returns a SqlRow -- a database-shaped type -- so every caller must parse SQL and is coupled to it, and swapping the backend breaks them all. Abstractions should not depend on details. The fix returns a domain User the caller understands directly."
+notes: "This is the second half of the Dependency Inversion statement made concrete: abstractions should not depend on details. UserRepository looks like a proper port -- an abstract interface the policy depends on -- but its findUser returns a SqlRow, a type that carries the database's representation. So even though callers depend on the interface, they depend THROUGH it on a SQL-shaped type: they must know how to read a SqlRow, they break if the row format changes, and swapping to a document store or an HTTP backend forces every caller to change because the return type does. The detail has leaked across the abstraction boundary. It is close to the detail-owned-abstraction trap but distinct: there the vendor type appeared in the parameters and the ownership was wrong; here the interface may be owned by the right layer, yet it still exposes a technology type through its signatures, so the leak is in what flows across, not in who declared it. The fix is to make the abstraction speak in domain types the caller already understands: findUser returns a User -- an id and a name -- and each adapter is responsible for translating its own storage format into that domain type behind the port. Now a caller depends only on User, the SQL representation stays inside the SQL adapter, and a different backend is a different translation with no caller changes. The rule: the types on an interface's boundary must belong to the domain, not to any implementation. The sign: an interface whose method returns or accepts a row, record, result-set, request, or response type named after a specific technology."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

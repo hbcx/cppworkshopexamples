@@ -1,0 +1,8 @@
+- slug: "dependency-injection"
+  note: "The mechanism that realises this principle: Dependency Inversion says depend on an abstraction, and injection is the usual way the concrete implementation reaches the object -- go there for constructor vs setter, the composition root, and ownership."
+- slug: "interface-segregation"
+  note: "What the abstraction you invert onto should look like: ISP says depend on the smallest role you need, so the port a high-level module owns stays narrow -- go there for splitting fat interfaces into client-specific ones."
+- slug: "liskov-substitution"
+  note: "What keeps the inverted dependency safe: once policy depends on a port, every adapter behind it must be substitutable, which is exactly Liskov's contract -- go there for behavioural subtyping and the rules a good adapter obeys."
+- slug: "open-closed"
+  note: "Why the inversion pays off: depending on an abstraction is what lets you add a new implementation without editing the policy, which is Open-Closed -- go there for extension seams and the forms they take."

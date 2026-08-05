@@ -1,0 +1,14 @@
+title: "Anti-pattern: inverting a stable dependency"
+standard: "C++11"
+difficulty: 3
+summary: "Wrapping std::string behind an IStringBuilder interface, with an adapter and injection, adds a layer of indirection to gain flexibility that will never be used -- std::string is not going to be swapped. Invert dependencies on volatile details like I/O and services, not on stable, ubiquitous ones. The fix just uses std::string directly."
+notes: "Dependency Inversion is a response to volatility -- you invert a dependency because the detail behind it is likely to change or needs to be faked, such as a database, a payment provider, the clock. Applied to a stable dependency it becomes its own anti-pattern: pure ceremony for flexibility no one will use. The bad Greeter depends on an IStringBuilder interface, with a StdStringBuilder adapter injected in, all to concatenate two strings -- but std::string is one of the most stable, ubiquitous types in the language and is never going to be swapped for another string, so the interface, the adapter, and the wiring earn nothing and cost a layer of indirection, a virtual call, and code that is harder to read for no benefit. The fix is to just use std::string directly; the good Greeter is a plain function of its input. The judgement DIP actually asks for is which dependencies are volatile enough to be worth inverting. Things that cross a boundary to the outside world -- storage, network, time, randomness, third-party services -- are volatile and change on their own schedule, so inverting them pays off in swappability and testing. The standard library's value types, a pure mathematical formula, a stable in-process utility -- these are not going to change out from under you, and wrapping them in interfaces is the design-level cousin of over-injection: more seams than the problem has. The rule of thumb: invert a dependency when you can name a plausible second implementation or a test that needs a fake; if you cannot, the concrete type is fine. The sign: an interface with exactly one implementation that wraps a standard-library type or a pure function, injected purely on principle."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

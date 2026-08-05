@@ -1,0 +1,4 @@
+[bad]  [file] charging 5000
+charged 5000
+[good] [console] charging 5000
+charged 5000
