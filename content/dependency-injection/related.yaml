@@ -18,3 +18,5 @@
   note: "When the injected dependency is a behaviour: injecting an algorithm -- a comparator, a pricing rule, a backoff policy -- is the Strategy pattern, and go there for its object, std::function, and compile-time policy forms."
 - slug: "single-responsibility"
   note: "The principle that tells you WHY to extract the collaborator you then inject: Single Responsibility splits a class into focused parts, and injection is how you hand those parts back in instead of hard-wiring them -- go there for how to decide what to pull out."
+- slug: "liskov-substitution"
+  note: "What makes a swapped-in implementation trustworthy: DI hands over a collaborator behind an interface, and Liskov is the contract guaranteeing any implementation behaves as the interface promises -- go there for the substitutability injection relies on."

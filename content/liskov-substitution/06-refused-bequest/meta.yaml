@@ -1,0 +1,13 @@
+title: "Anti-pattern: a refused bequest"
+standard: "C++11"
+difficulty: 3
+summary: "Bird promises fly(), but Penguin cannot, so it throws. Code that calls fly() through a Bird reference works for a sparrow and breaks for a penguin. The base promises an operation a subtype cannot deliver. The fix is to split the interface so only birds that fly are asked to."
+notes: "A refused bequest is a subtype that inherits an operation it cannot support and deals with it by throwing, returning a dummy, or doing nothing. Bird declares fly() with a sensible default, and Sparrow is fine, but Penguin cannot fly, so its override throws. The trouble is that migrate() is written against Bird and calls fly() through the base, so it works for every bird until it meets a penguin, where it throws at run time -- the base made a promise (a Bird can fly) that one subtype cannot keep, and callers written to the base pay for it. Like the other violations here, it compiles cleanly; Penguin is a perfectly good Bird as far as the type system is concerned, and the failure is behavioural and delayed. Throwing an unsupported-operation error from an override is the clearest symptom that a hierarchy has an LSP problem: the base is promising more than all its subtypes can deliver. The fix is to stop making the promise to those who cannot keep it -- segregate the interface so flying lives in a FlyingBird type that only actual flyers implement, while Penguin remains a Bird and gains its own swim(). Now migrate() takes a FlyingBird and the compiler rejects a penguin at the call, turning a run-time throw into a compile error. This is the point where Liskov leads straight into the Interface Segregation principle: the cure for an operation only some subtypes support is a smaller interface, not a base method that throws. The sign: an override whose body is throw not-supported, or a no-op that silently ignores the call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

@@ -1,0 +1,4 @@
+[bad] rectangle: expected 20, got 20
+[bad] square: expected 20, got 16
+[good] rectangle area=20
+[good] square area=25

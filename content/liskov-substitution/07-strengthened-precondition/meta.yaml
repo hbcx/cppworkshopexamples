@@ -1,0 +1,13 @@
+title: "Anti-pattern: a strengthened precondition"
+standard: "C++11"
+difficulty: 3
+summary: "The base UserService accepts any id; the subclass demands an id in 1 to 100 and throws otherwise. Code written to the base passes id 0 and works with the base but breaks with the subclass. A subtype must never require MORE of its callers than the base does."
+notes: "A precondition is what a method requires of its caller before it will work. LSP says a subtype may only weaken it -- accept everything the base accepts, and possibly more -- because any caller that satisfied the base's requirement must keep working. This anti-pattern does the forbidden reverse: UserService accepts any id and never fails, but CachedUserService STRENGTHENS the precondition to demand an id between 1 and 100, throwing otherwise. Now code written against UserService -- which reasonably passes id 0 or a large id, both valid for the base -- works with a UserService and throws with a CachedUserService, even though the subclass compiles as a drop-in. The caller did nothing wrong; it met the contract it was given, and the subtype moved the goalposts. This is one of the sneakiest LSP breaks because the tighter check often looks like defensive programming or validation, and it passes review as a reasonable guard -- the flaw is only visible when you compare it against what the base already promised to accept. The fix is that a subtype must honour at least the base's input domain: CachedUserService has to handle every id the base handles, falling back to the uncached path for ids outside its cache rather than rejecting them. If a narrower input range is genuinely required, it belongs in a different, non-substitutable type, not a subclass. The sign: an override that adds an argument check, a range guard, or a throw-on-invalid that the base version did not have."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

@@ -1,0 +1,14 @@
+title: "Anti-pattern: a square is not a rectangle"
+standard: "C++11"
+difficulty: 3
+summary: "Square inherits Rectangle and overrides setWidth and setHeight to keep the sides equal, so a function that sets width 5 and height 4 and expects area 20 gets 16 from a Square. The inherited two-axis promise cannot be kept. The fix is to make them siblings under a Shape interface, not parent and child."
+notes: "This is the textbook Liskov violation, and it is worth seeing run. Rectangle promises two independent axes: setWidth changes only the width, setHeight only the height, so a caller can set 5 by 4 and count on an area of 20. Square inherits Rectangle -- a square IS a rectangle, the reasoning goes -- but to keep its sides equal it must override setWidth to also change the height and setHeight to also change the width. Now the inherited promise is broken: resizeAndCheck, written against Rectangle, sets width 5 then height 4 and expects 20, and gets 20 from a Rectangle but 16 from a Square, because the second call quietly changed both sides. Nothing failed to compile; a Square satisfies the Rectangle interface perfectly. The bug is behavioural -- the subtype cannot honour a guarantee the base makes -- and it surfaces as a wrong number far from the class that caused it. The lesson is that the plain-English is-a is not the inheritance is-a: inheritance requires the subtype to keep EVERY promise of the base, and a square cannot keep the independent-axes promise. The fix is the composition-over-inheritance design from earlier: Rectangle and Square are siblings under a Shape interface, each with its own area rule and no shared two-axis setter to violate, so both substitute for Shape without surprising anyone. The sign of this trap: an override that changes more state than the base version, especially a setter that touches a field the base setter left alone."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "override specifier", url: "https://en.cppreference.com/w/cpp/language/override" }
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

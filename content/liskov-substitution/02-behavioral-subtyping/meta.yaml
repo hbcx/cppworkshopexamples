@@ -1,0 +1,13 @@
+title: "Honour the behaviour, not just the interface"
+standard: "C++11"
+difficulty: 2
+summary: "A KeyValueStore has a contract beyond its signatures: after put(k, v), get(k) returns v. InMemoryStore keeps that promise, so code relying on the round-trip works. A subtype that merely compiles -- one that forgets or rewrites values -- would break every such caller."
+notes: "The C++ type system checks that a subtype has the right method signatures; it cannot check that the subtype does the right thing, and that behavioural half is where LSP lives. KeyValueStore declares put and get, but its real contract is a behaviour the signatures do not express: after you put a value under a key, get returns that same value. InMemoryStore honours it, so roundTrips -- a function written to the contract -- succeeds for any key and value. The point is what the compiler will happily let you get away with: a CachingStore that drops entries under memory pressure, or a store that lower-cases keys, or one that returns an empty string when it has not seen a key, all satisfy the interface and compile cleanly, yet each breaks callers who trusted the round-trip. That is a Liskov violation even though nothing failed to build, and it is exactly the kind of bug that ships, because interface conformance gave a false sense that the substitution was safe. Practically, this means the base type's contract must be written down -- in comments, a doc, or tests -- and every subtype checked against it, not just against the method list. When you cannot make a subtype keep the base's behaviour, that is the signal it is not really a subtype, which the later examples turn into concrete traps."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

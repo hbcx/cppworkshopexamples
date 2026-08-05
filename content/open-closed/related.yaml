@@ -6,3 +6,5 @@
   note: "The trade-off OCP makes you choose: a class hierarchy is open to new types but closed to new operations, and Visitor flips it -- open to new operations, closed to new types (the expression problem) -- go there to see which axis you keep open."
 - slug: "single-responsibility"
   note: "The sibling SOLID principle: SRP puts each reason to change in its own class, OCP adds the next change without editing what is there -- together they push behaviour toward small, swappable parts."
+- slug: "liskov-substitution"
+  note: "The principle that keeps your new subtypes safe: OCP adds behaviour by adding a subclass, and Liskov is the rule that the subclass must behave like its base -- go there for what makes an extension substitutable rather than a landmine."

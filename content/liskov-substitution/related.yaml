@@ -1,0 +1,8 @@
+- slug: "open-closed"
+  note: "The sibling that creates the subtypes LSP has to keep safe: Open-Closed says extend by adding a subclass, and Liskov is the rule that says the subclass must behave like its base or the extension is a landmine -- read them together."
+- slug: "dependency-injection"
+  note: "Why an injected implementation is safe to swap: DI hands an object a collaborator behind an interface, and Liskov is the contract that guarantees any implementation behaves as the interface promises -- go there for the injection mechanics this principle underwrites."
+- slug: "strategy"
+  note: "Where substitutability is the whole point: a Strategy is only interchangeable if every algorithm honours the same behavioural contract, which is exactly what Liskov demands -- go there for the swap this principle makes safe."
+- slug: "single-responsibility"
+  note: "Another SOLID principle: SRP is about where behaviour lives, Liskov about whether a subtype may stand in for its base -- go there for the reason-to-change split that keeps classes small enough to reason about."

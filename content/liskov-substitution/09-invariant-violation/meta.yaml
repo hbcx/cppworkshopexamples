@@ -1,0 +1,13 @@
+title: "Anti-pattern: a broken invariant"
+standard: "C++11"
+difficulty: 3
+summary: "Account keeps an invariant its callers rely on -- the balance never goes below zero. OverdraftAccount overrides withdraw to allow any amount, so the balance goes negative and code that trusted the floor is wrong. A subtype must preserve every invariant the base maintains."
+notes: "An invariant is a promise a class keeps true for its whole lifetime, not just at one call: Account guarantees that its balance is never negative, enforcing it in withdraw by refusing an amount larger than the balance. Callers lean on this -- a report that shows balances, a check that assumes funds are non-negative -- and they lean on it because it is the base type's promise. OverdraftAccount inherits Account and overrides withdraw to subtract any amount unconditionally, so after one large withdrawal the balance is negative and the invariant every Account was supposed to hold is broken for this one. Code written against Account now sees an impossible state, and because the type is still an Account as far as the compiler and the caller know, the failure shows up as corrupted data far from the subclass that allowed it. This is subtler than the precondition and postcondition breaks because it is about state that persists between calls: the subtype did not just answer one call wrongly, it moved the object into a configuration the base said could never happen. The fix is that a subtype must preserve the base's invariants. If overdraft is a real feature, model it honestly -- an Account whose invariant is balance is at least minus the overdraft limit, enforced consistently, with the limit visible to callers -- rather than a subclass that silently drops the floor. If the new type cannot keep the base's invariant, it is not a subtype of it. The sign: an override that removes or loosens a check the base used to protect a field, letting the object reach a state the base promised was impossible."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

@@ -1,0 +1,2 @@
+rectangle area=20
+square area=25

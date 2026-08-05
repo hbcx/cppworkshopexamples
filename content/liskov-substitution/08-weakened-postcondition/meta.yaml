@@ -1,0 +1,13 @@
+title: "Anti-pattern: a weakened postcondition"
+standard: "C++11"
+difficulty: 3
+summary: "The base Ranking guarantees a descending-sorted result; FastRanking returns the scores unsorted to save time. A caller that trusts the first element is the highest gets the wrong answer from the subclass. A subtype must never promise LESS about its output than the base."
+notes: "A postcondition is what a method guarantees about its result after it returns. LSP says a subtype may only strengthen it -- promise everything the base promises, and possibly more -- because any caller relying on the base's guarantee must keep working. This anti-pattern does the forbidden reverse: Ranking promises the returned scores are sorted in descending order, and best() relies on it by reading the front element as the highest. FastRanking WEAKENS that postcondition, returning the scores in whatever order they came, so best() written against the base now reads a non-maximum and returns the wrong answer -- silently, with no exception and no crash, which is what makes a weakened postcondition so dangerous. It compiles, it runs, it returns a plausible number, and the defect only shows up as a subtly wrong result somewhere downstream. The caller is not at fault; it depended on exactly what the base guaranteed. The reason a subtype gets here is usually a shortcut -- skip the sort, cache a stale value, return null instead of an empty list -- that trades away a promise the caller was counting on. The fix is that a subtype must keep every guarantee of the base: FastRanking may use a faster algorithm, but the result it returns must still be sorted, so it honours the contract while optimising the how. If it truly cannot provide the guarantee, it is not a Ranking and should not inherit one. The sign: an override that skips work the base did to establish its result -- no sort, no validation, no normalisation -- or that returns a weaker value (null, empty, unordered) than the base ever would."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

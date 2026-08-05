@@ -1,0 +1,12 @@
+title: "Preconditions weaken, postconditions strengthen"
+standard: "C++11"
+difficulty: 3
+summary: "The rules that keep substitution safe: a subtype may accept MORE than the base (weaker precondition) and promise MORE than the base (stronger postcondition), but never less of either. Capped honours Discount's contract by handling negative input too and by tightening the guaranteed range."
+notes: "Liskov substitution has precise rules, and they are directional -- getting the direction right is what separates a safe subtype from a broken one. The base Discount states a contract: its precondition is that the input n is non-negative, and its postcondition is that the result lies in the range zero to n. A subtype stays substitutable if it does two things. It may WEAKEN the precondition -- accept everything the base accepts and more -- because any caller that met the base's requirement still meets the looser one; Capped also handles negative n, which no caller relying on the base would pass, so nothing breaks. And it may STRENGTHEN the postcondition -- promise everything the base promises and more -- because any caller depending on the base's guarantee still gets it; Capped never returns more than a fifth of n, which is a subset of the base's zero-to-n promise, so a caller expecting a result within zero to n is still satisfied. The forbidden moves are the reverse: a subtype must never STRENGTHEN the precondition (demand more of callers, rejecting inputs the base accepted) or WEAKEN the postcondition (promise less, returning results the base ruled out) -- those are the strengthened-precondition and weakened-postcondition anti-patterns later in this chapter. The way to remember it: a subtype should be more tolerant of its inputs and more precise about its outputs than the base, never the other way round. priceAfter here is written to the base contract and works with either subtype, because both keep the caller's guarantee that the price never goes negative or above n."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

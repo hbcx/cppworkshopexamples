@@ -1,0 +1,4 @@
+[bad] sparrow: flap flap
+[bad] penguin: ERROR penguins cannot fly
+[good] sparrow: flap flap
+[good] penguin: paddle paddle

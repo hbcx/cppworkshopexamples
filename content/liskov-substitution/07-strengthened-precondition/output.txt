@@ -1,0 +1,4 @@
+[bad] user#0
+[bad] ERROR id must be 1..100
+[good] user#0
+[good] user#0

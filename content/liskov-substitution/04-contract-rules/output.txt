@@ -1,0 +1,3 @@
+standard 1000 -> 900
+capped   1000 -> 900
+capped honours [0,n] even for a big n: 500 -> 450

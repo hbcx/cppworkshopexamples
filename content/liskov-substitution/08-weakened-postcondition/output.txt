@@ -1,0 +1,3 @@
+[bad] base best = 90
+[bad] fast best = 40
+[good] fast best = 90

@@ -4,3 +4,5 @@
   note: "After you split a job across several small classes, a Facade gives the caller one entry point over the pieces, so honouring SRP does not force every client to juggle five objects."
 - slug: "open-closed"
   note: "The next SOLID principle: once responsibilities are separated, Open-Closed is about extending one of them without editing what already works -- together they push a design toward small, swappable parts."
+- slug: "liskov-substitution"
+  note: "Another SOLID principle: once each class has one job, Liskov governs whether a subtype may stand in for its base without breaking callers -- go there for behavioural subtyping and the contract rules."

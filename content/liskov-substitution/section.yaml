@@ -1,0 +1,4 @@
+title: "Liskov Substitution Principle"
+description: "The third SOLID principle: a subtype must be usable anywhere its base type is expected, without breaking the program -- behavioural subtyping, not just a matching interface. Shown as drop-in subtypes behind one function, honouring the base's behaviour and not only its signatures, choosing composition when it is not a behavioural is-a, and the contract rules that keep substitution safe -- alongside the square-is-not-a-rectangle trap, a refused bequest, a strengthened precondition, a weakened postcondition, and a broken invariant."
+sort_order: 48
+category: "Design principles"

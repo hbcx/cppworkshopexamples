@@ -1,0 +1,13 @@
+title: "Subtypes are drop-in for the base"
+standard: "C++11"
+difficulty: 1
+summary: "Code written against a Shape works for any shape that honours area(): the describe function never names a concrete type, yet Circle and Rectangle both slot in and behave correctly. That drop-in property -- a subtype usable wherever the base is expected -- is what Liskov substitution asks for."
+notes: "Liskov substitution is the rule that makes polymorphism trustworthy: if S is a subtype of T, an object of S must be usable anywhere a T is expected, with the program still correct. Here describe takes a const Shape reference and calls area() and name() through it, knowing nothing about which concrete shape it holds; Circle and Rectangle each implement the interface so that area() returns the shape's real area, and both drop into describe with the right result. That is the whole idea stated positively -- the caller depends only on the base contract, and every subtype keeps it, so substituting one for another cannot break the caller. It is easy to read this as just virtual dispatch, but LSP is the stricter, behavioural half: the compiler guarantees a subtype has the right method signatures, while LSP demands the subtype also does the right THING -- returns the real area, not a placeholder, and does not throw where the base would not. The rest of this chapter is about the ways a subtype can satisfy the interface yet violate that behavioural contract, but this is the baseline: a well-formed hierarchy where every subtype is a faithful stand-in, so code against the base needs no knowledge of, and no branch on, the concrete type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

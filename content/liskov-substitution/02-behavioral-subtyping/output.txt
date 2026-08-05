@@ -1,0 +1,3 @@
+round-trip 'name'->'Ada': ok
+round-trip 'city'->'London': ok
+stored name = Ada

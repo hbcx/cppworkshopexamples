@@ -1,0 +1,14 @@
+title: "When it is not a behavioural is-a, compose"
+standard: "C++11"
+difficulty: 2
+summary: "A square is a shape, but it is not a rectangle you can resize on two axes -- so do not inherit Square from Rectangle. Give both a Shape interface and keep Square its own type with one side, and substitution stays safe because there is no inherited two-axis resize to break."
+notes: "The square-rectangle puzzle is really a modelling mistake: is-a in plain English is not the same as the behavioural is-a that inheritance requires. A square IS a shape, and every shape has an area, so both Rectangle and Square implement a Shape interface and drop into any shape-consuming code safely. But a square is NOT a rectangle in the sense inheritance would impose -- a Rectangle promises independent width and height you can set separately, and a Square cannot keep that promise without breaking either its own always-equal-sides invariant or the caller's expectation, which is the trap the matching anti-pattern makes concrete. The fix is to stop forcing the inheritance and choose the relationship that is actually true. Here Square is a sibling of Rectangle under Shape, with a single side and its own area rule, so there is no inherited setWidth or setHeight to violate. When a subtype genuinely needs to reuse another type's machinery, prefer composition to inheritance: hold the other type as a member and expose only the operations that keep your invariants -- a Square that owns a rectangle internally but offers only setSide, never independent axes. Inheritance is a strong promise (a subtype can go everywhere the base can); reach for it only when the subtype can keep every promise the base makes, and use composition or a shared interface when it cannot. The rule of thumb: model the behaviour you can actually honour, not the noun that sounds right."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
