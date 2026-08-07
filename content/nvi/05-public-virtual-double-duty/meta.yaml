@@ -1,0 +1,12 @@
+title: "Anti-pattern: a public virtual doing double duty"
+standard: "C++11"
+difficulty: 3
+summary: "A public virtual is both the interface and the customization point, so every override must repeat the fixed work -- here writing an audit record. One override forgets and the record is silently skipped. NVI moves the audit into a non-virtual wrapper that runs every time, so no override can drop it."
+notes: "This is the problem NVI exists to prevent. When the same function is both public (the interface clients call) and virtual (the point subclasses override), every override replaces the whole thing -- including any fixed work the base wanted to run around it. Here process() is a public virtual that is supposed to write an audit record and then do the work. The base version audits, but a subclass that overrides process() must remember to audit as well, and the moment one forgets -- BadRefund here -- the audit is silently skipped. There is no crash and no warning: the code compiles and runs, and only a later audit review reveals the missing record, which for a payment or refund is a compliance failure. The NVI version fixes it by splitting the two roles: the public non-virtual handle() writes the audit record every single time and then calls the private virtual doProcess(). Subclasses can only override doProcess(), which runs INSIDE the wrapper, so the audit cannot be skipped no matter what the subclass does. The counter makes the difference concrete -- the bad design records one of two operations because an override forgot, the NVI design records both. The sign of this anti-pattern is a public virtual whose overrides all start or end with the same lines -- the same log, lock, check or audit -- copied into each one, where copying is the bug waiting to happen and the shared lines belong in a non-virtual caller."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

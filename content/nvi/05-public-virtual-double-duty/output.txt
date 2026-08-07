@@ -1,0 +1,7 @@
+pay
+refund
+bad:  auditCount=1  <- 1, the refund was not audited
+
+pay
+refund
+good: auditCount=2  <- 2, every operation audited

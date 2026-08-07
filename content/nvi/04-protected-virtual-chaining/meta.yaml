@@ -1,0 +1,12 @@
+title: "A protected virtual for chained overrides"
+standard: "C++11"
+difficulty: 3
+summary: "Make the virtual protected instead of private when a derived override must call the base version. serialize() is the one public non-virtual entry; fields() is a protected virtual each level overrides by chaining to its base, so Widget, Button and ToggleButton each add their own fields while everything still funnels through one wrapper."
+notes: "The default in NVI is a private virtual, which no subclass can call -- not even to reach the base's own version. That is the strongest form, but sometimes a subclass genuinely needs to build ON TOP of the base's step rather than replace it: serialize a widget by writing the base widget's fields and then the derived widget's extra fields. For that, make the virtual protected instead of private. Protected access lets a derived override name and call the base class's version -- Widget::fields() -- so overrides can chain: Button::fields() calls Widget::fields() and appends its own, ToggleButton::fields() calls Button::fields() and appends again, and the public non-virtual serialize() still wraps the whole result in braces as the single entry point. The public interface stays non-virtual and stable; only the extension point opened up from private to protected, and only as far as needed. The trade-off is real: a protected virtual is a weaker guarantee than a private one, because a subclass can now call the base step directly and could call it at the wrong time or forget to call it at all (dropping the base's fields). Use protected only when chaining is actually required, and keep the virtual private otherwise. This protected-virtual form is also how many frameworks structure serialization, cloning and event handling, where each layer contributes and the base wrapper composes the parts."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

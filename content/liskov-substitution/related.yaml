@@ -10,3 +10,5 @@
   note: "The cure for the refused-bequest trap here: when a subtype cannot support a base method, the fix is a smaller interface, not a throwing override -- go there for splitting fat interfaces into client-specific roles."
 - slug: "dependency-inversion"
   note: "Where substitutable implementations are put to work: once policy depends on an abstraction (Dependency Inversion), Liskov is what guarantees each adapter behind it is a safe stand-in -- go there for the inversion that creates the port."
+- slug: "nvi"
+  note: "The C++ mechanism that enforces this contract: an NVI base wraps a private virtual, so a pre- or post-condition every subtype must honour lives in the non-virtual method where no override can weaken it -- go there for the idiom that keeps substitutability from depending on subclass discipline."

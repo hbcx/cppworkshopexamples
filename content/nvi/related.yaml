@@ -1,0 +1,10 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "template-method"
+  note: "The pattern NVI sharpens into a guideline: a fixed skeleton in the base calling overridable steps -- go there for Template Method in full, its hooks and its own anti-patterns, where NVI first appears as one example."
+- slug: "crtp"
+  note: "The compile-time alternative to the virtual hook: CRTP lets the base call into the derived type with no vtable, trading run-time flexibility for zero-cost static dispatch -- go there when the type is known at compile time and the virtual call is not wanted."
+- slug: "strategy"
+  note: "The composition alternative: instead of a subclass overriding a private virtual, inject the varying step as an object the base calls -- go there for behaviour-as-object and when to prefer it over inheritance for the customization point."
+- slug: "liskov-substitution"
+  note: "The contract NVI helps enforce: the base wrapper is where a pre- or post-condition that every subclass must honour actually lives, so overrides cannot weaken it -- go there for substitutability stated as a rule and how strengthening a precondition breaks it."

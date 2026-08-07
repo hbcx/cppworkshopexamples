@@ -1,0 +1,13 @@
+title: "A private virtual can still be overridden"
+standard: "C++11"
+difficulty: 2
+summary: "The rule that makes NVI work: access control and virtual dispatch are independent. A private virtual cannot be NAMED by a derived class, but it can still be OVERRIDDEN, and the base's non-virtual method picks the override at run time. The derived class supplies the behaviour; the base controls the call."
+notes: "NVI relies on a rule that surprises people the first time they meet it: whether a function is private and whether it is virtual are two independent things. Access control decides who is allowed to NAME a function -- to write the call step() -- and it is checked at compile time on the name. Virtual dispatch decides WHICH override runs when a call does happen, and it is resolved at run time on the object. They do not interact. So a base can declare step() as a private virtual, a derived class can override it, and the base's own member function -- which is allowed to name step() -- will call the derived override, even though the derived class itself cannot write step() anywhere. This example shows exactly that: Base::run() calls the private step(), Derived overrides it, and calling run() on a Derived prints Derived::step; yet d.step() from outside, or from inside Derived, would be a compile error because the name is private. This separation is the whole safety story of NVI. The base publishes one non-virtual entry point and keeps the customization point private, so a subclass can change the behaviour but can never call it out of context or bypass the wrapper -- the base owns the call site, the subclass owns only the behaviour. If a subclass genuinely needs to call the base's version of the step (to chain to it), the virtual is made protected instead of private, which the chaining example covers; private is the default and the stronger guarantee."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
+  - { name: "override specifier", url: "https://en.cppreference.com/w/cpp/language/override" }

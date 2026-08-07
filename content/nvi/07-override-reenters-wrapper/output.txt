@@ -1,0 +1,11 @@
+bad -- override re-enters draw():
+[frame open, depth=1]
+[frame open, depth=2]
+  actual paint
+[frame close, depth=2]
+[frame close, depth=1]
+
+good -- override paints only:
+[frame open, depth=1]
+  actual paint
+[frame close, depth=1]

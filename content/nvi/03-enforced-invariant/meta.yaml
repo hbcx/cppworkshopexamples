@@ -1,0 +1,12 @@
+title: "The wrapper enforces an invariant"
+standard: "C++11"
+difficulty: 2
+summary: "The real payoff of NVI: the non-virtual wrapper runs a check the virtual step cannot bypass. setVolume clamps to 0..100 BEFORE calling the private virtual applyVolume, so no override ever receives or applies an out-of-range value. The invariant lives in one place and every subclass gets it for free."
+notes: "This is why NVI is worth the extra function: the non-virtual wrapper is the one place a class invariant or a pre- and post-condition can be enforced so that no override can skip it. Here setVolume() is public and non-virtual; it clamps the requested value into the valid range 0 to 100 and only then calls the private virtual applyVolume() with the clamped number. The subclass that implements applyVolume() can never see 150 or minus 20 -- the wrapper guarantees the argument is already valid, so every override is written against a clean precondition and none of them has to repeat the check. Compare the public-virtual alternative: setVolume() would be the virtual, each subclass would have to clamp its own input, and the first override that forgot would apply a bad value with no warning -- a bug spread across every subclass instead of fixed once in the base. The same shape enforces post-conditions (check or adjust the result after the virtual returns) and wraps the call in a lock or a transaction, all in the non-virtual function. The rule of thumb: any guarantee that must hold for EVERY subclass belongs in the non-virtual wrapper, not in the overridable step, because only the wrapper cannot be overridden away."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

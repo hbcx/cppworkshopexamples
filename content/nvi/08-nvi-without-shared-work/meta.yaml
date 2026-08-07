@@ -1,0 +1,11 @@
+title: "Anti-pattern: an empty wrapper that adds nothing"
+standard: "C++11"
+difficulty: 3
+summary: "NVI earns its extra function only when the non-virtual wrapper holds shared work -- a check, a lock, a log. A wrapper that just forwards to the virtual step adds a layer of indirection and nothing else. When there is no shared work to enforce, a plain public virtual is simpler and reads as exactly what it is."
+notes: "NVI is boilerplate: a non-virtual public function, a separate virtual, and the discipline of keeping them apart. That cost buys something real when the wrapper runs work every subclass must share -- a precondition, a lock, a log, an invariant. It buys nothing when the wrapper is empty. Here BadShape::area() is a non-virtual function whose entire body is a call to the virtual computeArea(); it enforces no invariant, holds no lock, logs nothing. All it adds is a layer between the caller and the overridable step, plus the reader's question of why the layer is there at all. GoodShape drops it: a plain public virtual area() expresses one overridable operation directly, with no wrapper to explain. The guideline behind NVI is prefer public functions non-virtual, but the reason is to give the base a place to run shared work -- when there is none, the guideline is not serving anything and a public virtual is the clearer choice. Do not apply NVI mechanically to every virtual; apply it when the base actually has cross-cutting work to run around the customization point. The sign of the over-applied form is a non-virtual wrapper whose body is nothing but a single call to its virtual, with no other statement in it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

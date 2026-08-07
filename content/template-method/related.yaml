@@ -6,3 +6,5 @@
   note: "Builder's Director is a Template Method for construction: it owns a fixed build sequence and calls the builder's steps, the same skeleton-plus-overridable-steps shape aimed at assembling one complex object -- go there for that creational use of an orchestrated step order."
 - slug: "crtp"
   note: "The compile-time way to write this pattern: this chapter's CRTP example is one facet of the idiom -- go to the CRTP chapter for static polymorphism in full, mixins, per-type state, and when the vtable-free form is worth its costs."
+- slug: "nvi"
+  note: "The guideline this chapter's NVI example turns into a rule: make the public method non-virtual and the step a private virtual -- go to the NVI chapter for the private-virtual language rule, invariant-enforcing wrappers, protected chaining, and the anti-patterns that bypass the wrapper."

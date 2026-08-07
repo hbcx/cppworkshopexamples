@@ -1,0 +1,3 @@
+request 50 -> clamped 50: speaker at 50
+request 150 -> clamped 100: speaker at 100
+request -20 -> clamped 0: speaker at 0

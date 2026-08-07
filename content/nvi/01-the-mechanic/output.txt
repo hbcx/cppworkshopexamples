@@ -1,0 +1,6 @@
+=== BEGIN ===
+sales: 1200 units
+=== END ===
+=== BEGIN ===
+errors: 3 warnings
+=== END ===

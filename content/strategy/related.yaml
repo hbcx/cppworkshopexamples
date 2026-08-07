@@ -16,3 +16,5 @@
   note: "The principle Strategy serves: injecting the varying algorithm is how you extend a context's behaviour without editing it -- go there for open-for-extension stated as a rule, with the registry and compile-time-policy forms alongside this one."
 - slug: "type-erasure"
   note: "The idiom under a std::function strategy: storing a Strategy as a std::function is type erasure -- go there for the general Concept/Model wrapper, value semantics via clone(), and non-intrusive dispatch through free functions."
+- slug: "nvi"
+  note: "The inheritance alternative to injecting the step: NVI keeps the varying step a private virtual a subclass overrides, where Strategy hands it in as a separate object -- go there when a fixed base wrapper around the step matters more than swapping it on a live instance."

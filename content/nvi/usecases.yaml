@@ -1,0 +1,19 @@
+- problem: "A framework base class must run cross-cutting work around every polymorphic operation -- take a lock, start a timer, write a log line, open a transaction -- and every plugin or handler that subclasses it has to get that work without being trusted to remember it."
+  why: "An NVI wrapper puts the lock, timer and log in the non-virtual entry point once, and the subclass overrides only the private virtual inside it, so no subclass can forget or reorder the shared steps. A public virtual would push that boilerplate into every override, and the first one that forgets the lock is a data race nobody sees in review."
+  signal: "A public virtual whose overrides all begin or end with the same lines -- the same lock guard, the same log call, the same timing -- copied into each subclass."
+
+- problem: "A base class has an invariant or a pre-condition that must hold for every subclass -- an argument clamped to a range, a state checked before a transition, a buffer validated before it is used -- and it cannot rely on each author re-checking it."
+  why: "The non-virtual wrapper validates or clamps before calling the virtual step, so every override is handed already-valid input and the invariant is enforced in one place. If the check lived in the virtual, each subclass would repeat it and one that skipped it would violate the invariant with no warning."
+  signal: "A public virtual whose every override starts with the same bounds check or state assertion, or a base class comment saying subclasses must validate before doing the work."
+
+- problem: "A widely used base class is part of a stable API, and you need to add a step around its polymorphic operation later -- logging, a feature flag, a metrics counter -- without editing or recompiling the many subclasses that already exist."
+  why: "Because the public entry point is non-virtual, you can change what happens around the virtual step in one place and every subclass picks it up, with the public signature unchanged. If the entry point were the virtual itself, adding a step would mean touching every override, and the interface would be frozen by the subclasses that depend on its exact shape."
+  signal: "A public virtual at the root of a large hierarchy where a new cross-cutting concern would otherwise have to be pasted into every override."
+
+- problem: "A polymorphic computation must have its result adjusted or checked by the base -- clamp a returned score, normalise a vector, round a currency amount, verify a post-condition -- and the adjustment must apply no matter which subclass produced the value."
+  why: "The non-virtual wrapper calls the virtual, then adjusts or checks its return before handing it back, so the post-condition holds for every subclass. Leaving it to each override means the correction is duplicated and a subclass that forgets it returns an unadjusted value."
+  signal: "A public virtual whose callers all run the same fix-up on its result, or overrides that each repeat the same normalise or clamp on what they return."
+
+- problem: "You need to trace or instrument every polymorphic call in a hierarchy while debugging -- log entry and exit, count invocations, record timings -- without editing each subclass and then removing it all afterwards."
+  why: "One log line in the non-virtual wrapper covers every subclass call at a single choke point, and it comes out just as easily. Instrumenting a public virtual means editing every override and cleaning them all up later, and any override you miss is a blind spot in the trace."
+  signal: "Temporary logging pasted into many overrides of the same virtual, or a request to see every call to a polymorphic operation from one place."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: the override re-enters the wrapper"
+standard: "C++11"
+difficulty: 3
+summary: "The private virtual step should do its own work, not call the public wrapper again. An override that calls back into the non-virtual entry re-runs the whole fixed frame -- nested -- and without a guard it recurses forever. Here a depth guard stops it so the double frame is visible instead of a stack overflow."
+notes: "The private virtual in NVI is the inside of the wrapper, and it must not call back out to the public entry point. If the override calls the public non-virtual method again, the fixed frame runs a second time, nested inside the first, and the virtual is entered again -- which calls the wrapper again -- so without something to stop it the program recurses until the stack overflows. This example makes the mistake safe to run by adding a depth guard: BadShape::paint() calls draw() again only while the frame depth is below two, so the frame opens twice and closes twice instead of forever, and you can see the doubled work. In real code there is usually no such guard, and the symptom is a crash or a hang rather than a tidy double frame. The GoodShape override does what an NVI virtual should: only its own painting, with no call back into draw(), so the frame opens and closes exactly once. The underlying rule is that the direction of calls in NVI is one-way -- the public non-virtual method calls the private virtual, never the reverse. If a step needs to trigger the whole operation again, that is a design signal to restructure, not to call the wrapper from inside itself. The sign of this bug is a virtual override whose body calls the class's own public entry point, creating a cycle through the wrapper."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

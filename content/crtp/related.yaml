@@ -10,3 +10,5 @@
   note: "The run-time counterpart with the opposite trade-off: type erasure picks the implementation at run time behind one non-template value type, where CRTP picks it at compile time with no vtable -- go there when the types are not known until run time and must share one type and one container."
 - slug: "tag-dispatch"
   note: "The other compile-time dispatch technique: tag dispatch selects an overload from a type trait or category, where CRTP selects an implementation by the derived type -- go there for choosing a function by a compile-time property rather than by inheritance."
+- slug: "nvi"
+  note: "The run-time hook CRTP replaces at compile time: NVI wraps a private VIRTUAL step in a non-virtual base method, where CRTP inlines the derived step with no vtable -- go there for the run-time customization point and the base-owns-the-call structure both idioms share."

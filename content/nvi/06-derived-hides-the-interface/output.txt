@@ -1,0 +1,5 @@
+draft published (no check!)
+bad:  checks=0  <- 0, the wrapper was bypassed
+
+article body
+good: checks=1  <- 1, wrapper ran

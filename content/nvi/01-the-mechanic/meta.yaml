@@ -1,0 +1,12 @@
+title: "The Non-Virtual Interface mechanic"
+standard: "C++11"
+difficulty: 1
+summary: "Make the public method non-virtual and the customization point a private virtual it calls. The base owns the fixed frame -- here a header and footer -- around the one varying step, and clients have a single stable entry point. Subclasses override only the private virtual; nothing else can call it."
+notes: "The Non-Virtual Interface idiom, NVI, is Herb Sutter's guideline written as a shape: prefer public functions non-virtual, and virtual functions private. It splits the two jobs a public virtual function tries to do at once -- being the stable interface clients call, and being the customization point subclasses override. Those jobs are in tension, because the moment a function is both, a subclass that overrides it also replaces the interface, including any fixed work the base wanted to run. NVI separates them: render() is public and non-virtual, so it is the one entry point and the base fully controls the sequence -- open the frame, run the varying part, close the frame -- and body() is private and virtual, so it is the extension point and only render() ever calls it. Here the fixed work is just a header and footer, but the shape is the whole point: the subclass fills in body() and is structurally unable to run without the frame, because there is no public virtual to call and the private access stops even the subclass from calling body() out of context. The following examples build on this: the private virtual can still be overridden even though it cannot be called from outside (the surprising language rule that makes NVI work), the non-virtual wrapper can enforce an invariant no override can bypass, and the virtual can be protected instead of private when a derived override needs to chain to the base version. The sign a class wants NVI is a public virtual whose every override begins and ends with the same boilerplate -- that repeated frame belongs in a non-virtual caller."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: a derived class hides the wrapper"
+standard: "C++11"
+difficulty: 3
+summary: "NVI's public method is non-virtual, so if a derived class declares its own method of the same name it HIDES the base wrapper rather than overriding anything. A call through that derived object runs the derived method and skips the fixed work the wrapper was there to guarantee -- silently, since name hiding is not an error."
+notes: "The public method in NVI is deliberately non-virtual, and that has a sharp edge: a non-virtual function is not an override point, so if a derived class declares a function with the same name, it HIDES the base's function instead of overriding it. Here the base Publisher has a non-virtual publish() that runs a required safety check and then calls the private virtual doPublish(). The Draft subclass declares its own publish() -- perhaps meaning to customise behaviour -- and that new function hides Publisher::publish(). A call on a Draft object runs Draft::publish() and never touches the base wrapper, so the required check is silently skipped. Nothing warns you: name hiding is legal, the code compiles, and the check simply does not run. The Article subclass shows the correct shape -- it overrides only the private virtual doPublish() and leaves the public wrapper alone, so the check always runs. The counter makes it concrete: the bad path records zero checks, the good path one. The rule is simple and worth stating: in NVI you override the private (or protected) virtual, and you never redeclare the public non-virtual interface in a subclass. If you find a subclass with a public method whose name matches the base's non-virtual entry point, that is the bug -- the wrapper, and everything it guaranteed, is being bypassed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "non-virtual interface", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "access specifiers", url: "https://en.cppreference.com/w/cpp/language/access" }
