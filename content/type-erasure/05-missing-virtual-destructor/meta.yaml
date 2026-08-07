@@ -1,0 +1,12 @@
+title: "Anti-pattern: missing virtual destructor in Concept"
+standard: "C++11"
+difficulty: 3
+summary: "The wrapper deletes the held object through a Concept* -- so for ~Model<T> and the stored object's destructor to run, the Concept destructor MUST be virtual. Without it, deleting a derived object through a non-virtual base destructor is undefined behaviour and the payload leaks. The fix is one word: virtual ~Concept()."
+notes: "A type-erased wrapper deletes the held object through a base pointer -- unique_ptr<Concept> runs delete on a Concept* that actually points at a Model<T>. For that delete to run ~Model<T>, and therefore the destructor of the stored object, the Concept destructor MUST be virtual. If it is not, deleting a derived object through a base pointer whose destructor is non-virtual is undefined behaviour: in practice ~Model<T> is skipped, the stored object is never destroyed, and any resource it held leaks. Because that is real undefined behaviour, this example does not run the broken version -- it runs only the correct wrapper, where a Payload counted by a global live counter is created inside the wrapper and released when the wrapper is destroyed, so live returns to 0. The broken one-line change is described in the comment: give Concept a non-virtual destructor and the same program would leak the Payload, leaving live at 1. The sign is easy to state and easy to miss: any polymorphic base -- a class with virtual functions meant to be deleted through a base pointer -- needs a virtual destructor, and the type-erasure Concept is exactly such a base. The fix is one word: virtual ~Concept() = default."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

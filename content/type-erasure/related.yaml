@@ -1,0 +1,10 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "crtp"
+  note: "The compile-time counterpart with the opposite trade-off: CRTP picks the implementation by type at compile time with no vtable and no allocation, where type erasure picks it at run time behind one non-template value -- go there for static polymorphism, mixins, and per-type state."
+- slug: "pimpl"
+  note: "The same value-type-hiding-implementation move applied to data instead of behaviour: pimpl puts a class behind a pointer to a hidden Impl to cut compile coupling -- go there for the compile firewall, its special-member recipe, and why the destructor must be out-of-line."
+- slug: "unique-ptr"
+  note: "The tool the erased wrapper is built on: the concrete object is owned by a unique_ptr<Concept> and deleted through the base, which is why the Concept destructor must be virtual -- go there for ownership, custom deleters, and make_unique."
+- slug: "strategy"
+  note: "Where std::function-based type erasure is the pattern in action: a Strategy stored as a std::function erases the concrete algorithm behind one callable type -- go there for the pattern in its object, std::function, and policy forms."

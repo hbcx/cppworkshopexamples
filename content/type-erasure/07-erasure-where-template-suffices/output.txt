@@ -1,0 +1,2 @@
+erased sum=6  heap Models=3
+direct sum=6  heap Models=3  <- no new boxes

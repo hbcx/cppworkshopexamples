@@ -1,0 +1,3 @@
+before:   live=0
+in scope: live=-1
+after:    live=-2  <- 0, the destructor ran

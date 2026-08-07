@@ -1,0 +1,13 @@
+title: "Non-intrusive dispatch through a free function"
+standard: "C++11"
+difficulty: 3
+summary: "Requiring a draw() member still forces a shape on the stored type. If the Model calls a free function draw_impl(data_) instead, overload resolution picks the right one and a type needs no member and no base class -- so you can wrap third-party types you cannot modify by writing one free function next to them."
+notes: "The wrappers so far required the stored type to have a draw() member. That still forces a shape on types you own; it does nothing for a third-party type you cannot edit. The fix is to dispatch to a FREE function rather than a member: Model<T>::draw() calls draw_impl(data_), and overload resolution picks the draw_impl for that type. Now adapting a new type means writing one free function next to it -- no base class, no member added, no change to the type at all -- which is why this is called non-intrusive or external polymorphism. Here Circle is a type we own and LegacyLabel stands in for a third-party type with no draw member and no common base; both are wrapped and drawn through the same Drawable, each adapted from the outside by its own draw_impl overload. This is how generic libraries erase types they have never seen: the required operations are free functions, often found by argument-dependent lookup, so any type becomes usable by defining those functions in its own namespace. It is the most powerful form of the idiom -- the interface is a set of free functions, and conformance is checked when a Model<T> is instantiated, giving a clear error if an overload is missing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

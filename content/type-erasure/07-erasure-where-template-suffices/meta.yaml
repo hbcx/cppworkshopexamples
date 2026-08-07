@@ -1,0 +1,13 @@
+title: "Anti-pattern: type erasure where a template would do"
+standard: "C++11"
+difficulty: 3
+summary: "Type erasure costs a heap allocation per value and a virtual call per use. That is worth paying only when the types genuinely differ and are unknown until run time. Boxing a fixed, compile-time-known type buys nothing: this example counts three heap Models for the erased path against zero for a plain std::vector<int> the compiler inlines."
+notes: "Type erasure has a real cost: every value is a separate heap allocation for its Model, and every call through the interface is a virtual dispatch the compiler cannot inline. That price is worth paying when the stored types genuinely differ and are not known until run time. It is pure waste when the type is fixed and known at compile time -- then a template, or just the concrete type, does the same work with no allocation and calls that inline. This example counts the Models allocated on the heap: the erased path boxes three int values behind AnyValue, so three Models are allocated and each element access is a virtual call, while the direct std::vector<int> summed by a template allocates no Models and inlines the loop. Both produce the same sum, so the erasure bought nothing and cost three allocations and three indirect calls. The sign to look for is an erased wrapper whose every construction site passes the same concrete type, or an interface with a single implementation -- the abstraction has no second case to justify it. Reach for type erasure when you actually have heterogeneous types flowing through one channel; for a known type, keep the type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

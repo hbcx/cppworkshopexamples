@@ -1,0 +1,6 @@
+bad -- copy shares one Model:
+  release id=0
+  release id=0
+good -- copy clones the Model:
+  release id=1
+  release id=2

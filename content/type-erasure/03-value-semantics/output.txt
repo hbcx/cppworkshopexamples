@@ -1,0 +1,7 @@
+original: 2
+  Dog
+  Tree
+copy: 3
+  Dog
+  Tree
+  Dog

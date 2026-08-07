@@ -1,0 +1,12 @@
+title: "std::function is type erasure"
+standard: "C++11"
+difficulty: 2
+summary: "std::function is type erasure you already use: it holds any callable with a given signature -- a function pointer, a stateful functor, a lambda with captures -- behind one value type, dispatching through a hidden virtual call. Three unrelated callables sit in one std::vector<std::function<int(int)>>, which a template parameter could never do."
+notes: "std::function is type erasure you already use: it holds any callable with a given signature -- a function pointer, a stateful functor, a lambda with captures -- behind a single value type std::function<int(int)>, and calls it through a hidden virtual dispatch exactly like the hand-rolled wrapper in example 01. The three types pushed into the vector here are completely unrelated and have different sizes, yet they share one element type because std::function erased them. Contrast this with a template parameter: template <class F> void run(F f) binds ONE concrete callable type per instantiation and is resolved at compile time, so you cannot put a function pointer and a lambda in the same std::vector<F> -- there is no single F. You reach for the template when the type is known at the call site and you want it inlined with zero overhead; you reach for std::function when you need to store, pass, or swap callables of different types through one uniform type, at the cost of a virtual call and often a heap allocation. std::function is the ready-made tool; the rest of this section shows how to build the same thing for your own interface when a plain callable is not enough."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

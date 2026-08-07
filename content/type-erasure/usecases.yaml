@@ -1,0 +1,19 @@
+- problem: "A service layer needs to notify other code when something happens -- a request finishes, a config reloads -- but must not depend on the concrete type of each listener. Templating the whole notifier on the callback type would spread that type through every signature and header."
+  why: "std::function erases the callable, so the notifier stores and calls listeners of any type -- a lambda, a bound method, a free function -- through one member, and the listener types stay out of its interface. A template parameter cannot be stored side by side or crossed over a compiled boundary; std::function can."
+  signal: "A class templated on a callback type F, or a hand-rolled list of function-pointer-plus-void-pointer pairs, where all that is really needed is to store and later invoke callables of one signature."
+
+- problem: "An editor or renderer holds a mix of items -- shapes, text, images, plugin objects -- and wants to draw or serialize them uniformly, but many of those types come from libraries you cannot make inherit a common Drawable base."
+  why: "A type-erased Drawable value wraps each item and dispatches draw through a hidden interface, so unrelated and third-party types live in one std::vector<Drawable> with value semantics. Forcing a shared base is impossible for types you do not own; erasure adapts them from the outside instead."
+  signal: "A container of base-class pointers that exists only so unrelated types can be treated alike, plus adapter subclasses written solely to wrap types that could not be changed."
+
+- problem: "A library wants to accept anything that can do X at a stable boundary -- a compiled API or an ABI other teams link against -- without templating the entry point, which would force every caller to be a template and rebuild whenever internals change."
+  why: "A type-erased parameter fixes the boundary to one non-template type, so callers pass any conforming type and the library can change its internals without recompiling clients -- the same compile-firewall benefit as pimpl, applied to behaviour instead of data. A template API leaks the concrete type into every caller and prevents a stable ABI."
+  signal: "A public header whose main entry points are function templates over a policy or callback type, causing long rebuilds across teams and blocking a binary-stable interface."
+
+- problem: "A configuration or scripting layer must store values whose types are decided at run time -- a setting that is a number here and a string there -- in one container, and hand them back later."
+  why: "A type-erased value, which is the idea behind std::any, holds any type in one slot and recovers it on demand, so the container is not limited to a fixed set of alternatives. A union or variant must list every possible type up front, which does not work when the set is open or comes from plugins."
+  signal: "A variant with a long and growing type list, or a struct full of mostly-empty optional fields, used as a general property bag."
+
+- problem: "Code under test depends on a collaborator -- a clock, a network client, a database handle -- and the test needs to substitute a fake, but you do not want to introduce an interface base class into production types just to make them swappable."
+  why: "A type-erased handle lets the production type and the test double both fit one value-typed dependency without sharing an inheritance hierarchy, keeping the seam out of the production class. Extracting a virtual interface works too but forces every real type under a base you added only for testing."
+  signal: "An interface class with a single production implementation, created only so a mock can derive from it, injected everywhere by base-class pointer."

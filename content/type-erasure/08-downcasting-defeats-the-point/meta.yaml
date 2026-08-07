@@ -1,0 +1,12 @@
+title: "Anti-pattern: downcasting back to the concrete type"
+standard: "C++11"
+difficulty: 3
+summary: "Type erasure hides the concrete type so callers dispatch through the interface. Recovering it with dynamic_cast and branching on it puts the type switch back -- a second place to update for every new type. Here a downcasting area() silently returns 0 for a Triangle nobody added a branch for, while a virtual area() in the interface just works."
+notes: "Type erasure exists to remove the concrete type from the calling code: you hold a Shape and call shape.area(), and the wrapper dispatches to whatever it stores. The anti-pattern is to erase the type and then keep asking what it really is -- recovering the concrete type with dynamic_cast, or any_cast, or a type tag, and branching on it. Here a bad area function downcasts the erased Shape to each known type in turn and computes the area in an outside switch; the good design puts area() into the erased interface so the wrapper dispatches it like name(). The two are compared on the same shapes, and the difference shows on a type the switch forgot: a Triangle is added, s.area() returns the right value because Triangle provides area(), but the downcasting function has no branch for it and silently returns 0. That is the deeper problem -- the type switch is a second place that must be updated for every new type, and forgetting one is a silent wrong answer rather than a compile error, which is exactly the maintenance burden virtual dispatch removes. An occasional, well-justified downcast is fine; a switch over concrete types behind an erased value means the behaviour belonged in the interface. The sign: dynamic_cast or any_cast chains applied to a value whose whole purpose was to hide its type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "dynamic_cast", url: "https://en.cppreference.com/w/cpp/language/dynamic_cast" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

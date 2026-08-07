@@ -8,3 +8,5 @@
   note: "The sibling idiom with the opposite goal: pimpl hides the implementation behind a pointer to cut compile coupling, where CRTP pulls it into the header to inline it -- go there for static polymorphism, mixins, and per-type state."
 - slug: "raii"
   note: "The idiom the unique_ptr-to-Impl member relies on: acquire in the constructor, release in the destructor -- go there for scope guards, move-only ownership, and cleanup on every exit path, the general form of what pimpl's owning pointer does."
+- slug: "type-erasure"
+  note: "The same hiding move applied to behaviour instead of data: type erasure hides a concrete type behind one value that dispatches at run time, using the same unique_ptr-to-hidden-object structure -- go there for the Concept/Model wrapper, std::function, and value semantics via clone()."

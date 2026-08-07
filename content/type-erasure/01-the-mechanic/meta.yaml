@@ -1,0 +1,13 @@
+title: "The type-erasure mechanic"
+standard: "C++11"
+difficulty: 1
+summary: "One non-template value type holds any object with a draw() operation, without those objects sharing a base class. A private abstract Concept declares the operation, a Model<T> template forwards it to the stored object, and the wrapper keeps a unique_ptr<Concept> -- so Drawable holding a Circle and Drawable holding a Square have the same type."
+notes: "Type erasure gives you one non-template value type that can hold any object with a required capability, here a draw() operation, without those objects sharing a base class you define. The trick is a private pair: an abstract Concept that declares the operation as a pure virtual function, and a Model<T> template that derives from Concept and forwards the call to the concrete object it stores. The public wrapper keeps a unique_ptr<Concept>; its constructor is a template that, for whatever type you pass, allocates a Model<T> and holds it as a Concept. From the outside the wrapper is a plain value -- Drawable d = Circle{}; d.draw(); -- and Circle never mentions Drawable, never inherits anything, and does not know it is being erased. Inside, the call goes wrapper.draw() then Concept::draw() (virtual) then Model<Circle>::draw() then Circle::draw(), so the dispatch is an ordinary virtual call chosen by the Model created for that type. This first version stores a unique_ptr, so it is move-only for now; example 03 adds a clone() to make it a copyable value. The name is exact: the concrete type is erased from the wrapper's type -- Drawable holding a Circle and Drawable holding a Square have the same type, unlike a template Wrapper<Circle> and Wrapper<Square> which do not. That is the whole point, and it is why the two can sit in one std::vector<Drawable>."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

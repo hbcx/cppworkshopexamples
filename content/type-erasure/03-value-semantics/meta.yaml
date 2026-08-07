@@ -1,0 +1,13 @@
+title: "Value semantics with clone()"
+standard: "C++11"
+difficulty: 2
+summary: "The unique_ptr-based wrapper is move-only. Adding a virtual clone() to the Concept makes it a copyable value: copying the wrapper deep-copies the held object without knowing its type. This is what separates type erasure from a plain unique_ptr<Base> -- the erased value copies like int, and a whole std::vector of them can be copied into independent objects."
+notes: "The wrapper in example 01 stores a unique_ptr and so is move-only. To make it a real value -- copyable, storable in containers by value, passable by value -- the Concept gains a virtual clone() that returns a fresh unique_ptr<Concept>, and each Model<T> implements it by copy-constructing a new Model<T> from its stored object. The wrapper's copy constructor then calls other.self_->clone(), so copying the wrapper deep-copies the held object without the wrapper knowing its type. This is the key difference between type erasure and a plain unique_ptr<Base>: unique_ptr<Base> gives you reference semantics and is move-only, while the erased value behaves like int or std::string -- copy it and you get an independent object. Here two shapes go into a vector, the whole vector is copied, and the copy owns its own clones, so changing or destroying one does not touch the other. The copy-and-swap assignment operator, taking its parameter by value, reuses the copy or move constructor and needs no separate move assignment. The cost is a clone() per copy, which is exactly a virtual call plus one allocation -- the same cost model as any deep copy, made explicit by the interface."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }

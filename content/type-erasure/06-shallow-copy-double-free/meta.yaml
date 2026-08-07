@@ -1,0 +1,12 @@
+title: "Anti-pattern: shallow copy double-frees the held object"
+standard: "C++11"
+difficulty: 3
+summary: "The unique_ptr-based wrapper is move-only for a reason. Making it copyable by switching to a raw pointer and copying the POINTER means two wrappers own one Model, so the resource is released twice -- a double free. Shown as a release count on the same Model id, not a crash. The fix is clone(): a copyable erased value must deep-copy, never share the owning pointer."
+notes: "The natural type-erased wrapper stores unique_ptr<Concept> and is therefore move-only -- try to copy it and it does not compile, which is the compiler steering you correctly. The bug appears when someone makes it copyable the wrong way: they switch to a raw Concept*, or a shared pointer used as if it were a deep copy, and write a copy constructor that copies the POINTER. Now two wrappers hold the same Model, and when both release it the underlying resource is freed twice -- a double free. This example makes the double free visible as a count instead of a crash: releasing just prints the Model id and bumps a counter, and no real second delete is performed. In the bad wrapper a copy shares one Model, so the same id is released twice; in the good wrapper the copy constructor calls clone(), so the copy owns a distinct Model with its own id and each is released once. The good version is the value-semantics recipe from example 03. The rule: a type-erased value is either move-only (store unique_ptr and let copies be deleted) or copyable through clone() -- copying the owning pointer is never correct, because ownership cannot be shared by two objects that both destroy it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

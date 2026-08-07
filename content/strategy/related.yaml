@@ -14,3 +14,5 @@
   note: "The inheritance counterpart: Template Method varies a step by overriding it in a subclass at compile time, where Strategy injects the step as an object -- go there for the fixed-skeleton form, the NVI idiom, and exactly when composition here beats that inheritance."
 - slug: "open-closed"
   note: "The principle Strategy serves: injecting the varying algorithm is how you extend a context's behaviour without editing it -- go there for open-for-extension stated as a rule, with the registry and compile-time-policy forms alongside this one."
+- slug: "type-erasure"
+  note: "The idiom under a std::function strategy: storing a Strategy as a std::function is type erasure -- go there for the general Concept/Model wrapper, value semantics via clone(), and non-intrusive dispatch through free functions."

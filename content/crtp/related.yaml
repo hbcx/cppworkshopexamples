@@ -6,3 +6,5 @@
   note: "A concrete CRTP mixin in use: a clone() helper written once in the CRTP base gives every derived type a correctly-typed copy without repeating the boilerplate -- go there for that pattern and its polymorphic clone."
 - slug: "pimpl"
   note: "The sibling idiom with the opposite goal: pimpl hides the implementation behind a pointer to cut compile coupling, where CRTP pulls the implementation into the header to inline it -- go there for the compile-firewall idiom and its costs."
+- slug: "type-erasure"
+  note: "The run-time counterpart with the opposite trade-off: type erasure picks the implementation at run time behind one non-template value type, where CRTP picks it at compile time with no vtable -- go there when the types are not known until run time and must share one type and one container."

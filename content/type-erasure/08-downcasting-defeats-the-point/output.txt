@@ -1,0 +1,8 @@
+good -- area() in the interface:
+  Circle area=3.14159
+  Square area=4
+  Triangle area=6
+bad -- downcast switch:
+  Circle area=3.14159
+  Square area=4
+  Triangle area=0
