@@ -1,0 +1,13 @@
+title: "Dispatch on a type trait with true_type and false_type"
+standard: "C++11"
+difficulty: 2
+summary: "The real workhorse: build the tag from a type trait. A copyRange dispatches on std::is_trivially_copyable -- a std::true_type picks a bulk memcpy, a std::false_type picks an element-by-element copy. The trait chooses the overload automatically, so trivial types get the fast path and the rest stay correct."
+notes: "This is tag dispatch as it is actually used: the tag is not named by hand but produced by a type trait, so the overload is chosen from a property of the type. Standard traits inherit from std::true_type or std::false_type -- which are themselves the tag types -- so std::is_trivially_copyable<T>{} is an object of one of those two types, and passing it selects the matching overload. Here copyRange copies n objects: for a trivially copyable type it is safe and much faster to copy the raw bytes with std::memcpy, and for any other type you must copy element by element so each object's copy assignment runs. The dispatcher builds std::is_trivially_copyable<T>{} and forwards it; int takes the memcpy path, while a type with a user-written copy assignment takes the element path, which the copy counter confirms. This is exactly how standard library implementations specialise std::copy and std::uninitialized_copy -- bulk-copy trivial types, fall back for the rest -- and it is important that only the SELECTED overload is instantiated: the memcpy overload is never compiled for a non-trivial type, so it never memcpy-clobbers an object that needs its copy assignment. That last property is the real reason to prefer tag dispatch over a run-time if, and the anti-patterns come back to it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::is_trivially_copyable", url: "https://en.cppreference.com/w/cpp/types/is_trivially_copyable" }

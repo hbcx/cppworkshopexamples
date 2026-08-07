@@ -1,0 +1,2 @@
+compile-time (tag dispatch): 42
+run-time (plain if):        42

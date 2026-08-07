@@ -1,0 +1,4 @@
+vector distance = random-access: direct subtraction
+4
+list distance   = input/forward/bidirectional: counting loop
+3

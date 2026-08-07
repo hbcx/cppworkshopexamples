@@ -1,0 +1,12 @@
+title: "Anti-pattern: tag dispatch with no real difference"
+standard: "C++11"
+difficulty: 3
+summary: "Two tag-dispatched overloads that do the same work add an empty-struct hop and two functions but branch on nothing. If the paths are identical, one function is shorter and clearer. Reach for tag dispatch only when the paths genuinely differ and at least one would not compile for the other types."
+notes: "Tag dispatch is boilerplate: an extra trait, two or more overloads, an empty tag argument, a dispatcher. That cost is worth paying when it buys something a simpler tool cannot -- overloads that are valid for different sets of types. It is pure overhead when the paths do not actually differ. Here showBad dispatches on std::is_integral, but both overloads do the same thing, print the value, so the dispatch decides nothing; showGood is a single template that does the same work in one line. The rule is to check, before adding tag dispatch, that the branches really are different AND that a plain run-time if would not do -- and a run-time if would not do only when one branch is invalid for some of the types. If both branches compile for all types and differ only in behaviour, a run-time if is simpler; if the branches are identical, no dispatch is needed at all. One more note on modern C++: from C++17, a single function with if constexpr expresses a genuine two-way compile-time choice in one place and replaces most simple tag dispatch, because the untaken branch is discarded and never has to compile. This section targets C++11, where tag dispatch is the tool for that job -- but if you are on C++17 or later, prefer if constexpr for the simple two-way case, and keep tag dispatch for open-ended overload sets like the iterator categories."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }

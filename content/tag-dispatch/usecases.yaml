@@ -1,0 +1,19 @@
+- problem: "A generic algorithm should be fast on cheap iterators and still correct on weak ones -- advance or distance over a std::vector iterator can jump in one step, but over a std::list or an input stream it must walk element by element."
+  why: "Dispatching on iterator_traits<It>::iterator_category selects the O(1) path for random-access iterators and the O(n) path for the rest, chosen at compile time with no run-time check, and tag inheritance routes each category to the right overload. A single implementation would either be O(n) for everyone or use a run-time category check that has to compile the += path even for iterators that do not support it."
+  signal: "A hand-written advance, distance, copy or rotate that walks with ++ in a loop for every iterator, ignoring that some support += and subtraction."
+
+- problem: "A container or serializer copies or moves large arrays of objects on a hot path, and for plain data the loop of per-element copies is far slower than a single bulk memcpy the CPU can vectorise."
+  why: "Dispatching on std::is_trivially_copyable picks memcpy for trivial types and the element-by-element path for the rest, so trivial data gets the fast path while types with real copy constructors stay correct. A plain memcpy for all types would silently corrupt objects that need their copy constructor; an element loop for all types leaves the trivial fast path on the table."
+  signal: "A per-element copy loop over a large buffer of a trivially copyable type, or a raw memcpy applied to types without checking that they are trivially copyable."
+
+- problem: "A library wants outside types to opt into a special behaviour -- a binary fast path, a custom hash, a known tuple size -- without the library editing those types or knowing them in advance."
+  why: "A trait template the user specializes (inheriting from true_type or false_type) is a customization point the library dispatches on, so a type opts in with one line beside it and the choice is checked at compile time. A central if/else or switch over known types cannot see types defined later in other code, and editing each type to add a base class or member is intrusive and often impossible for third-party types."
+  signal: "A trait template like is_fast<T> or supports_binary<T> that defaults to false and is specialized per type, or a growing hard-coded list of types handled specially inside one function."
+
+- problem: "A generic function must do genuinely different things for different categories of type -- call size() on containers, format numbers directly -- where each branch is only valid for some of the types."
+  why: "Tag dispatch instantiates only the overload chosen for each type, so the size() body is compiled only for types that have size() and never for a plain int. A run-time if on the type trait fails to compile, because it must generate both branches for every type, including the branch that is invalid for that type."
+  signal: "A function template with an if on a type trait (is_class, is_pointer, a has-member check) whose branches call members or operators that do not exist on all the types the template is instantiated with."
+
+- problem: "A compile-time-sized computation should be specialised on a number known at compile time -- a fixed vector dimension, a recursion depth, a small-buffer size -- so the compiler can unroll or pick a specific layout."
+  why: "Dispatching on std::integral_constant<int, N> turns the compile-time number into a tag and selects a per-value overload, so the size drives specialization with no run-time loop over a constant. A run-time loop or switch over a value that is actually a compile-time constant blocks unrolling and layout choices the compiler could otherwise make."
+  signal: "A loop or switch whose bound is a template non-type parameter or a constexpr, where each iteration count could select a different, specialised implementation."

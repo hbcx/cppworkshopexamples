@@ -1,0 +1,12 @@
+title: "Anti-pattern: a run-time if on a compile-time property"
+standard: "C++11"
+difficulty: 3
+summary: "A run-time if on a type property must compile BOTH branches for every type, so a branch that calls x.size() fails to build for an int even though it is never taken. Tag dispatch instantiates only the selected overload, so each body need only be valid for the types that reach it -- which is the whole reason the idiom exists."
+notes: "This is the problem tag dispatch was invented to solve. Suppose you want to print a container's size() but a plain number's value. Written as one function with a run-time if -- if the type is a class, print x.size(), else print x -- it does not compile: the compiler must generate BOTH branches for every type the function is instantiated with, so for T = int it still compiles the x.size() branch even though that branch is never reached at run time, and int has no size(), so the build fails. The if chose nothing at compile time; both arms had to be valid. Tag dispatch fixes this because only the overload selected for a given type is instantiated: the size() overload is compiled only for class types, the value overload only for the rest, and neither ever sees a type it cannot handle. The example runs the working tag-dispatch version -- dispatching on std::is_class as a stand-in for a real has-size trait -- and describes the broken run-time if in a comment rather than compiling it. The general rule: when the two paths are valid for DIFFERENT sets of types, a run-time if cannot express the choice, because it demands both paths compile for all of them; you need compile-time selection, which is tag dispatch here (and if constexpr from C++17)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }

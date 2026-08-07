@@ -1,0 +1,10 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "type-erasure"
+  note: "The run-time counterpart: type erasure picks the implementation at run time behind one value through a virtual call, where tag dispatch picks it at compile time by overload with no branch left -- go there when the type is only known at run time and must share one value type."
+- slug: "crtp"
+  note: "The other compile-time dispatch: CRTP resolves a call to the derived type through the template system with no vtable, a sibling static-polymorphism technique -- go there for static polymorphism, mixins, and per-type state."
+- slug: "iterator"
+  note: "Where the iterator categories that example 03 dispatches on come from: the pattern that defines input, forward, bidirectional and random-access traversal -- go there for the iterator concept and how containers expose it."
+- slug: "visitor"
+  note: "Dispatch on type done at run time: Visitor uses double dispatch through virtual calls to pick behaviour by an object's dynamic type, the run-time answer to what tag dispatch does at compile time -- go there for double dispatch and when a run-time type switch is unavoidable."

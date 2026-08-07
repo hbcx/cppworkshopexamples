@@ -1,0 +1,12 @@
+title: "Anti-pattern: no overload for the weaker category"
+standard: "C++11"
+difficulty: 3
+summary: "Iterator-category dispatch leans on tag inheritance: a stronger tag binds to an overload for a weaker one. But if you only provide the random-access overload, a list's bidirectional tag cannot convert to random_access_iterator_tag, so there is no matching overload and the error points deep inside the dispatcher. Always cover the weakest category you support."
+notes: "Iterator-category dispatch works because the tags form an inheritance chain -- random_access derives from bidirectional, from forward, from input -- so a stronger iterator's tag binds to an overload written for a weaker category through a derived-to-base conversion. That routing only works if the weaker overload EXISTS. The mistake is to write only the overload for the strongest category you optimised, say random_access_iterator_tag for an O(1) path, and forget the fallback. Then a std::vector works, because its tag matches exactly, but a std::list breaks: a bidirectional_iterator_tag does not convert to random_access_iterator_tag (that would be base-to-derived, which is not allowed), so there is NO viable overload, and the compiler error lands deep inside the dispatcher template instead of at your call site, which makes it hard to read. The example provides the correct pair -- an O(1) overload for random_access and a counting overload for input_iterator_tag, the weakest category -- so tag inheritance routes forward, bidirectional and random-access iterators to the right place; a vector subtracts and a list counts. The broken version, dropping the input_iterator_tag overload, is described in a comment. The rule: provide an overload for the weakest iterator category you intend to support, and let inheritance route the stronger ones up to your faster overloads."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "std::iterator_traits", url: "https://en.cppreference.com/w/cpp/iterator/iterator_traits" }
+  - { name: "iterator category tags", url: "https://en.cppreference.com/w/cpp/iterator/iterator_tags" }

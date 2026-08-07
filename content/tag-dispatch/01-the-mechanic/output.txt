@@ -1,0 +1,4 @@
+run<use_fast>: fast path
+42
+run<use_safe>: safe path
+42

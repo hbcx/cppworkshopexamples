@@ -1,0 +1,13 @@
+title: "Iterator-category dispatch, the way the STL does it"
+standard: "C++11"
+difficulty: 2
+summary: "The standard library's own use: read iterator_traits<It>::iterator_category and dispatch on it. A vector iterator is random-access so advance jumps in O(1); a list iterator is bidirectional so it steps in O(n). Because the category tags form an inheritance hierarchy, the bidirectional tag binds to the forward overload automatically."
+notes: "This is where tag dispatch was born: std::advance, std::distance and std::copy all pick their implementation from the iterator's category. Every iterator type publishes a category through std::iterator_traits<It>::iterator_category, and those categories are empty tag types -- std::input_iterator_tag, std::forward_iterator_tag, std::bidirectional_iterator_tag, std::random_access_iterator_tag -- so they are exactly what tag dispatch needs. Here a hand-written myAdvance reads the category and forwards it: a random-access iterator gets an overload that does it += n in one step (O(1)), and weaker iterators get an overload that steps ++it n times (O(n)). The elegant part is the tag hierarchy. random_access_iterator_tag derives from bidirectional, which derives from forward, which derives from input, so a stronger tag can bind to an overload written for a weaker one through an ordinary derived-to-base conversion. That is why the O(n) overload is written for forward_iterator_tag yet a std::list's bidirectional iterator selects it with no extra code -- and why a std::vector's random-access iterator still prefers the exact random-access overload, because an exact match beats a base conversion. You provide an overload for each category that behaves differently and let inheritance route the rest, which is the pattern the whole standard library follows."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "std::iterator_traits", url: "https://en.cppreference.com/w/cpp/iterator/iterator_traits" }
+  - { name: "iterator category tags", url: "https://en.cppreference.com/w/cpp/iterator/iterator_tags" }
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }

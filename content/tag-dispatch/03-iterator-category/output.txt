@@ -1,0 +1,4 @@
+random-access: O(1) jump
+vector[3] = 3
+forward/bidirectional: O(n) steps
+list[3] = 3

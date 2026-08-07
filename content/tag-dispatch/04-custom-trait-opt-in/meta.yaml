@@ -1,0 +1,12 @@
+title: "A user-extensible trait as a customization point"
+standard: "C++11"
+difficulty: 3
+summary: "Tag dispatch on a trait you define yourself. is_pod_like<T> defaults to std::false_type; a user opts a type into the fast path by specializing it to std::true_type. save() then dispatches on it -- opted-in types get a binary path, everything else a generic one. This is how libraries let outside types choose a behaviour."
+notes: "The trait a tag dispatch reads does not have to be a standard one -- you can define your own, and let users of your library extend it for their types without touching your code. Here is_pod_like<T> is a trait template that inherits from std::false_type by default, so out of the box every type takes the generic path. A user opts a specific type into the fast path by specializing the trait to inherit from std::true_type -- one line next to their type, template<> struct is_pod_like<Point> : std::true_type {}; -- and from then on save(Point) dispatches to the binary overload while save(std::string) and save(42) still take the generic one. This is the customization point pattern, and the standard library uses exactly this shape: std::is_error_code_enum, std::tuple_size, std::hash, and iterator_traits itself are traits you specialize to teach generic code about your types. The strengths are that the opt-in is non-intrusive (the type itself is not modified, only a trait beside it) and checked at compile time (a wrong specialization is a build error, not a silent run-time surprise). The dispatcher is the same three-line shape as every other example -- build the tag from the trait, forward it -- the only new idea is that the trait is open for anyone to extend."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }

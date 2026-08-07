@@ -1,0 +1,11 @@
+title: "The tag-dispatch mechanic"
+standard: "C++11"
+difficulty: 1
+summary: "Two empty tag structs and two overloads that take them. A generic run<Tag>(x) passes Tag{} and overload resolution picks the matching function -- the choice is made by the TYPE of the tag, at compile time, with no run-time branch."
+notes: "Tag dispatch selects one of several function overloads by passing an extra argument whose only job is to carry a compile-time choice in its TYPE. The tags are empty structs -- they hold no data and cost nothing at run time; the compiler uses their type, and only their type, to pick an overload. Here two tags, use_fast and use_safe, name two overloads of compute(), and a generic front-end run<Tag>(x) builds a Tag{} and calls compute(x, Tag{}). Because Tag is a template parameter fixed when run is instantiated, the call resolves to exactly one compute() at compile time -- run<use_fast> always calls the fast overload, run<use_safe> always the safe one, and there is no if, no virtual call, no branch left in the generated code. This is the whole mechanic. What makes it useful is what the following examples add: the tag usually comes from a type trait (std::true_type or std::false_type) rather than being named by hand, so the overload is chosen automatically from a property of the type -- is it trivially copyable, what iterator category does it have, did the user opt it into a fast path. The key point to hold onto is that the selector is a TYPE, resolved at compile time; a value known only at run time cannot pick an overload, which is the boundary one of the anti-patterns explores."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

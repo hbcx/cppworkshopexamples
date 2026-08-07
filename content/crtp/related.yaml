@@ -8,3 +8,5 @@
   note: "The sibling idiom with the opposite goal: pimpl hides the implementation behind a pointer to cut compile coupling, where CRTP pulls the implementation into the header to inline it -- go there for the compile-firewall idiom and its costs."
 - slug: "type-erasure"
   note: "The run-time counterpart with the opposite trade-off: type erasure picks the implementation at run time behind one non-template value type, where CRTP picks it at compile time with no vtable -- go there when the types are not known until run time and must share one type and one container."
+- slug: "tag-dispatch"
+  note: "The other compile-time dispatch technique: tag dispatch selects an overload from a type trait or category, where CRTP selects an implementation by the derived type -- go there for choosing a function by a compile-time property rather than by inheritance."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: trying to dispatch on a run-time value"
+standard: "C++11"
+difficulty: 3
+summary: "A tag selects an overload by TYPE, which must be known at compile time. A bool read at run time cannot pick a type -- fast ? use_fast{} : use_safe{} has two different types and no common type, so it is ill-formed. When the choice is genuinely run-time, a plain if is the right tool; tag dispatch is only for compile-time choices."
+notes: "Tag dispatch chooses an overload by the TYPE of the tag, and a type must be fixed at compile time. This trips people up when the choice they want to make is only known at run time -- a flag from a config file, a value from user input. You cannot turn that bool into a tag: writing compute(x, fast ? use_fast{} : use_safe{}) is ill-formed, because the two arms of the conditional have different types (use_fast and use_safe) with no common type, so the expression has no type at all. The tag mechanism has nothing to select on. The example shows the two situations side by side. When the choice is a compile-time constant, run<use_fast>(x) uses tag dispatch and the overload is baked in. When the choice is genuinely run-time, runtimeChoice(x, flag) uses a plain if -- and that is correct precisely because both paths ARE valid for x, so compiling both is fine. The rule of thumb: if the selector is a value that can only be known while the program runs, use an ordinary if or a virtual call; reach for tag dispatch when the selector is a type or a compile-time trait. The ill-formed conditional-tag attempt is left in a comment, since it does not compile."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "tag dispatch", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

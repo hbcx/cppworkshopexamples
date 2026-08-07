@@ -4,3 +4,5 @@
   note: "The real version of this chapter's hand-written linked list: std::list is node-based, so its iterators are bidirectional (not random-access) and stay valid across insert and erase of other elements -- go there for the container whose iterator category is the trade-off against a vector's."
 - slug: "associative-containers"
   note: "Where find() returning end() is the everyday case: map and set lookups report a miss with the end iterator, the exact check this chapter's dereferencing-end anti-pattern is about -- go there for the ordered containers and the benchmark of their bidirectional iteration."
+- slug: "tag-dispatch"
+  note: "How generic code uses the iterator categories this chapter defines: std::advance and std::distance dispatch on input, forward, bidirectional and random-access tags to pick an O(1) or O(n) path -- go there for the compile-time technique that turns those categories into a fast implementation."
