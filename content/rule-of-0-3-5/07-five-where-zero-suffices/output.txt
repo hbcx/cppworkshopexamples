@@ -1,0 +1,2 @@
+bad copy:  name=a tag=0  <- tag lost
+good copy: name=c tag=42  <- tag kept

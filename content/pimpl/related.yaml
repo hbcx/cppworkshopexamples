@@ -10,3 +10,5 @@
   note: "The idiom the unique_ptr-to-Impl member relies on: acquire in the constructor, release in the destructor -- go there for scope guards, move-only ownership, and cleanup on every exit path, the general form of what pimpl's owning pointer does."
 - slug: "type-erasure"
   note: "The same hiding move applied to behaviour instead of data: type erasure hides a concrete type behind one value that dispatches at run time, using the same unique_ptr-to-hidden-object structure -- go there for the Concept/Model wrapper, std::function, and value semantics via clone()."
+- slug: "rule-of-0-3-5"
+  note: "The special-member rules a pimpl class must follow, on their own: how many of the five to declare and why declaring one changes the others -- go there for rule of zero, three and five before applying them to the out-of-line pimpl members."

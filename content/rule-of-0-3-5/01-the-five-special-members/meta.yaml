@@ -1,0 +1,15 @@
+title: "The five special members"
+standard: "C++11"
+difficulty: 1
+summary: "The five special members are the destructor, copy constructor, copy assignment, move constructor and move assignment. A small type logs which one runs so you can see the compiler pick copy for an lvalue and move for an rvalue -- in real classes you write none of these, the rest of the section is about how many you actually must."
+notes: "The five special member functions are the destructor, the copy constructor, the copy assignment operator, the move constructor and the move assignment operator. The compiler can generate all five for you, and for most classes it should -- this example only writes them by hand so their firing becomes visible on the console. Watch the pattern: Tracked b = a copies (a is a named lvalue), Tracked c = std::move(a) moves (the argument is an rvalue), b = c copy-assigns, b = std::move(c) move-assigns, and at the end three destructors run in reverse order of construction. That is the whole cast. The point of the section is NOT to write these -- it is to know how many you are forced to write. The answer is usually zero (rule of zero): if every member manages itself, the generated five are already correct. You are pushed to three when you own a raw resource whose destructor you must write, and to five when you also want cheap moves. And the members come as a SET: declaring one changes whether the others are generated, which is the trap the anti-patterns at the end of the section keep hitting."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of five", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }

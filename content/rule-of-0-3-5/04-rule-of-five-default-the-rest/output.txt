@@ -1,0 +1,5 @@
+after move:   b.size=1000 a.size=0 (moved-from)
+~Buffer size=0
+after assign: b.size=1000
+~Buffer size=1000
+~Buffer size=0

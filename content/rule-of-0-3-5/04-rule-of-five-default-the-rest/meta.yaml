@@ -1,0 +1,13 @@
+title: "Rule of five: default the rest when one is declared"
+standard: "C++11"
+difficulty: 3
+summary: "Declaring any one of the five stops the compiler generating the moves, so a class with self-managing members silently falls back to copying. When you must write a destructor -- to log, to close a handle, or because it is a polymorphic base -- = default the move constructor and move assignment to bring cheap moves back."
+notes: "The five members come as a set, and declaring one changes what the compiler generates for the others. In particular, declaring a destructor (or a copy operation) stops the compiler from generating the move constructor and move assignment. That is the sharp edge of the rule: a class whose members all self-manage would have correct moves for free, but the moment you add a destructor those moves quietly disappear and every move turns back into a copy. This Buffer holds a std::vector, so rule of zero would give it cheap moves -- but suppose we must declare a destructor, here to log, in real code to close a handle or because the class is a polymorphic base that needs a virtual destructor. Declaring it deletes the implicit moves, so we = default them back, and default the copies too, spelling out all four to say exactly what the class supports. Now Buffer b = std::move(a) steals the vector instead of copying its 1000 ints, and b = makeBuffer() move-assigns. This is the discipline behind rule of five: once you declare one special member, decide about all of them -- = default the ones you still want, = delete the ones you forbid, and write the ones you must -- rather than leaving the compiler to silently drop a move. If you can avoid declaring any member at all, prefer that (rule of zero); this is what to do when you cannot."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of five", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }

@@ -1,0 +1,13 @@
+title: "Rule of three: own a resource, write all three"
+standard: "C++11"
+difficulty: 2
+summary: "When a class owns a raw resource and writes a destructor to free it, the compiler's shallow copy would double-free -- so if you write one of destructor, copy constructor or copy assignment, write all three. Here they are, done correctly with a deep copy and a self-assignment-safe assignment."
+notes: "Rule of three is the pre-C++11 rule that still decides correctness: if a class needs a user-written destructor, copy constructor, or copy assignment operator, it almost certainly needs all three. The reason is ownership. This IntArray owns a raw heap buffer and frees it in its destructor. If you stopped there, the compiler-generated copy would copy the POINTER, so two objects would free the same buffer -- a double free (the anti-pattern later in the section). Writing all three fixes it: the copy constructor allocates its own buffer and copies the elements (a deep copy), and the copy assignment does the same while safely releasing the old buffer. Note the assignment order here -- allocate the new buffer first, and only then delete the old one -- so that if allocation throws, the object is left unchanged rather than holding a freed pointer; the self-assignment check guards the case a = a. Two things worth saying. In C++11 you would usually go further and add the two move members (rule of five, the next example) so the buffer transfers cheaply instead of copying. And better still, most classes should not own a raw buffer at all -- hold a std::vector<int> and you are back to rule of zero with nothing to write. This raw version exists to show the three members and why they travel together."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of three", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }

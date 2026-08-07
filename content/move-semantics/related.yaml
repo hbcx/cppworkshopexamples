@@ -12,3 +12,5 @@
   note: "The move type made concrete: a std::string move hands over its heap buffer, the small-string optimization decides when there is a buffer at all, and moved-from strings appear throughout."
 - slug: "raii"
   note: "Why resource-owning types are move-only: the rule of five here exists to make RAII types transfer ownership safely instead of copying a handle twice -- go there for the resource-management idiom these move operations serve."
+- slug: "rule-of-0-3-5"
+  note: "The decision layer above these mechanics: how many of the five special members you must actually write -- zero when members self-manage, three for a raw resource, five to add cheap moves -- go there for the rule that says when to declare the moves this section explains."

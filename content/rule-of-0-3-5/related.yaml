@@ -1,0 +1,10 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "move-semantics"
+  note: "The mechanics behind the two members rule of five adds: what a move actually does, why move members should be noexcept, moved-from state, and moving into containers -- go there once you know how many special members to write and want to know how the moves behave."
+- slug: "raii"
+  note: "Why owning a resource forces rule of three or five in the first place, and how rule of zero delegates it: acquire in the constructor, release in the destructor -- go there for the resource-management idiom these rules serve, scope guards, and move-only ownership."
+- slug: "unique-ptr"
+  note: "The tool that turns rule of five into rule of zero: hold a resource in a unique_ptr (with a custom deleter for C handles) and you declare no special members at all -- go there for ownership, custom deleters, and make_unique."
+- slug: "pimpl"
+  note: "A worked rule-of-five case: a pimpl class is move-only unless you add a deep copy, with every special member declared in the header and defined where the hidden Impl is complete -- go there for the out-of-line special members and why the destructor cannot be defaulted in the header."

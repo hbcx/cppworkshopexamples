@@ -1,0 +1,2 @@
+AlmostMovable copyable? false  <- false: the move ctor deleted the copy
+Movable copyable?       true  <- true: = default brought it back

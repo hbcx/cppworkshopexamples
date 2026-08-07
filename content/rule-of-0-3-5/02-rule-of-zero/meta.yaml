@@ -1,0 +1,13 @@
+title: "Rule of zero: declare none of them"
+standard: "C++11"
+difficulty: 2
+summary: "When every member already manages itself -- std::string owns its text, std::vector its buffer, a smart pointer its object -- declare none of the five special members. The compiler-generated copy, move and destructor are all correct, and stay correct when you add another self-managing member later. This is the modern default."
+notes: "Rule of zero is the modern default: if every data member already knows how to copy, move and destroy itself, declare none of the five special members and let the compiler generate them. std::string owns its characters, std::vector owns its buffer, std::shared_ptr owns its object, and the generated copy deep-copies each of them, the generated move steals each of them, and the generated destructor releases each of them -- all correct, and all for free. The big practical win is maintenance: add a new self-managing member a year later and the generated members pick it up automatically, where a hand-written copy would silently forget it. This example makes a Config from a string, a vector and a shared_ptr; copying it deep-copies the string and vector while sharing the shared_ptr's object, moving it steals the string and vector cheaply, and none of that needed a single special member. One choice to note: shared_ptr keeps the class copyable, but if you used std::unique_ptr the class would become move-only -- still rule of zero, since you still declare nothing, just move-only instead of copyable. The rule you are trading against is rule of three or five, where owning a raw resource forces you to write those members by hand; rule of zero is what you get by NOT owning raw resources directly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of zero", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

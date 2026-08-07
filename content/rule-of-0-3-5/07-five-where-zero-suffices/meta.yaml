@@ -1,0 +1,12 @@
+title: "Anti-pattern: writing five where zero would do"
+standard: "C++11"
+difficulty: 3
+summary: "Hand-writing the special members for a class whose members already self-manage is pure boilerplate that invites bugs. The classic one: someone adds a member later and forgets it in the hand-written copy, so copies silently drop it. Declaring nothing (rule of zero) copies every member, including the new one."
+notes: "Rule of zero is not only less typing -- it is safer, and this anti-pattern is why. When every member already manages itself, a hand-written copy constructor and copy assignment do exactly what the compiler-generated ones would do, so they add no value and one real risk: they must be kept in sync with the member list by hand. The classic failure is adding a member later. Here a widget started with just a name, someone wrote the copy members for it, and then a tag field was added -- but the hand-written copy was never updated, so copying a widget silently drops the tag and leaves it at its default. The compiler would never make that mistake: the generated copy copies every member, and picks up the new one automatically. The example shows a BadWidget whose hand-written copy forgets tag_, so the copy comes out with tag 0, next to a GoodWidget that declares nothing and copies both fields. This is the everyday case for rule of zero: unless you are directly holding a raw resource, do not write the special members at all -- every one you write is a place a future change can silently break, and the compiler-generated versions are correct by construction. The sign is a class with hand-written copy or move members whose body just copies each member one by one, and whose members are all standard library types."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of zero", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }

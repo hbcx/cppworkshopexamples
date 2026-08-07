@@ -6,3 +6,5 @@
   note: "RAII for a resource with more than one owner: reference-counted cleanup that releases when the last owner goes away -- go there when single ownership does not fit."
 - slug: "pimpl"
   note: "A sibling idiom that leans on RAII: the unique_ptr-to-Impl member is an owning handle and the rule-of-five plumbing is the same -- go there for the compile-firewall use of an owning pointer."
+- slug: "rule-of-0-3-5"
+  note: "The special-member decision RAII drives: owning a resource forces you to write three or five special members, while rule of zero is what you get by letting RAII members own it for you -- go there for how many of the five to declare and why they travel as a set."

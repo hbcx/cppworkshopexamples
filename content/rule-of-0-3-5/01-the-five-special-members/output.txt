@@ -1,0 +1,14 @@
+-- Tracked a --
+default ctor
+-- Tracked b = a --
+copy ctor
+-- Tracked c = std::move(a) --
+move ctor
+-- b = c --
+copy assign
+-- b = std::move(c) --
+move assign
+-- end of scope --
+destructor
+destructor
+destructor

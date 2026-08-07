@@ -1,0 +1,2 @@
+bad  self-assign: id=-1  <- -1, corrupted
+good self-assign: id=7  <- 7, intact

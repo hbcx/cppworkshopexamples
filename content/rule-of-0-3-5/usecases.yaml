@@ -1,0 +1,19 @@
+- problem: "You are wrapping an OS or C-library resource -- a file descriptor, a FILE*, a sqlite3* connection, an OpenGL texture -- that must be released exactly once with a specific free call. The wrapper owns the raw handle and needs correct copy, move and cleanup."
+  why: "Owning the raw handle forces the full rule of five, which is easy to get wrong -- a forgotten move, a missing self-assignment guard, a shallow copy that double-frees. Holding the handle in a std::unique_ptr with a custom deleter instead is rule of zero: you declare nothing and get correct move-only ownership for free."
+  signal: "A class with a raw handle member, a destructor that calls a C free function, and either no copy/move members or a hand-written set of them."
+
+- problem: "A type represents exclusive ownership that must transfer but must never be duplicated -- a scoped lock, a database transaction, a reservation on a job or device. Copying it would be a bug."
+  why: "Rule of five with the copy members = deleted and the moves = defaulted makes the type move-only, so the compiler rejects an accidental copy at compile time. Leaving copy to the compiler would double-release on copy, and reaching for std::shared_ptr would permit the sharing the design is trying to forbid."
+  signal: "A resource wrapper that is passed by value or stored in a container and ends up copied, when the design says only one owner should exist at a time."
+
+- problem: "You are writing a base class in a polymorphic hierarchy, so it needs a virtual destructor for safe deletion through a base pointer. That single declaration changes what else the compiler generates."
+  why: "Declaring the virtual destructor suppresses the implicit move members, so derived objects silently copy where they could move, and the base's copyability is left unstated. Rule of five forces the decision: = default the copy and move members for a value base, or = delete them to prevent slicing -- either way it is explicit."
+  signal: "A base class with virtual functions and a virtual destructor but no explicit statement about its copy and move members."
+
+- problem: "A domain value type -- Money, a 3D vector, a date, an RGBA color -- is built from arithmetic fields and standard library members and is copied and moved constantly through the code."
+  why: "Rule of zero gives it correct copy, move and equality-friendly semantics with nothing declared, and the generated members stay correct as fields are added. A hand-written copy adds no behaviour and introduces the risk that a future field is silently left out of it."
+  signal: "A small value class with hand-written copy or assignment whose body copies each member one by one, and whose members are all built-in or standard library types."
+
+- problem: "You are modernising a pre-C++11 class that has the classic three -- destructor, copy constructor, copy assignment -- but no move members, and it is stored in a std::vector or returned by value on hot paths."
+  why: "Without move members every vector growth and every by-value return deep-copies the whole object, which the profiler shows as copy cost the class never needed to pay. Adding = default (or hand-written) move members, or switching the class to rule of zero, restores cheap transfers."
+  signal: "A resource-owning class written before C++11 with a destructor and copy members but no move constructor or move assignment, used in containers or returned by value."

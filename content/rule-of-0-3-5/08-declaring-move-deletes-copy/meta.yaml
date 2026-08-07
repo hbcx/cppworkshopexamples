@@ -1,0 +1,13 @@
+title: "Anti-pattern: declaring a move deletes the copy"
+standard: "C++11"
+difficulty: 3
+summary: "Declaring a move constructor or move assignment makes the compiler delete the copy constructor and copy assignment, so a class becomes silently move-only and any code that copies it stops compiling. The fix is to = default the copies back. Shown with std::is_copy_constructible rather than a build error."
+notes: "The five members interact, and this is the interaction that surprises people most: declaring a move constructor or move assignment operator does not just add moving -- it DELETES the copy constructor and copy assignment. A class that was copyable becomes silently move-only, and any code that tries to copy it fails to compile, often far from the class where the move was added. This is the mirror image of the rule-of-five example earlier: there, declaring a destructor removed the moves; here, declaring a move removes the copies. The example cannot show the trap by copying, because that would not compile, so it uses std::is_copy_constructible to report the fact: AlmostMovable declares only a move constructor and comes out non-copyable, while Movable declares the moves and then = defaults the copies back and stays copyable. The lesson is the same discipline the whole section teaches: the special members are a set, and once you declare one you should decide about all of them -- = default the ones you still want, = delete the ones you forbid. Do not let adding a move quietly delete copying, or adding a destructor quietly delete moving. The sign is a class with a hand-written move member and no copy members, being used in code that assumes it can be copied."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of five", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+  - { name: "deleted function", url: "https://en.cppreference.com/w/cpp/language/function#Deleted_functions" }

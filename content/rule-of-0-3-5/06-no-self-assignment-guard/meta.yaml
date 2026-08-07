@@ -1,0 +1,12 @@
+title: "Anti-pattern: assignment with no self-assignment guard"
+standard: "C++11"
+difficulty: 3
+summary: "A hand-written assignment that releases the old resource and then copies from the other object corrupts itself on a = a: it releases its own resource first, then copies from what it just released. A this != &other guard, or the copy-and-swap idiom, fixes it. Shown deterministically, no crash."
+notes: "When you write a copy or move assignment by hand, the object on the left already holds a resource, and the natural shape is: release what we have, then take a copy of the other object's resource. That shape has a trap -- if the other object IS this object (a = a, which happens through references and aliasing more often than you would think), releasing our resource also releases the other's, and the copy that follows reads from something already released. This example makes the corruption visible without undefined behaviour: a Handle owns a numbered id, and release marks it as minus one. The bad assignment releases first and then copies o.id_ -- but on self-assignment o is this, so o.id_ has already become minus one, and the handle ends up corrupted. The guarded assignment checks this != &o and simply does nothing on self-assignment, leaving the value intact. There are two standard fixes. The explicit one is the identity check shown here. The better one is copy-and-swap: take the parameter by value (so it is already an independent copy), then swap it into this -- self-assignment then just swaps with a copy of itself and is harmless, and the same code is also exception-safe. The sign to look for is a hand-written operator= that frees or deletes a member before reading from the source, with no identity check and no copy-and-swap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of three", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }

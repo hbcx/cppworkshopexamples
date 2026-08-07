@@ -1,0 +1,12 @@
+title: "Anti-pattern: a destructor with a shallow default copy"
+standard: "C++11"
+difficulty: 3
+summary: "The classic rule-of-three violation: write a destructor to free a resource but leave the copy to the compiler. The generated copy is shallow -- it copies the handle -- so two objects free the same resource and it is released twice. Shown as an open-handle count going negative, with the rule-of-three fix beside it."
+notes: "This is the most common rule-of-three violation and the reason the rule exists. The class writes a destructor to release a resource -- here a numbered handle -- but declares no copy constructor or copy assignment, so the compiler generates a shallow copy that just copies the handle number. Copy the object and you now have two owners of one handle; when both destructors run, the handle is released twice. This example shows the double release as a count rather than a crash: acquire increments a live-handle counter and release decrements it, so releasing the same handle twice drives the counter below zero. In the bad case a shallow copy shares handle one, and the two destructors take the counter to minus one. In the good case the rule of three is followed: the copy constructor acquires its OWN handle, matched by the destructor, so each object releases a distinct handle once and the counter returns to zero. (A complete rule of three would also write the copy assignment operator the same way; it is deleted here to keep the demo short.) The sign to look for is a class with a user-written destructor that frees or closes something, and no copy constructor or copy assignment beside it -- the compiler will copy it, and its copy will double-free. The fix is either to write all three, or better, to hold the resource in a type that already manages it (a smart pointer or a container) so there is nothing to write."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "rule of three", url: "https://en.cppreference.com/w/cpp/language/rule_of_three" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }

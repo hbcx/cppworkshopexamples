@@ -1,0 +1,12 @@
+bad -- shallow copy shares the handle:
+  acquire #1
+  release #1
+  release #1
+liveCount after bad = -1  <- not 0, double free
+
+good -- rule of three gives each its own handle:
+  acquire #2
+  acquire #3
+  release #3
+  release #2
+liveCount after good = 0  <- back to 0
