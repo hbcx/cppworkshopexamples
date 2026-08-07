@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 60}, {"file": "main.cpp", "line": 36}, {"file": "main.cpp", "line": 19, "out": "acquire (live=1)\n"}, {"file": "main.cpp", "line": 37}, {"file": "main.cpp", "line": 22, "out": "bad() threw\nafter bad:  live=1  <- leaked\n\nacquire (live=1)\nrelease (live=0)\ngood() threw\nafter good: live=0  <- clean\n"}]}

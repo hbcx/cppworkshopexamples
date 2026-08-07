@@ -1,0 +1,14 @@
+title: "Transferring ownership with move"
+standard: "C++11"
+difficulty: 2
+summary: "A resource must have exactly one owner, or two destructors release it twice. So a resource-owning RAII type is move-only: copying is disabled and moving transfers the resource, leaving the source empty so its destructor does nothing."
+notes: "A destructor that releases a resource means each resource can be owned by exactly one live object -- if two objects held the same handle, both destructors would release it and you would have a double free. RAII types enforce that by being move-only: the copy constructor and copy assignment are deleted, so you cannot accidentally duplicate the owner, and the move operations TRANSFER the handle rather than copy it. The moved-from object is left holding a sentinel value (here -1) so its destructor knows it owns nothing and does nothing. The transfer is two steps: take the source's handle, then null the source out -- in C++14 and later std::exchange writes that as one expression. The example builds a socket, move-constructs a second from it (ownership moves, the first is now empty), then move-assigns into a third that already owns a different handle -- move assignment must first release what it holds before taking the new handle, or the old one would leak. Watch the live counter: despite three sockets and two ownership transfers, each handle is closed exactly once, and the moved-from sockets close nothing. Marking the moves noexcept matters in practice: it lets containers such as std::vector move these objects instead of copying them (which they cannot, being non-copyable) when they reallocate. This is the rule of five specialised to the common case where the resource is move-only and copying makes no sense."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "move assignment operator", url: "https://en.cppreference.com/w/cpp/language/move_assignment" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

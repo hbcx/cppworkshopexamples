@@ -1,0 +1,8 @@
+- slug: "unique-ptr"
+  note: "The standard-library RAII you reach for first: unique_ptr is a ready-made move-only owner for heap memory, and with a custom deleter for any C handle -- go there instead of writing your own guard for the common cases."
+- slug: "move-semantics"
+  note: "The move-only ownership and rule of five a resource-owning RAII type is built from -- go there for move constructors, transferring a handle with std::exchange, and why copying a resource owner is disabled."
+- slug: "shared-ptr"
+  note: "RAII for a resource with more than one owner: reference-counted cleanup that releases when the last owner goes away -- go there when single ownership does not fit."
+- slug: "pimpl"
+  note: "A sibling idiom that leans on RAII: the unique_ptr-to-Impl member is an owning handle and the rule-of-five plumbing is the same -- go there for the compile-firewall use of an owning pointer."

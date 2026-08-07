@@ -1,0 +1,12 @@
+title: "Anti-pattern: a scope guard with no name"
+standard: "C++11"
+difficulty: 3
+summary: "A guard built as an unnamed temporary is destroyed at the end of the full expression -- the semicolon -- not the end of the block, so it releases immediately and the code it was meant to protect runs unguarded. The fix is to give it a name."
+notes: "A guard only protects the code that runs before its destructor. A named local variable is destroyed at the end of its enclosing block, so it covers the whole block. But a guard built as an unnamed TEMPORARY is destroyed at the end of the full expression it appears in -- the semicolon on that line -- so it is already gone before the next statement runs. The classic form is a lock: writing std::lock_guard<std::mutex>{m}; as a statement on its own locks and then immediately unlocks, so the critical section that follows runs with no lock held. It compiles without a warning, and on a single-threaded test it even appears to work, because nothing is there to race -- the protection is simply absent, which is the worst kind of bug because it hides until concurrency exposes it. The example models the lock with a held flag so the effect is visible without threads: in the bad function the flag is already false by the time the 'critical' work runs, while in the good function -- identical except the guard has a name -- the flag is still true. The fix is trivial and the lesson is sharp: a guard must be a named local (auto lock = ...; or lock_guard<mutex> lock(m);). The mistake usually comes from copying a construction expression without noticing the missing variable name, or from thinking the braces make a scoped block -- they do not; { } after a type name is a temporary object, not a scope."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

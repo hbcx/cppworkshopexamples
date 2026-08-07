@@ -1,0 +1,11 @@
+title: "Acquire in the constructor, release in the destructor"
+standard: "C++11"
+difficulty: 1
+summary: "The whole idiom in one class: the constructor takes a resource, the destructor gives it back, and the language runs the destructor at the end of the scope -- so cleanup is automatic and happens at a known point, with no release call to remember."
+notes: "RAII means Resource Acquisition Is Initialization: you acquire the resource in the constructor, so an object that exists is an object that owns a live resource, and you release it in the destructor, which C++ runs for you when the object goes out of scope. Here the resource is a stand-in file handle -- opening and closing just print a line so you can see the timing. Two things to notice. First, there is no close() call anywhere: the handle closes itself when the enclosing block ends, at the closing brace, whether the block finishes normally or is left early. Second, when a scope holds several RAII objects, their destructors run in REVERSE order of construction -- the last one built is the first torn down -- which is what you want, because a later object may depend on an earlier one. This is the single most useful idiom in C++: memory, locks, files, sockets, database transactions, and temporary state changes are all managed this way, and the standard library's own owning types (std::unique_ptr, std::lock_guard, std::fstream) are RAII wrappers you did not have to write. The rest of this section builds on this base -- cleanup on every exit path, transferring ownership, a reusable guard -- and shows the ways it goes wrong."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

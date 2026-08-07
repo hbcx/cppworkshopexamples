@@ -1,0 +1,8 @@
+acquire manual (live=1)
+manual() threw
+after manual: live=1  <- leaked
+
+acquire raii (live=1)
+release raii (live=0)
+raii() threw
+after raii:   live=0  <- clean

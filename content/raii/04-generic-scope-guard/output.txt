@@ -1,0 +1,10 @@
+working...
+cleanup ran
+---
+begin transaction
+  work failed, leaving early
+  ROLLBACK
+---
+begin transaction
+  work ok
+  COMMIT

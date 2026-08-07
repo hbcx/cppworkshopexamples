@@ -1,0 +1,8 @@
+-- BAD: rely on the destructor to flush --
+caller: done (believes the write succeeded)
+flush: FAILED to write 14 bytes
+~BufferedWriter: backstop flush ok=0 (caller never saw this result)
+
+-- GOOD: flush explicitly and check --
+flush: FAILED to write 14 bytes
+caller: flush failed -- retrying / alerting

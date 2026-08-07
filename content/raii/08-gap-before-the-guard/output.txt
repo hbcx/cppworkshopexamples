@@ -1,0 +1,8 @@
+acquire (live=1)
+bad() threw
+after bad:  live=1  <- leaked
+
+acquire (live=1)
+release (live=0)
+good() threw
+after good: live=0  <- clean

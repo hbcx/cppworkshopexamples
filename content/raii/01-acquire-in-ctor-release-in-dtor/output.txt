@@ -1,0 +1,10 @@
+-- enter block --
+open  app.log
+write app.log: started
+close app.log
+-- left block --
+open  a.txt
+open  b.txt
+write a.txt: hi
+close b.txt
+close a.txt

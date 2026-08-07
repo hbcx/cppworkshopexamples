@@ -1,0 +1,11 @@
+title: "Anti-pattern: a gap between acquiring and the guard"
+standard: "C++11"
+difficulty: 3
+summary: "RAII is only safe if acquisition and ownership are the same step. If you acquire a raw resource, run some code, and only then construct the guard, an exception in that gap leaks the resource -- the guard was never built, so nothing releases it."
+notes: "The whole safety of RAII rests on one thing: the resource is owned from the instant it exists. If you acquire a raw resource, then run code that can throw, and only afterwards hand the resource to a guard, there is a window where the resource is live but owned by nobody -- and a throw in that window leaks it, because the guard's constructor was never reached and so no destructor will ever run. The example shows it with a live counter: the bad function acquires a handle, calls a validation step that throws, and only then constructs the Guard -- the throw skips the guard, and the count stays up (leaked). The fix is to acquire INSIDE the guard's constructor, so obtaining the resource and taking ownership are a single, indivisible step: after that line either the guard exists and owns the resource, or the acquisition threw and there is nothing to leak. A later throw then unwinds through the fully-constructed guard and the resource is released. This is exactly why std::make_unique and std::lock_guard(m) acquire in their constructors rather than taking an already-open raw handle -- and why the older habit of writing p = new T; then handing p to a smart pointer on the next line is discouraged: any throw between the two leaks. The general rule: never let a raw resource sit between acquisition and the guard; make the guard do the acquiring."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

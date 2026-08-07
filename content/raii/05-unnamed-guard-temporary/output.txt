@@ -1,0 +1,8 @@
+bad:
+  lock   (held=1)
+  unlock (held=0)
+  critical work, held=0  <- already false!
+good:
+  lock   (held=1)
+  critical work, held=1  <- protected
+  unlock (held=0)

@@ -1,0 +1,12 @@
+title: "Anti-pattern: a copyable resource owner"
+standard: "C++11"
+difficulty: 3
+summary: "If a class releases a resource in its destructor but leaves copying enabled, a copy duplicates the handle -- not the resource -- so two objects own the same thing and both destructors release it. Releasing twice is a double free. The fix is to make the owner move-only."
+notes: "A class that owns a resource in its destructor must control copying, or the compiler-provided copy will duplicate the handle member and hand you two owners of one resource. When both go out of scope, both destructors release it, and releasing the same resource twice -- a double free, a double fclose -- is real undefined behaviour. Note that since C++11, having a user-declared destructor makes the implicit copy constructor a deprecated feature precisely because of this trap, so the shallow copy here is written as = default to compile cleanly, but leaving copy implicit does exactly the same thing. We do not run the undefined behaviour: instead each handle counts how many times it was released, so the correct program releases each handle once and the bug shows up as a release count of two. The fix is to make the owner move-only: delete the copy operations so a duplicate cannot be made by accident, and provide a move that transfers the handle and nulls the source, so the moved-from object releases nothing. The move-only version releases each handle exactly once. This is the same rule the standard owning types follow -- std::unique_ptr is move-only for this reason, and std::shared_ptr is copyable only because it reference-counts so the release happens once, when the last owner goes away. The sign to watch for: a class with a destructor that frees, closes, or deletes something, and no deleted or user-written copy operations."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }

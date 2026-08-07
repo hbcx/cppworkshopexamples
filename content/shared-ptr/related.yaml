@@ -12,3 +12,5 @@
   note: "A real interning use: a Flyweight factory hands out shared_ptr to interned objects so many logical objects share few physical ones, and the reference count frees a flyweight when its last user is gone."
 - slug: "memento"
   note: "Where sharing is the wrong default: a memento that copies a shared_ptr shares the buffer instead of snapshotting it, so an edit corrupts the saved state -- go there for the shallow-copy trap and why a snapshot needs its own deep copy, not a shared handle."
+- slug: "raii"
+  note: "The idiom shared_ptr automates for shared ownership: tie a resource to object lifetime so it is released without a manual call -- go there for the pattern itself and how to write your own single-owner guard."

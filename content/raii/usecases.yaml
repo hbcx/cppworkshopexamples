@@ -1,0 +1,19 @@
+- problem: "A service protects shared state with a mutex, and the critical section has several early returns and can throw. Every exit must unlock, or the next thread blocks forever."
+  why: "A lock guard unlocks in its destructor, so the mutex is released on every path -- normal return, early return, thrown exception -- from one line at the top. Hand-written lock/unlock has to repeat the unlock on each exit, and the one that is forgotten is a deadlock that only shows up under load."
+  signal: "A mutex locked and unlocked by hand, especially where the code between them has several returns or can throw."
+
+- problem: "A long-running server opens files, sockets, or database connections on many code paths. A single path that skips the close leaks the handle, and the process slowly runs out of descriptors."
+  why: "A handle wrapper closes in its destructor, so the resource is freed on every path automatically, including error paths. Manual close() calls spread through the function are the ones that get skipped when an early return or exception is added later."
+  signal: "A raw handle from an open or connect call with a matching close() far away, or a close() that appears in some branches but not all."
+
+- problem: "A routine makes several changes that must all succeed together -- move money between accounts, update several tables -- and any failure partway through must undo the earlier steps."
+  why: "A scope guard set to roll back, then dismissed once the work commits, undoes the partial changes on any early exit without a rollback call in every catch block. Writing the rollback by hand in each error branch duplicates it and misses the branches added later."
+  signal: "Rollback or undo logic copied into several catch blocks, or a multi-step operation with a cleanup that must run unless the whole thing succeeds."
+
+- problem: "Code must change some ambient state for the length of a block -- a stream's formatting flags, a global setting, a terminal mode -- and restore the old value afterwards no matter how the block ends."
+  why: "A guard that saves the old value in its constructor and restores it in its destructor puts the restore right next to the change and runs it on every exit. A restore written at the end of the block is skipped by an early return or an exception, leaving the state wrong for everything after."
+  signal: "A save-old-value then set-new-value pair at the top of a block with the restore at the bottom, reachable only if nothing returns or throws in between."
+
+- problem: "A program uses a C library whose objects are created and destroyed by paired functions -- a FILE with fopen and fclose, a sqlite3 with open and close, a GPU object with create and delete. The C API has no destructors, so cleanup is manual."
+  why: "Wrapping the handle in a unique_ptr with a custom deleter, or in a small guard, gives the C object a C++ destructor so it is released automatically and moves with its owner. Calling the C close function by hand brings back exactly the leak-on-early-exit problem RAII removes."
+  signal: "Paired C create and destroy calls -- fopen and fclose, malloc and free, xCreate and xDestroy -- bracketing a block of code, with the destroy reachable only on the normal path."

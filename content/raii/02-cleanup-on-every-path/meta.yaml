@@ -1,0 +1,11 @@
+title: "Cleanup that runs on every exit path"
+standard: "C++11"
+difficulty: 2
+summary: "The reason RAII matters: a function has many exits -- the end, an early return, a thrown exception -- and manual cleanup must be repeated on each one. A destructor runs on all of them for free, so a leak that manual code lets through is impossible with RAII."
+notes: "This is the payoff that makes RAII worth using everywhere. The manual version acquires a resource, does work that throws, and has its hand-written release AFTER the work -- so the throw jumps over the release and the resource leaks. You could add a release in the catch block, and before every return, and at the end -- but that is the whole burden: every new exit you add is another place to remember the cleanup, and the one you forget is the bug. The RAII version puts the resource in a guard whose destructor releases it; when the same throw unwinds the stack, the guard is destroyed on the way out and the resource is freed no matter which exit is taken. We make the leak visible with a live counter instead of relying on undefined behaviour: acquire adds one, release removes one, and after each call we print the count -- the manual path ends with the count still up (leaked), the RAII path returns to zero (clean). Note the ordering in the output: in the RAII case the guard's destructor runs while the exception is still unwinding, so the release prints BEFORE the catch handler in main reports the throw. This exception-safety property is the reason the standard library manages every resource this way, and why 'just call close() at the end' is not good enough in code that can throw."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

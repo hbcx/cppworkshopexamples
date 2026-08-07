@@ -18,3 +18,5 @@
   note: "Owning polymorphic objects in a container: an undo/redo history is a vector of unique_ptr<Command>, each command freed automatically once it can no longer be undone -- go there for that use."
 - slug: "pimpl"
   note: "The classic use of unique_ptr as a class member: the pimpl idiom hides a type behind unique_ptr<Impl>, whose incomplete-type rules are exactly what force a hand-written out-of-line destructor -- go there for the compile-firewall idiom and its special-member recipe."
+- slug: "raii"
+  note: "The general idiom unique_ptr is one instance of: acquire in a constructor, release in a destructor, for any resource -- not just heap memory -- go there for scope guards, writing your own move-only owner, and cleanup on every exit path."

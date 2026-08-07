@@ -1,0 +1,11 @@
+title: "Anti-pattern: fallible work only in the destructor"
+standard: "C++11"
+difficulty: 3
+summary: "A destructor cannot return a value and must not throw, so it cannot report failure. Putting work that can fail -- a flush, a commit, a final write -- only in the destructor means a failure is silently swallowed and the caller believes it succeeded. Expose an explicit close() that reports the error."
+notes: "This is the other side of the throwing-destructor rule. A destructor is a fine place to RELEASE something that cannot fail -- freeing memory always succeeds -- but a poor place to do work that can fail, because it has no way to tell anyone. It cannot return a status, and it must not throw, so a failure inside it simply vanishes. The trap is to rely on the destructor for the important final step: a buffered writer whose data is flushed only when the object is destroyed, a transaction that commits in its destructor. If that flush or commit fails, the caller has already moved on believing the work is done, and the error is lost -- silent data loss, the worst kind. std::ofstream has exactly this shape: its destructor flushes and closes, but a write error there is invisible unless you call close() yourself and check the stream. The fix, which the example runs, is to expose an explicit flush()/close()/commit() that performs the fallible work and REPORTS the result -- a return code here, an exception elsewhere -- and is meant to be called on the success path where the caller can react (retry, alert, abort). The destructor still flushes as a last-resort backstop for the paths that forgot, but it is no longer the only place the work happens, so a real failure is seen and handled. The example runs both: the bad path never calls flush() and the failure is only reported from the destructor where no one is listening; the good path calls flush(), checks the result, and reacts. The sign: a class whose destructor performs I/O, a commit, or any operation that can fail, with no public method that does the same thing and returns whether it worked."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

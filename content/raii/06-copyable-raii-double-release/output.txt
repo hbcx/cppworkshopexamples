@@ -1,0 +1,10 @@
+-- copyable owner --
+open  1
+close 1 (release #1)
+close 1 (release #2)
+handle 1 released 2 times  <- double release
+
+-- move-only owner --
+open  2
+close 2 (release #1)
+handle 2 released 1 times  <- exactly once

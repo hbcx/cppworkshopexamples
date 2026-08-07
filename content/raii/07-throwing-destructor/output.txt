@@ -1,0 +1,9 @@
+-- normal: commit, then destroy --
+open
+commit: flushing
+~Saver: already committed, nothing to do
+
+-- early exit: commit skipped, destructor backstops --
+open
+~Saver: discarding uncommitted work (no throw)
+caught: boom

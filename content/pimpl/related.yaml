@@ -6,3 +6,5 @@
   note: "The tool pimpl is built on: the implementation is owned by a unique_ptr<Impl>, and its incomplete-type rules are exactly what force the out-of-line destructor -- go there for unique_ptr ownership, custom deleters, and make_unique."
 - slug: "crtp"
   note: "The sibling idiom with the opposite goal: pimpl hides the implementation behind a pointer to cut compile coupling, where CRTP pulls it into the header to inline it -- go there for static polymorphism, mixins, and per-type state."
+- slug: "raii"
+  note: "The idiom the unique_ptr-to-Impl member relies on: acquire in the constructor, release in the destructor -- go there for scope guards, move-only ownership, and cleanup on every exit path, the general form of what pimpl's owning pointer does."

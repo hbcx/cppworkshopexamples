@@ -1,0 +1,12 @@
+title: "A generic scope guard"
+standard: "C++11"
+difficulty: 3
+summary: "Writing a whole class per resource is a lot of boilerplate when all you need is 'run this code when the scope exits'. A generic guard stores a callable and runs it in its destructor -- and with a dismiss() it becomes commit-or-rollback: undo by default, cancelled on success."
+notes: "When the cleanup is a small piece of code rather than a reusable resource type, a full RAII class is overkill. A scope guard is a tiny template that holds any callable and runs it in its destructor -- one tool for locks, rollbacks, restoring state, and C-API cleanup, each expressed as a lambda. This is the idiom behind std::experimental::scope_exit, gsl::finally, and folly's SCOPE_EXIT. The refinement is dismiss(): the guard runs its action only while active, so you set it up to undo the work, then call dismiss() on the success path to cancel the undo. That turns it into commit-or-rollback -- the action rolls back on any early exit or exception, and is skipped once the work has committed -- which is the exception-safe way to write a multi-step operation without duplicating the rollback in every catch. Two implementation points. The action is stored by value and the guard owns it, so the guard is made non-copyable (copying would run the action twice) but movable, with the moved-from guard dismissed so only one copy fires. And because this is C++11, there is no class template argument deduction, so a small guard() factory function deduces the callable's type for you -- in C++17 and later you could construct ScopeGuard directly. The trade-off against a named RAII class: a scope guard is quick and local, but a class documents the resource, can be passed around and stored, and centralises the logic when the same resource is managed in many places -- reach for the guard for one-off cleanup, the class for a resource you own repeatedly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

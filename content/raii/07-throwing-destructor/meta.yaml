@@ -1,0 +1,11 @@
+title: "Anti-pattern: throwing from a destructor"
+standard: "C++11"
+difficulty: 3
+summary: "Destructors run during stack unwinding, when another exception may already be in flight, and C++ cannot handle two at once -- so a throw that escapes a destructor calls std::terminate. Since C++11 destructors are noexcept by default, so it terminates even with no second exception. Report failure from an explicit method instead."
+notes: "A destructor is the wrong place to throw. Destructors run while the stack unwinds from an exception, and if a destructor throws at that moment there are two exceptions in flight and the language has no way to choose -- so it calls std::terminate and the program dies. Since C++11 destructors are implicitly noexcept, so a throw that escapes one calls std::terminate even without a second exception already active. This example does NOT run the throwing destructor -- doing so would abort the process and, being nondeterministic across runs and compilers, could not be captured anyway; the dangerous line is shown in a comment. The rule it teaches: a destructor must not let an exception escape. But release operations can genuinely fail -- flushing a buffer, committing a transaction, closing a file with unwritten data -- so where do you report that? The answer, which the fixed code runs, is to split the two jobs: expose an explicit commit() (or close()) that performs the fallible work and CAN report failure through a return value or an exception, meant to be called on the success path where the caller can handle it; and let the destructor be a silent last-resort backstop that cleans up if commit() was never called but never throws. The example shows both paths -- committing normally, and an exception that skips the commit so the destructor backstops without throwing. This mirrors the standard library: std::fstream's destructor closes the file but swallows any error, and if you care whether the final write succeeded you call close() yourself and check the stream state."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

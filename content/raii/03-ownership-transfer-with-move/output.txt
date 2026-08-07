@@ -1,0 +1,8 @@
+open  fd=42 (live=1)
+move-construct fd=42
+-- a is moved-from, b owns 42 --
+open  fd=7 (live=2)
+close fd=7 (live=1)
+move-assign  fd=42
+-- c owns 42 now, 7 was closed --
+close fd=42 (live=0)
