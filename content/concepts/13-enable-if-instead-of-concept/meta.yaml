@@ -1,0 +1,12 @@
+title: "Anti-pattern: enable_if SFINAE instead of a concept"
+standard: "C++20"
+difficulty: 3
+summary: "Constraining a template with std::enable_if means an extra template parameter with a defaulted value -- the classic SFINAE trick. It is verbose, easy to misplace, and gives worse errors than a named concept. The same constraint is one word before auto: std::integral auto."
+notes: "Before C++20 the way to constrain a template was SFINAE, usually spelled with std::enable_if: you add a template parameter like std::enable_if_t<std::is_integral_v<T>, int> = 0, which quietly removes the overload from consideration when the condition is false. It works, and it is everywhere in older code, but it has real costs. It is verbose and cryptic -- the extra parameter and the trailing = 0 have nothing to do with what the function does. It is easy to get wrong: put the enable_if in the wrong place, or forget it on one overload, and the constraint silently does nothing. And when a call is rejected, the error is a no-matching-function message with the enable_if machinery spilled into it, rather than a plain statement of the unmet requirement. A concept replaces all of that: twiceNew is written with std::integral auto, which is shorter, says exactly what it means, and rejects a wrong argument at the call site with a message naming the concept. This example runs both versions on an int to show they behave identically, and describes the rejection of a double in a comment. The upgrade path in real code is mechanical -- an enable_if_t<Trait<T>::value> becomes a concept or a requires-clause on the same condition -- and it is one of the highest-value reasons to move a template-heavy codebase to C++20: the same constraints, far more readable, with errors a caller can act on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

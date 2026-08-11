@@ -1,0 +1,13 @@
+title: "Composing concepts with and, or, not"
+standard: "C++20"
+difficulty: 2
+summary: "Concepts combine like boolean expressions: && requires both, || requires either, ! negates, and one concept can be defined in terms of another (refinement). Number is integral or floating_point; SignedNumber refines Number with a signedness check; TextLike is convertible-to-string but not integral."
+notes: "A concept is a compile-time boolean, so concepts compose with the same operators you already know. Conjunction with && demands both parts: SignedNumber here is Number<T> && std::is_signed_v<T>. Disjunction with || demands either: Number is std::integral<T> || std::floating_point<T>, satisfied by any built-in number. Negation with ! excludes: TextLike is convertible to std::string but not integral, which keeps a char (an integer type) out even though it converts to string. And a concept can be defined in terms of another -- SignedNumber is written using Number -- which is called refinement, and it matters for more than tidiness: the standard library builds its concepts this way (regular refines semiregular refines copyable), and refinement is exactly what lets the compiler ORDER overloads later, because a concept built from another SUBSUMES it. That subsumption is the subject of a later example; here the point is just the algebra. Two practical notes. Prefer combining existing concepts (&&, ||) over writing one big requires-expression -- it reads better and composes with library concepts. And a conjunction of concepts is not the same as a single requires-expression listing several requirements: the difference shows up in subsumption, where separate concept terms can be compared and a monolithic requires-expression is one opaque atomic constraint."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }
+  - { name: "std::floating_point", url: "https://en.cppreference.com/w/cpp/concepts/floating_point" }
+  - { name: "std::convertible_to", url: "https://en.cppreference.com/w/cpp/concepts/convertible_to" }

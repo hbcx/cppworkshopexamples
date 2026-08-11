@@ -1,0 +1,11 @@
+title: "Anti-pattern: overloads whose constraints do not subsume"
+standard: "C++20"
+difficulty: 3
+summary: "Constraint-based overloading only orders overloads when one constraint is BUILT FROM the other. Two overloads on independent concepts a type happens to satisfy are ambiguous, because neither subsumes the other. The fix is to define the stronger concept in terms of the weaker, so subsumption can pick the more refined overload."
+notes: "Subsumption is what lets the compiler prefer a more constrained overload, but it works only through containment: constraint A subsumes constraint B when A is written in a way that INCLUDES B -- typically because A is defined using B. Two concepts that are simply unrelated do not subsume each other, even if some type satisfies both, and overloading on them is ambiguous for that type. This example does it the RIGHT way to keep it compiling: Fast is Small, and Faster is Small && Aligned4, so Faster is built from Fast and subsumes it; an int, which is both small and suitably aligned, unambiguously picks the Faster overload, while a char, small but not aligned enough, picks Fast. The anti-pattern, described in the comment because it does not compile, is to overload on two INDEPENDENT concepts instead -- one on Small, one on Aligned4 -- with no relationship between them. Then a type that satisfies both makes the call ambiguous: both overloads are viable, neither constraint contains the other, and the compiler cannot choose. The error is a confusing ambiguous-call message that does not obviously point at the missing subsumption. The fix is the shape shown here: when you want one overload to win over another, define its concept in terms of the other's (Faster = Small && Aligned4), so the constraints are ordered by containment. If two capabilities really are independent and a type can have both, they cannot order overloads on their own -- combine them into a single more-refined concept, or dispatch on that combination explicitly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "requires clause", url: "https://en.cppreference.com/w/cpp/language/constraints" }

@@ -1,0 +1,11 @@
+title: "Constrain a template with a concept"
+standard: "C++20"
+difficulty: 1
+summary: "A concept is a named constraint on a template parameter. Writing template <std::integral T> means only integer types are accepted, and a call with the wrong type is rejected at the call site with a short message -- instead of a wall of errors from deep inside the function body."
+notes: "A concept is a compile-time predicate on types, given a name, that you attach to a template parameter to say what that parameter must support. Here twice() is constrained with the standard concept std::integral, so it accepts int, long, unsigned and the other integer types, and nothing else. The value this adds over a plain template <class T> is the error message. An unconstrained template only fails when something inside its body does not work for the type, so a bad call produces pages of errors pointing deep into the function, or into the library it calls. A constrained template checks the requirement first: pass a double to twice() and the compiler rejects the call right there, saying the argument does not satisfy std::integral -- short, early, and pointing at your call, not at line 400 of a header. This is the headline reason concepts exist, and every other feature in this section builds on it: naming the requirements a template needs, so misuse is caught at the boundary with a message a human can read. std::integral is one of many concepts the standard library already provides; the next examples show how to write your own and where else a constraint can go."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

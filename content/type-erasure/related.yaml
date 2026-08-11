@@ -10,3 +10,5 @@
   note: "Where std::function-based type erasure is the pattern in action: a Strategy stored as a std::function erases the concrete algorithm behind one callable type -- go there for the pattern in its object, std::function, and policy forms."
 - slug: "tag-dispatch"
   note: "The compile-time way to choose an implementation: tag dispatch picks an overload by type with no run-time cost, where type erasure defers the choice to a virtual call -- go there when the type is known at compile time and you want the branch gone."
+- slug: "concepts"
+  note: "The compile-time way to state the same interface: a concept requires the operations a type must provide, checked when a template is used, where type erasure checks them at run time behind a virtual call -- go there for stating a duck-typed interface with no base class and no vtable."

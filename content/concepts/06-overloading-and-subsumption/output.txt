@@ -1,0 +1,4 @@
+some value
+shape, area=3.14
+named box, area=4
+done

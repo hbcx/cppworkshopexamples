@@ -1,0 +1,5 @@
+Box(7)
+Box<Opaque> built and used without print()
+Kind<int>    = integral
+Kind<double> = generic
+done

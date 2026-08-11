@@ -1,0 +1,11 @@
+title: "A concept as a compile-time bool"
+standard: "C++20"
+difficulty: 3
+summary: "A concept is just a compile-time boolean, so it can drive if constexpr inside a single function instead of splitting into overloads. Each branch is compiled only for the types that reach it, so a branch may use members the other types do not have. One describe() handles integers, printable types and opaque ones."
+notes: "Everywhere a concept has been used so far it named a constraint, but a concept is also simply a bool you can evaluate at compile time -- Printable<T> is true or false -- so it works anywhere a compile-time condition does, including if constexpr. That gives a second way to branch on a type: instead of writing separate overloads and letting subsumption pick one, write one function with if constexpr (Concept<T>) and handle each case in a branch. The key property is that if constexpr discards the untaken branches before they are instantiated, so a branch may use an operation only some types support -- the printable branch here does std::cout << x, which would not compile for an opaque type, but that branch is never instantiated for one. This is the same reason a run-time if cannot do the job (it would have to compile every branch for every type); if constexpr, driven by a concept, can. When to use which: reach for if constexpr when the alternatives live naturally in one function and share code around the branch, and reach for constrained overloads when the cases are separate functions, when you want callers to extend the set with their own overloads, or when subsumption should order them. Both are cleaner than the pre-C++20 tag dispatch they replace; the concept-as-bool form is often the most direct for a small, closed set of cases."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

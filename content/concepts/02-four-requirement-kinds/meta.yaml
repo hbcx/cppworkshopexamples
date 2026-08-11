@@ -1,0 +1,12 @@
+title: "The four kinds of requirement"
+standard: "C++20"
+difficulty: 2
+summary: "A requires-expression is how you write your own concept, and it can hold four kinds of requirement: simple (an expression must be valid), type (a type name must exist), compound (an expression must be valid AND its result must satisfy a concept), and nested (another concept must hold). This one concept uses all four."
+notes: "You write your own concept with a requires-expression: requires(params) { requirements }. It is not run -- the compiler only checks whether each requirement is well-formed for the type, and the whole thing is true when they all are. There are exactly four kinds of requirement, and this Readable concept uses each. A SIMPLE requirement is just an expression followed by a semicolon -- c.begin(); -- which asserts the expression compiles, nothing more. A TYPE requirement is the keyword typename plus a type name -- typename T::value_type; -- asserting that the type exists (the container names its element type). A COMPOUND requirement wraps an expression in braces and can add a return-type constraint -- { c.size() } -> std::convertible_to<std::size_t>; -- asserting the call is valid and its result converts to size_t; it may also assert noexcept by writing { expr } noexcept. A NESTED requirement is the keyword requires plus a constraint -- requires std::default_initializable<typename T::value_type>; -- asserting that another concept holds, which is how you demand properties of associated types. Together they let a concept describe an interface precisely: what must be callable, what types must exist, what those calls return, and what further concepts must be satisfied. Two things to keep straight: the compound arrow checks the result against a CONCEPT, not a type (write std::same_as<X> to demand an exact type), and a bare type in a compound like { c.size() } -> std::size_t is a compile error -- the right-hand side must be a concept."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "requires expression", url: "https://en.cppreference.com/w/cpp/language/requires" }
+  - { name: "std::convertible_to", url: "https://en.cppreference.com/w/cpp/concepts/convertible_to" }

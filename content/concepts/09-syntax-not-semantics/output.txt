@@ -1,0 +1,4 @@
+total(ints)      = 6
+total(strings)   = abc
+sumNumbers(ints) = 6
+done

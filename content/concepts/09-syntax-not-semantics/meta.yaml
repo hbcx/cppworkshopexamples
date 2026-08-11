@@ -1,0 +1,11 @@
+title: "Anti-pattern: a concept that checks syntax, not meaning"
+standard: "C++20"
+difficulty: 3
+summary: "A requires-expression only checks that an expression compiles, not what it means. An Addable concept written as requires { a + b; } accepts std::string, whose + is concatenation, so a total() built on it silently concatenates strings. The fix is a semantic concept -- constrain to actual numbers -- so a type whose + means something else cannot slip in."
+notes: "A concept constrains an interface, not behaviour: a requires-expression asks whether an expression is well-formed, and it cannot ask what that expression DOES. This is easy to forget when a concept is named after an operation. Here Addable checks that a + b compiles and returns T, which sounds like it captures numbers -- but std::string satisfies it too, because + concatenates strings and returns a string. So total(), constrained on Addable, compiles for a vector of strings and runs, silently concatenating them into abc when a reader of the name expected numeric addition. Nothing is technically wrong; the concept did exactly what it said, which was to check the syntax, and the syntax matched. The bug is the gap between what the name implies and what the constraint guarantees. The fix is to constrain on meaning, not shape: Number is std::integral<T> || std::floating_point<T>, a concept whose members genuinely are numbers, so sumNumbers rejects std::string at the call. The general lesson is that a syntactic concept is a real risk exactly where an operator is overloaded to mean different things -- +, *, <, [] -- and the guard is to reach for a semantic standard concept (integral, floating_point, totally_ordered) or to encode the meaning some other way, rather than assuming a valid expression implies the behaviour you had in mind. Concepts move errors earlier and make them readable; they do not verify semantics, and treating a passing constraint as proof of correct meaning is the trap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "requires expression", url: "https://en.cppreference.com/w/cpp/language/requires" }

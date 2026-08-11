@@ -1,0 +1,13 @@
+title: "Every place a constraint can be written"
+standard: "C++20"
+difficulty: 2
+summary: "The same constraint can be written in six places, all meaning the same thing: a constrained template parameter, a requires-clause after the template header, a trailing requires-clause after the parameter list, an abbreviated auto parameter, a constrained return type, and a constrained variable. Pick the one that reads best."
+notes: "A constraint is not tied to one syntax; C++20 lets you attach it in several positions, and they are equivalent -- all six functions here accept exactly the integer types and reject the rest at the call site with the same reason. Position one is the constrained template parameter: template <std::integral T>, the most common form, reading like a typed parameter. Position two is a requires-clause right after the template header: template <class T> requires std::integral<T>, which is what you use when the constraint is a longer expression or combines several concepts. Position three is a TRAILING requires-clause after the parameter list: T f(T x) requires std::integral<T>, handy when the constraint depends on the parameters. Position four is the abbreviated function template: write the concept before auto in the parameter -- void f(std::integral auto x) -- the shortest form, where auto alone would mean unconstrained. The last two are placeholder types outside parameters: a constrained RETURN type, std::integral auto make(), which checks the returned value satisfies the concept, and a constrained VARIABLE, std::integral auto x = make(), which checks the initializer. Which to reach for is a style choice: the template-parameter and abbreviated forms are the everyday ones, the requires-clause forms are for constraints too big or too parameter-dependent to fit inline, and the placeholder-type forms document intent at a return or a variable. What matters is that a bare auto or a bare template <class T> constrains NOTHING -- the constraint is what turns a wrong call into a clear, early error."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "abbreviated function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }
+  - { name: "requires clause", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

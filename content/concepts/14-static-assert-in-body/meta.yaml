@@ -1,0 +1,12 @@
+title: "Anti-pattern: a static_assert in the body, not a constraint"
+standard: "C++20"
+difficulty: 3
+summary: "Checking a requirement with a static_assert inside the body is not the same as constraining the signature. A body check does not take part in overload resolution, so the function is still selected for a wrong type and then hard-errors, and you cannot add a fallback overload. A constraint in the signature disables the overload cleanly and lets a second one handle the rest."
+notes: "It is tempting to guard a template with a static_assert in its body -- static_assert(std::is_integral_v<T>) at the top of the function -- and it does produce a readable message. But it is a weaker tool than a constraint, because it runs only AFTER the function has been selected. A static_assert in the body cannot remove the function from overload resolution: for any T the function is still a candidate, still chosen, and only then does the assert fire. Two consequences follow. First, the error is late -- the call resolved to this function, and the failure is inside it, not a statement that the call itself was wrong. Second, and worse, you cannot provide an alternative: because the function is always selected, there is no room for a second overload to handle the types the first rejects, so a body check is a dead end for anything but a single all-or-nothing template. A constraint in the SIGNATURE -- template <std::integral T>, or a requires-clause -- takes part in overload resolution, so the constrained overload is viable only for integers, and a plain unconstrained overload cleanly handles everything else. This example runs the concept version routing an int and a std::string to two different overloads, which the static_assert version simply cannot do, and describes the static_assert failure in a comment. The rule: put a requirement where it can be checked BEFORE selection -- in the signature as a concept -- not in the body where it only fires after the damage is done. A static_assert is still fine for a genuine hard invariant that no type should ever violate; it is the wrong tool for choosing between types."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

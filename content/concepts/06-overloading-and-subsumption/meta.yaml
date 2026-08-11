@@ -1,0 +1,12 @@
+title: "Overloading and subsumption"
+standard: "C++20"
+difficulty: 3
+summary: "Constraints order overloads: when several are viable, the most constrained one wins. Because HasName is defined as HasArea plus more, it SUBSUMES HasArea, so a type with both area() and name() picks the HasName overload unambiguously, a type with only area() picks HasArea, and anything else picks the unconstrained overload."
+notes: "Concepts replace the old SFINAE and tag-dispatch machinery for picking one of several overloads by capability, and they do it through subsumption. When more than one overload is viable for a call, the compiler prefers the one whose constraints are strictly stronger -- the one that requires everything the other does and then some. Here describe has three overloads: an unconstrained one, one constrained on HasArea (the type has area()), and one constrained on HasName, which is defined as HasArea<T> plus a name(). Because HasName is built FROM HasArea, its normalized constraints contain HasArea's, so HasName subsumes HasArea, which in turn subsumes the unconstrained overload. A NamedBox satisfies all three, and the most constrained -- HasName -- is chosen with no ambiguity; a Circle satisfies only HasArea and the unconstrained one, and HasArea wins; a plain int satisfies only the unconstrained one. This is the clean replacement for a chain of enable_if overloads or a tower of tag types: you state each capability as a concept, define the stronger ones in terms of the weaker, and the compiler orders them for you. The one rule to remember is that subsumption only orders overloads when one constraint is BUILT FROM the other -- two unrelated concepts that a type happens to satisfy do not subsume, and the call is ambiguous, which is the trap the anti-patterns cover."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "requires expression", url: "https://en.cppreference.com/w/cpp/language/requires" }
+  - { name: "requires clause", url: "https://en.cppreference.com/w/cpp/language/constraints" }

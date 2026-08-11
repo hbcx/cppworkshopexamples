@@ -1,0 +1,4 @@
+old integer: 42
+new integer: 42
+new other:   hi
+done

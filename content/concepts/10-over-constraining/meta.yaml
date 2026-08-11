@@ -1,0 +1,11 @@
+title: "Anti-pattern: over-constraining rejects valid types"
+standard: "C++20"
+difficulty: 3
+summary: "A concept that demands more than the algorithm uses turns away types that would work. An Indexable concept requires operator[], but the function only iterates, so std::list is rejected for no reason. The fix is to require exactly what you use -- begin() and end() -- so the function accepts every type it can actually handle."
+notes: "Concepts should ask for what the code uses, and no more. Requiring extra capabilities does not make the code safer; it just narrows the set of types that qualify, turning away ones that would have worked. Here countStrict only walks the range with begin() and end() and never indexes anything, yet its concept Indexable demands operator[]. A std::vector has operator[] and is accepted, but a std::list does not, so the call countStrict(list) is rejected -- even though counting a list is perfectly possible and the function would have done it correctly. The requirement bought nothing and cost a valid use. countLoose fixes it by constraining on exactly what the body needs, Iterable (begin() and end()), so it accepts both the vector and the list. Over-constraining tends to creep in two ways: copying a bigger concept when a smaller one would do (asking for a random-access range when you only iterate), and demanding an exact type where a weaker concept fits (std::same_as<std::size_t> on a size() that any integer would satisfy, instead of std::convertible_to<std::size_t>). Both shrink the type set for no gain. The guideline is to write the loosest constraint that still guarantees the body compiles: it maximises reuse, and it keeps the concept honest about what the algorithm truly requires -- which is also what makes the error message meaningful when a type genuinely cannot be used."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "requires expression", url: "https://en.cppreference.com/w/cpp/language/requires" }

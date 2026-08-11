@@ -1,0 +1,12 @@
+title: "Anti-pattern: an unconstrained auto constrains nothing"
+standard: "C++20"
+difficulty: 3
+summary: "A plain auto parameter is an unconstrained template parameter -- it accepts every type, and any check happens deep inside the body, which is the pre-concepts error experience concepts were meant to remove. Writing the concept before auto, std::integral auto, is what actually constrains it and rejects wrong types at the call site."
+notes: "C++20 lets you write auto as a function parameter, which quietly creates a template: auto doubledBad(auto x) is the same as a template <class T> function. The trap is thinking the auto restricts anything -- it does not. An unconstrained auto accepts every type, and if the body does something the type cannot do, the error appears inside the body, pointing at the operation rather than the call, which is exactly the deep, unreadable failure concepts were introduced to fix. The fix is one word in the right place: std::integral auto x writes the concept before auto and turns the parameter into a CONSTRAINED one, so a wrong argument is rejected at the call site naming the unsatisfied concept. The example is deliberately sneaky: doubledBad(x) returns x + x, and calling it with a std::string happens to compile, because string + string concatenates -- so the missing constraint hides until someone passes a type where + does not exist, at which point the error lands deep in the body. doubledGood, constrained on std::integral, rejects the string at the call with a clear message. The rule is simple: a bare auto parameter (or a bare template <class T>) states no requirement, so the template is unconstrained and its misuse fails late and far away. If a template needs its argument to support something, say so with a concept -- before auto, as a requires-clause, or as a constrained template parameter -- and get the early, local error that is the whole point."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "abbreviated function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "tag-dispatch"
+  note: "What concepts modernize: tag dispatch selected an overload by a trait through an extra tag argument in C++11/17, where constrained overloads ordered by subsumption do the same job directly in C++20 -- go there for the older technique and why concepts replace most of it."
+- slug: "crtp"
+  note: "The other side of static polymorphism: CRTP binds a call to the derived type at compile time, and concepts constrain which types a template accepts -- go there for compile-time polymorphism with no vtable, often constrained by a concept."
+- slug: "type-erasure"
+  note: "The run-time answer to the same interface question: type erasure gives one value type that accepts anything matching an interface, checked through a virtual call, where a concept states the interface as a compile-time contract with no vtable -- go there when the type is only known at run time."

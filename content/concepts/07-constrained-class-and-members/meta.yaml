@@ -1,0 +1,12 @@
+title: "Concepts on classes, members and specializations"
+standard: "C++20"
+difficulty: 3
+summary: "Constraints work beyond function templates. A member function can carry a trailing requires so it exists only for some T -- Box::print() is available only when T is printable, while the rest of Box works for any T. And a class template can have a constrained partial specialization, chosen by a concept: Kind picks a compact form for integral types."
+notes: "A constraint is not limited to whole function templates; it can sit on an individual member or select a class specialization, which lets a generic type adapt its surface to its parameter. The first case is a conditionally-available member: Box<T> stores any T and its get() works for all of them, but print() carries a trailing requires Printable<T>, so it EXISTS only when T can be written to a stream. For a printable T you call print() normally; for a non-printable T the rest of Box is fine and only print() is absent -- and calling it is a clean compile error at the call, naming the unsatisfied concept, not a confusing failure inside the member body. This is how a container might expose hashing only when its element is hashable, or comparison only when the element is comparable, without splitting into separate class templates. The second case is a constrained partial specialization: Kind has a primary template and a specialization written template <std::integral T> struct Kind<T>, so integral types select the specialized form and everything else falls to the primary. A constrained specialization is more specialized than the primary when its constraint is satisfied, so this is concept-driven selection at the type level, the class-template counterpart of constrained overloading. Together they show the reach of concepts: the same named requirements steer function overloads, individual members, and which specialization a type gets."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "requires clause", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+  - { name: "std::same_as", url: "https://en.cppreference.com/w/cpp/concepts/same_as" }

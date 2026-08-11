@@ -12,3 +12,5 @@
   note: "The other compile-time dispatch technique: tag dispatch selects an overload from a type trait or category, where CRTP selects an implementation by the derived type -- go there for choosing a function by a compile-time property rather than by inheritance."
 - slug: "nvi"
   note: "The run-time hook CRTP replaces at compile time: NVI wraps a private VIRTUAL step in a non-virtual base method, where CRTP inlines the derived step with no vtable -- go there for the run-time customization point and the base-owns-the-call structure both idioms share."
+- slug: "concepts"
+  note: "How to constrain the templates CRTP is built from: a concept states what the derived type must provide, so a CRTP base can require its interface and reject a wrong parameter with a clear message -- go there for concepts, requires-expressions, and constrained templates."

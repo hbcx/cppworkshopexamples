@@ -8,3 +8,5 @@
   note: "Where the iterator categories that example 03 dispatches on come from: the pattern that defines input, forward, bidirectional and random-access traversal -- go there for the iterator concept and how containers expose it."
 - slug: "visitor"
   note: "Dispatch on type done at run time: Visitor uses double dispatch through virtual calls to pick behaviour by an object's dynamic type, the run-time answer to what tag dispatch does at compile time -- go there for double dispatch and when a run-time type switch is unavoidable."
+- slug: "concepts"
+  note: "What replaces this in C++20: constrained overloads ordered by subsumption select an implementation by a named requirement directly, where tag dispatch needed an extra tag argument and a trait -- go there for concepts, the requires-expression, and the modern form of this dispatch."

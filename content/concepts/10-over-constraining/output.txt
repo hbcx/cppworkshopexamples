@@ -1,0 +1,4 @@
+countStrict(vector) = 3
+countLoose(vector)  = 3
+countLoose(list)    = 4
+done

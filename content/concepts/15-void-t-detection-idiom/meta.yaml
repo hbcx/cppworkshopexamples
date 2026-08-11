@@ -1,0 +1,12 @@
+title: "Anti-pattern: the void_t detection idiom instead of requires"
+standard: "C++20"
+difficulty: 3
+summary: "Detecting whether a type has a member the pre-C++20 way takes a primary trait, a partial specialization keyed on std::void_t, and std::declval -- several lines of boilerplate for one question. A requires-expression says the same thing in one readable line: requires(const T& t) { t.size(); }."
+notes: "Asking whether a type supports an expression -- has a size() member, is callable, has a nested type -- used to require the detection idiom: a primary trait defaulting to false_type, and a partial specialization keyed on std::void_t<decltype(...)> that matches only when the expression is well-formed, pulling in std::declval to name a value of the type without constructing one. It works and it is a clever use of SFINAE, but it is a lot of machinery for one query, it is hard to read, and every new thing you want to detect is another six-line trait. A requires-expression collapses all of it: concept HasSize = requires(const T& t) { t.size(); }; is one line that reads as what it checks, and it composes with other concepts directly. This example computes the same answer both ways for a std::vector (has size) and an int (does not), so you can see they agree, and then never needs the trait again. Beyond being shorter, the concept form is usable everywhere a constraint goes -- as a template parameter, a requires-clause, an if constexpr condition -- while the old trait only gave you a ::value you then had to feed into enable_if or if constexpr yourself. When you meet a void_t detection trait in existing code, it almost always rewrites directly to a requires-expression on the same decltype expression, and the result is code a reader can follow."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "std::void_t", url: "https://en.cppreference.com/w/cpp/types/void_t" }
+  - { name: "requires expression", url: "https://en.cppreference.com/w/cpp/language/requires" }

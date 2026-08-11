@@ -1,0 +1,13 @@
+title: "The standard library concepts"
+standard: "C++20"
+difficulty: 2
+summary: "You rarely need to write your own concept: the standard library already names the common requirements. A tour of the families -- core (same_as, convertible_to, derived_from), arithmetic (integral, floating_point), object (movable, copyable, regular), comparison (equality_comparable, totally_ordered) and callable (invocable, predicate) -- with a small algorithm constrained on std::predicate."
+notes: "Before writing a requires-expression, check whether the standard library already has the concept. The header concepts (plus a few in iterator and ranges) name the requirements that come up again and again, grouped into families. The CORE language concepts describe relationships between types: std::same_as for the exact same type, std::convertible_to for an implicit conversion, std::derived_from for a base class. The ARITHMETIC concepts: std::integral, std::signed_integral, std::unsigned_integral, std::floating_point. The OBJECT concepts describe how a type behaves as a value: std::movable, std::copyable, std::semiregular (default-constructible and copyable) and std::regular (semiregular plus equality) -- the last is the shape most value types should have. The COMPARISON concepts: std::equality_comparable (has ==) and std::totally_ordered (has the full set of relational operators). And the CALLABLE concepts: std::invocable<F, Args...> for anything you can call with those arguments, and std::predicate<F, Args...> for a callable whose result is usable as bool. This example asserts a batch of them and then constrains a small countIf on std::predicate, so an argument that is not callable-returning-bool is rejected at the call. Reaching for these instead of hand-writing requires-expressions keeps your constraints consistent with the rest of the ecosystem and with the standard algorithms, which are constrained on exactly these names."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "concepts", url: "https://en.cppreference.com/w/cpp/language/constraints" }
+detailed_tags:
+  - { name: "std::invocable", url: "https://en.cppreference.com/w/cpp/concepts/invocable" }
+  - { name: "std::same_as", url: "https://en.cppreference.com/w/cpp/concepts/same_as" }
+  - { name: "requires clause", url: "https://en.cppreference.com/w/cpp/language/constraints" }
