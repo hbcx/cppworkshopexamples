@@ -6,3 +6,5 @@
   note: "The other side of static polymorphism: CRTP binds a call to the derived type at compile time, and concepts constrain which types a template accepts -- go there for compile-time polymorphism with no vtable, often constrained by a concept."
 - slug: "type-erasure"
   note: "The run-time answer to the same interface question: type erasure gives one value type that accepts anything matching an interface, checked through a virtual call, where a concept states the interface as a compile-time contract with no vtable -- go there when the type is only known at run time."
+- slug: "constexpr-consteval"
+  note: "The other half of compile-time C++: concepts constrain WHICH types a template takes, where constexpr and consteval decide WHEN code runs -- go there for compile-time evaluation, immediate functions, and is_constant_evaluated, the sibling C++20 feature."

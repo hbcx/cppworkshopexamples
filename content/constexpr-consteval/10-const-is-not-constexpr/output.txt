@@ -1,0 +1,3 @@
+const from runtime = 8
+constexpr size = 8, array holds 8
+done

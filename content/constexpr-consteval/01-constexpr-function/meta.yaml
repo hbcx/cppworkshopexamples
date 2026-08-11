@@ -1,0 +1,11 @@
+title: "A constexpr function runs at compile time and run time"
+standard: "C++14"
+difficulty: 1
+summary: "A constexpr function can be evaluated by the compiler when its arguments are constants, and it runs normally at run time otherwise -- one function, both worlds. C++14 lets it use loops and local variables. Here factorial() folds to a constant in static_assert and a constexpr variable, and also runs on a value known only at run time."
+notes: "constexpr on a function means it is ALLOWED to be evaluated at compile time -- not that it always is. When you call it in a context that needs a constant (a static_assert, the initializer of a constexpr variable, an array bound) and pass constant arguments, the compiler runs the function during compilation and bakes the result into the program. Call the same function with a value known only at run time, and it runs at run time like any ordinary function. That dual nature is the whole point: you write one factorial() and use it both to size a compile-time table and to compute a number from user input, with no duplicate run-time version. C++11 allowed constexpr functions but restricted them to essentially a single return statement; C++14 relaxed that, so the body here can declare a local and loop, which is how real constexpr code is written today. Two things worth stating. The compiler only evaluates the call at compile time when the CONTEXT forces it (a constant expression) -- in a plain statement it is free to defer to run time, which the anti-patterns explore. And a constexpr function must be capable of constant evaluation for SOME arguments; if its body can never be constant-evaluated, marking it constexpr is meaningless and, before C++23, ill-formed. For now the model to hold is simple: constexpr means may run at compile time, and does when a constant is required."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }

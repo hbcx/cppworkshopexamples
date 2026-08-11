@@ -6,3 +6,5 @@
   note: "Why moving a std::array is not a steal: with no heap buffer to hand over, a move has to copy every element."
 - slug: "tuple"
   note: "The heterogeneous fixed-size bundle: when the elements are of different types, reach for tuple and its get/apply interface."
+- slug: "constexpr-consteval"
+  note: "Where a std::array earns its keep at compile time: it is the literal type that holds the result of a constexpr computation, since a std::vector cannot survive constant evaluation -- go there for compile-time tables, constexpr functions, and consteval."

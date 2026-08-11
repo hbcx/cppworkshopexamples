@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 18, "out": "squared(3)        = 9\n"}, {"file": "main.cpp", "line": 19, "out": "squared(4)        = 16\n"}, {"file": "main.cpp", "line": 20, "out": "squaredPlusOne(5) = 26\n"}, {"file": "main.cpp", "line": 26, "out": "done\n"}, {"file": "main.cpp", "line": 27}]}

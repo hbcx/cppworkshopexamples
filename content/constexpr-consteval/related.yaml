@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "concepts"
+  note: "The other half of compile-time C++: concepts constrain WHICH types a template accepts, where constexpr and consteval decide WHEN code runs -- go there for named requirements, requires-expressions, and constrained overloads, the sibling C++20 compile-time feature."
+- slug: "tag-dispatch"
+  note: "What if constexpr replaced: tag dispatch selected an implementation by a trait through an extra tag argument, where an if constexpr (or is_constant_evaluated) branch does it in one function -- go there for the older technique and where a constexpr branch is the modern form."
+- slug: "arrays"
+  note: "Where a compile-time table lives: a std::array is the literal type that holds the result of a constexpr computation, since a std::vector cannot survive constant evaluation -- go there for the fixed-size array and its compile-time-friendly interface."

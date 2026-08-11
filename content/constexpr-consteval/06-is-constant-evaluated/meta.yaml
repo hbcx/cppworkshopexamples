@@ -1,0 +1,11 @@
+title: "is_constant_evaluated: one function, two paths"
+standard: "C++20"
+difficulty: 3
+summary: "std::is_constant_evaluated() lets one function detect whether it is running during constant evaluation and take a different path: a simple, obviously-correct version at compile time, a fast one at run time. It MUST be used with a plain if, never if constexpr -- which is a dedicated anti-pattern."
+notes: "Sometimes the best code for compile time and the best code for run time are different. A compile-time version wants to be simple and clearly correct, since it runs in the compiler and cannot use run-time-only tricks; a run-time version wants to be fast, perhaps using a bit trick, an intrinsic, or a lookup the compiler cannot do. std::is_constant_evaluated() bridges them: inside a constexpr function it returns true when the call is being evaluated at compile time and false when it runs at run time, so one function can branch to the right implementation. Here powerOfTwo uses a plain multiply loop when constant-evaluated -- easy for the compiler to run and verify -- and a fast left shift at run time, and both return the same value, so the choice is invisible to callers. The standard library uses exactly this to give functions like std::midpoint or the math headers a portable compile-time path and a fast run-time one. The critical rule, and the reason this is difficulty three, is that is_constant_evaluated() must be the condition of a PLAIN if, never an if constexpr. The condition of an if constexpr is itself constant-evaluated, so is_constant_evaluated() there is always true and the run-time branch becomes dead code -- a silent bug covered in the anti-patterns. Reach for this only when the two paths genuinely differ; if the same code is fine for both, a plain constexpr function is simpler and less error-prone."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "std::is_constant_evaluated", url: "https://en.cppreference.com/w/cpp/types/is_constant_evaluated" }

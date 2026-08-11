@@ -1,0 +1,4 @@
+squared(3)        = 9
+squared(4)        = 16
+squaredPlusOne(5) = 26
+done

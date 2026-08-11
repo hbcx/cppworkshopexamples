@@ -1,0 +1,12 @@
+title: "constexpr containers: build a table at compile time"
+standard: "C++20"
+difficulty: 3
+summary: "C++20 allows std::vector and std::string during constant evaluation, so you can compute a table with ordinary code and bake the result into the binary. The vector cannot survive constant evaluation, so copy the result into a std::array, which can. Here the first ten squares are computed by the compiler and stored as a constant."
+notes: "Before C++20 a constexpr function could not allocate memory, so building a table at compile time meant awkward recursion or template tricks. C++20 added constexpr dynamic allocation: std::vector and std::string can be used inside a constexpr function, with new and delete allowed during constant evaluation. That lets you write the table generator as plain, readable code -- push into a vector in a loop -- and have the compiler run it. The one rule is that any allocation made during constant evaluation must also be FREED during constant evaluation: a std::vector cannot outlive the compile-time computation and become a run-time constant. So the pattern is to compute into a vector and then copy the finished data into a fixed-size std::array, which is a literal type and can persist as a constant. Here firstSquares() fills a vector, copies it into a std::array, and returns the array; the vector is destroyed at the end of the function, still at compile time, and kSquares holds the result as a constant baked into the program image -- no run-time loop, no start-up cost, checked by static_assert. This is how compile-time lookup tables are written in modern C++: CRC tables, character-class tables, precomputed trig, small parser tables. Use it when the data is fixed and known at build time and you want it ready with zero run-time initialization; for data that depends on run-time input, compute it normally."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

@@ -1,0 +1,11 @@
+title: "constinit: guaranteed constant initialization"
+standard: "C++20"
+difficulty: 2
+summary: "constinit guarantees a static or global variable is constant-initialized -- its value is set at compile time, before any dynamic initialization runs -- which sidesteps the static initialization order problem between translation units. Unlike constexpr, a constinit variable is not const: it can be changed afterwards."
+notes: "Globals and static variables come in two flavours of initialization. Constant initialization happens at compile time and is baked into the program image, before main and before any code runs. Dynamic initialization happens at run time, at program start, and its ORDER across different translation units is not defined by the standard -- which is the classic static initialization order fiasco, where one global uses another that has not been initialized yet. constinit is the fix: it forces a variable to be constant-initialized and makes the compiler REJECT the declaration if the initializer is not a constant expression, so a global that would have been dynamically initialized fails to build instead of silently depending on start-up order. Here gCounter is constinit and initialized from a constexpr function, so its value 45 is set at compile time; if configFor were not constexpr, the line would not compile. The important difference from constexpr is mutability: constexpr implies const, but constinit does NOT -- it only constrains HOW the variable is first initialized, not whether it can change later, so gCounter is freely incremented at run time. Use constinit for a global or static that must be ready before any dynamic initialization and must also be writable -- a counter, a flag, a cache, a lazily-swapped pointer -- where constexpr would wrongly freeze it and a plain definition would risk the initialization-order trap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constinit", url: "https://en.cppreference.com/w/cpp/language/constinit" }
+detailed_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }

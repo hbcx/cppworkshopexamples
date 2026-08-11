@@ -1,0 +1,13 @@
+title: "A fully compile-time class"
+standard: "C++14"
+difficulty: 2
+summary: "A class can live entirely at compile time: a constexpr constructor and constexpr member functions, static constexpr data members, nested using aliases, and dimensions carried as std::integral_constant types. Here a Grid<Rows, Cols> is queried -- size, squareness, an index calculation, its value_type -- all in static_assert, before the program runs."
+notes: "Earlier a literal type showed that objects of a class can be built in constant expressions. This goes further: a class whose whole interface is compile-time, mixing the pieces you reach for when a type is meant to be used by the compiler. The member functions are constexpr, so index() can be checked with static_assert. The data members are static constexpr, so size and square are constants you read without an object. The nested using aliases give the type a small vocabulary -- value_type names the element type, and rows and cols carry the dimensions as std::integral_constant, which turns a compile-time NUMBER into a TYPE that also exposes it as ::value. That last move is worth dwelling on: an integral_constant is the bridge between values and types in template code -- Grid<3,4>::rows is a type you can pass to another template, and Grid<3,4>::rows::value is the int 3, so the same fact is available in both worlds. Everything here is resolved during compilation: g.size, Grid<3,4>::square, g.index(1,2), the value_type check -- all are static_asserts that pass before main runs, and the same members also print normally at run time. This is the shape of a compile-time configuration or descriptor type -- a fixed-size grid, a units tag, a small state-machine table -- where the type both computes with constexpr members and carries information through aliases and integral_constant. The rule that makes it work is the literal-type rule from before applied throughout: every member that must run in a constant expression is constexpr, and the data members are themselves literal types."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "std::integral_constant", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "type alias", url: "https://en.cppreference.com/w/cpp/language/type_alias" }
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }

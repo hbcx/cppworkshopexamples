@@ -1,0 +1,12 @@
+title: "Anti-pattern: assuming constexpr forces compile-time evaluation"
+standard: "C++20"
+difficulty: 3
+summary: "Marking a function constexpr does not force it to run at compile time -- it only ALLOWS it. Called with a run-time argument, or even in a plain statement, it runs at run time. Only a constant-expression context (a constexpr variable, static_assert, template argument) forces compile-time evaluation. To require it, assign to a constexpr variable or use consteval."
+notes: "A common misreading of constexpr is that it means the compiler as a computation happens during compilation. It does not: constexpr on a function grants PERMISSION to evaluate at compile time, and the compiler only takes that option when the CONTEXT demands a constant. This example makes the difference visible with std::is_constant_evaluated(), which returns true only when a call really is being constant-evaluated. Assigning evalMark(5) to a constexpr variable forces compile-time evaluation, so the mark is added. Passing a run-time int runs the function at run time, so it is not. And calling evalMark(5) as a plain function argument -- with a literal, no less -- still runs at run time, because a function argument is not a constant-expression context and the compiler is not required to fold it. All three are the same constexpr function; only the context decides when it runs. The practical consequence is that you cannot rely on constexpr alone to guarantee a computation is done at build time -- a table you meant to precompute may quietly be rebuilt on every call. The fixes are explicit: assign the result to a constexpr variable (or use it in another constant-expression context) to FORCE compile-time evaluation, or mark the function consteval so a run-time call does not even compile. The rule to remember: constexpr means CAN, and the context decides; if you need MUST, say so with constexpr storage or consteval."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "std::is_constant_evaluated", url: "https://en.cppreference.com/w/cpp/types/is_constant_evaluated" }
+  - { name: "consteval", url: "https://en.cppreference.com/w/cpp/language/consteval" }

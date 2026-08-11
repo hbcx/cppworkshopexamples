@@ -1,0 +1,11 @@
+title: "Anti-pattern: calling consteval with a run-time argument"
+standard: "C++20"
+difficulty: 3
+summary: "A consteval function can only be called with arguments that are themselves constant expressions, because it must run at compile time. Forwarding a run-time parameter to it -- return squared(y) inside an ordinary function -- does not compile. The fix is to keep the value constant, or to make the caller consteval so the constant-ness propagates."
+notes: "consteval buys a strong guarantee -- the function always runs at compile time -- and the price is that its arguments must be constant expressions at every call. This surprises people who mark a function consteval and then try to feed it a value known only at run time. Here squared is consteval, so squared(3) and squared(4) with literals are fine and fold to constants, but a wrapper like int f(int y) { return squared(y); } does NOT compile: inside f, the parameter y is a run-time value, not a constant expression, and a consteval call cannot run at run time. The error can be confusing because the wrapper itself looks harmless -- it is the consteval call on a non-constant argument that is rejected. There are two fixes, shown here. Keep the argument constant: call with a literal or a constexpr value, as kNine does. Or make the caller consteval too -- squaredPlusOne is consteval, so its own parameter is a constant expression in every (necessarily constant) call, and it may pass that straight to squared. The general shape is that consteval-ness has to propagate up the call chain: everything from the literal down to the consteval function must be constant. If a value genuinely arrives at run time, consteval is the wrong tool -- use a plain constexpr function, which runs at run time when it must and at compile time when it can."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "consteval", url: "https://en.cppreference.com/w/cpp/language/consteval" }
+detailed_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }

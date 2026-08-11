@@ -1,0 +1,11 @@
+title: "A constexpr literal type"
+standard: "C++14"
+difficulty: 2
+summary: "Mark a class's constructor and member functions constexpr and it becomes a literal type: its objects can live in constant expressions and be computed by the compiler. Here a Fraction is built and multiplied entirely at compile time, checked with static_assert, and only then printed."
+notes: "constexpr is not only for free functions and int constants; a whole user type can take part in compile-time evaluation. A type whose constructor is constexpr, and whose member functions you want to call in constant expressions are constexpr too, is called a literal type: the compiler can create and manipulate its objects during compilation. This Fraction has a constexpr constructor and constexpr accessors, a constexpr operator* and a constexpr value(), so half and third are compile-time constants, half * third is folded to a Fraction at compile time, and static_assert checks the result before the program ever runs. Nothing here is special-cased -- it is ordinary member-function code that the compiler is allowed to run early because every piece is marked constexpr. This is what lets libraries offer rich value types -- fixed-point numbers, small matrices, units of measure, colors -- that cost nothing at run time when their inputs are constants, and still work normally when the inputs are not. Two practical notes. A literal type's data members must themselves be literal types (here plain ints), and its constructor must be able to initialize every member in a constant expression. And since C++14 the member functions may contain the full relaxed constexpr body -- locals and loops -- so the compile-time and run-time versions of the type are genuinely the same code, not a cut-down compile-time copy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }

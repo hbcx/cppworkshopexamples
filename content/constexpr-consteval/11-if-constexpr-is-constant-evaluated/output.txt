@@ -1,0 +1,4 @@
+markBad  at run time: 1005  <- 1005, WRONG (dead branch)
+markGood at run time: 5  <- 5, correct
+markBad  at compile time: 1005
+markGood at compile time: 1005

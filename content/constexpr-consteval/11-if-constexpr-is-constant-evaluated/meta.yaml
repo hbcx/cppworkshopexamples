@@ -1,0 +1,13 @@
+title: "Anti-pattern: is_constant_evaluated inside if constexpr"
+standard: "C++20"
+difficulty: 3
+summary: "std::is_constant_evaluated() used as the condition of an if constexpr is ALWAYS true, so the run-time branch becomes dead code. The condition of an if constexpr is itself a constant expression evaluated in a constant-evaluated context, so the function reports true even at run time. The fix is a plain if, whose condition is evaluated per call."
+notes: "This is one of the sharpest traps in the whole feature, sharp enough that both major compilers warn about it. std::is_constant_evaluated() is meant to distinguish a compile-time call from a run-time one, and it works -- but only when its result depends on how the ENCLOSING function is being evaluated. Put it in the condition of an if constexpr and that is no longer true: the condition of an if constexpr must itself be a constant expression, and evaluating it is a constant-evaluated context, so is_constant_evaluated() there always returns true. The compiler then keeps only the true branch and discards the else, at every call, including run-time ones -- so the run-time branch is dead code that never runs, and the function silently uses its compile-time path everywhere. This example proves it: markBad at run time returns 1005, wrongly taking the compile-time branch, while markGood, using a plain if, correctly returns 5. At compile time both return 1005, which is why the bug hides -- the compile-time tests pass, and only run-time behaviour is wrong. The rule is simple and absolute: is_constant_evaluated() must be the condition of a PLAIN if, never an if constexpr, and never a static_assert or any other constant-evaluated context, because in all of those it is a constant true. If you see it paired with if constexpr, that is the bug. (This example turns off -Werror on purpose so the intentional mistake can be shown; the warning the compiler gives is exactly the right one to heed.)"
+run: true
+sanitizers: []
+werror: false
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "if constexpr", url: "https://en.cppreference.com/w/cpp/language/if" }
+  - { name: "std::is_constant_evaluated", url: "https://en.cppreference.com/w/cpp/types/is_constant_evaluated" }

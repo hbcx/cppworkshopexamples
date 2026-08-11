@@ -1,0 +1,4 @@
+constexpr var: 1005  <- compile time (1000 added)
+runtime arg:   5  <- run time
+plain call:    5  <- run time (not forced)
+done

@@ -1,0 +1,11 @@
+title: "consteval: a function that must run at compile time"
+standard: "C++20"
+difficulty: 2
+summary: "A consteval function is an immediate function: every call must be evaluated at compile time, so it always produces a constant. That makes it ideal for validating a literal -- a bad value fails to compile, never at run time. Unlike constexpr, which MAY run at compile time, consteval MUST, and a call with a run-time argument does not compile at all."
+notes: "constexpr says a function CAN be evaluated at compile time; consteval says it MUST. A consteval function -- an immediate function -- can only ever be called in a way that produces a constant, so the compiler runs it during compilation for every call, and there is no run-time version at all. The headline use is compile-time validation. Here percent() checks its argument is in range and, if not, reaches a throw; because the call is always constant-evaluated and a throw cannot happen during constant evaluation, a bad value is a COMPILE error -- percent(150) simply does not build. A valid value like percent(80) is checked and folded into a constant with no run-time cost. This turns a whole class of run-time failures into build failures: a malformed literal (a bad color, an out-of-range setting, a wrong format string) is caught at the definition, not when a user hits that code path in production. The trade-off is the flip side of the guarantee: because a consteval call must be constant, you cannot pass it a value known only at run time -- percent(someRuntimeInt) does not compile, which is a dedicated anti-pattern. Reach for consteval when a computation should NEVER happen at run time -- validation of constants, generating compile-time ids or tables -- and for constexpr when the same code should serve both compile time and run time. In short: constexpr is may, consteval is must."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "consteval", url: "https://en.cppreference.com/w/cpp/language/consteval" }
+detailed_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }

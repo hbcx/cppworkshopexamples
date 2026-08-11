@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 24, "out": "squares:"}, {"file": "main.cpp", "line": 25, "out": " 0 1 4 9 16 25 36 49 64 81"}, {"file": "main.cpp", "line": 26, "out": "\n"}, {"file": "main.cpp", "line": 27}, {"file": "main.cpp", "line": 28}]}

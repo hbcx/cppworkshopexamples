@@ -1,0 +1,11 @@
+title: "Anti-pattern: mistaking const for constexpr"
+standard: "C++11"
+difficulty: 3
+summary: "const only means the value will not change; it does NOT mean the value is known at compile time. A const initialized from a run-time value is a run-time constant and cannot be used as an array bound, a template argument, or in a static_assert. constexpr is the keyword that guarantees a compile-time constant."
+notes: "const and constexpr both make a variable read-only, and that shared meaning hides a real difference. const promises only that the variable will not be modified after initialization; the value may be computed at run time. constexpr additionally requires the initializer to be a constant expression, so the value is known at compile time and can be used where the language needs a constant. This example shows the gap: badSize is const but initialized from runtimeSize(), an ordinary function, so it is a run-time constant -- you cannot use it as an array bound or a template argument, because those need a value the compiler knows while compiling. goodSize is constexpr, initialized from a constexpr function, so it works in exactly those places. The trap is that const sometimes seems to work: const int n = 8; initialized from a literal IS a constant expression, so it can size an array, which teaches the habit that const is enough -- until the initializer becomes a function call or a value read at run time, and the same-looking const silently stops being usable as a constant. The message a wrong use gives is often confusing, pointing at the array declaration rather than the const. The fix is to say what you mean: if a value must be a compile-time constant, declare it constexpr, and the compiler will both guarantee it and reject an initializer that is not constant -- turning a subtle usability gap into a clear error at the declaration."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }

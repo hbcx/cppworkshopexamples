@@ -1,0 +1,2 @@
+case label used kSize
+raw holds 8 ints, array holds 8, Fixed holds 8

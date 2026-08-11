@@ -1,0 +1,12 @@
+title: "A constexpr variable is a real compile-time constant"
+standard: "C++11"
+difficulty: 1
+summary: "A constexpr variable is guaranteed to be a compile-time constant, so it can be used where the language REQUIRES a constant expression: an array bound, a template non-type argument, a static_assert, a case label. A plain const only promises the value will not change, not that it is known at compile time."
+notes: "There are two words that both make a variable read-only, and they are not the same. const means the variable cannot be modified after initialization; its value may still be computed at run time. constexpr is stronger: the initializer MUST be a constant expression, so the value is known at compile time, and the variable can be used everywhere the language demands a constant. This example uses one constexpr int in every such place: the bound of a raw array, the size argument of std::array, a non-type template argument of our own Fixed, a static_assert, and a switch case label. Each of those positions rejects a value that is not a constant expression, so each is a place where const would not be enough and constexpr is. The distinction is easy to blur because a const initialized from a LITERAL -- const int n = 8; -- happens to be a constant expression too, so it works in those positions; the trap is a const initialized from a non-constant value, which looks identical but cannot be used as a constant, and that is a dedicated anti-pattern later. The rule of thumb: if a value is a fixed compile-time constant and especially if it feeds an array size, a template argument, or a static_assert, declare it constexpr and say so, rather than leaning on const and hoping the initializer happens to qualify."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+detailed_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }
