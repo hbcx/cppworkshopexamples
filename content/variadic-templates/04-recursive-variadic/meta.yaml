@@ -1,0 +1,10 @@
+title: "Processing a pack by recursion"
+standard: "C++11"
+difficulty: 2
+summary: "Before C++17 you process a pack by peeling off the FIRST argument and recursing on the REST, with a non-variadic overload as the base case. print(First, Rest...) handles one argument and calls print(rest...); print() with no arguments ends it. Each pack length becomes a separate template instance."
+notes: "C++11 and C++14 have parameter packs but no fold expressions, so the standard way to REDUCE a pack -- to sum it, print it, apply an operation across all of it -- is recursion on the pack itself. You write two overloads. The recursive one takes a first parameter plus a pack of the rest, template <class First, class... Rest> f(First first, Rest... rest), does its work on first, and calls f(rest...), which is the same function with a pack one element shorter. And a base case ends the recursion: here an empty print() with no parameters, called when the pack finally runs out. The example prints its arguments comma-separated by handling one per call and recursing on the remainder. This is the classic pre-C++17 idiom, and you should recognise it in older code, but it has real costs. It is verbose -- two functions and a base case for one operation. It generates a separate template instantiation for every pack length in the recursion (print with four arguments instantiates print with three, two, one, and zero), which adds up in compile time across a codebase. And the base case is a place to get wrong -- forget it, or make it ambiguous with the recursive overload, and you get a confusing error, which is one of the anti-patterns. Since C++17 a fold expression does the same reduction in one line with no base case and far fewer instantiations, so recursion is now reserved for the cases where each step must do something a fold cannot express -- but understanding the recursive form is still necessary to read and maintain the large body of code written before folds existed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags: []

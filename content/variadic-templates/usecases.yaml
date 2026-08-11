@@ -1,0 +1,19 @@
+- problem: "A factory or container needs to construct an object in place from whatever arguments its constructor takes -- an emplace_back, a make_unique-style helper, an object pool that builds elements -- without knowing the constructor's arity or argument types."
+  why: "A variadic template with forwarding references and std::forward passes any number of arguments through in their original value category, so the object is constructed directly with no temporary and no copy. Fixed-arity overloads would need one per argument count and still lose value category, and building the object outside then moving it in pays an extra move the in-place construction avoids."
+  signal: "A set of near-identical overloads differing only in argument count, or a helper that constructs a temporary and then moves it into a container instead of constructing in place."
+
+- problem: "A logging, formatting, or diagnostic function must accept any number of arguments of mixed types and turn them into one message -- a log line, an error string, a structured event."
+  why: "A variadic template with a fold over the stream operator, (os << ... << args), consumes every argument type-safely in one pass, so each value is formatted by its own operator<< with no format string to match against the arguments. A printf-style call has no type safety and crashes or corrupts on a mismatched specifier, and manual string concatenation loses each value's natural formatting."
+  signal: "A printf-family call whose format string must be kept in sync with its arguments by hand, or a chain of string concatenations that stringises each value separately."
+
+- problem: "A generic wrapper must forward an arbitrary argument list to a target it does not control -- a retry or timing decorator, a thread or task that stores a call to run later, a bind-like adapter."
+  why: "A forwarding-reference pack captures the whole argument list once and std::forward replays it to the target, and std::apply reconstitutes a call from a stored tuple of arguments, so the wrapper is written once for all signatures. Committing to one fixed signature forces a separate wrapper per shape, and storing arguments without a tuple loses their types."
+  signal: "A wrapper template hard-coded to one call signature, or a deferred-call type that stores arguments in a way that cannot hold mixed types."
+
+- problem: "A computation must combine a fixed set of values known at the call site into one result -- sum or product of several fields, a combined hash of a struct's members, an all-of or any-of check over several conditions."
+  why: "A fold expression reduces the pack in a single expression with guaranteed order and no base case, so a hash-combine or an all-valid check reads as one line and compiles to the direct sequence of operations. A hand-written recursion is more code and more template instantiations, and a run-time loop cannot iterate a set of differently-typed values at all."
+  signal: "A hand-rolled recursive helper that peels one argument at a time, or a chain of x1 op x2 op x3 written out by hand for a known set of values."
+
+- problem: "Code holds a std::variant and must act on whichever alternative it currently holds -- an AST node, a message type, a state -- with a clear branch per type and a compile error if a case is missed."
+  why: "The overloaded idiom builds a visitor from one lambda per alternative and std::visit dispatches to the matching one, so the code reads as a type-based pattern match and the compiler flags an unhandled alternative. A chain of if with get_if is verbose, easy to leave incomplete, and gives no exhaustiveness check."
+  signal: "A ladder of std::get_if or index() checks on a variant, or a hand-written visitor struct with one operator() per alternative type."

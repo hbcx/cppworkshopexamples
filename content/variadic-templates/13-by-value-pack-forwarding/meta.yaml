@@ -1,0 +1,12 @@
+title: "Anti-pattern: forwarding a pack by value"
+standard: "C++17"
+difficulty: 3
+summary: "Taking a pack by value, template <class... Ts> f(Ts... args), and passing it on copies every argument -- the value category is lost, so even an rvalue becomes an lvalue and is copied. Forwarding references plus std::forward, f(Ts&&... args) with std::forward<Ts>(args)..., preserve value category so rvalues are moved."
+notes: "When a variadic template is meant to pass its arguments onward -- a factory, a wrapper, a logger that feeds another sink -- taking the pack BY VALUE is a quiet performance bug. With template <class... Ts> f(Ts... args), each parameter is a value: an rvalue argument is moved into the parameter, but from then on the parameter args is an LVALUE with a name, so passing it on, f(args)... or sink(args), copies it, because an lvalue does not bind to a move. So a caller who passes a temporary expecting it to be moved through gets a copy at the second hop, and the value category the caller had is gone. The fix is variadic perfect forwarding: a forwarding-reference pack Ts&&... args, which deduces each Ts to preserve whether the argument was an lvalue or an rvalue, and std::forward<Ts>(args) on each element, which restores that category when passing on -- so an rvalue stays an rvalue and is moved, an lvalue stays an lvalue. This example counts copies of a tracked type through both forms: the by-value pack copies every argument, the forwarding version copies none. The costs are exactly the ones perfect forwarding exists to avoid, now multiplied across a pack -- every argument pays. The rule is the same as for single-argument forwarding: a template that only PASSES its arguments through should take them by forwarding reference and forward them, not take them by value; reach for by-value only when the function genuinely needs its own copy of each argument to keep."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }

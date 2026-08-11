@@ -1,0 +1,10 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "move-semantics"
+  note: "The forwarding a variadic factory rests on: a forwarding-reference pack plus std::forward is single-argument perfect forwarding generalised to any number -- go there for value categories, std::forward vs std::move, and why moves must be noexcept."
+- slug: "type-traits"
+  note: "The tools you fold over a pack: is_integral, is_same and the rest supply the per-element condition an && fold checks, and make_index_sequence gives the index pack expansion needs -- go there for the trait vocabulary and integer_sequence."
+- slug: "tuple"
+  note: "Where a pack goes to be stored: a parameter pack cannot be a data member, so a variadic type keeps its elements in a std::tuple, and std::apply unpacks that tuple back into a call -- go there for heterogeneous fixed-size storage and get/apply."
+- slug: "concepts"
+  note: "How to constrain a whole pack: a fold over a concept, (std::integral<Ts> && ...), in a requires-clause demands a property of every argument -- go there for named requirements and constrained templates."

@@ -1,0 +1,11 @@
+title: "Pack expansion"
+standard: "C++11"
+difficulty: 2
+summary: "To use a pack you EXPAND it. args... spreads the arguments into a call: takeThree(args...) becomes takeThree(a, b, c). A PATTERN expands per element: square(args)... becomes square(a), square(b), square(c). Expansion is how a pack turns into a comma-separated list."
+notes: "A parameter pack on its own is inert; the ellipsis after an expression is what turns it into a comma-separated list, and that is called pack expansion. The simplest form is the pack name followed by three dots: args... expands to the individual arguments a, b, c, so takeThree(args...) forwards them all as separate arguments to another function. The powerful form is a PATTERN followed by three dots: any expression that mentions the pack is repeated once per element, with the pack element substituted in. square(args)... expands to square(a), square(b), square(c) -- the pattern square(_) is applied to each argument -- and the results form a list you can pass to a call or use to build a container, as this example does with a braced initializer of a vector. The pattern can be more than a single call: f(args)..., args + 1..., std::make_pair(keys, args)... all expand the same way, substituting each pack element into the whole pattern. Where the expanded list may appear is limited to contexts that accept a comma-separated list: function-call arguments, braced initializers, template argument lists, base-class lists, and a few others. Two pre-C++17 idioms rest on this: expanding into a braced-init-list to run an operation for each element (with guaranteed left-to-right order, unlike a function call), and expanding into a call to forward all arguments onward. Fold expressions, later, give a cleaner way to reduce a pack, but plain expansion into a call or a container is the everyday tool and the foundation everything else builds on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

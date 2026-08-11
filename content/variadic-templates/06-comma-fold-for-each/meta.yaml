@@ -1,0 +1,11 @@
+title: "A comma fold: do something for each element"
+standard: "C++17"
+difficulty: 2
+summary: "A fold over the comma operator, (expr, ...), runs a statement for EACH element of the pack, left to right, guaranteed. It is the clean modern way to loop over pack arguments -- print each, push each into a container, call a handler per element -- where a reduction operator does not fit."
+notes: "Not every use of a pack is a reduction to a single value; often you want to DO something for each element -- print it, register it, add it to a container. The comma operator makes a fold do exactly that: (expr, ...) evaluates expr once for every pack element, discarding each result, so the pattern runs as a side-effecting loop over the arguments. This example prints each argument with its index using a comma fold, and sums into a global with another. The crucial property is ORDER: a fold expression evaluates strictly left to right, so the comma fold visits the pack in argument order, and the index counter increments predictably -- which is the guarantee a pack expansion into a function call does NOT give (an anti-pattern later). Before C++17 the same for-each was done by expanding into a braced initializer list, (void)std::initializer_list<int>{ (expr, 0)... }, which also guarantees left-to-right order but is awkward to write; the comma fold is the readable replacement. A couple of practical notes. Wrap the per-element expression so its value is genuinely used or discarded cleanly -- an assignment or a stream insertion is fine, and cast to void if the compiler warns about an unused result. And the comma fold is the tool when the operation is a statement with side effects rather than a value to combine; when you are combining values into one result, use the arithmetic or logical fold from the previous example instead. Together, the reduction folds and the comma fold cover almost every everyday pack operation without a single recursive helper."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "fold expression", url: "https://en.cppreference.com/w/cpp/language/fold" }

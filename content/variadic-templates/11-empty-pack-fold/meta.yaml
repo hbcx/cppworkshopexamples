@@ -1,0 +1,11 @@
+title: "Anti-pattern: a unary fold over an empty pack"
+standard: "C++17"
+difficulty: 3
+summary: "A unary fold like (args + ...) has no value for an EMPTY pack and is ill-formed when the pack is empty -- only &&, || and the comma operator have a defined empty result (true, false, void). The fix is a binary fold with an explicit identity: (0 + ... + args) is well-defined and returns 0 for an empty pack."
+notes: "Fold expressions look like they always work, but the UNARY forms have a gap: an empty pack. A unary fold (args op ...) reduces the elements with op, and for an empty pack there is nothing to reduce, so the result would have to be the identity of op -- and the standard only defines that identity for three operators: && folds to true, || folds to false, and the comma operator folds to void. For every other operator, including +, *, and streaming, a unary fold over an empty pack is ILL-FORMED and does not compile. So a sum written as (args + ...) works for one or more arguments and then fails to build the moment someone calls it with none, which is easy to miss because the empty call may be rare. The fix is a BINARY fold, which carries an explicit initial value that is also the empty-pack result: (0 + ... + args) sums the pack starting from 0, so an empty pack simply yields 0, and (1 * ... + args) would start a product at 1. This example runs the binary-fold sum with arguments and with none, showing it returns 0 for the empty call, and describes the unary version that would fail on the empty call in a comment. The rule: if a variadic template might be instantiated with zero arguments -- and generic code often is -- use a binary fold with the operator's identity, or restrict the template to a non-empty pack; never leave a plain unary fold over + or * exposed to an empty pack."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "fold expression", url: "https://en.cppreference.com/w/cpp/language/fold" }

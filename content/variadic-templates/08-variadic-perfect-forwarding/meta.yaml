@@ -1,0 +1,12 @@
+title: "Variadic perfect forwarding"
+standard: "C++14"
+difficulty: 3
+summary: "A variadic factory forwards any number of arguments to a constructor without copying: forwarding references Args&&... capture each argument's value category, std::forward preserves it, and the pack expands the forward per element -- std::forward<Args>(args).... This is how make_unique, make_shared and emplace pass arguments through."
+notes: "The most common real use of variadic templates is a factory or wrapper that accepts arbitrary constructor arguments and passes them on untouched -- make_unique, make_shared, emplace_back, and every generic in-place constructor work this way. Doing it without copies needs three pieces together. First, a forwarding-reference pack: Args&&... args, where each Args is deduced so that an lvalue argument makes Args a reference and an rvalue makes it a value, which is what records each argument's value category. Second, std::forward on each element: std::forward<Args>(args), which casts back to an rvalue exactly when the original was an rvalue, so a temporary stays a temporary and can be moved. Third, expansion of that pattern: std::forward<Args>(args)..., which applies the forward to every element and spreads them as the target call's arguments. Put together, new T(std::forward<Args>(args)...) constructs T with the arguments passed through in their original value category, so an rvalue argument is moved into place and an lvalue is bound, with no needless copy. The example makes a Widget through such a factory and counts copies of a tracked member: passing rvalue arguments produces zero copies, because forwarding let them be moved. This is variadic templates and perfect forwarding combined -- the pack generalises perfect forwarding from one argument to any number -- and it is worth learning as one unit, because getting any of the three pieces wrong (by value instead of &&, forgetting forward, or forwarding the whole pack the wrong way) silently turns the moves back into copies, which is the by-value-forwarding anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }

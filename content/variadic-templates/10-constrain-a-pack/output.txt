@@ -1,0 +1,2 @@
+sumIntegers(1,2,3) = 6
+sumChecked(4,5,6)  = 15

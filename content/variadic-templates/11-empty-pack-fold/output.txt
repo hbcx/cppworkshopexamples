@@ -1,0 +1,2 @@
+sumSafe(1,2,3) = 6
+sumSafe()      = 0

@@ -3,3 +3,5 @@
   note: "The two-element special case, with its own make_pair/get, lexicographic comparison and structured-binding story."
 - slug: "arrays"
   note: "The homogeneous fixed-size cousin: the same tuple interface (get, tuple_size, structured bindings) when every element shares one type."
+- slug: "variadic-templates"
+  note: "Where the elements come from and go back to: a variadic template collects a parameter pack into a tuple to store it, and std::apply unpacks a tuple into a call -- go there for parameter packs, expansion, fold expressions, and apply/invoke."

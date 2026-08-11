@@ -1,0 +1,11 @@
+title: "A variadic class template: the overloaded visitor"
+standard: "C++17"
+difficulty: 3
+summary: "A class template can take a type pack too, and inherit from EACH type in it. The overloaded idiom builds one callable from several lambdas: it derives from all of them (Fs...) and pulls each operator() into scope with a pack expansion in a using-declaration. It is the standard way to write a std::visit visitor."
+notes: "Parameter packs are not only for functions; a class template can have a type pack, and one powerful thing it can do is inherit from every type in the pack -- struct S : Fs... derives from each Fs. The famous use is the overloaded idiom, which turns a set of lambdas into a single callable object that picks the right one by overload resolution. It has two parts. The class derives from all the lambda types, Fs..., so it contains each lambda's function-call operator. Then a using-declaration pulls them all into one overload set: using Fs::operator()...; is a C++17 pack expansion in a using-declaration, bringing every base's operator() into the derived class so that calling the object resolves to whichever lambda matches the argument. A deduction guide, overloaded(Fs...) -> overloaded<Fs...>, lets you write overloaded{ lambda1, lambda2, ... } and have the pack deduced. The result is a visitor you hand to std::visit over a std::variant: this example builds one from three lambdas -- one per alternative type -- and visiting the variant calls the matching lambda, so the code reads as a little pattern-match over the variant's current type. This is the cleanest way to handle a variant, far clearer than a chain of if with get_if or a hand-written visitor struct with one operator() per type. Beyond this idiom, inheriting from a pack of bases is a general technique for mixing in behaviours -- a class that combines several policy or interface types supplied as a pack -- and the using-declaration expansion is how you surface their members together."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }

@@ -1,0 +1,2 @@
+takeThree: 2 3 4
+squares: 4 9 16

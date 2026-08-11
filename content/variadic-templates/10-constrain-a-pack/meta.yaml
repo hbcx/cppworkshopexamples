@@ -1,0 +1,12 @@
+title: "Constraining a whole pack"
+standard: "C++20"
+difficulty: 3
+summary: "To require that every element of a pack satisfies a condition, fold a concept or trait over &&: (std::integral<Ts> && ...) is true only when all types are integral. It works in a C++20 concept, a requires-clause, or a static_assert, so a variadic template can demand a property of all its arguments at once."
+notes: "A variadic template often needs a guarantee about every argument -- all integers, all the same type, all printable -- and a fold over && expresses exactly that: (Cond<Ts> && ...) is a compile-time bool that is true only if Cond holds for each element of the pack. Because a fold is just an expression, this fits everywhere a constraint goes. As a C++20 concept, AllIntegral here is defined as (std::integral<Ts> && ...), a named requirement over the whole pack that reads clearly and can be put in a requires-clause to constrain a function -- sumIntegers accepts any number of arguments but only if all are integral, and a call with a double is rejected at the call site. As a trait fold in a static_assert, (std::is_integral_v<Ts> && ...) enforces the same rule inside the body with a custom message, which is the pre-concepts way and still useful when you want a specific diagnostic. The && fold is the common case (all must satisfy), but || folds too (at least one satisfies), and you combine them for richer rules. This is where three threads of this category meet: parameter packs supply the arguments, fold expressions reduce the per-element checks to one bool, and concepts or traits provide the condition -- so a variadic interface can be as precisely constrained as a fixed-arity one, rejecting a bad argument with a clear message instead of failing deep inside an expansion. When a variadic template should only accept certain argument types, a && fold over a concept in a requires-clause is the modern, readable way to say so."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "fold expression", url: "https://en.cppreference.com/w/cpp/language/fold" }
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

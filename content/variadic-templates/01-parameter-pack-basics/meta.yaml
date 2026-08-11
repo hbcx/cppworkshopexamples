@@ -1,0 +1,11 @@
+title: "Parameter packs and sizeof..."
+standard: "C++11"
+difficulty: 1
+summary: "A parameter pack lets a template take any number of arguments of any types: template <class... Ts> declares a type pack, and Ts... args a matching value pack. sizeof...(Ts) is the count, a compile-time constant you can use as an array size, a template argument, or in a static_assert."
+notes: "A variadic template is one with a parameter pack, written with an ellipsis. template <class... Ts> introduces a TYPE pack named Ts -- a list of zero or more types -- and a function parameter Ts... args introduces a matching VALUE pack, so the function accepts any number of arguments of any types at once. This is what lets one template stand in for a whole family of overloads: instead of writing f(), f(a), f(a, b), f(a, b, c), you write a single f(Ts... args). The count of a pack is sizeof...(Ts) for the type pack or sizeof...(args) for the value pack -- always the same number -- and it is a compile-time constant, so it works everywhere a constant is required: this example uses it as a std::array size, and it is equally valid in a static_assert (to reject too many or too few arguments) or as a non-type template argument. Note sizeof...(pack) with three dots is the pack-size operator and is completely separate from sizeof(x), the byte-size operator -- a common source of confusion. On its own, a pack cannot do much: you cannot index it directly or loop over it with a normal for. To actually use the arguments you EXPAND the pack, which the next examples cover, and before then the only thing you can ask is how many there are. The mental model to start with: a parameter pack is a compile-time list of arguments bundled into one name, and sizeof... tells you its length."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }

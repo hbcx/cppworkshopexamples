@@ -1,0 +1,11 @@
+title: "Advanced expansion: two packs and index packs"
+standard: "C++14"
+difficulty: 3
+summary: "A pattern can mention TWO packs, which expand together in lockstep as long as they have the same length. The common case is expanding a value pack next to an INDEX pack from make_index_sequence, so each argument gets its position -- the standard way to attach indices or pair a pack with tuple positions."
+notes: "Expansion is more flexible than one pack at a time. A pattern may mention two (or more) packs, and they expand TOGETHER, element by element, provided they have the same length -- so a pattern like f(as, bs)... expands to f(a0, b0), f(a1, b1), and so on, pairing the packs positionally rather than taking their cross product. The most useful instance of this pairs a value pack with an INDEX pack. You often need each argument's position -- to number them, to index a tuple, to build a lookup -- but a pack has no built-in index, so you generate one with std::index_sequence and std::make_index_sequence (or index_sequence_for<Ts...>, which sizes it from a type pack). This example takes the arguments and an index_sequence of the same length, then expands a pattern that mentions BOTH the index Is and the value args, printing each argument with its number. The two-function shape is standard: a public function makes the index sequence and calls a helper that DEDUCES the index pack Is... as a function parameter, which is the only way to get the pack into scope so it can be expanded. This index-pack technique is exactly how std::apply unpacks a tuple, how a tuple is printed or compared field by field, and how you iterate a pack by position, so it appears throughout real metaprogramming. The idea to hold: when a pattern names several packs they expand in lockstep, and pairing a pack with make_index_sequence is how you give its elements positions to work with."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "std::index_sequence", url: "https://en.cppreference.com/w/cpp/utility/integer_sequence" }

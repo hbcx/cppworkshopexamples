@@ -1,0 +1,11 @@
+title: "Anti-pattern: recursion where a fold would do"
+standard: "C++17"
+difficulty: 3
+summary: "The pre-C++17 recursive way to reduce a pack -- a base case plus a recursive overload -- is verbose and generates a separate template instantiation for every pack length. When the operation is a plain reduction, a C++17 fold expression does the same in one line, with no base case and far fewer instantiations."
+notes: "Recursion on a pack was necessary before C++17 and is still correct, but reaching for it out of habit when a fold would serve is an anti-pattern with real costs. The recursive sum here needs two functions -- a base case and a recursive overload that peels one argument and calls itself -- and each call length is a distinct template instantiation: summing four arguments instantiates the function for four, three, two, one, and zero arguments, and across a whole codebase these extra instantiations add measurably to compile time and code size. The fold version, (0 + ... + args), does exactly the same reduction in a single expression, with no base case to write or get wrong and only one instantiation per call, and as a binary fold it is also correct for the empty pack. The example shows both producing the same answer. The guidance is simple: since C++17, prefer a fold expression for any reduction that a binary operator can express -- sums, products, logical any-of and all-of, streaming, min and max via a helper -- and reserve pack recursion for the cases a fold genuinely cannot handle, such as a step that must inspect the current element AND the running result together, transform the pack's structure, or stop early. Recognise the recursive idiom to read older code, but do not reproduce it in new code where a fold is shorter, clearer, and cheaper to compile."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "fold expression", url: "https://en.cppreference.com/w/cpp/language/fold" }

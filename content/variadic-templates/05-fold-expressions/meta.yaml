@@ -1,0 +1,11 @@
+title: "Fold expressions"
+standard: "C++17"
+difficulty: 2
+summary: "A fold expression reduces a whole pack with a binary operator in one expression -- no recursion, no base case. There are four forms: unary and binary, each left or right. (args + ...) sums, (args && ...) checks all, (std::cout << ... << args) streams every argument in order."
+notes: "C++17 added fold expressions, which apply a binary operator across a pack directly, replacing the recursive idiom for most reductions. There are four forms, distinguished by whether there is an init value and which side the parentheses-dots sit. A UNARY RIGHT fold, (args op ...), folds from the right: a op (b op (c)). A UNARY LEFT fold, (... op args), folds from the left: ((a) op b) op c. The BINARY forms add an init value on one side: (init op ... op args) is a binary left fold and (args op ... op init) a binary right fold, which is how you supply a starting value and, importantly, make the fold well-defined for an empty pack. This example shows sum with (args + ...), an all-true check with (args && ...), and a print that streams every argument with the binary left fold (std::cout << ... << args), which expands to std::cout << a << b << c in order. Almost any binary operator works -- arithmetic, comparison, logical, bitwise, the comma operator (the next example), even << and >> -- so a fold expresses sums, products, any-of and all-of, min and max via a helper, and streaming, each in a single readable line. The two things to remember: pick left or right when the operator is not associative (subtraction, division, streaming) because the grouping differs; and for + and most operators an EMPTY pack has no defined result in the unary form, so use the binary form with an identity when the pack might be empty -- an anti-pattern later. For the common associative reductions, a fold is simply the modern, shorter, faster-to-compile replacement for a recursive pack helper."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "fold expression", url: "https://en.cppreference.com/w/cpp/language/fold" }

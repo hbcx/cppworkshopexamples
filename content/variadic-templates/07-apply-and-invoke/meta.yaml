@@ -1,0 +1,12 @@
+title: "std::apply and std::invoke"
+standard: "C++17"
+difficulty: 3
+summary: "std::apply unpacks a tuple into a function call -- the tuple's elements become the arguments, expanded as a pack internally. std::invoke calls any callable uniformly: a plain function, a lambda, a functor, or a pointer-to-member (with the object as the first argument). Both are the standard bridges between packs, tuples, and calls."
+notes: "Two library functions turn the pack machinery into everyday tools. std::apply takes a callable and a TUPLE and calls the callable with the tuple's elements as arguments -- std::apply(f, std::make_tuple(1, 2, 3)) calls f(1, 2, 3). Under the hood it does exactly the index-pack expansion from the advanced-expansion example: it makes an index sequence for the tuple, expands std::get<Is>(tuple)... into the call, and forwards each element. So apply is the answer to how do I call a function with the contents of a tuple, which comes up whenever arguments have been bundled -- a deferred call, a task queue, a row of values -- and need to be spread back out. std::invoke is the general call operator: std::invoke(f, args...) calls f with args, but it works uniformly across every kind of callable the language has, which a plain f(args...) does not. It calls a free function, a lambda, or a functor the obvious way, and for a POINTER-TO-MEMBER it does the right special thing -- invoke(&Class::method, object, args...) calls object.method(args...), and invoke(&Class::field, object) reads the member -- so generic code that is handed any callable can call it one way instead of switching on its kind. This is the INVOKE operation the standard defines and that std::function, std::bind, std::thread, and the ranges algorithms all use to accept any callable. The two compose: std::apply uses invoke internally, so std::apply(f, tuple) works when f is a member pointer too. Reach for apply when the arguments live in a tuple, and for invoke when you must call a callable whose exact kind is generic."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "std::apply", url: "https://en.cppreference.com/w/cpp/utility/apply" }
+  - { name: "std::invoke", url: "https://en.cppreference.com/w/cpp/utility/functional/invoke" }

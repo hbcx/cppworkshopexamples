@@ -1,0 +1,2 @@
+copies = 0 (perfect forwarding copied nothing)
+name = gadget

@@ -1,0 +1,11 @@
+title: "Anti-pattern: relying on evaluation order in a call expansion"
+standard: "C++17"
+difficulty: 3
+summary: "Expanding a pack into a FUNCTION CALL's arguments, f(g(args)...), has UNSPECIFIED evaluation order, so side effects during expansion may run in any order and differ between compilers. A comma fold, (g(args), ...), and a braced-init-list both evaluate strictly left to right -- use one of those when order matters."
+notes: "Pack expansion produces a comma-separated list, but where that list is used decides the evaluation order, and one common place gives no guarantee. Expanding into a FUNCTION CALL's argument list -- f(g(args)...) -- produces f(g(a), g(b), g(c)), and the order in which a function's arguments are evaluated is UNSPECIFIED in C++, so g(a), g(b) and g(c) may run in any order, and different compilers really do differ. If g has side effects -- appending to a log, incrementing a counter, reading from a stream -- the observable order is not portable, and code that happens to work on one compiler can misbehave on another. This bug is easy to introduce because the expansion looks sequential. The fix is to expand in a context that DOES guarantee left-to-right order. A comma fold, (g(args), ...), evaluates its elements strictly left to right, so it is the right tool for ordered side effects. So does a braced initializer list, std::initializer_list<int>{ (g(args), 0)... }, which was the pre-C++17 way. This example runs the arguments through a comma fold and shows the side effects happen in argument order every time, and describes the function-call expansion whose order is not guaranteed. The rule: never rely on the evaluation order of a pack expanded into a function call; if the per-element operations have side effects whose order matters -- and especially if they read or write shared state -- use a comma fold or a braced-init-list, both of which the standard pins to left-to-right."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+detailed_tags:
+  - { name: "fold expression", url: "https://en.cppreference.com/w/cpp/language/fold" }
