@@ -1,0 +1,11 @@
+title: "Extract a member's type and a return type"
+standard: "C++11"
+difficulty: 2
+summary: "decltype(T::member) gives the declared type of a data member, and decltype(std::declval<T>().method()) gives the return type of a member function. Together they let generic code follow a type's own definitions -- so a variable can always match a member's type or a method's result, even if that definition changes later."
+notes: "Two common questions in generic code are what type does this member hold and what type does this method return, and decltype answers both. For a data member, decltype(T::member) reports its declared type directly -- decltype(Widget::id) is int, decltype(Widget::samples) is std::vector<double> -- and because the member is named as a bare id-expression, this follows the declared-type rule and gives the type exactly, with no stray reference. For a member function, the return type is the type of a call expression, so you pair decltype with declval: decltype(std::declval<Widget>().name()) is whatever name() returns, here std::string, without constructing a Widget or calling anything. The payoff is that the extracted type FOLLOWS the class definition. A variable declared as decltype(std::declval<Widget>().name()) is a std::string today, and if name() is later changed to return std::string_view, the variable becomes std::string_view too, with no edit -- the type is written once, at the source of truth. This is the everyday use of decltype and declval together, and it is the foundation for traits, adapters, and wrappers that must store or forward whatever a type happens to expose. A small caution carried over from the value-category rules: decltype(T::member) gives the clean declared type, but decltype(std::declval<T>().member) would give a reference type instead, because that form is an expression, not a bare name -- reach for decltype(T::member) when you want the member's own type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "std::declval", url: "https://en.cppreference.com/w/cpp/utility/declval" }

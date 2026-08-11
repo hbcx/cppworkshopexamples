@@ -1,0 +1,11 @@
+title: "Anti-pattern: declval used where it is evaluated"
+standard: "C++11"
+difficulty: 3
+summary: "std::declval has no definition on purpose: it exists only to be named inside decltype, sizeof, noexcept, or a requires-expression, where the expression is examined but not run. Use it in code that is actually evaluated -- Widget w = std::declval<Widget>(); -- and the program fails to LINK. To get a real object, construct one."
+notes: "std::declval is a type-level tool with a deliberate booby trap. It is declared but never defined, anywhere, so there is no function body to call. That is not an oversight -- it is the guarantee that declval can only be used where its call is never actually performed: an UNEVALUATED context, meaning inside decltype, sizeof, noexcept, or a requires-expression, where the compiler inspects the type of the expression without running it. Used that way, declval<T>() lets you name a value of T for the purpose of asking about T, and no code is emitted. The trap is to write it where the expression IS evaluated -- assigning std::declval<Widget>() to a real variable, or calling a method on it and using the result at run time. That compiles, because the declaration exists, but it does not link: the linker looks for the definition of declval to actually call, finds none, and reports an undefined reference, often a confusing message far from the mistake. The example uses declval correctly, only inside decltype to get a member function's return type, and describes the evaluated misuse in a comment. The rule is simple: declval is for TYPES, never for VALUES. If you need an actual object, construct one with a real constructor; if the type has no default constructor, that is a reason to keep using declval in the type query, not a reason to try to make declval hand you an instance. The sign of the bug is std::declval appearing outside decltype/sizeof/noexcept -- in an initializer, a return, or an argument that is really evaluated."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "std::declval", url: "https://en.cppreference.com/w/cpp/utility/declval" }

@@ -1,0 +1,2 @@
+after auto copy:         items[0]=a
+after decltype(auto) ref: items[1]=CHANGED

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 23, "out": "real tag: "}, {"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 7, "out": "w  (declval was used only for the TYPE above)\n"}, {"file": "main.cpp", "line": 24}, {"file": "main.cpp", "line": 25}]}

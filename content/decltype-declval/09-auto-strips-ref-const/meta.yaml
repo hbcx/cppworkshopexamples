@@ -1,0 +1,11 @@
+title: "Anti-pattern: auto silently drops const and references"
+standard: "C++11"
+difficulty: 3
+summary: "auto always deduces a value type, stripping references and const, so auto item : container copies every element and auto x = obj.getRef() copies instead of binding. For large elements that is a silent, needless copy; if you meant to modify the original it is a bug. Bind a reference with const auto& (or auto&, or decltype(auto)) to avoid the copy."
+notes: "auto is convenient but it has one rule that bites: it deduces by value, dropping top-level const and any reference. So auto never gives you a reference unless you write the & yourself. The most common place this hurts is a range-for loop: for (auto item : container) makes item a COPY of each element, so a container of large objects is copied element by element for no reason, and any change to item is lost. The example counts copies with an instrumented type: the auto loop makes one copy per element, and the const auto& loop makes none, iterating by reference. The same trap appears with getters -- auto value = obj.getRef() copies whatever getRef returns by reference, so you get an independent value, and if you then modify it expecting to change the object, nothing happens. The costs are two: performance, from copies you did not intend, especially in hot loops over big elements; and correctness, when you meant to observe or modify the original and instead worked on a throwaway copy. The fixes are all about asking for the reference explicitly: const auto& to read without copying, auto& to read and modify, or decltype(auto) when a return type or variable must forward the exact reference-ness of an expression (the previous examples). Reach for plain auto when you actually want an independent value; when you do not, say & -- auto will not add it for you. The sign in code is a range-for by value over a container of non-trivial elements, or an auto variable initialised from a function that returns a reference."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "auto", url: "https://en.cppreference.com/w/cpp/language/auto" }
+detailed_tags:
+  - { name: "decltype(auto)", url: "https://en.cppreference.com/w/cpp/language/auto" }

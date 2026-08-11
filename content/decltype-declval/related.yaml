@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "concepts"
+  note: "The C++20 successor for asking is this valid: a requires-expression checks an operation's validity by name, where decltype-plus-SFINAE did it by whether an expression was well-formed -- go there for named requirements that replace much of this type-query machinery."
+- slug: "constexpr-consteval"
+  note: "The value side of compile-time C++: decltype and declval compute TYPES at compile time, where constexpr and consteval compute VALUES -- go there for compile-time evaluation, immediate functions, and constexpr tables, the sibling in this category."
+- slug: "move-semantics"
+  note: "Where value categories come from: declval<T>() is an rvalue reference and decltype's rules turn on lvalue, xvalue and prvalue -- go there for the move, forwarding, and rvalue-reference rules those categories drive."

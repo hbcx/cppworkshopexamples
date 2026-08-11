@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 8}, {"file": "main.cpp", "line": 20, "out": "makeValue() = 42  <- returned by value, safe\n"}, {"file": "main.cpp", "line": 26, "out": "done\n"}, {"file": "main.cpp", "line": 27}, {"file": "main.cpp", "line": 28}]}

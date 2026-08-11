@@ -1,0 +1,1 @@
+greet() type deduced; a sample value is "hi"

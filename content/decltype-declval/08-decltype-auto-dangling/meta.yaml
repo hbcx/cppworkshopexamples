@@ -1,0 +1,11 @@
+title: "Anti-pattern: decltype(auto) returning a dangling reference"
+standard: "C++14"
+difficulty: 3
+summary: "With decltype(auto) as the return type, return x; and return (x); mean different things: the bare name returns by value, but the parenthesised name is an lvalue expression, so decltype((x)) is a reference and the function returns a reference to a local that dies at the return. The fix is to return the bare name -- no parentheses."
+notes: "decltype(auto) is powerful because it forwards a type exactly, but it inherits the decltype parentheses trap, and as a return type that trap becomes a dangling reference. When a function is declared decltype(auto) and its body says return x; where x is a local, decltype(x) is the declared type -- a value -- so the function returns by value and the caller gets a safe copy. But write return (x); with parentheses and decltype((x)) is an lvalue reference, so the function now returns a reference to the local x -- and x is destroyed the instant the function returns, leaving the caller with a reference to a dead object, which is undefined behaviour. The two versions differ by one pair of parentheses and look almost identical, which is what makes the bug easy to introduce and hard to see. This example runs only the safe version, which returns by value, and describes the dangling version in a comment rather than compiling it, because the result would be undefined behaviour that could crash or read garbage. The rule is narrow and worth memorising: with decltype(auto) as a return type, never wrap the returned expression in parentheses unless you genuinely intend to return a reference AND you are sure the referent outlives the call. The same care applies to returning (member) or (*ptr) forms that decltype turns into references. When in doubt, return the bare name for a value, or spell the return type out explicitly so the intent is not hidden in punctuation."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "decltype(auto)", url: "https://en.cppreference.com/w/cpp/language/auto" }

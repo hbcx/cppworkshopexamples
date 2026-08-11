@@ -1,0 +1,2 @@
+auto:        3 copies
+const auto&: 0 copies

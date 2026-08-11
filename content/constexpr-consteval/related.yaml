@@ -6,3 +6,5 @@
   note: "What if constexpr replaced: tag dispatch selected an implementation by a trait through an extra tag argument, where an if constexpr (or is_constant_evaluated) branch does it in one function -- go there for the older technique and where a constexpr branch is the modern form."
 - slug: "arrays"
   note: "Where a compile-time table lives: a std::array is the literal type that holds the result of a constexpr computation, since a std::vector cannot survive constant evaluation -- go there for the fixed-size array and its compile-time-friendly interface."
+- slug: "decltype-declval"
+  note: "The type side of compile-time C++: decltype and declval compute TYPES where constexpr and consteval compute VALUES -- go there to extract a member's type or a function's return type, function traits, and decltype(auto)."

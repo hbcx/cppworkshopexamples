@@ -14,3 +14,5 @@
   note: "Why resource-owning types are move-only: the rule of five here exists to make RAII types transfer ownership safely instead of copying a handle twice -- go there for the resource-management idiom these move operations serve."
 - slug: "rule-of-0-3-5"
   note: "The decision layer above these mechanics: how many of the five special members you must actually write -- zero when members self-manage, three for a raw resource, five to add cheap moves -- go there for the rule that says when to declare the moves this section explains."
+- slug: "decltype-declval"
+  note: "Where the lvalue, xvalue and prvalue categories are read at compile time: decltype's rules turn on value category and declval yields an rvalue reference -- go there for type extraction, function traits, and decltype(auto), built on the categories this section defines."

@@ -1,0 +1,1 @@
+real tag: w  (declval was used only for the TYPE above)

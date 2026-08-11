@@ -1,0 +1,11 @@
+title: "The trailing return type"
+standard: "C++11"
+difficulty: 2
+summary: "When a function's return type depends on its parameters, C++11 cannot name it before the function, because the parameters are not in scope yet. The trailing return type -- auto name(params) -> decltype(expr) -- moves the return type after the parameter list, where the parameters are visible. The classic use is a wrapper that returns whatever the wrapped call returns."
+notes: "In generic code the return type is often computed from the arguments -- add(a, b) returns whatever a + b is -- but in the normal syntax the return type comes first, before the parameters are declared, so you cannot mention a or b there. The trailing return type fixes the ordering: write auto in the return-type slot as a placeholder and put the real type after the parameter list, introduced by ->, where a and b are now in scope: auto add(T a, U b) -> decltype(a + b). The compiler reads the parameters, then the trailing type. The most important use is a forwarding wrapper whose return type must be exactly the wrapped call's type: auto callOn(F f, Arg x) -> decltype(f(x)) returns precisely what f(x) returns, whatever that is. This also makes the function SFINAE-friendly -- if decltype(f(x)) is ill-formed for some F, this overload quietly drops out of consideration rather than erroring, which is how constrained overload sets were built before concepts. Since C++14 a function may deduce its return type from the return statements with just auto and no trailing decltype, which is shorter for simple bodies; but the trailing form is still needed when you want the return type to be a decltype of a specific expression (to preserve references, or for SFINAE) rather than the plain-value type auto deduction produces. The trailing return type is also where decltype most often appears in ordinary code, which is why it sits between the type-query examples and decltype(auto) next."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "trailing return type", url: "https://en.cppreference.com/w/cpp/language/function" }

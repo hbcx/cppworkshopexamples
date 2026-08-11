@@ -1,0 +1,11 @@
+title: "std::declval: a value without constructing one"
+standard: "C++11"
+difficulty: 2
+summary: "std::declval<T>() names a value of type T in an unevaluated context, so you can ask about the result of an operation on T without building a T -- which matters when T has no default constructor. It returns T&&, has no definition, and may appear only inside decltype, sizeof, or noexcept, never in real code."
+notes: "decltype needs an expression to inspect, and often the expression you want is a call on some type T -- what does T::foo() return? You could write decltype(T().foo()), but that only works if T can be default-constructed; a type whose only constructor takes arguments cannot be written as T(). std::declval<T>() solves this: it is a function template that pretends to return a value of type T without ever being called, so you can name T{}.foo() as std::declval<T>().foo() for ANY T, constructible or not. It has two rules that follow from being a pure type-level tool. It returns T&&, an rvalue reference, so declval<T>() is an xvalue -- which usually does not matter when you only want a call's result type, but is worth knowing when reference-ness matters. And it has NO definition on purpose: it may appear only in an UNEVALUATED context -- inside decltype, sizeof, noexcept, or a requires-expression -- where the compiler examines the expression without running it. Try to actually call it in evaluated code and the program does not link, which is a deliberate guard and a dedicated anti-pattern here. In this example NoDefault has only an int constructor, so NoDefault{} is impossible, yet decltype(std::declval<NoDefault>().greet()) still recovers the return type std::string. declval is the standard partner of decltype for querying member functions and operators of arbitrary types, and it is what makes the member-return-type and function-trait techniques in this section work on types you cannot cheaply construct."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "std::declval", url: "https://en.cppreference.com/w/cpp/utility/declval" }

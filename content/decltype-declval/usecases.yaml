@@ -1,0 +1,19 @@
+- problem: "A generic wrapper -- a logging or timing decorator, a retry helper, a thread-pool submit -- must return whatever the function it wraps returns, and that type is not known until the wrapper is instantiated with a concrete callable."
+  why: "A trailing return type of decltype(f(args...)), or decltype(auto), makes the wrapper's return type follow the wrapped call exactly, including references, so a callable returning a reference is not silently copied. A fixed or plain-auto return type would either not compile for some callables or quietly turn a returned reference into a value."
+  signal: "A forwarding wrapper template that hard-codes a return type, or returns by plain auto, and so copies or fails to compile when the wrapped function returns a reference."
+
+- problem: "A trait or adapter needs the type a class member holds or the type a method returns -- to declare a matching field, to pick a container, to know what to convert -- and that type should track the class definition rather than be hard-coded."
+  why: "decltype(T::member) and decltype(declval<T>().method()) read the type straight from the class, so a later change to the member or return type flows through with no edit. Writing the type by hand duplicates the class's decision and drifts the moment the class changes."
+  signal: "A trait or wrapper with a hand-written type that repeats a class's member or return type, or a comment saying keep this in sync with that class."
+
+- problem: "Metaprogramming code must ask whether an operation is valid for a type, or what it yields, for types that are expensive or impossible to default-construct -- handles, non-default-constructible values, types with deleted default constructors."
+  why: "std::declval<T>() names a value of T inside decltype without constructing one, so the query works for any type regardless of its constructors. Writing T{} instead limits the query to default-constructible types and fails on exactly the handle and resource types that most need introspection."
+  signal: "A decltype or SFINAE expression using T{} or a temporary that breaks for types without a default constructor."
+
+- problem: "A proxy, view, or accessor should behave transparently -- return exactly what the underlying object returns, a reference when it is a reference so callers can assign through it, a value when it is a value."
+  why: "decltype(auto) as the return type forwards the underlying expression's type precisely, so a reference stays a reference and the accessor is a true pass-through. Plain auto would strip the reference and return a copy, making assignment through the accessor a silent no-op."
+  signal: "An accessor or operator[] that returns auto and whose callers cannot modify the underlying element, or a getter that unexpectedly returns a copy."
+
+- problem: "A framework must introspect callbacks it is handed -- a signal/slot library, a dependency-injection container, a serializer, a scripting bridge -- to know each callback's parameter types so it can bind, convert, or supply the right arguments."
+  why: "A function-traits partial specialization decomposes the callback's type into its return and parameter types, which decltype alone cannot reach, so the framework reads the signature directly from the callable. Requiring users to register signatures by hand is boilerplate that drifts from the actual functions and breaks silently when one changes."
+  signal: "A callback-taking API that asks the caller to also pass argument types or an arity, or that only accepts one fixed signature because it cannot inspect the callable."

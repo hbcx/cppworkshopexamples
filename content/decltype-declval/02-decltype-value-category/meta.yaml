@@ -1,0 +1,11 @@
+title: "decltype and value category: the parentheses trap"
+standard: "C++11"
+difficulty: 2
+summary: "decltype has two rules. For a bare name it gives the declared type. For any other expression it adds a reference by value category: an lvalue gives T&, an xvalue gives T&&, a prvalue gives T. The famous consequence is that decltype(x) is int but decltype((x)) -- with extra parentheses -- is int&."
+notes: "decltype looks simple until the value-category rules appear, and they are worth learning because one of them is a real trap. Rule one: if the operand is an unparenthesised id-expression (a bare variable name) or a class member access, decltype gives the DECLARED type of that entity -- decltype(x) is int, decltype(cx) is const int, decltype(rx) is int& because rx was declared a reference. Rule two: for any other expression, decltype reports the type adjusted by the value category of the expression -- an lvalue expression gives T&, an xvalue (such as the result of std::move) gives T&&, and a prvalue (such as a + b) gives plain T. The trap lives in the gap between the two rules: a bare name x follows rule one and gives int, but wrapping it in parentheses, (x), makes it an expression rather than a bare name, and a parenthesised variable is an lvalue, so decltype((x)) follows rule two and gives int&. The two look almost identical and mean different things. This is mostly harmless when you are only querying a type, but it becomes a bug with decltype(auto) as a return type, where return (x); silently returns a reference to a local -- an anti-pattern later in this section. The rule to remember: decltype(name) is the declared type, decltype((name)) is a reference, and the difference is exactly one pair of parentheses."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

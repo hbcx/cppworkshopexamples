@@ -1,0 +1,11 @@
+title: "Function traits: reaching a parameter's type"
+standard: "C++11"
+difficulty: 3
+summary: "decltype can name a return type but cannot reach a parameter's type. To get that you decompose the function TYPE with a partial specialization: fn_traits<R(Args...)> captures the result, the arity, and each argument type through std::tuple_element. A second specialization for R(C::*)(Args...) const handles member functions."
+notes: "There is a limit to decltype: from a function you can name its return type, but there is no expression whose decltype is the type of the second parameter. To reach parameter types you take the function TYPE apart, and the tool for that is a class template partial specialization that pattern-matches the shape of the type. fn_traits is declared but not defined for a general F, then specialized for R(Args...) -- a function type -- where the return type R and the parameter pack Args are named directly. From the pack you get the count with sizeof...(Args) and each type with std::tuple_element<I, std::tuple<Args...>>, which indexes the pack as if it were a tuple. So fn_traits<decltype(free_fn)> exposes result, arity, and arg<0>, arg<1>, and so on, each a real type you can use. Member functions need one more specialization, because a pointer to member has a different shape -- R(C::*)(Args...) const -- so a second partial specialization matches that and reuses the first by inheriting from fn_traits<R(Args...)>, stripping the class away. This function-traits idiom is how signal/slot libraries, dependency-injection containers, serialization, and scripting bridges introspect callbacks: they read the callback's parameter types to know what to pass, bind, or convert. Two practical notes. Real libraries add specializations for noexcept, for the non-const and ref-qualified member forms, and for plain function pointers, since each is a distinct type the pattern must match. And this only works on a function whose type is a single, known type -- an OVERLOADED function has no one type, which is the trap the last anti-pattern covers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "std::tuple_element", url: "https://en.cppreference.com/w/cpp/utility/tuple/tuple_element" }

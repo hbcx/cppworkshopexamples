@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 14}, {"file": "main.cpp", "line": 29}, {"file": "main.cpp", "line": 30, "out": "label=computed (its type follows Widget::name()'s return type)\n"}, {"file": "main.cpp", "line": 31}, {"file": "main.cpp", "line": 32}]}

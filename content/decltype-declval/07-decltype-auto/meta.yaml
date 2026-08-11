@@ -1,0 +1,12 @@
+title: "decltype(auto): keep the reference auto strips"
+standard: "C++14"
+difficulty: 3
+summary: "auto deduction always gives a value type: it drops references and const. decltype(auto) instead deduces exactly what the initializer or return expression is, keeping references. That makes decltype(auto) the way to write a transparent accessor that returns a reference the caller can modify, where auto would hand back a copy."
+notes: "auto and decltype(auto) both let the compiler work out a type, but by different rules. auto uses template-argument deduction, which strips top-level const and references and gives a plain value type -- auto v = getRef() copies, even if getRef returns a reference. decltype(auto) uses decltype's rules on the initializer or return expression, so it keeps the reference and const exactly: if the expression is an lvalue of type std::string&, decltype(auto) is std::string&, not std::string. The headline use is a transparent accessor. Registry::at returns decltype(auto), and because items[i] is an lvalue reference into the vector, at() returns std::string& -- so the caller can assign through it and change the stored element. Write the same accessor with auto and it would return a copy, and assigning to that copy would change nothing, a silent bug. The example shows both side by side: an auto copy of at(0) is modified and the original is unchanged, while a decltype(auto) reference to at(1) modifies the real element. The cost of the power is that decltype(auto) inherits the parentheses trap from decltype -- return x; and return (x); differ, the second returning a reference to a local, which is the dangling anti-pattern next. Use decltype(auto) when a function or variable must forward a type EXACTLY, references and all -- generic accessors, perfect-forwarding wrappers, proxies -- and use plain auto when you actually want an independent value."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "decltype(auto)", url: "https://en.cppreference.com/w/cpp/language/auto" }
+  - { name: "auto", url: "https://en.cppreference.com/w/cpp/language/auto" }

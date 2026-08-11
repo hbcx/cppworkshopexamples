@@ -1,0 +1,2 @@
+makeValue() = 42  <- returned by value, safe
+done

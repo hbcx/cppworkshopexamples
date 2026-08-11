@@ -1,0 +1,11 @@
+title: "Anti-pattern: decltype of an overloaded function"
+standard: "C++11"
+difficulty: 3
+summary: "An overloaded function name does not have a single type, so decltype(&Printer::print) does not compile when print is overloaded -- the compiler cannot pick which one you mean. Name the overload by casting to its exact signature: static_cast to a function-pointer or member-function-pointer type selects one, and then its type is unambiguous."
+notes: "decltype and the address-of operator both need a single type, and an overloaded function name does not provide one. print here has two overloads, one taking int and one taking std::string, so &Printer::print is ambiguous: there is no one member-function pointer it could form, and decltype(&Printer::print) fails to compile with a message about not being able to resolve the overloaded function. The same happens for a free function with overloads, and it is a common wall to hit when feeding a function to the function-traits idiom from earlier -- that idiom needs the function TYPE, and an overload set has none. The fix is to tell the compiler which overload you mean by naming its exact type, usually through a static_cast: static_cast<void (Printer::*)(int) const>(&Printer::print) selects the int overload and yields a member-function pointer of that precise type, and casting to the std::string signature selects the other. Once the overload is pinned, its type is a normal single type that decltype, a typedef, or a trait can use. The example calls each selected overload through its pointer to show they resolved to different functions. The broader point is that overload resolution normally happens at a call, using the arguments; when you instead want the function itself as a value or a type -- to store a pointer, to introspect it, to pass it generically -- there are no arguments to resolve with, so you must supply the signature yourself. The sign of this trap is taking the address of, or decltype of, a function that has more than one overload, without a cast to say which."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }

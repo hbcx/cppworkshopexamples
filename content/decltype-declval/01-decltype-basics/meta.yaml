@@ -1,0 +1,11 @@
+title: "decltype: the type of an expression"
+standard: "C++11"
+difficulty: 1
+summary: "decltype(expr) is the type of an expression, worked out by the compiler without evaluating the expression. Use it to declare a variable of the same type as something else -- the result of an operation, a member, a call -- without spelling that type out or running any code."
+notes: "decltype answers a single question: what is the type of this expression? The compiler inspects the expression and reports its type, and crucially it does NOT evaluate the expression -- no function is called, no side effect happens, the operand exists only to be examined. That makes decltype the tool for saying a variable of whatever type this expression has. Here decltype(a) is int, decltype(a + b) is double because mixing int and double yields double, and decltype(v.size()) is the container's own size_type without you needing to know or write std::vector<int>::size_type. The last line shows the no-evaluation rule directly: decltype(std::cout << text) names the type std::ostream& but prints nothing, because the stream insertion is never actually performed. This is different from auto, which deduces from an initializer you must provide and which strips references and const; decltype reports the type of an arbitrary expression, exactly, including its reference-ness (the subject of the next example). Where it earns its keep is generic code, where the type you want depends on template parameters and cannot be named ahead of time -- the result of f(x), the type a member holds, what an operator returns. The mental model to keep: decltype is a compile-time question about a type, and asking it costs nothing at run time because the expression inside is never run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
