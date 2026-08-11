@@ -16,3 +16,5 @@
   note: "The compile-time facts a concept is made of: a concept is a named bool built from traits, and the standard concepts wrap traits like is_integral and is_same -- go there for the type-category, relationship and transformation traits underneath."
 - slug: "variadic-templates"
   note: "Constraining a whole argument pack: a fold over a concept, (std::integral<Ts> && ...), in a requires-clause demands a property of every element -- go there for parameter packs, expansion, and fold expressions."
+- slug: "template-basics"
+  note: "What concepts constrain: the function and class templates, deduction, specialization and dependent names that concepts sit on top of -- go there for the template foundations before adding the constraints."

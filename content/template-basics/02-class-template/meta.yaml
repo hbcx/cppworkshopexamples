@@ -1,0 +1,11 @@
+title: "Class templates"
+standard: "C++11"
+difficulty: 1
+summary: "A class template parameterises a whole class on a type. Box<int> and Box<std::string> are DIFFERENT types generated from one Box definition, each with its own member T. Unlike function templates, before C++17 you name the type argument explicitly when creating one: Box<int> b(42)."
+notes: "A class template applies the same idea to a type rather than a function: template <class T> before a class makes T a placeholder used throughout the members, so Box<T> holds a T, returns a T, and takes a T. Instantiating it with different arguments produces DIFFERENT, unrelated types -- Box<int> and Box<std::string> share the source but are as distinct as two hand-written classes, with their own member layout and their own compiled member functions. This is how the standard containers work: std::vector<int> and std::vector<std::string> are one template stamped out for two element types. A few practical points. The member functions of a class template are themselves templates and are only instantiated when actually called, so a member that would not compile for some T is fine as long as that T never calls it -- which lets one template serve types that support slightly different operations. Before C++17 you must name the type argument when you create an object, Box<int> b(42), because there is no argument to deduce the class parameter from at the declaration; C++17 class template argument deduction relaxes this for constructors, covered later. And the whole definition normally lives in a header, because the compiler needs to see it to instantiate Box<YourType> in your translation unit -- putting member definitions in a .cpp is the classic link-error trap, also covered later. The model: a class template is a factory for types, one concrete class per set of arguments, and each instantiation is its own independent type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }

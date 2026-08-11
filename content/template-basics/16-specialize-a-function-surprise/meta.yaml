@@ -1,0 +1,12 @@
+title: "Anti-pattern: a function-template specialization overload resolution never picks"
+standard: "C++11"
+difficulty: 3
+summary: "A full specialization of a function template does NOT take part in overload resolution. The compiler first picks the best overload or base template, and only THEN, if the primary template won, uses a specialization. So a plain overload can silently win over a specialization you expected to be chosen -- prefer overloading, not specializing, function templates."
+notes: "Full specialization of a function template is legal, but it behaves in a way that surprises almost everyone, which is why the guidance is to avoid it. The key rule: a function-template specialization is NOT a candidate in overload resolution. The compiler first does overload resolution among the primary templates and the non-template overloads, picks the best one, and ONLY if the winner is a primary template does it then look for a specialization of that template to use. So a specialization can be completely bypassed. This example has a function template f(T), a plain overload f(int*), and a full specialization f<int*>(int*) of the template. You might expect f(&x) with an int* to call the specialization -- but it does not: overload resolution runs first, the non-template f(int*) is a better match than the template, so it wins, and the specialization of the template is never even considered. The specialization would only matter if the primary template had been the best match, which it was not. The result is code where adding an overload silently changes which of your two int* implementations runs, with no error to warn you, and where the specialization you carefully wrote does nothing. Because of this, the long-standing advice (from Herb Sutter and the guidelines) is: do NOT specialize function templates -- overload them instead. Overloads participate in resolution directly, so what you see is what gets called. Reserve specialization for CLASS templates and traits, where it behaves predictably, and route function variation through overloading, which this and the previous anti-pattern both point to."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "template specialization", url: "https://en.cppreference.com/w/cpp/language/template_specialization" }
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

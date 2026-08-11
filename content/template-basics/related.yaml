@@ -1,0 +1,10 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "concepts"
+  note: "How to constrain the templates this chapter builds: a concept states what a template parameter must support, so a wrong argument is rejected at the call with a clear message instead of deep inside the body -- go there for named requirements and constrained templates."
+- slug: "type-traits"
+  note: "What partial specialization is used for at scale: the standard traits are primary templates plus partial specializations that pattern-match a type's shape -- go there for is_pointer, remove_reference and the rest, built with the specialization this chapter introduces."
+- slug: "variadic-templates"
+  note: "Templates over any NUMBER of arguments: a parameter pack generalises a single type parameter to a list, with expansion and fold expressions to process it -- go there once the fixed-arity templates here are familiar."
+- slug: "crtp"
+  note: "A first real pattern built from these basics: a class template whose parameter is its own derived type gives static polymorphism with no vtable -- go there for the idiom and where the compile-time form pays off."

@@ -1,0 +1,12 @@
+title: "Alias templates and variable templates"
+standard: "C++14"
+difficulty: 2
+summary: "An alias template gives a short name to a family of types: template <class V> using StringMap = std::map<std::string, V>. A variable template (C++14) is a family of constants, one per type: template <class T> constexpr T pi. Both parameterise something other than a class or function -- a name and a value."
+notes: "Two smaller template forms round out the basics. An ALIAS template is a parameterised typedef: template <class V> using StringMap = std::map<std::string, V>; means StringMap<int> IS std::map<std::string, int>, a shorter name for a whole family of types. It is not a new type, just a new spelling, so it interchanges freely with what it aliases, and it is the modern replacement for the old nested-typedef trick (a struct with a member typedef and ::type). The standard library uses alias templates everywhere -- the _t helpers like remove_reference_t are alias templates over the trait's ::type -- and they are the clean way to hide a long or repetitive type behind a readable name. A VARIABLE template, added in C++14, is a parameterised constant: template <class T> constexpr T pi = T(3.14159...); defines a family where pi<float> is a float and pi<double> a double, each at that type's precision. Before variable templates you wrote a function or a static data member of a class template to get a per-type constant; the variable template says it directly. The _v helpers like is_integral_v are variable templates over the trait's ::value. Both forms follow the same idea as everything in this section -- one definition parameterised on a type -- applied to a type NAME and to a VALUE rather than to a class or a function. Reach for an alias template to name a family of types and a variable template for a family of typed constants, and recognise them as what the standard library's _t and _v helpers are made of."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "type alias", url: "https://en.cppreference.com/w/cpp/language/type_alias" }
+  - { name: "variable template", url: "https://en.cppreference.com/w/cpp/language/variable_template" }

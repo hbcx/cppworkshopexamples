@@ -1,0 +1,11 @@
+title: "Function templates"
+standard: "C++11"
+difficulty: 1
+summary: "A function template is one definition that works for many types: template <class T> before the function makes T a placeholder the compiler fills in. It DEDUCES T from the arguments, so maxOf(3, 7) and maxOf(2.5, 1.5) both work from the same code, and you can also state the type explicitly with maxOf<int>(...)."
+notes: "A function template lets you write an algorithm once and have the compiler generate a version for each type it is used with. template <class T> introduces a type parameter T, and inside the function T stands for whatever type the call supplies -- so maxOf(T a, T b) compares two values of any type that has operator>. The key convenience is DEDUCTION: you call a function template like an ordinary function, maxOf(3, 7), and the compiler works out T from the argument types, here int, then instantiates maxOf<int> for you. Call it with doubles and it makes maxOf<double>; with std::strings, maxOf<std::string>. Each distinct T produces a separate instantiation -- real, compiled code generated on demand -- which is why a template is a recipe, not a function, until it is used. You can also supply the type explicitly in angle brackets, maxOf<int>(9, 4), which you need when there is nothing to deduce from or when you want a specific type rather than the deduced one. A template is only checked when it is INSTANTIATED, so an error in the body (calling a member the type does not have) surfaces at the point of use, not at the definition -- which is both the flexibility and the source of the long error messages templates are known for, and what concepts later tame. The mental model to start with: a function template is a pattern, the compiler stamps out a concrete function per type from the arguments, and explicit angle brackets override the deduction when you need to."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

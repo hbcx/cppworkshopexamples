@@ -1,0 +1,11 @@
+title: "Non-type template parameters"
+standard: "C++17"
+difficulty: 2
+summary: "A template parameter can be a VALUE, not a type: template <class T, int N> bakes a compile-time constant into the type, so Buffer<int, 4> has its size in its type and Buffer<int, 4> and Buffer<int, 8> are different types. C++17 template <auto V> deduces the constant's type for you."
+notes: "Not every template parameter is a type. A non-type template parameter is a compile-time VALUE carried in the type itself -- an integer, an enum value, a pointer, and since C++20 even some class-type constants. The classic use is a fixed size: template <class T, int N> struct Buffer holds T data[N], so N is part of Buffer<T, N>'s type, the size is known at compile time with no run-time storage, and Buffer<int, 4> and Buffer<int, 8> are distinct, incompatible types -- which is exactly how std::array<T, N> encodes its length. Because the value is a constant expression, it can size an array, feed another template, or appear in a static_assert. The argument must itself be a constant expression: Buffer<int, n> with a run-time n does not compile, the same rule the const-versus-constexpr distinction rests on. C++17 adds template <auto V>, which deduces the parameter's TYPE from the value, so one template accepts an int, a char, or an enum constant without you writing the type -- Constant<42> deduces int, Constant<'A'> deduces char. There are limits on what may be a non-type parameter -- before C++20 floating-point values and class types were not allowed, only integral and enumeration types, pointers, and references -- so a non-type parameter is for whole-number-like compile-time constants, not arbitrary values. Reach for a non-type parameter when a size, a count, a flag, or a fixed identifier is known at compile time and should be part of the type, giving you compile-time checking and zero run-time cost for that value."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "non-type template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

@@ -1,0 +1,11 @@
+title: "Template template parameters"
+standard: "C++11"
+difficulty: 3
+summary: "A template parameter can itself be a TEMPLATE, not a type: template <template <class...> class Container> lets a class be parameterised on WHICH container to use, then write Container<T> inside. Stack<std::vector, int> and Stack<std::list, int> share the same Stack code over different backing containers."
+notes: "Usually a template parameter is a type or a value, but it can also be a TEMPLATE that has not yet been given its own arguments -- a template template parameter. The syntax nests: template <template <class...> class Container> declares a parameter Container that is itself a class template taking type arguments, and inside the class you apply it, Container<T>, to instantiate whatever container was passed. This example makes a Stack parameterised on its backing container as well as its element, so Stack<std::vector, int> stores its elements in a std::vector and Stack<std::list, int> stores them in a std::list, from one Stack definition -- the container is a choice the user makes, not something baked in. Two practical points. The parameter's own signature must be compatible with what you pass: std::vector actually has more than one template parameter (element and allocator), so declaring the parameter as template <class...> class -- accepting any number of type arguments -- matches vector, list, deque and friends, whereas a stricter template <class> class would reject them. And a template template parameter takes the template itself, not an instantiation: you pass std::vector, not std::vector<int>, and the class supplies the element type. This is a niche but real tool, used when generic code must control the KIND of template it builds -- a container adaptor that lets the caller pick the underlying container (which is close to how std::stack and std::queue are actually parameterised), or a policy that is itself a template. Most generic code does not need it, but when you want to abstract over a template rather than a type, this is the parameter that does it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "template template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

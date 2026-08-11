@@ -1,0 +1,19 @@
+- problem: "The same logic is needed for several unrelated types -- a container, an algorithm, a utility -- and copying it per type means several near-identical bodies that drift apart as they are maintained."
+  why: "A function or class template writes the logic once and the compiler generates a version per type, so there is a single source of truth to fix and test. Hand-written copies per type multiply bugs and diverge, and a base-class abstraction adds a virtual call and forces unrelated types under one hierarchy they do not share."
+  signal: "Two or more functions or classes that are identical except for a type, or a set of overloads whose bodies are copy-paste with the type swapped."
+
+- problem: "A component has a behaviour most users should not have to think about but some must customise -- a container's allocator, a sort's comparator, a smart pointer's deleter, a hash."
+  why: "A template parameter defaulted to the ordinary choice lets the common case stay simple, T alone, while a caller who needs to can pass their own policy, and a template template parameter even lets them pick the underlying container. A fixed hard-coded behaviour cannot be customised, and a runtime callback pays an indirect call the compile-time policy avoids."
+  signal: "A class that hard-codes a comparator, allocator, or container it could expose as a defaulted template parameter, or a runtime std::function used only to select a compile-time-known policy."
+
+- problem: "A size, dimension, or fixed identifier is known at compile time -- a matrix's rows and columns, a ring buffer's capacity, a protocol version -- and encoding it in the type would give compile-time checking and no run-time storage."
+  why: "A non-type template parameter bakes the constant into the type, so a mismatch is a compile error and the value costs no memory, exactly as std::array<T, N> encodes its length. A run-time size field allows shapes to be mixed by mistake and stores a number the type could have carried for free."
+  signal: "A class with a size or dimension passed as a constructor argument and stored in a member, where every instance's size is actually a compile-time constant."
+
+- problem: "A long or repetitive type spelled out across a codebase -- a nested map, a specialization with many arguments -- is hard to read and change, and a per-type constant is duplicated as a function or a static member."
+  why: "An alias template names the family of types once (StringMap<V> for std::map<std::string, V>), and a variable template gives a typed constant directly (pi<T>), so both read as what they mean and change in one place. The old nested-typedef and static-member-of-a-class-template workarounds are more boilerplate for the same effect."
+  signal: "A verbose templated type repeated at many call sites, or a per-type constant implemented as a function template or a class-template static member."
+
+- problem: "Creating objects of a class template is noisy because the type arguments must be spelled out even though they are obvious from the constructor arguments -- std::pair<int, double>{1, 2.5}, a lock_guard over a named mutex."
+  why: "Class template argument deduction lets you drop the angle brackets -- Pair p(1, 2.5), std::lock_guard g(m) -- and a deduction guide covers the cases the constructor cannot express, so template types are as easy to create as ordinary ones. Writing the arguments by hand is repetitive and a place to get them wrong."
+  signal: "Object creations that spell out class template arguments the constructor already determines, or a make_ helper function written only to deduce a class template's arguments."

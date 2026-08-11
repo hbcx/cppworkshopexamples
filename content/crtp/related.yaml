@@ -14,3 +14,5 @@
   note: "The run-time hook CRTP replaces at compile time: NVI wraps a private VIRTUAL step in a non-virtual base method, where CRTP inlines the derived step with no vtable -- go there for the run-time customization point and the base-owns-the-call structure both idioms share."
 - slug: "concepts"
   note: "How to constrain the templates CRTP is built from: a concept states what the derived type must provide, so a CRTP base can require its interface and reject a wrong parameter with a clear message -- go there for concepts, requires-expressions, and constrained templates."
+- slug: "template-basics"
+  note: "The foundation CRTP is a pattern of: a class template whose parameter is its own derived type -- go there for function and class templates, specialization, and the deduction and dependent-name rules every template idiom rests on."

@@ -1,0 +1,7 @@
+show: 42
+show: 3.14
+show: hi
+twice(21)  = 42
+twice(2.5) = 5
+value 7 -- arithmetic? true
+value no -- arithmetic? false

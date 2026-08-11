@@ -8,3 +8,5 @@
   note: "A place traits do their work: a trait produces the true_type or false_type that tag dispatch routes on to pick an overload at compile time -- go there for the technique that turns a trait's answer into a chosen implementation."
 - slug: "variadic-templates"
   note: "Where traits are folded over a pack: an && fold of a trait constrains every element of a variadic template, and make_index_sequence drives pack expansion -- go there for parameter packs, fold expressions, and constraining a pack."
+- slug: "template-basics"
+  note: "The specialization traits are made of: the standard traits are primary templates plus partial specializations -- go there for the class-template specialization mechanism, plus function and class templates, deduction and dependent names."

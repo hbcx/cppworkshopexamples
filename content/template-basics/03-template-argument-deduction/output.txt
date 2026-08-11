@@ -1,0 +1,5 @@
+identity(42)  -> 42
+identity(2.5) -> 2.5
+convert<int>(3.9)   -> 3
+convert<double>(7)  -> 7
+identity(vector).size() -> 3

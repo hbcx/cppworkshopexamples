@@ -1,0 +1,11 @@
+title: "Full (explicit) specialization"
+standard: "C++11"
+difficulty: 2
+summary: "A full specialization gives a completely separate definition for one exact set of template arguments. template <> struct TypeName<int> replaces the primary template just for int; every other type still uses the primary. It is how you special-case a template for a specific type."
+notes: "Sometimes one particular type needs a different implementation from the generic one. A full (or explicit) specialization provides exactly that: template <> struct TypeName<int> is a stand-alone definition used only when the argument is precisely int, while every other type falls back to the primary template. The template <> with empty angle brackets marks it as a specialization rather than a new template, and the specialized arguments go on the name, <int>. The specialization is a wholly separate body -- it can have different members, a different base, different data -- so it is the tool when a type is different enough that parameterised code cannot express it: a traits class that must give a specific answer for a specific type, a serializer with a hand-tuned path for one format, a container optimised for bool. This example specializes a TypeName traits class for int and bool, leaving the generic answer for the rest. Two cautions carried into the anti-patterns. Full specialization of a CLASS template is well-behaved and common; full specialization of a FUNCTION template is allowed but interacts with overloading in surprising ways, so overloading is usually preferred there. And PARTIAL specialization -- matching a family of types rather than one exact type -- is the next example and is only available for class templates. For a single exact type that needs its own definition, a full specialization of a class or traits template is the direct, correct tool."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "template specialization", url: "https://en.cppreference.com/w/cpp/language/template_specialization" }

@@ -1,0 +1,11 @@
+title: "Template argument deduction and its limits"
+standard: "C++11"
+difficulty: 2
+summary: "The compiler deduces a template parameter from the ARGUMENTS that use it. A type that appears only in the return, or nowhere in the parameters, cannot be deduced and must be given explicitly -- convert<int>(x). And a braced list {1,2,3} has no type of its own, so it cannot drive deduction at all."
+notes: "Deduction is what lets you call a template without angle brackets, and it works by matching each argument's type against the parameter that uses the template parameter. If T appears in a parameter -- T x, const T&, T* -- the compiler reads T off the argument. The limits follow directly from that rule. A type that does NOT appear in any parameter cannot be deduced: convert here has a return type R that shows up nowhere in the parameter list, so R must be supplied explicitly, convert<int>(3.9), while T is still deduced from the argument. When you give some arguments explicitly they fill the parameters left to right, so the ones you must specify have to come first in the template parameter list -- which is why a to-be-deduced type is usually listed after an explicit one. Two more common deduction failures are worth knowing. A braced initializer list, {1, 2, 3}, has no type by itself, so passing it to a plain template parameter fails -- the compiler has nothing to deduce T from -- which is why you construct the container first. And deduction does exact type matching, not conversions: it will not deduce T=double to make an int argument fit alongside a double one, so mismatched argument types for the same T are an error rather than a promotion. When deduction cannot find a type or finds two conflicting ones, the fix is to state the type explicitly in angle brackets; deduction is a convenience for the common case, not a solver."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

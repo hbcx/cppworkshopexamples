@@ -1,0 +1,11 @@
+title: "The template disambiguator: telling the compiler a name is a template"
+standard: "C++11"
+difficulty: 3
+summary: "The mirror of typename: when a member template is reached through a dependent object, the compiler does not know the name is a template and reads the following < as a less-than. You disambiguate with the template keyword -- w.template scaled<5>(), w->template scaled<7>(), and typename W::template Slot<int> after ::."
+notes: "This is the second half of two-phase lookup. In the first phase, with the template parameters still unknown, the compiler cannot tell that a member reached through a dependent object is itself a template, so it parses scaled<5>() as (scaled < 5) > () -- a comparison, not a call with template arguments. The template keyword right after the . says the member is a template and the angle brackets are its arguments: w.template scaled<5>(). The same disambiguation is needed after -> for a pointer (w->template scaled<7>()) and after :: for a dependent nested template. The :: case is the one people trip on, because it usually needs BOTH keywords at once: typename W::template Slot<int> reads as typename (this whole thing is a type) plus template (Slot is a template). The rule pairs with the previous example: typename before a dependent type name, template before a dependent member template. Both are pure disambiguation -- you only need them inside a template, on a name that depends on a parameter; on a concrete type the compiler already knows what the member is and the keywords are neither needed nor allowed there."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "dependent name", url: "https://en.cppreference.com/w/cpp/language/dependent_name" }

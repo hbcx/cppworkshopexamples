@@ -1,0 +1,12 @@
+title: "Anti-pattern: a template definition left in a .cpp"
+standard: "C++11"
+difficulty: 3
+summary: "A template is only instantiated where its DEFINITION is visible, so putting the definition in a .cpp and only a declaration in the header makes a caller in another file fail to LINK. The fix is to define templates in the header, or -- if the definition must stay in a .cpp -- to explicitly instantiate the types you use, as this example does."
+notes: "This is the most common structural mistake with templates. A template is not code until it is instantiated, and implicit instantiation happens in the translation unit that USES the template and needs the full definition to be visible there. So the ordinary habit of declaring in a header and defining in a .cpp breaks: if mathutil.hpp only declares template <class T> T twice(T x); and mathutil.cpp defines it, then main.cpp -- which includes the header and calls twice(21) -- cannot instantiate twice<int>, because the definition is not visible in main.cpp's translation unit, and the program fails to LINK with an undefined reference to twice<int>. The header saw only a promise the definition never kept where it was needed. There are two fixes. The usual one is to DEFINE templates in the header, so every user sees the full definition and can instantiate whatever type they need -- which is why almost all template code is header-only. The other, used when the definition really must live in a .cpp (to hide it, or to cut compile time for a known, closed set of types), is EXPLICIT INSTANTIATION: in the .cpp, after the definition, write template int twice<int>(int); for each type you support, which forces the compiler to emit that instantiation's code there so the linker can find it. This example uses the explicit-instantiation form -- the definition is in mathutil.cpp with template int and template double lines -- so it links, but it only works for the types instantiated; a call with an unlisted type would fail to link again. The rule: put template definitions in the header unless you have a specific reason to explicitly instantiate a fixed set of types in a .cpp."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "explicit instantiation", url: "https://en.cppreference.com/w/cpp/language/class_template" }
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

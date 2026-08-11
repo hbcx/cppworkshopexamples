@@ -1,0 +1,11 @@
+title: "Dependent type names: the typename keyword"
+standard: "C++11"
+difficulty: 3
+summary: "Inside a template, a name that depends on a template parameter is not yet known to be a type or a value, so the compiler assumes a value by default. When it names a type -- typename Container::value_type, typename Container::const_iterator -- you must prefix typename to say so. This is a consequence of two-phase lookup."
+notes: "Templates are checked in two phases: once when the definition is parsed, with the template parameters still unknown, and again when the template is instantiated with concrete types. In the first phase the compiler cannot know what a name that DEPENDS on a template parameter refers to -- Container::value_type could be a type in one Container and a static data member in another -- so by default it assumes such a dependent qualified name is a VALUE, and if you meant a type you must say so with typename. That is why firstOf and sumOf here write typename Container::value_type and typename Container::const_iterator: without typename the compiler reads them as values and rejects the code, and adding it declares the dependent name is a type. The rule of thumb: inside a template, if a qualified name depends on a parameter and names a type, prefix typename. The mirror case -- a dependent member TEMPLATE, which needs the template keyword -- is the next example. These two keywords are pure disambiguation for the first phase of lookup, and forgetting them is one of the most common template compile errors."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "dependent name", url: "https://en.cppreference.com/w/cpp/language/dependent_name" }

@@ -1,0 +1,11 @@
+title: "Default template arguments"
+standard: "C++11"
+difficulty: 2
+summary: "A template parameter can have a default, used when the caller does not supply it. std::vector<T, Alloc = std::allocator<T>> and std::map<K, V, Cmp = std::less<K>> work this way. Here pickBest defaults its comparator to std::less, so the common case is one word, and passing std::greater flips the behaviour."
+notes: "A template parameter can carry a default value, so a caller only writes the arguments that differ from the common case. This is how the standard containers stay simple to use while staying configurable: std::vector<int> quietly means std::vector<int, std::allocator<int>>, and std::map<K, V> means std::map<K, V, std::less<K>, std::allocator<...>> -- the allocator and comparator have sensible defaults you rarely override. The example gives pickBest a comparator parameter Cmp defaulting to std::less<T>, so pickBest(v) uses the default and finds the maximum, while pickBest(v, std::greater<T>{}) supplies a different comparator and finds the minimum, all from one template. Defaults follow a rule like function default arguments: once a parameter has a default, every parameter after it must have one too, because you fill arguments left to right and cannot skip an earlier one. A default can also depend on an earlier parameter -- Cmp = std::less<T> uses T -- which is what lets a container default its comparator to one that orders its own key type. The pattern is the policy-with-a-default: expose a template parameter for a behaviour (a comparator, an allocator, a hash, a deleter), default it to the ordinary choice so most users ignore it, and let the rest swap in their own. It keeps a template both easy for the common case and open for the uncommon one, without a second template or an overload."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

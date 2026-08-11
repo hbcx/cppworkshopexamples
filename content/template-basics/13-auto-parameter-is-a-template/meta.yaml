@@ -1,0 +1,12 @@
+title: "An auto parameter is a template in disguise"
+standard: "C++20"
+difficulty: 2
+summary: "Writing auto for a function parameter (C++20) is not a special kind of parameter -- it is exactly a template parameter with a shorter spelling. void show(auto x) means template <class T> void show(T x): it deduces per call and instantiates once per argument type. A generic lambda (C++14) is the same trick a step earlier."
+notes: "This is the abbreviated function template. Each auto in the parameter list introduces an invented template parameter, so void show(auto x) is template <class T> void show(T x), and auto f(auto a, auto b) has two independent parameters, template <class T, class U>. The consequences are the consequences of templates: the argument type is deduced at each call, every distinct type is a separate instantiation with its own generated code, and the body is only checked against a type when that type is actually used -- so an operation the type does not support is an error at instantiation, not at definition. That is why show works for int, double and std::string here with one definition. The generic lambda from C++14 is the same mechanism: [](auto x){ ... } gives the closure type a templated operator(), so the single lambda object can be called with many types, each instantiating the call operator afresh. Reach for the auto form when you would otherwise write a one-line template <class T> and the explicit parameter name buys nothing; reach for the written-out template when you need to NAME the type (to use it in the body, constrain it, or refer to it in the return type). The two are interchangeable, and you can even mix them -- add a concept before auto, void show(std::integral auto x), to constrain the invented parameter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "abbreviated function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }
+  - { name: "auto", url: "https://en.cppreference.com/w/cpp/language/auto" }

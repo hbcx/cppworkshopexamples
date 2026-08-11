@@ -1,0 +1,3 @@
+int:    a value
+int*:   a pointer
+int[5]: an array

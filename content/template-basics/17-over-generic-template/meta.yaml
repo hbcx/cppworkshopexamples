@@ -1,0 +1,11 @@
+title: "Anti-pattern: a template where a plain function would do"
+standard: "C++11"
+difficulty: 3
+summary: "Templating code that is only ever used with one type buys nothing and costs plenty: worse error messages, a definition forced into a header, and a false promise of generality. If there is one concrete type, write a plain function; reach for a template only when you genuinely serve several unrelated types."
+notes: "Templates are powerful, and that makes it tempting to write everything as a template just in case. But a template used with a single type is pure cost. It gives WORSE errors: a wrong argument fails deep inside the body with a wall of instantiation messages -- shout(42) here would fail on int has no operator+ inside the function -- where a plain function rejects the bad call cleanly at the call site with a short message. It forces the definition into a HEADER, exposing the body to every user and lengthening compile times, because a template must be visible to instantiate (the link-error anti-pattern is the flip side). It offers a false generality: the signature says any T, but the body only works for string-like types, so the promise is a lie that the next reader has to test by hand. And it is simply more to read for no gain. The example contrasts a shout template that is only ever called with std::string against a plain shoutPlain function that does the same job -- the plain one has a clear signature, normal overload-resolution errors, and can live in a .cpp. The guidance is to template for a REASON: when you have, or will clearly have, multiple unrelated types that need the same logic, or when you are writing a genuinely generic library component. For one concrete type, or two related ones, a plain function or a couple of overloads is clearer, compiles faster, and fails better. Generality is a feature you pay for; add it when you need it, not by default."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

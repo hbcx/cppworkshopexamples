@@ -1,0 +1,4 @@
+maxOf(3, 7)      = 7
+maxOf(2.5, 1.5)  = 2.5
+maxOf<int>(9, 4) = 9
+maxOf(strings)   = pear

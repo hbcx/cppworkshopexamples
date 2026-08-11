@@ -1,0 +1,11 @@
+title: "Anti-pattern: partially specializing a function template"
+standard: "C++11"
+difficulty: 3
+summary: "Function templates CANNOT be partially specialized -- only class templates can. Writing what looks like a partial specialization of a function is ill-formed. The correct tool is overloading: a second overload for the more specific case, which overload resolution prefers, gives the same effect."
+notes: "People reach for partial specialization to give a function template a different implementation for a family of types -- say, one behaviour for T and another for T* -- and the language does not allow it: a FUNCTION template can be fully specialized but NOT partially specialized, and the syntax that looks like it (template <class T> void handle<T*>(...)) does not compile. This trips up anyone who learned partial specialization on class templates and assumes functions work the same way. The fix is OVERLOADING, which functions have and class templates do not. Write two ordinary function-template overloads, one taking T and one taking T*, and overload resolution picks the more specialised T* overload for a pointer and the T overload otherwise -- the same routing you wanted, expressed the way functions are meant to express it. This example does exactly that: handle(T) prints value and handle(T*) prints pointer, and calling with an int uses the first, with an int* the second. The reason the language splits this way is that functions already have overloading to select among candidates, so partial specialization would be a redundant and conflicting second mechanism; classes have no overloading, so partial specialization is their only way to vary by argument pattern. The practical rule: to vary a function template by the SHAPE of its argument, add an overload, not a specialization; reserve specialization -- full only -- for the rare exact-type case, and even there prefer an overload. If you find yourself writing angle brackets after a function name to specialize it, stop and write an overload instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

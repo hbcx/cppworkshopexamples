@@ -1,0 +1,2 @@
+max (default less): 9
+min (greater):      1

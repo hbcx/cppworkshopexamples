@@ -1,0 +1,12 @@
+title: "CTAD and deduction guides"
+standard: "C++17"
+difficulty: 3
+summary: "C++17 class template argument deduction (CTAD) lets you create a class template object without angle brackets -- Pair p(1, 2.5) deduces Pair<int, double> from the constructor. When the constructor alone is not enough, a deduction guide tells the compiler how to deduce the arguments, such as decaying a string literal to std::string."
+notes: "Before C++17, creating a class template object required naming its arguments: std::pair<int, double> p(1, 2.5). C++17 class template argument deduction (CTAD) removes that for the common case -- write Pair p(1, 2.5) and the compiler deduces Pair<int, double> from the constructor arguments, the same way function templates have always deduced. This is why you can now write std::pair p(1, 2.5), std::vector v = {1, 2, 3}, std::lock_guard g(mutex), and std::array a = {1, 2, 3} with no angle brackets. CTAD works by forming implicit deduction guides from the constructors, and usually that is enough. When it is not -- when the type you want to store differs from the constructor argument's type -- you write an explicit DEDUCTION GUIDE: a line of the form Wrapper(const char*) -> Wrapper<std::string>; that tells the compiler, when a Wrapper is built from a const char*, deduce Wrapper<std::string> rather than Wrapper<const char*>. Guides are how the standard containers do the right thing, for example deducing std::vector<T> from an iterator pair. The example shows CTAD on a Pair, CTAD from the library on a vector, and a guide that turns Wrapper("hello") into a Wrapper<std::string> holding a real string instead of a dangling pointer type. Two cautions. CTAD deduces from the constructor, so a type with no informative constructor may deduce nothing useful, and that is exactly when a guide is needed. And CTAD applies to whole objects, not to member or return types, so it does not replace explicit arguments everywhere. Used well, CTAD makes template types as convenient to create as ordinary ones, and a deduction guide is the small tool that fixes the cases the constructor cannot express."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "class template argument deduction", url: "https://en.cppreference.com/w/cpp/language/class_template_argument_deduction" }
+  - { name: "deduction guide", url: "https://en.cppreference.com/w/cpp/language/class_template_argument_deduction" }

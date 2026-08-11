@@ -1,0 +1,2 @@
+firstOf(vector) = 7
+sumOf(vector)   = 24

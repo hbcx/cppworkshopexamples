@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 14}, {"file": "main.cpp", "line": 15}, {"file": "main.cpp", "line": 8}, {"file": "main.cpp", "line": 8, "out": "hi!\n"}, {"file": "main.cpp", "line": 16}, {"file": "main.cpp", "line": 12}, {"file": "main.cpp", "line": 12, "out": "hello!\n"}, {"file": "main.cpp", "line": 21}, {"file": "main.cpp", "line": 22}]}

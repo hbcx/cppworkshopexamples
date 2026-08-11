@@ -8,3 +8,5 @@
   note: "Where a pack goes to be stored: a parameter pack cannot be a data member, so a variadic type keeps its elements in a std::tuple, and std::apply unpacks that tuple back into a call -- go there for heterogeneous fixed-size storage and get/apply."
 - slug: "concepts"
   note: "How to constrain a whole pack: a fold over a concept, (std::integral<Ts> && ...), in a requires-clause demands a property of every argument -- go there for named requirements and constrained templates."
+- slug: "template-basics"
+  note: "The single-parameter templates a pack generalises: function and class templates, deduction, specialization and dependent names -- go there for the fixed-arity foundations before adding a parameter pack."

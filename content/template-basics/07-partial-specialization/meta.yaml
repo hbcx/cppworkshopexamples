@@ -1,0 +1,11 @@
+title: "Partial specialization"
+standard: "C++11"
+difficulty: 3
+summary: "A partial specialization of a class template is still parameterised but matches a FAMILY of types -- Describe<T*> for any pointer, Describe<T[N]> for any array. It is more specialised than the primary, so a matching type selects it. Only CLASS templates can be partially specialized, not functions."
+notes: "Between the fully generic primary template and a full specialization for one exact type sits partial specialization: a version still parameterised on some template parameters but constrained to a pattern of arguments. Describe<T*> here matches ANY pointer type -- it still has a parameter T (the pointee), but only applies when the argument is a pointer -- and Describe<T[N]> matches any array, with T the element and N the size. When you name Describe<int*>, the compiler sees that the pointer partial specialization is a better, more specialised match than the primary and uses it; Describe<int> matches only the primary. This is the mechanism behind a huge amount of the standard library and of the traits you saw earlier: std::is_pointer is essentially a primary template inheriting false_type with a partial specialization for T* inheriting true_type, and iterator_traits, remove_pointer, tuple_element and many others are partial specializations that pattern-match a type's shape. The rules to remember are two. Partial specialization is available ONLY for class templates (and variable templates); a FUNCTION template cannot be partially specialized -- attempting it is an error, and the fix is overloading, which is a dedicated anti-pattern. And when several partial specializations could match, the most specialised one wins by the same ordering rules as overloads, so you can layer them from general to specific. Partial specialization is the workhorse of type-level programming: it is how a template inspects and adapts to the STRUCTURE of its argument -- pointer, array, a particular class template -- rather than just its identity."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }
+detailed_tags:
+  - { name: "partial specialization", url: "https://en.cppreference.com/w/cpp/language/partial_specialization" }
