@@ -1,0 +1,11 @@
+title: "Anti-pattern: a view over a temporary that dangles"
+standard: "C++20"
+difficulty: 3
+summary: "Piping a named lvalue container makes a ref_view that only REFERENCES it, so a view built over a local and then returned points at freed memory. Piping an rvalue instead moves the container into an owning_view that the view keeps alive. Give a view a source that outlives it: own the data, or refer only to something that lives long enough."
+notes: "A view does not copy its source; it refers to it, and that reference has a lifetime you must respect. When you pipe a NAMED lvalue container into an adaptor, ranges wraps it in a ref_view, which stores only a reference -- cheap, but valid only while that container lives. So a function that builds a view over a LOCAL container and returns it hands back a ref_view to storage destroyed at the return, and iterating it later reads freed memory, undefined behaviour. The safe version in this example relies on the other case: when you pipe an RVALUE container, ranges wraps it in an owning_view that MOVES the container inside, so the view owns its data and can be returned and iterated freely -- which is why building the view from a vector temporary and returning it works. The fix for the dangling case is the same idea: make the view own its data by feeding it an rvalue, or do not return the view at all -- return the container and let the caller build the view where the container lives. Note that range-based for extends the lifetime of a temporary range for the duration of the loop, so for (x : makeVector() | filter(...)) is fine; the danger is storing or returning a view whose referenced source then dies. The rule: a view is only as alive as what it refers to, so either give it ownership (pipe an rvalue) or keep the referred-to container alive at least as long as the view -- never return a view built over a local you do not move in."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::filter", url: "https://en.cppreference.com/w/cpp/ranges/filter_view" }

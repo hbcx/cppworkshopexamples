@@ -1,0 +1,12 @@
+title: "Range algorithms take a whole range"
+standard: "C++20"
+difficulty: 1
+summary: "The std::ranges algorithms take a range directly -- std::ranges::sort(v) -- instead of a begin/end pair, so the calls are shorter and you cannot accidentally mix iterators from two different containers. The same set covers sort, find, count, min/max_element, all_of and the rest."
+notes: "Every classic algorithm has a std::ranges version that accepts a range as one argument. std::ranges::sort(v) replaces std::sort(v.begin(), v.end()), and the same is true across the library -- find, count, for_each, transform, copy, unique, min_element and max_element, all_of, any_of, none_of, and dozens more. Two practical wins come with it. First, the calls are shorter and read better, because the range is named once rather than as a pair. Second, and more important, you cannot make the classic mistake of passing begin() from one container and end() from another, or the two arguments in the wrong order -- the range algorithm takes a single range, so that whole class of bug disappears. The ranges algorithms also add two features the old ones lack, both used later in this section: projections, which tell the algorithm which field of an element to work on without a comparator lambda, and constrained interfaces built on the range concepts, so a misuse fails with a clear message about an unsatisfied requirement rather than deep inside the template. This example uses only the range forms of familiar algorithms -- sort, find, count, min and max element, all_of -- to show the shape; the rest of the section is about views, the lazy, composable half of ranges that has no pre-C++20 equivalent."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::ranges::sort", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/sort" }
+  - { name: "std::ranges::find", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/find" }

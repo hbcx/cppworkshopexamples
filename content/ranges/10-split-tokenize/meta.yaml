@@ -1,0 +1,11 @@
+title: "split: tokenize a range on a delimiter"
+standard: "C++20"
+difficulty: 3
+summary: "views::split breaks a range on a delimiter and yields a range of subranges, each a view into the original with no copy. Splitting a string on a comma gives a view per field; build a std::string from each part when you need an owned token. It is the range-based replacement for hand-written string tokenizing."
+notes: "Tokenizing -- splitting a string into fields on a separator -- is a task every codebase re-implements, and views::split is the range-based answer. range | views::split(delimiter) yields a range whose elements are SUBRANGES of the original, one per piece between delimiters, so splitting a comma-separated string gives a view for alpha, a view for beta, and so on, with no copying: each part is a window into the source characters. Because a part is a range, not a string, you turn it into an owned token when you need one by constructing a std::string (or a std::string_view) from part.begin() and part.end() -- shown here in the loop. The delimiter can be a single element, as with the comma, or a whole subrange pattern for multi-character separators such as a comma-space. Two cautions specific to split. The parts are lazy views tied to the source, so the source must outlive them -- the same lifetime rule as every view. And in C++20 the split parts are forward ranges of characters, not null-terminated strings, which is exactly why you materialise each part into a std::string before treating it as text; do not expect c_str or a std::string interface on the part itself. Reach for split wherever you would otherwise loop over characters tracking delimiter positions, or reach for a heavier tokenizer; it composes with the rest of the pipeline, so split then transform then filter reads as one chain."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::split", url: "https://en.cppreference.com/w/cpp/ranges/split_view" }

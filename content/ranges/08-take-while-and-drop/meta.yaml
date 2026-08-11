@@ -1,0 +1,12 @@
+title: "take_while, drop and drop_while"
+standard: "C++20"
+difficulty: 2
+summary: "The slicing family: take_while yields the leading run that satisfies a predicate and stops at the first that does not, drop skips the first n elements, and drop_while skips the leading run that matches. They cut a range at a position defined by a count or a condition, lazily and with no copy."
+notes: "Alongside take, which keeps the first n elements, ranges has a small family of adaptors for slicing a range by a count or a condition. take_while keeps the leading run of elements that satisfy a predicate and stops at the FIRST element that fails it -- so over 2, 4, 6, 7, 8 with an is-even predicate, take_while yields 2, 4, 6 and stops at 7, even though 8 later would match; it is a prefix, not a filter. drop is the mirror of take: it SKIPS the first n elements and yields the rest, so drop(2) over six elements gives the last four. drop_while is the mirror of take_while: it skips the leading run that matches the predicate and yields everything from the first element that fails onward -- drop_while is-even over 2, 4, 6, 7, 8 yields 7, 8. The key distinction, and a common source of confusion, is take_while and drop_while versus filter: the while adaptors look only at the LEADING run and stop deciding once the predicate first flips, whereas filter tests every element independently across the whole range. Use take_while and drop_while on data that is ordered or grouped so the prefix is meaningful -- reading a header until a blank line, skipping leading whitespace, taking values while they stay under a threshold -- and use filter when you want every matching element regardless of position. All four are lazy views: they compute nothing until iterated and copy nothing, just like the rest."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::take_while", url: "https://en.cppreference.com/w/cpp/ranges/take_while_view" }
+  - { name: "std::views::drop", url: "https://en.cppreference.com/w/cpp/ranges/drop_view" }

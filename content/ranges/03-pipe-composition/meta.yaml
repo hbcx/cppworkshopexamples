@@ -1,0 +1,13 @@
+title: "Composing views with the pipe operator"
+standard: "C++20"
+difficulty: 2
+summary: "Range adaptors compose with the pipe operator, left to right, so a pipeline reads like a sentence: keep the even numbers, square them, take the first three. Each stage is lazy, so the whole chain pulls one element at a time with no intermediate containers."
+notes: "The pipe operator is what makes views feel like a query language. r | adaptor applies the adaptor to the range, and because the result is itself a range, you keep piping: r | filter(...) | transform(...) | take(3) reads top to bottom as a sequence of steps, which is far clearer than the nested std::transform and std::copy_if calls with explicit iterators and back_inserters it replaces. The order is the reading order -- the leftmost stage runs first on each element -- and because every stage is lazy, the chain does not build a filtered vector, then a transformed vector, then a truncated one. It pulls a single element through the whole pipeline at a time: take asks transform for the next value, transform asks filter, filter pulls from the source until it finds one that passes, and the element flows back up. Nothing downstream of take(3) is ever computed. Two things worth knowing. The adaptors are the objects in std::views (filter, transform, take, drop, and the rest), and each is a factory that captures its arguments -- here small lambdas -- and returns something pipeable. And the pipeline is a value you can name, pass, and compose further, since it is just a view; assigning it to auto pipe does no work until you iterate. This composition, with the laziness from the previous example, is the core of ranges: describe the transformation as a readable chain, and pay only for what you consume."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::filter", url: "https://en.cppreference.com/w/cpp/ranges/filter_view" }
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

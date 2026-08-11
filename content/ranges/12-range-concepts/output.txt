@@ -1,0 +1,3 @@
+array size via ranges::size = 3
+first via ranges::begin = 10
+all range concepts hold

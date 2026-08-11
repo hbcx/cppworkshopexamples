@@ -1,0 +1,11 @@
+title: "The range concepts"
+standard: "C++20"
+difficulty: 3
+summary: "Ranges is built on concepts and customization points. std::ranges::begin/end/size work uniformly on containers, arrays and views. The concepts classify what a range can do -- contiguous, random-access, bidirectional, sized, common -- and separate a lightweight view from an owning container and a borrowed range from a dangling one."
+notes: "Under the adaptors, ranges is a small set of concepts and customization points that everything else builds on. The customization points std::ranges::begin, end, size, empty and data are uniform ways to get at a range: they work on a std::vector, a plain C array, and a lazy view alike, which is what lets the algorithms and adaptors accept anything range-shaped. The concepts classify what a given range supports, mirroring the iterator categories: contiguous_range (a vector, whose elements sit in one block), random_access_range, bidirectional_range (a list), forward_range and input_range, plus sized_range for ranges that can report their size in constant time and common_range for ranges whose begin and end share a type. Two concepts carry ideas specific to ranges. view marks a range that is cheap to copy and owns little or nothing -- the adaptor results are views, while containers are ranges but not views -- which is why passing a view by value is fine and why a view must not outlive the data it refers to. borrowed_range marks a range whose iterators stay valid after the range expression that produced them ends: a container passed by lvalue reference is borrowed, a temporary container is not, and this is precisely the property that decides whether returning an iterator into a range is safe or dangling. You rarely name these concepts directly in everyday code, but they are what makes the algorithms give clear errors, what constrains which adaptors accept which ranges, and what the dangling anti-pattern is really about -- so it is worth knowing they are the foundation the readable pipeline syntax sits on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::iota", url: "https://en.cppreference.com/w/cpp/ranges/iota_view" }

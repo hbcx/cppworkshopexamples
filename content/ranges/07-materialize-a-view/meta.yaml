@@ -1,0 +1,12 @@
+title: "Materialising a view into a container"
+standard: "C++20"
+difficulty: 3
+summary: "A view is lazy and has no storage, so to keep a result -- to store it, return it, or reuse it many times -- you copy the view's elements into a real container. In C++20 you push them into a vector in a loop; C++23 adds std::ranges::to for the one-liner. This turns a live, recomputing view into a stable snapshot."
+notes: "Everything so far kept views lazy, but eventually you need an actual result: a vector to return from a function, to store in a struct, to hand to an API that wants a container, or to iterate many times without recomputing. Because a view has no storage of its own, you materialise it -- copy its elements into a real container. The plain C++20 way is a loop that pushes each element into a vector, which always works regardless of the view. There is a subtlety that makes the one-liner tempting but tricky: many views, filter among them, are NOT common ranges, meaning begin() and end() have different types, so the classic vector(first, last) constructor does not accept them directly -- you would first pipe through views::common (covered later) to give them a matching iterator and sentinel. C++23 removes all of this friction with std::ranges::to, so std::ranges::to<std::vector>(view) or view | std::ranges::to<std::vector>() materialises in one expression; this section targets C++20, where the loop is the portable tool. Materialising is also the fix for the two view anti-patterns at the end: a view reflects later changes to its source and recomputes on every pass, so when you need a stable, computed-once result, materialise it, and from then on you hold a normal container with its own storage. The rule of thumb: keep it a view while you are still transforming and only iterating once; materialise the moment you need to store it, return it, or read it more than once."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::filter", url: "https://en.cppreference.com/w/cpp/ranges/filter_view" }
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }

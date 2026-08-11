@@ -1,0 +1,12 @@
+title: "Views are lazy"
+standard: "C++20"
+difficulty: 2
+summary: "Creating a view computes nothing. A transform or filter runs only when an element is actually consumed, and take stops early -- so a view over eight elements followed by take(3) runs the transform three times, not eight. Views describe a computation; iterating performs it, element by element, on demand."
+notes: "A view is a description of a computation over a range, not the result of running it. Building one -- v with a transform applied -- does no work at all; the transform function is not called, nothing is allocated, and no elements are produced. The work happens only when you iterate, and only for the elements you actually consume. This example proves it with a counter inside the transform: right after the view is built, the counter is zero, and after iterating just the first three elements through take(3), the counter is three, not eight -- the transform ran once per consumed element and take ended the range before the rest were touched. This laziness is the whole point of views and the source of their power. It means you can chain several adaptors and pay only for the elements that flow all the way through -- filter then transform then take does not build three intermediate containers, it pulls one element at a time through the pipeline. It also means views can describe infinite sequences (the iota example) that terminate only because something downstream, like take, stops asking for more. The flip side is that a view is not a stored result: because it recomputes on each pass and reflects later changes to its source, treating it like a container is a mistake, which the anti-patterns cover. For now the model is: a view is a recipe, iterating is cooking, and nothing cooks until someone eats."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

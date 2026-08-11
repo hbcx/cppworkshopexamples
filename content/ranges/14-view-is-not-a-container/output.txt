@@ -1,0 +1,3 @@
+before change: 2 4 6
+after change:  200 4 6 8
+snapshot stays: 200 4 6 8

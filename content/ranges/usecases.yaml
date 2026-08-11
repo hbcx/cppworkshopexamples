@@ -1,0 +1,19 @@
+- problem: "A data path filters, transforms and truncates a large collection -- keep the active records, project a field, take the top N -- and the straightforward version builds a temporary vector at each step, allocating and copying data it immediately throws away."
+  why: "A view pipeline does the whole chain lazily in one pass, pulling each element through filter, transform and take with no intermediate container, so only the elements that reach the end are ever computed. Chained std::copy_if and std::transform calls materialise a vector between every stage, paying allocation and copy costs for data that is filtered out downstream."
+  signal: "A sequence of algorithm calls each writing into a fresh temporary vector via back_inserter, feeding the next algorithm, where only a small slice of the final result is used."
+
+- problem: "A collection of records must be sorted or searched by one field -- customers by signup date, orders by total, events by timestamp -- and the comparator is just less-than on that member."
+  why: "A projection passes the member pointer to the range algorithm -- ranges::sort(orders, {}, &Order::total) -- so the intent is one argument and the default comparison does the rest, with no lambda to get wrong. A hand-written comparator lambda repeats the field twice and is an easy place to invert the operator or swap the arguments."
+  signal: "A comparator lambda whose entire body is a.field < b.field, passed to sort, min_element or a similar algorithm."
+
+- problem: "Code needs a sequence of numbers -- indices, sample points, retry delays, test inputs -- and currently builds it with a for loop that fills a vector before the real work even starts."
+  why: "views::iota generates the sequence lazily and pipes straight into a transform or filter, so the numbers are produced and consumed in one pass with no vector of inputs. Filling a vector first allocates storage for values that are used once and thrown away, and separates the generation from the use."
+  signal: "A for loop from 0 to n that pushes i (or a function of i) into a vector that is then iterated once and discarded."
+
+- problem: "A pipeline must flatten nested data or split text -- visit every element of every group, or break a line into fields -- and the hand-written version is a nested loop or a manual delimiter scan that tends to get the boundaries wrong."
+  why: "views::join flattens a range of ranges and views::split tokenizes on a delimiter, both lazily and composably, so flattening or splitting becomes one stage in a readable chain. A nested loop or a hand-rolled tokenizer duplicates fiddly boundary logic that is a classic source of off-by-one and empty-field bugs."
+  signal: "A doubly-nested loop that visits every inner element to build a flat list, or a manual loop tracking delimiter positions to cut a string into pieces."
+
+- problem: "Business logic over a collection is written as a long imperative loop with several conditions, accumulators and early breaks, and it is hard to read and to change because the what is buried in the how."
+  why: "A view pipeline states the steps declaratively -- filter, transform, take -- so the intent reads top to bottom and each stage can be added or removed in isolation. A single loop mixing filtering, mapping and limiting into one body forces a reader to reconstruct the intent and risks a change to one concern breaking another."
+  signal: "A hand-written loop over a container whose body clearly separates into a filter test, a mapping step and a stop condition, all tangled together."

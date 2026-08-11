@@ -1,0 +1,3 @@
+by age: Bob(25) Ann(30) Dee(35) Cy(40)
+oldest: Cy
+found by name: Cy age 40

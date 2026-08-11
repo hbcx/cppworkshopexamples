@@ -1,0 +1,11 @@
+title: "join: flatten a range of ranges"
+standard: "C++20"
+difficulty: 2
+summary: "views::join flattens a range whose elements are themselves ranges into one continuous range, lazily -- a vector of vectors becomes a single sequence with no copy into a combined container. It composes with the other adaptors, so you can flatten and then filter or transform in one pipeline."
+notes: "Data often arrives nested: a vector of vectors, a map whose values are lists, lines each split into words, pages each holding rows. views::join takes a range whose elements are ranges and presents them as one flat range, walking the outer range and, for each inner range, yielding its elements before moving on. So a vector of {1,2}, {3,4,5}, {6} joins to 1, 2, 3, 4, 5, 6, and it does this lazily -- no combined vector is built, the elements are pulled through one at a time. Because the result is an ordinary range, join composes with everything else: join then filter keeps the even elements across all the groups, join then transform maps every element regardless of which inner range it came from, and join often follows split or a transform that produced the inner ranges. This is the standard tool for the flatten step of a pipeline, replacing a nested loop that pushes each inner element into an output vector. Two practical notes. The inner ranges are visited in order and joined end to end, so the flattening preserves order. And join works on views of ranges too, not just containers of containers, which is what lets split-then-join and transform-into-ranges-then-join pipelines read as a single chain. When you meet a doubly-nested loop whose only purpose is to visit every element of every inner range, views::join is the flat replacement."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::join", url: "https://en.cppreference.com/w/cpp/ranges/join_view" }

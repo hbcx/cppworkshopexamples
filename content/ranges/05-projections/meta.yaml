@@ -1,0 +1,12 @@
+title: "Projections: tell an algorithm which field to use"
+standard: "C++20"
+difficulty: 2
+summary: "A projection is an extra argument to a range algorithm that says which field of each element to work on -- std::ranges::sort(people, {}, &Person::age) sorts by age with no comparator lambda. The same projection applies to find, the min/max family, and the rest, so you point at a member and let the default comparison do the work."
+notes: "Range algorithms add a feature the old ones never had: a projection, a small function applied to each element before the algorithm looks at it. It goes in the last argument, and a pointer-to-member is the common form -- std::ranges::sort(people, {}, &Person::age) reads as sort people, with the default comparison, by their age. The {} in the middle is the comparator slot left at its default (less-than); the projection then feeds each Person's age to that comparison, so you sort by age without writing a lambda that spells out a.age < b.age. The value is that the projection separates WHICH field from HOW to compare. Most sorts and searches are by some member with the ordinary ordering, and a projection expresses exactly that, shorter and less error-prone than a hand-written comparator that could get the operator or the argument order wrong. The same projection argument works across the ranges algorithms: max_element(people, {}, &Person::age) finds the oldest, and find(people, name, &Person::name) searches by the name field, comparing the projected member against the value. Projections are not limited to pointer-to-member -- any callable works, so you can project through a getter or a computed key -- but the pointer-to-member form covers most real sorting and searching. When you reach for a comparator lambda whose whole body is a.field < b.field, a projection is the shorter, clearer tool."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }
+  - { name: "std::ranges::sort", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/sort" }

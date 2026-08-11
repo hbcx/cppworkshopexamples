@@ -1,0 +1,1 @@
+even, squared, first three: 4 16 36

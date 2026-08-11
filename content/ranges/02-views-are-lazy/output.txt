@@ -1,0 +1,3 @@
+after building the view, calls = 0
+first 3 squares: 1 4 9
+transform ran 3 times (only 3, not 8)

@@ -1,0 +1,12 @@
+title: "Anti-pattern: an infinite view consumed without a bound"
+standard: "C++20"
+difficulty: 3
+summary: "views::iota(n) with one argument is infinite, and filtering an infinite range gives another infinite range -- so consuming it without take (or take_while) never ends. Bound the range with take BEFORE you iterate. The fix is one adaptor: put take at the end of the pipeline."
+notes: "Infinite ranges are a feature, not a bug -- views::iota(n) is an endless counter, and it is genuinely useful because laziness means only the consumed prefix is computed. The trap is forgetting that filtering or transforming an infinite range leaves it infinite: iota(2) | filter(is_prime) is still an endless range, now of primes, and a plain for loop over it asks for element after element forever and never returns. Nothing in the pipeline decides to stop; a filter yields matches until the source runs out, and the source never does. The fix is to bound the range downstream, with take(n) to keep the first n or take_while to keep a leading run, placed BEFORE you consume it -- iota(2) | filter(is_prime) | take(5) is the first five primes and terminates. This example runs the bounded version and describes the unbounded loop in a comment rather than running it, because it would hang. The rule is a habit: whenever a pipeline starts from an infinite source -- a one-argument iota, a repeat, an istream view that may never end -- there must be a take or take_while, or a condition that breaks the loop, somewhere before it is iterated. If you find a range built on iota(n) with no bound feeding a loop, that loop does not terminate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::iota", url: "https://en.cppreference.com/w/cpp/ranges/iota_view" }
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

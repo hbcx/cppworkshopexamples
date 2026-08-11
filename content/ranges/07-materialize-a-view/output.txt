@@ -1,0 +1,2 @@
+materialised: 4 8 12
+result is a real vector of size 3

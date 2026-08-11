@@ -6,3 +6,5 @@
   note: "Where find() returning end() is the everyday case: map and set lookups report a miss with the end iterator, the exact check this chapter's dereferencing-end anti-pattern is about -- go there for the ordered containers and the benchmark of their bidirectional iteration."
 - slug: "tag-dispatch"
   note: "How generic code uses the iterator categories this chapter defines: std::advance and std::distance dispatch on input, forward, bidirectional and random-access tags to pick an O(1) or O(n) path -- go there for the compile-time technique that turns those categories into a fast implementation."
+- slug: "ranges"
+  note: "The modern generalisation of iterators: ranges wraps a begin and a sentinel into one object, keeps the same traversal categories, and adds lazy composable views over them -- go there for range algorithms, views, and the pipe operator."

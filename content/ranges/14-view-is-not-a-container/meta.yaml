@@ -1,0 +1,11 @@
+title: "Anti-pattern: treating a view as a container"
+standard: "C++20"
+difficulty: 3
+summary: "A view is a live window on its source, not a stored result. Change the source after building the view and the view reflects the change; iterate it again and it recomputes. Code that builds a view once and treats it as a fixed, computed collection is wrong. If you need a stable snapshot, materialise the view into a container."
+notes: "The laziness that makes views powerful also makes them easy to misuse: a view is not a snapshot of a computation, it is a live description that reads its source every time. This example builds a transform view over a vector, iterates it once (2, 4, 6), then MODIFIES the source vector -- pushes a new element and changes the first -- and iterates the same view again, which now yields 200, 4, 6, 8. Nothing recomputed the view; it simply reflects the current state of the source, because it never held a copy. People trip on this when they build a view, believe they have computed a result, and are surprised that later edits to the underlying container change what the view produces, or that the view has no size() and no random access like a container would. The correct mental model is that a view is a window, not a bucket. When you genuinely need a fixed result -- a value to store, to return, to compare against later, to iterate many times cheaply -- you MATERIALISE the view into a real container, as the third part of the example does: it copies the current elements into a vector, and from then on that vector is independent, unaffected by further changes to the source. The rule follows from the laziness: keep it a view while you are still shaping the data and will read it once; the moment you want a stable, computed-once collection, copy it into a container and hold that instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }

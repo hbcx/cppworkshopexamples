@@ -12,3 +12,5 @@
   note: "The same contiguous-growth container specialized for characters: size versus capacity, reserve, and the erase-remove idiom all reappear, plus the small-string optimization a vector has no equivalent for."
 - slug: "iterator"
   note: "What a vector's iterators actually are and why growth or erase invalidates them: the Iterator pattern chapter covers the invalidation rules, the random-access category a vector provides, and how to write an iterator of your own."
+- slug: "ranges"
+  note: "The modern way to process a vector: lazy filter/transform/take pipelines and range algorithms that take the whole vector instead of a begin/end pair, materialising back into a vector when you need a result -- go there for views and the pipe operator."

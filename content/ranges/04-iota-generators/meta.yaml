@@ -1,0 +1,12 @@
+title: "iota: a lazy sequence generator"
+standard: "C++20"
+difficulty: 2
+summary: "std::views::iota(n) is a lazy, infinite sequence n, n+1, n+2, ... that you bound with take, and iota(first, last) is the finite half-open range. It generates numbers with no container and no manual loop, and feeds straight into a pipeline -- squares of 1 to 5 with nothing stored."
+notes: "views::iota is the counting generator. In its one-argument form, iota(n) is an INFINITE increasing sequence starting at n, produced one value at a time with no storage -- it exists only as a rule, next is previous plus one, so it costs nothing until consumed and you MUST bound it, usually with take, or it never ends (an anti-pattern later). In its two-argument form, iota(first, last) is the finite half-open range first up to but not including last, the range-based way to say the classic for loop from first to last. Either form is a real range, so it pipes into the rest of the library: iota(1, 6) | transform(square) yields 1, 4, 9, 16, 25 with no vector of inputs and no vector of outputs -- the numbers are generated, squared, and consumed in one pass. This is how ranges replaces index loops. Instead of writing for (int i = 0; i < n; ++i) and pushing into a vector, you generate the indices with iota and transform them, which reads as what you want rather than how to loop. iota also composes with filter to make lazy generators of derived sequences -- the primes example bounds iota with take after a filter -- and with enumerate-style patterns. The two rules to carry: the one-argument iota is infinite and needs a bound before you consume it, and the two-argument iota is the finite counting range you reach for in place of a raw for loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::iota", url: "https://en.cppreference.com/w/cpp/ranges/iota_view" }
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "concepts"
+  note: "The foundation ranges is built on: the range, view and borrowed_range concepts constrain every algorithm and adaptor, and the clear errors come from them -- go there for named requirements, requires-expressions, and how the constraints are written."
+- slug: "iterator"
+  note: "What ranges generalises: the iterator pattern and its input/forward/bidirectional/random-access categories are exactly what the range concepts classify, now with a sentinel end that need not match the iterator -- go there for the traversal model underneath."
+- slug: "vectors"
+  note: "The container most pipelines start from and materialise back into: a std::vector is a contiguous range that feeds a view chain and holds the result when you copy a view out -- go there for the container's own growth, capacity and iterator rules."

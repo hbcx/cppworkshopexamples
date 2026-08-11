@@ -1,0 +1,11 @@
+title: "reverse, and common_view for legacy APIs"
+standard: "C++20"
+difficulty: 3
+summary: "views::reverse walks a range back to front, lazily and with no copy. And because some views are not common ranges -- their begin() and end() have different types (an iterator and a sentinel) -- views::common bridges them to older algorithms that need a matching (first, last) pair of the same type."
+notes: "Two smaller but important pieces. views::reverse presents a range in reverse order without copying or modifying it -- it is a lazy window that yields the last element first, useful on its own and in pipelines where you want to process newest-first or walk backward. The second piece is about a design choice in ranges that trips people up the first time. A classic iterator range ends at an iterator of the same type as begin, so old algorithms take a (first, last) pair where both are the same type. Ranges relaxes this: a range ends at a SENTINEL, which may be a different type from the iterator -- an infinite iota has a sentinel that never compares equal, and a filter view has a sentinel because it cannot cheaply know its end in advance. Such a range is not a COMMON range, and its begin() and end() types differ, so you cannot hand them to a legacy algorithm or a container constructor that assumes one iterator type. views::common fixes exactly that: it wraps a non-common range so that begin() and end() share a type again, at the cost of a small wrapper, letting you pass a filtered or transformed view to std::accumulate or any pre-ranges API that wants a uniform pair. The example sums the even numbers of a vector by piping the filter through views::common and calling std::accumulate. The rule to remember: prefer the ranges algorithms, which accept a range and its sentinel directly; reach for views::common only at the boundary with older code that still expects begin() and end() to be the same type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::reverse", url: "https://en.cppreference.com/w/cpp/ranges/reverse_view" }

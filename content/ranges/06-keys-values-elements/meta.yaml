@@ -1,0 +1,12 @@
+title: "keys, values and elements"
+standard: "C++20"
+difficulty: 2
+summary: "views::keys and views::values pull one side out of each pair in a map, and views::elements<N> generalises that to the Nth field of any tuple-like element. They give you a column of data -- all the names, all the scores, the third field of each row -- as a lazy view, with no loop copying the field into a separate container."
+notes: "A lot of code needs just one part of each element: the keys of a map, the values, or one column of a table of tuples. views::keys and views::values do exactly that for a range of pairs -- map | views::keys is a view of every key in order, map | views::values is a view of every mapped value -- so you iterate the names alone or the scores alone without writing a loop that copies pair.first into a vector. views::elements<N> is the general form: for a range whose elements are tuple-like (std::tuple, std::pair, std::array), views::elements<N> is a view of the Nth field of each, so a range of (name, count, ratio) rows yields the ratios with views::elements<2>. keys and values are simply the common names for elements<0> and elements<1>. Like all views these are lazy and non-owning: they refer to the original range and produce the projected field on demand, so there is no copy and, for values over a mutable map, you can even modify through the view. This is the reading half of what a projection does for algorithms -- a projection tells an algorithm which field to compare, and elements gives you a whole range of one field to iterate or pipe onward. Reach for these whenever you find a loop whose only job is to pull one member out of each element into a separate list."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::keys", url: "https://en.cppreference.com/w/cpp/ranges/keys_view" }
+  - { name: "std::views::values", url: "https://en.cppreference.com/w/cpp/ranges/values_view" }

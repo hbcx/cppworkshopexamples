@@ -1,0 +1,11 @@
+title: "Anti-pattern: re-iterating a lazy view recomputes"
+standard: "C++20"
+difficulty: 3
+summary: "A view stores no results, so iterating the same view twice runs its transform again both times. For a costly transform that silently doubles the work. If you will iterate more than once -- or the transform is expensive -- materialise the view into a container once and iterate that."
+notes: "Laziness has a cost that is easy to miss: because a view holds no storage, every pass over it re-runs the whole computation. This example counts calls to a transform. Iterating the view twice makes the transform run for every element both times, eight calls for a four-element source, because the second loop recomputes exactly what the first one did -- the view remembered nothing. That is fine when the transform is cheap and you iterate once, which is the common case; it is a problem when the transform is expensive (a parse, a decode, an allocation, a network or disk touch) or when the same view is iterated several times, where the wasted work multiplies silently with no error to flag it. The fix is to materialise once: copy the view's elements into a vector a single time, paying the transform cost once, and then iterate that vector as many times as you like at container speed with zero further transform calls. The example shows the counter dropping from eight to four by materialising before the two passes. The decision rule ties the view anti-patterns together: keep it a lazy view when you will iterate once and the per-element work is cheap; materialise it into a container when you will iterate more than once, when the transform is costly, or when you need a stable result that does not reflect later changes to the source. A view is a plan, and running a plan twice does the work twice."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }
