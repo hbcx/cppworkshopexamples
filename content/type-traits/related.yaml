@@ -1,0 +1,8 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+# Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "concepts"
+  note: "What traits grew into: a concept is a named compile-time bool built from traits, put in the template signature and used to order overloads -- go there for named requirements, requires-expressions, and how the standard concepts wrap these traits."
+- slug: "decltype-declval"
+  note: "The other half of the metaprogramming toolkit: decltype and declval query a type's members and results by expression, and the void_t idiom detects a member, where traits ask fixed questions -- go there for type extraction, function traits, and member detection."
+- slug: "tag-dispatch"
+  note: "A place traits do their work: a trait produces the true_type or false_type that tag dispatch routes on to pick an overload at compile time -- go there for the technique that turns a trait's answer into a chosen implementation."

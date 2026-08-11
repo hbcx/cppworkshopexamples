@@ -1,0 +1,12 @@
+title: "Anti-pattern: is_convertible is directional and permissive"
+standard: "C++17"
+difficulty: 3
+summary: "is_convertible<A, B> asks a one-way question -- A to B, not B to A -- and it is permissive about numbers: both int to double and double to int are convertible, even though one loses information. It is not is_same and not are these interchangeable. Use is_same for identity and be explicit about which direction you require."
+notes: "is_convertible is easy to reach for when you mean something stronger, and it answers two things people forget. First, it is DIRECTIONAL: is_convertible<A, B> asks whether an A can become a B, and the reverse is a separate question with possibly a different answer -- is_convertible<Derived*, Base*> is true while is_convertible<Base*, Derived*> is false, so testing one direction tells you nothing about the other. Second, for built-in numbers it is PERMISSIVE: the standard implicit conversions include narrowing ones, so is_convertible<int, double> and is_convertible<double, int> are BOTH true, even though double-to-int silently drops the fractional part. So is_convertible is not a test that two types are the same, nor that they are safely interchangeable, nor that a conversion is lossless -- it only asks whether the language permits an implicit conversion in that one direction. The example shows both numeric directions passing while is_same<int, double> is false, making the gap concrete. The fixes depend on what you actually meant: for exact identity use is_same (after decaying cv and references, per the previous anti-pattern); for a checked, non-narrowing relationship you need more than is_convertible, such as constraining with a concept or checking the specific conversion you allow; and when one direction is genuinely what you want, assert exactly that direction and do not assume symmetry. The sign is is_convertible used as if it meant equality or a two-way compatibility, or a single is_convertible check standing in for a guarantee that a conversion is safe."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::is_convertible", url: "https://en.cppreference.com/w/cpp/types/is_convertible" }
+  - { name: "std::is_same", url: "https://en.cppreference.com/w/cpp/types/is_same" }

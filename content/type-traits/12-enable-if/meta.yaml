@@ -1,0 +1,11 @@
+title: "enable_if: a conditional type for SFINAE"
+standard: "C++17"
+difficulty: 3
+summary: "std::enable_if<Cond, T> has a member ::type equal to T when Cond is true and NO ::type at all when false. Naming that missing ::type makes a template drop out of overload resolution, which is the classic pre-C++20 way to constrain templates. C++20 concepts express the same thing far more clearly."
+notes: "enable_if is a trait with an unusual job: it turns a compile-time condition into the presence or absence of a type. std::enable_if<true, T>::type is T, but std::enable_if<false, T> has no ::type member at all -- and the point is what happens when you NAME that missing member in a template. Under the SFINAE rule (substitution failure is not an error), a template whose signature mentions enable_if_t<Cond, T> for a false Cond is silently removed from the overload set rather than causing a hard error, so you can write two overloads guarded by mutually exclusive conditions -- one enabled for integral types, one for floating-point -- and the compiler keeps only the one that applies. The example does exactly that: kind is defined twice, each guarded by an enable_if on is_integral or is_floating_point, and the call picks the matching overload while a type that is neither has no viable overload at all. The common spelling puts the enable_if in a defaulted non-type template parameter, enable_if_t<Cond, int> = 0, which is noisy but keeps the function's real signature clean. This was THE way to constrain templates before C++20, and it is everywhere in existing libraries, so you must be able to read it. But it is verbose, easy to misplace, and gives poor errors, which is why C++20 concepts replace it: the same constraint becomes a requires-clause or a concept name in the signature -- covered in the Concepts chapter -- that reads clearly and orders overloads by subsumption. Learn enable_if to understand and maintain older code; reach for a concept in new code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }

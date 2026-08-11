@@ -1,0 +1,12 @@
+title: "Traits are what concepts are made of"
+standard: "C++20"
+difficulty: 3
+summary: "A concept is a named compile-time bool, and traits are where those bools come from. You can define a concept directly from a trait -- SignedInteger is is_integral_v and is_signed_v -- and the standard concepts are built the same way, with std::integral wrapping std::is_integral and std::same_as wrapping std::is_same."
+notes: "This section and the concepts chapter meet here. A concept in C++20 is, underneath, a named compile-time boolean expression, and the most common source of those booleans is a type trait -- so a concept is very often just a trait (or a combination of traits) given a name and the concept syntax. SignedInteger here is defined with std::conjunction_v over is_integral and is_signed -- the trait-native way to write the and, which short-circuits -- and it behaves exactly like that conjunction: SignedInteger<int> is true, SignedInteger<unsigned> and SignedInteger<double> are false, and constraining negate on it rejects the wrong types at the call. The standard library's own concepts are built this way: std::integral is essentially std::is_integral_v, std::floating_point is std::is_floating_point_v, std::same_as wraps std::is_same, std::convertible_to wraps std::is_convertible, and the object concepts like std::copyable are conjunctions of the copy and assignment traits. The example asserts a couple of these equivalences to make the point concrete. Understanding this relationship is practically useful in both directions. When you write a concept, reach first for existing traits to express the requirement -- they are tested, precise, and already match the standard concepts. And when you read a concept's definition to understand exactly what it demands, it usually bottoms out in traits you already know from this section. Concepts add the syntax that puts the constraint in the template signature and orders overloads by subsumption; traits are the vocabulary of compile-time facts underneath. The two are one toolkit: traits are the facts, concepts are the named, constraint-shaped way to use them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::conjunction", url: "https://en.cppreference.com/w/cpp/types/conjunction" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }

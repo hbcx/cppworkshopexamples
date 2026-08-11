@@ -1,0 +1,12 @@
+title: "Anti-pattern: cv and reference qualifiers hide the answer"
+standard: "C++20"
+difficulty: 3
+summary: "A trait sees the EXACT type, cv-qualifiers and references included. So is_same<const int&, int> is false, is_integral<int&> is false, and is_const<const int&> is false because the reference itself is not const. Normalise first -- decay, or in C++20 remove_cvref -- before asking a category or identity question."
+notes: "Traits are exact, and that exactness is a trap when a type arrives decorated with cv-qualifiers or a reference, which happens constantly with deduced and forwarded types. is_same compares types EXACTLY, so is_same<const int&, int> is false even though the value is really an int -- const int& is a different type. is_integral<int&> is false, because a reference is not an integer even though it refers to one. And is_const<const int&> is false, which surprises everyone: the reference is not itself const at the top level, the referred-to int is, and is_const looks at the top level. So a template that deduces T as const int& and then asks is_same_v<T, int> or is_integral_v<T> gets an answer about the decorated type, not the underlying one, and takes the wrong branch. The fix is to normalise the type before you interrogate it: std::decay_t strips top-level cv and references (and decays arrays and functions), and in C++20 std::remove_cvref_t strips cv and references without the array decay, which is usually what you want for a pure identity or category question. The example shows the raw comparisons failing and the normalised ones succeeding. The rule for generic code: when a type comes from template deduction, a forwarding reference, or auto, run it through remove_cvref (or decay) before comparing it with is_same or classifying it with a category trait -- otherwise a stray const or & silently changes the answer. The sign is a trait applied directly to a deduced template parameter with no decay in sight."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::remove_cvref", url: "https://en.cppreference.com/w/cpp/types/remove_cvref" }
+  - { name: "std::decay", url: "https://en.cppreference.com/w/cpp/types/decay" }

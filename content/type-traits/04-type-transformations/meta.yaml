@@ -1,0 +1,13 @@
+title: "Type transformations"
+standard: "C++17"
+difficulty: 2
+summary: "The transformation traits return a modified type: remove_reference strips a reference, remove_cv strips const and volatile, add_pointer adds a star, make_unsigned switches signedness, underlying_type gives an enum's integer type. decay does what a by-value parameter does -- strip reference and cv, and turn arrays and functions into pointers."
+notes: "Alongside the traits that ask questions are the traits that answer with a modified TYPE, each exposing its result as ::type or the _t helper. They fall into small groups. Adding and removing qualifiers: remove_reference (int& to int), remove_cv (const volatile int to int), remove_const, add_const, add_pointer (int to int*), remove_pointer, add_lvalue_reference. Changing a numeric type: make_signed and make_unsigned flip signedness, and underlying_type gives the integer type an enum is stored as, which you need to serialise or index by an enum. And the compound decay, which is the most used: decay applies exactly the transformations a by-value function parameter undergoes -- it strips top-level cv and references, and turns an array into a pointer to its first element and a function into a function pointer -- so decay_t<const int&> is int and decay_t<int[5]> is int*. That last behaviour is why decay is the standard way to normalise a deduced or forwarded type before you store it, compare it with is_same, or use it as a map key: it removes the cv and reference decoration that would otherwise make two logically-equal types compare unequal, a trap the anti-patterns cover. In C++20, remove_cvref does the strip-cv-and-reference part without the array-to-pointer decay, which is often what you want for a pure identity comparison. Reach for a specific remove_ or add_ trait when you need one precise change, and for decay (or remove_cvref) when you want the whole normalisation a value parameter would apply."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::remove_reference", url: "https://en.cppreference.com/w/cpp/types/remove_reference" }
+  - { name: "std::decay", url: "https://en.cppreference.com/w/cpp/types/decay" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }

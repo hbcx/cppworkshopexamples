@@ -1,0 +1,4 @@
+-5
+SignedInteger<int>      = true
+SignedInteger<unsigned> = false
+SignedInteger<double>   = false

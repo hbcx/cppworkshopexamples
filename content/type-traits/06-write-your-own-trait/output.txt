@@ -1,0 +1,4 @@
+is_std_vector<vector<int>> = true
+is_std_vector<int>         = false
+is_std_vector<list<int>>   = false
+custom traits work

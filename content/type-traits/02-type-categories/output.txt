@@ -1,0 +1,5 @@
+int: integer
+double: floating point
+char*: pointer
+Color: enum
+vector: class

@@ -1,0 +1,13 @@
+title: "Constructibility and assignability traits"
+standard: "C++17"
+difficulty: 2
+summary: "A large family asks whether a type supports an operation: is_default_constructible, is_copy_constructible, is_move_constructible, is_destructible, and the matching assignment traits. Each has a nothrow variant (used for exception guarantees, like a vector deciding whether to move on reallocation) and a trivially variant (a simple bit copy)."
+notes: "These traits ask whether a type supports an operation, and they come in three graded strengths that matter for different reasons. The plain form asks whether the operation is merely POSSIBLE: is_default_constructible, is_copy_constructible, is_move_constructible, is_destructible, and the assignment mirror is_copy_assignable and is_move_assignable. A move-only type here is move-constructible and move-assignable but not copy-constructible or copy-assignable, because its copy members are deleted, and the traits report that exactly -- which is how a generic container knows whether it may copy an element or must move it. The NOTHROW form asks whether the operation is guaranteed not to throw: is_nothrow_move_constructible is the trait std::vector consults to decide whether a reallocation may MOVE its elements or must fall back to copying them, because moving is only safe under the strong exception guarantee if it cannot throw -- which is the whole reason move constructors should be marked noexcept. The TRIVIALLY form asks whether the operation is a simple bit copy with no user code: is_trivially_copyable is the precise can-I-memcpy-this predicate, true for int and false for std::string because a string manages a heap buffer that a raw byte copy would alias. Real generic code uses all three levels: the plain traits to know what is allowed, the nothrow traits to choose a safe fast path under exceptions, and the trivial traits to take a bulk-copy shortcut. This is the family the section otherwise only touched through is_trivially_copyable, and it is among the most used in the whole header, because containers, algorithms, and wrappers constantly ask can I build, move, or copy this element, and how cheaply."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::is_default_constructible", url: "https://en.cppreference.com/w/cpp/types/is_constructible" }
+  - { name: "std::is_nothrow_move_constructible", url: "https://en.cppreference.com/w/cpp/types/is_move_constructible" }
+  - { name: "std::is_trivially_copyable", url: "https://en.cppreference.com/w/cpp/types/is_trivially_copyable" }

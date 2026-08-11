@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 5}, {"file": "main.cpp", "line": 9, "out": "is_integral<int>::value = true\n"}, {"file": "main.cpp", "line": 10, "out": "is_integral_v<double>   = false\n"}, {"file": "main.cpp", "line": 24, "out": "trait basics hold\n"}, {"file": "main.cpp", "line": 25}, {"file": "main.cpp", "line": 26}]}

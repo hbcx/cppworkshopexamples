@@ -1,0 +1,13 @@
+title: "Pointer and member-pointer traits"
+standard: "C++17"
+difficulty: 2
+summary: "is_pointer and remove_pointer / add_pointer handle plain pointers. Pointers to members are a SEPARATE category the traits keep apart: is_member_pointer, and its two refinements is_member_object_pointer (a pointer to a data member) and is_member_function_pointer (a pointer to a member function). A member pointer is not a plain pointer."
+notes: "Two related families deal with pointers, and the key lesson is that they are kept strictly apart. For ordinary pointers, is_pointer is true for int* and false for int, remove_pointer strips one level (int* to int, int** to int*), and add_pointer adds one (int to int*). The surprise is member pointers. A pointer-to-member -- int Widget::* for a data member, or void (Widget::*)() for a member function -- is NOT a plain pointer and is_pointer is false for it, because a member pointer is really an offset or a dispatch token, not an address, and the type system treats it as its own thing. So there is a separate is_member_pointer, true for any pointer-to-member, and two refinements under it: is_member_object_pointer for a pointer to a data member and is_member_function_pointer for a pointer to a member function. Keeping them apart matters in generic code that reflects over a type's members -- a serialiser or a binding layer that is handed &Widget::data or &Widget::run must tell a data member from a method, and is_member_object_pointer versus is_member_function_pointer is exactly that test, where a single is_pointer check would wrongly report false for both and tell you nothing. The practical rule: use is_pointer for addresses, and the member-pointer traits for the pointer-to-member types you get from taking the address of a class member, and remember that the two categories do not overlap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::is_pointer", url: "https://en.cppreference.com/w/cpp/types/is_pointer" }
+  - { name: "std::remove_pointer", url: "https://en.cppreference.com/w/cpp/types/remove_pointer" }
+  - { name: "std::is_member_pointer", url: "https://en.cppreference.com/w/cpp/types/is_member_pointer" }

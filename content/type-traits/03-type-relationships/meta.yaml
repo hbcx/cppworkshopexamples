@@ -1,0 +1,13 @@
+title: "Type relationships"
+standard: "C++17"
+difficulty: 2
+summary: "Three traits ask how two types relate. is_same is exact identity -- int and const int are different. is_base_of asks whether one class is a base of another. is_convertible asks whether one type converts to another, and it is directional: Derived* to Base* yes, the reverse no."
+notes: "Where category predicates classify one type, the relationship traits compare two. std::is_same is the strictest: it is true only when the two types are EXACTLY the same, so is_same<int, int> is true but is_same<int, const int> and is_same<int, long> are false, because a cv-qualifier or a different width makes a different type. This exactness is what makes is_same the right tool for is this precisely T and the wrong tool for are these compatible. std::is_base_of asks whether the first type is a base class of the second, following the class hierarchy: is_base_of<Base, Derived> is true, the reverse is false, and an unrelated class is false; note it also reports a class as a base of itself and ignores access, so read its exact definition when the answer surprises you. std::is_convertible asks whether a value of the first type can implicitly convert to the second, and its key property is that it is DIRECTIONAL -- is_convertible<Derived*, Base*> is true because you may treat a derived pointer as a base pointer, while the reverse is false. These three cover most type questions generic code asks: is_same to pin an exact type (often after decaying away cv and references), is_base_of to detect a hierarchy relationship for a template, and is_convertible to check that an argument will bind to a parameter. The traps -- is_same being fooled by cv and reference qualifiers, and is_convertible being both directional and permissive about numeric conversions -- are exactly what two of the anti-patterns cover."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::is_same", url: "https://en.cppreference.com/w/cpp/types/is_same" }
+  - { name: "std::is_base_of", url: "https://en.cppreference.com/w/cpp/types/is_base_of" }
+  - { name: "std::is_convertible", url: "https://en.cppreference.com/w/cpp/types/is_convertible" }

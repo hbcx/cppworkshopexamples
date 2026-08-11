@@ -1,0 +1,13 @@
+title: "Type-property traits"
+standard: "C++17"
+difficulty: 2
+summary: "Where category traits ask what KIND a type is, property traits ask what it is LIKE: is it const or volatile, signed or unsigned, empty, polymorphic, abstract, final, standard-layout, trivial, does it have a virtual destructor. These describe a type's shape and qualifiers rather than its family."
+notes: "Category traits (the previous kind) sort a type into a family -- integer, class, pointer. Property traits instead report a specific characteristic, and there are many. Qualifier properties look at the top-level cv: is_const is true for const int but not int, and is_volatile for volatile int. Signedness properties are meaningful for arithmetic types: is_signed and is_unsigned split the numeric ones. The class-shape properties are the most useful group. is_empty is true for a class with no non-static data members, which underlies the empty-base optimisation libraries use to store a stateless comparator or allocator for free. is_polymorphic is true for a class with at least one virtual function, and has_virtual_destructor for one with a virtual destructor -- both are what a safe-delete-through-base check looks at. is_abstract is true for a class with a pure virtual function (one you cannot instantiate). is_final for a class marked final. And the layout and triviality properties -- is_standard_layout, is_trivial -- report the two independent qualities that the deprecated is_pod once bundled, which the last anti-pattern returns to: standard-layout means a predictable member order safe to share with C or map over a buffer, trivial means a simple default constructor and a bitwise copy. These properties are what generic libraries branch on to enable an optimisation or enforce a requirement -- store an empty comparator inline, refuse a non-standard-layout type at a C boundary, pick a trivial fast path -- and each is a plain value trait you read with _v and combine with the logical traits."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::is_const", url: "https://en.cppreference.com/w/cpp/types/is_const" }
+  - { name: "std::is_polymorphic", url: "https://en.cppreference.com/w/cpp/types/is_polymorphic" }
+  - { name: "std::is_empty", url: "https://en.cppreference.com/w/cpp/types/is_empty" }

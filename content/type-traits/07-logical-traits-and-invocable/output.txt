@@ -1,0 +1,4 @@
+signed_integer<int>      = true
+signed_integer<unsigned> = false
+number_or_pointer<int*>  = true
+logical traits and invocable hold

@@ -12,3 +12,5 @@
   note: "The pre-concepts way to ask the same questions: decltype and declval query a type's members and results by whether an expression is well-formed, which concepts wrap in named requirements -- go there for type extraction, function traits, and decltype(auto)."
 - slug: "ranges"
   note: "The biggest library built on concepts: range, view and borrowed_range constrain every algorithm and adaptor, and the lazy pipeline syntax rests on them -- go there for range algorithms, composable views, and the pipe operator."
+- slug: "type-traits"
+  note: "The compile-time facts a concept is made of: a concept is a named bool built from traits, and the standard concepts wrap traits like is_integral and is_same -- go there for the type-category, relationship and transformation traits underneath."

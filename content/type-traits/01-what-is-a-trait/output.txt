@@ -1,0 +1,3 @@
+is_integral<int>::value = true
+is_integral_v<double>   = false
+trait basics hold

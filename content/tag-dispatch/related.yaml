@@ -12,3 +12,5 @@
   note: "What replaces this in C++20: constrained overloads ordered by subsumption select an implementation by a named requirement directly, where tag dispatch needed an extra tag argument and a trait -- go there for concepts, the requires-expression, and the modern form of this dispatch."
 - slug: "constexpr-consteval"
   note: "The single-function alternative to a tag: an if constexpr branch (or is_constant_evaluated) picks the path inside one function with no tag argument and no extra overloads -- go there for compile-time evaluation, constexpr, consteval, and the if constexpr that replaces this."
+- slug: "type-traits"
+  note: "Where the tag usually comes from: a trait produces the true_type or false_type this technique dispatches on, and reads a type's category or properties -- go there for the type-category, relationship and transformation traits that drive the dispatch."

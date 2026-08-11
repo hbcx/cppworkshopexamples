@@ -1,0 +1,3 @@
+is_pod<Plain> = true
+trivial=true standard_layout=true trivially_copyable=true
+done

@@ -1,0 +1,13 @@
+title: "What a type trait is"
+standard: "C++17"
+difficulty: 1
+summary: "A type trait is a template that answers a question about a type at compile time. Value traits derive from std::integral_constant and expose a ::value (the _v helper is the shorthand); type traits expose a ::type (the _t helper). std::true_type and std::false_type are the two fixed boolean traits everything is built from."
+notes: "A type trait is a compile-time query written as a template. There are two kinds, distinguished by what they hand back. A VALUE trait answers a yes/no or numeric question and exposes the answer as a static member ::value -- std::is_integral<int>::value is true -- and every such trait derives from std::integral_constant, the template that pairs a type with a constant value; std::true_type and std::false_type are just integral_constant<bool, true> and integral_constant<bool, false>, the two answers a predicate returns. A TYPE trait answers with a type and exposes it as a member ::type -- std::remove_reference<int&>::type is int. Because writing ::value and typename ...::type everywhere is noisy, the library adds helpers: the _v suffix is a variable template equal to ::value (std::is_integral_v<int>), and the _t suffix is an alias equal to ::type (std::remove_reference_t<int&>), so modern code reads is_integral_v and remove_reference_t. This example shows both forms side by side and confirms the true_type/false_type foundation with static_assert. The conventions matter because they are universal: every trait in the header follows the value-with-::value or type-with-::type shape, so once you know the pattern you can read any of the roughly one hundred traits, and the rest of this section is families of traits that all share it. The mental model: a trait is a function that runs in the compiler, taking types as arguments and returning either a compile-time value or another type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::integral_constant", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }

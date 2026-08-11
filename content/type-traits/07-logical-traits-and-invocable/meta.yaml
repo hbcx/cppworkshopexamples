@@ -1,0 +1,12 @@
+title: "Logical traits and is_invocable"
+standard: "C++17"
+difficulty: 3
+summary: "conjunction, disjunction and negation combine trait predicates like and, or, not, and they short-circuit -- so a later trait is not evaluated once the answer is decided. is_invocable asks whether a call is valid, and invoke_result gives the type that call returns, without making the call."
+notes: "Two more groups round out the everyday traits. The LOGICAL traits combine predicates: std::conjunction is a compile-time and over a list of traits, std::disjunction an or, std::negation a not. They read as is_signed_integer being conjunction of is_integral and is_signed, and beyond being tidier than writing is_integral_v<T> && is_signed_v<T>, they SHORT-CIRCUIT like the operators they mirror -- conjunction stops at the first false and disjunction at the first true, and it does not even instantiate the later traits, which matters when a later trait would be ill-formed for a type the earlier one already ruled out. That short-circuiting is why they exist rather than plain &&, which would evaluate every operand. The CALLABLE traits ask about invoking something: std::is_invocable<F, Args...> is true when F can be called with those argument types, and std::invoke_result<F, Args...> gives the type such a call would return -- both computed without performing the call, so they work on any callable, function, lambda, or functor. is_invocable is the guard (can I call this here) and invoke_result is the answer type (what do I store the result in), and together they are how a framework introspects a handler before wiring it up. These, with the categories, relationships, transformations, conditional and custom traits, are the full working set: almost every real use of type_traits is one of these families, and the roughly one hundred individual traits are variations that all follow the value-with-::value or type-with-::type conventions from the first example."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::conjunction", url: "https://en.cppreference.com/w/cpp/types/conjunction" }
+  - { name: "std::invoke_result", url: "https://en.cppreference.com/w/cpp/types/result_of" }

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 10}, {"file": "main.cpp", "line": 27, "out": "pointer and member-pointer traits hold\n"}, {"file": "main.cpp", "line": 28}, {"file": "main.cpp", "line": 29}]}

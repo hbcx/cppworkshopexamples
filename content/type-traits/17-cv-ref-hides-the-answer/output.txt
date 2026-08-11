@@ -1,0 +1,3 @@
+raw     is_same<const int&, int> = false
+decayed is_same<..., int>        = true
+done

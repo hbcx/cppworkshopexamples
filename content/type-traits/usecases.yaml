@@ -1,0 +1,19 @@
+- problem: "A generic function has a fast path that is only valid for some types -- a bulk memcpy for trivially copyable elements, a specialised code path for arithmetic types -- and it must pick the safe path for the rest without the caller choosing."
+  why: "A trait such as is_trivially_copyable or is_arithmetic, tested in an if constexpr or a static_assert, selects the path at compile time and only instantiates the branch that fits, so the fast path is used exactly when it is sound. A run-time check cannot do this because every branch would have to compile for every type, and a hand-maintained overload set is more code to keep in sync."
+  signal: "A template with a bulk byte-copy or a numeric shortcut guarded by a hand-written type list, or one that would corrupt a non-trivial type if the wrong path ran."
+
+- problem: "A template deduces or forwards a type and then compares or classifies it, but the deduced type arrives with a stray const or reference, so the comparison silently takes the wrong branch."
+  why: "Running the type through std::decay or std::remove_cvref first removes the top-level cv and reference decoration, so is_same and the category traits answer about the underlying type, which is what the logic meant. Comparing the raw deduced type makes const int& and int look different and int& look non-integral, a bug that hides until an unusual argument arrives."
+  signal: "A trait applied directly to a template parameter, a forwarding-reference type, or an auto variable, with no decay or remove_cvref in between."
+
+- problem: "A container or wrapper should store its data in a different type depending on the element -- a wider counter on 64-bit builds, an inline buffer for small trivially copyable elements, a signed or unsigned index -- and the choice must be made at compile time."
+  why: "std::conditional_t picks the storage type from a compile-time condition, often another trait, so one class template adapts its representation to the element without duplication. Writing separate class templates per case multiplies code, and choosing the worst-case type for everyone wastes space or range."
+  signal: "Near-duplicate class templates that differ only in one member's type, or a single hard-coded storage type chosen for the largest or most general case."
+
+- problem: "A library must recognise its own family of types -- a duration, a specific smart pointer, a tagged id, one of its own containers -- to route them to the right overload, serialiser, or formatter."
+  why: "A custom trait written as a primary template plus a partial specialization detects the type's own template shape, giving an is_my_type_v the rest of the code can branch on, for types the standard traits know nothing about. A growing if/else or overload set keyed on concrete type names cannot be extended by a user and breaks when a new instantiation appears."
+  signal: "A dispatch that lists specific instantiations by hand, or a request to treat all specialisations of one template alike without naming each."
+
+- problem: "A framework is handed a callback and must know, before wiring it up, whether it can be called with the intended arguments and what type it returns -- to store the result, to reject a bad handler at compile time, or to build the right adapter."
+  why: "std::is_invocable guards the call and std::invoke_result gives the return type, both computed without invoking anything, so the framework validates and adapts the handler at compile time. Assuming a fixed signature forces every callback into one shape, and discovering an invalid call at run time is far too late."
+  signal: "A callback-taking API that assumes one hard-coded signature, or that fails at run time when a handler does not match instead of rejecting it at compile time."

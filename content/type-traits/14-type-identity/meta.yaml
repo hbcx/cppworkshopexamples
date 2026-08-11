@@ -1,0 +1,11 @@
+title: "type_identity and non-deduced contexts"
+standard: "C++20"
+difficulty: 3
+summary: "std::type_identity_t<T> is just T, but because T appears behind an alias it is a NON-DEDUCED context: the compiler will not deduce T from that argument. Wrapping a parameter in it forces the caller to state T, so a mixed-type call cannot silently pick the wrong T. It is also a plain do-nothing transformation trait."
+notes: "type_identity looks pointless -- std::type_identity_t<T> is exactly T -- until you see where it is placed. Template argument deduction works by matching the argument against the parameter, but only in DEDUCED positions; a template parameter that appears only inside another template's argument (here, as the argument of type_identity) is a NON-DEDUCED context, so the compiler does not try to infer T from it. Putting a function parameter behind type_identity_t therefore switches OFF deduction for that parameter: the caller must specify T explicitly, and the argument is then converted to that T. The example contrasts identity, whose parameter is a plain T deduced from the argument, with clampToType, whose parameter is type_identity_t<T> and so is not deducible -- clampToType(42) is an error, and you must write clampToType<double>(42), which pins T to double and converts the int argument. Why want this? To stop deduction from picking a T you did not intend when several arguments could each drive it, or to make one argument follow a type fixed by another rather than proposing its own -- a classic case is a two-argument function where the second argument should convert to the first argument's deduced type, so you leave the first deducible and wrap the second in type_identity. type_identity is also simply the identity transformation trait, useful as a no-op default in a trait computation or to add const or a reference around a T uniformly. It is a small tool, but non-deduced contexts are a real technique, and type_identity is the standard, readable way to create one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::type_identity", url: "https://en.cppreference.com/w/cpp/types/type_identity" }

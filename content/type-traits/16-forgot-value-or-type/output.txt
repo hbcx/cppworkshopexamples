@@ -1,0 +1,3 @@
+is_integral_v<int> = true
+stripRef<int&>() returned an int: 0
+done

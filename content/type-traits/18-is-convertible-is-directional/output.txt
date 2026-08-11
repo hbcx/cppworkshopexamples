@@ -1,0 +1,3 @@
+int<->double both convertible: true
+but is_same<int, double>:       false
+done

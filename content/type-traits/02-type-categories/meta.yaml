@@ -1,0 +1,12 @@
+title: "Type-category predicates"
+standard: "C++17"
+difficulty: 2
+summary: "The is_* predicates classify a type: is_integral, is_floating_point, is_pointer, is_class, is_enum, is_array, is_reference, and the rest. Combined with if constexpr they let one function template take a different branch per category, and in static_assert they enforce what a template accepts."
+notes: "The largest family of traits are the category predicates, each answering is T a member of this category: is_integral, is_floating_point, is_arithmetic (integral or floating), is_pointer, is_class, is_enum, is_union, is_array, is_function, is_reference, is_void, and more. Each is a value trait returning true or false, so they read naturally in a static_assert to constrain a template, and they pair with if constexpr to branch a single function template on the type it was given -- this describe() prints a different line for an integer, a floating-point number, a pointer, an enum, or a class, choosing the branch at compile time so only the taken branch is instantiated. That combination, a category trait inside if constexpr, is the everyday replacement for tag dispatch when the cases are a small closed set. A few facts about the categories are worth holding. They are precise: is_class is true for a class or struct but false for a union (which has is_union) and for an enum (is_enum). They are exact about qualifiers, which trips people up -- is_pointer is false for a reference-to-pointer, and is_integral is false for int& -- because a reference or cv-qualifier makes a different type, a point the anti-patterns return to. And they compose: is_arithmetic is exactly is_integral or is_floating_point, and is_fundamental, is_scalar and is_object sit above them, so you can often ask one broad question instead of several narrow ones. When you find a chain of type checks selecting behaviour, a category predicate in if constexpr usually expresses it more directly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }
+  - { name: "if constexpr", url: "https://en.cppreference.com/w/cpp/language/if" }

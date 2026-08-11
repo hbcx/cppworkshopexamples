@@ -1,0 +1,11 @@
+title: "integer_sequence for expanding packs"
+standard: "C++17"
+difficulty: 3
+summary: "std::index_sequence<Is...> carries a compile-time pack of indices 0, 1, ... N-1, made with std::make_index_sequence<N>. It is the standard way to expand a parameter pack over positions -- to index every element of a tuple, apply a function to unpacked arguments, or generate a pack of a fixed length."
+notes: "A recurring metaprogramming need is to do something for each index from 0 to N-1 at compile time -- read tuple element 0, then 1, then 2, or generate N arguments. You cannot write a compile-time for loop over indices directly, so the standard gives you a pack of them: std::integer_sequence<T, Vs...> holds a list of compile-time values, and its common alias std::index_sequence<Is...> holds std::size_t indices. std::make_index_sequence<N> builds the sequence 0, 1, ... N-1, and the trick is to take it as a function parameter of type index_sequence<Is...>, which lets the compiler DEDUCE the pack Is... so you can then expand it. The example prints a tuple this way: printTuple makes an index_sequence for the tuple's size, passes it to a helper that deduces Is..., and a fold expression expands std::get<Is>(t) over every index, so each element is fetched and printed with no hand-written loop and no recursion. This pattern -- make_index_sequence to get the indices, a helper that deduces the pack, a fold or expansion over it -- is how std::apply calls a function with a tuple's elements, how a tuple is compared or streamed field by field, and how you build a pack of a given length. integer_sequence lives in the utility header rather than type_traits, but it belongs to the same compile-time toolkit and is one of the most useful pieces for real template work, because it is the bridge from a compile-time COUNT to an expandable compile-time pack."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::make_index_sequence", url: "https://en.cppreference.com/w/cpp/utility/integer_sequence" }

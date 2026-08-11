@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 9}, {"file": "main.cpp", "line": 26, "out": "is_same, is_base_of, is_convertible all hold\n"}, {"file": "main.cpp", "line": 27}, {"file": "main.cpp", "line": 28}]}

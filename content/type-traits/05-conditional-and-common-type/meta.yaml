@@ -1,0 +1,12 @@
+title: "conditional and common_type"
+standard: "C++17"
+difficulty: 2
+summary: "conditional_t<Cond, A, B> is A when the compile-time condition is true and B otherwise -- an if that chooses a type. common_type_t gives the type several types promote to, the one a ? b : c would settle on. Together they let generic code compute the right type to use from the types it is given."
+notes: "Two traits compute a type from a choice rather than transform one. std::conditional_t<Cond, A, B> is A if the boolean Cond is true and B if it is false, evaluated at compile time -- it is an if statement for types. You use it to pick a representation from a property: a wider counter on 64-bit builds, a signed or unsigned index, a small-buffer type when an element fits inline and a heap type when it does not. Because the condition is any compile-time bool, it is often another trait -- conditional_t<is_trivially_copyable_v<T>, FastPath, SafePath> selects an implementation type by a property of T. std::common_type_t<Ts...> answers a different question: what single type do these types share, the one they all convert to. It is the type the conditional operator a ? b : c produces, so common_type_t<int, double> is double (int promotes to double) and common_type_t<char, short, int> is int. It is what a generic min or a mixed-type arithmetic helper should return, so that adding an int and a double yields a double rather than truncating. The two work together in real metaprogramming: common_type decides the shared type of several inputs, and conditional picks between candidate types based on traits, and the result is code that adapts its own types to its arguments instead of hard-coding one. When you find yourself wanting an if that returns a type, or the natural result type of mixing several numeric types, these are the traits."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::conditional", url: "https://en.cppreference.com/w/cpp/types/conditional" }
+  - { name: "std::common_type", url: "https://en.cppreference.com/w/cpp/types/common_type" }

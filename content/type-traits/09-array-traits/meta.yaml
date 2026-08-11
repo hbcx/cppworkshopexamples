@@ -1,0 +1,13 @@
+title: "Array traits: rank, extent, remove_extent"
+standard: "C++17"
+difficulty: 2
+summary: "A small family describes built-in array types. rank is how many dimensions the array has, extent<T, N> is the size of the Nth dimension (0 if unknown), remove_extent peels one dimension and remove_all_extents peels them all down to the element type. They let generic code inspect and unwrap raw arrays."
+notes: "C-style array types carry their shape in the type, and these traits read it. std::rank is the number of dimensions: rank of int is 0, of int[5] is 1, of int[3][4] is 2. std::extent<T, N> is the size of the Nth dimension, counting from zero, so extent<int[3][4], 0> is 3 and extent<int[3][4], 1> is 4; for an unbounded dimension, such as the outer one of int[], it reports 0, which is how you detect an incomplete array bound. The transformation traits peel dimensions: std::remove_extent strips exactly one, turning int[3][4] into int[4], and std::remove_all_extents strips every dimension, turning int[3][4] into the element type int. Where this matters is generic code that must handle raw arrays -- a serialiser walking a fixed buffer, a wrapper that copies a C array, a trait that computes an element count -- because a raw array is not a container and has no size() member, so its length lives only in the type, and these traits are how you get it out. They are less common now that std::array carries its size as a template argument you can read directly, but they remain the tools for the built-in array types you meet at C boundaries, in fixed-size buffers, and in legacy interfaces. Each follows the usual shape: rank and extent are value traits with a ::value (and _v), and remove_extent is a type trait with a ::type (and _t)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::rank", url: "https://en.cppreference.com/w/cpp/types/rank" }
+  - { name: "std::extent", url: "https://en.cppreference.com/w/cpp/types/extent" }
+  - { name: "std::remove_extent", url: "https://en.cppreference.com/w/cpp/types/remove_extent" }

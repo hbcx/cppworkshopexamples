@@ -1,0 +1,11 @@
+title: "Anti-pattern: forgetting ::value or ::type"
+standard: "C++17"
+difficulty: 3
+summary: "A trait is a TYPE, not the answer inside it. A value trait's answer is its ::value (or the _v helper); a type trait's answer is its ::type (or the _t helper). Using remove_reference<T> where you meant remove_reference_t<T> names the trait struct, not the type, and using the class where a bool is meant is fragile even when it compiles."
+notes: "The single most common beginner mistake with traits is using the trait itself where its answer was meant. A trait is a class template: std::is_integral<int> is a type, and std::remove_reference<int&> is a type -- the answers live inside them, as ::value and ::type. For TYPE traits the mistake is a hard error and easy to catch: writing std::remove_reference<int&> where you need a type names the trait STRUCT, not int, so you must write std::remove_reference<int&>::type or the helper std::remove_reference_t<int&>. This example shows a stripRef that correctly uses the _t helper; dropping the _t would not compile. For VALUE traits the mistake is sneakier, because std::integral_constant defines an implicit conversion to its value, so std::is_integral<int> converts to the bool true and a forgotten ::value often still compiles and even gives the right answer -- which trains a bad habit that breaks the moment the conversion does not apply (in a context expecting a specific type, in overload resolution, or when you accidentally take the size or address of the trait object instead of reading a bool). The habit that avoids both problems is to always write the answer explicitly: ::value or the _v helper for a boolean or numeric trait, ::type or the _t helper for a type trait. Modern code uses the _v and _t helpers everywhere precisely because they make the intent -- I want the answer, not the trait -- impossible to forget. If you see a trait name used bare where a value or a type is expected, that is the bug or the latent one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::remove_reference", url: "https://en.cppreference.com/w/cpp/types/remove_reference" }

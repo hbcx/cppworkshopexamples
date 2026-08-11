@@ -1,0 +1,12 @@
+title: "Writing your own trait"
+standard: "C++14"
+difficulty: 3
+summary: "A custom trait is a template with a default answer and a partial specialization for the case you want to detect. is_std_vector inherits from std::false_type by default and from std::true_type for vector<T, Alloc>. A transformation trait works the same way, exposing a ::type that a specialization overrides."
+notes: "The standard traits are not magic; they are ordinary templates you can write yourself, and doing so is the core of type-level programming. The recipe for a VALUE trait is a primary template giving the default answer and a partial specialization matching the shape you want to detect. is_std_vector here inherits from std::false_type by default, so every type is not-a-vector, and a partial specialization for std::vector<T, Alloc> inherits from std::true_type, so any vector -- whatever its element and allocator -- is detected. Inheriting from true_type/false_type gives your trait the ::value member and the whole integral_constant interface for free, and adding a constexpr bool variable template gives it the modern _v spelling to match the standard ones. A TRANSFORMATION trait follows the same pattern with a ::type: element_type<T> defaults its ::type to T, and a specialization for std::vector<T, Alloc> sets ::type to T, so element_type_t<vector<double>> is double and element_type_t<int> is int. This specialization technique classifies and unpacks user types the standard traits cannot know about -- is this one of my library's types, is this a std::chrono duration, what does this smart pointer point to -- and it is what you reach for to drive overload selection, serialisation, or template constraints on your own vocabulary. Note this is a different technique from member DETECTION (does T have a size() member), which uses a requires-expression or the void_t idiom covered in the decltype chapter; here the shape being matched is the type's own template structure, not the presence of a member."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type traits", url: "https://en.cppreference.com/w/cpp/header/type_traits" }
+detailed_tags:
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }

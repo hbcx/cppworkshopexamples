@@ -1,0 +1,3 @@
+kind(42):  integer
+kind(3.5): floating point
+done
