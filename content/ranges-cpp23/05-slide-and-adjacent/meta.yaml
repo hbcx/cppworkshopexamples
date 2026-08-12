@@ -1,0 +1,12 @@
+title: "slide and adjacent: overlapping windows"
+standard: "C++23"
+difficulty: 2
+summary: "views::slide(n) yields every consecutive window of width n, moving one step at a time so the windows overlap. views::adjacent<N> is the same with a compile-time width, and each window is a tuple you can unpack -- adjacent<2> is also called pairwise."
+notes: "Where chunk cuts a range into disjoint blocks, slide and adjacent produce OVERLAPPING windows, which is what sliding-window computations need: a moving average, the difference between consecutive samples, n-grams over tokens. slide(n) takes its width at run time and yields each window as a sub-range; the count of windows is size - n + 1, and a range shorter than n yields nothing. adjacent<N> fixes the width at compile time and, crucially, yields each window as a TUPLE rather than a range, so you can bind the slots by name -- for (auto [a, b] : v | adjacent<2>) reads the pair directly and a delta is simply b - a. adjacent<2> has the alias pairwise. Because the width is a constant, adjacent<N> is the right tool when N is known and small and you want named elements; slide is the tool when the width is a run-time value or you want to iterate the window as a range. Both have transform variants -- adjacent_transform and slide has the closely related pattern -- covered in the transform-variants example, which apply a function to each window and yield the results. Keep the contrast with chunk in mind: adjacent<2> over four elements gives three overlapping pairs, while chunk(2) gives two disjoint pairs; picking the wrong one is a real bug the anti-pattern demonstrates."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::slide", url: "https://en.cppreference.com/w/cpp/ranges/slide_view" }
+  - { name: "std::views::adjacent", url: "https://en.cppreference.com/w/cpp/ranges/adjacent_view" }
+detailed_tags: []

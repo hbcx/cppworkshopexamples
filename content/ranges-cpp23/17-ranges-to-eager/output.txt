@@ -1,0 +1,2 @@
+to in the middle: transform ran 8 times for 3 results
+to at the end:    transform ran 3 times for 3 results

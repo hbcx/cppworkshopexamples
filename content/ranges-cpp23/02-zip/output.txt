@@ -1,0 +1,4 @@
+Ada: 95
+Linus: 82
+Grace: 88
+after bonus: 100 87 93

@@ -1,0 +1,12 @@
+title: "Anti-pattern: chunk mistaken for slide"
+standard: "C++23"
+difficulty: 3
+summary: "chunk(n) and slide(n) both group a range into width-n pieces, but chunk gives non-overlapping blocks and slide gives overlapping windows. They produce different groups and different counts, so using the wrong one -- chunk where you needed a sliding window -- quietly computes the wrong thing."
+notes: "The two adaptors read almost identically -- v | chunk(3) versus v | slide(3) -- which is exactly why the mix-up happens. chunk(n) partitions the range into consecutive blocks that do NOT overlap and together cover it once, with a short final block; over five elements chunk(3) gives two blocks, 20 21 23 and 22 25. slide(n) yields every consecutive window of width n, moving one element at a time, so the windows OVERLAP; over the same five elements slide(3) gives three windows, 20 21 23, 21 23 22, and 23 22 25. For a moving average, a rolling difference, or any windowed statistic you want slide -- and chunk silently gives the wrong answer, because most of the windows you needed (the ones straddling a block boundary) never exist, and the counts differ too (two versus three here). Nothing errors; the numbers are just wrong. The rule: reach for slide (or adjacent<N> when the width is a small constant and you want named slots) for a rolling window, and for chunk only when you genuinely want to cut the data into separate batches. The sign to watch for: a chunk feeding a per-group average or delta that is meant to roll across the whole series, which almost always should have been slide."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::chunk", url: "https://en.cppreference.com/w/cpp/ranges/chunk_view" }
+  - { name: "std::views::slide", url: "https://en.cppreference.com/w/cpp/ranges/slide_view" }
+detailed_tags: []

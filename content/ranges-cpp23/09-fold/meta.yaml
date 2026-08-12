@@ -1,0 +1,13 @@
+title: "fold_left, fold_right, fold_left_first"
+standard: "C++23"
+difficulty: 2
+summary: "The C++23 range reductions. fold_left combines elements left to right from an initial value and returns the result; fold_right goes right to left; fold_left_first uses the first element as the seed and returns an optional. They are the range-native replacement for std::accumulate."
+notes: "std::accumulate has two long-standing rough edges: it takes an iterator pair, not a range, so it does not sit at the end of a view pipeline, and it deduces the accumulator type from the init argument, so accumulate over a range of doubles with an init of 0 silently accumulates in int and truncates. The fold family fixes both. fold_left(range, init, op) reduces left to right and returns the value directly, and because it takes a range it folds a pipeline -- fold_left(v | transform(square), 0, plus) -- with no temporary container. fold_right(range, init, op) reduces right to left, which only matters for a non-commutative operation: with subtraction the nesting is visible, 1 - (2 - (3 - ...)). fold_left_first(range, op) has no init -- it seeds with the first element -- so for an EMPTY range there is nothing to return, and it yields std::optional, empty when the range is empty; this is the safe design (accumulate would need an init you might pick wrongly), but it means you must handle the optional, which the anti-pattern covers. There are more members in the family (fold_right_last, and the *_with_iter forms that also return the final iterator), but these three are the everyday ones. Prefer a fold over accumulate in new code: it composes with ranges and its result type follows the operation instead of the init literal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::ranges::fold_left", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/fold_left" }
+detailed_tags:
+  - { name: "std::ranges::fold_right", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/fold_right" }
+  - { name: "std::ranges::fold_left_first", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/fold_left_first" }

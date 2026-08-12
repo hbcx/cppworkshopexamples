@@ -6,3 +6,5 @@
   note: "What ranges generalises: the iterator pattern and its input/forward/bidirectional/random-access categories are exactly what the range concepts classify, now with a sentinel end that need not match the iterator -- go there for the traversal model underneath."
 - slug: "vectors"
   note: "The container most pipelines start from and materialise back into: a std::vector is a contiguous range that feeds a view chain and holds the result when you copy a view out -- go there for the container's own growth, capacity and iterator rules."
+- slug: "ranges-cpp23"
+  note: "What the next standard added on top of these views: ranges::to to materialise a pipeline in one step without a loop, zip and enumerate, the chunk / slide / stride windowing family, cartesian_product, repeat, and the fold reductions -- go there for the C++23 additions."

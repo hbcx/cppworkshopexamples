@@ -1,0 +1,12 @@
+title: "repeat: a value, over and over"
+standard: "C++23"
+difficulty: 2
+summary: "views::repeat(value, n) is a range that yields the same value n times without storing n copies. With no count it is an infinite range, which you bound with take. It is the constant generator that fills, pads, or supplies a fixed column."
+notes: "repeat is the simplest of the generating views: it produces one value on demand, as many times as asked, holding a single copy of the value rather than a filled container. The two-argument form repeat(value, n) is bounded and yields the value n times -- useful for padding a sequence to a length, building a constant column to zip against real data, or filling a container via ranges::to. The one-argument form repeat(value) is INFINITE, and like any infinite view it is only usable once you limit it, normally with take(k); because views are lazy, holding an infinite repeat costs nothing until you iterate it, and take stops the iteration after k elements. That laziness is the whole point -- repeat('*') | take(4) never builds an infinite string, it just hands out four stars. This mirrors views::iota, the counting generator from the C++20 chapter: iota walks increasing values, repeat holds one value still. The trap it shares with every infinite view is iterating it without a bound, which hangs; the C++20 ranges chapter has that anti-pattern, and it applies here unchanged. Reach for repeat whenever you need a constant sequence and do not want to allocate it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::repeat", url: "https://en.cppreference.com/w/cpp/ranges/repeat_view" }
+detailed_tags:
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

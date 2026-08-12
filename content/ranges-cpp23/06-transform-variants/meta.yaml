@@ -1,0 +1,12 @@
+title: "zip_transform and adjacent_transform"
+standard: "C++23"
+difficulty: 2
+summary: "The transform siblings of zip and adjacent. views::zip_transform calls a function on the matched elements of several ranges and yields the results instead of tuples. views::adjacent_transform<N> calls a function on each sliding window. Both fuse a map step into the view."
+notes: "zip and adjacent hand you tuples; often the very next thing you do is combine the tuple into one value, and the transform variants do that in a single step. zip_transform(f, r1, r2, ...) takes the function FIRST, then the ranges, and yields f applied to the matched elements -- so multiplying two columns is zip_transform(std::multiplies{}, a, b) with no tuple to unpack and no separate transform stage. adjacent_transform<N>(f) does the same for a sliding window of compile-time width N: f is called with the N elements of each window, so consecutive differences are adjacent_transform<2>([](int x, int y){ return y - x; }). These are not just shorthand -- fusing the combine into the adaptor means no intermediate tuple range is formed, and the intent (a product of columns, a delta series) reads directly. The argument order is the thing to remember: the callable comes before the ranges in zip_transform, unlike most adaptors where the range is piped in first. Reach for the plain zip or adjacent when you genuinely want the tuple (to bind and use several parts), and for the transform variant when you immediately reduce each group to one value."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::zip_transform", url: "https://en.cppreference.com/w/cpp/ranges/zip_transform_view" }
+  - { name: "std::views::adjacent_transform", url: "https://en.cppreference.com/w/cpp/ranges/adjacent_transform_view" }
+detailed_tags: []

@@ -1,0 +1,11 @@
+title: "Anti-pattern: zip silently truncates to the shortest range"
+standard: "C++23"
+difficulty: 3
+summary: "views::zip ends when its SHORTEST input ends, so zipping ranges of different lengths silently drops the tail of the longer ones. When the lengths were supposed to be equal, the missing elements are a data-loss bug with no error to point at it."
+notes: "Stopping at the shortest range is the correct and useful definition of zip -- it is what lets you zip a finite range against an infinite generator, or against a repeat. But the same rule bites when the inputs were MEANT to be the same length and one is not. Here four ids are zipped with three values because an upstream step dropped a row, and the loop processes only three pairs: the fourth id never appears, the count is quietly wrong, and nothing in the code or the compiler flags it. This is the classic silent-truncation bug, and it is easy to miss precisely because zip did nothing wrong -- it did exactly what it promises. The fix is to make the length assumption explicit: when the ranges must match, compare their sizes before (or after) zipping and treat a mismatch as an error, rather than letting zip absorb it. If the ranges legitimately differ in length and you want the longer one preserved, zip is simply the wrong tool -- you need a different join that pads the short side (the standard library does not yet have a zip_longest; you fill the shorter range, for example by chaining it with a repeat of a default, before zipping). The sign in code to watch for: a zip over two containers whose equal length is an assumption rather than something the code guarantees or checks."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::zip", url: "https://en.cppreference.com/w/cpp/ranges/zip_view" }
+detailed_tags: []

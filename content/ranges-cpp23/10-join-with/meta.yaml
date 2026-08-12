@@ -1,0 +1,12 @@
+title: "join_with: flatten with a separator"
+standard: "C++23"
+difficulty: 2
+summary: "views::join_with flattens a range of ranges into one, inserting a separator between the inner ranges but not at the ends. It is the range form of a string join, and the separator can be a single element or a whole range."
+notes: "C++20 had views::join, which concatenates a range of ranges into one flat sequence with nothing between the pieces. join_with adds the separator, which is what turns concatenation into a real join: a range of strings joined with a dash, or with a comma-space, comes out as one string with the separator between each pair and none at the front or back -- exactly the string-join operation every language has and C++ long lacked in the standard library. The separator is flexible: a single element (join_with('-') puts one dash between parts) or a whole range (join_with(std::string_view{, }) inserts the two-character separator), and the same works for joining ranges of ranges of any element type, not only characters. Combined with ranges::to<std::string> it is the idiomatic way to build a delimited string from parts without a manual loop that has to special-case the last element to avoid a trailing separator -- the classic join bug join_with does not have. It stays lazy until materialized, so you can join, then transform, then collect. For building paths, CSV rows, human-readable lists, or any delimited text from a sequence of pieces, this is the tool."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::join_with", url: "https://en.cppreference.com/w/cpp/ranges/join_with_view" }
+detailed_tags:
+  - { name: "std::ranges::to", url: "https://en.cppreference.com/w/cpp/ranges/to" }

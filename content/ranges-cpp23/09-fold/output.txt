@@ -1,0 +1,4 @@
+fold_left sum: 15
+sum of squares: 55
+fold_left_first product: 120
+fold_right with minus: 3

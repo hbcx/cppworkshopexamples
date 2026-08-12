@@ -1,0 +1,2 @@
+50 x 50 x 50 = 125000 tuples
+took only 3 instead of materializing all

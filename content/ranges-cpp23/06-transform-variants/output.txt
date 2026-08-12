@@ -1,0 +1,2 @@
+zip_transform (a*b): 10 40 90 160 
+adjacent_transform<2> (deltas of b): 10 10 10 

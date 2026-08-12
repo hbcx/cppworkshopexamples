@@ -1,0 +1,2 @@
+ids: 4, processed: 3  <- 'd' silently skipped
+size mismatch detected: 4 vs 3 -- handle it, do not zip blindly

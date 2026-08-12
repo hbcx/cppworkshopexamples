@@ -1,0 +1,11 @@
+title: "enumerate: index and element together"
+standard: "C++23"
+difficulty: 1
+summary: "views::enumerate pairs every element with its position, counting from zero, yielding a tuple of index and element. It removes the counter you would otherwise declare before the loop and increment by hand at the bottom."
+notes: "The pattern of needing both the element and its position -- numbering output, assigning sequential ids, reporting an error as row N -- was served by a size_t i = 0 before the loop and a ++i at the end of the body. That counter is easy to forget, and easy to bump wrong when a continue skips the increment or a branch bumps it twice. enumerate makes the index part of the iteration: for (auto [i, item] : enumerate(range)) gives a tuple whose first element is the zero-based position and whose second is a reference to the element, so the two cannot drift apart. The index type is the range's signed difference type (ptrdiff_t), which is worth knowing if you compare it against an unsigned size(). Like zip -- of which enumerate is essentially a special case, zipping the range with its own index sequence -- the element is a reference, so you can modify it through the binding. It is a small feature but a constant one; anywhere a loop keeps a side counter purely for the position, enumerate says the same thing with less to go wrong."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::enumerate", url: "https://en.cppreference.com/w/cpp/ranges/enumerate_view" }
+detailed_tags: []

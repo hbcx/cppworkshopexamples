@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "ranges"
+  note: "The C++20 foundation this builds on: what a view is, why views are lazy, the pipe operator, filter and transform, and the dangling rules -- go there first if the pipeline syntax or laziness here is new, because this chapter assumes all of it."
+- slug: "concepts"
+  note: "What the range library is built from: range, view, input_range and the rest are concepts, and every adaptor here is constrained by them -- go there for named requirements and how the constraints behind these views are written."
+- slug: "tuple"
+  note: "What zip, enumerate, adjacent and cartesian_product hand you: each step is a tuple, unpacked with a structured binding and reachable with std::get -- go there for heterogeneous fixed-size grouping and how to take a tuple apart."
+- slug: "vectors"
+  note: "Where ranges::to usually lands: the most common target is a std::vector, and the growth and capacity rules decide what that materialization costs -- go there for size vs capacity, reserve, and reallocation."

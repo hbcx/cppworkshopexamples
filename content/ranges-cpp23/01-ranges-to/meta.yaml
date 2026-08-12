@@ -1,0 +1,13 @@
+title: "ranges::to: materialize a pipeline into a container"
+standard: "C++23"
+difficulty: 2
+summary: "The headline C++23 range addition. A lazy view produces elements on demand but is not a container; ranges::to runs the pipeline and collects the results into a real container in one step, deducing the element type. It replaces the manual loop, the reserve, and the back_inserter dance."
+notes: "C++20 gave us composable lazy views, but turning one back into a container was clumsy -- a range-for with push_back, or std::copy through a std::back_inserter, spelled out every time. ranges::to closes that gap: append it to a pipeline and it constructs the target container from the view, deducing the element type so you write to<std::vector> without repeating int. It is EAGER by design -- it walks the whole view once and allocates the container -- which is exactly what you want at the END of a pipeline, and exactly what you do not want in the middle (the last anti-pattern shows why). The target is not limited to vector: to<std::string> collects characters, and to<std::map> or to<std::set> collects a pipeline of pairs or keys, because ranges::to can construct any container it recognises, including from an iterator pair or with extra constructor arguments. When the container element type is obvious it also has a pipe-friendly form, my_view | std::ranges::to<std::vector>(), which reads left to right with the rest of the chain. This one function removes a large slice of the imperative glue that used to sit between algorithms and containers, and it is the piece that makes the C++20 view syntax feel finished. Reach for it wherever you were about to declare an empty container and fill it in a loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::ranges::to", url: "https://en.cppreference.com/w/cpp/ranges/to" }
+detailed_tags:
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }
+  - { name: "std::views::filter", url: "https://en.cppreference.com/w/cpp/ranges/filter_view" }

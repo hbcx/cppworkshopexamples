@@ -1,0 +1,23 @@
+- problem: "Almost every codebase builds a new container by filtering and transforming an existing one -- the reserve, the loop, the push_back, or a copy_if into a back_inserter. It is boilerplate you write again and again and get subtly wrong."
+  why: "ranges::to turns the whole pipeline into a container in one step and deduces the element type, so filter-map-collect is one line with no manual loop; the alternative is several lines of imperative bookkeeping for every collection you build."
+  signal: "A declare-empty-container then range-for with an if and push_back, or a std::copy_if / std::transform feeding a std::back_inserter."
+
+- problem: "Data stored as parallel arrays -- names and scores, ids and timestamps, the columns of a table in struct-of-arrays layout -- has to be walked together, element by element."
+  why: "Indexing all of them with one loop counter works until the arrays drift out of length or an index is off by one; zip walks them in lockstep with no index and stops at the shortest, making the parallel structure explicit."
+  signal: "A for loop over an index i used only to subscript two or more vectors of the same length, like a[i], b[i], c[i]."
+
+- problem: "You are iterating a range but also need the position: numbering output lines, assigning sequential ids, or reporting an error as row N."
+  why: "The hand-rolled version declares a counter outside the loop and increments it at the bottom, which is easy to forget or to bump twice after a continue; enumerate ties the index to the element so the two cannot drift apart."
+  signal: "A size_t i = 0 declared just before a range-for and a ++i at the end of the body, used only for the position."
+
+- problem: "A stream of records must go to a bulk API in fixed-size batches -- insert 1000 rows per statement, send 100 items per request -- because per-item calls are too slow or the API caps the batch size."
+  why: "The manual version does index arithmetic with min(i+n, size) to slice each batch and is a classic source of off-by-one and wrong last-partial-batch bugs; chunk(n) yields the batches directly, including a correct short final one."
+  signal: "A loop stepping by n with inner bounds like begin + i and begin + min(i + n, size), or other manual batching index math."
+
+- problem: "Time-series or signal code needs to compute over a moving window: a moving average, the difference between consecutive samples, or n-grams of a token stream."
+  why: "Rolling your own window means juggling two indices and the boundary conditions at the start and end; slide(n) and adjacent<N> give exactly the consecutive windows, and adjacent<N> names each slot so a delta reads as b - a."
+  signal: "Loops that index v[i] and v[i+1] (or a k-wide span) together, with special-casing for the first or last elements."
+
+- problem: "You need a single value out of a range -- a sum, product, max, or a custom combine -- possibly at the end of a lazy view pipeline."
+  why: "std::accumulate works on iterator pairs and deduces the accumulator type from the init, so accumulate over doubles with an init of 0 silently truncates to int; fold_left is range-based, composes with a pipeline directly, and its result type follows the operation."
+  signal: "A std::accumulate call, especially one whose init literal 0 is a narrower type than the elements, or one wrapped around v.begin() and v.end() just to reduce a container."

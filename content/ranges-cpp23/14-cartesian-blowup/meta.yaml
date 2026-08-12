@@ -1,0 +1,12 @@
+title: "Anti-pattern: cartesian_product blows up to the product of sizes"
+standard: "C++23"
+difficulty: 3
+summary: "The number of tuples cartesian_product yields is the PRODUCT of its input sizes, so a few modest ranges combine into an enormous one, and adding a range multiplies the total again. Materializing that with ranges::to allocates every combination -- easy to trigger from an expression that looks small."
+notes: "cartesian_product is a lazy view, which hides its cost: the expression cartesian_product(a, b, c) looks the same whether the ranges have three elements or three thousand, but the number of tuples is the product of their sizes. Three ranges of fifty is a hundred and twenty-five thousand tuples; four ranges of a hundred is a hundred million. Nothing goes wrong while the view is just held -- the danger is forcing it, especially with ranges::to<std::vector>, which allocates and fills a container with every combination, or a plain loop that visits them all. This is the multiplicative version of the same lesson as any large range: laziness lets you DESCRIBE a huge computation cheaply, and it is materializing or fully iterating it that costs. The defences are to keep it lazy and bound it -- take a slice, or filter to the combinations you actually want, ideally as early as possible so the filter runs during iteration rather than after building everything -- and to be conscious of the multiplication when you write the ranges. Here we only measure the size and then take three, doing almost no work. The sign to watch for: a cartesian_product (or any nested-loop-shaped view) fed straight into ranges::to or a full loop, over inputs whose sizes are not tiny or not known small at the call site."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::cartesian_product", url: "https://en.cppreference.com/w/cpp/ranges/cartesian_product_view" }
+detailed_tags:
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

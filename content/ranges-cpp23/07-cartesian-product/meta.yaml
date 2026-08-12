@@ -1,0 +1,11 @@
+title: "cartesian_product: every combination"
+standard: "C++23"
+difficulty: 2
+summary: "views::cartesian_product yields every way to pick one element from each of several ranges, as a tuple. It replaces nested loops over the inputs and is handy for generating grids, test matrices, or option combinations."
+notes: "cartesian_product takes several ranges and produces every combination -- one element from the first, one from the second, and so on -- each as a tuple, in order with the first range varying slowest and the last fastest. It is the range form of a nested loop: three sizes crossed with two colours gives the six size-colour pairs without writing the two loops by hand, and it scales to any number of input ranges. Typical uses are generating a grid of coordinates, building a matrix of test-parameter combinations, or enumerating every setting of a small set of options. Because it is a lazy view the combinations are produced as you iterate, and it composes with filter and transform like any other view, so you can pair it with a filter to keep only the combinations that satisfy some rule. The one thing to hold in mind is its SIZE: the number of tuples is the PRODUCT of the input sizes, so it grows fast -- three ranges of a hundred elements is already a million tuples -- which the anti-pattern on it makes concrete. Used with awareness of that multiplication, it turns a common nest of loops into one readable expression."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::cartesian_product", url: "https://en.cppreference.com/w/cpp/ranges/cartesian_product_view" }
+detailed_tags: []

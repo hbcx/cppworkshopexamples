@@ -1,0 +1,12 @@
+title: "Anti-pattern: ranges::to mid-pipeline kills laziness"
+standard: "C++23"
+difficulty: 3
+summary: "ranges::to is eager -- it builds and fills a container on the spot. Placed in the middle of a pipeline it forces the whole thing so far, allocating an intermediate container and running every earlier stage over all elements, instead of letting a later take or filter limit the work. to belongs at the end."
+notes: "The value of lazy views is that work flows element by element and only as far as it is pulled: put a take(3) after a transform and the transform runs three times, because take stops asking. ranges::to breaks that flow on purpose -- it is eager, it walks the entire view and builds a container -- which is exactly right at the END of a pipeline where you want a container, and wrong in the MIDDLE. The example makes the cost visible with a counting transform: materializing the transformed range first and THEN taking three runs the transform eight times for three results, because to forced all eight before take could limit anything. Keeping the pipeline lazy and moving to to the end -- transform, then take(3), then to -- runs the transform three times, because now take limits the work before it is forced. The intermediate to also allocates a full container that is immediately thrown away. This is the same eager-versus-lazy lesson as materializing a C++20 view too early, sharpened by how natural to makes it to drop a to<vector> into the middle of a chain out of habit. The rule is one materialization, at the end: compose all the lazy stages, put the bounding take or filter as early as it belongs, and call ranges::to once, last. The sign to watch for: a ranges::to (or an assignment to a std::vector) partway through a chain that keeps going with more adaptors afterwards."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::ranges::to", url: "https://en.cppreference.com/w/cpp/ranges/to" }
+detailed_tags:
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

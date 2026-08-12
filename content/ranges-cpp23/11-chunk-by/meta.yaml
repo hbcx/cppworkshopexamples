@@ -1,0 +1,11 @@
+title: "chunk_by: group by a predicate on neighbours"
+standard: "C++23"
+difficulty: 3
+summary: "views::chunk_by splits a range into groups wherever a binary predicate on two adjacent elements is false. Unlike chunk, which cuts at fixed positions, chunk_by cuts based on the data -- grouping equal runs, ascending runs, or any relation you name."
+notes: "chunk and chunk_by both produce non-overlapping groups, but they decide the boundaries differently. chunk cuts every n elements regardless of value; chunk_by cuts based on the CONTENT, starting a new group whenever the predicate applied to two adjacent elements returns false. Pass std::ranges::equal_to and it groups runs of equal values -- a form of run-length grouping. Pass a < b and it keeps each ascending run together, breaking where the sequence stops increasing. Any binary predicate works, so it expresses things like group while the category is the same or split when the gap exceeds a threshold, provided the property is decided by looking at neighbours. The predicate is checked between consecutive elements only, so chunk_by finds RUNS -- it does not gather all equal values scattered through the range, only adjacent ones, which is why data is often sorted first when you want equal-key groups (the same relationship as the classic sort-then-group). Each yielded group is a sub-range you iterate, and the whole thing is lazy. Use chunk_by when the grouping rule is about the relationship between neighbouring elements rather than a fixed count; use chunk when the block size is fixed regardless of value."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::chunk_by", url: "https://en.cppreference.com/w/cpp/ranges/chunk_by_view" }
+detailed_tags: []

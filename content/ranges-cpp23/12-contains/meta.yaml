@@ -1,0 +1,12 @@
+title: "ranges::contains and contains_subrange"
+standard: "C++23"
+difficulty: 1
+summary: "ranges::contains answers whether a range holds a value, returning a bool -- a readable replacement for find(...) != end(). ranges::contains_subrange answers whether a range contains another as a consecutive run."
+notes: "Checking membership with the old algorithms reads badly: std::find(v.begin(), v.end(), x) != v.end() states the intent (is x in v) as a comparison against the end iterator, and std::ranges::find(v, x) != v.end() only shortens the range part. ranges::contains(v, x) says exactly what it means and returns a bool, which is what you almost always wanted. ranges::contains_subrange(v, sub) is the sequence version: it is true when sub appears in v as a CONSECUTIVE run, so {15, 16, 23} is found in 4 8 15 16 23 42 but {15, 23} is not, because those two are present yet not adjacent -- the difference between a subsequence and a contiguous subrange. Both take an optional projection and, for contains, a value to compare, following the usual ranges-algorithm shape. These sit alongside the related C++23 additions ranges::starts_with and ranges::ends_with, which ask whether a range begins or ends with a given sequence. Reach for contains when you only need a yes/no membership answer and do not care WHERE the element is; if you need the position, find is still the tool, since contains deliberately returns only a bool."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::ranges::contains", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/contains" }
+detailed_tags:
+  - { name: "std::ranges::contains_subrange", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/contains" }

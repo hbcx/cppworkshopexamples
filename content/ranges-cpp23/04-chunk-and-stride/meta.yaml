@@ -1,0 +1,12 @@
+title: "chunk and stride: batch and sample a range"
+standard: "C++23"
+difficulty: 2
+summary: "views::chunk(n) cuts a range into consecutive non-overlapping blocks of up to n elements, with a short final block when it does not divide evenly. views::stride(n) keeps every n-th element. Both resample a range without index arithmetic."
+notes: "These two adaptors do the two most common fixed-step reshapings of a sequence. chunk(n) is batching: it yields sub-ranges of up to n consecutive elements that do not overlap and together cover the whole range, with the last one short if the size is not a multiple of n -- exactly what you need to feed a bulk API a page at a time, and it handles the awkward final partial batch for you. Each yielded group is itself a range you iterate. stride(n) is downsampling: it yields the first element and then every n-th after it, so stride(2) is every other element -- useful for taking one sample per row, skipping a fixed header cadence, or thinning a signal. Both replace loops built on index arithmetic (i += n, begin + min(i + n, size)) that are a well-known source of off-by-one and wrong-last-batch bugs. Keep the distinction from the next example clear: chunk gives NON-overlapping blocks, while slide gives OVERLAPPING windows -- same-looking calls, different results and different counts, which the chunk-versus-slide anti-pattern shows directly. Both are lazy views, so nothing is copied; each group or sampled element is produced as you iterate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::chunk", url: "https://en.cppreference.com/w/cpp/ranges/chunk_view" }
+  - { name: "std::views::stride", url: "https://en.cppreference.com/w/cpp/ranges/stride_view" }
+detailed_tags: []

@@ -1,0 +1,12 @@
+title: "Anti-pattern: fold_left_first returns an optional"
+standard: "C++23"
+difficulty: 3
+summary: "fold_left_first has no initial value -- it seeds with the first element -- so an empty range has no result, and it returns std::optional. For an empty range that optional is empty, and calling value() or dereferencing it throws or is undefined. You must handle the empty case."
+notes: "fold_left_first is convenient because you do not have to invent an initial value: it starts the fold with the first element, which is exactly right for operations like min, max, or a combine with no natural identity. But that convenience has a consequence -- an empty range has no first element, so there is no result to return, and the signature reflects this by returning std::optional rather than a bare value. The bug is treating it as if it always succeeds: fold_left_first(range, op).value() reads fine and works in every test where the range is non-empty, then throws std::bad_optional_access the first time the range is empty in production -- often a range that was empty because an earlier filter matched nothing. The fixes are both simple. If empty is a real possibility, check the optional (if (result) ... else ...) and decide what an empty range means. If you have a sensible starting value, use fold_left with that init instead: it always returns a value, giving the init back for an empty range, so a sum defaults to 0 and a product to 1 with no optional to unwrap. Choose fold_left_first when the range cannot be empty or when an empty result genuinely has no answer; choose fold_left when a default is meaningful. The sign to watch for: a fold_left_first (or the related min/max element reductions that also return optional or an end iterator) whose result is used without checking for the empty case."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::ranges::fold_left_first", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/fold_left_first" }
+detailed_tags:
+  - { name: "std::ranges::fold_left", url: "https://en.cppreference.com/w/cpp/algorithm/ranges/fold_left" }

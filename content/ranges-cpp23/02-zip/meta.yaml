@@ -1,0 +1,11 @@
+title: "zip: walk several ranges in lockstep"
+standard: "C++23"
+difficulty: 1
+summary: "views::zip iterates two or more ranges together, yielding a tuple of one element from each at every step. It replaces the shared index that used to subscript parallel arrays, and because the tuple holds references you can also write back through it."
+notes: "Parallel arrays -- names next to scores, ids next to timestamps, the columns of a struct-of-arrays layout -- used to be walked with a single loop counter subscripting each one, which is fine until the arrays are different lengths or an index goes off by one. zip removes the index entirely: for (auto [name, score] : zip(names, scores)) yields a tuple of references, one per range, unpacked by a structured binding. Two properties matter. First, the tuple elements are REFERENCES into the underlying ranges, so writing to score in the loop modifies the original scores vector -- zip is not a read-only copy. Second, zip stops at the SHORTEST input; if the ranges are different lengths the tail of the longer one is silently skipped, which is convenient when intended and a bug when not, so the anti-pattern on it is worth reading. zip takes any number of ranges, giving a wider tuple, and its cousin zip_transform (a later example) applies a function to the matched elements instead of tupling them. Use zip whenever you have two or more sequences that are indexed together; it makes the parallel structure explicit and takes the manual index -- and its off-by-one risks -- out of the code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+  - { name: "std::views::zip", url: "https://en.cppreference.com/w/cpp/ranges/zip_view" }
+detailed_tags: []
