@@ -6,3 +6,5 @@
   note: "The head-to-head benchmark of std::map vs std::unordered_map vs a sorted vector, and why the asymptotically slower container is often the faster one."
 - slug: "sets"
   note: "The keys-only counterpart: the same ordering and node stability, without a mapped value attached to each key."
+- slug: "find-find-if"
+  note: "The linear-search algorithm and why it is the wrong tool here: std::find scans a map in O(n) and ignores the tree, where the member find is O(log n) -- go there for find/find_if over sequences and the member-find-versus-std-find comparison."

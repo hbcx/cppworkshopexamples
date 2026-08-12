@@ -1,0 +1,3 @@
+leading spaces: 3
+trimmed: 'hello'
+first invalid amount: -5

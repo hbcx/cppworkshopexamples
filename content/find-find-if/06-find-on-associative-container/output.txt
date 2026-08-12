@@ -1,0 +1,2 @@
+std::find found 8? true  (== comparisons: 8)
+member find found 8? true  (< comparisons: 5)

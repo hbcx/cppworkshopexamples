@@ -1,0 +1,4 @@
+title: "find / find_if / find_if_not"
+description: "The linear search algorithms that return the POSITION of the first match: find by value, find_if by a predicate, find_if_not by the first element that fails one. Each returns an iterator -- to the element, or end() when there is no match. Covers the three forms, the C++20 std::ranges versions with projections, and using the returned iterator to read, modify, or erase in place -- alongside the anti-patterns: using the result without checking end(), running std::find over a set or map where the member find is far cheaper, and searching twice for one lookup."
+sort_order: 69
+category: "Algorithms"

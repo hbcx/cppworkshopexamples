@@ -1,0 +1,12 @@
+title: "Anti-pattern: std::find on a set or map"
+standard: "C++11"
+difficulty: 3
+summary: "std::find is a linear O(n) scan: it walks from begin comparing with ==, ignoring any ordering. On a std::set or std::map that throws away the whole point of the container -- the member find descends the balanced tree in O(log n). Use the member find on associative containers."
+notes: "std::find knows nothing about its range beyond how to step through it and compare with ==, so it always does a linear scan -- fine for a vector or list, wrong for a container that is sorted for you. A std::set and std::map keep their elements in a balanced tree precisely so a lookup can be O(log n), but std::find does not use that structure: handed a set, it starts at begin and compares element by element until it matches or hits end(), which is O(n) and defeats the reason you chose the container. The example counts comparisons on an eight-element set: std::find does eight == comparisons to reach the last key, while the member ids.find() descends the tree with a few < comparisons for the same answer. The gap is the difference between O(n) and O(log n), and it grows with size -- on a million-element set it is a million comparisons versus about twenty. The fix is to call the container's OWN find: set.find(key), map.find(key), and likewise unordered_set / unordered_map, whose member find is O(1) on average through the hash. The same applies to count, lower_bound, and contains -- prefer the member versions on associative containers. Reserve the std::find family for sequence containers (vector, deque, list, array) and plain ranges where a linear scan is the only option. The sign to watch for: std::find or std::find_if called with a std::set, std::map, or unordered container as its range -- the member find is waiting and is asymptotically faster."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+detailed_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }

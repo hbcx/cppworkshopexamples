@@ -1,0 +1,13 @@
+title: "find and find_if: the position of the first match"
+standard: "C++11"
+difficulty: 1
+summary: "find searches for a value, find_if for the first element that satisfies a predicate. Both return an iterator: to the matching element, or end() when there is no match. From that iterator you read the element, get its index with distance, or act at its position."
+notes: "These are the linear search algorithms, and the key thing about them is what they RETURN: not a bool and not an index, but an iterator pointing at the first match. std::find(first, last, value) compares each element to value with == and stops at the first equal one; std::find_if(first, last, pred) stops at the first element for which the predicate is true. Both return end() when nothing matches, and end() is a valid iterator that does NOT point at an element -- so the first rule of using find is to compare the result against end() before doing anything with it (dereferencing end() is undefined behavior, its own anti-pattern). Once you have a real iterator you can dereference it to read or modify the element (*it, it->field), compute its zero-based position with std::distance(begin, it), or hand it to erase or insert to change the container at that spot -- returning the position is exactly what makes find more useful than a yes-or-no check when you need to act on the element. Choose find when you are matching a value and find_if when the match is a condition; the next example adds find_if_not for the first element that FAILS a condition. If you only need to know whether something exists, any_of says so without the iterator; if you need where it is, these are the tools."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+  - { name: "std::find_if", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

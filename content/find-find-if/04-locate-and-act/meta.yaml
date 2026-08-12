@@ -1,0 +1,11 @@
+title: "Locate and act on the found element"
+standard: "C++11"
+difficulty: 2
+summary: "The reason find returns an iterator rather than a bool: you act on the element at its position. Find a task by id and mark it done through the iterator, or find one by title and erase it at that spot -- no index to compute, and erase and modify take the iterator directly."
+notes: "This is the everyday shape of a find call. You are not usually asking does it exist -- any_of answers that; you are asking where is it so you can do something to it. find_if hands back an iterator straight to the element, and from there the container operations you need take that iterator as-is. To read or modify in place you dereference it: it->done = true changes the found Task without copying it out or looking it up again. To remove it you pass the iterator to erase, which deletes exactly that element and returns an iterator to the next one -- no index arithmetic, no second search. This is cleaner and safer than the index-based alternative, where you would find the position, store an int, and risk it going stale if the container changes in between. Two cautions carry over. Guard the end() check before using the iterator, as always. And be careful about iterator invalidation if you keep searching and erasing in a loop: erase invalidates the iterator it was given (use its return value to continue), and for a vector it invalidates everything from that point on. For a single locate-then-act, though, this is the pattern -- find the element, then read, change, or erase it right where it sits."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find_if", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }

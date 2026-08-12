@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "all-any-none-of"
+  note: "When you only need yes or no, not the position: any_of answers is there one without handing back an iterator, and find_if != end() is really any_of in disguise -- go there for the quantifier algorithms and when a bool is all you want."
+- slug: "ranges"
+  note: "Where the C++20 forms come from: std::ranges::find takes the whole range and a projection so you can search by a member, and views can be searched directly -- go there for range algorithms, views, and projections."
+- slug: "maps"
+  note: "The right tool when lookups are frequent or the container is large: std::map keeps keys sorted and its member find is O(log n), where std::find over any range is a linear O(n) scan -- go there for keyed lookup and the member find that beats a linear search."
+- slug: "lambdas"
+  note: "What find_if takes as its predicate: a lambda that tests one element, often capturing the value or field you are searching for -- go there for captures and how a closure holds what the predicate compares against."

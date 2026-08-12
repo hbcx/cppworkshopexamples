@@ -1,0 +1,11 @@
+title: "Anti-pattern: using the result without checking end()"
+standard: "C++11"
+difficulty: 3
+summary: "find always returns an iterator, and when there is no match that iterator is end(), which does not point at an element. Dereferencing it or advancing from it is undefined behavior. Always compare the result against end() before you use it."
+notes: "The single most common find bug is treating the returned iterator as if a match is guaranteed. find, find_if and find_if_not never fail to return -- on a miss they return end(), a valid iterator that marks one-past-the-last element and points at nothing. Dereferencing end() (*it), accessing a member through it (it->field), or incrementing or decrementing from it is undefined behavior: in practice it reads whatever memory sits past the container, so it may print a plausible-looking garbage value, silently corrupt something, or crash -- and it often appears to work in testing when the value being searched for happens to be present, hiding until a real miss. The fix is one line and never optional: compare the result to end() first, and only use the iterator in the branch where it is not end(). The example describes the broken dereference in a comment (running it would be UB) and runs the guarded version. This is also why find returns an iterator rather than, say, a reference or optional: the end() sentinel is how it reports not found, so checking against end() is not a nicety, it is reading the result. The sign to watch for: a find result dereferenced, used with ->, or advanced without a preceding comparison to end() on that exact iterator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+detailed_tags:
+  - { name: "std::find_if", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

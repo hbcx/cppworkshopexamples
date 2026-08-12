@@ -1,0 +1,19 @@
+- problem: "A small collection -- a handful of config entries, the rows of one request, a few open connections -- has to be searched for the one item with a given id or field, and building an index would be more code than the search."
+  why: "A std::map keyed by the field would be O(1) or O(log n), but for a few dozen items held in a vector it is a whole extra structure to build and keep in sync; find_if scans them directly and returns the position, which is simpler and often faster at that size."
+  signal: "A std::vector searched by a field with a hand-written loop, or a std::map built and kept in sync only to serve a lookup over a small, short-lived collection."
+
+- problem: "You need the FIRST element that meets a condition and then to act on it -- the first error in a log, the first free slot in a pool, the first order past its due date."
+  why: "any_of would tell you one exists but not WHICH, and a raw loop with a break leaves you re-deriving the position; find_if returns an iterator straight to that element so you can read or change it."
+  signal: "A loop that breaks on the first match and then recomputes the index, or an any_of immediately followed by a second search for the element it proved exists."
+
+- problem: "An item must be located so it can be changed or removed in place -- mark a task done, update a cached entry, erase a session by id."
+  why: "Indexing by position means finding the index first and risking it going stale; find_if hands back the exact iterator, which you pass straight to erase or dereference to modify, with no separate index step."
+  signal: "A search that yields an index which is then used only to subscript the same container, or an erase preceded by a manual scan for the position."
+
+- problem: "A buffer, line, or token stream must be split at the first occurrence of a delimiter or the first character of a given class -- the colon in a header, the first non-space, the end of a word."
+  why: "Hand-written index scanning with bounds checks is where off-by-one bugs live; find and find_if_not return the boundary iterator directly, and the two halves are just ranges either side of it."
+  signal: "A manual index loop advancing until a delimiter or character class, with its own end-of-range check."
+
+- problem: "Code needs a quick presence check on a small container where keeping a std::set or std::map purely for membership would be overkill."
+  why: "A dedicated set answers membership in O(1)/O(log n) but costs an allocation per element and a second container to maintain; for a small, rarely-searched list, find compared against end() is a one-liner with no extra structure."
+  signal: "A std::set or std::map maintained alongside a vector solely to answer contains for a small or infrequently queried collection."

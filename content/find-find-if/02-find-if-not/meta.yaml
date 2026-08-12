@@ -1,0 +1,12 @@
+title: "find_if_not: the first element that fails"
+standard: "C++11"
+difficulty: 2
+summary: "find_if_not is the mirror of find_if: it returns the first element for which the predicate is FALSE. It is the natural tool for skipping a leading run that satisfies a condition, or for finding the first entry that breaks a rule."
+notes: "find_if_not(first, last, pred) returns an iterator to the first element where pred is false -- exactly find_if with the predicate negated, but written positively so you do not have to wrap the condition in a lambda that returns the negation. Two shapes come up constantly. Skipping a leading run: to trim leading spaces you find the first character that is NOT a space, and the range from there to the end is the trimmed text -- the example does this, and the same idea skips leading zeros, header lines, or any prefix that shares a property. Finding the first violation: given a rule every element should obey (positive, non-empty, in range), find_if_not lands on the first one that breaks it, which is both the check (did we reach end() or not) and the culprit (what is *it) in one call -- more useful than all_of here, because all_of only says whether they all passed while find_if_not also points at the first failure for an error message. It pairs with find_if the way none_of pairs with any_of: use find_if to locate a match, find_if_not to locate the first non-match. Like the others it returns end() when every element satisfies the predicate (nothing failed), so the end() check still applies before you dereference."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find_if_not", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

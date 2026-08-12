@@ -1,0 +1,10 @@
+title: "Anti-pattern: searching twice for one lookup"
+standard: "C++11"
+difficulty: 2
+summary: "Calling find once to check whether something is present and then again to use it does the same scan twice. find already returns the iterator you need -- keep it, check it against end(), then use it, so the search happens once."
+notes: "This shows up whenever the mental model is contains-then-get: first ask is it there with a find compared to end(), then, inside the if, call find again to actually reach the element. Both calls do the same linear scan, so a lookup that should cost one pass costs two -- and on a large range, or in a hot path, that is a real and needless doubling. It also opens a subtle gap: between the two searches the container could change (in threaded or callback-heavy code), so the second find might not match what the first one saw. The fix is to remember that find already gives you the iterator: store it once, compare it to end(), and use it in the not-found-is-false branch -- auto it = find(...); if (it != end()) use *it. One scan, one result, no window for the two to disagree. The same anti-pattern has a well-known cousin on maps -- calling count(key) and then operator[](key) or find(key) again, two lookups where one find or insert would do -- and the cure is identical: do the lookup once and reuse its result. The sign to watch for: the same find (or the same key lookup) written twice with identical arguments, once in a condition and once in the body it guards."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+detailed_tags: []

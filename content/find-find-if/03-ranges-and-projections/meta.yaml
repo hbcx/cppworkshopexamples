@@ -1,0 +1,13 @@
+title: "The std::ranges forms with projections"
+standard: "C++20"
+difficulty: 2
+summary: "The C++20 std::ranges::find and find_if take the whole range instead of a begin/end pair, and add a projection applied to each element before the comparison. It lets you search a container of structs by one field -- find by sku, find_if by stock -- without reaching into the element in the predicate."
+notes: "The std::ranges versions improve the classic find the same way they improve the quantifiers. They take the range directly, ranges::find(catalog, value), so there is no begin()/end() pair, and they compose with views from the ranges chapter. And they add a PROJECTION as a trailing argument. For ranges::find the projection is applied to each element before comparing to the value, so ranges::find(catalog, C-300, and Product::sku) compares each product's sku to the target -- searching a vector of structs by a member without a lambda at all. For ranges::find_if the projection produces the value the predicate sees, so and Product::stock lets the predicate be a plain s == 0 over the stock int instead of reaching into the Product. A projection can be a pointer to a data member, a pointer to a method, or any callable. The result is still an iterator into the original range (pointing at the whole Product, not the projected field), so you use it exactly as before -- check against end(), dereference for the element, erase at its position. Prefer these in C++20 code when searching by a field, because the projection removes the boilerplate of digging the field out inside the predicate and makes search-by-member read as one line."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+  - { name: "std::find_if", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

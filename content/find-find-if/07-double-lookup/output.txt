@@ -1,0 +1,2 @@
+bad:  found grace (searched twice)
+good: found grace (searched once)

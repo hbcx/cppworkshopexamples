@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 22, "out": "999 not found -- did not dereference\n"}, {"file": "main.cpp", "line": 23}, {"file": "main.cpp", "line": 24}]}
