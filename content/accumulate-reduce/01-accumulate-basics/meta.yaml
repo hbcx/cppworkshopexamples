@@ -1,0 +1,11 @@
+title: "accumulate: fold a range to one value"
+standard: "C++11"
+difficulty: 1
+summary: "accumulate is a left fold: it starts from an initial value and combines it with each element in order. With no operation it sums; pass std::multiplies for a product, or a lambda for any two-argument combine -- the first argument is the accumulator, the second the element."
+notes: "std::accumulate (from <numeric>) reduces a range to a single value by folding: it takes the init, combines it with the first element, combines that result with the second, and so on to the end -- strictly left to right. The three-argument form accumulate(first, last, init) uses operator+, so it is the sum, and the init is both the starting value and, crucially, the type the accumulation happens in (0 sums in int, 0.0 in double -- the init-type anti-pattern). The four-argument form takes a binary operation: std::multiplies for a product (start from 1, its identity), std::min or std::max wrapped in a lambda for a running extreme, or any lambda that combines an accumulator with an element. The operation's signature is op(accumulator, element) -- accumulator first -- which matters for order-dependent folds like subtraction or string building. accumulate always visits every element and is defined to go in order, so it works for operations where the order or grouping matters (unlike reduce, the next-but-one example). Reach for it whenever a loop exists only to build one running result -- a total, a product, a combined value -- from a range; it names the fold and cannot get the loop bookkeeping wrong."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+detailed_tags:
+  - { name: "std::multiplies", url: "https://en.cppreference.com/w/cpp/utility/functional/multiplies" }

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 22}, {"file": "main.cpp", "line": 23, "out": "accumulate with minus (left to right): -117\n"}, {"file": "main.cpp", "line": 29}, {"file": "main.cpp", "line": 30}]}

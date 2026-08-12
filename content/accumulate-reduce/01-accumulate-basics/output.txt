@@ -1,0 +1,3 @@
+sum:     31
+product: 6480
+max:     9

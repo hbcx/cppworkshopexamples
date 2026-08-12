@@ -1,0 +1,10 @@
+title: "Fold into any type, not just a number"
+standard: "C++11"
+difficulty: 2
+summary: "The accumulator can be any type, so accumulate reduces a range to a whole summary in one pass. Here the orders fold into a struct holding sum, count and max at once -- several statistics from a single traversal, where a naive approach would loop three times."
+notes: "The init value of accumulate decides both the starting value and the accumulator TYPE, and that type does not have to be a number -- it can be a struct, a container, or any type your operation knows how to combine with an element. That turns accumulate into a general reduce-to-summary: start from a Stats{} with zeroed fields, and a lambda that folds each Order into it -- adding the total, bumping the count, tracking the max -- produces sum, count and max in a SINGLE pass over the data. The alternative, one loop per statistic, reads the range several times and repeats the loop scaffolding; folding into a struct reads it once. Two practical notes. The lambda here takes the accumulator BY VALUE and returns the updated copy, which is the classic accumulate signature and is fine for a small struct; for a large or growing accumulator, copying it every step is wasteful (the O(n squared) anti-pattern shows the string case, and C++20 lets accumulate move the accumulator). And this pattern is exactly what a dedicated reduce-to-summary does in other languages; in C++ it is just accumulate with a richer accumulator. When a single pass should yield more than one number, fold into a struct rather than looping repeatedly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+detailed_tags: []

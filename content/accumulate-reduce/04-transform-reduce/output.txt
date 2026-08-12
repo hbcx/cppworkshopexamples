@@ -1,0 +1,2 @@
+dot product:    300
+sum of squares: 30

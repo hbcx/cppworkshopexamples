@@ -7,3 +7,5 @@
   note: "What zip, enumerate, adjacent and cartesian_product hand you: each step is a tuple, unpacked with a structured binding and reachable with std::get -- go there for heterogeneous fixed-size grouping and how to take a tuple apart."
 - slug: "vectors"
   note: "Where ranges::to usually lands: the most common target is a std::vector, and the growth and capacity rules decide what that materialization costs -- go there for size vs capacity, reserve, and reallocation."
+- slug: "accumulate-reduce"
+  note: "The classic fold these ranges algorithms modernize: fold_left is std::accumulate, and reduce and transform_reduce are its numeric cousins -- go there for the pre-ranges accumulate, reduce, and the init-type and non-associative traps."

@@ -1,0 +1,10 @@
+title: "Anti-pattern: an init that truncates or overflows"
+standard: "C++11"
+difficulty: 2
+summary: "The init value's type is the accumulator type. Passing int 0 to sum a range of doubles accumulates in int and truncates every value; passing int 0 to a large integer sum can overflow. Match the init to the element type -- 0.0 for doubles, a wide type like 0LL when the total can be large."
+notes: "This is the most common accumulate bug, and it hides in the most innocent-looking argument. accumulate deduces the accumulator type from the INIT value, not from the elements, and every combination happens in that type. So accumulate(prices.begin(), prices.end(), 0) over a range of doubles accumulates in int: each addition int + double produces a double, but it is assigned back into the int accumulator and truncated, so the running total loses every fraction and the answer is wrong (132 instead of 134.48 here). The fix is to make the init match the elements: 0.0 keeps a double accumulator and the sum is right. The same mistake appears as OVERFLOW rather than truncation: summing a thousand five-million-ints into an int 0 exceeds the 32-bit range and wraps to a garbage value, so use a wider init -- 0LL for a 64-bit long long -- to accumulate in a type that can hold the total (do not use 0L for this on Windows, where long is 32-bit; 0LL is portably 64-bit). The rule is simple: the init sets the accumulator type, so choose it deliberately -- the element type for correctness, and a wide enough type for range. The sign to watch for: accumulate (or reduce) with a literal 0 or 1 init over non-int elements, or over many large ints where the total could exceed the init type's range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+detailed_tags: []

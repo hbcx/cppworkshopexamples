@@ -1,0 +1,1 @@
+accumulate with minus (left to right): -117

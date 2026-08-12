@@ -1,0 +1,10 @@
+title: "Anti-pattern: an accumulator copied every step"
+standard: "C++11"
+difficulty: 3
+summary: "Folding a string (or another growing container) with accumulate and acc + element copies the whole accumulator at every step, so the total work is O(n squared) in the data, not O(n). Build a string with a plain loop and += (with reserve), or a dedicated join, which each copy the data once."
+notes: "accumulate is a fold, and its operation takes the accumulator and returns the new accumulator -- for a number that is a cheap copy, but for a string or vector that GROWS, each step copies the entire accumulator so far. Folding parts with a lambda that returns acc + p copies acc (length 0, then 3, then 6, then 9, then 12...) at every step, so the characters copied add up as 3 + 6 + 9 + 12 + 15 -- O(n squared) in the total size, even though the final string is only the sum of the parts. The example counts those characters: 45 copied by the accumulate-with-plus version versus 15 by the loop, and the gap widens fast as the list grows (a few thousand parts turns thousands of appends into millions of copied bytes). The fix is not to fold a growing container with a by-value operation. For a string, a plain loop with += appends each part directly onto one buffer, copying each part's characters once, and a reserve() up front avoids the reallocations as it grows -- O(n) total. The same applies to concatenating vectors (insert into one, do not fold with +) and to building any large accumulator. C++20 improves accumulate to MOVE the accumulator through the fold, which removes the per-step copy when the operation uses += and returns by move, but the loop is still the clearest tool. The sign to watch for: accumulate (or a fold) whose operation returns acc + element for a std::string, std::vector, or other container that grows across the fold."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+detailed_tags: []

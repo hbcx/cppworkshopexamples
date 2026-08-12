@@ -1,0 +1,12 @@
+title: "Anti-pattern: reduce with a non-associative operation"
+standard: "C++17"
+difficulty: 3
+summary: "reduce may group and reorder its combinations, so it only gives a well-defined result for an associative, commutative operation. Using it with subtraction, division, or any order-dependent op yields an unspecified answer. For an order-dependent fold, use accumulate, which is defined to go strictly left to right."
+notes: "reduce buys parallelism by giving up order: it is allowed to combine elements in any grouping and any sequence, then merge the partial results. That is only safe when the operation does not care about grouping or order -- when it is ASSOCIATIVE and COMMUTATIVE. Addition and multiplication qualify, so reduce and accumulate agree on a sum or product. Subtraction does not: 0 - 100 - 10 - 5 - 2 read left to right is -117, but reduce might compute (0 - 100) and (10 - 5 - 2) separately and combine them, which is a different number -- and the standard says the result is UNSPECIFIED, so it can change between library versions, optimization levels, or the moment someone adds a parallel execution policy. The example does not run the bad reduce, precisely because what it produces is not guaranteed; it runs the correct tool instead. That tool is accumulate, which is specified to fold strictly left to right, so it is right for any order-dependent operation: subtraction, division, building a string, or a custom combine where grouping changes the answer. The division of labour: reduce (and transform_reduce) for associative, commutative reductions you may want to parallelize -- sums, products, min, max, bitwise and logical combines; accumulate for everything whose result depends on the order or grouping of the combine. Floating-point addition is a subtle case: it is commutative but not perfectly associative, so a parallel reduce can give a slightly different sum than accumulate -- usually acceptable, but worth knowing. The sign to watch for: std::reduce (or transform_reduce) with std::minus, std::divides, string concatenation, or any operation that is not associative and commutative."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reduce", url: "https://en.cppreference.com/w/cpp/algorithm/reduce" }
+detailed_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+  - { name: "std::minus", url: "https://en.cppreference.com/w/cpp/utility/functional/minus" }

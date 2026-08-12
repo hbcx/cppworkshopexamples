@@ -5,3 +5,5 @@
   note: "Where a transform often feeds a sort: precompute a key per element (the decorate step) so the comparator does not recompute it every call -- go there for sorting, comparators, and stable_sort."
 - slug: "count-count-if"
   note: "The sibling that reduces instead of maps: count totals matches over a range where transform produces a new value per element -- go there for tallies, thresholds, and progress counts."
+- slug: "accumulate-reduce"
+  note: "The reduce that pairs with this map: transform_reduce fuses a transform and a fold, and accumulate folds a range to one value -- go there for sums, dot products, and folding into a summary."

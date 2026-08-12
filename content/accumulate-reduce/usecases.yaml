@@ -1,0 +1,19 @@
+- problem: "A report needs a total over a column -- the sum of order amounts, total bytes transferred, total duration of a batch -- computed from a list you already hold."
+  why: "A hand-written loop with an accumulator variable is more lines and one more place to mis-initialize or forget an element; accumulate states fold these into a total in one call, and the init value fixes the accumulator type for you."
+  signal: "A loop whose whole body is total += f(x) over a container, producing a single running sum or product."
+
+- problem: "A statistic must be built from a range in one pass -- a mean and a max together, a running product, a bitwise-or of flags, a min and max pair -- without several separate loops."
+  why: "Separate loops read the data several times and repeat the boilerplate; accumulate folds into an accumulator of any type (a struct holding sum, count and max) so one pass produces the whole summary."
+  signal: "Two or three loops over the same container each computing one aggregate, or a summary struct filled field by field in a manual loop."
+
+- problem: "A numeric kernel must combine two parallel vectors into one number -- a dot product, a weighted score, a similarity measure, a sum of element-wise products."
+  why: "Doing it as a transform into a temporary vector then an accumulate allocates and traverses twice; transform_reduce fuses the multiply and the sum into a single pass with no intermediate container."
+  signal: "A transform that fills a temporary vector which is then immediately passed to accumulate, or a manual loop multiplying a[i]*b[i] into a running sum."
+
+- problem: "A very large dataset -- billions of samples, a big log, a wide sensor buffer -- must be reduced to one value fast, and the machine has many cores to spare."
+  why: "accumulate is defined to run strictly in order, so it cannot be parallelized; reduce leaves the order unspecified, which lets std::reduce with a parallel execution policy split the work across threads for a near-linear speedup."
+  signal: "A sequential accumulate over a huge range in a hot path on a multicore box, where the operation is associative and commutative."
+
+- problem: "A collection must be folded into a non-numeric result -- merging a set of option maps, combining permission flags, reducing a list of intervals to their union."
+  why: "A bespoke loop re-implements the fold and scatters the combine logic; accumulate with a custom binary operation names the combine once and applies it across the range, whatever the accumulator type."
+  signal: "A loop that repeatedly merges each element into a growing result object with a hand-written combine step."

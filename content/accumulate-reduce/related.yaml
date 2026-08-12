@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "ranges-cpp23"
+  note: "The range form of this fold: ranges::fold_left is accumulate for a whole range, and fold_left_first and fold_right round out the family with clearer, composable syntax -- go there for the C++23 fold algorithms and how they improve on accumulate."
+- slug: "transform"
+  note: "The map half of transform_reduce: transform produces a value per element where reduce collapses them to one, and transform_reduce fuses the two -- go there for mapping a range, in place or to a new container."
+- slug: "count-count-if"
+  note: "A reduce with a fixed operation: count is really a fold that adds one per match, the special case of reducing to a total -- go there for tallies, thresholds, and progress counts."

@@ -1,0 +1,11 @@
+title: "transform_reduce: map and reduce in one pass"
+standard: "C++17"
+difficulty: 3
+summary: "transform_reduce (C++17) fuses a transform and a reduce. The two-range form multiplies matched elements and sums them -- a dot product -- in a single pass with no temporary. The unary form maps each element with a function, then reduces the results."
+notes: "transform_reduce combines the map and fold steps so you neither build an intermediate container nor traverse twice. It has two shapes. The two-range form takes two input ranges, an init, and optionally a reduce operation and a transform operation; with the defaults it multiplies matched elements and sums the products, which is exactly a dot product (and it is the modern replacement for std::inner_product, which does the same sequentially). The unary form takes one range, an init, a reduce operation, and a transform operation: it applies the transform to each element and folds the results with the reduce op -- a sum of squares is transform_reduce(first, last, 0, plus, [](x){ return x*x; }). Because it is built on reduce, the same rules apply: the reduce operation must be associative and commutative, the order is unspecified, and it accepts an execution policy for parallel runs -- so a large dot product or weighted sum can be parallelized for free. Compared with doing transform into a temporary vector and then accumulate, this does one pass and allocates nothing, which matters in numeric kernels. Reach for transform_reduce whenever you would map a range (or zip two) and immediately sum or otherwise reduce the mapped values -- dot products, weighted scores, sums of a projected field, similarity measures."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform_reduce", url: "https://en.cppreference.com/w/cpp/algorithm/transform_reduce" }
+detailed_tags:
+  - { name: "std::plus", url: "https://en.cppreference.com/w/cpp/utility/functional/plus" }

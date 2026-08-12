@@ -1,0 +1,2 @@
+accumulate with +: "aaabbbcccdddeee", copied 45 chars
+loop with +=:      "aaabbbcccdddeee", copied 15 chars

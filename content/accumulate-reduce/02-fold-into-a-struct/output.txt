@@ -1,0 +1,2 @@
+count: 3, sum: 145.49, max: 120
+average: 48.4967

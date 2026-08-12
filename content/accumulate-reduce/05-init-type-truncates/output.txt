@@ -1,0 +1,3 @@
+sum with init 0 (int):      132
+sum with init 0.0 (double): 134.48
+wide sum with init 0LL:     5000000000

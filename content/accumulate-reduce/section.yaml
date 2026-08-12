@@ -1,0 +1,4 @@
+title: "accumulate / reduce"
+description: "Folding a range down to a single value. accumulate is the left fold -- an init and a binary operation applied in order, a sum by default; reduce (C++17) is the same but with unspecified order, so it can run in parallel; transform_reduce fuses a map and a reduce for dot products and sums of a projected field. Covers the basics, folding into a non-numeric result, reduce and when its order rules apply, and transform_reduce -- alongside the anti-patterns: an init whose type truncates or overflows the accumulator, using reduce with a non-associative operation, and folding a growing string with accumulate into O(n squared) work."
+sort_order: 73
+category: "Algorithms"

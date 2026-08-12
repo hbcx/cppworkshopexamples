@@ -1,0 +1,11 @@
+title: "reduce: the parallelizable fold"
+standard: "C++17"
+difficulty: 2
+summary: "std::reduce (C++17) folds a range like accumulate but leaves the order of combination unspecified, which is what allows a parallel execution policy to split the work across threads. The price is that the operation must be associative and commutative -- fine for + and *, wrong for subtraction."
+notes: "std::reduce is accumulate freed from a fixed order. accumulate is defined to combine strictly left to right, which makes it correct for any operation but impossible to parallelize -- element n cannot be added until n-1 has been. reduce drops that guarantee: it may group and reorder the combinations however it likes, so it can add the first half and the second half on two threads and merge, giving a near-linear speedup on large data with a parallel execution policy (std::reduce(std::execution::par, first, last, init)). The cost of that freedom is a requirement on the operation: because the grouping and order are unspecified, the operation must be ASSOCIATIVE (grouping does not change the result) and COMMUTATIVE (order does not either). Addition, multiplication, min, max, and the logical operators satisfy this, so reduce gives the same answer as accumulate for them. Subtraction, division, and building a string do not, and using them with reduce gives an unspecified result -- the subject of the anti-pattern. Two more differences from accumulate: reduce defaults its init to a value-initialized element type and its operation to +, and floating-point reduce may give a slightly different sum than accumulate because reordering changes rounding. Reach for reduce when the fold is a sum or another associative-commutative combine over a large range you want to parallelize; use accumulate when the order matters or the range is small enough that sequential is fine."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reduce", url: "https://en.cppreference.com/w/cpp/algorithm/reduce" }
+detailed_tags:
+  - { name: "std::multiplies", url: "https://en.cppreference.com/w/cpp/utility/functional/multiplies" }

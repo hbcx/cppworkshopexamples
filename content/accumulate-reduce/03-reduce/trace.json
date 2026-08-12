@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 12}, {"file": "main.cpp", "line": 13, "out": "reduce sum:     31\n"}, {"file": "main.cpp", "line": 15}, {"file": "main.cpp", "line": 16, "out": "reduce product: 6480\n"}, {"file": "main.cpp", "line": 23}, {"file": "main.cpp", "line": 24}]}
