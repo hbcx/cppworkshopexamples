@@ -1,0 +1,12 @@
+title: "Anti-pattern: a side effect in the predicate"
+standard: "C++11"
+difficulty: 3
+summary: "The quantifiers short-circuit, so their predicate is not run for every element. Hiding a per-element side effect in the predicate -- counting, logging, accumulating -- means it only runs until the answer is decided, producing a partial result that looks like a bug with no obvious cause."
+notes: "A predicate is supposed to be a pure question: given an element, does it satisfy the condition. The quantifiers rely on that -- they call it only until the answer is settled and then stop. So when a predicate ALSO does work as a side effect (incrementing a counter, appending to a log, summing a field), that work happens only for the elements examined before the short-circuit, not for the whole range. The example asks is any over 3 while trying to count positives in the same predicate; the first element already answers the question, so the predicate runs once and positives ends up 1 instead of 5. Nothing crashes and nothing warns -- you just get a number that is quietly wrong, and it changes depending on where the deciding element happens to sit, which makes it maddening to debug. This is really the short-circuit behavior turned into a bug by a wrong assumption: the predicate does not visit every element, so a side effect that needs to must not live there. The fix is to keep the two jobs separate: count with std::count_if, sum with std::accumulate, log in a std::for_each or a plain loop, and ask the yes/no question with the quantifier on its own. Each algorithm then does one thing, and the counting one actually visits everything. The sign to watch for: a predicate passed to all_of, any_of or none_of that mutates a captured variable or does I/O -- its work is at the mercy of the short-circuit."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+detailed_tags:
+  - { name: "std::count_if", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }

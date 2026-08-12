@@ -1,0 +1,2 @@
+any over 3? true -- positives counted = 1 (expected 5)
+fixed: positives = 5, any over 3 = true

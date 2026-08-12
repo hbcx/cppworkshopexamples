@@ -7,3 +7,5 @@
   note: "What a variadic lambda is built from: auto... in the parameter list is a parameter pack, and a fold expression combines it, the same machinery as a variadic function template -- go there for packs, expansion, and folds."
 - slug: "concepts"
   note: "How to constrain a template lambda: []<std::integral T>(T) puts a concept on the invented parameter exactly as on any template, and a plain auto parameter is an unconstrained one -- go there for named requirements and constrained templates."
+- slug: "all-any-none-of"
+  note: "Where the lambdas you write become predicates: all_of / any_of / none_of take a lambda that tests one element, often capturing a threshold, and answer a yes-or-no question about a whole range -- go there for the quantifier algorithms."

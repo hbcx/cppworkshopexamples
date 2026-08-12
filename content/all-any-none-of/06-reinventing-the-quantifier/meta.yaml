@@ -1,0 +1,13 @@
+title: "Anti-pattern: reinventing the quantifier"
+standard: "C++11"
+difficulty: 2
+summary: "Asking every, any, or no with a hand-rolled loop and a flag, with count_if compared to size, or with find_if against end() works but is less clear and sometimes slower. all_of, any_of and none_of say the intent directly and short-circuit -- prefer them over the workarounds."
+notes: "Because the question is so common, it gets written many ways, and the roundabout ones each have a drawback. A manual loop with a bool flag and a break is correct but is several lines of bookkeeping that hide a one-word intent, and it is the exact loop the algorithm exists to replace. std::count_if(...) == size() reads as all match, but it COUNTS every element -- there is no early exit, so it always scans the whole range even when the first element already settled the answer, which the short-circuit example shows can be the difference between one check and thousands. std::find_if(...) != end() means one matches, i.e. any_of, but it says find where nothing is being found -- the iterator is computed only to be thrown away in a comparison, and the reader has to translate the idiom back into any. Writing !any_of(...) where none_of(...) exists adds a needless negation. None of these is wrong, but each makes the reader decode the mechanism instead of reading the meaning, and two of them do more work than necessary. The fix is to use the quantifier that names the question: all_of for every, any_of for at least one, none_of for not one -- clearer to read, and short-circuiting by default. The sign to watch for: a count_if or find_if whose result is only ever compared (to size, to zero, to end) to produce a bool, or a loop whose whole body is a flag and a break -- each is a quantifier waiting to be named."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::all_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+detailed_tags:
+  - { name: "std::count_if", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+  - { name: "std::find_if", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

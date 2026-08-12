@@ -1,0 +1,2 @@
+all delivered (empty batch)? true
+with empty treated as false:  false

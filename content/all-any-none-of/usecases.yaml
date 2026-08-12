@@ -1,0 +1,19 @@
+- problem: "Before accepting a form, a config file, or an incoming request, every field has to pass its own rule -- non-empty, in range, well-formed -- and processing must stop unless they all pass."
+  why: "The hand-rolled version is a loop with a valid flag that each check clears and a break, which is easy to get wrong (a missing break, a flag reset in the wrong place); all_of states the whole rule as one expression and short-circuits on the first failure."
+  signal: "A bool valid = true set before a loop that flips it to false and breaks on the first bad element."
+
+- problem: "A batch job processes many records and must abort the whole batch the moment any single record is bad -- one malformed row should not be half-committed."
+  why: "Scanning with a found flag or a find that you then compare against end() buries the intent; any_of says is there a bad one directly and stops at the first, which is exactly the abort condition."
+  signal: "A loop that sets a found = true and breaks, or a std::find_if whose result is only compared to end() and never used as an iterator."
+
+- problem: "Code must confirm that none of the requested items is in a forbidden state before proceeding -- no feature is unsupported, no user is banned, no node is offline."
+  why: "Writing this as !any_of, or as a count that must equal zero, is a double negative or extra work; none_of expresses the not one of them phrasing that matches the requirement and reads without mental inversion."
+  signal: "A !std::any_of(...) call, or a std::count_if(...) == 0 used only as a boolean."
+
+- problem: "An action is allowed only when every required permission (or capability, or precondition) is present on the caller."
+  why: "A chain of nested ifs or a series of && over individual lookups does not scale as the required set grows and cannot be driven by data; all_of over the required list checks them uniformly and is trivial to extend."
+  signal: "A growing && chain of membership checks, or nested ifs each guarding the next required permission."
+
+- problem: "A service readiness or health check must report ready only when all its dependencies (database, cache, queue) report healthy, and unhealthy the moment one is down."
+  why: "Counting how many are up and comparing to the total works but scans them all and restates the size; all_of over the dependency statuses says the rule directly and stops at the first unhealthy one."
+  signal: "A loop counting healthy subsystems and comparing the count to the total number of subsystems."

@@ -1,0 +1,4 @@
+all even?      true
+any over 5?    true
+none negative? true
+any odd?       false (so none_of odd is true)

@@ -1,0 +1,13 @@
+title: "A validation summary from all three"
+standard: "C++11"
+difficulty: 2
+summary: "The everyday use: validate a batch by combining the three quantifiers into a readable summary -- all records have an id, none is negative, and none is over the limit -- then accept the batch only when every rule passes. Each rule is one line that says what it checks."
+notes: "This is where these algorithms earn their place in ordinary business code. Validating a collection is a set of quantifier questions -- does EVERY record have an id, is ANY amount over the limit, is NONE negative -- and writing each as all_of, any_of, or none_of turns the rules into lines that read like the specification. A lambda captures whatever the rule needs, here the limit, and tests one element; the algorithm applies it across the batch and returns a bool. Composing the results with plain boolean logic (allHaveId and not anyOverLimit and noneNegative) gives the final accept-or-reject decision, and each clause is independently readable and testable. The alternative -- one loop that checks every rule per element and juggles several flags -- mixes the rules together, is easy to get wrong when a rule is added, and hides the intent; the quantifier version keeps each rule separate and makes adding or removing one a single line. It also short-circuits per rule, so a cheap rule placed first can reject early. The one thing to keep in mind is the empty-batch case: all_of and none_of are true for an empty range, so an empty batch passes every all/none rule -- decide whether that means accept or reject and guard emptiness explicitly if it should reject (the vacuous-truth anti-pattern). For form, config, request, and batch validation, this three-quantifier summary is the clean shape."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::all_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::none_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }

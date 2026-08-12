@@ -1,0 +1,2 @@
+all even (loop / count / all_of): false false false
+any odd  (find / any_of):         true true

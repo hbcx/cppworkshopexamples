@@ -1,0 +1,14 @@
+title: "The std::ranges forms with projections"
+standard: "C++20"
+difficulty: 2
+summary: "The C++20 std::ranges::all_of / any_of / none_of take the whole range instead of a begin/end pair, and add a projection: a member pointer or callable applied to each element before the predicate. It lets you quantify over one field of a struct without unpacking it in the predicate."
+notes: "The std::ranges versions bring two improvements over the classic algorithms. First, they take the range itself -- ranges::all_of(users, pred) -- so you no longer write users.begin(), users.end(), and they compose with views from the ranges chapter (you can quantify over a filtered or transformed view). Second, they accept an optional PROJECTION as a trailing argument: a function applied to each element to produce the value the predicate actually tests. A projection is most often a pointer to a data member, &User::age, which pulls the age out of each User so the predicate is just a >= 18 rather than having to reach into the struct; it can equally be a pointer to a method (&User::size) or any callable. This separates WHICH part of the element you look at from the CONDITION you check, which keeps both short and reusable -- the same predicate a >= 18 works over any projection that yields an int. The result and the short-circuit behavior are identical to the classic forms; the projection and whole-range call are the only differences. Prefer these in C++20 code, especially when quantifying over a member of a struct or over a view, because the projection removes the boilerplate of digging the value out inside every predicate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::all_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::none_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

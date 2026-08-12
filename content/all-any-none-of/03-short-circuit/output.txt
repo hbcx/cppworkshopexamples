@@ -1,0 +1,2 @@
+any > 3 = true after 4 checks (of 8)
+all > 3 = false after 1 checks

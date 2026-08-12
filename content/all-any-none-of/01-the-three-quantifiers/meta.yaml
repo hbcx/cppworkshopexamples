@@ -1,0 +1,13 @@
+title: "The three quantifiers"
+standard: "C++11"
+difficulty: 1
+summary: "all_of, any_of and none_of each take a range and a predicate and return a single bool: does every element satisfy the predicate, does at least one, does not one. They are the standard way to ask a yes-or-no question about a whole range."
+notes: "These three algorithms from <algorithm> answer the three quantifier questions you ask about a collection. all_of returns true when the predicate holds for EVERY element, any_of when it holds for AT LEAST ONE, and none_of when it holds for NO element. Each takes a begin/end iterator pair and a unary predicate (a function, functor, or lambda that returns bool) and gives back a plain bool, so they read like the sentence they replace -- are all of these even, is any of them over the limit, is none of them negative. They are equivalent to loops you would otherwise write by hand, but they say the intent directly and cannot get the loop bookkeeping wrong. The three are related: none_of over a predicate is exactly !any_of over the same predicate, and all_of over a predicate is none_of over its negation, so you pick whichever phrasing reads most naturally at the call site. Two behaviors matter and get their own examples: they SHORT-CIRCUIT, stopping as soon as the answer is settled, and on an EMPTY range all_of and none_of return true while any_of returns false (a point of surprise worth knowing). Reach for these whenever a piece of code asks whether every, some, or no element of a range meets a condition -- it is clearer than a raw loop and clearer than counting."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::all_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::none_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }

@@ -1,0 +1,4 @@
+title: "all_of / any_of / none_of"
+description: "The three quantifier algorithms that answer a yes-or-no question about a whole range against a predicate: all_of (does every element satisfy it), any_of (does at least one), none_of (does not one). Covers the basics, the C++20 std::ranges forms with projections, the short-circuit behavior that stops at the first decisive element, and a validation summary built from all three -- alongside the anti-patterns: the vacuous truth that makes all_of and none_of true for an empty range, reinventing a quantifier with a raw loop or count_if/find_if, and hiding a per-element side effect in a predicate that short-circuits."
+sort_order: 68
+category: "Algorithms"

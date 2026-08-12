@@ -1,0 +1,13 @@
+title: "Anti-pattern: all_of on an empty range is true"
+standard: "C++11"
+difficulty: 3
+summary: "On an empty range all_of and none_of return true and any_of returns false -- vacuous truth: with no elements, nothing fails the all_of test and nothing satisfies the none_of test. When emptiness should mean not yet or nothing to confirm, that true is a bug. Guard the empty case explicitly."
+notes: "The mathematical convention is that a statement about EVERY element of an empty set is true (there is no counterexample), so all_of over an empty range returns true and, by the same logic, none_of returns true while any_of returns false. This is correct and usually what you want, but it bites when true is read as a success that has not actually happened. all orders delivered, all tests passed, all files uploaded -- each is true for an empty batch, so an initialized-but-not-yet-populated collection reports success, a pipeline that produced zero results looks like it completed, a check that should have found work to do silently passes. The symptom is a green light where there was nothing to check. The fix is to decide what emptiness MEANS for this rule and encode it: when nothing to check should not count as success, require the range be non-empty first -- !v.empty() && std::all_of(...) -- so an empty range is false. The same guard, inverted, applies if an empty range should count as failure for a none_of or a success for an any_of. This is not a flaw in the algorithms; it is a question they cannot answer for you, because whether zero elements means yes or no is a property of your problem. The sign to watch for: an all_of or none_of whose result gates an action, over a range that can legitimately be empty, with no check that it actually had elements."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::all_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::none_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }

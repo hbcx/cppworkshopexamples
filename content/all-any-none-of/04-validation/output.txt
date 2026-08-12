@@ -1,0 +1,4 @@
+all have an id?     true
+any over the limit? false
+none negative?      true
+batch accepted:     true

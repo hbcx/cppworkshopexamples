@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "ranges"
+  note: "Where the C++20 forms come from: std::ranges::all_of takes the whole range and a projection instead of an iterator pair, and the same view pipelines feed these quantifiers -- go there for range algorithms, views, and projections."
+- slug: "lambdas"
+  note: "What you pass as the predicate: nearly every all_of/any_of/none_of call takes a lambda, often capturing a threshold or limit to test against -- go there for captures, generic lambdas, and how a closure holds the values the predicate needs."
+- slug: "vectors"
+  note: "The container these usually run over: a std::vector is the typical range you quantify across -- go there for how it stores elements, and the size() these checks are often compared against."

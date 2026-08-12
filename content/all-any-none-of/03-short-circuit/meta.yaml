@@ -1,0 +1,12 @@
+title: "Short-circuit: they stop at the first answer"
+standard: "C++11"
+difficulty: 2
+summary: "The quantifiers do not scan the whole range when they do not have to. any_of returns as soon as one element satisfies the predicate, all_of as soon as one fails, none_of as soon as one satisfies. A counting predicate shows exactly how few elements are examined."
+notes: "all_of, any_of and none_of are lazy in the sense that matters for performance: they stop the moment the result cannot change. any_of returns true at the FIRST element that satisfies the predicate and does not look further; all_of returns false at the FIRST element that fails; none_of returns false at the first that satisfies. The example makes this concrete with a predicate that counts its own calls: any_of over is x greater than 3 on 1 2 3 4 5 6 7 8 stops at the fourth element and reports four checks, and all_of over the same predicate fails on the very first element and reports one. This is why the quantifiers can be cheaper than alternatives that must visit everything -- counting all matches, for instance, has to scan the whole range even when the yes-or-no answer was decided at element one (the reinventing anti-pattern shows that cost). Two practical consequences follow. The early exit is a reason to ORDER a range so the deciding element is likely near the front when you control the order, or to combine the quantifier with a cheap-to-check condition first. And, because the predicate is NOT run for every element, you must not rely on a side effect in it to touch all of them -- that mistake is its own anti-pattern. Short-circuiting is a feature to lean on, not something to work around."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::all_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }

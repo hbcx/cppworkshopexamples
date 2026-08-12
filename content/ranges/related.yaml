@@ -8,3 +8,5 @@
   note: "The container most pipelines start from and materialise back into: a std::vector is a contiguous range that feeds a view chain and holds the result when you copy a view out -- go there for the container's own growth, capacity and iterator rules."
 - slug: "ranges-cpp23"
   note: "What the next standard added on top of these views: ranges::to to materialise a pipeline in one step without a loop, zip and enumerate, the chunk / slide / stride windowing family, cartesian_product, repeat, and the fold reductions -- go there for the C++23 additions."
+- slug: "all-any-none-of"
+  note: "The quantifier algorithms in their range form: std::ranges::all_of / any_of / none_of take a whole range and a projection, so you can ask every, any, or no over a view or a container member -- go there for the yes-or-no checks that pair with these views."

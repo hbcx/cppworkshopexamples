@@ -1,0 +1,3 @@
+all adults?   true
+any inactive? true
+none minors?  true
