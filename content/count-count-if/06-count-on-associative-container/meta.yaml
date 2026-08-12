@@ -1,0 +1,13 @@
+title: "Anti-pattern: std::count on a set or multiset"
+standard: "C++11"
+difficulty: 3
+summary: "std::count is a linear O(n) scan that compares every element with ==, ignoring any ordering. On a std::set, multiset or map the member count uses the tree -- O(log n) for a set, O(log n + k) for a multiset counting k duplicates. Call the member count on associative containers."
+notes: "Like std::find, std::count treats its range as an undifferentiated sequence: it walks from begin to end comparing each element with == and totals the matches, which is O(n) no matter how the container is arranged. On a std::set or std::map that is 0 or 1, computed the slow way; on a std::multiset or multimap, which exist precisely to hold and count duplicates, it still scans everything. The containers already provide the fast answer through their tree: the member count does a lookup in O(log n) and, for a multiset, gathers the run of equal keys in O(log n + k) where k is the number of matches -- it does not visit the unrelated elements at all. The example counts comparisons on an eight-element multiset with four 5s: std::count does eight == comparisons across the whole container, while bag.count(5) reaches the equal range with a handful of < comparisons. The gap is O(n) versus O(log n + k) and grows with the container. The fix is the member function: set.count(key), multiset.count(key), map.count(key), and the unordered_* versions whose count is O(1) on average; C++20 also adds a member contains for the 0/1 presence question. Keep std::count for sequence containers (vector, deque, list, array) and plain ranges, where a linear scan is the only way to count. The sign to watch for: std::count or std::count_if handed a std::set, multiset, map, or unordered container as its range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::count", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+detailed_tags:
+  - { name: "std::multiset", url: "https://en.cppreference.com/w/cpp/container/multiset" }
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }

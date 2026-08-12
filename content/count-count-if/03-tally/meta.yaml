@@ -1,0 +1,10 @@
+title: "A tally from repeated counts"
+standard: "C++11"
+difficulty: 2
+summary: "For a small, fixed set of categories, counting each one is a clear way to build a tally or histogram for a report. Loop over the known categories and call count for each -- no frequency map to build and read back."
+notes: "A common reporting need is how many of each: log levels, order states, response codes. When the set of categories is small and known ahead of time, the simplest tool is count called once per category, as here over ok, warn and error -- each line of the report is one count call, and the code reads as the table it produces. The trade-off is worth naming. This does a full pass PER category, so it is O(categories times n); for three categories over a short log that is nothing, but for many categories or a large range it is wasteful compared with a single pass that tallies into a std::map<category, int> as it goes, which is O(n) total. So the rule of thumb: repeated count is fine and clearest for a handful of fixed categories; reach for a map-based tally (or a ranges group-by) when the categories are numerous, unknown in advance, or the range is large enough that the extra passes matter. The example also shows a small convenience -- count compares each std::string element against a const char* level directly, because std::string is comparable with a string literal, so no explicit conversion is needed. For a quick fixed-category breakdown, this repeated-count tally is the readable choice."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::count", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+detailed_tags: []

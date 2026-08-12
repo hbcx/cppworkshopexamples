@@ -1,0 +1,2 @@
+any odd (count > 0)? true after 8 checks (of 8)
+any odd (any_of)?   true after 1 checks

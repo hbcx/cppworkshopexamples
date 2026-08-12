@@ -1,0 +1,3 @@
+ok: 4
+warn: 1
+error: 2

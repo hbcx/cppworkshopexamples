@@ -1,0 +1,4 @@
+title: "count / count_if"
+description: "The two algorithms that return HOW MANY elements match: count for a value, count_if for a predicate. Both return a signed integer -- the number of matches, zero when none. Covers the basics, the C++20 std::ranges forms with projections, building a small tally, and using the count in threshold and progress conditions -- alongside the anti-patterns: count greater than zero to test existence where any_of short-circuits, std::count over a set or multiset where the member count is far cheaper, and mixing count's signed result with an unsigned size()."
+sort_order: 70
+category: "Algorithms"

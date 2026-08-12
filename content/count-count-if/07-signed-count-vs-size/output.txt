@@ -1,0 +1,2 @@
+all fours (matched signedness)? true
+all fours (all_of)? true

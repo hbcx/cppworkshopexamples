@@ -1,0 +1,2 @@
+std::count of 5: 4  (== comparisons: 8)
+member count of 5: 4  (< comparisons: 7)

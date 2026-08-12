@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "all-any-none-of"
+  note: "When you need yes or no, not a number: any_of stops at the first match, where count scans the whole range to total the matches -- go there for the quantifier algorithms, and see the anti-pattern here on why count greater than zero should be any_of."
+- slug: "find-find-if"
+  note: "When you need WHERE, not how many: find_if returns an iterator to the first match, where count returns only their number -- go there for locating and acting on a single element."
+- slug: "ranges"
+  note: "Where the C++20 forms come from: std::ranges::count takes the whole range and a projection so you can count by a member, and views can be counted directly -- go there for range algorithms, views, and projections."
+- slug: "maps"
+  note: "The keyed way to count many things at once: a std::map<key, int> tallies every category in one pass, and a multiset's member count gives a value's multiplicity in O(log n) -- go there when you need a full frequency table rather than one count."

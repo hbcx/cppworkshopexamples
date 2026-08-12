@@ -1,0 +1,2 @@
+paid orders: 2
+orders with 3+ items: 2

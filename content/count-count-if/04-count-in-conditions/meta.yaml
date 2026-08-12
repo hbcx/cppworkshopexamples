@@ -1,0 +1,10 @@
+title: "Using the count in conditions"
+standard: "C++11"
+difficulty: 2
+summary: "The number count returns feeds straight into decisions: progress out of a total, an at-least-N threshold or quorum, and a majority test. A couple of small habits -- casting size() to match the signed count, and comparing to half by doubling rather than dividing -- keep these correct."
+notes: "Once you have the count, the useful part is what you compare it against. Progress is the count over the total, done out of size(). A threshold or quorum is the count against a minimum, done >= 3 -- proceed only when enough elements meet the rule, which is how a vote count, a healthy-replica minimum, or an in-stock check reads. A majority is the count against half, and the clean way to write it is done * 2 > total rather than done > total / 2, because integer division of total / 2 rounds down and gets the tie case wrong (3 of 6 is not a majority, but 3 > 6/2 is 3 > 3, false, which happens to be right here, while 3 of 5 would misbehave under naive rounding); doubling the count avoids the division entirely. Two type notes keep the comparisons honest. count returns a SIGNED integer, so when you compare it with size() -- which is unsigned -- convert size() to the signed type (here static_cast<long>) so the two sides match; mixing them is the sign-comparison anti-pattern. And keep the count in the signed type it came back as rather than forcing it into an unsigned one. With those, the count slots naturally into progress bars, guards, and reports."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::count", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+detailed_tags: []

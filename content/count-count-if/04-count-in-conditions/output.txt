@@ -1,0 +1,3 @@
+progress: 4 / 6
+at least 3 done? true
+majority done? true

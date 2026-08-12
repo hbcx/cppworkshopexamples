@@ -1,0 +1,13 @@
+title: "The std::ranges forms with projections"
+standard: "C++20"
+difficulty: 2
+summary: "The C++20 std::ranges::count and count_if take the whole range instead of a begin/end pair, and add a projection applied to each element first. It lets you count by a member -- how many orders are paid, how many have three or more items -- without a lambda that digs the field out."
+notes: "The std::ranges versions of count and count_if follow the same pattern as the other range algorithms. They take the range directly, ranges::count(orders, value), dropping the begin()/end() pair, and compose with views. And they take an optional PROJECTION. For ranges::count the projection is applied to each element before comparing to the value, so ranges::count(orders, paid, and Order::status) counts orders whose status equals paid -- counting by a member with no lambda at all. For ranges::count_if the projection produces the value the predicate sees, so and Order::items lets the predicate be a plain n >= 3 over the item count. A projection can be a pointer to a data member, a pointer to a method, or any callable. The return value is the same signed count as the classic form; the projection and whole-range call are the only differences. Prefer these in C++20 code when counting by a field, because the projection keeps both the value or condition and the field selection short and separate. And because they compose with views, you can count over a filtered or transformed range -- count how many of the transformed values satisfy something -- without materializing anything."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::count", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+  - { name: "std::count_if", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

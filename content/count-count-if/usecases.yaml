@@ -1,0 +1,19 @@
+- problem: "A report or dashboard needs the number of records in each state -- how many orders are paid, how many tickets are open, how many nodes are healthy -- computed on demand from a list you already hold."
+  why: "A hand-written loop with a counter per category is more code and more places to get the increment wrong; count and count_if produce each number in one line, and for a small fixed set of categories that is clearer than building a frequency map."
+  signal: "A loop with one or more int counters incremented inside an if, whose only purpose is to total how many elements match some condition."
+
+- problem: "An action should proceed only when at least N elements meet a rule -- a quorum of votes, a minimum number of healthy replicas, enough items in stock to fulfil an order."
+  why: "Scanning with a counter and an early break re-implements count and hides the threshold; count_if(...) >= N states the quorum directly, and the number is there if you also want to report it."
+  signal: "A loop that counts matches and breaks once the counter reaches a threshold, or a manual tally compared to a minimum."
+
+- problem: "You need how many times a value occurs -- duplicate detection, a frequency for one specific key, the multiplicity of an entry in a bag of items."
+  why: "Building a whole std::map of counts to answer one question about one value is wasteful; count over a range, or the member count on a multiset, gives that single multiplicity without the extra structure."
+  signal: "A std::map<T,int> built up only to read back the count of a single key, or a duplicate check that constructs a frequency table for one lookup."
+
+- problem: "Validation must report HOW MANY entries failed, not just whether any did -- 3 of 50 rows are invalid, 2 required fields are missing -- so the message can be specific."
+  why: "any_of answers yes or no and stops, which is right for a guard but useless for a count; count_if gives the exact number of failures for the error message or the metric, in the same single pass."
+  signal: "An any_of used to decide validity that is then followed by a second scan to count the failures for the message."
+
+- problem: "A progress or completion indicator needs the number done out of the total -- tasks finished, files uploaded, steps passed."
+  why: "Keeping a running done counter in sync with the collection drifts as items are added or removed; count over the current collection recomputes the true number each time with no separate state to maintain."
+  signal: "A separate done or completed counter kept alongside a collection and updated by hand as elements change state."

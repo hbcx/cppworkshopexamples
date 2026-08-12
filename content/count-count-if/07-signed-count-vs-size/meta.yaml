@@ -1,0 +1,11 @@
+title: "Anti-pattern: signed count against unsigned size()"
+standard: "C++11"
+difficulty: 2
+summary: "count returns a signed integer (ptrdiff_t) while size() is unsigned (size_t). Comparing them directly mixes signedness -- the compiler warns, and a negative value would wrap to a huge unsigned number and compare wrong. Match the types, or ask the question with the algorithm that fits."
+notes: "count and count_if return the iterator difference type, which is SIGNED, but a container's size() returns an UNSIGNED size_t, so count(...) == v.size() compares a signed value with an unsigned one. Under -Wall this is -Wsign-compare, and with -Werror it does not even build -- which is the warning earning its keep, because the bug it guards against is real: in a mixed comparison the signed operand is converted to unsigned, and if it is negative it wraps to a very large number, so a test that looks like it compares two counts silently compares the wrong values. count itself never returns a negative number, so this particular comparison happens to work, but the habit of comparing signed algorithm results to unsigned sizes is where the bug appears the moment a subtraction or an offset makes one side negative. The fix is to match the signedness at the comparison: cast size() to the signed type, static_cast<std::ptrdiff_t>(v.size()), so both sides are signed. Often, though, the comparison is a sign that the wrong tool is in use: count(...) == size() is asking do ALL elements match, which is what all_of says directly, without a count, without a size, and without the sign issue -- and it short-circuits on the first non-match instead of counting everything. So prefer all_of for all-match, none_of for none-match, and reserve the count-versus-size comparison for when you truly need the number and a size together, written with matched types. The sign to watch for: an algorithm's signed result compared with .size() or another unsigned value, or a -Wsign-compare warning around a count."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::count", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+detailed_tags:
+  - { name: "std::all_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }

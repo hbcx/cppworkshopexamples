@@ -1,0 +1,12 @@
+title: "count and count_if: how many match"
+standard: "C++11"
+difficulty: 1
+summary: "count returns how many elements equal a value; count_if how many satisfy a predicate. Both return the number of matches as a signed integer, and zero when nothing matches -- so an absent value needs no special handling."
+notes: "These are the tallying algorithms. std::count(first, last, value) compares each element to value with == and returns how many were equal; std::count_if(first, last, pred) returns how many satisfy the predicate. The result is the iterator difference type, a SIGNED integer (typically ptrdiff_t), which matters when you compare it against an unsigned size() -- its own anti-pattern later. Unlike find, which stops at the first match, count always visits every element, because it cannot know the total until it has seen them all -- so it is the right tool when you want the NUMBER, and the wrong tool when you only want to know whether at least one exists (count > 0 is the existence anti-pattern; any_of is the answer there). A value or condition that matches nothing returns 0, cleanly, with no need to check emptiness first. Choose count when matching a value and count_if when matching a condition, the same split as find/find_if. The number it returns feeds directly into reports (how many are in each state), thresholds (at least N match), and progress (how many are done) -- the examples that follow. If you also need the matching elements themselves, count is only the tally; copy_if or a filter view collects them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::count", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+  - { name: "std::count_if", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }

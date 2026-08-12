@@ -1,0 +1,3 @@
+count of 3: 3
+count over 5: 3
+count of 100: 0

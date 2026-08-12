@@ -1,0 +1,12 @@
+title: "Anti-pattern: count greater than zero for existence"
+standard: "C++11"
+difficulty: 2
+summary: "Writing count(...) > 0 to test whether at least one element matches computes the full total and then throws it away. count must scan the whole range, while any_of (or find) stops at the first match. Use any_of when the question is existence, not quantity."
+notes: "count and count_if answer how many; existence is whether at least one, and they are not the same question. count(...) > 0 gets the right answer, but to produce the number it must visit every element -- there is no early exit, because a count is not known until the range is exhausted. any_of asks exactly the existence question and returns true the instant it finds a match, so on a range whose first element already qualifies it does one check instead of n. The example makes the gap visible with a call counter: count_if scans all eight elements to learn there is one odd number, while any_of stops at the first element (the odd one) after a single check. On a large range, or a hot path, that is the difference between O(n) always and O(1) in the lucky case, for a question that never needed the total. The fix is to match the tool to the question: any_of(...) for is there at least one (returns a bool, short-circuits), find/find_if when you also want WHERE it is, and count only when you genuinely need the number. The sign to watch for: a count or count_if whose result is immediately compared to 0 (> 0, != 0, or == 0) and used only as a bool -- that is an any_of or none_of spelled the slow way."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::count_if", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }
+detailed_tags:
+  - { name: "predicate", url: "https://en.cppreference.com/w/cpp/named_req/Predicate" }
