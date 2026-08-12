@@ -1,0 +1,11 @@
+title: "Anti-pattern: using transform to filter"
+standard: "C++11"
+difficulty: 2
+summary: "transform is strictly one output per input -- it cannot drop elements. Trying to skip some by returning them unchanged (or a sentinel) just leaves them in the result. To select a subset, filter with copy_if first (or views::filter), then transform the survivors."
+notes: "transform is a MAP: it produces exactly one output for every input, in the same count and order. It has no way to say skip this one, so people try to fake filtering inside the function -- return the value doubled if it is even, otherwise return it unchanged, or return some sentinel for the ones to drop. Neither works: the unchanged values stay in the output (the example gets 1 4 3 8 5 12 when it wanted 4 8 12), and a sentinel just pollutes the result with markers you then have to strip. Filtering is a different operation, and the standard library separates the two. std::copy_if selects the elements that satisfy a predicate into an output, and transform then maps those survivors -- filter, then map, as two passes with a small intermediate container. In C++20 the ranges library fuses them lazily: in | views::filter(pred) | views::transform(fn) selects and maps in a single pass with no intermediate, and ranges::to materializes the result if you need a container. Either way the rule is the same: use copy_if or views::filter to choose WHICH elements survive, and transform to decide what each survivor becomes -- do not try to make one do the other's job. The sign to watch for: a transform whose function returns its argument unchanged for some inputs, or returns a sentinel meant to be removed afterwards."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+detailed_tags:
+  - { name: "std::copy_if", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }

@@ -1,0 +1,12 @@
+title: "The binary form: combine two ranges"
+standard: "C++11"
+difficulty: 2
+summary: "transform has a two-range form: give it two input ranges and a two-argument function, and it combines them element by element, result[i] = op(a[i], b[i]). It is the tool for adding two vectors, applying per-element weights, or computing a per-row difference."
+notes: "Besides mapping one range, transform can combine two. The binary overload takes the first range as a begin/end pair, the SECOND range as just a begin, an output iterator, and a two-argument function; it applies op(a[i], b[i]) for each position and writes the result. std::plus adds them, and any lambda expresses a custom combine -- a weighted sum, a ratio, a per-row delta between measured and expected. The important caveat is the second range: only its begin is passed, so transform reads exactly as many elements from it as the first range has, and the second range MUST be at least that long -- if it is shorter, transform reads past its end, which is undefined behavior. So make sure the second range has at least as many elements as the first (checking sizes up front when they come from different sources). The output follows the same rules as the unary form: a back_inserter to grow a new container, or an existing sized range, or even one of the inputs to combine in place. This is the element-wise vector operation you would otherwise write as an indexed loop over both containers, without the shared index and its off-by-one risk. When the two ranges are C++20 ranges, views::zip_transform (in the C++23 ranges chapter) does the same thing lazily."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+detailed_tags:
+  - { name: "std::plus", url: "https://en.cppreference.com/w/cpp/utility/functional/plus" }
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

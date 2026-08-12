@@ -7,3 +7,5 @@
   note: "The container std::sort cannot touch: a std::list has only bidirectional iterators, so it provides its own member sort that relinks nodes instead -- go there for the node-based list and why its sort is separate."
 - slug: "count-count-if"
   note: "The sibling algorithm for totals rather than order: count says how many match, where sort arranges them -- go there for tallies, thresholds, and progress counts over a range."
+- slug: "transform"
+  note: "The step that often comes before a sort: precompute a key per element with transform, then sort by that key so the comparator does not recompute it -- go there for mapping a range and the decorate-sort pattern."

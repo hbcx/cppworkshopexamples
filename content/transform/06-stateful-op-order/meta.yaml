@@ -1,0 +1,11 @@
+title: "Anti-pattern: a stateful function that relies on order"
+standard: "C++11"
+difficulty: 3
+summary: "transform does not promise the order in which it applies the function, so a function that carries state between calls -- a running total, a counter, a previous-value reference -- has an unspecified result. Keep the function pure; for a running total use a scan like partial_sum, and for ordered side effects use for_each."
+notes: "std::transform is specified as a pure MAP: it applies the function to each element to produce a result, and it does NOT guarantee the order of those applications (this leaves implementations free to reorder or, for the parallel overloads, run them concurrently). So a function that keeps state across calls -- capturing a running sum, an index it increments, or the previous element to compute a delta -- depends on an order transform does not promise, and the result is unspecified. The example tries to build a prefix sum by mutating a captured running total inside transform; it is not printed, because what it produces is not guaranteed and could differ between implementations, which is exactly the bug. Two correct tools replace it. When the operation is genuinely a running combination -- prefix sum, running max, a scan -- use the algorithm built for it: std::partial_sum computes prefix sums left to right by specification, and std::inclusive_scan / exclusive_scan (C++17) generalize it. When you just need a side effect per element in order -- print, log, accumulate into an external structure -- use std::for_each, which does visit elements in order for the sequential overload. Reserve transform for a pure element-to-element mapping whose result depends only on the current element. The sign to watch for: a transform whose function captures a mutable variable by reference and updates it, especially to reference an earlier element or a running aggregate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+detailed_tags:
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }

@@ -1,0 +1,11 @@
+title: "transform: map each element to a result"
+standard: "C++11"
+difficulty: 1
+summary: "transform applies a function to every element and writes the results to an output iterator. To build a new container, pass a back_inserter so the output grows; to update in place, point the output at the input range itself."
+notes: "std::transform is the map operation: given an input range and a function, it applies the function to each element and stores each result at the output. The output is an ITERATOR, and where you point it decides where the results go, which is the part people trip on. For a fresh container, wrap it in std::back_inserter(out): the inserter calls push_back for each result, so the output grows to fit and you do not have to size it first. To update the elements in place, pass the input's own begin as the output -- transform(v.begin(), v.end(), v.begin(), f) rewrites each element over itself, which is the in-place map with no extra container. You can also write into an already-sized container by passing its begin (see the empty-output anti-pattern for why the container must have room). transform returns the iterator one past the last result written. It applies the function once per element and is a pure mapping -- one output for one input, no elements added or dropped (the 1:1 property that the filter anti-pattern returns to), and the function should depend only on its argument (the ordering anti-pattern explains why a stateful function is a trap). This unary form is the everyday case; the next examples add the two-range binary form and mapping to a different output type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

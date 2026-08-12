@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "ranges"
+  note: "The lazy counterpart: views::transform maps on demand inside a pipeline with no output container, where the algorithm writes results eagerly -- go there for views, the pipe operator, and when a lazy map beats an eager one."
+- slug: "sort"
+  note: "Where a transform often feeds a sort: precompute a key per element (the decorate step) so the comparator does not recompute it every call -- go there for sorting, comparators, and stable_sort."
+- slug: "count-count-if"
+  note: "The sibling that reduces instead of maps: count totals matches over a range where transform produces a new value per element -- go there for tallies, thresholds, and progress counts."

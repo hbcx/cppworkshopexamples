@@ -1,0 +1,2 @@
+transform only (odds leak): 1 4 3 8 5 12 
+copy_if then transform:     4 8 12 

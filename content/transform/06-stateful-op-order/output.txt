@@ -1,0 +1,1 @@
+partial_sum (defined order): 10 30 60 100 

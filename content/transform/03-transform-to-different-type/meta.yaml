@@ -1,0 +1,11 @@
+title: "Transform to a different output type"
+standard: "C++11"
+difficulty: 2
+summary: "The output type need not match the input. transform maps a range of one type to a container of another -- ints to strings, records to one of their fields -- because the output container is separate and its element type is whatever the function returns."
+notes: "Because transform writes to a separate output iterator, the result type is decided by the function, not the input. Mapping status codes (int) to labels (std::string), parsing strings to numbers, formatting values for display, or turning domain objects into DTOs are all one transform with an output container of the target type and a back_inserter. The most common shape is projecting a field: transform a std::vector<Product> into a std::vector<std::string> of names, or a std::vector<double> of prices, which gives you the single column you need for output, a sort key, or a sum. The only requirement is that the output container hold what the function returns -- collect strings into a vector<string>, numbers into a vector<int> -- and that it has room, which the back_inserter provides by appending. This changes-the-type mapping is where transform most clearly beats a hand loop: the loop would declare the output, size or reserve it, and push_back each converted value, all of which the algorithm plus back_inserter say in one line. In C++20 the same field projection is often written as users | views::transform(and Product::name) for a lazy version, or with ranges::transform and a projection when you want the eager container."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

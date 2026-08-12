@@ -1,0 +1,11 @@
+title: "Anti-pattern: transform into an empty output through begin()"
+standard: "C++11"
+difficulty: 3
+summary: "transform writes to consecutive positions from the output iterator; it does not grow the container. Passing the begin() of an empty vector as the output writes past the end -- undefined behavior. Use a back_inserter to append, or size the output first and write into it."
+notes: "transform stores each result at the output iterator and advances it, exactly like copying into an existing array -- it never allocates or resizes. So the output must already have room for every result. The classic bug is declaring an empty output vector and passing out.begin(): for an empty vector begin() equals end() and points at no element, so the very first write goes past the end of the container's storage, and every result after it corrupts more memory. It is undefined behavior, and it often looks like it works in a small test (the writes hit memory that happens to be free) before crashing or producing garbage on real data. There are two correct outputs. A std::back_inserter(out) turns each write into a push_back, so the container grows to fit and you never size it yourself -- the right default when building a fresh result. Or size the output up front -- std::vector<int> out(in.size()), or out.resize(in.size()) -- and pass out.begin(), which overwrites existing elements in place and avoids the per-append growth checks when you know the count. Reserving without resizing is NOT enough: reserve only sets capacity, so begin() still points past zero elements and the write is still out of bounds -- it must be resize (or a back_inserter). The sign to watch for: a transform (or copy) whose output iterator is the begin() of a container that was not sized to hold the results."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

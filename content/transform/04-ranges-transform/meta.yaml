@@ -1,0 +1,13 @@
+title: "ranges::transform and the lazy views::transform"
+standard: "C++20"
+difficulty: 2
+summary: "std::ranges::transform (C++20) takes the whole range and an optional projection, writing results eagerly to an output. views::transform is the lazy counterpart: it maps each element on demand inside a pipeline, computing and storing nothing until the range is iterated."
+notes: "C++20 offers two ways to map a range, and the difference is eager versus lazy. std::ranges::transform is the algorithm: it takes the input range directly (no begin/end pair), an output iterator, the function, and an optional PROJECTION applied to each element before the function -- so ranges::transform(users, out, fn, and User::age) maps each user's age, letting the function be a plain a > 30 instead of reaching into the struct. Like the classic transform it writes every result to the output right away, so you get a filled container. views::transform is the adaptor from the ranges library: users | views::transform(and User::name) produces a VIEW that yields each mapped element only as it is iterated -- nothing is computed up front and no output container is allocated, and it composes with filter, take, and the rest into a lazy pipeline. The choice is about when the work happens and whether you need a container. Reach for the algorithm (ranges::transform, or classic transform) when you want a materialized result now -- a vector to store, sort, or return. Reach for the view when the mapped values feed straight into more range operations or a single pass, because laziness avoids the intermediate container and only computes what is actually consumed (the ranges chapter covers views in depth, including the trap of a view over a temporary)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }

@@ -1,0 +1,19 @@
+- problem: "You have a list of records and need one field or a derived value from each -- the ids for a query, the names for a dropdown, the line totals for an invoice -- collected into its own list."
+  why: "A hand-written loop with push_back is more code and an easy place to forget the reserve or mishandle the output; transform states map every record to this in one call, and pairs with a back_inserter to build the result."
+  signal: "A loop whose whole body is out.push_back(f(x)) over an input container, building a parallel list of a projected or computed value."
+
+- problem: "Every value in a collection must be converted -- cents to a formatted amount, Celsius to Fahrenheit, raw strings trimmed or lower-cased -- producing a converted collection or updating it in place."
+  why: "An index loop repeats the bounds and the subscript on both sides and is where off-by-one creeps in; transform applies the conversion element by element, and writing the output range back over the input does the in-place update with no temporary."
+  signal: "An index loop that reads v[i], converts it, and assigns back to v[i] or a parallel output vector."
+
+- problem: "Two parallel series must be combined position by position -- adding two vectors, applying per-element weights, computing the difference between a measured and an expected column."
+  why: "Indexing both with one counter works until they drift out of length or an index slips; the binary transform walks both together and writes the combined result, making the pairing explicit."
+  signal: "A single loop counter used to read a[i] and b[i] together and write a combined c[i]."
+
+- problem: "A sort or a lookup needs a derived key for each element -- a normalized string, a computed score, a lowercased name -- and recomputing it inside every comparison is expensive."
+  why: "Computing the key in the comparator runs it O(n log n) times; transforming the elements into a precomputed key list once (the decorate step of decorate-sort-undecorate) computes each key exactly once."
+  signal: "A sort comparator that derives the same key from each element on every call, or a lookup that recomputes a normalized form of each element repeatedly."
+
+- problem: "A numeric pipeline must scale, clamp, or normalize every element of a buffer in place -- apply a gain to samples, clamp pixels to a range, divide a histogram by its total."
+  why: "Copying to a new buffer wastes memory when the original is not needed afterwards; transform with the output iterator pointing at the input rewrites each element where it sits, one pass, no allocation."
+  signal: "A freshly allocated output buffer filled by scaling each element of an input buffer that is then discarded."

@@ -10,3 +10,5 @@
   note: "What the next standard added on top of these views: ranges::to to materialise a pipeline in one step without a loop, zip and enumerate, the chunk / slide / stride windowing family, cartesian_product, repeat, and the fold reductions -- go there for the C++23 additions."
 - slug: "all-any-none-of"
   note: "The quantifier algorithms in their range form: std::ranges::all_of / any_of / none_of take a whole range and a projection, so you can ask every, any, or no over a view or a container member -- go there for the yes-or-no checks that pair with these views."
+- slug: "transform"
+  note: "The eager map behind views::transform: the transform algorithm writes mapped results to a container now, where the view maps lazily on demand -- go there for the algorithm form, the binary two-range map, and when eager beats lazy."
