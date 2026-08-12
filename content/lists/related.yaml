@@ -8,3 +8,5 @@
   note: "std::list seen from the other side: one of the containers the FIFO adaptors can be built on."
 - slug: "iterator"
   note: "Why a list's iterators are bidirectional, not random-access, and stay valid across other elements' insert and erase: the Iterator pattern chapter builds a linked-list iterator by hand and explains the category trade-off against a vector's."
+- slug: "sort"
+  note: "Why a list has its own member sort: std::sort needs random-access iterators a list cannot give, so list::sort relinks nodes instead -- go there for the sort algorithm, comparators, and stable_sort."

@@ -1,0 +1,11 @@
+title: "stable_sort: keep the order of equal elements"
+standard: "C++11"
+difficulty: 2
+summary: "stable_sort orders a range like sort but GUARANTEES that elements comparing equal keep their original relative order. That is what you need for multi-key sorting -- sort by the secondary key, then stable_sort by the primary -- and whenever the input order of ties carries meaning."
+notes: "std::sort may reorder elements that compare equal; std::stable_sort promises it will not -- two elements the comparator treats as equal come out in the same order they went in. The example sorts entries by priority: b and d both have priority 1, and because b preceded d in the input, stable_sort keeps b before d (and a before e among the priority-2 pair). This guarantee matters in two common situations. First, when the tie order is meaningful on its own -- rows already in arrival order, results already ranked by a previous step -- and re-sorting by a new key must not scramble the elements that share that key. Second, it is the standard way to sort by MULTIPLE keys: sort by the least important key first, then stable_sort by the next, and so on up to the most important; each stable pass preserves the ordering the previous passes established among equal keys, so the final result is ordered by primary key, ties broken by secondary, and so on. The cost is that stable_sort may use extra memory and is a little slower than sort (O(n log n), or O(n log^2 n) if it cannot allocate a buffer). So reach for it when you rely on the order of equal elements; use plain sort when you do not, and never assume plain sort is stable -- that assumption is its own anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stable_sort", url: "https://en.cppreference.com/w/cpp/algorithm/stable_sort" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

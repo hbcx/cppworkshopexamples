@@ -1,0 +1,11 @@
+title: "partial_sort and nth_element: only part in order"
+standard: "C++11"
+difficulty: 3
+summary: "When you need only the top few or a rank statistic, do not sort everything. partial_sort orders the smallest N at the front and leaves the rest unspecified; nth_element places the element that would sit at position n and partitions around it in O(n) average, without sorting."
+notes: "A full sort is O(n log n) and orders every element, which is wasted work when you only want a slice of the result. Two algorithms do less. partial_sort(first, middle, last) arranges the range so that the elements from first to middle are the smallest, in sorted order, and everything after middle is left in some unspecified order -- so partial_sort(b, b+3, e) gives you the smallest three, sorted, cheaper than sorting all n (roughly O(n log k) for k selected). Pass a comparator (std::greater) to get the LARGEST few instead, which is the top-N leaderboard case. nth_element(first, nth, last) does even less: it places at position nth the exact element that a full sort would put there, and partitions the range so everything before nth is <= it and everything after is >= it, but neither side is sorted -- and it runs in O(n) on average. That makes it the tool for order statistics: the median (nth at the middle), a percentile, or the k-th smallest, without paying to sort. Both modify the range in place and are unstable. The rule: sort when you need the WHOLE range ordered; reach for partial_sort when you need the top or bottom few in order, and nth_element when you need a single rank-n element or a partition around it. Using a full sort to read only the max, the top few, or the median is the corresponding anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }
+detailed_tags: []

@@ -1,0 +1,19 @@
+- problem: "Results must be shown to a user in a chosen order -- a leaderboard by score, a table by date, search hits by relevance -- from data that arrived in whatever order the source produced."
+  why: "Keeping the collection sorted on every insert (or reaching for a std::multiset) pays the ordering cost continuously even when you only display once; a single sort right before rendering orders the batch in one O(n log n) pass and leaves the source untouched."
+  signal: "A vector rendered to a UI or report with a comparator applied at the display step, or an insertion that keeps a list ordered only so it can be shown sorted later."
+
+- problem: "An algorithm that needs sorted input is coming next -- a binary_search, set_intersection, unique to remove duplicates, or a merge -- and the data is not yet ordered."
+  why: "Those algorithms are only correct (or only fast) on a sorted range, and running them on unsorted data gives wrong answers silently; one sort establishes the precondition they all share, and several of them can then run on the same ordered range."
+  signal: "A binary_search, lower_bound, unique, or set_* algorithm applied to a range with no sort guaranteeing its input is ordered."
+
+- problem: "You need the top few or a rank statistic from a large set -- the ten highest scores, the median latency, the 95th percentile -- not the whole thing in order."
+  why: "A full sort orders every element when you only read a handful; partial_sort orders just the top N and nth_element finds the rank-n element in O(n) average without sorting, which on a large range is a large saving."
+  signal: "A full std::sort followed by reading only the first few elements, the last few, or a single middle element."
+
+- problem: "A pipeline must produce byte-for-byte reproducible output -- a deterministic build artifact, a stable diff, a signature over a set -- but the data comes from a source with no guaranteed order (a hash map, a directory listing, parallel workers)."
+  why: "Serializing or hashing an unordered collection gives a different result each run, breaking reproducibility and caching; sorting into a canonical order first makes the output depend only on the contents, not on iteration order."
+  signal: "A collection built from an unordered_map, filesystem scan, or concurrent producers that is then serialized, hashed, or compared without a sort to fix the order."
+
+- problem: "Equal items must be grouped together for a run-length summary, a dedup, or a group-by -- all orders for a customer next to each other, repeated log lines collapsed."
+  why: "Gathering equal items with a map of buckets builds a whole extra structure; sorting by the grouping key brings equal elements adjacent, after which a single linear pass with unique or chunk_by does the grouping in place."
+  signal: "A std::map or unordered_map used only to group elements by a key, where a sort followed by a linear group pass would avoid the extra container."

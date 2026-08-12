@@ -1,0 +1,4 @@
+stable_sort keeps input order of equal keys:
+  first
+  second
+  third

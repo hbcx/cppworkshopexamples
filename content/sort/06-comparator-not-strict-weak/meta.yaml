@@ -1,0 +1,11 @@
+title: "Anti-pattern: a comparator that is not a strict weak ordering"
+standard: "C++11"
+difficulty: 3
+summary: "sort's comparator must be a strict weak ordering: above all, comp(x, x) must be false. Writing <= instead of < breaks that -- equal elements each compare less than the other -- and it is undefined behavior, which in practice can read past the end of the range and crash, not just sort wrong."
+notes: "std::sort, and every algorithm that takes a comparator, requires that comparator to be a STRICT weak ordering. The rules are the ones < obeys: irreflexive (comp(x, x) is false -- nothing is less than itself), asymmetric (if comp(a, b) then not comp(b, a)), transitive, and consistent on the equivalence it induces. The mistake that keeps happening is writing <= (or >=) to mean ascending, which breaks irreflexivity: comp(x, x) becomes true, and for two equal elements both comp(a, b) and comp(b, a) are true, so the sort believes each belongs before the other. This is not a harmless quirk -- the standard says the behavior is UNDEFINED, and real implementations exploit the ordering guarantees to place partition boundaries, so a bad comparator can send an internal index past the end of the range and corrupt memory or crash. It often passes small tests (few or no equal elements) and blows up later on real data, which makes it dangerous. The fix is simply to use the strict form: < for ascending, > for descending, and for a key comparison compare the keys with < (a.key < b.key), never <=. When two elements are equivalent, a correct comparator returns false BOTH ways, and sort is free to order them either way (use stable_sort if that order must be preserved). The sign to watch for: a sort or set/map comparator using <= or >=, or one that can return true for two arguments that are equal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+detailed_tags:
+  - { name: "strict weak ordering", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }

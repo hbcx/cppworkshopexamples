@@ -1,0 +1,10 @@
+title: "is_sorted: check the order"
+standard: "C++11"
+difficulty: 1
+summary: "is_sorted answers whether a range is already in order, an O(n) check. is_sorted_until returns the first element that breaks the order. Use them to skip a needless sort, or to confirm a precondition before an algorithm that needs sorted input."
+notes: "Sometimes you do not need to sort -- you need to know whether the data is already sorted. std::is_sorted(first, last) returns true when the range is in non-decreasing order (or the order your comparator defines, passed as a third argument), in a single O(n) pass. Two uses are common. First, to avoid work: if a range is often already sorted, checking is_sorted and only sorting when it is not can be cheaper than sorting unconditionally, since the check is linear and a sort is n log n. Second, to guard a precondition: algorithms like binary_search, lower_bound, unique, and the set_* operations require sorted input and give wrong answers on unsorted data with no error, so an assert(is_sorted(...)) at the boundary catches a violated assumption where it happens instead of far downstream. std::is_sorted_until(first, last) is the diagnostic version: it returns an iterator to the first element that is out of order -- the point where sortedness breaks -- so you can see how far the range was sorted and what value broke it, which is useful in tests and error messages. Both take an optional comparator that must match the ordering you care about. They are cheap, honest checks -- reach for is_sorted before trusting that a range is ordered, especially right before an algorithm whose correctness depends on it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::is_sorted", url: "https://en.cppreference.com/w/cpp/algorithm/is_sorted" }
+detailed_tags: []

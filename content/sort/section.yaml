@@ -1,0 +1,4 @@
+title: "sort"
+description: "Ordering a range in place: std::sort with the default < or a custom comparator, sorting by a key, and the whole family around it. Covers the basics and descending order, sorting structs by a member and the C++20 ranges::sort with a projection, stable_sort for preserving the order of equal elements, partial_sort and nth_element for when you need only the top few or the median, and is_sorted to check order -- alongside the anti-patterns: a comparator that is not a strict weak ordering, running std::sort on a std::list, a full sort where a partial one or max_element would do, and relying on std::sort to keep the order of equal elements."
+sort_order: 71
+category: "Algorithms"

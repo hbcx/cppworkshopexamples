@@ -1,0 +1,11 @@
+title: "Anti-pattern: relying on std::sort being stable"
+standard: "C++11"
+difficulty: 3
+summary: "std::sort does not promise to keep the original order of elements that compare equal. Code that sorts by one key and expects ties to stay in their previous order has a latent bug -- it may pass today and break on a library change. Use stable_sort when the order of equal elements matters."
+notes: "std::sort is UNSTABLE by specification: among elements the comparator treats as equal, it may leave them in any order, and different implementations (or different versions of the same one) are free to differ. The bug appears when code sorts by a single key and quietly depends on ties keeping some earlier order -- for example sorting rows by group and expecting rows within a group to stay in arrival order, or doing a two-step sort with plain sort and assuming the first sort's order survives the second. It often works in practice, because a given implementation may happen to preserve order for equal elements in easy cases, which is the worst kind of bug: it passes tests and then changes behavior when the standard library is upgraded or the data shape shifts. The example sorts three equal-key rows and deliberately does NOT print that result, because it is unspecified and could differ between compilers -- that unpredictability is the point. The fix is std::stable_sort, which guarantees equal elements keep their input order, and which is exactly how you sort by multiple keys (sort by secondary, stable_sort by primary). Use plain sort when you genuinely do not care about the order of equal elements (and it is a little faster); reach for stable_sort the moment that order carries meaning. The sign to watch for: a std::sort by one field whose correctness depends on the prior order of elements sharing that field, or a chain of plain sorts assuming earlier order is retained."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stable_sort", url: "https://en.cppreference.com/w/cpp/algorithm/stable_sort" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

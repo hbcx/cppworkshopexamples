@@ -1,0 +1,11 @@
+title: "sort: ascending, descending, and a comparator"
+standard: "C++11"
+difficulty: 1
+summary: "std::sort orders a range in place. With no comparator it sorts ascending by <; pass a comparator -- std::greater for descending, or a lambda for any rule -- to change the order. It needs random-access iterators, so it works on a vector, array, or deque."
+notes: "std::sort(first, last) rearranges the elements of the range into ascending order, comparing with operator< and modifying the container in place -- there is no sorted copy, the range itself is reordered. To sort another way you pass a comparator as a third argument: a function object or lambda taking two elements and returning true when the first should come BEFORE the second. std::greater<>{} gives descending order, and a lambda like [](int a, int b){ return a < b; } spells out ascending (or any custom rule -- by length, by absolute value, by a computed key). The comparator must be a strict weak ordering -- roughly, it must behave like < and never report an element as less than itself -- which its own anti-pattern covers, because getting it wrong is undefined behavior, not just a wrong order. std::sort requires RANDOM-ACCESS iterators, so it applies to std::vector, std::array, std::deque and raw arrays, but NOT to std::list or std::forward_list, which have their own member sort. It runs in O(n log n) and is not stable -- equal elements may be reordered, which is why stable_sort exists. This is the workhorse ordering algorithm; the rest of the section is sorting by a key, keeping equal elements in place, ordering only part of a range, and checking whether a range is already sorted."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+detailed_tags:
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }

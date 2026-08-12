@@ -1,0 +1,6 @@
+stable by priority:
+  b (p1)
+  d (p1)
+  a (p2)
+  e (p2)
+  c (p3)

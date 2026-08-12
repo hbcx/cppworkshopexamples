@@ -1,0 +1,2 @@
+smallest 3 (sorted): 1 2 3
+median: 5

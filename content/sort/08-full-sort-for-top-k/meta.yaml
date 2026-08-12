@@ -1,0 +1,13 @@
+title: "Anti-pattern: a full sort for the max or top few"
+standard: "C++11"
+difficulty: 2
+summary: "Sorting the whole range to read just the largest value, or only the top few, does O(n log n) work for an answer that costs less. max_element (or min_element) finds the extreme in one O(n) pass; partial_sort orders only the top N; nth_element gives a rank statistic in O(n) average."
+notes: "A full std::sort orders every element, so using it to read a single value -- the maximum, the minimum -- or a small prefix of the result is paying n log n for something cheaper. The example sorts nine values only to take the last one; max_element does the same in a single linear scan, and *max_element(first, last) returns the largest (min_element the smallest, and they take a comparator for a custom notion of largest). When you want the top few rather than one, partial_sort(first, first + k, last, std::greater{}) puts the k largest in order at the front and leaves the rest unspecified, which is roughly O(n log k) instead of O(n log n) and is the natural top-N leaderboard operation. When you want a rank statistic -- the median, a percentile, the k-th largest -- nth_element places just that one element in its final position in O(n) average without sorting. The rule is to match the work to the question: the extreme is min_element or max_element, the top or bottom few is partial_sort, a single rank is nth_element, and only when you truly need the WHOLE range ordered is a full sort right. The saving is real on large ranges and in hot paths. The sign to watch for: a std::sort whose result is read only at the back (or front), or only a few elements deep, or only at one middle position."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+detailed_tags:
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }

@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "ranges"
+  note: "Where the C++20 form comes from: std::ranges::sort takes the whole range and a projection, so you sort by a member with a default comparator -- go there for range algorithms, projections, and the views a sorted range feeds."
+- slug: "find-find-if"
+  note: "The search a sort enables: once a range is sorted, binary_search and lower_bound find in O(log n), where find over an unsorted range is a linear scan -- go there for the linear search and when to sort first for the faster one."
+- slug: "lists"
+  note: "The container std::sort cannot touch: a std::list has only bidirectional iterators, so it provides its own member sort that relinks nodes instead -- go there for the node-based list and why its sort is separate."
+- slug: "count-count-if"
+  note: "The sibling algorithm for totals rather than order: count says how many match, where sort arranges them -- go there for tallies, thresholds, and progress counts over a range."

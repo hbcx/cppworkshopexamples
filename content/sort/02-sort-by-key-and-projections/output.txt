@@ -1,0 +1,8 @@
+by score (desc):
+  Linus: 88
+  Grace: 65
+  Ada: 42
+by name (asc):
+  Ada: 42
+  Grace: 65
+  Linus: 88

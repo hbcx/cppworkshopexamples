@@ -9,3 +9,5 @@
   note: "What find_if takes as its predicate: a lambda that tests one element, often capturing the value or field you are searching for -- go there for captures and how a closure holds what the predicate compares against."
 - slug: "count-count-if"
   note: "When you need HOW MANY match, not just the first: find_if returns one position and stops, count_if visits everything and totals the matches -- go there for tallies, thresholds, and progress counts."
+- slug: "sort"
+  note: "The faster search a sort unlocks: once a range is sorted, binary_search and lower_bound find in O(log n) instead of find's linear scan -- go there to order a range first, with comparators and stable_sort."

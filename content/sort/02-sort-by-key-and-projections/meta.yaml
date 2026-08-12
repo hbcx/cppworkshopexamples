@@ -1,0 +1,12 @@
+title: "Sorting by a key, and ranges::sort with a projection"
+standard: "C++20"
+difficulty: 2
+summary: "To sort structs by a field, pass a comparator that compares that field. The C++20 std::ranges::sort adds a projection, so you give it the default comparator and a member pointer -- ranges::sort(players, {}, and Player::name) -- keeping the ordering rule and the field selection separate."
+notes: "Real data is usually a range of records sorted by one of their fields. The classic way is a comparator lambda that reaches into both elements: [](const Player& a, const Player& b){ return a.score > b.score; } sorts by score, descending. That works everywhere, but the comparator mixes two decisions -- which field and which direction -- and you repeat the field access on both sides. std::ranges::sort (C++20) separates them with a PROJECTION: ranges::sort(players, {}, and Player::name) passes {} as the comparator, which defaults to ascending less, and and Player::name as the projection that pulls the name out of each element before comparing. So the projection says WHAT to sort by and the comparator says HOW, and each is short. The projection can be a pointer to a data member, a pointer to a method (sort by size() by projecting and std::string::size), or any callable, and to sort descending by a projected field you pass std::greater{} as the comparator. ranges::sort also takes the whole range with no begin/end pair and composes with the ranges world. Prefer it in C++20 for sort-by-field, because the projection removes the repeated field access and reads as the intent; keep the comparator-lambda form when the ordering depends on more than one field at once (a primary and a secondary key compared together)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

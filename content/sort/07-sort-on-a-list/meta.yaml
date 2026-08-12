@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::sort on a std::list"
+standard: "C++11"
+difficulty: 2
+summary: "std::sort needs random-access iterators, but std::list (and forward_list) only provide bidirectional ones, so std::sort on a list does not compile. Use the container's member sort, which relinks nodes in place. And never sort a std::set or map -- they are already ordered and their keys are const."
+notes: "std::sort is built for contiguous, index-like access: it takes midpoints and jumps around the range, which requires RANDOM-ACCESS iterators. A std::vector, std::array, std::deque, or raw array provides those; a std::list and std::forward_list do not -- their iterators are only bidirectional, because a linked list has no O(1) way to reach the middle. So std::sort(list.begin(), list.end()) fails to compile, and the error (about iterator category or missing operator-) is the type system correctly refusing an algorithm the container cannot support. The remedy is the container's OWN sort: std::list::sort and std::forward_list::sort are member functions that sort by RELINKING nodes rather than moving values, which a linked structure can do efficiently and which also keeps element addresses stable. list.sort() takes an optional comparator just like std::sort, and it is stable. The related mistake is trying to std::sort a std::set, std::map, or their multi/unordered cousins: the ordered ones are already sorted by construction and their keys are const so they cannot be rearranged, and the unordered ones have no meaningful order to impose -- if you need a sorted view of a set, copy it into a vector and sort that. The sign to watch for: std::sort (or another random-access algorithm like nth_element) applied to a std::list, forward_list, or an associative container."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
