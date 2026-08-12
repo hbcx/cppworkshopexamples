@@ -1,0 +1,12 @@
+title: "Anti-pattern: overlapping enable_if conditions are ambiguous"
+standard: "C++11"
+difficulty: 3
+summary: "enable_if only removes overloads whose condition is false; it does nothing to rank the ones that remain. If two overloads conditions can both be true for the same type, that type has two equally viable candidates and the call is ambiguous. The fix is to make the conditions mutually exclusive so they partition the types."
+notes: "It is tempting to think of enable_if overloads as ordered -- a specific one and a general one -- but SFINAE does not work that way. It only decides whether each overload EXISTS; among the overloads that survive, ordinary overload resolution applies, and two function templates with the same parameter list and no other tiebreaker are ambiguous. The bad version pairs an is_integral overload with a sizeof(T) <= 4 overload. For int both conditions are true, so both survive, they have the identical parameter T, and there is nothing to prefer one over the other -- the compiler reports an ambiguous call, often far from where the overloads are defined. The fix is to write conditions that PARTITION the types: here the small-integer overload requires is_integral AND sizeof <= 4, and the large-integer overload requires is_integral AND sizeof > 4, so for any integer exactly one is viable. Every enable_if overload set carries this obligation -- you, the author, must guarantee the conditions never overlap, and there is no compiler help until a call actually goes ambiguous. This manual bookkeeping is one of the biggest reasons concepts exist: constrained overloads are ordered by SUBSUMPTION, so a more-constrained overload is automatically preferred over a less-constrained one, and you can write a general version and a specialized version without hand-crafting exclusive conditions or fearing a future overlap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }

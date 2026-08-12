@@ -1,0 +1,12 @@
+title: "enable_if in its three positions"
+standard: "C++11"
+difficulty: 2
+summary: "enable_if is the standard tool for driving SFINAE from a condition: it yields a type when the condition is true and nothing when it is false, so a false condition removes the overload. You can attach it on the return type, as an extra defaulted template parameter, or as a defaulted function parameter -- with the template-parameter form the usual choice."
+notes: "enable_if turns a compile-time bool into the presence or absence of a type: std::enable_if<true, T>::type is T, and std::enable_if<false, T> has no ::type at all. Under SFINAE, a template whose signature names that missing member is dropped from the overload set, so enable_if is how you say this overload only exists when the condition holds. The three positions are equivalent in effect but differ in cost. On the return type it works everywhere but hides the actual return type inside the enable_if, which hurts readability. As an extra template parameter -- typename enable_if<Cond, int>::type = 0 -- it keeps the return type and parameter list honest and is the only form that works on constructors, which have no return type; this is the form you see most in libraries and the one to prefer. As a defaulted function parameter it works too but adds a phantom argument that leaks into diagnostics. A subtle rule that the redefinition anti-pattern covers: in the template-parameter form the enable_if must be a non-type parameter carrying a value (the = 0), because a defaulted TYPE parameter is not part of the signature and two overloads that differ only there collide. All three forms are C++11 and everywhere in older code; in new code a concept or requires-clause expresses the same constraint far more clearly, but you must read enable_if to work with existing templates."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }

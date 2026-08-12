@@ -1,0 +1,12 @@
+title: "Expression SFINAE with decltype"
+standard: "C++11"
+difficulty: 3
+summary: "Instead of probing whether a TYPE is valid, probe whether an EXPRESSION compiles. A trailing return type of decltype(some expression) makes an overload viable only when that expression is well-formed for the deduced type, which is how you ask does this type support this operation."
+notes: "The traits in the earlier examples ask fixed questions about a type -- is it integral, does it have a value_type. Expression SFINAE asks an open one: is this exact expression valid for T. The tool is a trailing return type whose decltype names a candidate expression. serialize is written twice: the first overload returns decltype(x.toString()), so it is viable only for types that have a toString() member, and the second returns decltype(std::to_string(x)), viable only for types std::to_string accepts. For a Widget the first compiles and the second does not, so the first is chosen; for an int it is the reverse. The two never overlap here, so there is no ambiguity. decltype does not evaluate the expression -- it only inspects its type in an unevaluated context -- so nothing is actually called during the check, and the same technique works for probing operators (decltype(a + b)), free functions, conversions, and member access. This is the building block under the detection idiom in the next example, which packages the same probe into a reusable yes/no trait. Two cautions carry over: the expression must sit in the immediate context of the signature to be SFINAE rather than a hard error, and a valid expression proves only that the call compiles, not that it does anything sensible. In C++20 a requires-expression expresses the same probe far more readably -- requires(T t) { t.toString(); } -- with the added ability to constrain the result type in the same breath."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+  - { name: "expression SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "trailing return type", url: "https://en.cppreference.com/w/cpp/language/function" }

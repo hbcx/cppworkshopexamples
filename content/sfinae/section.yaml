@@ -1,0 +1,4 @@
+title: "SFINAE"
+description: "SFINAE -- substitution failure is not an error -- the pre-concepts way to switch a template overload on or off by whether a type or an expression is valid. Covers the core rule, enable_if in its three positions, overloading on a trait, expression SFINAE with decltype, the void_t detection idiom, and detect-and-dispatch -- alongside the anti-patterns, each pointing at the C++20 concept that now does the job better: a hard error outside the immediate context, enable_if default arguments that collide, overlapping conditions that make a call ambiguous, a templated constructor that hijacks copy, a SFINAE overload pair where if constexpr is simpler, and an enable_if wall a concept replaces."
+sort_order: 65
+category: "Generic programming"

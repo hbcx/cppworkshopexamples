@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "concepts"
+  note: "The modern replacement, and the reason this whole chapter is legacy: a concept states the same constraint in one readable line and, when a call fails, names the requirement instead of dumping the overload set -- go there for requires-clauses, named requirements, and subsumption."
+- slug: "type-traits"
+  note: "The vocabulary SFINAE switches on: enable_if, void_t, is_integral and the rest supply the true/false conditions and the ill-formed-or-not probes an overload is enabled by -- go there for the trait toolkit these techniques are built from."
+- slug: "decltype-declval"
+  note: "The tools expression SFINAE is made of: decltype names the type of a probe expression and declval conjures a value to call members on, without constructing anything -- go there for how the detection idiom forms its check."
+- slug: "tag-dispatch"
+  note: "The sibling compile-time selection technique, often paired with a SFINAE detector: the detector yields a true_type or false_type that tag dispatch then routes on to pick an overload -- go there for choosing an implementation by a compile-time property."

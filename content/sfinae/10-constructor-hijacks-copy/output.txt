@@ -1,0 +1,8 @@
+Bad:
+  template ctor
+  template ctor
+  b2.label = from template
+Good:
+  template ctor
+  copy ctor
+  g2.label = from copy

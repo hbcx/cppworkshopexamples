@@ -1,0 +1,2 @@
+h(42)   -> small integer
+h(42LL) -> large integer

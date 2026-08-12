@@ -1,0 +1,11 @@
+title: "SFINAE: substitution failure is not an error"
+standard: "C++11"
+difficulty: 1
+summary: "The core rule in one example. When substituting a deduced type into a template makes its signature ill-formed, the overload is quietly removed from the set instead of causing a compile error, so another candidate can win. Here a container overload probes for a nested value_type and a variadic fallback catches everything else."
+notes: "SFINAE is the mechanism that makes every later technique in this chapter possible, and its name says exactly what it does: when the compiler tries a function template and substituting the argument types into its signature produces something ill-formed, that is a substitution failure, and it is NOT an error -- the compiler simply drops that candidate and keeps looking. The first overload here takes a defaulted parameter of type T::value_type pointer. When T is std::vector, value_type is int and the parameter type is fine, so the overload is viable; when T is int, int has no member value_type, the parameter type is ill-formed, and the overload is removed. The second overload uses a C-style ellipsis parameter, which accepts any arguments but is the worst possible match in overload resolution, so it is chosen only when the first overload is not there; the extra int parameter and the 0 passed at the call are just there to make the container overload the preferred match when it does exist. The important word is quietly: describe(42) does not fail to compile even though the container overload cannot be formed for int -- the failure just prunes that candidate. The two limits to remember, both of which the anti-patterns return to: the failure must happen in the IMMEDIATE context of the signature (a failure deep inside a called template is a hard error instead), and SFINAE only checks that something is well-formed, never that it means the right thing. This is the C++11 way to switch overloads on and off; C++20 concepts do the same job with far better syntax and error messages, but the rule underneath is still this one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

@@ -14,3 +14,5 @@
   note: "The single-function alternative to a tag: an if constexpr branch (or is_constant_evaluated) picks the path inside one function with no tag argument and no extra overloads -- go there for compile-time evaluation, constexpr, consteval, and the if constexpr that replaces this."
 - slug: "type-traits"
   note: "Where the tag usually comes from: a trait produces the true_type or false_type this technique dispatches on, and reads a type's category or properties -- go there for the type-category, relationship and transformation traits that drive the dispatch."
+- slug: "sfinae"
+  note: "How the tag is often computed in the first place: a void_t detector yields the true_type or false_type that tag dispatch then routes on, so detecting a capability and dispatching on it are two halves of one pattern -- go there for enable_if, expression SFINAE, and the detection idiom."

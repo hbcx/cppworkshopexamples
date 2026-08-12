@@ -1,0 +1,3 @@
+classify(42)   -> integer
+classify(3.14) -> floating point
+classify(2.0f) -> floating point

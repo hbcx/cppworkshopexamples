@@ -8,3 +8,5 @@
   note: "Where value categories come from: declval<T>() is an rvalue reference and decltype's rules turn on lvalue, xvalue and prvalue -- go there for the move, forwarding, and rvalue-reference rules those categories drive."
 - slug: "type-traits"
   note: "The other half of the metaprogramming toolkit: traits ask fixed questions about a type (is it integral, strip its reference), where decltype and declval derive types from expressions -- go there for the type-category, relationship and transformation traits."
+- slug: "sfinae"
+  note: "Where decltype and declval do their most famous work: expression SFINAE and the void_t detection idiom probe an expression with decltype(declval<T>()...) to enable an overload or build a has-member trait -- go there for switching overloads on the validity of an expression."

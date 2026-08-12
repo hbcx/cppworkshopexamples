@@ -1,0 +1,14 @@
+title: "Detect a capability and dispatch on it"
+standard: "C++17"
+difficulty: 3
+summary: "The detection idiom is most useful when the answer drives a decision. A has_reserve trait detects whether a container can pre-allocate, and tag dispatch routes the call to a version that reserves or one that does nothing -- so the same generic code takes a fast path for std::vector and skips it for std::list."
+notes: "This is the detection idiom put to work, and a realistic shape you meet in generic library code. has_reserve<T> is built exactly like has_size in the previous example, probing declval<T ref>().reserve(size_t) so it is true for std::vector and false for std::list. The interesting part is how the answer is used. A true_type/false_type is not just a bool -- it is a distinct TYPE, so it can select an overload. reserveImpl is written twice, one taking std::true_type and calling reserve, one taking std::false_type and doing nothing, and the public maybeReserve passes has_reserve<C>{} as the tag, letting overload resolution pick the right body at compile time. This matters because the call c.reserve(n) must not even be COMPILED for a list -- list has no reserve, so a plain runtime if (has_reserve) c.reserve(n) would fail to build. Tag dispatch keeps the reserve call inside a function that is only instantiated for types that have it. The pattern generalises: detect a capability with a void_t trait, then dispatch on the resulting true_type/false_type to enable an optimisation, pick a serialization strategy, or choose between a member and a fallback. In C++17 you could instead write one function with if constexpr (has_reserve<C>::value), which discards the untaken branch and avoids the second overload; in C++20 a concept (requires(C c){ c.reserve(0); }) states the requirement directly. Tag dispatch on a detector is the C++11/14 form of the same idea, and still the clearest when the two implementations are genuinely separate functions."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::void_t", url: "https://en.cppreference.com/w/cpp/types/void_t" }
+  - { name: "std::declval", url: "https://en.cppreference.com/w/cpp/utility/declval" }
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }

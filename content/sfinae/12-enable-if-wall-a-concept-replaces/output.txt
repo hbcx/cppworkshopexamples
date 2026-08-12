@@ -1,0 +1,2 @@
+absValue(-5)  -> 5
+absValue(-7L) -> 7

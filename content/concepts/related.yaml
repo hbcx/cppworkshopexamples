@@ -18,3 +18,5 @@
   note: "Constraining a whole argument pack: a fold over a concept, (std::integral<Ts> && ...), in a requires-clause demands a property of every element -- go there for parameter packs, expansion, and fold expressions."
 - slug: "template-basics"
   note: "What concepts constrain: the function and class templates, deduction, specialization and dependent names that concepts sit on top of -- go there for the template foundations before adding the constraints."
+- slug: "sfinae"
+  note: "What concepts replaced: enable_if, expression SFINAE and the void_t detection idiom did the same constraining job before C++20, with worse syntax and silent no-matching-function errors -- go there to read the technique still filling older code and the standard library."

@@ -1,0 +1,19 @@
+- problem: "A logging or serialization helper must accept many unrelated types -- some have a toString(), some are plain numbers, some are third-party types you cannot change -- and one call site should do the right thing for each."
+  why: "The obvious alternative is a base class every type must inherit, which you cannot add to types you do not own (int, std::string, a vendor struct). A SFINAE detector picks the toString() path when it exists and a fallback otherwise, without touching the types."
+  signal: "A free function overloaded many times by hand, or a base class with a virtual toString() that wrapper types are forced to inherit just to be printable."
+
+- problem: "A generic routine fills a container it was handed. If the container can pre-allocate (reserve), doing so avoids repeated reallocations; if it cannot (std::list, std::set), the call must simply be skipped."
+  why: "Writing one code path per container type does not scale and breaks for user containers. A has_reserve detector enables the reserve call only where it compiles, so the fast path is taken when available and silently dropped otherwise."
+  signal: "A template that calls .reserve() and therefore only builds for vector-like types, or a comment saying it assumes the container has reserve()."
+
+- problem: "A value-like wrapper (an any, an optional, a small string type) needs a constructor that accepts anything convertible to its payload, but that greedy template must not swallow copies, moves, or types it cannot actually store."
+  why: "An unconstrained template U-ampersand-ampersand constructor is a better match than the copy constructor for a non-const lvalue, so it hijacks copying; enable_if excluding the own type is how the standard library's own wrappers stay correct."
+  signal: "A class with both a copy constructor and a template constructor taking a forwarding reference and no enable_if -- copies that mysteriously call the template, or errors about converting the class to its own member type."
+
+- problem: "In a C++11 or C++14 codebase a function must run different code for integers, floating-point, and pointers, chosen at compile time with no runtime branch."
+  why: "Before if constexpr (C++17) a single function could not hold branches that are ill-formed for the other types; a set of enable_if overloads, or tag dispatch on a trait, was the only way to compile just the branch that applies."
+  signal: "In pre-C++17 code, a family of same-named function templates each guarded by enable_if on is_integral, is_floating_point or is_pointer."
+
+- problem: "You maintain code written before concepts, or step into the standard library and Boost headers, where enable_if, void_t and the detection idiom are everywhere."
+  why: "Concepts replace SFINAE for new code, but they do not rewrite the millions of lines already using it; you cannot debug an overload-resolution failure in libstdc++ or a Boost header without reading SFINAE fluently."
+  signal: "Compiler errors pointing into the type_traits header, an enable_if_t in a library signature, or a primary-template plus void_t partial-specialization pair in a header you did not write."

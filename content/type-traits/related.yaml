@@ -10,3 +10,5 @@
   note: "Where traits are folded over a pack: an && fold of a trait constrains every element of a variadic template, and make_index_sequence drives pack expansion -- go there for parameter packs, fold expressions, and constraining a pack."
 - slug: "template-basics"
   note: "The specialization traits are made of: the standard traits are primary templates plus partial specializations -- go there for the class-template specialization mechanism, plus function and class templates, deduction and dependent names."
+- slug: "sfinae"
+  note: "Where traits become a switch: enable_if turns a trait into an on/off condition on an overload, and void_t turns a decltype probe into a has-member trait -- go there for using these traits to select and constrain templates the pre-concepts way."

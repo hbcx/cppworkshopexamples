@@ -1,0 +1,4 @@
+nameOld(42)   -> integer
+nameOld(3.14) -> other
+nameNew(42)   -> integer
+nameNew(3.14) -> other

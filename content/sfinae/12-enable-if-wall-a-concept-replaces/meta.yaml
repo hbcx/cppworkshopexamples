@@ -1,0 +1,13 @@
+title: "Anti-pattern: an enable_if wall a concept replaces"
+standard: "C++11"
+difficulty: 2
+summary: "A multi-part enable_if condition on the return type works, but it is hard to read and, when a call does not match, produces only no matching function with a wall of rejected candidates and no reason. A C++20 concept states the same constraint in one line and reports the specific requirement that failed."
+notes: "This closes the chapter by naming what all the earlier techniques cost even when used correctly. The absValue here is constrained the pre-C++20 way: an enable_if on the return type ANDing four traits to demand a signed integer that is not bool or char. It compiles and does the right thing, but two problems remain. Readability -- the real return type T is buried at the end of a nested enable_if, and the intent (a plain signed integer) is spelled as a boolean puzzle the reader must decode. Diagnostics -- and this is the bigger one. SFINAE removes a non-matching overload SILENTLY, so when you call absValue with a wrong type the compiler cannot say your type is not a signed integer; it can only report that, after removing every candidate, there is no matching function, and then list the candidates it discarded without saying why each failed. On a real overload set that is a page of noise. The C++20 version, shown in the comment, is a named concept used directly in the signature: it reads as the constraint it is, and a violation reports constraints not satisfied naming the concept and the argument type. This is why concepts were added, and the practical guidance for the whole chapter follows from it -- learn SFINAE to read and maintain the vast body of pre-C++20 code and the standard library internals that rely on it, but for new code express constraints with concepts and reserve enable_if for the corners concepts do not reach."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }
+  - { name: "std::is_same", url: "https://en.cppreference.com/w/cpp/types/is_same" }

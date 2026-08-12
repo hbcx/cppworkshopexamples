@@ -1,0 +1,2 @@
+f(42)   -> integral overload
+f(3.14) -> non-integral overload

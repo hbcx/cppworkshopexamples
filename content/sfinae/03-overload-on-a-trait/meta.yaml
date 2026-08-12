@@ -1,0 +1,13 @@
+title: "Overloading on a type trait"
+standard: "C++11"
+difficulty: 2
+summary: "The classic pre-C++17 pattern: write the same function twice, each overload enabled by a mutually exclusive trait, and let overload resolution pick the one that applies. Here one overload handles integers and the other floating-point, selected entirely at compile time with no runtime check."
+notes: "This is how compile-time dispatch was done for a decade. Each overload of classify is guarded by an enable_if on a different trait -- is_integral for one, is_floating_point for the other -- so for any given argument exactly one overload has a valid signature and the rest are removed by SFINAE. The result is that classify(42) and classify(3.14) run different code chosen at compile time, with no runtime type check and no shared branch. The rule that makes it work is that the conditions must PARTITION the types: they must never both be true for the same T, or the call has two equally viable candidates and is ambiguous, which the overlapping-conditions anti-pattern shows. A type that satisfies neither -- classify on a pointer, say -- has no viable overload at all, which is usually what you want (a clear error at the call). Two things replaced this pattern in modern C++. When the branches live in one function and differ only by a compile-time condition, if constexpr (C++17) folds them into a single function and is simpler. When you are constraining which types an overload accepts, concepts (C++20) order overloads by subsumption, so you write the more-constrained and less-constrained versions and the compiler prefers the tighter one without you hand-crafting exclusive conditions. Learn this form to read older code; reach for if constexpr or concepts in new code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }
+  - { name: "std::is_floating_point", url: "https://en.cppreference.com/w/cpp/types/is_floating_point" }

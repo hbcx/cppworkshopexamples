@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 24}, {"file": "main.cpp", "line": 25, "out": "has_size<std::vector<int>> = true\n"}, {"file": "main.cpp", "line": 26, "out": "has_size<int>              = false\n"}, {"file": "main.cpp", "line": 27}, {"file": "main.cpp", "line": 28}]}

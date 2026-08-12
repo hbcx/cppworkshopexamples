@@ -1,0 +1,3 @@
+serialize(Widget) -> Widget
+serialize(42)     -> 42
+serialize(3.5)    -> 3.500000

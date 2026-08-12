@@ -1,0 +1,13 @@
+title: "Anti-pattern: enable_if in a default template argument collides"
+standard: "C++11"
+difficulty: 3
+summary: "Guarding two overloads with enable_if written as a defaulted TYPE parameter fails to compile as a redefinition, because default template arguments are not part of a template's signature. The fix is to make the enable_if a non-type parameter with a value, so the parameter type itself differs between the overloads."
+notes: "This is one of the most common SFINAE beginner traps, and the error message -- redefinition of g -- gives no hint why. The natural first attempt is template <class T, typename = enable_if_t<Cond>> void g(T), copied for a second condition. It looks like two overloads, but a DEFAULT template argument is not part of the signature; strip the defaults and both are template <class T, class> void g(T), the identical signature, so the second is a redefinition of the first, not an overload of it. Nothing about SFINAE even gets a chance to run. The fix is small but has to be understood: make the extra parameter a NON-TYPE parameter that carries a value, typename enable_if<Cond, int>::type = 0. Now the enable_if is the parameter's TYPE rather than its default, and the two overloads have genuinely different parameter lists -- one parameter is enable_if<is_integral, int>::type, the other enable_if<is_floating_point, int>::type -- so they are distinct templates and SFINAE can disable whichever does not apply. The rule to remember: what distinguishes two enable_if overloads must be part of the SIGNATURE, which a default argument is not and a parameter type is. This is exactly the kind of syntax booby-trap concepts remove: two requires-constrained overloads, or two functions taking a constrained parameter, are distinct by construction and read as what they are."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }
+  - { name: "std::is_floating_point", url: "https://en.cppreference.com/w/cpp/types/is_floating_point" }

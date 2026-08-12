@@ -1,0 +1,13 @@
+title: "Anti-pattern: a hard error where you expected SFINAE"
+standard: "C++11"
+difficulty: 3
+summary: "SFINAE only turns a substitution failure into a dropped overload when the failure happens in the immediate context of the signature. A failure deeper in -- inside a trait or helper that substitution instantiates -- is an ordinary hard error, so the overload is not removed and the build stops. The fix is to keep the condition a plain check in the signature itself."
+notes: "The word IMMEDIATE in the SFINAE rule is the whole trap. Substitution failure is recoverable only when it occurs directly in the function's signature -- the template parameter list, the return type, the parameter types. If forming the signature triggers instantiation of ANOTHER template and the failure happens inside that template's body, it is not a substitution failure at all, it is a hard error, and it aborts compilation instead of pruning the overload. The bad version here routes its enable_if condition through StrictSize<T>, whose body has a static_assert that T is integral. For a floating-point T that assert fires inside StrictSize, a non-immediate context, so f(3.14) does not fall through to another overload -- it fails to build with a confusing error that points into StrictSize, not into f. The good version keeps the test as std::is_integral<T>::value written directly in the signature: a false result is a clean substitution failure, the integral overload drops out, and the non-integral overload wins. The practical rules: put the actual condition in the signature, not behind a helper that can hard-error; and when you write your own traits, make them SFINAE-FRIENDLY -- yield false_type for the unsupported case rather than static_asserting, so callers can test them without exploding. This is also a strong argument for concepts: a requires-clause is evaluated in a context built for constraint checking, and a concept that is not satisfied produces a named, readable failure instead of a hard error deep in a helper."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }

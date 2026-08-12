@@ -1,0 +1,13 @@
+title: "Anti-pattern: two SFINAE overloads where if constexpr is simpler"
+standard: "C++17"
+difficulty: 2
+summary: "When two branches live in one function and differ only by a compile-time condition, a pair of enable_if overloads duplicates the signature, repeats the trait, and forces you to keep the conditions exclusive by hand. C++17 if constexpr folds them into a single function that compiles only the taken branch."
+notes: "Not every SFINAE overload set should be an overload set. A very common use of enable_if is a two-way compile-time branch inside what is conceptually one function -- do this for integers, that for everything else. Written as two overloads it costs a duplicated signature, the trait spelled twice with a negation you must keep correct, and the standing risk of an ambiguous call if the conditions ever overlap. if constexpr (C++17) expresses the same thing as one function with an ordinary if whose condition is a constant: the branch not taken is discarded before instantiation, so it is never type-checked against T, which means each branch may use members or operations that would be ill-formed for the other type -- the same power the separate overloads gave you, without the duplication. The result is shorter, has one signature, and cannot go ambiguous. The honest scope: if constexpr replaces SFINAE only when the choice is INSIDE one function body. It does not replace SFINAE or concepts when you need to enable or disable a whole function for overload resolution (so a different function, or a fallback in another header, can be chosen), or when you are constraining which types a template accepts at the call site. For selecting one implementation among branches you control, reach for if constexpr; for constraining an interface, reach for a concept; keep enable_if mainly for reading older code and for the overload-set cases the newer tools do not cover."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "if constexpr", url: "https://en.cppreference.com/w/cpp/language/if" }
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }

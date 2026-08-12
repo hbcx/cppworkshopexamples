@@ -1,0 +1,14 @@
+title: "The void_t detection idiom"
+standard: "C++17"
+difficulty: 3
+summary: "Turn an expression probe into a reusable trait. A primary class template inherits false_type, and a partial specialization guarded by std::void_t of a decltype inherits true_type -- so the specialization is chosen only when the probed expression is valid. This is the standard way to answer does type T have this member."
+notes: "Expression SFINAE picks a function overload; the detection idiom does the same test but produces a value trait you can query and reuse. It has three moving parts. The primary template has_size takes a second, defaulted-to-void type parameter and inherits std::false_type -- this is the answer when nothing better matches. The partial specialization fixes that second argument to std::void_t<decltype(declval<T>().size())>: std::void_t is an alias that is void for any well-formed argument types, so when declval<T>().size() is a valid expression the whole thing is void, the specialization matches has_size<T, void>, and true_type wins; when the expression is ill-formed the specialization is removed by SFINAE and the primary's false_type stands. std::declval<T>() yields a value of T in an unevaluated context so you can name .size() without constructing a T, and decltype inspects the call's type without running it. The result is has_size<X>::value, a compile-time bool you can static_assert on, feed to enable_if, or dispatch on -- which the next example does. std::void_t is C++17, though the same trick predates it with a one-line helper. The detection idiom was common enough that the library once proposed a general std::is_detected for it. In C++20 you would not write any of this: requires(T t) { t.size(); } is the same check in one readable line, and a named concept makes it reusable. Learn the idiom to read pre-C++20 headers, where it is everywhere."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::void_t", url: "https://en.cppreference.com/w/cpp/types/void_t" }
+  - { name: "std::declval", url: "https://en.cppreference.com/w/cpp/utility/declval" }
+  - { name: "std::true_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }
+  - { name: "std::false_type", url: "https://en.cppreference.com/w/cpp/types/integral_constant" }

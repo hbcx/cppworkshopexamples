@@ -1,0 +1,14 @@
+title: "Anti-pattern: a templated constructor that hijacks copy"
+standard: "C++11"
+difficulty: 3
+summary: "An unconstrained template constructor taking a forwarding reference is a better match than the copy constructor when you copy a non-const object, so copies silently call the template. The classic fix is enable_if that excludes the class's own type, using decay to catch every reference and cv spelling of it."
+notes: "A converting constructor written as a forwarding reference -- template <class U> C(U ref-ref) -- is meant to accept anything convertible to the payload, but it is greedy in a way that bites. When you copy a NON-const lvalue, Bad b2 = b1, the copy constructor Bad(const Bad ref) must add const to bind, while the template with U = Bad ref is an exact match needing no conversion, so overload resolution prefers the template. The copy quietly runs the template constructor instead of copying -- in real code this usually shows up as a compile error deep inside the template body (trying to build the payload from the class itself) or, as here, an object that took the wrong path. The output makes it visible: Bad b2, which should be a copy of b1, reports from template. The fix is the canonical enable_if guard: disable the template constructor when U, after std::decay strips its reference and cv-qualifiers, is the class itself -- !is_same<decay_t<U>, Good>. Now copying a Good finds only the real copy constructor, while genuine conversions still use the template. This is why the standard library's own wrappers (any, optional, function, and others) carry exactly this kind of constraint on their perfect-forwarding constructors. It is also a textbook case for concepts: in C++20 you would constrain the constructor with requires (!std::same_as<std::decay_t<U>, Good> && ...), which reads as the intent instead of an enable_if incantation, and gives a clear message when a type is rejected."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "SFINAE", url: "https://en.cppreference.com/w/cpp/language/sfinae" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::is_same", url: "https://en.cppreference.com/w/cpp/types/is_same" }
+  - { name: "std::decay", url: "https://en.cppreference.com/w/cpp/types/decay" }
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }

@@ -1,0 +1,2 @@
+has_size<std::vector<int>> = true
+has_size<int>              = false
