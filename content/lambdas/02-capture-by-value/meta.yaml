@@ -1,0 +1,11 @@
+title: "Capture by value: a snapshot"
+standard: "C++11"
+difficulty: 1
+summary: "Naming a variable in the capture list, [factor], copies it into the closure when the lambda is created. The closure keeps its own copy, so later changes to the original variable do not affect it -- the capture is a snapshot taken at creation time."
+notes: "The capture list is what separates a lambda from a plain function: it decides which of the surrounding variables the closure can see and how. [factor] captures BY VALUE, which means the closure stores a copy of factor, made at the point the lambda object is constructed -- not each time it is called. So scale holds factor as 10 from creation, and setting factor to 100 afterwards changes only the outer variable; the closure still multiplies by its own copy, 10. This snapshot behavior is usually what you want when the closure might be stored and called later, because the copy lives inside the closure and does not depend on the original still existing. Two details worth knowing early. The copy is made once, at creation, so a by-value capture of an expensive object copies it then -- if that is costly, capture a reference (next example) or move it in with init-capture. And a by-value capture is read-only inside the body by default: to modify the closure's own copy you add mutable, which is its own example. Capture by value is the safe default when a closure outlives the scope it was written in, exactly because it does not reach back out to variables that may be gone."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

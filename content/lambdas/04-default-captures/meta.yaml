@@ -1,0 +1,11 @@
+title: "Default and mixed captures"
+standard: "C++11"
+difficulty: 2
+summary: "A capture-default captures everything the body uses without naming each variable: [=] by value, [&] by reference. A mixed list sets a default and then names the exceptions, like [&, base] -- all by reference except base by value."
+notes: "The capture-defaults save typing when a lambda touches several variables: [=] captures by value every automatic variable the body actually uses, and [&] captures them all by reference. Only what the body references is captured, so [=] does not copy the whole scope, just what it needs. The mixed forms let you choose a default and override individuals: [&, base] is by reference by default but base by value, and [=, &out] is by value except out by reference -- handy when one variable needs the opposite treatment. The example shows the two defaults are independent snapshots versus links: byValue keeps its own copies (still 6 after the originals are multiplied), byRef changes the originals, and mix reads a live reference to a but a frozen copy of base. Two cautions make many teams restrict the defaults. [&] makes it easy to capture a reference that later dangles, because you no longer see which locals you grabbed. And [=] inside a member function does NOT copy the object's members -- it captures this (a pointer), so member access goes through it and can dangle; that surprise is common enough to be its own anti-pattern, and C++20 deprecated the implicit this in [=] for it. Many style guides prefer naming captures explicitly ([a, &b]) precisely so it is obvious what the closure holds and how; the defaults are convenient but hide exactly the thing -- the capture -- that makes lambdas subtle."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

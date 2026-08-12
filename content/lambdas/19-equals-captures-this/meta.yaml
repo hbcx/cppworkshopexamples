@@ -1,0 +1,11 @@
+title: "Anti-pattern: [=] captures this, not members by value"
+standard: "C++17"
+difficulty: 3
+summary: "Inside a member function, [=] does not copy the object's members -- it captures the this pointer, and member access goes through it. So a closure that looks like it holds members by value actually shares the object and dangles if it dies. Use [*this] to copy the object, or name the members."
+notes: "It is natural to read [=] as capture everything by value and assume that, in a member function, the members are therefore copied into the closure. They are not. A lambda cannot capture members individually through the default; instead [=] (and [&]) capture THIS -- the object pointer -- and every mention of a member inside the body is really this->member. So getReader here returns a closure that holds a pointer to the Widget, not a copy of value, and once that Widget is destroyed the closure reads through a dangling pointer: undefined behavior, exactly the danger a by-value capture was supposed to avoid. The example stores the closure past the object's lifetime and, rather than run the broken one (UB), runs the fix. The fixes are explicit about what to copy. [*this] (C++17) captures a COPY of the whole object into the closure, so it is self-contained and safe to outlive the original -- getSafeReader still returns 99 after the Widget is gone. If you only need one member, capture it by init-capture, [v = value], which copies just that. Because this pitfall caught so many people, C++20 DEPRECATED the implicit this capture in [=]: writing [=] in a member that uses members now warns, and you say [=, this] to keep the pointer or [=, *this] / [*this] to copy the object. The sign to watch for: a lambda in a member function that uses members and is returned or stored, captured with [=] or [&] -- it is sharing the object, and its safety depends entirely on the object outliving the closure."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

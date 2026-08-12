@@ -1,0 +1,4 @@
+captured area: 20
+hello Ada
+moved-in value: 42
+original pointer is now null

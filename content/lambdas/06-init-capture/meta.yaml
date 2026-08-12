@@ -1,0 +1,13 @@
+title: "Init-capture: compute, rename, and move in"
+standard: "C++14"
+difficulty: 2
+summary: "Init-capture (C++14) writes [name = expression] to introduce a new closure member initialized by any expression, not just a copy of an existing variable. Its most important use is capturing by move -- getting a unique_ptr or another move-only value into a closure."
+notes: "Plain captures can only copy or reference an existing variable. Init-capture, also called generalized capture, lets the capture INTRODUCE a member and initialize it from an expression: [a = width * height] stores the computed product, [name = std::string(Ada)] stores a value built in place, and you can rename while you are at it. The reason it was added, though, is move capture. Before C++14 there was no way to move an object into a closure -- a by-value capture copies, and move-only types like unique_ptr cannot be copied, so they simply could not be captured by value. Init-capture solves it: [p = std::move(up)] move-constructs the closure's member from up, so the closure OWNS the pointer and the original is left null. This is how you give a closure sole ownership of a resource -- a unique_ptr, a large buffer, a file handle wrapper -- which matters when the closure will be stored and run later (a task queued on a thread pool, a deferred callback). It is also the efficient way to capture a big object you no longer need outside: move it in rather than copy. The member is a real data member of the closure, so mutable applies if you want to modify it, and its type is deduced from the initializer like auto. Reach for init-capture whenever a capture needs to be more than a straight copy or reference of a named variable -- especially to move."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "init-capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

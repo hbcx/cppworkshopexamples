@@ -1,0 +1,4 @@
+byValue (snapshot of 1+2+3): 6
+after byRef, a b c = 10 20 30
+byValue still: 6
+mix (a by ref = 10, base by value = 5): 15

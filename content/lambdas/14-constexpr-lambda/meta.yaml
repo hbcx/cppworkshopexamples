@@ -1,0 +1,13 @@
+title: "constexpr and consteval lambdas"
+standard: "C++20"
+difficulty: 3
+summary: "A lambda is implicitly constexpr when its body qualifies (C++17), so it can run in constant expressions -- filling a compile-time table or feeding a static_assert. Marking it consteval (C++20) requires it to run at compile time, turning a run-time call into an error."
+notes: "Since C++17 a lambda whose body meets the constexpr rules is constexpr automatically, without the keyword, so it can be evaluated at compile time wherever a constant expression is needed: square(9) inside a static_assert runs during compilation, and an immediately-invoked lambda can build a std::array table that is a compile-time constant, giving you the full power of ordinary code -- a loop, locals -- to compute a constant instead of a cramped initializer or a recursive template. You can write constexpr explicitly on the lambda to REQUIRE that it be usable in constant expressions (the compiler then diagnoses a body that accidentally is not). consteval, from C++20, goes further: a consteval lambda is an immediate function that MUST be evaluated at compile time, so cube(3) is fine when the result is itself constant, but calling it with a run-time value is an error -- the strongest guarantee that no work leaks into the run-time binary. This mirrors the constexpr and consteval story for functions in the constexpr-consteval chapter, now on closures, which matters because a lambda is often the most convenient place to write a small compile-time helper -- a table generator, a compile-time check -- right where it is used. Prefer the implicit constexpr for values you want available at compile time but also usable at run time; reach for consteval when compile-time evaluation must be guaranteed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+  - { name: "consteval", url: "https://en.cppreference.com/w/cpp/language/consteval" }
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }

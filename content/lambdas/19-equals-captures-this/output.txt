@@ -1,0 +1,1 @@
+safe reader ([*this] copy): 99

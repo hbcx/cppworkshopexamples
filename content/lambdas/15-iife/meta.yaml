@@ -1,0 +1,10 @@
+title: "The immediately-invoked lambda for const init"
+standard: "C++11"
+difficulty: 2
+summary: "Writing a lambda and calling it in the same expression, [] { ... }(), runs a block of logic in place and yields a value. Its main use is initializing a const (or a member) that needs branching or a loop to compute, so the variable can stay const."
+notes: "An immediately-invoked lambda -- define it and put () right after -- is a way to run several statements where an expression is expected, and use their result. The reason to reach for it is const initialization. Often a value needs real logic to compute: a setting chosen by a chain of conditions, a string built up in a loop, a lookup with a fallback. The usual workaround is to declare the variable non-const, fill it with statements, and then never touch it again -- which throws away the const guarantee and leaves a variable that only LOOKS mutable. An IIFE keeps the logic inline and hands back the finished value to a const: the branches or the loop run inside the lambda, and const level = [] { ... }() is const from the start. Compared with lifting the logic into a named helper function, the IIFE keeps it right at the point of use when it is not reused anywhere else, and it can capture nearby locals if it needs them. The cost is a little visual noise (the trailing ()), so it earns its place when the initialization is genuinely more than one expression; for a simple value a plain initializer is clearer. It is also the natural shape for a constexpr table (previous example) and for member initialization in a constructor's initializer list, where you cannot write statements otherwise."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags: []

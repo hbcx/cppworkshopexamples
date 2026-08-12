@@ -20,3 +20,5 @@
   note: "What concepts constrain: the function and class templates, deduction, specialization and dependent names that concepts sit on top of -- go there for the template foundations before adding the constraints."
 - slug: "sfinae"
   note: "What concepts replaced: enable_if, expression SFINAE and the void_t detection idiom did the same constraining job before C++20, with worse syntax and silent no-matching-function errors -- go there to read the technique still filling older code and the standard library."
+- slug: "lambdas"
+  note: "Constraining a closure: a template lambda takes a concept on its invented type parameter, []<std::integral T>(T), and a plain auto lambda parameter is the unconstrained form -- go there for closures, captures, and generic and template lambdas."

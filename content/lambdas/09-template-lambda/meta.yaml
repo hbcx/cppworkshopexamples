@@ -1,0 +1,12 @@
+title: "Template lambdas: naming the type"
+standard: "C++20"
+difficulty: 3
+summary: "A template lambda (C++20) writes an explicit template parameter list, []<class T>(...), so the body can use the type T by name -- to construct a T, match a shape like vector<T> in the parameter, or constrain it with a concept. It is a generic lambda that gives back the type."
+notes: "A generic lambda with auto gives you the VALUE but never the type: you cannot write T{}, name vector<T>, or refer to the element type, because auto hides it. The template lambda, added in C++20, restores the explicit template header on a lambda -- []<class T>(const std::vector<T>& v) -- so T is a real named parameter you can use. That unlocks three things the example shows: constructing or default-constructing a value of the deduced type (T{}), pattern-matching the argument's shape so the lambda only accepts a vector and pulls out its element type, and constraining the parameter with a concept, []<std::integral T>(T x), which rejects non-integers at the call with a clear message just like a constrained function template. You can also give it a non-type or variadic template parameter, the full template header. In effect a template lambda is the local, inline form of a function template, chosen when you need the type and a plain auto is not enough; when you only need the value, the shorter generic-lambda auto form is fine. This is the most template-like a lambda gets, and it composes with everything else here -- captures, mutable, trailing return type -- unchanged."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "template lambda", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "std::integral", url: "https://en.cppreference.com/w/cpp/concepts/integral" }

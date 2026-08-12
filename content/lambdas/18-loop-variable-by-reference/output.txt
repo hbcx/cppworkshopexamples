@@ -1,0 +1,2 @@
+by reference (all see final i = 3): 3 3 3 
+by value (each its own snapshot): 0 1 2 

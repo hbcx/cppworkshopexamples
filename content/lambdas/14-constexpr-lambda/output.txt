@@ -1,0 +1,2 @@
+compile-time table: 0 1 4 9 16 
+consteval cube(3) = 27

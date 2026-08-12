@@ -1,0 +1,11 @@
+title: "Return type: deduced or trailing"
+standard: "C++11"
+difficulty: 2
+summary: "A lambda deduces its return type from the return statement, so you usually write none. A trailing -> Type is needed when different returns would deduce different types, or when you want to force a specific return type such as a reference or a wider numeric type."
+notes: "For the common case a lambda needs no return type: the compiler deduces it from the return expression, just as auto does for a function, so [](int a, int b){ return a + b; } returns int. You must write an explicit trailing return type, ->Type after the parameter list, in two situations. First, when the body has more than one return and they would deduce to DIFFERENT types -- an int in one branch and a double in another -- the compiler cannot pick one and rejects it; ->double tells it the common type and each branch converts. Second, when the deduced type is not the one you want: deduction strips references and gives a value, so to return a reference (into a captured container, say) you write -> T& explicitly, and to force a wider type (return double from integer inputs) you name it. The trailing form is required because the return type sits after the parameters -- there is no room for it before the [] the way a normal function has a leading return type. In modern code decltype(auto) as the trailing type is another option when you want the exact type of the returned expression, references and all. Most lambdas are fine on deduction; reach for the trailing type the moment the branches disagree or you need a type deduction would not give you."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "trailing return type", url: "https://en.cppreference.com/w/cpp/language/function" }

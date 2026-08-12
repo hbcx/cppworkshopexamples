@@ -1,0 +1,11 @@
+title: "Lambda basics: an inline function object"
+standard: "C++11"
+difficulty: 1
+summary: "A lambda is a compact way to write a function object right where you use it. The compiler turns it into an unnamed class with an operator(); you store it in auto and call it like a function, and its main job is handing small behavior to algorithms."
+notes: "A lambda expression, [](params){ body }, is not a special language primitive at run time -- the compiler generates an anonymous class (the closure type) with an operator() holding the body, and the lambda is an object of that class. That is why you hold it in auto: the type has no name you could write. Calling it, square(5), invokes the operator(). The empty [] is the capture list, covered next; with nothing captured the closure is just a packaged function. The reason lambdas matter is the standard algorithms: sort, count_if, find_if, for_each and the rest take a callable, and before lambdas you had to write a named comparator or a functor struct somewhere far from the call. A lambda puts that logic exactly where it is used -- sort(v.begin(), v.end(), [](int a, int b){ return a > b; }) says descending right at the call site. Two facts to carry forward: every lambda, even two spelled identically, has its own distinct type, which shapes how you store and pass them (a later example); and a lambda with no captures is convertible to a plain function pointer, while one with captures is not. Everything else in this chapter builds on this -- the capture list is where the real range of lambdas comes from."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

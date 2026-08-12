@@ -10,3 +10,5 @@
   note: "How to constrain a whole pack: a fold over a concept, (std::integral<Ts> && ...), in a requires-clause demands a property of every argument -- go there for named requirements and constrained templates."
 - slug: "template-basics"
   note: "The single-parameter templates a pack generalises: function and class templates, deduction, specialization and dependent names -- go there for the fixed-arity foundations before adding a parameter pack."
+- slug: "lambdas"
+  note: "Packs and folds inside a closure: a variadic lambda takes auto... and folds it, and C++20 can capture the pack by move into the closure -- go there for closures, captures, and the lambda-shaped form of this machinery."

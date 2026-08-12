@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "move-semantics"
+  note: "What init-capture by move rests on: [p = std::move(ptr)] moves a value into the closure, and capturing a heavy or move-only object turns on the same value-category and rvalue rules -- go there for std::move, forwarding, and why a move must be cheap and noexcept."
+- slug: "type-erasure"
+  note: "What std::function does to store a lambda: it erases the closure's unique type behind one callable value through a virtual call and an allocation, the cost the storing-lambdas example weighs -- go there for how type erasure works and when to pay for it."
+- slug: "variadic-templates"
+  note: "What a variadic lambda is built from: auto... in the parameter list is a parameter pack, and a fold expression combines it, the same machinery as a variadic function template -- go there for packs, expansion, and folds."
+- slug: "concepts"
+  note: "How to constrain a template lambda: []<std::integral T>(T) puts a concept on the invented parameter exactly as on any template, and a plain auto parameter is an unconstrained one -- go there for named requirements and constrained templates."

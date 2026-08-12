@@ -1,0 +1,12 @@
+title: "Generic lambdas with auto parameters"
+standard: "C++14"
+difficulty: 2
+summary: "An auto parameter (C++14) makes the lambda generic: the compiler gives its operator() a template parameter, so one lambda handles many argument types, each call instantiated for the type passed. auto&& makes the parameter a forwarding reference."
+notes: "Writing auto for a lambda parameter turns the closure's call operator into a template -- [](auto x){ ... } is, underneath, a member template operator()(T x). So a single generic lambda accepts int, double, std::string, or anything the body supports, and the compiler instantiates a fresh version per type at each call, exactly like a function template. This is what makes a lambda usable as a visitor over several types, or a one-liner passed to an algorithm that runs on whatever element type the container holds, without spelling out the type. const auto& is the common read-only form (bind to anything, no copy), and auto&& is a forwarding reference: it binds to both lvalues and rvalues and preserves the value category, which is what you want in a generic wrapper that passes the argument on (with std::forward). The relationship to templates is exact -- a generic lambda is the terse spelling of a small function template, and the next example, the template lambda, adds back the ability to NAME the type when auto alone is not enough. Reach for a generic lambda whenever the same tiny operation should work across types and you would otherwise write it out per type or lift it into a named template."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "generic lambda", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "auto", url: "https://en.cppreference.com/w/cpp/language/auto" }

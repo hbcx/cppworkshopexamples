@@ -1,0 +1,4 @@
+penalize(): 90
+outer score still: 100
+penalize() again: 80
+penalize() again: 70

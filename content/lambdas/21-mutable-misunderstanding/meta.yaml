@@ -1,0 +1,12 @@
+title: "Anti-pattern: misreading what mutable does"
+standard: "C++11"
+difficulty: 2
+summary: "mutable is often misread two ways: that it lets the lambda change the outside variable (it does not -- the capture is a copy), and that each call starts fresh from the captured value (it does not -- the copy persists and accumulates). mutable only makes the closure's own by-value copies writable."
+notes: "mutable does exactly one thing: it removes the const from the closure's operator() so the body may assign to its BY-VALUE captures. Two wrong mental models grow from that, and both show up as bugs. The first is thinking mutable connects the lambda back to the original variable -- that penalize modifying score changes the outer score. It cannot: [score] captured a COPY, and mutable only lets the body edit that copy, so the outer score stays 100. If you actually want to affect the caller's variable, capture it by reference ([&score]); mutable is irrelevant to that. The second is thinking each call re-reads the captured value, so penalize would return 90 every time. It does not: the copy lives in the closure OBJECT and persists across calls, so ++ or -= accumulates -- 90, then 80, then 70. That persistence is the useful feature when you WANT a stateful lambda (the mutable example builds a counter on it), but it surprises people who expected a pure function of the capture. The way to keep it straight: a by-value capture is a member of the closure; mutable makes that member writable; the member lives as long as the closure. If you need to change the outside, use a reference capture; if you need a clean value per call, pass it as an argument instead of capturing it. The sign to watch for: a mutable lambda whose author seems to expect either the outer variable to change or each call to reset -- neither happens."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "mutable", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

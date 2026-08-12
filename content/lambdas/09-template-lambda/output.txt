@@ -1,0 +1,3 @@
+firstOf(nums) = 7
+zeroOf(nums) = 0
+doubleIt(21) = 42

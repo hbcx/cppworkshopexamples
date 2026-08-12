@@ -1,0 +1,2 @@
+via std::function (type-erased): 55
+via template (zero overhead):    55

@@ -1,0 +1,11 @@
+title: "Captureless lambda to function pointer"
+standard: "C++11"
+difficulty: 2
+summary: "A lambda with an empty capture list converts implicitly to a plain function pointer, because it carries no state. That makes captureless lambdas usable with C APIs and callbacks that take a function pointer -- while a capturing lambda, which holds state, does not convert."
+notes: "A closure with no captures needs to store nothing, so the standard says its type has an implicit conversion to a matching function pointer -- the compiler can generate a plain function with the lambda's body and hand back its address. That is why int (*fp)(int) = [](int x){ return x*x; } compiles, and why you can pass a captureless lambda straight to a C-style API that expects a function pointer, like a comparator for qsort or a callback registered with a C library. It gives you the readability of writing the callback inline while still meeting the pointer-based interface. The moment a lambda captures ANYTHING, this stops working: the closure now holds state (the captured values), and a bare function pointer has nowhere to put that state, so there is no conversion and the code does not compile. That is the practical dividing line -- captureless lambdas bridge to function-pointer APIs, capturing ones do not. When you genuinely need to pass state through such an API, the usual patterns are a separate void* user-data argument the API forwards to your function (common in C callbacks), or storing the state elsewhere; and when the interface is yours to design, take a template parameter or std::function instead so any callable, capturing or not, fits."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

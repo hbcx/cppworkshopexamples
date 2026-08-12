@@ -1,0 +1,11 @@
+title: "Recursion with deducing this"
+standard: "C++23"
+difficulty: 3
+summary: "A lambda has no name in its own body, so it cannot recurse directly. C++23 gives it one through the explicit object parameter: this auto self is the closure itself, so self(...) calls it recursively. Before C++23 the usual workaround is a std::function the lambda captures."
+notes: "A lambda is an unnamed object, and inside its body there is no identifier that refers to the closure, so a plain [](int n){ return ... call myself ... } cannot be written. C++23 fixes this cleanly with the explicit object parameter, also called deducing this: declaring the first parameter as this auto self makes self bind to the closure itself, so the body can call self(n - 1) and recurse, with no captures and no type erasure. This is the modern, zero-overhead way to write a recursive lambda -- a factorial, a tree walk, a parser step -- as a local closure. Before C++23 the standard trick is a std::function that the lambda captures by reference: std::function<long(int)> fib = [&fib](int n){ ... fib(...) ... }, where the name fib exists in the enclosing scope so the body can reach it. It works everywhere from C++11 on, at the cost of std::function's allocation and indirect call, and with a subtle lifetime requirement -- the std::function must outlive every call, and capturing it by reference means it cannot be moved away mid-recursion. Other pre-C++23 options are a named static local function, or the Y-combinator style where the lambda takes itself as an extra generic parameter (auto self). Prefer deducing this when C++23 is available; use the std::function form when it is not and the recursion genuinely needs to be an inline closure rather than a named function."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "deducing this", url: "https://en.cppreference.com/w/cpp/language/member_functions" }

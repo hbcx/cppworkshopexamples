@@ -1,0 +1,2 @@
+scale(3) with factor 10: 30
+after factor = 100, scale(3): 30

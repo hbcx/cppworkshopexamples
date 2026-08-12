@@ -1,0 +1,2 @@
+through a function pointer: 36
+passed to a C-style API: 105

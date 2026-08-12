@@ -1,0 +1,12 @@
+title: "Capturing this: whole object or one member, shared or copied"
+standard: "C++17"
+difficulty: 2
+summary: "A lambda in a member function reaches the object along two axes: share it (a pointer or reference -- sees changes, dangles if it dies) or copy it, and the whole object or one member. That gives four forms: [this], [&n = name], [*this], and [n = name]."
+notes: "A lambda that uses a member needs access to the object, and there are four ways to give it that, along two independent choices. SHARE versus COPY: a pointer or reference sees later changes and is cheap but is valid only while the object lives, while a copy is a self-contained snapshot safe to outlive the object at the cost of the copy. WHOLE object versus one MEMBER: take everything, or just the field(s) you need. The four combinations: [this] shares the whole object through its pointer; [*this] (C++17) copies the whole object into the closure; [n = name] uses init-capture to copy just one member (the simple capture list cannot name a member -- [name] would look for a local, so you write [n = name] where the right-hand name is this->name); and [&n = name] uses a REFERENCE init-capture to share just one member. The example changes the original after making all four closures: the two sharing forms ([this], [&n = name]) report the new name, the two copies ([*this], [n = name]) keep the old one. The crucial caveat is that sharing a single member is NOT safer than [this]: [&n = name] does not store the this pointer, but the reference still points into the object, so it dangles the moment the object is destroyed, exactly like [this]. The outlive-safety comes from COPYING, not from narrowing to a member -- so [n = name] is the safe-and-cheap option when a closure escapes and needs one field, [*this] when it needs the whole object, and the two reference forms are for closures that clearly run within the object's lifetime. Note that [=] in a member function captures this, not copies of the members, which is a frequent surprise and its own anti-pattern; naming the form says exactly which of these four you mean."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "init-capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

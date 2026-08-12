@@ -12,3 +12,5 @@
   note: "The compile-time way to choose an implementation: tag dispatch picks an overload by type with no run-time cost, where type erasure defers the choice to a virtual call -- go there when the type is known at compile time and you want the branch gone."
 - slug: "concepts"
   note: "The compile-time way to state the same interface: a concept requires the operations a type must provide, checked when a template is used, where type erasure checks them at run time behind a virtual call -- go there for stating a duck-typed interface with no base class and no vtable."
+- slug: "lambdas"
+  note: "The most common thing stored behind type erasure: std::function erases a lambda's unique closure type so unrelated callables share one type, the same technique this idiom generalises -- go there for closures, captures, and when a template parameter beats std::function."

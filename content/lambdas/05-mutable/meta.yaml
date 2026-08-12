@@ -1,0 +1,12 @@
+title: "mutable: a lambda that keeps state"
+standard: "C++11"
+difficulty: 2
+summary: "By-value captures are read-only inside the lambda -- the generated operator() is const. Adding mutable makes it non-const, so the body can modify the closure's own copies. Those copies persist between calls, which turns the lambda into a small stateful object."
+notes: "A lambda's call operator is const by default, so a by-value capture cannot be changed in the body -- the compiler treats the captured copy as read-only. mutable removes that const, letting the body assign to its captured copies. The important and often-surprising part is what persists: the copy lives in the closure OBJECT, not in each call, so ++start mutates the same stored copy every time counter is invoked, and it counts 1, 2, 3 across calls. The lambda has become a tiny stateful function object, which is exactly how you make a generator, a running total, or a memoizing wrapper without writing a class. Two boundaries keep it clear. mutable changes only the closure's own copy -- it never reaches the original variable outside (start stays 0), because a by-value capture is a copy in the first place. And it does not make each call start fresh -- the state accumulates until the closure is destroyed. Both of these are easy to misread, and the mismatch between what people expect from mutable and what it does is its own anti-pattern later. mutable has no effect on reference captures (those are already writable through the reference) -- it is specifically about being allowed to write to the by-value copies the closure holds."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "mutable", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

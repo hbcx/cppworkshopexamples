@@ -1,0 +1,12 @@
+title: "Anti-pattern: reaching for std::function by default"
+standard: "C++11"
+difficulty: 2
+summary: "Typing every callable parameter as std::function forces type erasure -- a heap allocation for the closure and an indirect call -- even when the caller passes a plain lambda that a template parameter would take with zero overhead. Use std::function only when heterogeneous storage or a fixed callable type is actually needed."
+notes: "std::function is the obvious type for a callable, so it gets used reflexively -- a function parameter, a class member, a callback slot all typed as std::function<int(int)>. The cost is easy to miss because the code works: std::function ERASES the callable's type behind a uniform wrapper, which for anything larger than a tiny closure means a heap allocation to hold it and an indirect call through a pointer every time it is invoked, plus a barrier the optimizer cannot inline across. When the parameter merely receives a lambda and calls it, that is pure overhead. The example runs the same reduction two ways: sumWithFunction takes std::function and pays the erasure; sumWith is a template on the callable type F, so the lambda's real type flows through, the call inlines, and nothing is allocated -- identical call site, no cost. A template parameter (or an auto parameter, its shorthand) is the right default for passing a callable into a function. Reserve std::function for when you genuinely need type erasure: storing callables of DIFFERENT types in one container, holding a callable as a member whose type must be fixed, breaking a template dependency across a compilation boundary, or exposing a stable ABI. The sign to watch for: a std::function parameter or local that is assigned once and simply called, never stored heterogeneously -- it almost always wants to be a template parameter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "template parameter", url: "https://en.cppreference.com/w/cpp/language/template_parameters" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a dangling reference capture"
+standard: "C++11"
+difficulty: 3
+summary: "A reference capture is valid only while the variable it points at is alive. A closure that captures a local by reference and then outlives it -- returned, stored, or run later -- reads a destroyed variable, which is undefined behavior. Capture by value what the closure must keep past the current scope."
+notes: "This is the most common serious lambda bug. A [&] or [&x] capture stores a reference to a variable in the enclosing scope, and a reference does not extend that variable's lifetime -- so the moment the closure lives longer than the referent, every use of the capture is undefined behavior. The trap is that it usually LOOKS fine: the code compiles without error, and a quick test where the closure runs immediately even appears to work, because the memory has not been reused yet. It breaks when the closure escapes -- returned from a factory, pushed into a container of callbacks, queued as a task, handed to another thread -- and is called after the scope that owned the captured local has ended. The symptom is the worst kind: it may print the right value, print garbage, or crash, depending on what reused the stack. The example describes the broken makeBad in a comment (running it would be UB, so it is not compiled) and runs the fix: makeCounter captures value BY VALUE, so the closure carries its own copy that lives as long as it does. The rule follows the lifetime: capture by reference only when the closure is used within the referent's lifetime -- an inline predicate to sort or find_if, a body run right here -- and capture by value (or move, for expensive or move-only things) whenever the closure may outlive the scope it was written in. The sign to watch for: a lambda with a & capture that is returned, stored in a member or container, or scheduled to run later."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

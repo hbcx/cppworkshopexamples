@@ -1,0 +1,13 @@
+title: "Variadic lambdas and capturing a pack"
+standard: "C++20"
+difficulty: 3
+summary: "auto... makes a lambda variadic: it takes any number of arguments as a parameter pack, combined with a fold expression. C++20 also lets a lambda capture a pack by move, [...ys = std::move(xs)], so a returned closure can own an arbitrary set of values."
+notes: "A variadic generic lambda writes auto... for its parameters, giving the closure a variadic member template operator(). The pack is used like any parameter pack, most often through a fold expression: (xs + ...) sums them, and a comma fold ((std::cout << xs << ' '), ...) runs a statement once per argument, left to right. That much works in C++14. What C++20 adds is capturing a pack: [...ys = std::move(xs)] introduces a captured pack, moving each argument into the closure, so a lambda returned from makeAdder OWNS its arguments and can be called later to fold them. Before this, getting a pack into a closure meant packing it into a tuple and unpacking with std::apply -- the pack capture makes it direct. The combination -- a variadic lambda that captures its pack -- is how you build a deferred call or a small task object that carries an arbitrary argument list without naming their types or a tuple. It is the lambda-shaped version of a variadic function template plus perfect-forwarding capture, and it leans on the same machinery: parameter packs, pack expansion, and fold expressions, all of which the variadic-templates chapter covers in depth. Reach for it when the number of inputs is not fixed and you want one closure to handle them uniformly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "generic lambda", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "fold expression", url: "https://en.cppreference.com/w/cpp/language/fold" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

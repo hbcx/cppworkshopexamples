@@ -1,0 +1,11 @@
+title: "Capture by reference: work on the original"
+standard: "C++11"
+difficulty: 1
+summary: "Prefixing a capture with &, [&total], binds the closure to the original variable instead of copying it. The lambda reads and writes the real variable, so changes flow both ways -- and the reference is only valid while that variable is alive."
+notes: "A reference capture, [&total], stores a reference to the outer variable rather than a copy, so the closure operates on the SAME object the surrounding code does. add accumulates into the real total, and because there is no copy involved, a value written to total from outside is immediately visible inside the closure. This is what you want when the lambda is meant to affect the caller's state -- collecting a result, updating a counter, appending to a container -- and when copying would be wasteful. The cost is lifetime: a reference is valid only as long as the thing it refers to lives, so a closure that captures a local by reference and then OUTLIVES that local -- returned from the function, stored in a container used later, run on another thread -- holds a dangling reference, which is undefined behavior. That failure is the subject of a later anti-pattern, and it is the single most common lambda bug. The rule of thumb: capture by reference when the closure is used right here, within the lifetime of what it captures (an inline predicate to sort, a body run immediately); capture by value (or move) when the closure escapes the current scope. Reference for now, value for later."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: capturing a loop variable by reference"
+standard: "C++11"
+difficulty: 3
+summary: "Storing closures that each capture the loop variable by reference makes them all share one variable, so after the loop they all report its final value instead of the value at their own iteration. Capture by value to snapshot the counter each time around."
+notes: "When you build a set of closures in a loop -- one handler per item, one deferred task per index -- and each captures the loop counter by reference, every closure holds a reference to the SAME variable. The loop keeps changing that one variable, so once the loop finishes and you call the stored closures, they all read its final value: the example gets 3, 3, 3 from the reference version instead of 0, 1, 2. The fix is to capture by VALUE, [i], so each closure copies the counter as it stood on that iteration and reports 0, 1, 2. There is a sharper version of this bug: if the loop variable is declared INSIDE the loop (the usual for (int i = ...)), a reference capture of it dangles the moment that iteration ends, because the variable is destroyed each pass -- so calling the stored closures later is undefined behavior, not merely wrong numbers. The example declares i outside the loop so the references stay valid and the mistake shows as a defined-but-wrong result; the dangling form is the same mistake with a worse outcome. Either way the cause is one shared referent where you wanted a per-iteration snapshot. The sign to watch for: a loop that pushes lambdas into a container (or registers them as callbacks) while capturing the loop variable, or any surrounding mutable local, by reference -- almost always it should be a value capture."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }

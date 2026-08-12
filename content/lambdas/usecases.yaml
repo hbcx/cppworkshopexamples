@@ -1,0 +1,23 @@
+- problem: "An algorithm or an ordered container needs a comparison or a test that is specific to one call site -- sort these records by a computed key, count the ones past a threshold, keep a priority_queue ordered by a custom rule."
+  why: "A named free function or a functor struct puts the logic far from where it is used and adds a type to the namespace for something used once; an inline lambda keeps the rule next to the call and can capture the local threshold or key it needs."
+  signal: "A tiny standalone comparator or predicate function (or a struct with a single operator()) used by exactly one std::sort, find_if, or container declaration."
+
+- problem: "A callback or event handler must run later and needs some of the context from where it was set up -- the widget it belongs to, the request id, a counter to update."
+  why: "Passing that context to a plain function pointer is impossible (it carries no state), and a bound member or a functor object is more machinery than the job needs; a lambda captures exactly the variables it must remember."
+  signal: "A registration call (on_click, subscribe, then) whose handler needs surrounding state, currently passed through a hand-written functor or a std::bind."
+
+- problem: "A resource from a C API must be released with a specific function -- fclose for a FILE, a library-specific free for a handle -- and you want a smart pointer to own it."
+  why: "unique_ptr with the default delete would call the wrong thing; a named deleter struct works but is boilerplate for a one-line call, while a captureless lambda deleter states the cleanup right where the pointer is created."
+  signal: "A raw handle from a C library paired with a matching close/free call, or a unique_ptr with a hand-written deleter type used in one place."
+
+- problem: "A const variable or member needs real logic to compute -- a value chosen by several conditions, or built up in a loop -- but you want it to stay const after initialization."
+  why: "The alternative is to declare it non-const, fill it with statements, and never change it again (losing the const guarantee), or to add a one-use helper function far from the use; an immediately-invoked lambda runs the logic in place and yields the value to a const."
+  signal: "A non-const variable that is written by an if/switch or a loop right after its declaration and then never modified, or a helper function called from exactly one initializer."
+
+- problem: "You are passing behavior into a generic algorithm or a policy slot and do not want to invent a named type for it, or you have reached for std::bind to adapt an existing function."
+  why: "std::bind is harder to read, optimizes worse, and composes poorly compared with a lambda that just calls what you want; and a one-off named functor adds a type for no reuse."
+  signal: "A std::bind call, or a small functor class defined only to be passed to one algorithm or constructor."
+
+- problem: "A block of code must run when the current scope exits by any path -- releasing a lock, restoring a flag, closing something -- and you want the cleanup written next to the acquisition, not repeated before every return."
+  why: "Duplicating the cleanup at each return is error-prone and breaks under exceptions; a scope-guard object that runs a captured lambda in its destructor ties the cleanup to the scope, so it happens exactly once however the scope ends."
+  signal: "The same cleanup statement copied before multiple return points, or a flag set then reset by hand around a block."

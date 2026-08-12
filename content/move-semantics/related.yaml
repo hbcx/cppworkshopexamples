@@ -18,3 +18,5 @@
   note: "Where the lvalue, xvalue and prvalue categories are read at compile time: decltype's rules turn on value category and declval yields an rvalue reference -- go there for type extraction, function traits, and decltype(auto), built on the categories this section defines."
 - slug: "variadic-templates"
   note: "Perfect forwarding generalised to any number of arguments: a forwarding-reference pack plus std::forward passes a whole argument list through in its original value category -- go there for parameter packs, expansion, and fold expressions."
+- slug: "lambdas"
+  note: "Where these rules meet closures: init-capture moves a value into a lambda ([p = std::move(ptr)]), and capturing a heavy or move-only object leans on the same move mechanics -- go there for captures, generic and template lambdas, and how a closure stores what it holds."

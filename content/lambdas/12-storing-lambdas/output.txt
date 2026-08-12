@@ -1,0 +1,2 @@
+auto + template: 12
+chained through std::function: 108
