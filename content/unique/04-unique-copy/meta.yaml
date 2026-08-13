@@ -1,0 +1,12 @@
+title: "unique_copy: collapse into an output"
+standard: "C++11"
+difficulty: 2
+summary: "unique_copy writes the consecutive-deduplicated result to an output iterator and leaves the source unchanged -- the copy-out counterpart of unique, the way copy_if is to remove_if. With a back_inserter it fills a new container; with an ostream_iterator it prints runs collapsed in a single pass, no temporary needed."
+notes: "Where unique edits the range in place (and needs an erase to finish), unique_copy reads the input and WRITES the collapsed result somewhere else, so the source is never touched. It is the same relationship copy_if has to remove_if: one mutates, one copies out. This is the right tool when the input must stay intact -- it belongs to someone else, you need it again later, or it is a const view -- and when the destination is not a container at all. Pass a std::back_inserter to grow a fresh vector of the distinct-consecutive values, or pass a std::ostream_iterator to stream the collapsed run straight to cout or a file with no intermediate storage, which is handy for log de-duplication and reports. Like unique, it collapses only ADJACENT equal elements, so the same rule applies: sort the input first (or use sort's ordering) if you want every duplicate gone, not just repeated neighbours. It also takes the same optional binary predicate to redefine equality. One practical note: unique_copy reads from a plain input range, so it can consume an input stream directly through an istream_iterator, collapsing repeats as they are read. Reach for unique_copy whenever you want the deduplicated sequence without disturbing -- or without even owning -- the original."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_copy", url: "https://en.cppreference.com/w/cpp/algorithm/unique_copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }
+  - { name: "std::ostream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/ostream_iterator" }

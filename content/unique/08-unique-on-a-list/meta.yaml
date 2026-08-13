@@ -1,0 +1,12 @@
+title: "Anti-pattern: std::unique on a std::list"
+standard: "C++11"
+difficulty: 2
+summary: "The erase-unique idiom works on a std::list, but std::unique compacts by moving element VALUES between nodes, which defeats the stable-node property a list is for. std::list has a member unique that unlinks the duplicate nodes in place, moving nothing and keeping every surviving node's address stable."
+notes: "This is the unique member of the same family as std::sort and std::remove on a list: the algorithm works but fights the container. std::unique deduplicates by MOVING values -- it copies the survivors forward over the duplicates to compact them -- which is fine for a vector's contiguous storage but wrong for a list, whose whole purpose is that each element is a node that never moves. Running std::unique on a list produces the right contents but move-assigns values between nodes, doing needless work and, more importantly, breaking the guarantee that a pointer or reference to a surviving element stays valid and keeps pointing at the same value. The fix is the member list::unique(), which removes consecutive duplicates by UNLINKING the redundant nodes -- it splices them out and frees them, moving no values, so every node you keep stays exactly where it was, address and all -- and it resizes the list itself, so there is no separate erase. Like the algorithm it collapses adjacent runs only, and it takes an optional binary predicate. (list also has member sort and remove for the same reason.) The rule for the node-based containers: reach for the member unique, not std::unique. The sign to watch for: std::unique or the erase-unique idiom applied to a std::list."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list::unique", url: "https://en.cppreference.com/w/cpp/container/list/unique" }
+detailed_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

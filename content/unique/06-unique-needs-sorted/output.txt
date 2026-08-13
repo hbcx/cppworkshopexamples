@@ -1,0 +1,2 @@
+unique on unsorted: 3 1 3 2 1 3 2 
+sort then unique:   1 2 3 

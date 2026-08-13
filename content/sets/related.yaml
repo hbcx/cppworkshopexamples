@@ -4,3 +4,5 @@
   note: "Drop the ordering for O(1) average membership: std::unordered_set, for when you never ask for ranges or sorted output."
 - slug: "maps"
   note: "Attach a value to each key: the same balanced tree and node stability, as a key-to-value container."
+- slug: "unique"
+  note: "The other way to get distinct values: sort+unique deduplicates a vector in place and leaves it sorted, cheaper than a set for a one-shot batch -- go there for deduplicating a range and when a vector beats a set."

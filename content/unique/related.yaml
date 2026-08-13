@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "sort"
+  note: "The step that makes unique remove every duplicate: sorting groups equal values so unique can collapse them, and dedup by a key needs the sort and the unique to agree on that key -- go there for ordering, comparators, and projections."
+- slug: "remove-erase"
+  note: "The algorithm unique is built like: both compact survivors to the front, return a new logical end, and need an erase to shrink -- go there for the erase-remove idiom, the [[nodiscard]] return, and removing by value or condition."
+- slug: "sets"
+  note: "The container that stays distinct by construction: a std::set rejects duplicates on insert and keeps them ordered, the right choice when elements arrive over time rather than in one batch to sort+unique -- go there for keyed uniqueness and O(log n) lookup."
+- slug: "copy-copy-if"
+  note: "The plain copy behind unique_copy: copy writes every element and copy_if selects a subset, where unique_copy writes runs collapsed to one -- go there for copying ranges out, back_inserter, and printing through an ostream_iterator."

@@ -1,0 +1,4 @@
+title: "unique"
+description: "Removing CONSECUTIVE duplicate elements. std::unique collapses each run of adjacent equal elements to one and returns the new logical end, like remove -- so it is paired with erase, and to remove ALL duplicates the range must be sorted first. Covers the basic idiom, the sort-then-unique dedup, a custom binary predicate, unique_copy to an output without mutating the source, and the C++20 ranges::unique with a projection -- alongside the anti-patterns: running unique on unsorted data so scattered duplicates survive, forgetting the erase so the size never changes, using std::unique on a list where a member unique unlinks nodes, and re-running sort+unique to maintain a set that a std::set keeps distinct by construction."
+sort_order: 77
+category: "Algorithms"

@@ -7,3 +7,5 @@
   note: "The mirror operation: copy_if selects the matches and copies them OUT to a new container, where remove_if deletes the matches from the source in place -- go there for filtering into a container and the copy-vs-remove distinction."
 - slug: "find-find-if"
   note: "How you get the position that member erase deletes: find returns the iterator to a located element, and erase(it) removes it and hands back the next one -- go there for locating elements before deleting them."
+- slug: "unique"
+  note: "The same compaction specialized to duplicates: unique collapses adjacent equal runs and, like remove, returns a new end you erase -- go there for deduplicating a range, the sort-then-unique idiom, and unique_copy."

@@ -1,0 +1,13 @@
+title: "Anti-pattern: sort+unique to maintain a live distinct set"
+standard: "C++11"
+difficulty: 3
+summary: "sort + unique is the right tool for a one-shot dedup of a batch you already hold, but it is the wrong one for keeping a collection distinct as elements arrive: re-running it after each insert is O(n log n) every time. A std::set or std::unordered_set stays distinct by construction, one insert per element."
+notes: "sort + unique + erase and a set both deduplicate, but they answer different questions, and using one where the other fits is the mistake. sort + unique is a BATCH operation: given a vector you already have, it removes all duplicates in O(n log n), in place, cache-friendly, and leaves the result sorted -- ideal for deduplicating data once, or occasionally. The trap is using it to MAINTAIN uniqueness in a collection that grows over time: if you append and then re-sort-and-unique on every insert to keep it distinct, each insert costs O(n log n) and the whole build becomes O(n^2 log n) -- a quadratic loop hiding behind a one-line idiom. A container that enforces uniqueness itself is the right tool there: std::set inserts in O(log n), rejects duplicates automatically, and keeps the elements ordered; std::unordered_set does the same in O(1) average when you do not need order. Which to pick: sort + unique for a one-shot or rare dedup of a batch, and when you want a sorted vector at the end; std::set when elements arrive incrementally and you want them distinct and ordered; std::unordered_set when they arrive incrementally, must be distinct, and order does not matter. The sign to watch for: a sort + unique (or an insert-then-dedup) run repeatedly inside a loop that keeps adding elements, rather than once over a finished batch."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+detailed_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

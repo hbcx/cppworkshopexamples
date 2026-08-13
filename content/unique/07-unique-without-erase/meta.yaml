@@ -1,0 +1,11 @@
+title: "Anti-pattern: unique without the erase"
+standard: "C++11"
+difficulty: 2
+summary: "Like remove, unique cannot resize the container: on its own it compacts the survivors to the front and returns the new logical end, but the size is unchanged and the tail holds unspecified leftovers. The duplicates only disappear when you pass the returned iterator to erase."
+notes: "unique shares remove's defining limitation: it operates through iterators and never sees the container, so it physically cannot shrink it. What it does is move the run-collapsed survivors to the front and return an iterator to the new logical end; the container keeps its original size, with moved-from junk in the tail. If you drop that return value -- or capture it but never erase -- nothing is removed. The container still has its old length, and a later loop over the whole thing reads the leftover tail. It is easy to miss because the front of the container really is deduplicated, so a quick glance at the first few elements looks right; the bug surfaces as a wrong size, a duplicated-looking tail, or a read of an unspecified value. Modern standard libraries even mark std::unique [[nodiscard]], so ignoring its result outright is a warning -- but capturing the iterator and then forgetting to erase still compiles clean. The fix is the erase-unique idiom, the unique twin of erase-remove: v.erase(std::unique(v.begin(), v.end()), v.end()), which drops the tail and brings the size down. In C++20 the ranges form returns a subrange you pass straight to erase, which is harder to leave incomplete. The sign to watch for: a std::unique whose returned iterator is stored or ignored with no surrounding erase."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

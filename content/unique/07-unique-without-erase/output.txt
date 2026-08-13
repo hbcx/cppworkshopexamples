@@ -1,0 +1,4 @@
+unique run length (distance): 3
+container size, unchanged:    6
+size after unique+erase:      3
+kept: 5 8 1 

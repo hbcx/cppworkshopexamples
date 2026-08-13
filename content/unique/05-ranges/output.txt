@@ -1,0 +1,2 @@
+deduped consecutive: 1 2 3 2 
+one row per user-run: 1:open 2:open 1:open 

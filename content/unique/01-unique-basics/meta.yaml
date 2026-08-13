@@ -1,0 +1,11 @@
+title: "unique: collapse each run of adjacent duplicates"
+standard: "C++11"
+difficulty: 1
+summary: "std::unique removes CONSECUTIVE equal elements, collapsing each run of adjacent duplicates to a single element. Like remove, it does not resize the container -- it moves the survivors to the front and returns the new logical end, so it is paired with erase. It compares only neighbours, so non-adjacent duplicates survive."
+notes: "The one fact that governs everything about unique is that it only looks at NEIGHBOURS. It walks the range and, whenever an element equals the one before it, drops it; so a run of adjacent equal elements collapses to a single copy, but two equal elements with something else between them are each kept. That is why 1 1 2 2 2 3 1 1 becomes 1 2 3 1 -- the trailing 1 1 is a separate run from the leading one, so a 1 appears twice in the result. This is deliberate: unique is a linear, single-pass operation with no sorting and no hashing, which makes it cheap but means it removes ALL duplicates only when equal elements are already adjacent -- usually because you sorted first (the next example). Mechanically it behaves exactly like remove: it cannot resize the container (an algorithm only sees iterators), so it compacts the survivors to the front and returns an iterator to the new logical end, leaving unspecified leftovers in the tail. You finish the job with erase(new_end, end), the same erase-remove shape. So the two rules to carry: unique collapses adjacent equal runs only, and unique without erase changes nothing -- both get their own anti-pattern later in the section. A binary predicate can redefine what 'equal neighbours' means, and unique_copy writes the collapsed result to an output instead of editing in place."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

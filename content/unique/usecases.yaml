@@ -1,0 +1,19 @@
+- problem: "A sorted stream of events or readings contains long runs of the same value -- a status polled every second that rarely changes, repeated log lines, a sensor stuck on one reading -- and only the transitions matter."
+  why: "Storing or processing every repeat wastes space and work; unique (or unique_copy to a report) collapses each run to a single entry in one linear pass, and because the stream is already sorted or time-ordered, adjacent-only removal is exactly right."
+  signal: "A sorted or time-ordered sequence with repeated neighbours, consumed by code that only cares when the value changes."
+
+- problem: "A distinct list must be built from a dataset that has duplicates -- the set of tags used across articles, the unique customer ids in a log, the distinct error codes seen today -- and the result is wanted as a plain, ordered vector."
+  why: "sort + unique + erase deduplicates in place in O(n log n) and leaves a sorted vector, which is cheaper and more cache-friendly than building a node-based set when you are processing a finished batch and want a contiguous result."
+  signal: "A vector accumulated from a source with repeats, then needed as a distinct, ordered list in one pass."
+
+- problem: "A path or polyline has consecutive points at the same position -- a GPS track that paused, a drawing tool that emitted repeated coordinates, a series with flat stretches -- and the redundant points should be dropped without reordering the path."
+  why: "Sorting would destroy the path's order, which is the one thing that must be preserved; unique with a by-position predicate removes only consecutive duplicates, simplifying the path while keeping its sequence intact."
+  signal: "An ordered sequence of points or samples where only back-to-back repeats should be removed and the order must not change."
+
+- problem: "A deduplicated view of a sequence is needed for a report or a downstream stage, but the original must stay intact -- it is const, shared, or needed again in full later."
+  why: "unique edits in place and would mutate the source; unique_copy writes the collapsed result to a new container or straight to a stream, leaving the input untouched, so no defensive copy of the whole input is required first."
+  signal: "Code that copies a container only so it can run unique on the copy without disturbing the original."
+
+- problem: "Records must be collapsed so that a run from the same key becomes one representative -- consecutive events from the same user, repeated rows sharing an id, back-to-back messages from one sender folded to a single line."
+  why: "A hand-written loop tracking the previous key and skipping matches is easy to get wrong on the first element and on ties; unique with a key predicate (or a C++20 projection) states the key once and keeps the first record of each run."
+  signal: "A loop that remembers the last seen key and conditionally skips or merges the current element when it matches."

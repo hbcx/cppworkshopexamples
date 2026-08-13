@@ -1,0 +1,12 @@
+title: "The C++20 ranges form with a projection"
+standard: "C++20"
+difficulty: 2
+summary: "std::ranges::unique takes the whole range and returns a SUBRANGE marking the leftover tail, which you pass straight to erase. An optional projection collapses neighbours equal in one field -- deduplicating by a key without a hand-written predicate -- while still carrying the whole element."
+notes: "The ranges form improves the classic in two ways. First, it takes the range directly -- ranges::unique(v) -- and returns a SUBRANGE describing the tail to remove, {new logical end, end}, so the erase reads v.erase(tail.begin(), tail.end()) with no second v.end(). That subrange return is the ranges convention for the erase-family algorithms and removes a common slip. Second, it accepts a PROJECTION as a trailing argument: ranges::unique(rows, {}, &Row::userId) compares neighbours by their userId while keeping the whole Row, so you deduplicate consecutive rows from the same user without writing a lambda that reaches into the struct. The {} is the default binary comparison (equal_to); the projection follows it. Everything else matches the classic unique: it collapses ADJACENT runs only, so sort first (here too, by the same projected key) if you need every duplicate gone, and it keeps the FIRST element of each run. ranges::unique_copy is the copy-out version with the same projection support. Prefer the ranges form in C++20: the subrange return pairs cleanly with erase, and a projection is clearer and less error-prone than a comparator that has to destructure the element itself. As always with the key-based case, if you also sort, sort by the same key the projection uses or the runs will not line up."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

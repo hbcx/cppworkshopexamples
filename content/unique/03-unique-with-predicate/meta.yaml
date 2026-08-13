@@ -1,0 +1,11 @@
+title: "A custom predicate: define what equal means"
+standard: "C++11"
+difficulty: 2
+summary: "unique takes an optional binary predicate that decides when two neighbours count as the same, so you can collapse runs by a rule other than plain equality: case-insensitive text, elements equal in one field, or values within a tolerance. It still only compares adjacent pairs and keeps the first element of each run."
+notes: "By default unique compares neighbours with operator==, but the third argument is a binary predicate -- a function of two elements returning true when they should be treated as equal. This lets you collapse runs by any notion of sameness: two strings equal ignoring case (shown here), two records with the same id, two samples within a small tolerance, two points at the same coordinate. The predicate is called on adjacent pairs only, and unique keeps the FIRST element of each collapsed run -- which matters when the 'equal' elements are not identical: a case-insensitive collapse of Yes, yes, YES keeps Yes, the first spelling. Two cautions. First, the predicate should be a genuine equivalence for neighbours -- symmetric and consistent -- or the result is surprising; in particular a 'within tolerance' predicate is not transitive (a is near b, b is near c, but a is not near c), so a long gently-drifting run can collapse further than you expect. Second, when you dedup by a key you usually sort by that same key first, and the sort comparator and the unique predicate must agree on the key, or unique will collapse the wrong neighbours. The projection form in C++20 (later example) expresses the key-based case more cleanly: unique(range, {}, &T::field)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

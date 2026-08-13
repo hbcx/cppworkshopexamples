@@ -1,0 +1,2 @@
+via std::unique:  2 5 1 4 
+via list::unique: 2 5 1 4 

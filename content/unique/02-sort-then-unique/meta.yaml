@@ -1,0 +1,12 @@
+title: "sort then unique: dedup a whole container"
+standard: "C++11"
+difficulty: 1
+summary: "Because unique only removes adjacent duplicates, deduplicating a whole container takes two steps: sort so equal values become neighbours, then unique + erase collapses every run. sort + unique + erase is the standard in-place dedup idiom for a vector, and it leaves the result sorted."
+notes: "unique on its own removes only adjacent duplicates, so the way to strip ALL duplicates from a container is to make the duplicates adjacent first -- and that is exactly what sorting does. The full idiom is three operations: std::sort to group equal elements, std::unique to collapse each group to one, and container.erase to drop the leftover tail. Written together: v.erase(std::unique(v.begin(), v.end()), v.end()) after a sort. It is worth knowing the trade-offs against the alternatives. sort + unique is O(n log n), works in place with no extra container, is cache-friendly on a vector, and leaves the data SORTED -- often a bonus, since you frequently want distinct-and-ordered anyway. Building a std::set or std::unordered_set from the range also deduplicates, but allocates nodes and gives set ordering (or none, for the hash set); it wins when you are maintaining uniqueness as elements arrive rather than deduplicating a batch you already hold (the closing anti-pattern weighs these). A custom comparator on the sort plus a matching predicate on unique lets you dedup by a key -- but the two must agree: sort by the key and unique by the same key, or you will collapse the wrong neighbours. For a one-shot dedup of a vector you already have, sort + unique + erase is the tool to reach for."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: unique on unsorted data"
+standard: "C++11"
+difficulty: 2
+summary: "unique removes only CONSECUTIVE duplicates, so running it on unsorted data does not deduplicate the range -- scattered equal values are not neighbours and survive. When no equal elements happen to be adjacent, unique removes nothing at all. Sort first (or use a set) to remove every duplicate."
+notes: "This is the number-one mistake with unique: treating it as 'remove all duplicates' when it is really 'collapse adjacent duplicate runs'. On unsorted input the duplicates are usually spread out, not next to each other, so unique leaves them in place -- and in the worst case, where no two equal values are adjacent at all, it removes nothing while looking like it did the job. The code compiles, runs, and returns a vector that still has duplicates, which is the kind of bug that passes a casual test (the sample input happened to have a repeated pair) and fails on real data. The reason is the same single fact from the basics: unique compares each element only with its immediate neighbour, in one linear pass, with no sorting or hashing. So to remove EVERY duplicate you must first make equal elements adjacent, which is exactly what sorting does -- hence sort + unique + erase. If you do not want the sort's O(n log n) or its reordering, the alternative is to build a std::set or std::unordered_set, which deduplicates by construction (the closing anti-pattern compares the two). The sign to watch for: a std::unique (or the erase-unique idiom) applied to a container that was not sorted -- or made adjacent-by-key -- immediately before."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
