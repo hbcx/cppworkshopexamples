@@ -1,0 +1,3 @@
+via full sort:    4 7 12 
+via partial_sort: 4 7 12 
+via nth_element:  4 7 12 

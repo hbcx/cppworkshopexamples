@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting a sorted range after nth_element"
+standard: "C++11"
+difficulty: 2
+summary: "nth_element puts only the kth element in its final place and partitions the rest -- the k elements before position k are the k smallest, but in unspecified order, and the elements after are unsorted too. Reading the prefix expecting ascending order is a bug; use partial_sort if you need the bottom-k sorted."
+notes: "nth_element does the minimum work to answer 'what is the kth element' and 'which elements are below it': exactly ONE element -- the one at position k -- ends up in its sorted place, and the two sides are merely PARTITIONED (all before <= it, all after >= it), not sorted. So after nth_element the prefix [begin, begin+k) is the SET of the k smallest, but their internal order is unspecified and varies by implementation, and the suffix is likewise unordered. Code that calls nth_element and then reads v[0], v[1], v[2] as 'the smallest, second smallest, third smallest' is wrong -- it gets the right three values as a set, in the wrong (arbitrary) order. This is easy to miss because the values ARE the correct ones, just shuffled, so a test that checks membership passes while one that checks order fails. The fix depends on what you need: if the order within the bottom k matters, use partial_sort, which sorts that prefix; if only the kth value or the unordered set matters, nth_element is right and you must not assume order. This example prints only the kth value and a separately partial_sorted copy, precisely because printing nth_element's prefix order would be showing an unspecified result. The sign to watch for: indexing into the prefix after nth_element as if it were sorted."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }
+detailed_tags:
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }

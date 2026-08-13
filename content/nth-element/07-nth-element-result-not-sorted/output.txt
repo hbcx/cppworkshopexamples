@@ -1,0 +1,2 @@
+kth smallest (position 4) = 5
+bottom 4 in order: 1 2 3 4 

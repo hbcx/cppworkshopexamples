@@ -1,0 +1,12 @@
+title: "Anti-pattern: selection for a single min or max"
+standard: "C++11"
+difficulty: 1
+summary: "Using nth_element or partial_sort to find just the single smallest or largest element is overkill: both reorder the range as a side effect. min_element and max_element scan once in O(n), return an iterator, and leave the range untouched -- the right tool for one extreme."
+notes: "nth_element and partial_sort are for the kth element or the top-k, and using them for k = 1 -- the single minimum or maximum -- brings costs you do not need. Both MUTATE the range: nth_element(begin, begin, end) partitions everything to drop the smallest at the front, and partial_sort(begin, begin+1, end) heap-processes the range, so either reorders your data as a side effect even though you only wanted to read one value. min_element and max_element do the job directly: a single O(n) scan that returns an ITERATOR to the extreme and never touches the container, so the original order is preserved and you also get the POSITION, not just the value. The distinction is which you actually need: for one extreme, min_element / max_element (and minmax_element for both ends in one pass); for the kth element or a group of k, nth_element / partial_sort. Reaching for the selection algorithms to get a single min or max both does more work and destroys order for no reason. The sign to watch for: nth_element with the pivot at begin (or partial_sort with middle at begin+1) used only to read one element, where min_element or max_element would read it without reordering."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::min_element", url: "https://en.cppreference.com/w/cpp/algorithm/min_element" }
+detailed_tags:
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }

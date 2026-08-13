@@ -1,0 +1,11 @@
+title: "partial_sort_copy: top-k into a smaller output"
+standard: "C++11"
+difficulty: 2
+summary: "partial_sort_copy writes the k smallest elements of an input, in sorted order, into a separate output range whose SIZE decides k. It leaves the input untouched, so it works on a const range or a single-pass stream where you only want to keep the top few."
+notes: "partial_sort_copy(first, last, out_first, out_last) is partial_sort's copy-out form, and it has a distinctive twist: the OUTPUT range's size determines how many elements you get. It copies the smallest (out_last - out_first) elements of the input into the output, in sorted order, and returns an iterator to the end of what it wrote (which may be short if the input had fewer elements than the output can hold). Because it writes elsewhere, the input is never modified -- so unlike partial_sort it works on a const container, and, importantly, it only requires INPUT iterators on the source, which means it can consume a single-pass stream. That makes it the natural way to keep the top-k of a large or streamed dataset with bounded memory: size the output to k, feed the whole stream, and you end up with the k smallest without ever holding the whole input or sorting it. Give it a greater-than comparator to keep the k largest instead. This bounded-output, input-only shape is exactly what a top-k over a huge log or query result wants -- you decide k by the output size, read the source once, and never allocate for the full data. Prefer partial_sort_copy over partial_sort when the source must stay intact or cannot be random-access, and over a full sort whenever k is much smaller than the input."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sort_copy", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort_copy" }
+detailed_tags:
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }

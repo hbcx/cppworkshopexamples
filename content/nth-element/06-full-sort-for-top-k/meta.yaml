@@ -1,0 +1,12 @@
+title: "Anti-pattern: a full sort to read the k smallest"
+standard: "C++11"
+difficulty: 2
+summary: "Sorting the whole range to read the k smallest (or largest) orders all n elements when only k are wanted -- O(n log n) for an O(n log k) or O(n) job. partial_sort orders just the top-k; nth_element selects them unordered in O(n) average."
+notes: "When only the top few of a range matter -- the ten highest scores, the five nearest points, the cheapest three offers -- a full std::sort is doing far more work than asked: it puts ALL n elements in order, at O(n log n), when the answer is just k of them. Two cheaper tools exist, and which to pick depends on whether you need those k in order. If you need them SORTED, partial_sort orders only the first k in O(n log k), which for k much smaller than n is a large saving (finding the top 10 of a million is roughly n log 10, not n log n). If you only need to know WHICH k they are -- to process them further, sum them, or pass them on regardless of order -- nth_element selects them into the first k positions in O(n) average, cheaper still, leaving them unordered. This example shows all three giving the same k smallest; the sort in the nth_element branch is only there to print them comparably. The saving grows as n grows and k stays small, which is the common shape of top-k queries. The sign to watch for: a std::sort over a whole container whose result is read only at the first (or last) k positions -- that is a partial_sort or nth_element."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }

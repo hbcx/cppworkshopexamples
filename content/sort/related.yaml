@@ -23,3 +23,5 @@
   note: "The other thing a sort unlocks: merge and set_union/intersection/difference combine two sorted ranges in O(n+m), and inplace_merge is the merge step of merge sort -- go there for combining sorted ranges, all needing the same order sort provides."
 - slug: "next-permutation"
   note: "Where enumeration begins: to walk all permutations you sort to the smallest one first, and next_permutation steps in the order your comparator defines -- go there for generating arrangements and the do-while enumeration loop."
+- slug: "nth-element"
+  note: "The cheaper partial sort when you do not need the whole order: nth_element finds the kth in O(n) and partial_sort orders just the top-k, so a full sort to read a median or a shortlist is wasted work -- go there for selection and top-k."

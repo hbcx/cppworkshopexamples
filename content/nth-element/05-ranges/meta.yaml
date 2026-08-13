@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms with a projection"
+standard: "C++20"
+difficulty: 2
+summary: "std::ranges::nth_element and partial_sort take the range and the pivot/middle iterator directly, plus a comparator and a PROJECTION, so selecting the kth or the top-k by a member needs no hand-written comparator -- for example the three most populous cities by population."
+notes: "The ranges versions keep the algorithms and clean up the call. ranges::partial_sort(range, middle, comp, proj) takes the range and the middle iterator into it, then an optional comparator and PROJECTION; ranges::nth_element(range, nth, comp, proj) likewise. So the top-k by a field is ranges::partial_sort(cities, mid, std::ranges::greater{}, &City::population) -- the projection maps each City to its population, std::ranges::greater makes it largest-first, and the whole City objects are moved so mid marks the end of the top three. std::ranges::greater and std::ranges::less are the ranges function objects for the comparator, cleaner than std::greater<City> would be. As with the classic forms, the projection feeds only the comparison; the elements themselves are what gets reordered. All the semantics carry over: nth_element places one element and partitions (the sides stay unsorted), partial_sort orders the prefix and leaves the tail unspecified, and both mutate the range. There is also a ranges::partial_sort_copy that writes the top-k into a separate output with the same projection support. Prefer the ranges forms in C++20 for the projection -- selecting top-k by a struct field is exactly where a hand-written comparator is most tedious and a projection reads best."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

@@ -1,0 +1,10 @@
+title: "nth_element: place one element, partition the rest"
+standard: "C++11"
+difficulty: 2
+summary: "std::nth_element puts the element that would be at position n in a fully sorted range into that position, and partitions the rest so everything before is <= it and everything after is >= it. It runs in O(n) on average without sorting either side -- the way to find a median, percentile, or kth element cheaply."
+notes: "nth_element(first, nth, last) is selection, not sorting. After the call, the element at position nth is exactly the one that would be there if the whole range were sorted -- the nth smallest -- and the range is PARTITIONED around it: every element before nth is less than or equal to it, every element after is greater than or equal. Crucially, neither side is sorted; only the nth element is in its final place. It achieves this in O(n) on AVERAGE (it is quickselect, the selection cousin of quicksort's partitioning), far cheaper than the O(n log n) of sorting just to read one position -- though its worst case is O(n^2), which library implementations guard against by falling back to a median-of-medians or heap strategy. The headline use is order statistics without a full sort: the median (nth = size/2), a percentile (nth = p * size), or any kth smallest. It also gives you a partition around a pivot value for free -- the bottom k elements end up before position k, unordered, which is enough when you only need WHICH k, not their order. Two cautions become anti-patterns: do not expect the sides to be sorted (they are not), and do not call it repeatedly for several statistics (it reorders the range each time). It takes an optional comparator to select by a custom order, and mutates the range in place."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }
+detailed_tags: []

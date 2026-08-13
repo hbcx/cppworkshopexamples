@@ -7,3 +7,5 @@
   note: "The sibling rearrange-and-return-a-point algorithm: remove compacts the kept elements and returns the new end, as partition splits and returns the boundary -- go there for the erase-remove idiom and removing by condition."
 - slug: "count-count-if"
   note: "When you only need the sizes, not the split: count_if totals the matches in one pass without moving anything, where partition rearranges to give you both groups -- go there for tallies and thresholds."
+- slug: "nth-element"
+  note: "Partition applied to selection: nth_element is quickselect, partitioning around the kth element to find a median or top-k in O(n) without sorting -- go there for order statistics and the top-k that partition's pivoting enables."

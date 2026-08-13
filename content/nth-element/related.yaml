@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "sort"
+  note: "The full-ordering fallback these save you from: sort orders everything in O(n log n), where partial_sort and nth_element do just the top-k or the kth in less -- go there for the complete sort, comparators, and stable_sort, and when you truly need the whole range ordered."
+- slug: "partition"
+  note: "The split nth_element is built on: nth_element is quickselect, partitioning around the kth element, and std::partition rearranges a range around a predicate in O(n) -- go there for two-group splits and the partition point."
+- slug: "min-max-element"
+  note: "The k=1 case: for a single smallest or largest, min_element and max_element scan in O(n) and leave the range untouched, where these selection algorithms would reorder it -- go there for one extreme and its position."

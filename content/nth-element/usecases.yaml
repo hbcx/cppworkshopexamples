@@ -1,0 +1,19 @@
+- problem: "A median or a percentile of a dataset is needed -- the p50 or p95 of request latencies, the median income, a cutoff score -- and the full sorted order is not."
+  why: "Sorting to read one position is O(n log n); nth_element places exactly that position's value in O(n) average and partitions the rest, so a single percentile costs a linear pass, not a full sort, which matters on large latency or metric arrays computed often."
+  signal: "A sort of a whole array whose result is read only at one index, such as the middle for a median or a fixed fraction for a percentile."
+
+- problem: "The top-k results must be shown in order -- a leaderboard's top ten, the five nearest points to a location, the best matches for a query, the cheapest offers."
+  why: "A full sort orders all n candidates when only k are shown; partial_sort orders just the first k in O(n log k), a large saving when k is small and n is large, and a comparator ranks by score, distance, or price directly."
+  signal: "A full sort followed by reading only the first (or last) k elements for a ranked shortlist."
+
+- problem: "The top-k must be kept from a huge or streamed input without holding it all -- the top errors from a rolling log, the nearest N over a data stream, the best few from a query that returns millions."
+  why: "partial_sort_copy reads the source with only input iterators (so it consumes a single-pass stream) and writes into a fixed-size output whose size is k, so memory stays bounded at k and the input is never fully materialized or sorted."
+  signal: "A top-k over a large or streaming source that currently collects everything into a container just to sort and slice it."
+
+- problem: "A dataset must be split into the best k and the rest for separate handling -- keep the k cheapest candidates for a detailed pass, cut everything below a rank -- and neither group needs to be ordered."
+  why: "nth_element partitions around the kth element in O(n) average, leaving the bottom k before the pivot and the rest after, so you get the cutoff and the two groups without paying to sort either -- cheaper than partial_sort when order within the groups is irrelevant."
+  signal: "A sort or partial_sort used only to take a prefix as a cutoff, where the order within the kept group is never used."
+
+- problem: "The kth smallest (or largest) element itself is the answer -- an order statistic in a selection algorithm, the kth-nearest for a distance threshold, a quantile boundary."
+  why: "nth_element is quickselect: it finds the kth element in O(n) average without sorting, which is asymptotically better than the O(n log n) of sorting to index position k, and it takes a comparator to select by any order."
+  signal: "Code that sorts a range solely to read the element at a single computed rank k."

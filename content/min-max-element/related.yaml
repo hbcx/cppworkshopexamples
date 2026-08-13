@@ -7,3 +7,5 @@
   note: "The other single-pass question about a range: count totals how many match where min/max_element find the boundary value -- go there for tallies, thresholds, and progress counts."
 - slug: "ranges"
   note: "Where the projection forms come from: ranges::max_element and ranges::minmax take a whole range and a projection so you rank by a member, and ranges::max returns a value -- go there for range algorithms, views, and projections."
+- slug: "nth-element"
+  note: "The step up from one extreme to k: min_element gives the single smallest, where nth_element finds the kth and partial_sort the top-k -- go there for medians, percentiles, and ordered or unordered top-k."

@@ -1,0 +1,11 @@
+title: "partial_sort: the top-k in order"
+standard: "C++11"
+difficulty: 2
+summary: "std::partial_sort orders only the first k elements: after the call [begin, begin+k) holds the k smallest in sorted order, and the remaining elements are in unspecified order. It costs O(n log k), cheaper than a full sort when k is small -- the tool for a sorted top-k."
+notes: "partial_sort(first, middle, last) does exactly enough work to fill [first, middle) with the smallest (middle - first) elements IN SORTED ORDER, leaving everything from middle to last in unspecified order. So for a leaderboard's top ten, the nearest five points, or the three cheapest offers, you get precisely those, ordered, without sorting the whole range. Its cost is O(n log k) where k is the size of the sorted prefix: it builds a heap of the first k and streams the rest through it, so when k is much smaller than n it is far cheaper than a full O(n log n) sort. The difference from nth_element is what you get ordered: nth_element places ONE element and partitions (the bottom k end up before position k but UNSORTED), while partial_sort SORTS the whole prefix. So choose nth_element when you only need which k (or the kth value) and partial_sort when you need those k in order. To get the k LARGEST instead of smallest, pass a greater-than comparator (next examples). The tail past middle is unspecified, so do not read it expecting anything. And note partial_sort with middle == last sorts the entire range, but as a slower full sort than std::sort -- use sort for that. partial_sort_copy is the variant that writes the top-k into a separate, smaller output."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }
+detailed_tags:
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }

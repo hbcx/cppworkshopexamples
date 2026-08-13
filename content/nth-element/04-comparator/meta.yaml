@@ -1,0 +1,11 @@
+title: "Top-k by a custom key"
+standard: "C++11"
+difficulty: 2
+summary: "nth_element and partial_sort take an optional comparator, so you select by any order: the k highest scores, the nearest points, the newest records. A greater-than comparator turns 'the k smallest' into 'the k largest', selecting the top-k by a field."
+notes: "The selection algorithms rank by a comparator exactly as sort does, which is what makes them useful on real data rather than plain numbers. Pass a comparator that orders Players by score descending (a.score > b.score) and partial_sort's 'first k in order' becomes the top k SCORERS, largest first -- the leaderboard case. The mental trick is that 'k smallest under comparator C' equals 'k largest under the natural order' when C is greater-than: the comparator defines what 'small' means, so a descending comparator makes the biggest values compare smallest and float to the front. The same comparator works with nth_element to find, say, the player at the 90th percentile of score, or with partial_sort_copy to copy the top-k out. Common keys are a score, a distance (nearest neighbours: order by distance to a query point), a timestamp (most recent), or a priority. As with sort, the comparator must be a strict weak ordering (use > or <, never >= or <=), and it must be consistent -- the algorithm relies on it to decide which side of the pivot each element belongs. In C++20 a projection replaces most of these comparators (next example): partial_sort(range, mid, greater, &Player::score). Reach for a comparator whenever the top-k or kth is by a member or a derived quantity rather than the element's natural order."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sort", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sort" }
+detailed_tags:
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: repeated nth_element for several statistics"
+standard: "C++11"
+difficulty: 2
+summary: "nth_element selects one order statistic in O(n) but reorders the whole range each call. Calling it several times -- for the 25th, 50th, 75th percentiles -- pays O(n) and a full reshuffle per statistic. When you need several order statistics, one sort (O(n log n)) answers them all by indexing."
+notes: "nth_element is the right tool for ONE order statistic: a single median, a single percentile, the kth element. Its win over sorting is that it is O(n) average instead of O(n log n), but that win is per call, and each call also REORDERS the entire range. So asking for several statistics by calling it repeatedly -- one nth_element per percentile -- costs O(n) each time and shuffles the data on every call, and the shifting pivots make it easy to index the wrong position or assume a layout that the next call destroys. Once you want more than one or two order statistics, a single std::sort is the better answer: O(n log n) once, then EVERY order statistic is a direct index (good[n/4], good[n/2], good[3n/4], and any others) with no more passes and a stable, fully-ordered array to read. The crossover is small -- roughly, if you need about log n statistics or more, sort once; for just one or two, nth_element is cheaper. This example computes three percentiles both ways and gets the same values, but the sort version is simpler to read and does the work once. The sign to watch for: several nth_element calls on the same container to pull out multiple positions, where a single sort would serve all of them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::nth_element", url: "https://en.cppreference.com/w/cpp/algorithm/nth_element" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
