@@ -1,0 +1,11 @@
+title: "Anti-pattern: a comparator that is not strict"
+standard: "C++11"
+difficulty: 3
+summary: "The comparator for min/max_element must be a strict weak ordering, which above all means it is irreflexive: comp(a, a) must be false. Writing the predicate with <= instead of < makes it reflexive and breaks that requirement, so the result is unspecified even though the code compiles and often looks right."
+notes: "Every ordering-based algorithm in the standard library -- sort, the ordered containers, and min/max_element among them -- requires its comparator to be a strict weak ordering, and the part people trip over is 'strict', meaning irreflexive: comp(a, a) must return false. The natural mistake is to write the predicate as a <= b, reading it as 'a is at most b', but <= is reflexive (a <= a is true), so it claims an element is less than itself. That violates the comparator's contract, which makes the behavior of max_element unspecified: it may return the wrong element, and because the standard grants no guarantee, the answer can differ between library implementations or optimization levels. It frequently 'happens to work' on small inputs, which is what makes it dangerous -- it passes a quick test and misbehaves later. The rule is simple: a comparator always expresses strict less-than. Write a < b, compare fields with <, and never <=, <=, >=, or anything reflexive. For the natural order, pass no comparator at all: the default uses operator<, which is already correct. The same defect sinks a sort comparator (the strict-weak-ordering anti-pattern in the sort chapter) and a std::map or std::set key comparator, where it can corrupt the container. The sign to watch for: a comparator lambda or functor whose body uses <=, >=, or otherwise returns true when its two arguments are equal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }
+detailed_tags:
+  - { name: "strict weak ordering", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }

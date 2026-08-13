@@ -1,0 +1,12 @@
+title: "min_element and max_element: iterators to the extremes"
+standard: "C++11"
+difficulty: 1
+summary: "min_element and max_element scan a range and return an iterator to the smallest or largest element -- a position, not a value. Dereference it for the value, or take its distance from begin for the index. On an empty range both return end(), which is how you detect there is no extreme."
+notes: "The key thing to internalize is that these return an ITERATOR, not the value. min_element(first, last) returns an iterator to the first smallest element and max_element to the first largest; you dereference it to read the value (*it) and you take std::distance(first, it) to get its index. Returning the position rather than the value is deliberate and useful: it lets you not just read the extreme but act on it -- modify it in place, erase it, or update a parallel array at the same index. Two details matter. First, the tie rule for these two functions is 'first wins': when several elements are equal to the extreme, both return the FIRST one (minmax_element differs for the max, which is a separate example). Second, on an empty range there is no element to point at, so both return end() -- the same value as last -- which means you must compare against end() before dereferencing, exactly as you would after a find. Both are O(n): a single linear scan, n-1 comparisons. By default they compare with operator<; a comparator or projection lets you rank by any rule, which the next example covers. Do not reach for these when the container is a std::map or std::set already ordered by the key -- there the smallest and largest are simply begin() and the last element, in O(1)/O(log n), with no scan."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::min_element", url: "https://en.cppreference.com/w/cpp/algorithm/min_element" }
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

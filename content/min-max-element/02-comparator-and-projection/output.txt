@@ -1,0 +1,2 @@
+longest word: purple
+top scorer: Ben with 75

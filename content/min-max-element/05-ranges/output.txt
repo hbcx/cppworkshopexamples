@@ -1,0 +1,3 @@
+biggest city: Kyiv
+smallest city: Bern
+minmax values: 2 9

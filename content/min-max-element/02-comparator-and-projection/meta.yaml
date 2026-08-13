@@ -1,0 +1,11 @@
+title: "Ranking by a rule: comparator and field"
+standard: "C++11"
+difficulty: 2
+summary: "min_element and max_element take an optional comparator, so you can find the extreme by any rule rather than the natural order of the elements: the longest string, the player with the highest score, the cheapest offer. The comparator is the same less-than predicate a sort uses, and the result is still an iterator you reach through for the fields."
+notes: "By default min/max_element compare elements with operator<, which is fine for numbers but rarely what you want for structs or for a derived quantity. The third argument is a comparator: a binary predicate that returns true when its first argument should be treated as LESS than its second -- exactly the same shape sort uses. Pass one that compares a field (a.score < b.score) and max_element finds the element with the largest score; compare by string length (a.size() < b.size()) and it finds the longest word. The direction never changes: max_element wants the element that no other element is 'greater' than under your comparator, and min_element the one no other is 'less' than, so you write the comparator as a plain less-than and let the function pick the end. A common shorthand in real code is to compute a key once and compare keys; if the key is expensive, precompute it into a parallel array or a decorated struct rather than recomputing inside every comparison. The result is still an iterator, so read the winning fields through it (best->name). In C++20 a projection (a member pointer or a small lambda) replaces most of these comparators -- max_element(range, {}, &Player::score) -- which is the ranges example later in this section. The comparator must be a strict weak ordering (use <, never <=), a rule whose own anti-pattern closes the section."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }
+detailed_tags:
+  - { name: "std::min_element", url: "https://en.cppreference.com/w/cpp/algorithm/min_element" }

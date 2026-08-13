@@ -1,0 +1,11 @@
+title: "Anti-pattern: dereferencing the extreme of an empty range"
+standard: "C++11"
+difficulty: 2
+summary: "On an empty range min_element and max_element return end(), the same as last. Dereferencing that iterator to read the value is undefined behavior. Because the container can be empty at runtime -- an empty query result, a sensor that returned nothing -- you must compare the result against end() before dereferencing it."
+notes: "It is tempting to write *std::max_element(v.begin(), v.end()) in one breath and use the value directly, and it works right up until v is empty. With no elements there is no extreme to point at, so both min_element and max_element return end() (which equals the last argument you passed). Dereferencing end() reads one past the last element: undefined behavior that may crash, may return garbage, and often does neither in testing because the memory just past a small vector happens to be readable -- so the bug ships and fires on the first empty input in production. The fix is the same discipline as after a find: the returned iterator is only dereferenceable when it is not end(), so compare first. Assign the result to a variable, check it against v.end(), and read *it only in the branch where an element exists; handle the empty case explicitly (a default, a skip, a message). Note this is exactly why these functions return an iterator rather than a value -- the value form has no way to signal 'there wasn't one', while end() does. In C++20, ranges::max over an empty range is likewise a precondition violation, and if you want a defined answer for the empty case, ranges::max accepts no fallback, so guard there too or keep a sentinel default. The sign to watch for: *max_element(...) or *min_element(...) dereferenced inline, with no end() check and a container that is not provably non-empty."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }
+detailed_tags:
+  - { name: "std::min_element", url: "https://en.cppreference.com/w/cpp/algorithm/min_element" }

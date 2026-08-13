@@ -1,0 +1,3 @@
+min value: 9, max value: 30
+min at index 6, max at index 3
+empty range: no max

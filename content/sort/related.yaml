@@ -9,3 +9,5 @@
   note: "The sibling algorithm for totals rather than order: count says how many match, where sort arranges them -- go there for tallies, thresholds, and progress counts over a range."
 - slug: "transform"
   note: "The step that often comes before a sort: precompute a key per element with transform, then sort by that key so the comparator does not recompute it -- go there for mapping a range and the decorate-sort pattern."
+- slug: "min-max-element"
+  note: "When you only want one end, not the whole order: min_element and max_element find the extreme in O(n), and partial_sort or nth_element get the top-k, so sorting just to read front() or back() is wasted work -- go there for the extremes."

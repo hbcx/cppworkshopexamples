@@ -1,0 +1,19 @@
+- problem: "One record has to be picked out of a collection as the best or worst by some metric -- the highest bid, the cheapest supplier, the most recent event, the player in the lead -- and then acted on, not just measured."
+  why: "A hand-written loop that tracks a best-so-far and its index is several lines that are easy to get wrong on ties or an empty input; max_element (or min_element) with a comparator says the intent in one call and returns an iterator you can read through, modify, or erase."
+  signal: "A loop with a best variable and a bestIndex updated inside an if, comparing a field of each element against the current best."
+
+- problem: "Values must be rescaled to a fixed display or storage range -- fitting a data series to a chart axis, normalizing sensor readings to 0..1, mapping a heatmap to a colour ramp -- which needs both the smallest and the largest of the data."
+  why: "Calling min_element and then max_element walks the data twice; minmax_element gets both ends in a single pass at about three-quarters the comparisons, which matters when the range is large or the scaling is recomputed every frame."
+  signal: "A min_element call immediately followed by a max_element call over the same range, feeding a scale or normalize step."
+
+- problem: "An input value must be kept inside an allowed band before it is used -- a volume or brightness slider, a zoom level, a retry backoff capped at a maximum, an array index kept in bounds."
+  why: "The idiomatic std::max(lo, std::min(v, hi)) is correct but easy to write with the bounds or arguments transposed, and the bug is silent; std::clamp(v, lo, hi) states the band directly and cannot be misordered the same way."
+  signal: "Nested std::min and std::max calls that pin a single value between a low and a high bound."
+
+- problem: "Not the extreme value but its POSITION is needed -- the index of the peak sample to annotate on a graph, the slot of the winning entry to highlight, the frame where a maximum occurred -- often to update a second, parallel array at the same index."
+  why: "A value-returning reduction throws the position away, forcing a second search to find where it was; min_element / max_element return an iterator, so std::distance from begin gives the index directly with no re-scan."
+  signal: "A search for a maximum or minimum value followed by a second loop that looks up where that value sits."
+
+- problem: "The data has ties at the extreme and which tied element is chosen matters -- the earliest of several top-priority jobs, the last record at the peak price, a deterministic tie-break a test depends on."
+  why: "A naive loop's tie behavior is accidental, and the standard functions disagree on purpose -- max_element returns the FIRST largest while minmax_element's max returns the LAST -- so picking the right function (or comparator) makes the tie-break explicit instead of incidental."
+  signal: "Code that assumes a specific duplicate is selected at the extreme without a comparator or function chosen to guarantee it."

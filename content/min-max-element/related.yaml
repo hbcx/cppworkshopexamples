@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "sort"
+  note: "When one extreme is not enough: for the k largest or smallest, partial_sort and nth_element beat a full sort, and sorting only to read one end is the anti-pattern this chapter warns about -- go there for ordering, comparators, and top-k."
+- slug: "accumulate-reduce"
+  note: "The general fold behind min and max: an extreme is a reduction that keeps the best-so-far, and accumulate or reduce folds a range to any single summary -- go there for sums, custom folds, and reducing to a struct."
+- slug: "count-count-if"
+  note: "The other single-pass question about a range: count totals how many match where min/max_element find the boundary value -- go there for tallies, thresholds, and progress counts."
+- slug: "ranges"
+  note: "Where the projection forms come from: ranges::max_element and ranges::minmax take a whole range and a projection so you rank by a member, and ranges::max returns a value -- go there for range algorithms, views, and projections."

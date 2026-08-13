@@ -7,3 +7,5 @@
   note: "Where the C++20 forms come from: std::ranges::count takes the whole range and a projection so you can count by a member, and views can be counted directly -- go there for range algorithms, views, and projections."
 - slug: "maps"
   note: "The keyed way to count many things at once: a std::map<key, int> tallies every category in one pass, and a multiset's member count gives a value's multiplicity in O(log n) -- go there when you need a full frequency table rather than one count."
+- slug: "min-max-element"
+  note: "The other single-pass summary of a range: where count totals the matches, min_element and max_element find the boundary value and its position -- go there for the smallest and largest, and minmax in one pass."

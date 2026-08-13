@@ -1,0 +1,2 @@
+min: 1, max: 7
+min at index 1, max at index 4

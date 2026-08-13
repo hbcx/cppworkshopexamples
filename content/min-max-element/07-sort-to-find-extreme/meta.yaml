@@ -1,0 +1,12 @@
+title: "Anti-pattern: sorting a container to read one end"
+standard: "C++11"
+difficulty: 2
+summary: "Sorting a whole container just to read its front or back is O(n log n) work for an O(n) question, and it reorders the data as a side effect. min_element, max_element, or minmax_element for both find the extreme in a single linear scan and leave the container untouched."
+notes: "Sorting to find the minimum or maximum is a classic case of a bigger hammer than the job needs. A full sort is O(n log n) and, worse, it rearranges the container -- so either you pay for a copy to preserve the original order (an allocation plus n moves, as here) or you silently destroy an order the rest of the code was relying on. All of that to look at sorted.front() or sorted.back(). Finding an extreme is inherently O(n): you must look at every element once, but no more than once. min_element and max_element do exactly that single pass and hand back an iterator; minmax_element gets both ends in one pass at about 3n/2 comparisons, still linear. None of them touch the container's order. The same reasoning extends past a single extreme: if you want the k smallest or largest, partial_sort or nth_element is O(n log k) / O(n) rather than a full O(n log n) sort (that is the 'full sort for top-k' anti-pattern in the sort chapter). Reserve a full sort for when you genuinely need the WHOLE range ordered -- to iterate in order, to binary_search repeatedly, to deduplicate with unique. For 'what is the biggest' or 'what is the smallest', scan. The sign to watch for: a std::sort whose result is used only through front(), back(), or a couple of end positions, especially on a throwaway copy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::min_element", url: "https://en.cppreference.com/w/cpp/algorithm/min_element" }
+detailed_tags:
+  - { name: "std::minmax_element", url: "https://en.cppreference.com/w/cpp/algorithm/minmax_element" }
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

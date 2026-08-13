@@ -1,0 +1,2 @@
+max of first and last only: 88
+max of the whole vector:    90

@@ -1,0 +1,4 @@
+title: "min_element / max_element"
+description: "Finding the smallest and largest element of a range. min_element and max_element return an iterator to the extreme (dereference for the value, distance for the index), minmax_element finds both in a single pass, and a comparator or projection ranks by any rule. Covers the iterator result, ranking by a field, minmax_element and its asymmetric tie rule, the value-level min/max and C++17 clamp, and the C++20 ranges forms with projections -- alongside the anti-patterns: dereferencing the end() an empty range returns, sorting a whole container just to read one end, confusing max_element (an iterator over a range) with max (the larger of its arguments), and a comparator that is not a strict weak ordering."
+sort_order: 76
+category: "Algorithms"

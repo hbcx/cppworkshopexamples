@@ -5,3 +5,5 @@
   note: "The map half of transform_reduce: transform produces a value per element where reduce collapses them to one, and transform_reduce fuses the two -- go there for mapping a range, in place or to a new container."
 - slug: "count-count-if"
   note: "A reduce with a fixed operation: count is really a fold that adds one per match, the special case of reducing to a total -- go there for tallies, thresholds, and progress counts."
+- slug: "min-max-element"
+  note: "A reduce that keeps the best-so-far instead of combining: min_element and max_element fold a range to its extreme and hand back its position, where accumulate folds to a computed value -- go there for the smallest and largest of a range."

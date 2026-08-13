@@ -1,0 +1,11 @@
+title: "Anti-pattern: confusing max_element with max"
+standard: "C++11"
+difficulty: 2
+summary: "std::max returns the larger of its ARGUMENTS -- a couple of values, or an initializer_list -- while std::max_element scans a RANGE and returns an ITERATOR to the largest element. Mixing them up gives std::max(front, back), which ignores the middle, or a raw iterator used where a value was meant."
+notes: "The two look interchangeable and are not. std::max(a, b) answers 'which of these values is larger' and returns a value; std::max_element(first, last) answers 'where is the largest element in this range' and returns an iterator. Two mistakes follow from blurring them. First, reaching for std::max on a container by feeding it a couple of elements -- std::max(v.front(), v.back()) -- which compares only those two and silently ignores everything in between, so it is simply the wrong answer for 'the maximum of the vector' (here it reports 88 and misses 90). There is no std::max overload that takes a container and scans it; the initializer_list overload, std::max({a, b, c}), only takes a fixed, hand-listed set of values, not a runtime container. Second, forgetting that max_element hands back an iterator: printing it, comparing it to a number, or assigning it to an int does not compile, because it is a position, not a value -- you must dereference (*it) to get the element. The rule is short: to reduce a whole CONTAINER to its largest element, use max_element and dereference the result; use std::max only to pick the larger of a few values you already hold. The sign to watch for: std::max fed individual container elements as if it scanned them, or a max_element result used without a dereference."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }
+detailed_tags:
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }

@@ -1,0 +1,11 @@
+title: "minmax_element: both extremes in one pass"
+standard: "C++11"
+difficulty: 2
+summary: "minmax_element returns a pair of iterators {min, max} in a single scan, cheaper than calling min_element and max_element separately. Its tie rule is asymmetric: the min is the FIRST smallest element but the max is the LAST largest -- the opposite of a standalone max_element."
+notes: "When you need both ends, minmax_element is the right tool: one pass, one pair of iterators, result.first for the min and result.second for the max. It is not just tidier but faster -- the standard guarantees at most about 3n/2 comparisons, where two separate calls do close to 2n, because it compares elements in pairs and updates both extremes together. Reach through each iterator for the value (*result.first) or take its distance for the index, exactly as with the single-ended versions. The detail that surprises people is the tie rule, and it is asymmetric on purpose. min_element, max_element and minmax_element's MIN all return the FIRST element equal to the extreme. But minmax_element's MAX returns the LAST element equal to the largest -- deliberately different from a lone max_element, which returns the first. The reason is a subtle guarantee: for a range of all-equal elements, minmax's min points at the front and its max at the back, so the two never point at the same element unless the range has one element. In this example, with two 1s and two 7s, the min is the first 1 and the max is the last 7. If which duplicate you get matters -- a tie-break on a scoreboard, the earliest versus latest record at the peak -- know that a standalone max_element and minmax_element's max disagree, and pick accordingly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::minmax_element", url: "https://en.cppreference.com/w/cpp/algorithm/minmax_element" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

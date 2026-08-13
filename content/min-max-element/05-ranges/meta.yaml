@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms with projections"
+standard: "C++20"
+difficulty: 2
+summary: "The C++20 ranges versions take the whole range and an optional projection, so you rank by a member without a comparator. ranges::max_element still returns an iterator; ranges::min and ranges::max return a VALUE; ranges::minmax returns a pair of values in one pass."
+notes: "The ranges forms bring the two usual improvements to this family. They take the range directly -- ranges::max_element(cities, {}, &City::population) -- with no begin/end pair, and they accept a PROJECTION as a trailing argument, so instead of writing a comparator that reaches into a struct you name the field with a member pointer and let the algorithm compare the projected values. The {} in the call is the default comparator (less-than); the projection follows it. Watch which ones return an iterator and which return a value: ranges::max_element and min_element return an ITERATOR into the range, exactly like the classic versions, so you dereference or read a field through it. But ranges::min and ranges::max return a VALUE -- the smallest or largest element itself (a copy), or the larger of two given values -- which is often what you actually wanted and saves the dereference. ranges::minmax returns a small struct with .min and .max VALUES in a single pass, the value-returning cousin of minmax_element. A caution that comes with value-returning: taking min/max/minmax of a temporary range and holding a reference into the result can dangle; bind the returned values (as the structured binding here does with copies) rather than references when the range is a temporary. Prefer the ranges forms in C++20 code: projections remove most hand-written comparators, and returning a value where you want a value is cleaner than dereferencing an iterator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::max_element", url: "https://en.cppreference.com/w/cpp/algorithm/max_element" }
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

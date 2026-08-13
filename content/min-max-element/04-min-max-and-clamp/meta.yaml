@@ -1,0 +1,12 @@
+title: "Value-level min, max, and clamp"
+standard: "C++17"
+difficulty: 1
+summary: "std::min and std::max work on VALUES, not ranges: they return the smaller or larger of two arguments, or of an initializer_list. std::clamp (C++17) bounds a value to a range in one call, replacing the error-prone std::max(lo, std::min(v, hi))."
+notes: "This example is the value-level family, distinct from the range-scanning min_element / max_element. std::min(a, b) returns the smaller of two values and std::max(a, b) the larger; both also accept an initializer_list -- std::max({4, 9, 2, 7}) is 9 -- which is the neat way to take the largest of a fixed handful of values without a container. They return by const reference for the two-argument form, so be careful taking a reference to the result of std::max(a, b) when a and b are temporaries. std::clamp(v, lo, hi), added in C++17, restricts a value to an inclusive range: it returns lo when v is below lo, hi when v is above hi, and v otherwise. It exists because the hand-rolled equivalent, std::max(lo, std::min(v, hi)), is easy to write with the arguments in the wrong order or the bounds swapped, and clamp reads as its intent. Common uses are pinning a slider or volume to its limits, keeping an index inside an array, or bounding a colour channel to 0..255. One precondition: lo must not be greater than hi, or the result is undefined. Like min and max, clamp can take a comparator for custom orderings. Keep the two families straight: min/max/clamp compare a few VALUES you already hold; min_element/max_element scan a whole RANGE and hand back an iterator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::min", url: "https://en.cppreference.com/w/cpp/algorithm/min" }
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }
+detailed_tags:
+  - { name: "std::clamp", url: "https://en.cppreference.com/w/cpp/algorithm/clamp" }
