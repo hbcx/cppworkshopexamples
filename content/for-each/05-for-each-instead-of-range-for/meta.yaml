@@ -1,0 +1,11 @@
+title: "Anti-pattern: for_each where a range-for is clearer"
+standard: "C++11"
+difficulty: 1
+summary: "Using for_each with a lambda just to visit every element of a whole container is more machinery than a range-based for loop, which needs no iterators, no lambda, and supports break and continue. Reach for for_each only where it does something a range-for cannot."
+notes: "Since C++11 the range-based for loop is the default way to walk a whole container: for (int x : v) is shorter than std::for_each(v.begin(), v.end(), [](int x){ ... }), needs no begin/end pair, introduces no lambda scope, and -- crucially -- supports break, continue, and early return, none of which for_each allows (its callback runs for every element, always). So wrapping a plain per-element side effect in for_each is extra ceremony that reads worse. This is not a rule against for_each; it is a rule about the WHOLE-container simple-visit case, where the loop wins. for_each remains the right tool when it offers something the loop does not: applying to a SUB-RANGE via an iterator pair, running under a parallel EXECUTION POLICY (C++17), passing a STATEFUL FUNCTOR whose result you read back, or writing GENERIC code that receives iterators rather than a range. If none of those apply and you are just touching each element once, use the loop. The sign to watch for: std::for_each over a container's full begin()/end() with a lambda that only produces a side effect and no return value -- especially if the lambda would be cleaner as a loop body, or if you find yourself wishing you could break out of it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }
+detailed_tags:
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }

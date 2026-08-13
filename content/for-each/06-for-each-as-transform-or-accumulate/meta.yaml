@@ -1,0 +1,12 @@
+title: "Anti-pattern: for_each doing a transform or accumulate"
+standard: "C++11"
+difficulty: 2
+summary: "for_each with a captured accumulator to build a sum, or pushing mapped values into another container, works but hides its intent behind a side effect. accumulate says fold-to-a-value and transform says map-each-element; using the named algorithm makes the code say what it does."
+notes: "for_each is so general it can imitate the more specific algorithms, and that is exactly why doing so reads worse. A for_each with a [&sum] capture that adds each element is a FOLD -- std::accumulate(v.begin(), v.end(), 0LL) states 'reduce to a total' directly, in one expression, with no external variable to initialize and mutate. A for_each that push_backs a computed value into another vector is a MAP -- std::transform(v.begin(), v.end(), std::back_inserter(out), f) states 'produce one output per input'. The specific algorithm carries meaning a general loop cannot: a reader sees accumulate and knows a single value comes out; sees transform and knows a parallel container is produced; and each is harder to get subtly wrong (a for_each fold is easy to write with the wrong initial value or an overflow-prone accumulator type). The general principle behind this whole section: reach for the algorithm whose NAME matches your intent -- count_if to tally, transform to map, accumulate to fold, find_if to locate -- and keep for_each for the case that is genuinely just 'do this side effect to each element' with no value coming back. The sign to watch for: a for_each whose lambda captures an accumulator it sums into, or appends mapped results to another container -- those are accumulate and transform wearing a disguise."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }
+detailed_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }

@@ -1,0 +1,3 @@
+for_each found: 15
+find_if found: 15
+any over 10? yes

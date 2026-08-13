@@ -13,3 +13,5 @@
   note: "The faster search a sort unlocks: once a range is sorted, binary_search and lower_bound find in O(log n) instead of find's linear scan -- go there to order a range first, with comparators and stable_sort."
 - slug: "remove-erase"
   note: "What to do once you have found the element: member erase(it) deletes the one find returned and hands back the next iterator, and remove_if deletes every match by condition -- go there for deleting elements in place."
+- slug: "for-each"
+  note: "The visit-everything algorithm that cannot stop: for_each always runs to the end, where find_if short-circuits at the first match -- go there for applying a side effect to each element, and why a search should not be a for_each with a flag."

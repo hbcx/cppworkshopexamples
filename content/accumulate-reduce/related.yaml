@@ -7,3 +7,5 @@
   note: "A reduce with a fixed operation: count is really a fold that adds one per match, the special case of reducing to a total -- go there for tallies, thresholds, and progress counts."
 - slug: "min-max-element"
   note: "A reduce that keeps the best-so-far instead of combining: min_element and max_element fold a range to its extreme and hand back its position, where accumulate folds to a computed value -- go there for the smallest and largest of a range."
+- slug: "for-each"
+  note: "The general per-element apply accumulate is often written as by hand: a for_each with a captured running total is really a fold, and accumulate states it -- go there for the plain visit and when a named algorithm beats a captured accumulator."

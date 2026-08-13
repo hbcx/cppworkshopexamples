@@ -1,0 +1,12 @@
+title: "Anti-pattern: for_each to find or stop early"
+standard: "C++11"
+difficulty: 2
+summary: "for_each always visits every element -- it has no way to break. Emulating an early exit with a captured flag keeps scanning after the answer is found and reads awkwardly. find_if returns the first match and any_of answers yes/no, both stopping as soon as they can."
+notes: "for_each has no early exit: the callback runs for every element, and there is no break, no way to signal 'stop now'. So using it to find the first element matching a condition means scanning the whole range and guarding with a flag (if not-found-yet and matches, record it), which wastes the rest of the pass and buries the intent in mutable state. Worse patterns emulate break by throwing an exception out of the callback to unwind for_each -- control flow through exceptions for an ordinary search, which is slow and surprising. The library already has the right tools, and they SHORT-CIRCUIT: std::find_if stops at and returns an iterator to the first element satisfying the predicate; std::any_of returns true as soon as one matches (and none_of / all_of for the other quantifiers); std::count_if if you actually need the total. Each says what it is doing and stops as early as correctness allows, where the for_each version cannot stop at all. The rule: if the loop wants to stop when it finds something, it is a search, and a search algorithm -- not for_each -- is the tool. (If you genuinely need to visit every element AND stop early on a condition, a plain range-based for loop with a break is clearer than either.) The sign to watch for: a for_each whose callback carries a found flag or throws to escape, doing the job of find_if or any_of."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }
+detailed_tags:
+  - { name: "std::find_if", url: "https://en.cppreference.com/w/cpp/algorithm/find" }
+  - { name: "std::any_of", url: "https://en.cppreference.com/w/cpp/algorithm/all_any_none_of" }

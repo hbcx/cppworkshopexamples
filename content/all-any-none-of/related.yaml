@@ -9,3 +9,5 @@
   note: "When you need WHICH element, not just whether one exists: any_of gives a yes-or-no, find_if gives an iterator to the first match so you can read, change, or erase it -- go there for locating and acting on an element."
 - slug: "count-count-if"
   note: "When you need HOW MANY, not just whether one exists: any_of stops at the first match, count_if visits every element to total them -- go there for tallies, thresholds, and why count greater than zero should be any_of."
+- slug: "for-each"
+  note: "The visit-every-element algorithm these improve on for a yes/no: any_of short-circuits where a for_each with a found flag keeps scanning -- go there for applying a side effect to each element, and when a plain loop or a search beats it."

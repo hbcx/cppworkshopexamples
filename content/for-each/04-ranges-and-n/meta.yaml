@@ -1,0 +1,12 @@
+title: "for_each_n and the C++20 ranges form"
+standard: "C++20"
+difficulty: 2
+summary: "for_each_n (C++17) applies the callable to the first N elements, taking a start iterator and a count. std::ranges::for_each (C++20) takes the whole range and an optional projection, so the callable receives a chosen field instead of the whole element."
+notes: "Two later additions round out for_each. for_each_n(first, n, f), from C++17, applies f to the first n elements starting at first -- a COUNT rather than an end iterator, which suits a stream or a count you already have without computing an end. The caller is responsible for the range holding at least n elements, exactly like copy_n. std::ranges::for_each(range, f, proj), from C++20, takes the range directly and adds an optional PROJECTION: passing &User::visits makes the callable receive each user's visits field rather than the whole User, so you act on one member without reaching into the struct in the lambda. It returns a struct with the end iterator and the (moved) function object, keeping the stateful-functor trick from the classic form. Worth knowing but not shown here (it needs a parallel runtime to link): since C++17 std::for_each also has an overload taking an EXECUTION POLICY as its first argument -- std::for_each(std::execution::par, first, last, f) -- which may run the per-element work across threads. That parallel overload is one of for_each's strongest reasons to exist over a plain loop, but it requires f to be safe to call concurrently (no unsynchronized shared state) and the order of calls is then unspecified. Prefer the ranges form in C++20 for the direct range and projection; reach for the execution-policy overload when a large, independent per-element workload can be parallelized."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each_n", url: "https://en.cppreference.com/w/cpp/algorithm/for_each_n" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: resizing the container inside the callback"
+standard: "C++11"
+difficulty: 3
+summary: "for_each walks a fixed [first, last) iterator pair. Changing the container's SIZE from inside the callback -- push_back, insert, erase -- can reallocate or shift the storage and invalidate those iterators, so the loop then reads freed or moved memory: undefined behavior. Build new elements in a separate container and append once."
+notes: "for_each is handed the iterators first and last once, at the start, and walks between them. The callback getting a reference to the current element is not permission to change the container's SIZE. If the callback push_backs onto the same vector, a reallocation moves the whole buffer, leaving first and last dangling, and the next iteration dereferences freed memory -- undefined behavior that may crash or silently corrupt. Even without a reallocation, appending while iterating can extend the range so the new elements are visited too, giving a runaway loop; and erasing shifts elements so the walk skips or repeats. This is the same iterator-invalidation trap as erasing in a hand-written loop, and it applies to any algorithm that holds iterators across the call. The fix is to not mutate the size of the range you are iterating: write the produced elements into a SEPARATE container inside the callback, then splice them on afterward with a single insert (or reserve up front if you know the count). If you must delete by a condition, use the erase-remove idiom or erase_if, not an erase inside for_each. Mutating the VALUES in place (through int&) is fine; mutating the container's structure is not. The sign to watch for: a for_each (or any standard algorithm) whose callback calls push_back, insert, erase, resize, or clear on the very container being iterated."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }
+detailed_tags:
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }

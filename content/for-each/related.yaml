@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "transform"
+  note: "The algorithm to use when for_each is really mapping: transform produces one output per input, stating the intent that a for_each with a push_back capture hides -- go there for mapping a range, in place or to a new container."
+- slug: "accumulate-reduce"
+  note: "The algorithm to use when for_each is really folding: accumulate reduces a range to one value, clearer than a for_each with a captured running total -- go there for sums, custom folds, and reducing to a struct."
+- slug: "find-find-if"
+  note: "The search for_each cannot express: find_if stops at the first match and returns its position, where for_each must scan the whole range with no way to break -- go there for locating and acting on one element."
+- slug: "all-any-none-of"
+  note: "The short-circuiting yes/no checks: any_of and its siblings stop as soon as the answer is known, where a for_each with a found flag keeps going -- go there for the quantifier algorithms."

@@ -1,0 +1,11 @@
+title: "for_each: apply a callable to every element"
+standard: "C++11"
+difficulty: 1
+summary: "std::for_each invokes a callable once on each element of a range, in order. It is the plainest algorithm -- no result, no filtering, just a side effect per element -- and the callable can be a lambda, a free function, or a functor."
+notes: "for_each(first, last, f) walks the range from first to last and calls f on each element, in order, once each. It returns f (more on that in a later example) but is used mostly for the side effect: print each element, send each message, register each handler. The callable is anything invocable with one element -- a lambda as here, a plain function, or a function object. Passed by value (int x), the callable sees a COPY and cannot change the element; passed by reference (int& x), it can mutate in place, which the next example shows. Two honest framings set expectations for the whole section. First, for a simple visit of a WHOLE container, a range-based for loop (for (int x : v)) says the same thing with no iterators, no lambda, and the ability to break or continue -- so plain for_each over an entire container is usually not the modern choice (an anti-pattern later). for_each earns its keep on a SUB-RANGE, in generic code that is handed an iterator pair, with a stateful functor whose result you read back, or with a parallel execution policy. Second, if the per-element work is really building a value or a mapped container, a more specific algorithm (accumulate, transform, count_if) states the intent better than for_each with a captured variable. Knowing when NOT to use it is most of knowing for_each."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }
+detailed_tags:
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }

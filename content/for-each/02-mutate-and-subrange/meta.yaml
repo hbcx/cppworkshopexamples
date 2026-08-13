@@ -1,0 +1,11 @@
+title: "Mutating in place, and a sub-range"
+standard: "C++11"
+difficulty: 1
+summary: "Take the element by reference (int&) and the callable can modify it in place. Because for_each is given an iterator pair, not a container, it applies just as easily to a sub-range -- the first N elements, a middle slice -- which is one of the places it beats a range-based for loop over the whole container."
+notes: "Two small but useful points. First, mutation: declare the callable's parameter as a reference (int& x) and assignments inside it change the actual element, so for_each(v.begin(), v.end(), [](int& x){ x *= 10; }) scales the vector in place. Take it by value and you edit a throwaway copy -- a common silent bug when someone expects for_each to modify and forgets the &. Second, the sub-range: for_each is handed a [first, last) iterator pair, so pointing it at part of the container -- v.begin() to v.begin()+3 -- applies the action to just those elements. A range-based for loop always covers the WHOLE container; to visit only a slice with a range-for you would need a view or an index guard, whereas for_each expresses the slice directly with the two iterators. This sub-range ability, together with the parallel and generic-code cases, is where for_each is genuinely the better tool. When the reference-mutation is really recomputing each element from itself, transform in place (writing back to the same range) is the intent-revealing alternative; use for_each when the action is a side effect that happens to also touch the element, and transform when you are mapping old value to new."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }
+detailed_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }

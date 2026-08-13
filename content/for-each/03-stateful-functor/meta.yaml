@@ -1,0 +1,11 @@
+title: "The returned functor: gather a result"
+standard: "C++11"
+difficulty: 2
+summary: "for_each returns its function object by value after applying it to every element, so a functor that accumulates state -- a sum, a count, a min/max, a collected list -- carries its result out of the call. This is the one thing for_each offers that a range-based for loop does not."
+notes: "The detail almost everyone forgets is that for_each has a return value: it returns the function object f, moved out after the last call. That matters when f is STATEFUL. A functor whose operator() updates members -- a running sum and count here -- has, by the time for_each finishes, seen every element, and for_each hands that populated functor back so you can read the gathered result: Stats s = std::for_each(begin, end, Stats{}); then s.sum and s.count are ready. This was the classic pre-lambda way to compute a summary in one pass, and it is still the cleanest way to package a reusable, testable per-element accumulation that you apply in several places. Since C++11 a lambda that captures local variables by reference does much the same thing more briefly for one-off cases -- but the captured-variable version does not return anything, so the functor form remains the composable one, and it is what makes for_each usable in generic code that expects an invocable it can inspect afterward. Note the functor is taken and returned BY VALUE, so for_each works on its own copy; do not expect an outside instance you passed to be updated -- read the returned one. When the accumulation is a plain fold to a single value, std::accumulate says so more directly; reach for the returned functor when the per-element state is richer than one value or when you want a named, reusable object."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }
+detailed_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }

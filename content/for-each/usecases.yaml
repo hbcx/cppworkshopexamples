@@ -1,0 +1,19 @@
+- problem: "Every element of a collection must trigger a side effect with no value collected back -- send each queued message, log each record, register each handler, enqueue each job -- and the code is generic over the container."
+  why: "A range-based for loop is fine in concrete code, but a function template handed a [first, last) iterator pair cannot write a range-for over an unknown range as cleanly; for_each applies the action across whatever the pair spans, and pairs naturally with the sub-range and execution-policy overloads."
+  signal: "A function template taking a begin/end pair that applies one side-effecting action to each element without producing a result."
+
+- problem: "An action must be applied to only PART of a container -- the first N items, a middle slice, a window -- not the whole thing, and expressing exactly that range keeps the call precise."
+  why: "A range-based for loop always covers the whole container, so a slice needs an index guard or a view; for_each takes the two iterators (or for_each_n takes a start and a count) and applies to exactly that span with nothing extra."
+  signal: "A loop over a container guarded by an index range or a break at a count, doing a side effect on a leading or middle slice."
+
+- problem: "A one-pass summary must be gathered while touching each element once -- min, max, sum and count together, or a small histogram -- as a reusable, testable object rather than a handful of loose local variables."
+  why: "for_each returns its function object, so a functor that accumulates several statistics carries them out of the call as one named value that can be unit-tested and reused, where scattered captured locals cannot be passed around or reused."
+  signal: "Several accumulator variables updated together inside one loop, that would read better as one object with the gathering logic attached."
+
+- problem: "A large dataset needs the same independent computation applied to every element -- shading pixels, transforming rows, scoring records -- and the machine has cores to spare."
+  why: "std::for_each with std::execution::par (C++17) may spread the per-element work across threads with a one-word change, where a plain loop is sequential; the elements are independent, so no synchronization is needed beyond keeping the callback free of shared mutable state."
+  signal: "A sequential loop doing heavy, independent work per element in a hot path on a multicore machine."
+
+- problem: "A collection of objects must each be told to do something -- notify every observer, advance every entity one tick, flush every open connection -- calling a method or callback on each."
+  why: "This is the pure visit-each case for_each was made for: it names the intent (apply this action to all) and, in generic or algorithm-composed code, slots in where a raw loop would not; for a concrete whole-container visit a range-for is equally good, so the win is in generic or sub-range contexts."
+  signal: "A loop whose only body is calling one member function or callback on each element of a collection."
