@@ -1,0 +1,12 @@
+title: "Anti-pattern: generate where fill or iota fits"
+standard: "C++11"
+difficulty: 2
+summary: "generate is general enough to imitate fill and iota, and doing so reads worse. A generator that returns a constant is a fill; a generator with a captured counter that increments is an iota. The named algorithm states the intent and needs no external state."
+notes: "generate can produce any per-element value, so it is easy to reach for it when a more specific algorithm says exactly what you mean. Two cases recur. A generate whose lambda ignores everything and returns a CONSTANT -- []{ return 42; } -- is just std::fill(begin, end, 42): the value is buried in a lambda body instead of being a plain argument. A generate with a captured counter -- int i = 0; [&i]{ return i++; } -- is std::iota(begin, end, 0): it reinvents the consecutive-sequence algorithm with an external variable you have to declare, initialize, and hope nobody else touches. Both compile and work, but they hide a simple intent behind a closure and captured state, and the captured-counter version also quietly depends on generate calling the lambda left to right. The fix is to match the tool to the intent, the same lesson as elsewhere in the algorithms: fill for one repeated value, iota for a consecutive run, generate only when the values genuinely need a function with state (random numbers, a pattern, a stream). A good check: if the generator's body would be identical for every element, you want fill; if it is just a counter increment, you want iota; if it is neither, generate is right. The sign to watch for: a generate lambda that returns a constant, or that captures and post-increments a counter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::generate", url: "https://en.cppreference.com/w/cpp/algorithm/generate" }
+detailed_tags:
+  - { name: "std::fill", url: "https://en.cppreference.com/w/cpp/algorithm/fill" }
+  - { name: "std::iota", url: "https://en.cppreference.com/w/cpp/algorithm/iota" }

@@ -14,3 +14,5 @@
   note: "The eager map behind views::transform: the transform algorithm writes mapped results to a container now, where the view maps lazily on demand -- go there for the algorithm form, the binary two-range map, and when eager beats lazy."
 - slug: "min-max-element"
   note: "A range reduction with a projection: ranges::max_element and ranges::minmax rank a whole range by a member and return the extreme -- go there for the smallest and largest, the value-returning ranges::max, and the tie rules."
+- slug: "fill-generate"
+  note: "The eager writers behind views::iota: fill, generate and iota put values into a container now, where views::iota produces an increasing sequence lazily in a pipeline -- go there for initializing ranges and building them from a generator."

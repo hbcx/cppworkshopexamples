@@ -1,0 +1,11 @@
+title: "fill: set every element to one value"
+standard: "C++11"
+difficulty: 1
+summary: "std::fill writes one value into every element of a range. It works on a whole container or any sub-range, and is the clear way to reset a buffer, blank a grid, or set a block of elements to a known value."
+notes: "fill(first, last, value) assigns the same value to each element in the range -- the plainest write operation. Its everyday jobs are initialization and reset: blank a scratch buffer between uses, zero an accumulator array before a new pass, set a row of a grid to a background value. Because it takes an iterator pair, it applies just as easily to a SUB-RANGE: fill(v.begin(), v.begin()+3, 0) sets only the first three. Compared to the alternatives, fill is the tool when the value is CONSTANT across the range; if each element should get a computed or sequential value instead, generate (a nullary function per element) or iota (consecutive numbers) are the right tools, covered next. Two efficiency notes. First, if you are setting a container to a value right after creating or resizing it, the container itself can do the fill -- std::vector<int>(n, value) or resize(n, value) -- in one step, so a default construction followed by fill is redundant work (an anti-pattern later). Second, for trivially copyable types set to zero, fill is as fast as a memset under the hood but stays type-safe, so prefer fill over a raw memset (also an anti-pattern). fill_n is the counted sibling that takes a start and a length instead of an end."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fill", url: "https://en.cppreference.com/w/cpp/algorithm/fill" }
+detailed_tags:
+  - { name: "std::fill_n", url: "https://en.cppreference.com/w/cpp/algorithm/fill_n" }

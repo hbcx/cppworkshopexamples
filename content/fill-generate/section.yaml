@@ -1,0 +1,4 @@
+title: "fill / generate"
+description: "Writing values into a range. std::fill sets every element to one value, std::generate calls a nullary function for each element, and std::iota writes consecutive increasing values. The _n variants take a count instead of an end, and with a back_inserter they build a container from nothing. Covers fill and sub-ranges, generate with a generator, iota for sequences, the counted variants, and the C++20 ranges forms -- alongside the anti-patterns: writing past the end with fill_n on a too-small container, filling after a default construction the constructor could have done, using generate where fill or iota states the intent, and a generator that depends on being called in order."
+sort_order: 81
+category: "Algorithms"

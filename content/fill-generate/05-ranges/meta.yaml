@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms"
+standard: "C++20"
+difficulty: 1
+summary: "std::ranges::fill and std::ranges::generate take the whole range directly instead of a begin/end pair, and ranges::fill_n / generate_n keep the counted forms. The ranges algorithm that writes a consecutive sequence, std::ranges::iota, arrives one standard later, in C++23."
+notes: "The ranges versions are straightforward: ranges::fill(v, value) sets every element and ranges::generate(v, gen) calls the nullary generator per element, both taking the range directly with no begin()/end() pair. ranges::fill_n and ranges::generate_n keep the counted forms. There is no projection here, because these algorithms WRITE rather than read -- a projection transforms elements on the way in, and there is nothing coming in to transform. The one gap to know: ranges::iota, the algorithm that writes a consecutive sequence into a range, was not part of the original C++20 ranges set -- it landed in C++23. In C++20 you therefore still call the classic std::iota for that, while std::views::iota (a lazy view producing an increasing sequence, useful in pipelines) has been available since C++20. So on C++20: ranges::fill and ranges::generate for writing values, classic std::iota (or views::iota lazily) for sequences; on C++23 you also get ranges::iota. Prefer the ranges forms for the direct range argument, and remember iota is the odd one out until C++23."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::fill", url: "https://en.cppreference.com/w/cpp/algorithm/fill" }
+  - { name: "std::generate", url: "https://en.cppreference.com/w/cpp/algorithm/generate" }

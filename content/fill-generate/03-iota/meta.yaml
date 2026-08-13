@@ -1,0 +1,10 @@
+title: "iota: fill with consecutive values"
+standard: "C++11"
+difficulty: 1
+summary: "std::iota fills a range with consecutive increasing values starting from a given one, using the type's ++ operator: iota(first, last, 100) writes 100, 101, 102, and so on. It is the named tool for a sequence of numbers, cleaner than a generate with a captured counter."
+notes: "iota (named after the APL operator) writes an increasing sequence: it stores the start value in the first element, then ++value in the next, and so on to the end. iota(v.begin(), v.end(), 0) gives 0 1 2 3 ..., and any starting value works -- 100 here yields 100 101 102 .... It lives in <numeric>, not <algorithm>, alongside accumulate. Its typical uses are making index vectors (0..n-1 to sort or shuffle as a permutation, a very common trick: iota an index array, then sort the indices by some key), generating id or ticket numbers, or seeding a range you will transform. It works on any type with a prefix ++ and a copy, so it is not limited to ints -- iterators and some user types qualify too. The reason to prefer iota over generate with a captured i++ is exactly the reason to prefer any named algorithm: it states the intent (a consecutive run) in one call with no external counter to declare, initialize, and keep in sync -- writing that as a generate is a small anti-pattern later. If you only need the numbers lazily, without materializing them into a container, C++20's std::views::iota is the range-view counterpart; std::ranges::iota (the algorithm that writes into a range) arrives in C++23."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::iota", url: "https://en.cppreference.com/w/cpp/algorithm/iota" }
+detailed_tags: []

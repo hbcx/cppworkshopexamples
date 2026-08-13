@@ -1,0 +1,11 @@
+title: "generate: a value from a function per element"
+standard: "C++11"
+difficulty: 2
+summary: "std::generate calls a nullary function once per element and stores each result, so it writes computed rather than constant values: a running counter, random numbers, or a sequence held in the generator's state. The function takes no arguments -- it produces the next value each time it is called."
+notes: "generate(first, last, gen) fills a range by calling gen() -- a function object taking NO arguments -- once for each element and assigning the result. That no-argument shape is the key distinction: generate does not see the current element or its index (that is transform's job, mapping an input to an output), it just asks the generator for the next value. So the generator carries whatever it needs in its own state: a captured counter that increments, a random engine that advances, a small state machine producing a pattern. Here a captured next doubles each call to yield 1 2 4 8 16 32. Typical real uses are filling a buffer with random samples (generate with a captured std::mt19937 and a distribution), producing test data, or laying down a repeating pattern. Two cautions that become anti-patterns later. If the generator just returns a constant, that is fill; if it returns an incrementing counter, that is iota -- reach for the named tool instead of a captured-state generate. And a generator that depends on being called in a specific order (each value built from the last) works with the plain sequential generate but is fragile: it breaks under the parallel std::generate(std::execution::par, ...) overload, where the calls may run in any order or concurrently. Prefer generators whose calls are independent."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::generate", url: "https://en.cppreference.com/w/cpp/algorithm/generate" }
+detailed_tags:
+  - { name: "std::generate_n", url: "https://en.cppreference.com/w/cpp/algorithm/generate_n" }

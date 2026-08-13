@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "transform"
+  note: "The map that reads an input where generate does not: transform produces one output per input element, while generate calls a nullary function that sees nothing -- go there for mapping existing values, in place or to a new container."
+- slug: "copy-copy-if"
+  note: "The same output-iterator rules and the back_inserter idiom: copy writes existing elements where fill and generate write new values, and both need a sized destination or an inserter -- go there for copying ranges out and the empty-output trap."
+- slug: "vectors"
+  note: "Where the fill constructor and resize live: std::vector(n, value) and resize(n, value) set elements as the container is built or grown, the one-pass alternative to construct-then-fill -- go there for size, capacity, and growth."
+- slug: "ranges"
+  note: "The lazy sequence counterpart: std::views::iota generates an increasing range on demand inside a pipeline, where iota writes numbers into a container eagerly -- go there for views, the pipe operator, and lazy generators."

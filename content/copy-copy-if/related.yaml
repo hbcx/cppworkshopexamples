@@ -11,3 +11,5 @@
   note: "The dedup cousin of copy: unique_copy writes runs of adjacent duplicates collapsed to one, where copy writes every element -- go there for deduplicating a range, in place or copied out."
 - slug: "partition"
   note: "The two-output split behind copy_if: partition_copy sends matches and non-matches to separate outputs in one pass, where copy_if collects only the matches -- go there for splitting a range and in-place partitioning."
+- slug: "fill-generate"
+  note: "The write side that needs no source: fill and generate write new values into a range and, like copy, need a sized destination or a back_inserter -- go there for initializing and building ranges and the same empty-output trap."

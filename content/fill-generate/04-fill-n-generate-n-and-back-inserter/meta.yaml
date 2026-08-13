@@ -1,0 +1,12 @@
+title: "The counted variants and back_inserter"
+standard: "C++11"
+difficulty: 2
+summary: "fill_n and generate_n take a start iterator and a COUNT rather than an end, writing exactly n elements. Paired with a back_inserter they append n values to an empty container, building it from nothing without sizing it first."
+notes: "fill_n(first, n, value) and generate_n(first, n, gen) do the same work as fill and generate but are bounded by a COUNT instead of an end iterator -- handy when you know how many elements to write but do not have (or want to compute) an end. Written to existing slots, they need the container to already have room for n elements (writing past the end is undefined behavior -- an anti-pattern next). Their most useful pairing is with a std::back_inserter: because a back_inserter turns each assignment into a push_back, fill_n or generate_n with one APPENDS n elements to an empty (or existing) container, growing it to fit. This is the clean idiom for BUILDING a container of n items from nothing: generate_n(std::back_inserter(v), n, gen) makes n generated values, and fill_n(std::back_inserter(v), n, value) makes n copies of a value -- no pre-sizing, no manual loop. (When you can size up front, reserving n first avoids the incremental reallocations the back_inserter would otherwise do.) Note the count is taken literally: the caller is responsible for it being sensible -- a negative or wrong n is on you, exactly like copy_n. Choose the plain fill/generate when you have a range to write over, and the _n forms when you have a count -- with a back_inserter to create rather than overwrite."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fill_n", url: "https://en.cppreference.com/w/cpp/algorithm/fill_n" }
+  - { name: "std::generate_n", url: "https://en.cppreference.com/w/cpp/algorithm/generate_n" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

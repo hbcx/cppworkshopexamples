@@ -1,0 +1,11 @@
+title: "Anti-pattern: fill_n past the end of a container"
+standard: "C++11"
+difficulty: 2
+summary: "fill_n and generate_n write exactly count elements starting at the given iterator, with no bounds check. On an empty or too-small container, begin() has no room and the writes run past the end -- undefined behavior. Size the container first, or write through a back_inserter so it grows to fit."
+notes: "The counted algorithms trust the count completely: fill_n(first, n, value) writes to first, then the next position, n times, and never checks whether those positions exist. Point first at the begin() of an empty vector -- which equals its end() -- and all n writes land in memory the container does not own: undefined behavior, the classic 'writing into a range that has no slots' bug, the same trap transform hits when given begin() of an empty output. It often does not crash immediately (the memory just past a small allocation is frequently writable), so it passes a quick test and corrupts something later. There are two correct forms. If you know the size, create or resize the container to hold n elements first, then fill_n/generate_n writes into real slots. If you are BUILDING the container, wrap the destination in a std::back_inserter: each write becomes a push_back, so the container grows exactly n times to fit -- no pre-sizing. The rule is the output-iterator rule shared by copy, transform, and generate: the destination must either already have room, or be an inserter that makes room. A plain begin() into an empty or short container is the mistake. The sign to watch for: fill_n or generate_n whose first argument is the begin() of a container that has not been sized to at least n."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fill_n", url: "https://en.cppreference.com/w/cpp/algorithm/fill_n" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

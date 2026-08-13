@@ -11,3 +11,5 @@
   note: "The plain copy without the mapping: copy writes elements unchanged and copy_if selects a subset, where transform changes each one -- go there for filtering into a container, printing through an ostream_iterator, and the overlap rules copy shares."
 - slug: "for-each"
   note: "The general per-element apply transform is often mistaken for: for_each runs a side effect on each element and returns nothing, where transform produces one output per input -- go there for the plain visit and why a captured push_back should be a transform."
+- slug: "fill-generate"
+  note: "The write-only siblings that read no input: fill sets a constant and generate calls a nullary function per element, where transform maps an existing value -- go there for initializing and building ranges from nothing."

@@ -20,3 +20,5 @@
   note: "Emptying a vector of matching elements: the erase-remove idiom compacts and drops the tail, and erasing in a loop is the classic O(n squared) trap -- go there for remove vs erase, remove_if, and the C++20 erase_if."
 - slug: "rotate-reverse"
   note: "Moving elements within a vector without reallocating: rotate slides a block in one in-place pass where erase+insert shifts twice and can reallocate -- go there for reordering, move-to-front, and reversing a segment."
+- slug: "fill-generate"
+  note: "Setting a vector's contents: fill and generate write values into it, and the fill constructor v(n, value) or resize(n, value) beats construct-then-fill -- go there for initializing, building with generate_n, and iota sequences."

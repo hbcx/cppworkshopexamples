@@ -1,0 +1,11 @@
+title: "Anti-pattern: filling after a default construction"
+standard: "C++11"
+difficulty: 1
+summary: "Creating a container of n default elements and then overwriting them all with fill does the work twice: the elements are value-initialized, then reassigned. The fill constructor std::vector<int>(n, value) sets them as the container is built, in one pass, and resize(n, value) does the same for the new elements when growing."
+notes: "std::vector<int> v(n) value-initializes n elements (ints to 0), and following it with std::fill(v.begin(), v.end(), value) then reassigns every one -- two passes over the data to reach a state the container could have produced in one. The fill constructor states it directly: std::vector<int> v(n, value) builds n copies of value in a single pass, and the value is right there on the declaration line where a reader expects to learn the initial contents. This is the fill-family version of the reinventing-container-copy anti-pattern: reaching for an algorithm to do what a constructor already does. The same holds for growth: resize(n, value) constructs the NEWLY added elements as value, so resizing and then filling the appended tail by hand is redundant -- resize(n, value) is one call. When to still use fill: to RE-fill an existing container between uses (reset a reused buffer to a sentinel each iteration), or to fill only a sub-range, or when the fill value changes after construction. The mistake is specifically the create-then-immediately-fill pair, where the constructor argument would do. The sign to watch for: a std::vector<T> v(n); (or a resize(n)) immediately followed by a fill over the whole thing, where v(n, value) or resize(n, value) expresses it in one step."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fill", url: "https://en.cppreference.com/w/cpp/algorithm/fill" }
+detailed_tags:
+  - { name: "std::vector constructor", url: "https://en.cppreference.com/w/cpp/container/vector/vector" }

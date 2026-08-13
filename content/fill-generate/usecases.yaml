@@ -1,0 +1,19 @@
+- problem: "A reusable buffer or accumulator must be reset to a known value between passes -- clearing a scratch array each iteration, blanking a grid to a background cell, zeroing a histogram before a new count."
+  why: "Re-allocating a fresh container each pass churns memory and discards the capacity already reserved; std::fill overwrites the existing storage in place in one pass, keeping the allocation and stating the reset intent, and for trivially copyable types it is as fast as memset while staying type-safe."
+  signal: "A container re-created or looped over element by element to reset it to a constant between reuses."
+
+- problem: "A container of N computed or random values is needed -- test fixtures, sample data, N random tokens, a lookup table of precomputed results -- built from nothing."
+  why: "A hand-written loop with push_back mixes the count, the generator, and the growth into one body; generate_n with a back_inserter separates them -- the count and the value-producing function are explicit -- and it is the standard way to build N items without sizing first."
+  signal: "A for loop from 0 to N whose body only computes a value and push_backs it into a vector."
+
+- problem: "A run of consecutive numbers is needed -- index vectors to sort as a permutation, sequential ids or ticket numbers, keys 0..n-1 to map over."
+  why: "iota states 'consecutive values from here' in one call, where a generate with a captured counter reinvents it with external state to keep in sync; the index-permutation trick in particular (iota an index array, then sort the indices by a key) is a staple that iota makes one line."
+  signal: "A loop or a captured-counter generate that fills a container with 0, 1, 2, ... to use as indices or ids."
+
+- problem: "Only part of a buffer must be set -- resetting a fixed-size window, clearing the first N slots of a ring, blanking a header region -- leaving the rest untouched."
+  why: "fill_n writes exactly the count you give from a start position, so a slice is set without computing an end iterator or looping by index, and it composes with the same start-plus-count shape the rest of the buffer code already uses."
+  signal: "An index loop bounded by a fixed count that assigns the same value to a leading or windowed region of a buffer."
+
+- problem: "A container must start life as N copies of a default or sentinel -- N empty slots, N -1 placeholders, a grid pre-filled with a background value -- at construction or when it grows."
+  why: "The fill constructor std::vector<T>(n, value) and resize(n, value) set the elements as the container is built or grown, in one pass, where default-constructing and then filling does the work twice; putting the value on the declaration also documents the initial contents."
+  signal: "A vector sized with (n) or resize(n) immediately followed by a fill over the whole range with a constant."

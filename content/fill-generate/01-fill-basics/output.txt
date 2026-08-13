@@ -1,0 +1,2 @@
+all sevens:         7 7 7 7 7 7 
+first three zeroed: 0 0 0 7 7 7 
