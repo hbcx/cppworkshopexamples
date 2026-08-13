@@ -1,0 +1,12 @@
+title: "lower_bound and upper_bound"
+standard: "C++11"
+difficulty: 2
+summary: "On a sorted range, lower_bound returns an iterator to the first element not less than the value (>= it), and upper_bound the first strictly greater (> it). Together they bracket the run of elements equal to the value, and lower_bound of a missing value is exactly the position to insert it while keeping the range sorted."
+notes: "Where binary_search gives a bool, lower_bound and upper_bound give POSITIONS, and they are the more useful pair. lower_bound(first, last, value) returns an iterator to the first element that is NOT LESS than value -- the first one >= value -- and upper_bound returns the first element STRICTLY GREATER than value (> value). Read them as the two ends of a window: every element equal to value lies in the half-open range [lower_bound, upper_bound), so std::distance between them is how many times value occurs. Two everyday uses fall straight out. First, the INSERTION POINT: for a value not in the range, lower_bound returns where it would go to keep the range sorted, so v.insert(lower_bound(...), value) maintains sorted order -- the basis of a hand-kept sorted vector. Second, RANGE QUERIES: lower_bound(lo) and lower_bound(hi) (or upper_bound) bracket all elements with keys in [lo, hi). Both are O(log n) on random-access iterators and, like all of these, require the range to be sorted by the same comparison. A subtlety worth naming: lower_bound points AT value when present (the first occurrence) but at the next-greater element when absent, so to test presence you check both it != end() and *it == value -- lower_bound alone returning a valid iterator does not mean the value is there."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::lower_bound", url: "https://en.cppreference.com/w/cpp/algorithm/lower_bound" }
+  - { name: "std::upper_bound", url: "https://en.cppreference.com/w/cpp/algorithm/upper_bound" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

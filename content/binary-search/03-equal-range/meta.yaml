@@ -1,0 +1,11 @@
+title: "equal_range: both bounds in one call"
+standard: "C++11"
+difficulty: 2
+summary: "equal_range returns the pair {lower_bound, upper_bound} in one call -- the half-open sub-range of every element equal to the value. The distance between the two iterators is how many times the value occurs; an empty range (first == second) means the value is absent, positioned where it would be inserted."
+notes: "equal_range(first, last, value) is lower_bound and upper_bound bundled: it returns a std::pair whose .first is the lower_bound (first element >= value) and .second is the upper_bound (first element > value), so [first, second) is exactly the block of elements equal to value. It answers three questions at once. HOW MANY: std::distance(range.first, range.second) counts the occurrences of value in a sorted range -- the O(log n) way to count duplicates, far better than std::count's O(n) scan when the data is sorted. WHETHER PRESENT: the range is empty (first == second) precisely when value is absent, and non-empty when present. WHERE: first is the position of the first occurrence, or the insertion point if absent. Computing it in one call is not just tidier but can be cheaper than two separate bound searches. This is the algorithm behind a multimap's or multiset's member equal_range, which does the same over their trees, and it is the natural tool for 'give me all records with this exact key' on a sorted-by-key vector. As always the range must be sorted by the comparison used, and the same comparator (or projection) must be passed if the sort used one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::equal_range", url: "https://en.cppreference.com/w/cpp/algorithm/equal_range" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

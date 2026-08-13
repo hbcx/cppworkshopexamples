@@ -1,0 +1,2 @@
+4 appears 3 times, at indices 2..4
+5 appears 0 times

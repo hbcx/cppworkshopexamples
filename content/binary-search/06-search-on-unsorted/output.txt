@@ -1,0 +1,2 @@
+binary_search(9) after sort: true
+find(9) on unsorted:         true

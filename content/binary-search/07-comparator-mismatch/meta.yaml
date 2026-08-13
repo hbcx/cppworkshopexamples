@@ -1,0 +1,11 @@
+title: "Anti-pattern: a comparator that does not match the sort"
+standard: "C++11"
+difficulty: 3
+summary: "A binary search assumes the range is sorted by the comparator it is given. Searching a range sorted one way (say, descending) with a different comparator (the default ascending) violates that assumption -- the search follows the wrong order and reports present values as missing. The search comparator must match the one that sorted the range."
+notes: "This is the subtler cousin of searching unsorted data: the range IS sorted, just not by the order the search is using. A binary search does not inspect the data to discover its order; it TRUSTS that the range is arranged according to the comparator passed to it, and steps left or right on that basis. So a vector sorted descending (by std::greater) but searched with the default operator< is, from the search's point of view, not sorted at all -- it discards the wrong half and returns a wrong result, undefined behavior exactly as with unsorted data. The fix is a discipline: the comparator (and, in C++20, the projection) given to lower_bound, upper_bound, binary_search or equal_range must be the SAME one used to sort the range. If you sorted with std::greater, search with std::greater; if you sorted by a key projection, search by that key. This is a common real bug when the sort and the search live far apart in the code, or when someone changes the sort order and misses a search that still uses the old comparator. A good habit is to name the comparator once and use that name in both places, so they cannot drift. The sign to watch for: a binary-search call whose comparator (or absence of one) differs from the comparator used to sort the same range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::binary_search", url: "https://en.cppreference.com/w/cpp/algorithm/binary_search" }
+detailed_tags:
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }

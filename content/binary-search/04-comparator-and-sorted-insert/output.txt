@@ -1,0 +1,1 @@
+after inserting 6 (kept descending): 9 7 6 5 3 1 

@@ -1,0 +1,12 @@
+title: "Anti-pattern: binary-searching an unsorted range"
+standard: "C++11"
+difficulty: 2
+summary: "Every binary search assumes the range is sorted. On unsorted data the halving logic follows a wrong path and can report a present value as missing (undefined behavior), while looking like it worked. Sort the range first, or -- for a one-off lookup -- use the linear find, which needs no sorted order."
+notes: "binary_search, lower_bound, upper_bound and equal_range all buy their O(log n) speed by ASSUMING order: each step discards half the range based on where the value must be IF the range is sorted. Give them unsorted data and that assumption is false, so the search walks into the wrong half and returns a wrong answer -- and because the standard makes it a precondition, the behavior is formally undefined, not merely wrong. The trap is that it does not crash: it silently returns a plausible-looking bool or iterator, so a value that is present can be reported missing, and the bug hides until the data happens to be in an order that exposes it. There are two correct paths, and which is right depends on how often you search. If you will search the range MANY times, sort it once (O(n log n)) and then every binary_search is correct and O(log n) -- the sort pays for itself. If you will search only ONCE, sorting is wasted work; a linear std::find is O(n) but needs no order and is cheaper overall for a single lookup. The mistake is specifically running a binary search on data that was never sorted (or was re-sorted by a different key). The sign to watch for: binary_search or lower_bound on a container with no sort establishing the order it searches by, or on one sorted by a different comparator than the search uses."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::binary_search", url: "https://en.cppreference.com/w/cpp/algorithm/binary_search" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

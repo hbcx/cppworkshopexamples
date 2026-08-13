@@ -1,0 +1,12 @@
+title: "Anti-pattern: binary_search then find for the position"
+standard: "C++11"
+difficulty: 2
+summary: "binary_search returns only whether a value is present, not where. Following it with std::find to get the position adds a linear O(n) scan, wasting the O(log n) search. lower_bound returns the position AND lets you confirm presence in a single O(log n) call."
+notes: "binary_search answers a yes/no question and nothing more, so when you need the index you often see it paired with a std::find: first binary_search to know the value is there, then find to locate it. The two together are worse than useless -- the find is O(n), which dominates the O(log n) binary_search, so you have paid for a fast search and then thrown the result away with a slow one, doing more work than a single linear find would have. The right tool returns the position directly: lower_bound performs one O(log n) search and hands back an iterator to the first element not less than the target. To confirm the value is actually present (lower_bound points at the next-greater element when it is absent), check it != end() && *it == target -- one search covers both 'is it here' and 'where'. So the rule is: if you only need presence, binary_search; if you need the position (with or without a presence check), lower_bound, never binary_search followed by find. The same applies to counting -- equal_range gives the block in O(log n) rather than binary_search plus an O(n) count. The sign to watch for: a binary_search whose true branch immediately runs a find (or a count) for the same value on the same range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::lower_bound", url: "https://en.cppreference.com/w/cpp/algorithm/lower_bound" }
+detailed_tags:
+  - { name: "std::binary_search", url: "https://en.cppreference.com/w/cpp/algorithm/binary_search" }
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

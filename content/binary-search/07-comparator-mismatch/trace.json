@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 8}, {"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 19, "out": "binary_search(7) with matching comparator: true\n"}, {"file": "main.cpp", "line": 20}, {"file": "main.cpp", "line": 21}]}

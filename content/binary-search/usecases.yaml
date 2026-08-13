@@ -1,0 +1,19 @@
+- problem: "A large, rarely-changing table is checked for membership many times -- a set of allowed ids, a blocklist, a dictionary of known keys -- and the checks dominate the workload."
+  why: "A linear std::find is O(n) per check, which adds up fast; sorting the table once and using binary_search makes every check O(log n), and for a read-mostly table a sorted vector is more compact and cache-friendly than a std::set built for the same purpose."
+  signal: "Repeated linear scans of a container that is built once and then only queried, especially one large enough for the scan to show up in a profile."
+
+- problem: "A collection must stay sorted as elements are added -- a leaderboard, an ordered event list, a priced catalog -- without re-sorting the whole thing on every insert."
+  why: "Re-sorting after each push is O(n log n) per insert; lower_bound finds the correct position in O(log n) and a single insert puts the element there, keeping the vector sorted at the cost of only the O(n) shift the insert needs anyway."
+  signal: "A push_back followed by a full sort, or a re-sort triggered every time one element is appended to a container meant to stay ordered."
+
+- problem: "All records whose key falls in a range are needed -- events between two timestamps, orders in a price band, log lines in a window -- from a container sorted by that key."
+  why: "Filtering the whole container is O(n); on a sorted-by-key range, lower_bound(lo) and upper_bound(hi) bracket the matching block in O(log n), and the elements between the two iterators are exactly the answer, contiguous and ready to iterate."
+  signal: "A full scan with an if that keeps elements whose key is between two bounds, over a container already sorted by that key."
+
+- problem: "The number of times a value occurs in a sorted range is needed -- how many orders at a given price, how many samples at a level, the multiplicity of a key."
+  why: "std::count is an O(n) scan; on a sorted range equal_range returns the block of equal elements in O(log n), and the distance between its two iterators is the count -- and it gives the elements themselves, not just the number."
+  signal: "A std::count over a sorted range, or a manual tally of one value, where the range is already ordered by that value."
+
+- problem: "The first element at or beyond a threshold is needed -- the first event after a cutoff time, the first price at or above a target, the first id past a marker -- in a sorted sequence."
+  why: "Scanning from the front until the threshold is O(n); lower_bound jumps to the first element not less than the target in O(log n), and upper_bound gives the first strictly greater when the boundary itself should be excluded."
+  signal: "A loop from the beginning that stops at the first element meeting a >= or > condition, over a sorted range."

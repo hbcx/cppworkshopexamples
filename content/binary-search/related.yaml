@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "sort"
+  note: "The prerequisite for every search here: a binary search is correct only on a range sorted by the same comparator, so sort establishes the order these algorithms exploit -- go there for ordering, comparators, and stable_sort."
+- slug: "find-find-if"
+  note: "The linear search these replace when the range is sorted: find is O(n) on any range, where binary_search and lower_bound are O(log n) on a sorted one -- go there for locating an element without a sort, and when a scan beats sorting first."
+- slug: "sets"
+  note: "The container that keeps itself sorted and searches in O(log n) with its own member lower_bound and find, the right choice over a hand-sorted vector when the collection changes often -- go there for the tree-based ordered set."
+- slug: "maps"
+  note: "The keyed lookup that does this natively: a std::map stores sorted key-value pairs and its member find, lower_bound and equal_range give O(log n) access without a parallel sorted vector -- go there for associative lookup by key."

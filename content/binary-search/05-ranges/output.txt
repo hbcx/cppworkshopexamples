@@ -1,0 +1,2 @@
+first product >= 10: lamp (20)
+a product priced 20? true

@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms with a projection"
+standard: "C++20"
+difficulty: 2
+summary: "std::ranges::binary_search, lower_bound, upper_bound and equal_range take the whole range plus an optional comparator and PROJECTION, so you search a sorted-by-member range by that member without a hand-written comparator -- for example the first product priced at or above a threshold."
+notes: "The ranges forms bring the two familiar improvements. They take the range directly -- ranges::lower_bound(catalog, value) -- and they accept a PROJECTION, so searching a range sorted by a field is written by naming the field: ranges::lower_bound(catalog, 10, {}, &Product::price) finds the first product whose price is >= 10, with {} as the default (ascending) comparator and the projection mapping each Product to its price for the comparison. This removes the boilerplate comparator that classic lower_bound needs to reach into a struct, and it is easy to keep consistent with the sort, which uses the same projection. The whole family has ranges versions -- ranges::binary_search for presence, ranges::upper_bound, and ranges::equal_range returning a subrange -- each with comparator and projection support. The preconditions are unchanged: the range must be SORTED by the same comparator-and-projection you search with, and the speed is O(log n) only on random-access ranges. One consistency rule carries extra weight here: the projection and comparator passed to the search must match those used to sort, or the results are wrong -- the ranges API makes the projection explicit at both call sites, which helps keep them in step. Prefer the ranges forms in C++20 for the projection and the direct range argument."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::lower_bound", url: "https://en.cppreference.com/w/cpp/algorithm/lower_bound" }
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

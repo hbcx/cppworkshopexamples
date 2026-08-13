@@ -6,3 +6,5 @@
   note: "Attach a value to each key: the same balanced tree and node stability, as a key-to-value container."
 - slug: "unique"
   note: "The other way to get distinct values: sort+unique deduplicates a vector in place and leaves it sorted, cheaper than a set for a one-shot batch -- go there for deduplicating a range and when a vector beats a set."
+- slug: "binary-search"
+  note: "The hand-rolled sorted-vector alternative: binary_search and lower_bound give O(log n) lookup on a sorted vector, the read-mostly stand-in for a set -- go there for searching sorted ranges and why std::lower_bound on a set is O(n)."

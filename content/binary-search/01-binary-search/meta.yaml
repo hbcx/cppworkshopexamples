@@ -1,0 +1,11 @@
+title: "binary_search: is the value present?"
+standard: "C++11"
+difficulty: 1
+summary: "std::binary_search returns a bool: whether a value exists in a SORTED range. It halves the range at each step, so it is O(log n) -- far faster than a linear find on a large range -- but it is correct only when the range is sorted by the same order it searches with."
+notes: "binary_search(first, last, value) answers one question -- is value in the range? -- and returns true or false. It gets its speed by assuming the range is SORTED: it looks at the middle element, decides which half the value must be in, and repeats, discarding half the range each step, so it does about log2(n) comparisons instead of the n a linear scan would. On a million sorted elements that is roughly 20 comparisons versus a million. The catch is the precondition: the range must be sorted (more precisely, partitioned) with respect to the comparison used, or the result is undefined -- searching unsorted data is the first anti-pattern of this section. Two limits to keep in mind. First, binary_search only tells you WHETHER the value is there, not WHERE; when you need the position, use lower_bound (and following binary_search with a find to get the position is an anti-pattern). Second, it needs random-access iterators to hit the middle in O(1); on a std::set or std::list the iterators are not random-access, so the member lower_bound/find is the right O(log n) tool there (another anti-pattern). Compared with std::find, which is O(n) but works on any range: reach for binary_search when the data is already sorted and you only need a yes/no."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::binary_search", url: "https://en.cppreference.com/w/cpp/algorithm/binary_search" }
+detailed_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

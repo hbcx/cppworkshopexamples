@@ -1,0 +1,12 @@
+title: "A matching comparator, and sorted insert"
+standard: "C++11"
+difficulty: 2
+summary: "When a range is sorted by a custom comparator, every binary search on it must use the SAME comparator. lower_bound with that comparator returns the sorted insertion point, so v.insert(lower_bound(...), value) keeps a hand-maintained sorted vector in order as elements are added."
+notes: "The binary-search family is defined relative to an ordering, and that ordering must match the one the range is sorted by. A vector kept sorted DESCENDING is ordered by std::greater, so lower_bound, upper_bound and binary_search on it must all be passed std::greater too; call them with the default (ascending) comparison and they search as if the data were ascending, giving wrong answers -- a mismatch that is its own anti-pattern. With the matching comparator, lower_bound returns the first position where the new value is not ordered before the existing element, which is exactly where it belongs, so std::insert at that iterator keeps the range sorted. This lower_bound + insert pair is the core of a MANUALLY sorted container: cheaper in memory and more cache-friendly than a std::set for a mostly-read collection, at the cost of O(n) shifting on each insert (the search is O(log n), but the vector insert moves the tail). For a comparator on a field, the same holds -- sort by the field, then search by the field with the same comparator (or, in C++20, a projection). The rule to remember: the comparator (or projection) handed to a binary search must be consistent with how the range was sorted, every time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::lower_bound", url: "https://en.cppreference.com/w/cpp/algorithm/lower_bound" }
+detailed_tags:
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }
+  - { name: "std::vector::insert", url: "https://en.cppreference.com/w/cpp/container/vector/insert" }
