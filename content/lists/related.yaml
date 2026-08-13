@@ -10,3 +10,5 @@
   note: "Why a list's iterators are bidirectional, not random-access, and stay valid across other elements' insert and erase: the Iterator pattern chapter builds a linked-list iterator by hand and explains the category trade-off against a vector's."
 - slug: "sort"
   note: "Why a list has its own member sort: std::sort needs random-access iterators a list cannot give, so list::sort relinks nodes instead -- go there for the sort algorithm, comparators, and stable_sort."
+- slug: "remove-erase"
+  note: "The same reason a list has its own member remove: std::remove compacts by moving element values, which defeats a list's stable nodes, so list::remove unlinks them instead -- go there for the erase-remove idiom and why the member wins on a list."

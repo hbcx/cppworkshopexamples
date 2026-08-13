@@ -11,3 +11,5 @@
   note: "When you need HOW MANY match, not just the first: find_if returns one position and stops, count_if visits everything and totals the matches -- go there for tallies, thresholds, and progress counts."
 - slug: "sort"
   note: "The faster search a sort unlocks: once a range is sorted, binary_search and lower_bound find in O(log n) instead of find's linear scan -- go there to order a range first, with comparators and stable_sort."
+- slug: "remove-erase"
+  note: "What to do once you have found the element: member erase(it) deletes the one find returned and hands back the next iterator, and remove_if deletes every match by condition -- go there for deleting elements in place."

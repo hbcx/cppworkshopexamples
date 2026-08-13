@@ -1,0 +1,4 @@
+title: "remove / erase"
+description: "Removing elements from a container: std::remove and remove_if do not erase -- they shift the kept elements to the front and return the new logical end, and the container's erase then drops the tail. Covers the erase-remove idiom, removing by predicate, the member erase that deletes by position or range, and the C++20 std::erase and erase_if free functions that fold the whole idiom into one call -- alongside the anti-patterns: calling remove without the erase so the size never changes, erasing while iterating so elements are skipped, running std::remove on a list where a member remove unlinks nodes, and dropping the end iterator so a single-argument erase removes just one element."
+sort_order: 75
+category: "Algorithms"

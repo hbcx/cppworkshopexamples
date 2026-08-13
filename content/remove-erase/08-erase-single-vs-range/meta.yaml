@@ -1,0 +1,11 @@
+title: "Anti-pattern: erase-remove missing the end iterator"
+standard: "C++11"
+difficulty: 3
+summary: "Writing the erase-remove idiom but forgetting the second argument to erase calls the single-element erase overload on the iterator std::remove returned, deleting exactly one leftover instead of the whole tail. It compiles and runs, so the bug shows up only as a container that removed far fewer elements than it should have."
+notes: "The erase-remove idiom is v.erase(std::remove(v.begin(), v.end(), value), v.end()) -- two arguments to erase, the new logical end from remove and the real end, so erase(first, last) drops the entire moved-from tail. Drop that second argument and you write v.erase(std::remove(...)), which is still valid code: erase has a single-iterator overload that deletes just the one element at that position. std::remove returns an iterator to the new logical end, which points at the first leftover, so the single-argument erase deletes exactly one of the leftovers and leaves the rest. The container shrinks by one no matter how many elements matched -- here three zeros were 'removed' by the algorithm, but only one element is erased, so the size goes from 6 to 5 instead of to 3, and the tail still holds moved-from junk. Nothing warns you: both overloads exist, the types line up, and it runs cleanly. This is a strong argument for the C++20 std::erase(container, value) / std::erase_if(container, pred) free functions, which take no iterators at all and so cannot be miswritten this way. If you are on the classic idiom, the guard is simply to always pass v.end() as the second argument -- and to be suspicious when a container removed only one element. The sign to watch for: a call to erase whose only argument is a std::remove or remove_if expression, with no trailing end iterator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

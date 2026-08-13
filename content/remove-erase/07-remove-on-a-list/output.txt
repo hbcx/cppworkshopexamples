@@ -1,0 +1,2 @@
+via std::remove:  3 4 5 9 
+via list::remove: 3 4 5 9 

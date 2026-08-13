@@ -1,0 +1,2 @@
+erase removed 3, left: 3 4 5 9 
+erase_if removed 4, left: 3 25 7 

@@ -1,0 +1,11 @@
+title: "remove_if: delete by a condition"
+standard: "C++11"
+difficulty: 1
+summary: "remove_if is the predicate form of remove: instead of matching one value it keeps the elements for which the predicate is false and moves them to the front, returning the new end. Paired with erase it deletes every element that matches a rule -- here, all the even numbers -- in one pass."
+notes: "Where remove(first, last, value) deletes elements equal to a single value, remove_if(first, last, pred) deletes every element for which the predicate returns true. Everything else about it is identical: it does not touch the container, it only compacts the kept elements to the front and returns the new logical end, so it must be paired with erase to actually shorten the container. The idiom reads v.erase(std::remove_if(v.begin(), v.end(), pred), v.end()) -- one line that removes all matches. This is the everyday in-place filter: strip the even numbers, drop the expired records, delete the blank lines, throw out the values above a limit. The predicate is any callable -- a lambda, a function, a functor -- and it must not modify the elements or depend on the order of application, since remove_if is free to visit them in any order. Note the direction of the test: remove_if deletes the elements the predicate accepts, which is the opposite of copy_if, where the predicate selects the elements to keep. The two are mirror images -- copy_if copies out the matches and leaves the source whole; remove_if deletes the matches from the source. In C++20 std::erase_if(container, pred) is the same operation in a single call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::remove_if", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

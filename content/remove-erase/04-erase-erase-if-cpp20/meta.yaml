@@ -1,0 +1,12 @@
+title: "std::erase and erase_if: the idiom in one call"
+standard: "C++20"
+difficulty: 2
+summary: "C++20 adds the free functions std::erase(container, value) and std::erase_if(container, pred), which fold the whole erase-remove idiom into a single call: they remove the matching elements, shrink the container, and return the count removed. They work on every standard container, so the same call reads the same whether the container is a vector, a list, or a deque."
+notes: "For a decade the only way to delete by value or condition was the two-part erase-remove idiom, which is easy to get subtly wrong -- forget the second argument to erase, or forget erase entirely, and it fails quietly. C++20 fixes this with two non-member functions in the container headers: std::erase(container, value) removes every element equal to the value, and std::erase_if(container, pred) removes every element the predicate accepts. Each does the whole job -- the compaction and the resize -- in one call, and returns the number of elements removed, which the old idiom never gave you directly. The big convenience is uniformity: the same std::erase_if(c, pred) works on vector, deque, list, forward_list, string, map, set and their unordered forms, so you no longer switch between the erase-remove idiom for sequence containers and member remove for lists or the erase-in-a-loop dance for maps. Under the hood each container provides the right implementation -- for a list it unlinks nodes, for a vector it does the shift -- but the call site is identical. Prefer std::erase / std::erase_if whenever you are on C++20: it is shorter, it cannot be miswritten into the single-argument-erase trap, and it says exactly what it does. The erase-remove idiom is still worth knowing because it is everywhere in existing code, and because algorithms remain the only option before C++20."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase2" }
+  - { name: "std::erase_if", url: "https://en.cppreference.com/w/cpp/container/vector/erase2" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

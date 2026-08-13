@@ -1,0 +1,11 @@
+title: "Member erase: delete by position or range"
+standard: "C++11"
+difficulty: 2
+summary: "The container member erase deletes by POSITION, not by value: erase(it) removes the single element an iterator points at, and erase(first, last) removes a whole range. Both return an iterator to the element after the deleted part, which is how you keep iterating after a removal."
+notes: "There are two different erases and it is worth keeping them straight. The algorithm std::remove selects WHAT to delete by value or predicate but cannot resize; the container member erase deletes by POSITION and does resize. This example is the member. erase(it) removes exactly the one element at that iterator and returns an iterator to the element that followed it -- essential, because the passed iterator is invalidated by the call, so you continue from the returned one, never the old one. erase(first, last) removes the half-open range in a single call and likewise returns an iterator to the element after the erased block. Reaching for member erase directly is right when you already have the position -- you found it with std::find, you are deleting a known index, or you want to drop a contiguous slice. It is the wrong tool for deleting scattered elements by a condition: calling erase in a loop is O(n) per call (every later element shifts down) and is the classic source of the erase-while-iterating bug, so for by-condition deletion use the erase-remove idiom instead. The returned-iterator contract is also what makes a correct erase loop possible: write it = v.erase(it) when you delete and ++it when you keep, so you never advance a dangling iterator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }
+detailed_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

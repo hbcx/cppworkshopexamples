@@ -1,0 +1,11 @@
+title: "Anti-pattern: erasing while iterating"
+standard: "C++11"
+difficulty: 3
+summary: "Deleting elements in a forward loop that always advances skips elements: after each erase the later elements shift down by one, but the loop counter still moves forward, so the element that slid into the current slot is never checked. Two removable elements in a row leave one behind. The erase-remove idiom avoids the whole trap."
+notes: "This bug is a rite of passage. The loop erases the element at index i and then does ++i, but erase(begin() + i) shifts every following element down by one to fill the gap -- so the element that was at i+1 is now at i, and incrementing i steps right over it without testing it. When two removable elements sit next to each other, the second one survives: here the two adjacent zeros leave one zero behind. The result is defined but wrong, which is worse than a crash because it passes a quick test and fails on the input where two matches happen to be adjacent. The index version at least stays in bounds; the iterator version of the same shape is genuinely undefined behavior, because erase(it) invalidates it and the following ++it then advances a dangling iterator. There are two correct fixes. If you must delete in a hand-written loop, do not advance when you erase: write it = v.erase(it) on a match (erase returns the iterator to the next element) and ++it otherwise, so the counter never skips. Far better, when you are deleting by a value or a condition, do not loop at all -- use the erase-remove idiom, v.erase(std::remove(v.begin(), v.end(), value), v.end()), which compacts and deletes in one pass with no bookkeeping, or std::erase / erase_if in C++20. The sign to watch for: a loop that calls container.erase inside its body while still doing ++it or ++i every iteration."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }
+detailed_tags:
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }

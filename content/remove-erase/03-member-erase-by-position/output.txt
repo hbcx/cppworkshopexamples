@@ -1,0 +1,2 @@
+after erasing 7, next is 8
+left: 5 6 8 

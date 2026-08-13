@@ -1,0 +1,19 @@
+- problem: "A long-lived collection accumulates records that a rule marks as done -- expired sessions, cancelled orders, acknowledged alerts -- and they must be dropped in place so the same container keeps serving requests without a rebuild."
+  why: "Building a new filtered container and swapping it in doubles the memory for a moment and churns the allocator; the erase-remove idiom (or erase_if) deletes the matches in one pass over the existing storage, so the container shrinks without a second allocation."
+  signal: "A loop that copies the elements to keep into a fresh container and then reassigns it, where deletion happens far more often than full rebuilds."
+
+- problem: "A buffer arrives with sentinel or empty entries mixed in -- zero samples, blank lines, NaN readings, default-constructed placeholders -- and the rest of the pipeline assumes clean data."
+  why: "Checking for the sentinel at every later stage spreads the special case through the whole pipeline; one erase-remove up front deletes the junk once so nothing downstream has to guard against it."
+  signal: "Repeated if (x == sentinel) continue; guards scattered across the functions that consume a container."
+
+- problem: "A single known element must be deleted after it is located -- a specific user found by id, the entry a click selected -- and iteration continues over the rest of the container afterward."
+  why: "The erase-remove idiom is aimed at deleting by a condition across the whole range; for one element already found, member erase(it) deletes it directly, and its returned next iterator lets the surrounding loop carry on without a dangling iterator."
+  signal: "A std::find (or a search that yields an iterator) immediately followed by a deletion of that one element and continued traversal."
+
+- problem: "Code on C++20 prunes containers by a condition in several places, and the old two-step erase-remove idiom keeps being miswritten -- a forgotten end iterator, a forgotten erase -- causing bugs that pass a quick test."
+  why: "std::erase_if(container, pred) takes no iterators, so the single-argument-erase trap and the forgot-the-erase trap are both impossible to write; one call replaces remove_if plus erase and works identically across vector, list, map and the rest."
+  signal: "Hand-written erase(remove_if(...), end) idioms repeated across a C++20 codebase, some of them subtly wrong."
+
+- problem: "Elements must be removed from a std::list or std::forward_list whose surviving nodes are pointed at from elsewhere -- an intrusive index, an observer list, a cache keyed by node address -- so those pointers must stay valid."
+  why: "std::remove would move values between nodes to compact them, silently changing what the outside pointers refer to; the member remove / remove_if unlinks only the deleted nodes, so every surviving node keeps its address and the external pointers stay correct."
+  signal: "std::remove or the erase-remove idiom applied to a std::list or forward_list whose nodes are referenced by pointer from another structure."

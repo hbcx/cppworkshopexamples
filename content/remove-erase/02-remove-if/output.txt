@@ -1,0 +1,1 @@
+odd numbers left: 3 25 7 

@@ -1,0 +1,2 @@
+buggy index loop left: 1 0 2 3 
+erase-remove left:     1 2 3 

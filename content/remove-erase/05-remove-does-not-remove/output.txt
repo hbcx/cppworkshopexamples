@@ -1,0 +1,4 @@
+kept elements (distance to new end): 3
+container size, still unchanged:     6
+size after erase-remove:             3
+kept: 4 7 9 

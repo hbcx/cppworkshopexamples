@@ -1,0 +1,11 @@
+title: "Anti-pattern: remove without the erase"
+standard: "C++11"
+difficulty: 2
+summary: "Calling std::remove or remove_if on its own does not delete anything: the container keeps its original size and the elements past the new logical end are unspecified leftovers. The removed elements only disappear when you pass the returned iterator to the container's erase."
+notes: "This is the single most common mistake with these algorithms, and it is silent -- the code compiles, runs, and looks like it filtered the container, but the size is unchanged. The cause is the fundamental fact about standard algorithms: they operate on iterators, not on the container, so they physically cannot resize it. std::remove_if only rearranges -- it moves the elements you keep to the front and returns an iterator to the new logical end -- and then returns, leaving the container exactly as long as before, with moved-from junk in the tail. The returned iterator already marks where the kept elements end (the distance to it is 3 here), but nothing calls erase to act on it, so the container is never resized: bad.size() is still 6. It is easy to miss because a following loop over the container often still prints a plausible-looking result (the kept elements are really at the front), so the bug hides until the leftover tail causes a wrong count, a duplicate, or a read of an unspecified value. The fix is the erase-remove idiom: pass the returned iterator straight into erase -- good.erase(std::remove_if(good.begin(), good.end(), pred), good.end()) -- so the tail is actually dropped and the size falls to 3. In C++20, std::erase_if(container, pred) does the whole thing in one call and removes the chance to forget the erase entirely. The sign to watch for: a bare std::remove or remove_if statement whose return value is ignored, with no surrounding erase."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::remove_if", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

@@ -1,0 +1,3 @@
+size after single-arg erase: 5
+size after range erase:      3
+kept: 2 5 8 

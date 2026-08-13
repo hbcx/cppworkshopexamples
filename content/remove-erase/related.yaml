@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "vectors"
+  note: "Where the erase-remove idiom is really a vector operation: erase shifts the tail down and only shrinks size, not capacity -- go there for size vs capacity, iterator invalidation on growth, and why erasing in a loop is O(n squared)."
+- slug: "lists"
+  note: "The node-based container with its own member remove / remove_if that unlinks nodes instead of moving values -- go there for stable node addresses, splice, and why std::remove is the wrong tool for a list."
+- slug: "copy-copy-if"
+  note: "The mirror operation: copy_if selects the matches and copies them OUT to a new container, where remove_if deletes the matches from the source in place -- go there for filtering into a container and the copy-vs-remove distinction."
+- slug: "find-find-if"
+  note: "How you get the position that member erase deletes: find returns the iterator to a located element, and erase(it) removes it and hands back the next one -- go there for locating elements before deleting them."

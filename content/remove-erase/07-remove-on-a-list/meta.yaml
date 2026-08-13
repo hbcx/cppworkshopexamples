@@ -1,0 +1,12 @@
+title: "Anti-pattern: std::remove on a std::list"
+standard: "C++11"
+difficulty: 2
+summary: "The erase-remove idiom works on a std::list, but std::remove compacts by moving element VALUES, which defeats the whole point of a node-based container whose nodes are meant to stay put. std::list has a member remove that unlinks the matching nodes in place, moving nothing and keeping every surviving node's address stable."
+notes: "std::remove is a value-shuffling algorithm: it moves the elements you keep toward the front to close the gaps. That is the right strategy for a vector, whose elements live in one contiguous block, but it is the wrong strategy for a list, whose entire reason to exist is that each element is a separate node that never moves. Running std::remove on a list works -- it compiles and gives the correct contents -- but it move-assigns values between nodes to compact them, which copies data pointlessly and, worse, invalidates the stable-address guarantee that made you pick a list in the first place: pointers and references to the surviving elements may now refer to a different value. The fix is the member function list::remove(value) (and list::remove_if(pred)), which deletes by UNLINKING the matching nodes -- it splices them out of the chain and frees them, moving no values at all, so every node you keep stays exactly where it was, address and all. It also resizes the list itself in one call, so there is no separate erase step. This mirrors the other member-versus-algorithm cases: std::sort cannot run on a list (use list::sort), and std::find on a std::set is O(n) where member find is O(log n). The rule for the node-based containers list and forward_list: reach for the member remove / remove_if, not the std::remove algorithm. The sign to watch for: std::remove or the erase-remove idiom applied to a std::list or std::forward_list."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list::remove", url: "https://en.cppreference.com/w/cpp/container/list/remove" }
+detailed_tags:
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

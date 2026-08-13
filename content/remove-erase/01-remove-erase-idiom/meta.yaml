@@ -1,0 +1,12 @@
+title: "The erase-remove idiom: remove shifts, erase deletes"
+standard: "C++11"
+difficulty: 1
+summary: "std::remove does not delete anything. It moves the elements you keep to the front, in order, and returns an iterator to the new logical end; the container's erase(new_end, end) is what actually shortens it. The two together are the erase-remove idiom."
+notes: "The single most surprising thing about std::remove is that it removes nothing from the container. An algorithm only ever sees a pair of iterators, never the container object, so it cannot resize anything -- it works purely by moving values. What remove(first, last, value) does is compact: it walks the range and moves every element you keep toward the front, preserving their relative order, then returns an iterator to one past the last kept element -- the new logical end. Everything from that iterator to the original end is now leftover: those slots hold moved-from, unspecified values, and the size of the container has not changed at all. To actually delete the removed elements you follow up with the container member erase(new_end, end), which drops that tail and shrinks the size. Written together the two calls are the classic erase-remove idiom: v.erase(std::remove(v.begin(), v.end(), value), v.end()). Splitting it in two, as this example does, makes the mechanic visible: the size is still the original count right after remove, and only erase brings it down. remove_if is the predicate form (next example), and in C++20 std::erase / std::erase_if wrap the whole idiom in a single call. Remember it as: remove reorders and reports; erase deletes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }
+  - { name: "std::vector::size", url: "https://en.cppreference.com/w/cpp/container/vector/size" }
