@@ -1,0 +1,12 @@
+title: "Anti-pattern: partition_point on an unpartitioned range"
+standard: "C++11"
+difficulty: 3
+summary: "partition_point is a binary search: it assumes the range is already partitioned (all satisfying elements first). On an unpartitioned range the precondition is false, so the behavior is undefined and the returned boundary is meaningless. Partition first, or use count_if / find_if, which need no such property."
+notes: "partition_point works by binary search, which only makes sense when the predicate is monotonic across the range -- true for a prefix, then false for the rest. That is the definition of a partitioned range. Call it on a range where matches and non-matches are interleaved and the precondition is violated: the behavior is undefined, and in practice the search jumps around a boundary that does not exist and returns some arbitrary position that is not the count of matches, not the first non-match, not anything useful. Nothing warns you -- it compiles and returns an iterator, just a wrong one -- which is what makes it dangerous. There are two correct paths. If you want the boundary and can rearrange, partition the range first to establish the property, then partition_point (or just use partition's own returned point). If you only need an answer about an unordered range -- how many match, or where the first match is -- use count_if or find_if, which scan in O(n) and require no precondition. is_partitioned is the way to assert the property when you are unsure. The rule mirrors binary_search on a sorted range: the fast search buys its speed by assuming an ordering, and using it without that ordering gives a fast wrong answer. The sign to watch for: partition_point (or lower_bound-style binary search) on a range that was never partitioned or sorted for the property being searched."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partition_point", url: "https://en.cppreference.com/w/cpp/algorithm/partition_point" }
+detailed_tags:
+  - { name: "std::is_partitioned", url: "https://en.cppreference.com/w/cpp/algorithm/is_partitioned" }
+  - { name: "std::partition", url: "https://en.cppreference.com/w/cpp/algorithm/partition" }

@@ -1,0 +1,11 @@
+title: "partition_copy: split into two outputs"
+standard: "C++11"
+difficulty: 2
+summary: "partition_copy reads a range once and writes to TWO output iterators -- the elements that satisfy the predicate to the first, the rest to the second -- leaving the source unchanged. It is the copy-out form of partition and the one-pass way to split a range into two containers or sinks."
+notes: "Where partition rearranges in place, partition_copy leaves the input alone and COPIES each element to one of two outputs, chosen by the predicate: true goes to the first output iterator, false to the second. With a back_inserter on each you build two containers -- passed and failed, accepted and rejected, in-budget and over -- in a single pass over the source, and each output keeps the input order (it copies front to back). This is the tool to reach for when you need both groups as separate collections and must keep the original intact, or when the destinations are not containers at all but streams or sinks. Its big advantage over the obvious alternative -- two copy_if calls, one with the predicate and one with its negation -- is that it reads the range ONCE and states the condition ONCE, where the two-scan version reads twice and forces you to hand-write the negated predicate (which can drift out of sync); that two-pass split is an anti-pattern later. Note the difference from partition's return: partition_copy returns a pair of the two output iterators (their end positions), not a partition point, because the groups live in different containers. Choose partition when you want the split in place, partition_copy when you want two separate outputs from an untouched source."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partition_copy", url: "https://en.cppreference.com/w/cpp/algorithm/partition_copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

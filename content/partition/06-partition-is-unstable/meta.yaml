@@ -1,0 +1,11 @@
+title: "Anti-pattern: relying on partition to keep order"
+standard: "C++11"
+difficulty: 2
+summary: "std::partition guarantees only that satisfying elements come before non-satisfying ones -- the order WITHIN each group is unspecified and may differ between library implementations. Code that depends on the matches staying in their original order is not portable; stable_partition is the version that preserves it."
+notes: "partition is allowed to reorder elements within each group however it likes, because the only promise it makes is the split itself: matches before non-matches. In practice a given library produces some particular order, so a quick test on one compiler 'works' -- and then the same code gives a different order on another standard library, or a different version, or a different optimization level, and whatever depended on the order breaks. This is the same class of trap as relying on an unspecified evaluation order: it is not a bug that shows up where you wrote it. If the order within the groups carries meaning -- rows that should stay in display order, records that should stay in arrival order, a range that was sorted and should stay sorted within each half -- use stable_partition, which guarantees each group keeps its original relative order (at the cost of a temporary buffer). If the order genuinely does not matter, plain partition is correct and cheaper; the mistake is only in DEPENDING on partition's order. This example prints only the stable result, precisely because printing the plain partition's group order would be showing an unspecified value. The sign to watch for: code that reads the elements of a group after std::partition in a way that assumes they are still in their pre-partition order."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partition", url: "https://en.cppreference.com/w/cpp/algorithm/partition" }
+detailed_tags:
+  - { name: "std::stable_partition", url: "https://en.cppreference.com/w/cpp/algorithm/stable_partition" }

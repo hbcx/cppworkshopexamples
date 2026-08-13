@@ -1,0 +1,11 @@
+title: "Anti-pattern: two copy_if passes to split"
+standard: "C++11"
+difficulty: 2
+summary: "Splitting a range into matches and non-matches with two copy_if calls -- one with the predicate, one with its negation -- reads the range twice and writes the condition twice, so the two can drift out of sync. partition_copy does the same split in one pass and states the condition once; in-place partition avoids the copies entirely."
+notes: "Wanting both groups, matches and non-matches, is common, and the obvious way is two copy_if calls: one collects the elements that pass, another collects the ones that fail using the NEGATED predicate. It works, but it has two weaknesses. It reads the whole range TWICE, which matters for a large range or an expensive predicate. And it writes the condition in two places -- the predicate and its negation -- so when the rule changes (the threshold moves, a case is added) and only one is updated, the two groups silently stop being complements: an element can land in both or in neither. partition_copy fixes both: it makes a SINGLE pass and takes ONE predicate, sending true to the first output and false to the second, so the groups are complementary by construction and the condition lives in one place. If you do not actually need two separate copies -- if rearranging the original in place is fine -- std::partition is better still, since it splits with no allocation at all and hands you the boundary. So the ladder is: partition in place when you can, partition_copy when you need two outputs from an untouched source, and two copy_if passes essentially never. The sign to watch for: two copy_if (or filter) passes over the same range with a predicate and its hand-written negation, building two complementary containers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partition_copy", url: "https://en.cppreference.com/w/cpp/algorithm/partition_copy" }
+detailed_tags:
+  - { name: "std::copy_if", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }

@@ -9,3 +9,5 @@
   note: "The mirror of copy_if: where copy_if selects the matches and copies them OUT, remove_if deletes the matches from the source in place -- go there for the erase-remove idiom and deleting by a condition."
 - slug: "unique"
   note: "The dedup cousin of copy: unique_copy writes runs of adjacent duplicates collapsed to one, where copy writes every element -- go there for deduplicating a range, in place or copied out."
+- slug: "partition"
+  note: "The two-output split behind copy_if: partition_copy sends matches and non-matches to separate outputs in one pass, where copy_if collects only the matches -- go there for splitting a range and in-place partitioning."

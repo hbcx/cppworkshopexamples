@@ -1,0 +1,11 @@
+title: "stable_partition: keep the order within groups"
+standard: "C++11"
+difficulty: 2
+summary: "stable_partition splits a range by a predicate like partition, but preserves the relative order of the elements within each group. Use it when the order matters -- a display list, a sorted sequence -- at the cost of a temporary buffer and a bit more time than plain partition."
+notes: "stable_partition does the same split as partition -- satisfying elements to the front, the rest to the back, returning the partition point -- with one extra guarantee: within each group the elements keep their original relative order. So partitioning 1..8 by 'is even' gives evens 2 4 6 8 and odds 1 3 5 7, exactly the order they appeared, where plain partition could produce them in any order. That guarantee is what you want whenever the sequence carries meaning: pinning selected rows to the top of a table without scrambling the rest, moving urgent tasks ahead while keeping each group in arrival order, grouping a sorted range by a flag without losing the sort. The cost is real: stable_partition typically allocates a temporary buffer to hold one group while it shuffles, so it uses O(n) extra memory (falling back to a slower in-place method if allocation fails) and does more work than the allocation-free partition. So the choice is a genuine trade-off -- stable_partition when order within the groups matters, plain partition when it does not (using stable_partition 'just in case' when order is irrelevant is its own anti-pattern). The return value and the two-group layout are identical to partition; only the intra-group order and the cost differ."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stable_partition", url: "https://en.cppreference.com/w/cpp/algorithm/stable_partition" }
+detailed_tags:
+  - { name: "std::partition", url: "https://en.cppreference.com/w/cpp/algorithm/partition" }

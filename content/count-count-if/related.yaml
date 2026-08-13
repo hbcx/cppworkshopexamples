@@ -9,3 +9,5 @@
   note: "The keyed way to count many things at once: a std::map<key, int> tallies every category in one pass, and a multiset's member count gives a value's multiplicity in O(log n) -- go there when you need a full frequency table rather than one count."
 - slug: "min-max-element"
   note: "The other single-pass summary of a range: where count totals the matches, min_element and max_element find the boundary value and its position -- go there for the smallest and largest, and minmax in one pass."
+- slug: "partition"
+  note: "When you want the two groups, not just their sizes: count_if totals the matches without moving anything, where partition rearranges the range so you can process each group -- go there for splitting a range by a predicate."

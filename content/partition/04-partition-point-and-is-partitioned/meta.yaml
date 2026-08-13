@@ -1,0 +1,12 @@
+title: "partition_point and is_partitioned"
+standard: "C++11"
+difficulty: 2
+summary: "partition_point finds the boundary of an already-partitioned range -- the first element that does not satisfy the predicate -- by binary search in O(log n). is_partitioned checks whether a range has the partitioned property in the first place. Together they let you locate and verify the split cheaply."
+notes: "Once a range is partitioned, the predicate is monotonic across it: true for a prefix, then false for the rest. That is exactly the shape binary search needs, and partition_point exploits it -- it finds the partition point (the first non-satisfying element) in O(log n) comparisons instead of the O(n) scan partition itself did, the same relationship lower_bound has to a linear find on a sorted range. So if you have a range that is kept partitioned -- say records stored active-first, or a sequence sorted by a flag -- partition_point locates the boundary between the groups without walking them. is_partitioned is the guard: it returns true only if every satisfying element precedes every non-satisfying one, which is the precondition partition_point (and any binary search) relies on. This matters because partition_point's behavior is undefined on a range that is NOT partitioned -- it will follow a boundary that is not there and return a meaningless answer (its own anti-pattern). So use is_partitioned to assert or test the property, and only call partition_point when you know the range is partitioned -- either because you just partitioned it, or because it is maintained that way. For a range you will not keep partitioned, count_if and find_if answer 'how many' and 'where is the first' without needing the property at all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partition_point", url: "https://en.cppreference.com/w/cpp/algorithm/partition_point" }
+  - { name: "std::is_partitioned", url: "https://en.cppreference.com/w/cpp/algorithm/is_partitioned" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

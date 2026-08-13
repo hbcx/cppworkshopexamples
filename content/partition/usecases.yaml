@@ -1,0 +1,19 @@
+- problem: "A batch of records must be split into two groups for different handling -- valid and invalid rows, paid and unpaid orders, items in and over budget -- and both halves are processed from the same container."
+  why: "A hand-written loop appending to two vectors allocates both and duplicates the condition; std::partition rearranges the one container in place and returns the boundary, so each group is a sub-range with no extra storage, and partition_copy is the choice only when the source must stay intact."
+  signal: "A loop that pushes each element into one of two vectors by a condition, then processes each vector separately."
+
+- problem: "Some elements must be handled before the rest -- urgent tickets first, active connections before idle ones, ready jobs ahead of blocked ones -- but all stay in the same working set."
+  why: "Sorting by a priority key is O(n log n) and orders more than needed; partition moves the matching elements to the front in O(n) and hands back the point, so you can process [begin, point) first and the remainder after, without a full ordering."
+  signal: "A sort by a boolean or two-level priority whose only use is to bring one group to the front."
+
+- problem: "A UI or report groups items -- pinned rows on top, flagged entries first -- but the items within each group must stay in their existing display or sort order."
+  why: "plain partition may scramble the order within a group, which is visible and wrong for a UI; stable_partition keeps each group in its original order, so the grouping is applied without disturbing the sequence the user already sees."
+  signal: "A grouping step over a list that is already sorted or in a meaningful display order, where the groups must not reshuffle internally."
+
+- problem: "A stream of results must be routed to two sinks in a single pass -- accepted and rejected records to separate files, hits and misses to different queues -- without mutating or re-reading the source."
+  why: "Two filtered passes read the input twice and restate the condition as its own negation, which can drift apart; partition_copy makes one pass with a single predicate and writes both sinks, so the two outputs are complementary by construction."
+  signal: "Two filtering passes over the same source with a predicate and its hand-written negation, each feeding a different destination."
+
+- problem: "A collection is kept partitioned by a flag -- active records stored before inactive ones, a buffer arranged valid-first -- and the boundary between the groups is needed repeatedly and cheaply."
+  why: "Scanning for the first non-matching element is O(n) every time; because the range is already partitioned the predicate is monotonic, so partition_point finds the boundary by binary search in O(log n), the same speed-up lower_bound gives on a sorted range."
+  signal: "A repeated linear scan for the first element failing a condition, over a range that is maintained in partitioned order."

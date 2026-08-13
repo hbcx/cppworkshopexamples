@@ -1,0 +1,11 @@
+title: "Anti-pattern: stable_partition when order does not matter"
+standard: "C++11"
+difficulty: 2
+summary: "stable_partition preserves the order within each group, but it pays for that with a temporary buffer (O(n) extra memory) and more work than plain partition. When the intra-group order is irrelevant -- you only need the two groups, or their counts -- plain partition splits in place for free."
+notes: "stable_partition is the safe-sounding default, and reaching for it 'just in case' is a quiet inefficiency. Its guarantee -- that elements keep their relative order within each group -- is not free: it typically allocates a temporary buffer to hold one group while it rearranges, so it uses O(n) extra memory and does noticeably more work than plain partition, which splits in place with only swaps and no allocation. If nothing downstream depends on the order within a group -- you just want the matches separated from the rest, or their counts, or to process each group without caring about sequence -- then plain partition is the correct tool and stable_partition is paying for a property you discard. This is the mirror of the opposite anti-pattern (relying on plain partition's order): the point is to MATCH the algorithm to whether intra-group order actually matters. Ask the question explicitly: does anything read these groups in a way that assumes their original order? If yes, stable_partition earns its cost; if no, use partition. The same choice recurs with sort versus stable_sort. The sign to watch for: stable_partition (or stable_sort) chosen by default where the surrounding code never relies on the preserved order, especially in a hot path or on large inputs where the extra allocation and passes show up."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partition", url: "https://en.cppreference.com/w/cpp/algorithm/partition" }
+detailed_tags:
+  - { name: "std::stable_partition", url: "https://en.cppreference.com/w/cpp/algorithm/stable_partition" }

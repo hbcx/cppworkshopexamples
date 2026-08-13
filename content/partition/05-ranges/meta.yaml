@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms with a projection"
+standard: "C++20"
+difficulty: 2
+summary: "std::ranges::partition and stable_partition take the whole range and an optional projection, so you split by a member without a hand-written predicate, and they return a SUBRANGE covering the second group (the non-satisfying elements) rather than a single partition point."
+notes: "The ranges forms bring the usual improvements. They take the range directly -- ranges::stable_partition(tasks, pred, proj) -- and accept a PROJECTION, so a predicate on a bool member is written as a plain predicate on the projected value plus &Task::urgent, instead of a lambda that reaches into the struct. The return is a SUBRANGE, not a lone iterator: it spans the second group, the elements that did NOT satisfy the predicate, so rest.begin() is the partition point and the subrange itself is the false group ready to iterate or measure (ranges::distance(rest) counts it). ranges::partition returns the same kind of subrange for the unstable, allocation-free version. Everything else matches the classic algorithms: partition may reorder within groups and stable_partition preserves order at the cost of a buffer, the split is by the same predicate, and the projection only feeds the predicate -- the whole element is moved, not the projected field. There are matching ranges::partition_copy and ranges::partition_point as well, with projection support. Prefer the ranges forms in C++20: the projection removes most partition predicates that only test one field, and the returned subrange pairs cleanly with code that then processes the second group."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::stable_partition", url: "https://en.cppreference.com/w/cpp/algorithm/stable_partition" }
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

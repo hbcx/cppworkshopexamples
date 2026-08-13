@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "copy-copy-if"
+  note: "The one-group copy this splits into two: copy_if collects only the matches, where partition_copy sends matches and non-matches to separate outputs in one pass -- go there for filtering into a container and the copy-out family."
+- slug: "sort"
+  note: "The algorithm partition powers and the stable/unstable trade-off it shares: quicksort and nth_element partition around a pivot, and sort vs stable_sort is the same order-vs-cost choice as partition vs stable_partition -- go there for ordering, comparators, and top-k."
+- slug: "remove-erase"
+  note: "The sibling rearrange-and-return-a-point algorithm: remove compacts the kept elements and returns the new end, as partition splits and returns the boundary -- go there for the erase-remove idiom and removing by condition."
+- slug: "count-count-if"
+  note: "When you only need the sizes, not the split: count_if totals the matches in one pass without moving anything, where partition rearranges to give you both groups -- go there for tallies and thresholds."

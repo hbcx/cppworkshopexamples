@@ -1,0 +1,2 @@
+is_partitioned: false
+after partition, evens count: 3

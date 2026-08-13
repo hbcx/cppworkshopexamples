@@ -1,0 +1,11 @@
+title: "partition: split a range by a predicate"
+standard: "C++11"
+difficulty: 1
+summary: "std::partition rearranges a range in place so that every element satisfying the predicate comes before every element that does not, and returns an iterator to the partition point -- the first non-satisfying element. It splits a range into two groups in a single pass with no allocation."
+notes: "partition answers 'group these into the ones that match and the ones that do not', in place. It moves every element for which the predicate is true to the front and every false one to the back, then returns the PARTITION POINT: an iterator to the first element that does not satisfy the predicate, which is exactly the boundary between the two groups. So after the call, [begin, point) are the matches and [point, end) are the rest, and std::distance(begin, point) is how many matched. It is a single linear pass, O(n), with no extra memory -- it just swaps elements into place. Two things to keep in mind. First, the order WITHIN each group is unspecified: plain partition may shuffle the matches among themselves and the non-matches among themselves, so do not rely on 2 4 6 8 staying in that order (use stable_partition when it matters -- the next example, and an anti-pattern). Second, the return value is the useful part: capture it, because it is how you address the two groups afterward, and it is what partition_point later recovers by binary search on an already-partitioned range. partition is also the heart of quicksort and of nth_element (quickselect): both work by repeatedly partitioning around a pivot. Reach for it whenever you need to divide a range in two by a rule and then treat the halves differently."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partition", url: "https://en.cppreference.com/w/cpp/algorithm/partition" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

@@ -15,3 +15,5 @@
   note: "The dedup that a sort sets up: unique removes only adjacent duplicates, so sorting first makes equal values neighbours and sort+unique+erase strips them all -- go there for deduplicating a range and unique_copy."
 - slug: "rotate-reverse"
   note: "Rearranging without ordering: rotate moves an element or block within a sequence and reverse flips one, and reversing unsorted data is not a descending sort -- go there for in-place moves and why to sort with greater instead."
+- slug: "partition"
+  note: "The split at the heart of quicksort: partition rearranges around a predicate in O(n), and nth_element uses it to find an order statistic without a full sort -- go there for two-group splits and the stable-vs-unstable choice sort also has."

@@ -1,0 +1,2 @@
+evens count: 4
+evens: 8 2 6 4 | odds: 5 3 7 1 
