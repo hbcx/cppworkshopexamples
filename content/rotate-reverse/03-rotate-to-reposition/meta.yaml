@@ -1,0 +1,11 @@
+title: "rotate to move an element or block"
+standard: "C++11"
+difficulty: 2
+summary: "rotate's real job is repositioning: to move the element at index `from` to index `to`, rotate the sub-range between them. It shifts the elements in between one step and drops the moved element into its new slot, in a single in-place pass with no allocation -- the idiom behind list reordering and move-to-front."
+notes: "Spinning a whole ring is the mechanic; MOVING a block is what rotate is really for. To move the element at position from to an earlier position to, rotate the sub-range [to, from+1) with the element itself as the middle: std::rotate(begin+to, begin+from, begin+from+1). The block [to, from) slides one step toward the back and the single element at from lands at to -- exactly a drag-and-drop reorder from index 4 to index 1. To move an element LATER, from an earlier index to a later one, make middle = from+1 so that one element wraps to the end of the sub-range: std::rotate(begin+from, begin+from+1, begin+to+1). The same trick moves a whole BLOCK, not just one element: pick first and last to span the block plus its destination gap, and middle at the block boundary, and rotate slides the block across the gap in one pass. Why prefer this over erase-then-insert (an anti-pattern later)? rotate touches only the affected sub-range, does no allocation, and needs no copy of the moved value -- where erase + insert makes two O(n) shifts and invalidates iterators between them. This is why UI list reordering, move-to-front caches, and 'bring selection to top' are all one rotate call. The cost is O(number of elements between the two positions), which is the minimum work a move can take in a contiguous container."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::rotate", url: "https://en.cppreference.com/w/cpp/algorithm/rotate" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }

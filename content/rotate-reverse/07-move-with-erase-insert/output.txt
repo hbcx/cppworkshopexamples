@@ -1,0 +1,2 @@
+erase+insert: a D b c e 
+std::rotate:  a D b c e 

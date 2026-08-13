@@ -1,0 +1,12 @@
+title: "Anti-pattern: erase+insert to move an element"
+standard: "C++11"
+difficulty: 2
+summary: "Repositioning one element with erase then insert makes two O(n) shifts, can reallocate on the insert, and forces a copy of the value because erase invalidates iterators between the two steps. std::rotate on the sub-range moves the element in a single in-place pass with no copy and no second shift."
+notes: "Moving an element from one index to another is a natural place to reach for erase and insert, but the pair is clumsy and slower than it looks. erase(from) shifts every element after `from` down by one -- an O(n) pass -- and INVALIDATES all iterators and references from the erase point onward, so you cannot hold a reference to the element across the operation; you must copy its value out first (a copy of a std::string, or worse for a heavier type). Then insert(to, value) shifts a tail back UP by one -- a second O(n) pass -- and may REALLOCATE if the vector is at capacity, invalidating everything again. So the innocent two-liner is two shifts, a forced copy, and a possible reallocation. std::rotate expresses the same move directly: rotate(begin+to, begin+from, begin+from+1) slides the block between the two positions by one and drops the moved element into place, touching only the affected sub-range, allocating nothing, and moving each element in that range exactly once. It is the same idiom as the reposition example, now weighed against the alternative. Reserve erase + insert for when you are genuinely REMOVING an element and separately adding a different one; for MOVING an existing element within the container, rotate is the right tool. The sign to watch for: an erase immediately followed by an insert of the same value at a different position in the same container."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::rotate", url: "https://en.cppreference.com/w/cpp/algorithm/rotate" }
+detailed_tags:
+  - { name: "std::vector::erase", url: "https://en.cppreference.com/w/cpp/container/vector/erase" }
+  - { name: "std::vector::insert", url: "https://en.cppreference.com/w/cpp/container/vector/insert" }

@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "sort"
+  note: "Where rotate is a building block and reverse is not a substitute: sorting imposes an order, rotate moves an element within one, and reversing only flips an order you already have -- go there for ordering, comparators, and stable_sort."
+- slug: "lists"
+  note: "The node-based container with its own member reverse and splice: list::reverse relinks nodes instead of moving values, and splice moves a run of nodes in O(1) where a vector must rotate -- go there for stable nodes and node-level moves."
+- slug: "vectors"
+  note: "Why in-place rotate beats erase+insert: a vector shift is O(n) and a growth reallocation invalidates every iterator, so moving elements by rotating the affected range avoids both -- go there for growth, capacity, and iterator invalidation."
+- slug: "remove-erase"
+  note: "The other side of rearranging a vector: rotate MOVES elements while remove/erase deletes them, and both beat a naive erase-in-a-loop -- go there for the erase-remove idiom and removing by value or condition."

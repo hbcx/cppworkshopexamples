@@ -13,3 +13,5 @@
   note: "When you only want one end, not the whole order: min_element and max_element find the extreme in O(n), and partial_sort or nth_element get the top-k, so sorting just to read front() or back() is wasted work -- go there for the extremes."
 - slug: "unique"
   note: "The dedup that a sort sets up: unique removes only adjacent duplicates, so sorting first makes equal values neighbours and sort+unique+erase strips them all -- go there for deduplicating a range and unique_copy."
+- slug: "rotate-reverse"
+  note: "Rearranging without ordering: rotate moves an element or block within a sequence and reverse flips one, and reversing unsorted data is not a descending sort -- go there for in-place moves and why to sort with greater instead."

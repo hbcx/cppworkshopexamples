@@ -18,3 +18,5 @@
   note: "Filling one vector from another: copy and copy_if write into a vector through a back_inserter, and the whole-container-copy anti-pattern is exactly the vector copy constructor and assign -- go there for copying ranges out, and when a plain b = a beats an algorithm."
 - slug: "remove-erase"
   note: "Emptying a vector of matching elements: the erase-remove idiom compacts and drops the tail, and erasing in a loop is the classic O(n squared) trap -- go there for remove vs erase, remove_if, and the C++20 erase_if."
+- slug: "rotate-reverse"
+  note: "Moving elements within a vector without reallocating: rotate slides a block in one in-place pass where erase+insert shifts twice and can reallocate -- go there for reordering, move-to-front, and reversing a segment."

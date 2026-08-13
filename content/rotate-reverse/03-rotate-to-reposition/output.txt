@@ -1,0 +1,2 @@
+move index 4 to 1: a E b c d f 
+move index 1 to 3: a c d B e 

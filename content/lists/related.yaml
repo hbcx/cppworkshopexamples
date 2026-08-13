@@ -12,3 +12,5 @@
   note: "Why a list has its own member sort: std::sort needs random-access iterators a list cannot give, so list::sort relinks nodes instead -- go there for the sort algorithm, comparators, and stable_sort."
 - slug: "remove-erase"
   note: "The same reason a list has its own member remove: std::remove compacts by moving element values, which defeats a list's stable nodes, so list::remove unlinks them instead -- go there for the erase-remove idiom and why the member wins on a list."
+- slug: "rotate-reverse"
+  note: "And the same reason a list has its own member reverse: std::reverse swaps values where list::reverse relinks nodes, and forward_list cannot use std::reverse at all -- go there for reversing, rotating, and moving a block."

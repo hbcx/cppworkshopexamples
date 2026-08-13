@@ -9,3 +9,5 @@
   note: "How you get the position that member erase deletes: find returns the iterator to a located element, and erase(it) removes it and hands back the next one -- go there for locating elements before deleting them."
 - slug: "unique"
   note: "The same compaction specialized to duplicates: unique collapses adjacent equal runs and, like remove, returns a new end you erase -- go there for deduplicating a range, the sort-then-unique idiom, and unique_copy."
+- slug: "rotate-reverse"
+  note: "Moving elements instead of deleting them: rotate repositions an element or block in one in-place pass, the tool to reach for instead of erase+insert -- go there for reordering, move-to-front, and reversing."

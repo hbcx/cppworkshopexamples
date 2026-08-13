@@ -1,0 +1,3 @@
+ranges::reverse: 6 5 4 3 2 1 
+ranges::rotate:  4 3 2 1 6 5 
+old first now at index 4

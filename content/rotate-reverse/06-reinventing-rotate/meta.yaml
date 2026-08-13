@@ -1,0 +1,11 @@
+title: "Anti-pattern: reinventing rotate with a buffer"
+standard: "C++11"
+difficulty: 2
+summary: "Rotating a range by hand -- saving one block to a temporary, shifting the rest, copying the block back -- allocates a buffer, repeats bounds-prone index arithmetic, and is far more code than std::rotate, which does the same thing in place with no allocation."
+notes: "A rotation looks simple enough to write by hand: copy the first k elements to a temporary, slide the remaining elements down by k, then copy the saved block onto the end. It works, but it is the wrong choice for three reasons. It ALLOCATES a temporary buffer of k elements, where the standard algorithm needs none. Its index arithmetic -- the shift bounds, the destination offset, the size-minus-k end point -- is exactly the kind of off-by-one that hides until a specific input hits it. And it is several lines standing in for one call whose name states the intent. std::rotate(first, middle, last) does the identical rearrangement IN PLACE, in linear time, with no extra memory, using a swap-based algorithm (or the three-reverses trick: reverse the two parts, then reverse the whole). It also returns the new position of the old first element, which the hand-rolled version does not give you for free. The only time to think about the mechanics yourself is to understand the cost -- rotate is O(n) swaps -- not to reimplement it. The same applies to reversing by hand with an index loop when std::reverse exists. The sign to watch for: a temporary buffer plus a shifting loop that, read together, are just a rotation (or a manual two-index swap loop that is just a reverse)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::rotate", url: "https://en.cppreference.com/w/cpp/algorithm/rotate" }
+detailed_tags:
+  - { name: "std::reverse", url: "https://en.cppreference.com/w/cpp/algorithm/reverse" }

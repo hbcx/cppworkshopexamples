@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms"
+standard: "C++20"
+difficulty: 2
+summary: "std::ranges::reverse and std::ranges::rotate take the whole range directly. ranges::rotate returns a SUBRANGE whose begin marks the new position of the old first element, the same information the classic rotate returns as a single iterator, packaged to pair cleanly with follow-up code."
+notes: "The ranges versions are thin, welcome improvements. ranges::reverse(v) reverses a whole range with no begin/end pair, and ranges::rotate(v, v.begin()+2) rotates so the element at that iterator becomes first. The difference worth noting is the return: where classic rotate returns a single iterator to the old first element's new home, ranges::rotate returns a SUBRANGE [new_first_pos, end), so r.begin() is that same position and the subrange itself is the wrapped-around tail -- convenient when the next step wants the seam or the moved block. Everything else matches the classic algorithms: they work in place, need the same iterator strength (bidirectional for reverse, forward for rotate), and touch no memory beyond the range. C++20 also adds two close relatives that are often what people actually reach rotate for: std::shift_left(first, last, n) and std::shift_right(first, last, n) move the elements n positions within the range WITHOUT the wrap-around -- the vacated slots at the end (or start) are left with moved-from values rather than the elements that would have wrapped. Use shift when you want to drop elements off one end and do not care what fills the other; use rotate when the displaced block must wrap around and be kept. Prefer the ranges forms in C++20 code for the direct range argument and the subrange return."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::rotate", url: "https://en.cppreference.com/w/cpp/algorithm/rotate" }
+  - { name: "std::reverse", url: "https://en.cppreference.com/w/cpp/algorithm/reverse" }

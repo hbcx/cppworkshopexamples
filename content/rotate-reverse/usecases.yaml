@@ -1,0 +1,19 @@
+- problem: "A user reorders a list in the UI -- drags a playlist track, a kanban card, a layer -- and the backing vector must move one item from its old index to a new one while every other item keeps its order."
+  why: "erase-then-insert does the move in two O(n) shifts and invalidates iterators between them, forcing a copy of the moved item; std::rotate on the sub-range between the two positions performs the move in a single in-place pass with no allocation and no copy-out."
+  signal: "Reorder code that erases an element and re-inserts it at another index in the same container, or a manual loop shifting a run of elements by one."
+
+- problem: "A round-robin scheduler or load balancer must advance whose turn is first -- after serving a worker it goes to the back and the next takes the front -- over a fixed set that cycles."
+  why: "Rebuilding the sequence or repeatedly popping and pushing churns the container; a single std::rotate by one makes the next element the new front and wraps the served one to the end, which is exactly a turn of the ring, in place."
+  signal: "A collection cycled so the head element moves to the tail each round, implemented by pop-front plus push-back or by copying into a new order."
+
+- problem: "A most-recently-used cache or a 'bring to top' action must move a just-touched element to the front of an ordered list without disturbing the relative order of the rest."
+  why: "Move-to-front is the reposition idiom with to = 0: rotate(begin, hit, hit+1) slides the touched element to the front and shifts the others down by one, in place, where erase+insert would shift twice and reallocate; a std::list can instead splice the node with no moves at all."
+  signal: "Code that, on access, removes an element and re-adds it at the front to keep a recency order."
+
+- problem: "A segment of a buffer must be reversed in place -- undoing a stretch of samples, flipping a block of bytes for endianness, reversing part of a path or a selection -- without touching the rest."
+  why: "std::reverse on the sub-range flips just that segment in about n/2 swaps and no allocation, where copying the segment out reversed and back would allocate and double the work; reverse_copy covers the case where the original must stay intact."
+  signal: "A hand-written two-index loop swapping elements inward over a slice, or a segment copied out backwards into a temporary."
+
+- problem: "An element must be slid into its sorted position in an already-sorted vector after its key changed, moving it across the few neighbours it passed rather than re-sorting the whole container."
+  why: "Re-running sort is O(n log n) for a single out-of-place element; rotate moves it across exactly the elements between its old and new position -- the minimum work -- and is the building block behind an insertion step that keeps a mostly-sorted range ordered cheaply."
+  signal: "A full re-sort triggered by one element changing, in a container that was already sorted and stays nearly sorted."

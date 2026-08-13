@@ -1,0 +1,12 @@
+title: "reverse: flip a range end to end"
+standard: "C++11"
+difficulty: 1
+summary: "std::reverse flips the order of a range in place by swapping the two ends and working inward. It applies to a whole container or any sub-range, and reverse_copy writes the reversed sequence to an output while leaving the source unchanged."
+notes: "reverse is the simplest of the rearranging algorithms: it reverses the order of the elements in [first, last) in place, swapping first with last-1, then the next pair inward, until they meet -- so it does about n/2 swaps and no allocation. Because it takes an iterator pair, you can reverse a whole container or just a slice of it: reverse(v.begin(), v.begin() + 3) flips only the first three elements and leaves the rest alone, which is handy for reversing one segment of a buffer. reverse needs BIDIRECTIONAL iterators, since it walks from both ends toward the middle; that is fine for vector, deque, string, array and list, but not for forward_list, whose forward-only iterators cannot go backward -- that container has a member reverse instead (an anti-pattern later). When you must keep the original intact -- it is const, shared, or needed again -- reverse_copy reads the range and writes the reversed result to an output iterator, so with a back_inserter you build a reversed copy without touching the source. A note on intent: reversing is not sorting. Flipping an ascending range does give a descending one, but flipping unsorted data just gives it backwards, not sorted -- a trap the closing anti-pattern covers. Use reverse to invert an order you already have; use sort with a comparator to impose one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reverse", url: "https://en.cppreference.com/w/cpp/algorithm/reverse" }
+detailed_tags:
+  - { name: "std::reverse_copy", url: "https://en.cppreference.com/w/cpp/algorithm/reverse_copy" }
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

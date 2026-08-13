@@ -1,0 +1,12 @@
+title: "Anti-pattern: reversing to sort descending"
+standard: "C++11"
+difficulty: 1
+summary: "reverse flips the current order; it does not sort. Reversing an unsorted range gives it backwards, not sorted descending. Descending order comes from a reverse only when the range was already sorted ascending -- otherwise sort with a greater-than comparator."
+notes: "This one comes from reading 'descending' as 'the reverse of what I have'. It is only true when what you have is already sorted ASCENDING: reverse of a sorted-ascending range is sorted descending. On unsorted data, reverse just produces the same elements in the opposite order -- here 4 1 7 3 9 2 becomes 2 9 3 7 1 4, which is not sorted at all. The bug is easy to ship because a reversed range looks rearranged and might even pass a test whose input happened to be nearly sorted. The direct way to get descending order is to sort with a comparator that means greater-than: std::sort(v.begin(), v.end(), std::greater<int>()), which orders largest-first in one pass regardless of the starting order. (A projection or a lambda a > b does the same for custom types.) Sorting ascending and then reversing also yields descending order and is sometimes done deliberately -- for example when stable descending order is wanted, since reversing a stable ascending sort flips the order of equal elements, whereas sorting with greater keeps their original relative order; pick based on which tie behavior you need. But reaching for reverse ALONE to sort is the mistake. The sign to watch for: a std::reverse applied to data that was not just sorted, used where descending order is the goal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reverse", url: "https://en.cppreference.com/w/cpp/algorithm/reverse" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }

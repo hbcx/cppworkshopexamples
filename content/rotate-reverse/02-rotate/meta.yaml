@@ -1,0 +1,11 @@
+title: "rotate: make an element the new first"
+standard: "C++11"
+difficulty: 2
+summary: "std::rotate(first, middle, last) cyclically shifts a range so that the element at `middle` becomes the new first, and the front part [first, middle) wraps around to the end. It is a left rotation by (middle - first) positions, done in place, and it returns an iterator to where the old first element ended up."
+notes: "rotate takes THREE iterators, and the middle one is the whole idea: after the call, the element that was at `middle` is at the front, the block before it [first, middle) has wrapped around to the back, and the block from middle to last has slid to the front. So rotate(v.begin(), v.begin()+3, v.end()) on 1 2 3 4 5 6 7 gives 4 5 6 7 1 2 3 -- a left rotation by three. Think of the range as a ring you spin so that `middle` lands at the start. It is done in place with no allocation, in linear time, using a clever sequence of swaps. The return value is easy to overlook but useful: rotate returns an iterator to the new position of the element that used to be first, which is exactly the point where the wrapped-around block begins -- here the old first (1) is now at index 4. That return lets you chain operations or find the seam. A few things to keep straight: middle must lie in [first, last]; if middle == first or middle == last the range is unchanged (a rotation by zero). To rotate RIGHT by k, rotate left by size-k, or use middle = last - k. rotate needs forward iterators, so it works on almost every sequence container. Its real power is not spinning a whole ring but MOVING a sub-block to a new position, which the next example shows -- rotate is the in-place workhorse behind reordering."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::rotate", url: "https://en.cppreference.com/w/cpp/algorithm/rotate" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

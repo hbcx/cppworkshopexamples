@@ -1,0 +1,12 @@
+title: "Anti-pattern: std::reverse on a list"
+standard: "C++11"
+difficulty: 2
+summary: "std::reverse works on a std::list but reverses by swapping element VALUES between nodes, needless work on a container whose nodes are meant to stay put. std::list has a member reverse that relinks the nodes instead. std::forward_list, with only forward iterators, cannot use std::reverse at all -- its member reverse is the only option."
+notes: "This is the reverse member of the same family as std::sort, std::remove and std::unique on a list: the algorithm fights the container. std::reverse reverses a range by swapping values from the two ends inward, which is right for a vector's contiguous storage but wrong for a list, whose whole point is that each element is a node that never moves. Running std::reverse on a list produces the correct order but move-assigns values between nodes, doing needless work and breaking the guarantee that a pointer or reference to an element stays valid and keeps pointing at the same value. The member list::reverse() instead RELINKS the nodes -- it flips their next and prev pointers -- so no values move, every node keeps its address, and it is a single clean pass. For std::forward_list the point is sharper: its iterators are FORWARD-only and cannot walk backward, so std::reverse (which needs bidirectional iterators) does not even compile on it -- the member forward_list::reverse() is the only way to reverse it. The rule matches the rest of the node-container family: prefer the member (reverse, sort, remove, unique) over the std:: algorithm on list and forward_list. The sign to watch for: std::reverse called on a std::list, or any attempt to use a std:: rearranging algorithm on a std::forward_list."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::list::reverse", url: "https://en.cppreference.com/w/cpp/container/list/reverse" }
+detailed_tags:
+  - { name: "std::reverse", url: "https://en.cppreference.com/w/cpp/algorithm/reverse" }
+  - { name: "std::forward_list::reverse", url: "https://en.cppreference.com/w/cpp/container/forward_list/reverse" }
