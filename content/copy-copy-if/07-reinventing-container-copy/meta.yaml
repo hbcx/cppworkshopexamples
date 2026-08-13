@@ -1,0 +1,11 @@
+title: "Anti-pattern: copying a whole container with copy plus back_inserter"
+standard: "C++11"
+difficulty: 2
+summary: "Duplicating an entire container with std::copy into an empty one through a back_inserter works, but it is more code than needed and grows the output element by element. To copy a whole container use the copy constructor or assignment; for a sub-range, assign from iterators -- both size the destination once."
+notes: "std::copy is for moving elements to an output that is not simply another container of the same kind -- a stream, a different container type, a specific position, a filtered or transformed pipeline. Reaching for it to duplicate a whole vector into an empty vector is using a general tool where a direct one exists. std::copy(src.begin(), src.end(), std::back_inserter(dst)) does copy every element, but the back_inserter grows the destination one push_back at a time, so it may reallocate several times as it fills, and the three-line call obscures a one-word intent. The direct forms are clearer and allocate once: std::vector<int> dst = src (copy constructor) or dst = src (copy assignment) duplicate the whole container, sizing the destination exactly and copying in a single block. For a SUB-RANGE, dst.assign(first, last) is the counterpart -- it sizes the destination to the range and copies, again in one allocation, rather than growing through a back_inserter. So the guidance is: for a whole-container or sub-range copy of the same container type, use construction, assignment, or assign(); reserve std::copy for the cases those cannot express -- copying between different container types, into the middle of an existing container (with an inserter at a position), to a stream, or from a view. The sign to watch for: std::copy from a container's begin/end into an empty container of the same type through a back_inserter, where dst = src or dst.assign(...) would do."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

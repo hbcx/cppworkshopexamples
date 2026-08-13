@@ -1,0 +1,11 @@
+title: "copy_if: filter into a new container"
+standard: "C++11"
+difficulty: 1
+summary: "copy_if is copy with a predicate: it writes only the elements that satisfy the predicate to the output. It is the filter that extracts a subset into a new container, and it leaves the source unchanged -- it copies out, it does not remove."
+notes: "std::copy_if(first, last, out, pred) copies each element for which pred returns true to the output, skipping the rest -- so it selects a subset. With a back_inserter it collects the matches into a fresh container: the even numbers, the active records, the rows above a threshold. It is the everyday filter operation, the copy-out counterpart of the transform map, and the two compose -- filter with copy_if, then map with transform, or fuse both lazily with views::filter and views::transform in C++20. The single most important thing to understand is what it does NOT do: copy_if writes to an OUTPUT and never touches the source, so the input container keeps all its elements (nums still has eight here). People reach for copy_if expecting it to delete the non-matching elements from the container; it cannot, because an algorithm only sees iterators, not the container, and cannot resize it -- removing in place is the erase-remove idiom, which is its own anti-pattern. So the rule is: copy_if to pull a filtered COPY into another container; erase-remove to shrink the SOURCE. Everything else about it follows copy -- the output must have room (use a back_inserter or a sized destination), and the C++20 ranges::copy_if adds a projection so the predicate can test a member."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy_if", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

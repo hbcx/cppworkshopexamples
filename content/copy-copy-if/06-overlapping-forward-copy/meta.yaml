@@ -1,0 +1,11 @@
+title: "Anti-pattern: copying forward into an overlapping range"
+standard: "C++11"
+difficulty: 3
+summary: "std::copy requires that the destination not overlap a part of the source it has not read yet. Copying forward into a destination that starts ahead of the source -- a right shift within one buffer -- overwrites elements before they are read, which is undefined behavior. Use copy_backward for a right shift."
+notes: "std::copy processes elements from first to last, writing each to the output as it goes. That is fine when the source and destination do not overlap, or when the destination is BEHIND the source (a left shift), because every source element is read before anything overwrites it. It breaks when the destination is AHEAD of the source within the same buffer -- a right shift, copy(v.begin(), v.begin()+4, v.begin()+1). Walking forward, copy reads v[0] and writes it to v[1], destroying the old v[1] before that value is read; on the next step it reads the just-overwritten v[1] and smears the first value across the range. The standard says a destination that overlaps an unread part of the source is undefined behavior, so the answer is not merely wrong, it is unspecified. The right tool for a right shift is std::copy_backward(first, last, d_last), which copies from the END of the range toward the front: it writes the last element first, then the second-to-last, and so on, so each element is read before the write that could clobber it. (For a LEFT shift, plain copy is fine, because it reads ahead of where it writes; and std::move / std::move_backward are the moving equivalents.) The rule: a right shift within one container needs copy_backward, not copy; more generally, when source and destination overlap, choose the direction that reads each element before overwriting it. The sign to watch for: a std::copy whose destination range overlaps and starts after the source begin -- an in-place shift toward higher indices."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy_backward", url: "https://en.cppreference.com/w/cpp/algorithm/copy_backward" }
+detailed_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }

@@ -14,3 +14,5 @@
   note: "What a vector's iterators actually are and why growth or erase invalidates them: the Iterator pattern chapter covers the invalidation rules, the random-access category a vector provides, and how to write an iterator of your own."
 - slug: "ranges"
   note: "The modern way to process a vector: lazy filter/transform/take pipelines and range algorithms that take the whole vector instead of a begin/end pair, materialising back into a vector when you need a result -- go there for views and the pipe operator."
+- slug: "copy-copy-if"
+  note: "Filling one vector from another: copy and copy_if write into a vector through a back_inserter, and the whole-container-copy anti-pattern is exactly the vector copy constructor and assign -- go there for copying ranges out, and when a plain b = a beats an algorithm."

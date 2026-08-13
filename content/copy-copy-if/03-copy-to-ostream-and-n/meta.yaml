@@ -1,0 +1,12 @@
+title: "Copy to a stream, and copy_n"
+standard: "C++11"
+difficulty: 2
+summary: "The output iterator can be a std::ostream_iterator, which makes copy print a range: each element goes to the stream with a separator after it, in one line and with no trailing-separator special case. copy_n copies exactly the first N elements."
+notes: "copy does not care what its output is, only that it can be written to and advanced, so a std::ostream_iterator<T>(stream, sep) makes copy PRINT: it writes each element to the stream followed by the separator string. std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, ) is the idiomatic one-line dump of a range, and it sidesteps the classic loop bug where the separator trails the last element or you special-case the first. (The separator does follow every element including the last, so for strict comma-separation without a trailing comma you use a different tool, but for a space-separated dump this is the clean form.) The same idea gives istream_iterator for reading a stream into a container. copy_n(first, count, out) is the sibling that copies exactly count elements from the start rather than a whole range -- a preview, the head of a log, a fixed-size snapshot -- and it pairs naturally with the ostream_iterator to print just the first few. copy_n takes a COUNT, not an end iterator, so the caller is responsible for the range actually having that many elements (it reads count elements regardless). These two -- an output iterator that is a stream, and a count-limited copy -- turn copy into printing and previewing without writing a loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }
+  - { name: "std::copy_n", url: "https://en.cppreference.com/w/cpp/algorithm/copy_n" }
+detailed_tags:
+  - { name: "std::ostream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/ostream_iterator" }

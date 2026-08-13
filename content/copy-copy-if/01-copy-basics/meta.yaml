@@ -1,0 +1,11 @@
+title: "copy: write a range to an output"
+standard: "C++11"
+difficulty: 1
+summary: "copy writes each element of a range to an output iterator. To build a new container, pass a back_inserter so the output grows; to write into an already-sized container, pass its begin, which overwrites the existing elements."
+notes: "std::copy(first, last, out) is the plainest range operation: it takes each element in order and writes it to the output iterator, advancing both. As with transform, where the output points decides everything. For a fresh container, wrap it in std::back_inserter(out), which turns each write into a push_back so the container grows to fit and you do not size it first. For a container that already has room, pass its begin and copy OVERWRITES the elements in place -- which needs the destination to be at least as large as the source (the empty-output trap is the same one covered in the transform chapter: copy does not grow a container by itself). copy returns the output iterator one past the last element written, which is useful for chaining or for knowing where the copied block ends. It works between DIFFERENT container and iterator types too -- copy from a list into a vector, from an array into a deque, or from any range into a stream through an ostream_iterator (a later example). Two notes carry through the section: copy_if adds a predicate to copy only some elements, and copy requires the destination not to overlap a part of the source it has not read yet (the overlap anti-pattern). For duplicating a WHOLE container, though, a copy constructor or assignment is simpler and faster than copy plus a back_inserter -- its own anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

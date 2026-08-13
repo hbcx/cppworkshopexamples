@@ -1,0 +1,2 @@
+into a new vector:   1 2 3 4 5 
+into a sized vector: 1 2 3 4 5 

@@ -1,0 +1,13 @@
+title: "ranges::copy and copy_if with a projection"
+standard: "C++20"
+difficulty: 2
+summary: "The C++20 std::ranges::copy and copy_if take the whole range, and copy_if adds a projection so the predicate can test a member. ranges::copy also copies straight from a view, so a filter or transform pipeline materializes into a container in one call."
+notes: "The ranges versions bring the usual two improvements. They take the range directly -- ranges::copy(src, out) -- with no begin/end pair, and ranges::copy_if adds an optional PROJECTION so the predicate tests a projected value: ranges::copy_if(users, out, pred, and User::active) copies the users whose active flag passes, with the predicate seeing the bool rather than reaching into the struct. Note the algorithm still copies WHOLE elements (the full User), not the projected field -- the projection only feeds the predicate; to copy just one field, map with transform. The bigger win is that ranges::copy accepts a VIEW as its input, so a lazy pipeline flows straight into a container: users | views::transform(and User::name) piped into ranges::copy with a back_inserter collects the names in one call, no intermediate vector. This is the eager way to MATERIALIZE a view when you need a real container, and in C++23 std::ranges::to does the same even more directly (my_view | std::ranges::to<std::vector>()). So the modern shape of filter-and-collect is either ranges::copy_if for a simple predicate, or a views pipeline copied out (or ranges::to). Prefer these in C++20 code; they compose with the ranges world and keep the call to one line."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }
+  - { name: "std::copy_if", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

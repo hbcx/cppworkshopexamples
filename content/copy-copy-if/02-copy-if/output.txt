@@ -1,0 +1,2 @@
+evens: 4 2 8 6 
+source still has 8 elements

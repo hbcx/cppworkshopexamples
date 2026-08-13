@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "transform"
+  note: "The map to this plain copy: transform applies a function to each element while copying it out, and copy_if selects without changing -- go there for mapping a range, and the same output-iterator sizing rules apply to both."
+- slug: "ranges"
+  note: "Where ranges::copy shines: it copies straight from a view, so a filter or transform pipeline materializes into a container in one call -- go there for views, the pipe operator, and lazy composition."
+- slug: "vectors"
+  note: "Where the outputs go and the faster whole-container copy lives: back_inserter grows a vector, and a copy constructor or assign copies one wholesale in a single allocation -- go there for growth, reserve, and the erase-remove idiom."

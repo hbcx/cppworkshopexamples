@@ -7,3 +7,5 @@
   note: "The sibling that reduces instead of maps: count totals matches over a range where transform produces a new value per element -- go there for tallies, thresholds, and progress counts."
 - slug: "accumulate-reduce"
   note: "The reduce that pairs with this map: transform_reduce fuses a transform and a fold, and accumulate folds a range to one value -- go there for sums, dot products, and folding into a summary."
+- slug: "copy-copy-if"
+  note: "The plain copy without the mapping: copy writes elements unchanged and copy_if selects a subset, where transform changes each one -- go there for filtering into a container, printing through an ostream_iterator, and the overlap rules copy shares."

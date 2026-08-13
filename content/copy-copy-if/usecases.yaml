@@ -1,0 +1,19 @@
+- problem: "A subset of a collection must be pulled out for separate handling -- the active sessions, the failed jobs, the rows above a threshold -- while the original stays intact for other uses."
+  why: "A hand-written loop with an if and a push_back is more code and easy to get wrong; copy_if states the filter as a predicate and leaves the source untouched, so the extracted subset is one call and the original is still there."
+  signal: "A loop whose body is if (pred(x)) out.push_back(x) over a container, building a filtered copy while keeping the source."
+
+- problem: "A range must be printed or serialized with a separator between elements -- a comma-separated line, a space-joined list, a debug dump of a vector."
+  why: "A manual loop needs a special case so the separator does not trail the last element, which is a common off-by-one; copying through an ostream_iterator writes each element and its separator in one line without a hand-written loop."
+  signal: "A loop that streams each element and appends a separator, with an if to skip the separator on the first or last element."
+
+- problem: "Only the first N elements of a range are needed -- a preview, the head of a log, the first page of results, a fixed-size snapshot of a stream."
+  why: "Slicing by index and copying in a loop repeats the bound and risks reading past the end when the range is shorter than N; copy_n copies exactly N from the start in one call, and a view or a checked count guards the short case."
+  signal: "An index loop bounded by min(n, size) that copies the leading elements of a range into another container."
+
+- problem: "A collection must be split into two by a rule -- valid and invalid records, paid and unpaid orders, items in and out of budget -- each group processed separately."
+  why: "Two separate scans (copy_if with the predicate, then copy_if with its negation) read the data twice; partition_copy makes both output containers in a single pass, or two copy_if calls keep the intent clear when a pass each is fine."
+  signal: "Two copy_if calls over the same range with a predicate and its negation, or a loop appending each element to one of two vectors by a condition."
+
+- problem: "A range must be written into a pre-allocated buffer or a fixed-size array -- filling a C-style array to hand to a legacy API, or writing into a slot of a larger structure."
+  why: "A manual index loop is where the off-by-one and the missing bounds check live; copy into a sized destination (or copy_n with the exact count) writes the elements in one call, and the fixed size makes the required room explicit."
+  signal: "An index loop copying elements into a raw array or a pre-sized region for a C API, with its own bounds arithmetic."

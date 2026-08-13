@@ -1,0 +1,4 @@
+title: "copy / copy_if"
+description: "Copying a range to an output: copy for all of it, copy_if for the elements that pass a predicate. Covers copying to a new container or a pre-sized one, filter-copying with copy_if, printing a range through an ostream_iterator and taking the first N with copy_n, and the C++20 ranges::copy and copy_if with a projection -- alongside the anti-patterns: expecting copy_if to remove from the source (it writes to an output), copying forward into an overlapping range that corrupts the data where copy_backward is needed, and duplicating a whole container with copy plus a back_inserter where a copy constructor or assignment is simpler."
+sort_order: 74
+category: "Algorithms"

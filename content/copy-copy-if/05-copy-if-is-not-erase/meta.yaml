@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting copy_if to remove from the source"
+standard: "C++11"
+difficulty: 2
+summary: "copy_if writes matching elements to an output; it never changes the source container. Code that calls copy_if hoping to delete the non-matching elements finds the source unchanged. To copy a subset out, keep the output; to shrink the source in place, use the erase-remove idiom."
+notes: "copy_if is easy to misread as filter this container when it is really copy the matches elsewhere. It takes an output iterator and writes the passing elements there; the source is only READ, so it keeps every element -- nums still has all six after copy_if here. This confusion is common because the word filter suggests removal, but a standard algorithm cannot resize a container at all: it works through iterators and never sees the container object, so it physically cannot erase elements. There are two correct intentions to separate. To extract a subset into ANOTHER container, copy_if with a back_inserter is exactly right -- the result is the new container, and leaving the source intact is the point. To shrink the SOURCE, use the erase-remove idiom: std::remove_if shuffles the elements you keep to the front and returns an iterator to the new logical end, and the container's erase(new_end, old_end) drops the leftover tail -- two steps because, again, remove_if (an algorithm) can only rearrange, and erase (a member) is what actually resizes. In C++20 std::erase_if(container, pred) wraps both into one call. The rule: copy_if copies out and leaves the source whole; erase-remove (or erase_if) removes in place. The sign to watch for: a copy_if whose output is ignored or is the same logical container, written as if it filtered the source."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy_if", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }
+detailed_tags:
+  - { name: "std::remove_if", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }
