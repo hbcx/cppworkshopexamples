@@ -1,0 +1,12 @@
+title: "set_union and set_intersection"
+standard: "C++11"
+difficulty: 2
+summary: "set_union writes every element present in either sorted range; set_intersection writes only those present in both. Both walk the two inputs once in parallel -- O(n + m) -- and produce a sorted output, collapsing duplicates across the two ranges (one copy per value for unique inputs)."
+notes: "These are the two most-used set operations, and they work like merge but keep elements by a rule. set_union(a, b, out) writes each value that appears in a OR b, so it is the deduplicated combination of the two -- and unlike merge, a value common to both is written once, not twice, so there is no separate unique pass needed (doing merge then unique instead is an anti-pattern). set_intersection(a, b, out) writes only values that appear in BOTH, the overlap between the two sets -- shared tags, mutual members, common permissions. Both require the inputs to be SORTED by the same comparison, run in a single O(n + m) parallel walk, and emit a sorted result, so they are far cheaper than nested-loop membership checks (another anti-pattern). Provide the output via a back_inserter or a destination large enough (union can be as big as n + m; intersection at most min(n, m)). A precise note for inputs that themselves contain duplicates: these follow MULTISET rules -- intersection keeps min(count in a, count in b) copies of a value and union keeps max -- so they do not force uniqueness unless the inputs are already unique (the closing anti-pattern). For plain sorted sets of unique values, though, they are exactly the mathematical union and intersection."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set_union", url: "https://en.cppreference.com/w/cpp/algorithm/set_union" }
+  - { name: "std::set_intersection", url: "https://en.cppreference.com/w/cpp/algorithm/set_intersection" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

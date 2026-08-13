@@ -1,0 +1,2 @@
+union:        1 2 3 4 5 8 9 
+intersection: 2 3 8 

@@ -1,0 +1,12 @@
+title: "set_difference and symmetric difference"
+standard: "C++11"
+difficulty: 2
+summary: "set_difference writes the elements in the first range that are not in the second (A minus B); set_symmetric_difference writes the elements in exactly one of the two (in A or B but not both). Both are single-pass over sorted inputs and produce a sorted result."
+notes: "These complete the set-operation family. set_difference(a, b, out) writes each element of A that is NOT in B -- the asymmetric difference, so the ORDER of the arguments matters: A minus B is not B minus A. Its classic use is diffing two sorted snapshots to find what was removed or what one side has that the other lacks. set_symmetric_difference(a, b, out) writes the elements that are in exactly one of the two ranges -- present in A or in B but not both -- which equals the union with the intersection taken out, and is the way to find everything that CHANGED between two sets (added on one side or the other) in a single pass. Both require sorted inputs by the same comparison, run in O(n + m), and emit sorted output through an inserter or a sized destination. Together with set_union and set_intersection they cover the four basic set relations, all as parallel walks of two sorted ranges: union (either), intersection (both), difference (A not B), symmetric difference (exactly one). Like the others they obey multiset counting rules when inputs have duplicates -- set_difference keeps max(0, count in a minus count in b) copies of a value. Choose difference to ask what A has that B does not, and symmetric difference to ask what the two disagree on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set_difference", url: "https://en.cppreference.com/w/cpp/algorithm/set_difference" }
+  - { name: "std::set_symmetric_difference", url: "https://en.cppreference.com/w/cpp/algorithm/set_symmetric_difference" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

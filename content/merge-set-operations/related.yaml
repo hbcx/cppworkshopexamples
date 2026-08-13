@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "sort"
+  note: "The prerequisite these all share: merge and the set operations require sorted inputs, sorted by the same comparator the call uses, so sort establishes the order they walk in parallel -- go there for ordering, comparators, and stable_sort."
+- slug: "unique"
+  note: "The dedup these interact with: set_union already collapses cross-range duplicates, so merge+unique is a set_union in disguise, and making inputs unique first is how to get true-set output -- go there for deduplicating a range and the sort-then-unique idiom."
+- slug: "binary-search"
+  note: "The other family of sorted-range algorithms: binary_search and lower_bound query one sorted range in O(log n), where these combine two in O(n+m) -- go there for membership, bounds, and searching sorted data."
+- slug: "sets"
+  note: "The container whose contents are already sorted and unique, so its iterators feed these operations directly with no sort and clean set semantics -- go there for the tree-based ordered set and when a container beats a sorted vector."

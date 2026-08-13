@@ -19,3 +19,5 @@
   note: "The split at the heart of quicksort: partition rearranges around a predicate in O(n), and nth_element uses it to find an order statistic without a full sort -- go there for two-group splits and the stable-vs-unstable choice sort also has."
 - slug: "binary-search"
   note: "What a sort unlocks: once a range is sorted, binary_search and lower_bound find, count, and locate insertion points in O(log n) -- go there for the searches that need the order sort provides, using the same comparator."
+- slug: "merge-set-operations"
+  note: "The other thing a sort unlocks: merge and set_union/intersection/difference combine two sorted ranges in O(n+m), and inplace_merge is the merge step of merge sort -- go there for combining sorted ranges, all needing the same order sort provides."

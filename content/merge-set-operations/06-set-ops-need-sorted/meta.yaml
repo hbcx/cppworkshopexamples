@@ -1,0 +1,11 @@
+title: "Anti-pattern: set operations on unsorted input"
+standard: "C++11"
+difficulty: 2
+summary: "merge and all the set operations rely on their inputs being sorted -- they walk the two ranges in parallel, advancing whichever value is smaller. On unsorted data that logic is wrong, so the result is meaningless and the behavior is undefined. Sort both inputs, by the same order, before combining them."
+notes: "Every algorithm in this family -- merge, set_union, set_intersection, set_difference, set_symmetric_difference, includes -- works by comparing the current element of each range and stepping the smaller one forward. That parallel walk is only correct if each range is SORTED: it assumes that once it has passed a value, no smaller one will appear later. Feed it unsorted data and the assumption breaks -- it steps past elements it should have matched and matches ones it should not -- giving a garbage result, and because the standard makes sorted input a precondition, the behavior is formally undefined rather than merely inaccurate. It does not crash; it quietly returns a wrong set, which is the dangerous kind of bug. The fix is to sort both inputs first, by the SAME comparison the set operation will use (a mismatch of orders is as wrong as no order at all). If the ranges come from containers that are already ordered -- a std::set, a sorted-by-key vector -- they are ready to use directly. The cost of sorting is O(n log n) each, so when you will combine the same ranges repeatedly, sort once and reuse; when the data arrives sorted (from a database ORDER BY, a merge of sorted files, a std::set), no sort is needed. The sign to watch for: a merge or set_* call on containers that were filled in arbitrary order with no sort establishing the order the algorithm walks."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set_intersection", url: "https://en.cppreference.com/w/cpp/algorithm/set_intersection" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

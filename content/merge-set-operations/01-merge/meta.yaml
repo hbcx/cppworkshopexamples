@@ -1,0 +1,11 @@
+title: "merge: interleave two sorted ranges"
+standard: "C++11"
+difficulty: 1
+summary: "std::merge combines two sorted ranges into one sorted output in a single linear pass, keeping every element from both -- duplicates included. It is the merge step of merge sort, and the foundation the set operations build on."
+notes: "merge(first1, last1, first2, last2, out) walks both sorted input ranges at once and writes the smaller current element to the output each step, advancing that side, so the result is one sorted range containing EVERYTHING from both inputs -- it keeps all duplicates, so a value in both ranges appears twice. It is O(n + m): a single pass over each input, far cheaper than concatenating and re-sorting (O((n+m) log(n+m))). The one precondition is that BOTH inputs are already sorted by the same order the merge uses (unsorted input is the section's first anti-pattern). Like the other writing algorithms it needs somewhere to put the result: a back_inserter to build a new container, or a destination sized to n + m. Two relatives to keep straight. merge keeps everything; the SET operations (set_union next) apply the same parallel-walk but drop or keep elements by set rules, so if you actually want a deduplicated union, set_union does it directly rather than merge followed by unique. And inplace_merge (a later example) merges two consecutive sorted sub-ranges WITHIN one container, which is the literal merge step when implementing merge sort. Reach for merge when you have two sorted sequences and want them interleaved into one, keeping every element."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::merge", url: "https://en.cppreference.com/w/cpp/algorithm/merge" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

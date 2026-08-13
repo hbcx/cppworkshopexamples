@@ -1,0 +1,12 @@
+title: "Anti-pattern: merge plus unique for a union"
+standard: "C++11"
+difficulty: 2
+summary: "merge keeps every element from both ranges, so building a deduplicated union as merge followed by unique + erase is two passes and an extra buffer. set_union does exactly that -- combine and collapse duplicates -- in a single pass, and is the direct tool."
+notes: "It is a natural thought: to union two sorted ranges, merge them and then remove the duplicates with unique. It gives the right answer, but it is doing set_union's job in two steps. merge deliberately keeps EVERYTHING, so a value present in both ranges lands twice, and you then need a unique + erase pass to collapse those -- a second traversal and, for the merge output, a whole intermediate container. set_union folds both steps into one: as it walks the two sorted ranges in parallel it writes each distinct value once, skipping the duplicate copy that merge would have emitted, so the result is the deduplicated union straight away in O(n + m) with a single output. The reverse confusion is worth naming too: people sometimes expect merge to deduplicate and are surprised by the doubled elements -- merge keeps all, set_union collapses, that is the whole difference between them. So pick by intent: merge when you want every element interleaved (including duplicates), set_union when you want the combined set with each value once. The merge + unique detour is only defensible if you specifically need the duplicates kept AND a deduplicated view, which is rare. The sign to watch for: a merge whose output is immediately passed through unique to remove the cross-range duplicates -- that is a set_union."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set_union", url: "https://en.cppreference.com/w/cpp/algorithm/set_union" }
+detailed_tags:
+  - { name: "std::merge", url: "https://en.cppreference.com/w/cpp/algorithm/merge" }
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }

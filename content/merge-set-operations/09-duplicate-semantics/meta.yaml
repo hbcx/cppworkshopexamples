@@ -1,0 +1,12 @@
+title: "Anti-pattern: expecting the set operations to deduplicate"
+standard: "C++11"
+difficulty: 3
+summary: "The set operations are MULTISET operations: with duplicated inputs, set_intersection keeps min(count in a, count in b) copies of a value and set_union keeps max, so they do not force uniqueness. Code that assumes a unique result gets duplicates. Make the inputs unique first if a true set is needed."
+notes: "The name misleads: these are 'set' operations in the multiset sense, defined by COUNTS, not by uniqueness. For a value that appears m times in the first range and n times in the second, set_union writes max(m, n) copies, set_intersection writes min(m, n), and set_difference writes max(0, m - n). So on {1,1,2,3} and {1,2,2,4} the intersection is {1, 2} (one each: min(2,1) and min(1,2)) but the union is {1,1,2,2,3,4} (two 1s and two 2s: max(2,1) and max(1,2)) -- not the deduplicated {1,2,3,4} many people expect. When the inputs are already unique (each value appears at most once, as from a std::set or a sort+unique'd vector) every count is 0 or 1, the min/max rules collapse to ordinary set logic, and the output is unique -- which is the usual case and why the surprise only appears with duplicated inputs. So the fix, when you want true sets, is to make the INPUTS unique first: sort then unique each range (or build them from std::set), and the operations behave as the mathematical set operations. Deduplicating the OUTPUT afterward also works but does more traversals. The sign to watch for: a set_union / set_intersection / set_difference over ranges that can contain repeated values, with code downstream assuming each value appears at most once."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set_union", url: "https://en.cppreference.com/w/cpp/algorithm/set_union" }
+detailed_tags:
+  - { name: "std::set_intersection", url: "https://en.cppreference.com/w/cpp/algorithm/set_intersection" }
+  - { name: "std::unique", url: "https://en.cppreference.com/w/cpp/algorithm/unique" }

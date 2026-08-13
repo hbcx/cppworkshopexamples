@@ -1,0 +1,4 @@
+title: "merge / set operations"
+description: "Combining two SORTED ranges in linear time. std::merge interleaves them into one sorted output keeping everything, while set_union, set_intersection, set_difference and set_symmetric_difference compute the mathematical set relations, includes tests subset, and inplace_merge stitches two adjacent sorted runs. Covers merge, union and intersection, difference and symmetric difference, includes and inplace_merge, and the C++20 ranges forms with a projection -- alongside the anti-patterns: running these on unsorted input, using merge plus unique where set_union does it directly, a nested loop for an intersection two sorted ranges can do in O(n+m), and expecting the set operations to deduplicate when they follow multiset rules."
+sort_order: 83
+category: "Algorithms"

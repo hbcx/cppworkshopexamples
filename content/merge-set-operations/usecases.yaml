@@ -1,0 +1,19 @@
+- problem: "Two already-sorted sequences must be combined into one ordered stream -- merging sorted result pages from two shards, interleaving two time-ordered logs, joining pre-sorted batches -- keeping every record."
+  why: "Concatenating and re-sorting is O((n+m) log(n+m)) and ignores that the inputs are already ordered; merge does it in a single O(n+m) pass, and inplace_merge does the same when the two runs sit next to each other in one buffer -- it is literally the merge step of merge sort."
+  signal: "Two sorted containers concatenated and then sorted again, or a hand-written loop interleaving two ordered sequences by comparing their fronts."
+
+- problem: "The items common to two sorted collections are needed -- shared tags between two documents, mutual connections, permissions granted by two roles, ids present in both feeds."
+  why: "A nested loop or a find per element is O(n*m) and throws away the ordering; set_intersection walks both sorted ranges once in O(n+m), and against a std::set the members' own ordering means no extra sort is needed."
+  signal: "A loop over one collection testing membership in another with find or count to collect the overlap."
+
+- problem: "The difference between two sorted snapshots must be found -- which ids were added or removed between two syncs, what one config has that another lacks, the delta between two sorted exports."
+  why: "set_difference gives what the first has that the second does not in one pass (order of arguments picks added vs removed), and set_symmetric_difference gives everything that changed on either side -- both O(n+m), where a manual double scan is quadratic and easy to get backwards."
+  signal: "Two sorted snapshots compared element by element with nested loops to compute added and removed sets."
+
+- problem: "Two sorted key sets must be combined into one deduplicated set -- the union of allowed keys from two sources, the merged vocabulary of two documents, all ids seen across two feeds."
+  why: "merge then unique is two passes and an intermediate buffer; set_union combines and collapses duplicates in a single O(n+m) pass, producing the deduplicated union directly as long as the inputs are unique sets."
+  signal: "A merge whose output is immediately passed through unique to drop the cross-range duplicates."
+
+- problem: "One sorted set must be checked to contain all of another -- do the granted permissions cover the required ones, does available stock cover an order, is this feature set a superset of the baseline."
+  why: "includes answers the subset question in one O(n+m) walk of two sorted ranges and returns a bool, where checking each required element against the other set with find is O(n*m) and reimplements what one call already does."
+  signal: "A loop asserting every element of a required set is present in a permitted set, using find or count per element."

@@ -8,3 +8,5 @@
   note: "The other way to get distinct values: sort+unique deduplicates a vector in place and leaves it sorted, cheaper than a set for a one-shot batch -- go there for deduplicating a range and when a vector beats a set."
 - slug: "binary-search"
   note: "The hand-rolled sorted-vector alternative: binary_search and lower_bound give O(log n) lookup on a sorted vector, the read-mostly stand-in for a set -- go there for searching sorted ranges and why std::lower_bound on a set is O(n)."
+- slug: "merge-set-operations"
+  note: "Set math on sorted ranges: set_union, set_intersection and set_difference compute the relations between two sets in O(n+m), and a set's own sorted iterators feed them directly -- go there for combining sorted ranges."

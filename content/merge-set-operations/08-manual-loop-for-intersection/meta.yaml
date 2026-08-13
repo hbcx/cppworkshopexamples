@@ -1,0 +1,11 @@
+title: "Anti-pattern: a nested loop for an intersection"
+standard: "C++11"
+difficulty: 2
+summary: "Computing the intersection of two sorted ranges with a nested loop -- a find in the second range for each element of the first -- is O(n*m) and throws away the sortedness. set_intersection walks both ranges once in parallel, O(n + m), because sorted input lets it advance only the smaller side."
+notes: "The obvious way to intersect two containers is a nested scan: for each element of the first, search the second and keep it if found. That is O(n*m) -- every element of one range triggers a full or partial scan of the other -- and it ignores the fact that both ranges are already sorted, which is the expensive mistake. set_intersection exploits the order: it keeps a cursor in each range and compares the two current values, advancing whichever is SMALLER (or emitting the value and advancing both when they are equal). Because each step moves at least one cursor forward and neither ever goes back, it visits each element once -- O(n + m) total, linear instead of quadratic. On two ranges of a thousand elements that is a couple of thousand steps versus up to a million. The same parallel-walk shape powers the whole family (union, difference, includes), so a hand-written nested loop for any of them is leaving the same speed-up on the table. This does require the inputs to be sorted; if they are not and you only intersect once, sorting first (O(n log n)) plus set_intersection still beats the nested loop for any non-trivial size, and if you intersect repeatedly the sort pays for itself. (For an unsorted one-off on small data, a hash set of one side and a scan of the other is the O(n + m) alternative.) The sign to watch for: a loop over one container calling find/count on another to compute an intersection, difference, or union, especially when both are or could be sorted."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set_intersection", url: "https://en.cppreference.com/w/cpp/algorithm/set_intersection" }
+detailed_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

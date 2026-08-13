@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms with projections"
+standard: "C++20"
+difficulty: 2
+summary: "The ranges versions of merge and the set operations take both ranges directly, a comparator, and a PROJECTION PER RANGE, so two ranges of structs can be combined by a key field while the whole elements are written. Here two user lists sorted by id are intersected by id, keeping the User objects."
+notes: "std::ranges::merge, set_union, set_intersection, set_difference, set_symmetric_difference and includes all take the two ranges directly and add projection support -- and note there are TWO projections, one for each input range, because the two ranges are compared against each other and each may need its key extracted. So ranges::set_intersection(team, oncall, out, {}, &User::id, &User::id) compares users by id across the two lists and writes the whole User objects that match, which the classic version could only do with a comparator that reached into both structs. The {} is the default comparison; the two projections follow the output iterator. As always the whole ELEMENT is written, not the projected key -- the projection only feeds the comparison. For set_intersection and the differences, the standard specifies WHICH range an output element is copied from (intersection and difference copy from the first range), which matters when the elements compare equal by key but differ in other fields. The preconditions are unchanged: both ranges sorted by the same projected order the call uses, O(n + m), output through an inserter or a sized destination. Prefer the ranges forms in C++20 when combining ranges of structs by a key -- the per-range projections are exactly what this family needs and are awkward to express as a single comparator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::set_intersection", url: "https://en.cppreference.com/w/cpp/algorithm/set_intersection" }
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

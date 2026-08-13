@@ -1,0 +1,2 @@
+nested loop:      2 5 8 
+set_intersection: 2 5 8 

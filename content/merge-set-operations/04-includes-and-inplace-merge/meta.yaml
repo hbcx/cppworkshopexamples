@@ -1,0 +1,11 @@
+title: "includes and inplace_merge"
+standard: "C++11"
+difficulty: 2
+summary: "includes tests whether one sorted range contains all elements of another -- a subset check in O(n + m) returning a bool. inplace_merge merges two consecutive sorted sub-ranges of the same container into one sorted range, the literal merge step of merge sort."
+notes: "Two more members of the sorted-range family. includes(first1, last1, first2, last2) answers a yes/no: is every element of the second range also present in the first? It is the subset test -- does this set of required permissions fit within the granted ones, does the available stock cover the order -- done as a single parallel walk of two sorted ranges in O(n + m), far cheaper than checking each element of one against the other. Like the set operations it respects multiset counts (the first range must contain at least as many of each duplicated value). inplace_merge(first, middle, last) is different in shape: it takes ONE range that is really two consecutive sorted runs -- [first, middle) sorted and [middle, last) sorted -- and merges them into a single sorted range [first, last), in place. This is exactly the combine step of merge sort: sort the halves, then inplace_merge them. It is also the tool for cheaply re-sorting after appending a sorted batch: sort the new tail, then inplace_merge the old head with it, O(n) instead of a full O(n log n) re-sort. inplace_merge tries to use a temporary buffer for speed and falls back to a slower in-place method if none is available, so it may allocate. Both need their inputs sorted by the same comparison the call uses."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::includes", url: "https://en.cppreference.com/w/cpp/algorithm/includes" }
+  - { name: "std::inplace_merge", url: "https://en.cppreference.com/w/cpp/algorithm/inplace_merge" }
+detailed_tags: []
