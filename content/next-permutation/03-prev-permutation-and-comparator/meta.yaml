@@ -1,0 +1,12 @@
+title: "prev_permutation and a comparator"
+standard: "C++11"
+difficulty: 2
+summary: "prev_permutation is the mirror of next_permutation, stepping to the previous arrangement in lexicographic order. Both take an optional comparator that defines the order the permutations run through, so std::greater makes next step in descending order -- enumerate that way by starting from the largest range."
+notes: "prev_permutation(first, last) moves the range to the PREVIOUS permutation in lexicographic order and returns true, wrapping from the smallest back to the largest (and returning false) at the bottom -- exactly next_permutation reversed. You rarely need to go backward, but it is there when you must, for instance to un-step after overshooting, or to enumerate in descending order from the top. The more useful feature is the optional COMPARATOR both functions accept, which redefines what 'next' and 'previous' mean. Passing std::greater makes next_permutation treat larger-first as the ordering, so it steps through descending-ordered arrangements; to enumerate all of them this way, start from the range sorted descending (the smallest permutation under greater) and loop as usual. A custom comparator lets you permute structs by a key, or impose a domain-specific order. The one rule, as with sort and the binary searches, is consistency: the comparator you enumerate with must match the order you START from -- sort ascending then next_permutation with the default, or sort descending then next_permutation with greater; mixing them visits only part of the set. So next_permutation + operator< and prev_permutation + operator<, or next_permutation + greater, are the coherent pairings."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::prev_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/prev_permutation" }
+detailed_tags:
+  - { name: "std::next_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/next_permutation" }
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }

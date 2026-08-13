@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "sort"
+  note: "The starting point for enumeration and the order it follows: sort the range to begin at the smallest permutation, and the comparator you enumerate with must match the one you sorted by -- go there for ordering, comparators, and stable_sort."
+- slug: "rotate-reverse"
+  note: "The in-place rearrangement family this belongs to: next_permutation is built from a reverse of the tail, and reverse and rotate are the other ways to rearrange a range without new storage -- go there for reversing and moving elements in place."
+- slug: "fill-generate"
+  note: "How to build the range you permute: iota fills 0..n-1 to permute as index arrangements, the common setup before an enumeration loop -- go there for iota, fill, and generating a range from nothing."

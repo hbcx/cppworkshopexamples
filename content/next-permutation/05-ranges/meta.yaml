@@ -1,0 +1,12 @@
+title: "The C++20 ranges forms"
+standard: "C++20"
+difficulty: 2
+summary: "std::ranges::next_permutation and prev_permutation take the range directly and return a struct whose .found member is the bool. ranges::is_permutation takes both ranges, a comparator, and a projection per range, so two ranges of structs are compared by a chosen field."
+notes: "The ranges versions keep the behavior and modernize the interface. ranges::next_permutation(v) and ranges::prev_permutation(v) take the range with no begin/end pair and return a small result struct: its .found member is the true/false the classic version returned (true when a next/previous permutation was produced, false on the wrap), and it also carries the end iterator. So the enumeration loop becomes do { ... } while (std::ranges::next_permutation(v).found). ranges::is_permutation(r1, r2, pred, proj1, proj2) takes both ranges and, like the other two-range algorithms, TWO projections plus an optional comparator, so you can ask whether two ranges of structs are permutations of each other by a key field -- here two hands compared by rank, ignoring the labels and the order. The projections feed the comparison only; the elements themselves are what is matched up. All the semantics carry over: next/prev step in lexicographic order under the comparator and wrap at the ends, is_permutation ignores order and respects multiplicities, and enumerating all permutations still means starting from the sorted range. Prefer the ranges forms in C++20 for the direct range argument and, for is_permutation, the per-range projections that make a key-based comparison clean."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::next_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/next_permutation" }
+  - { name: "range projection", url: "https://en.cppreference.com/w/cpp/algorithm/ranges" }

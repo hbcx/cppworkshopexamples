@@ -7,3 +7,5 @@
   note: "Where the fill constructor and resize live: std::vector(n, value) and resize(n, value) set elements as the container is built or grown, the one-pass alternative to construct-then-fill -- go there for size, capacity, and growth."
 - slug: "ranges"
   note: "The lazy sequence counterpart: std::views::iota generates an increasing range on demand inside a pipeline, where iota writes numbers into a container eagerly -- go there for views, the pipe operator, and lazy generators."
+- slug: "next-permutation"
+  note: "A common consumer of iota: fill 0..n-1 with iota, then permute it to enumerate index arrangements -- go there for stepping through and enumerating all orderings of a range."

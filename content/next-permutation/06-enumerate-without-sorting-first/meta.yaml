@@ -1,0 +1,11 @@
+title: "Anti-pattern: enumerating without sorting first"
+standard: "C++11"
+difficulty: 2
+summary: "next_permutation only steps to lexicographically greater arrangements, so an enumeration loop starting from an arbitrary order visits only the permutations after that starting point and misses all the earlier ones. Sort the range first to begin at the smallest permutation and see all n!."
+notes: "The enumeration loop is only complete if it STARTS at the smallest permutation, and forgetting to sort is the common way to get a silently short result. next_permutation walks lexicographic order upward and stops when it wraps from the largest back to the smallest; so if you begin partway up -- at 2 1 3 -- the loop covers only 2 1 3, 2 3 1, 3 1 2, 3 2 1 before wrapping, four of the six, and never sees 1 2 3 or 1 3 2. The code runs and produces permutations, just not all of them, so the bug hides unless you check the count. The fix is one line: sort the range before the loop so it starts at the lexicographically smallest arrangement, after which the do-while visits every one and ends exactly when it wraps back to the start. (If you enumerate with a comparator, sort by that same comparator so 'smallest' matches -- sort ascending for the default, sort descending when using greater.) This pairs with the loop-shape rule: sort to fix the START, and use a do-while to include that first permutation. The sign to watch for: a next_permutation enumeration loop over a range that was not sorted immediately before it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::next_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/next_permutation" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

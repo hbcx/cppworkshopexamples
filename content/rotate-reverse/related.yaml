@@ -7,3 +7,5 @@
   note: "Why in-place rotate beats erase+insert: a vector shift is O(n) and a growth reallocation invalidates every iterator, so moving elements by rotating the affected range avoids both -- go there for growth, capacity, and iterator invalidation."
 - slug: "remove-erase"
   note: "The other side of rearranging a vector: rotate MOVES elements while remove/erase deletes them, and both beat a naive erase-in-a-loop -- go there for the erase-remove idiom and removing by value or condition."
+- slug: "next-permutation"
+  note: "Another in-place rearrangement, built on reverse: next_permutation steps a range to the next ordering (reversing its tail), and enumerates all arrangements of a small set -- go there for permutations and exhaustive small-scale search."

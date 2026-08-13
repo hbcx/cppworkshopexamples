@@ -1,0 +1,10 @@
+title: "Anti-pattern: a while loop that skips the first permutation"
+standard: "C++11"
+difficulty: 2
+summary: "Enumerating with while (next_permutation(...)) steps the range BEFORE the body runs, so the starting (sorted) permutation is never processed and you get n! - 1. A do-while processes the current arrangement first, then steps, so the first permutation is included."
+notes: "This is an off-by-one that costs you exactly one permutation -- the first, most obvious one. The enumeration must process the current arrangement and THEN advance, but a plain while loop puts next_permutation in the condition, which advances FIRST and then runs the body, so the initial sorted permutation (1 2 3) is stepped over before it is ever seen: the loop counts 5 for three elements instead of 6, and misses the identity ordering. That missing permutation is easy to overlook because the loop still produces many results and still terminates correctly (next_permutation returns false on the wrap either way); only the count and the absence of the sorted case reveal it. The fix is a do-while, whose body runs BEFORE the condition: process the current permutation, then call next_permutation to step, so the first arrangement is included and the loop ends when the step wraps. Together with the sort-first rule, these are the two things to get right about the enumeration loop -- start at the smallest (sort) and process-before-stepping (do-while). If you truly want to skip the identity permutation a while loop does it, but that is rarely the intent. The sign to watch for: while (next_permutation(...)) used to enumerate, where the first, sorted arrangement matters."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::next_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/next_permutation" }
+detailed_tags: []

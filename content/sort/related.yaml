@@ -21,3 +21,5 @@
   note: "What a sort unlocks: once a range is sorted, binary_search and lower_bound find, count, and locate insertion points in O(log n) -- go there for the searches that need the order sort provides, using the same comparator."
 - slug: "merge-set-operations"
   note: "The other thing a sort unlocks: merge and set_union/intersection/difference combine two sorted ranges in O(n+m), and inplace_merge is the merge step of merge sort -- go there for combining sorted ranges, all needing the same order sort provides."
+- slug: "next-permutation"
+  note: "Where enumeration begins: to walk all permutations you sort to the smallest one first, and next_permutation steps in the order your comparator defines -- go there for generating arrangements and the do-while enumeration loop."

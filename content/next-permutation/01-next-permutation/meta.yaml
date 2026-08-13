@@ -1,0 +1,10 @@
+title: "next_permutation: step to the next arrangement"
+standard: "C++11"
+difficulty: 1
+summary: "std::next_permutation rearranges a range into the next permutation in lexicographic order and returns true. From the last (largest) permutation it wraps back to the first (smallest) and returns false, which is exactly the signal a loop uses to know it has visited them all."
+notes: "A permutation is one particular ordering of the elements, and next_permutation moves the range to the NEXT one in lexicographic (dictionary) order in place, returning a bool. For 1 2 3 the lexicographic sequence is 1 2 3, 1 3 2, 2 1 3, 2 3 1, 3 1 2, 3 2 1, so next_permutation turns 1 2 3 into 1 3 2. The return value carries the important edge case: when the range is already the LARGEST permutation (3 2 1, i.e. sorted descending), there is no next, so the algorithm wraps it back to the SMALLEST (1 2 3, sorted ascending) and returns FALSE. That false-on-wrap is the whole basis of enumerating permutations with a loop (next example). It works on any range whose elements are comparable, and it is O(n) per step. Two things follow from the lexicographic definition. First, to walk ALL permutations you must start from the smallest one, which means sorting first -- starting elsewhere only visits the ones after your starting point (an anti-pattern). Second, equal elements are handled correctly: next_permutation produces DISTINCT permutations, so a range with duplicates yields fewer than n! arrangements, each once. prev_permutation is the mirror image, stepping to the previous ordering."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::next_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/next_permutation" }
+detailed_tags: []

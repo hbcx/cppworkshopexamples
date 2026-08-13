@@ -1,0 +1,11 @@
+title: "Enumerating every permutation"
+standard: "C++11"
+difficulty: 2
+summary: "The idiom to visit all n! permutations: sort the range to start at the smallest, then a do-while loop processes the current arrangement and calls next_permutation, stopping when it wraps and returns false. The do-while (not a while) is essential so the first, sorted permutation is not skipped."
+notes: "This is the canonical permutation-enumeration loop, and the two details that make it correct are the START and the LOOP SHAPE. Start: next_permutation only moves to lexicographically greater arrangements, so to see all of them you must begin at the smallest -- sort the range first (here it is already sorted). Begin anywhere else and you visit only the permutations after your starting point, missing the rest (an anti-pattern). Loop shape: use a do-while, not a while. The current arrangement must be processed BEFORE stepping, because the very first permutation (the sorted one) is a valid arrangement you want to see, and next_permutation advances past it immediately; a plain while that steps in its condition skips that first one and gives n! - 1 (also an anti-pattern). The loop ends when next_permutation wraps from the largest back to the smallest and returns false. The count is n! for distinct elements (6 for three), and importantly FEWER when there are duplicates -- next_permutation generates each distinct permutation once, so a range like 1 1 2 yields 3, not 6, which is usually what you want. Because n! explodes, this idiom is only practical for small ranges (another anti-pattern on scale). It is the workhorse behind exhaustive small-scale search: try every ordering and keep the best."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::next_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/next_permutation" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

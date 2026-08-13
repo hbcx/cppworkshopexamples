@@ -1,0 +1,10 @@
+title: "is_permutation: same elements, any order"
+standard: "C++11"
+difficulty: 2
+summary: "std::is_permutation tests whether two ranges contain the same elements with the same multiplicities, regardless of order. It needs no sorting and leaves both ranges unchanged, which makes it the right tool for an order-independent comparison that operator== (order-sensitive) cannot express."
+notes: "is_permutation(first1, last1, first2) returns true when the second range is a rearrangement of the first -- the same multiset of values, so equal counts of every element, in any order. It answers the question 'are these the same collection, ignoring order', which operator== does NOT (== compares element by element in order and reports two same-content vectors as different, an anti-pattern). Its distinctive properties: it does not require the ranges to be sorted, and it does not modify them, unlike the common alternative of sorting copies of both and comparing -- so it works on const ranges and preserves order. The trade-off is cost: is_permutation is O(n squared) in the worst case (for each element it counts occurrences), where sort-both-and-compare is O(n log n); for large ranges the sort approach can be faster, but is_permutation wins on clarity and on not needing to touch the data. Note the C++11 three-argument form here assumes the second range has at least as many elements as the first (it reads first2 up to the matching length); C++14 added a four-argument form taking last2 as well, which also checks the lengths match and is the safer choice when available. A comparator (or C++20 projection) lets you define 'same element' by a key. Reach for it to compare results against an expected set when order is irrelevant."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::is_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/is_permutation" }
+detailed_tags: []

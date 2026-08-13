@@ -1,0 +1,19 @@
+- problem: "A small problem must be solved exactly by trying every ordering -- the shortest route through a handful of stops, the best seating of a few guests, the arrangement of a few puzzle pieces that fits."
+  why: "Writing a recursive permutation generator by hand is fiddly and easy to get wrong on duplicates and termination; sort + a do-while over next_permutation visits every distinct ordering in place, letting you score each and keep the best, with the loop ending exactly when it wraps."
+  signal: "A hand-rolled recursive or backtracking generator that produces all orderings of a small fixed collection to evaluate each."
+
+- problem: "Every arrangement of a small input is needed for a test or a combinatorial check -- verifying an algorithm is order-independent, generating all schedules, listing every assignment to compare."
+  why: "next_permutation enumerates distinct arrangements deterministically and in a known (lexicographic) order, so tests are reproducible, and it collapses duplicate elements to distinct permutations automatically -- no manual dedup of repeated inputs."
+  signal: "A test that must feed a function every ordering of a small input, or a combinatorial listing built by nested loops that does not generalize to n items."
+
+- problem: "The next (or previous) arrangement in a defined sequence is needed one step at a time -- advancing a lexicographic counter, stepping a ranking, producing the next combination in order without materializing them all."
+  why: "next_permutation and prev_permutation step in O(n) to the adjacent arrangement in lexicographic order, so you walk the sequence incrementally and can stop as soon as a condition is met, rather than generating and storing the whole set."
+  signal: "Code that needs the successor or predecessor of an arrangement in lexicographic order, or steps a permutation forward on demand."
+
+- problem: "Two collections must be checked for holding the same elements regardless of order -- an actual result against an expected set, confirming a reordering preserved contents, treating a sequence as a multiset."
+  why: "operator== is order-sensitive and reports same-content collections as different; is_permutation tests same-elements-any-order directly, without sorting or copying, so a test can assert the contents match while the algorithm is free to produce them in any order."
+  signal: "An == between two containers used to check same-contents where the order is incidental, or a sort-both-then-compare written only to ignore order."
+
+- problem: "Arrangements must be stepped through in a domain-specific order rather than plain ascending -- descending priority, by a key field of a struct, a custom ranking of options."
+  why: "Both permutation functions take a comparator (a projection in C++20), so the sequence of arrangements follows that order, and enumerating from the range sorted by the same comparator visits them all under that ordering -- no need to remap values to plain integers first."
+  signal: "A permutation walk that should follow a custom order or compare structs by a field, currently forced through integer indices to use the default order."

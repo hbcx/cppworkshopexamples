@@ -1,0 +1,10 @@
+title: "Anti-pattern: operator== for an order-independent compare"
+standard: "C++11"
+difficulty: 1
+summary: "Comparing two containers with operator== to check they hold the same elements is wrong when order should not matter: == compares element by element in order and reports two same-content collections as different. is_permutation is the order-independent test."
+notes: "Container operator== is an ORDERED comparison: two vectors are equal only if they have the same elements in the same positions. So using == to ask 'do these two collections contain the same items' fails whenever the order differs -- {1,2,3,4} and {3,1,4,2} hold identical elements but compare unequal, which is a real bug when the order is incidental (a result set, a bag of tags, a multiset of values). is_permutation is the tool for that question: it returns true when the two ranges are rearrangements of each other -- same values, same multiplicities -- ignoring order, and without sorting or mutating either range. Reach for it when comparing an actual result against an expected set where the algorithm is free to produce the elements in any order, when checking that a shuffle or a reordering preserved the contents, or when treating a sequence as a multiset. The alternatives -- sort both then == (O(n log n) but mutates or needs copies), or build multisets and compare -- work too, but is_permutation says the intent directly and leaves the data untouched. Do not confuse the two: == for 'same sequence', is_permutation for 'same elements in any order'. The sign to watch for: an == between two containers used to test same-contents where the code neither controls nor cares about the order they are in."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::is_permutation", url: "https://en.cppreference.com/w/cpp/algorithm/is_permutation" }
+detailed_tags: []

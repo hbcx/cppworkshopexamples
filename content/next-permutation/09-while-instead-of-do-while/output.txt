@@ -1,0 +1,2 @@
+while loop counted: 5 (missed the first)
+do-while counted:   6 (all of them)
