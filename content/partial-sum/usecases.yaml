@@ -1,0 +1,19 @@
+- problem: "The same array is queried many times for the sum of a sub-range -- totals between two dates, the sum of a sliding window, cumulative amounts up to a point -- and the array does not change between queries."
+  why: "Summing each range on demand is O(n) per query and O(n*q) overall with hugely overlapping work; a prefix-sum array built once with partial_sum makes every range sum a single subtraction prefix[hi] - prefix[lo], O(1) per query after an O(n) build."
+  signal: "A loop of range-sum queries each computed with its own accumulate or inner loop over the same unchanging array."
+
+- problem: "A running total must be shown or stored as it evolves -- an account balance after each transaction, a cumulative distribution, points accumulated over a game, a burn-down over time."
+  why: "A hand-written loop with a carried accumulator interleaves the running-total logic with everything else; partial_sum states 'these are the running sums' in one call and can write the cumulative series straight into a container or in place, ready to plot or persist."
+  signal: "A loop that maintains a running total variable and pushes it into a series after each step."
+
+- problem: "Slowly changing or monotonically increasing data must be stored compactly -- timestamps, sorted ids, sensor samples, audio -- where the absolute values are large but consecutive values are close."
+  why: "The absolute values need many bits each, but adjacent_difference turns them into a first value plus small deltas that an entropy or variable-length coder packs tightly; this delta encoding is exactly how time-series stores, columnar formats, PNG and FLAC compress such data."
+  signal: "Large-valued but slowly-varying sequences stored as raw absolute values, where consecutive entries differ by only a little."
+
+- problem: "A delta-encoded stream must be decoded back to absolute values -- reconstructing timestamps from stored gaps, rebuilding a series from its differences, undoing a delta filter."
+  why: "Because partial_sum is the exact inverse of adjacent_difference, one prefix-sum pass over the deltas reconstructs the original sequence precisely (losslessly for integers), so the decode is a single call rather than a hand-written cumulative loop."
+  signal: "A stored sequence of differences plus a seed value that must be turned back into absolute values."
+
+- problem: "A prefix sum (or scan) is needed over a very large array and the machine has cores to spare -- computing offsets for a parallel compaction, cumulative histograms, stream compaction indices."
+  why: "partial_sum is strictly sequential; inclusive_scan (C++17) allows the operation to be reordered, so with a parallel execution policy it can split the scan across threads, and exclusive_scan gives the before-this-element offsets that parallel compaction and bucketing need."
+  signal: "A sequential prefix-sum over a large array in a hot path, or offsets computed one element at a time where a parallel scan would serve."

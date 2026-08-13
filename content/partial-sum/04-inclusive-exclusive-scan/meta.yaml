@@ -1,0 +1,12 @@
+title: "inclusive_scan and exclusive_scan"
+standard: "C++17"
+difficulty: 2
+summary: "C++17 adds inclusive_scan and exclusive_scan, the modern prefix-sum family. inclusive_scan is partial_sum but with an operation that may be applied in any order, so it parallelizes; exclusive_scan shifts the result so each element is the sum of everything BEFORE it, starting from an init value."
+notes: "C++17 introduced two scans that improve on partial_sum. inclusive_scan(first, last, out) produces the same running sums as partial_sum -- each output INCLUDES the current element -- but its specification allows the operation to be applied in a different ORDER, which is what lets a parallel version (with an execution policy) split the work across threads; for that reordering to be safe the operation must be associative (plain + is), and for a non-associative op the order is unspecified. exclusive_scan(first, last, out, init) shifts the window: each output is the sum of all elements BEFORE its position, offset by an init value, so out[0] is init and out[i] is init plus in[0..i-1]. The inclusive vs exclusive distinction is the key one: for input 1 2 3 4 5, inclusive gives 1 3 6 10 15 (element included) and exclusive with init 0 gives 0 1 3 6 10 (element excluded, shifted right). Exclusive scans are what you want when out[i] should describe the state BEFORE processing element i -- a byte offset for record i is the total size of records 0..i-1, a starting index is the count of everything before. Both take an optional binary operation, and inclusive_scan also accepts an init. transform_inclusive_scan / transform_exclusive_scan fuse a map into the scan. Prefer these in C++17 when you want parallelism or an exclusive (shifted) prefix; partial_sum remains the simple left-to-right inclusive sum."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::inclusive_scan", url: "https://en.cppreference.com/w/cpp/algorithm/inclusive_scan" }
+  - { name: "std::exclusive_scan", url: "https://en.cppreference.com/w/cpp/algorithm/exclusive_scan" }
+detailed_tags:
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }

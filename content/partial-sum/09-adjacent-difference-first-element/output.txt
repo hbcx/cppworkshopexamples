@@ -1,0 +1,3 @@
+output size: 4 (input size 4)
+values: 5 3 4 8 
+true differences (skip first): 3 4 8 

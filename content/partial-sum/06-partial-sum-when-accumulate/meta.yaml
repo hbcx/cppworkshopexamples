@@ -1,0 +1,11 @@
+title: "Anti-pattern: partial_sum when you only need the total"
+standard: "C++11"
+difficulty: 1
+summary: "Building the full prefix-sum array and reading its last element to get the total does n intermediate additions and an allocation you throw away. If you only need the final sum, accumulate folds the range to that one value with no intermediate storage."
+notes: "partial_sum produces EVERY running sum, and its last element happens to be the total, so it is tempting to reach for it when the total is all you want -- often written as partial_sum(...).back() or sums[n-1]. But that computes and stores n intermediate prefix sums, needing an O(n) buffer (or an in-place overwrite of the input), only to read one of them. accumulate does exactly the job: it folds the range to a single value in one pass with no output container, so std::accumulate(v.begin(), v.end(), 0) is the total directly. The rule is the same intent-matching lesson from the rest of the algorithms: reach for the tool whose result IS what you need -- accumulate for one folded value, partial_sum only when you actually use the intermediate running sums (a cumulative chart, a prefix-sum array for range queries, a running balance). If you find yourself computing all the prefix sums and touching only the last, you wanted a fold, not a scan. (Watch the accumulate init type for overflow, the same caution partial_sum has.) The sign to watch for: a partial_sum whose output is read only at .back() or its final index."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+detailed_tags:
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }

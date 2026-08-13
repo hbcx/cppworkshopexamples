@@ -1,0 +1,2 @@
+total (partial_sum.back): 108
+total (accumulate):       108

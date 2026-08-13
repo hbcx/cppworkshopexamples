@@ -1,0 +1,2 @@
+per-query scan:  9 19 28 6 
+prefix-sum O(1): 9 19 28 6 

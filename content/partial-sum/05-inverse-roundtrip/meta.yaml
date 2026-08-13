@@ -1,0 +1,11 @@
+title: "The inverse pair: delta encode and reconstruct"
+standard: "C++11"
+difficulty: 2
+summary: "adjacent_difference and partial_sum are exact inverses: taking the differences of a sequence and then the prefix sums of those differences recovers the original. This round trip is delta encoding -- store a first value and small deltas, then reconstruct the absolute values later."
+notes: "The two algorithms undo each other, and that is by design. adjacent_difference keeps the first element as-is and replaces the rest with gaps; partial_sum starts from that first element and adds the gaps back, landing exactly on the original sequence. So partial_sum(adjacent_difference(x)) == x, and this is precisely what makes the pair useful for DELTA (or difference) ENCODING, a real compression technique. Data that changes slowly or is sorted -- timestamps, monotonically increasing ids, sensor readings, sample offsets -- has large absolute values but small differences, so adjacent_difference turns it into a first value plus a run of small numbers that pack into far fewer bits (with a variable-length or entropy coder downstream). To read it back, partial_sum reconstructs the absolute values. Time-series stores, columnar databases, and formats like PNG and FLAC use exactly this idea. The round trip is exact for integer types (no rounding), which is why it is a lossless transform. The example shows both directions and confirms the reconstruction equals the input. Keep the direction straight: adjacent_difference to ENCODE (absolute to deltas), partial_sum to DECODE (deltas to absolute) -- and remember the encoded form's first element is the original first value, the seed the decode needs."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::adjacent_difference", url: "https://en.cppreference.com/w/cpp/algorithm/adjacent_difference" }
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }
+detailed_tags: []

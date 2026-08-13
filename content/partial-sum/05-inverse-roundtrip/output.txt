@@ -1,0 +1,2 @@
+deltas:   10 2 -1 4 -1 
+restored: 10 12 11 15 14  (matches original: true)

@@ -9,3 +9,5 @@
   note: "A reduce that keeps the best-so-far instead of combining: min_element and max_element fold a range to its extreme and hand back its position, where accumulate folds to a computed value -- go there for the smallest and largest of a range."
 - slug: "for-each"
   note: "The general per-element apply accumulate is often written as by hand: a for_each with a captured running total is really a fold, and accumulate states it -- go there for the plain visit and when a named algorithm beats a captured accumulator."
+- slug: "partial-sum"
+  note: "The fold that keeps every step: where accumulate returns only the final total, partial_sum writes the running sum at each position -- go there for prefix-sum arrays, cumulative series, and delta encoding."

@@ -1,0 +1,12 @@
+title: "A custom operation: running max and product"
+standard: "C++11"
+difficulty: 2
+summary: "Both partial_sum and adjacent_difference take an optional binary operation, so 'sum' and 'difference' generalize: partial_sum with max gives a running maximum, with multiplies a running product, and adjacent_difference with a custom op redefines the between-element combination."
+notes: "The default operations are + for partial_sum and - for adjacent_difference, but the fourth argument replaces them with any binary function, which turns these into general prefix-fold and adjacent-combine passes. partial_sum with std::max (or a max lambda) computes the RUNNING MAXIMUM -- out[i] is the largest element seen through i, useful for a high-water mark, a running best score, or a monotonic envelope. partial_sum with std::multiplies computes the RUNNING PRODUCT, so the prefix products of 1 2 3 4 5 are the factorials 1 2 6 24 120. Any associative-looking combine works: running min, running bitwise-or of flags, running string concatenation. adjacent_difference likewise takes a custom op to define what 'difference' means between neighbours -- a ratio instead of a difference (with divides), an XOR delta, a custom distance. A caution mirrors accumulate: partial_sum applies the operation strictly left to right and accumulates into the output element type, so an operation that grows fast (product) can overflow that type quickly -- the factorial column blows past a 32-bit int by 13!. And if you want the running combination to be parallelizable, the C++17 inclusive_scan is the version whose operation may be reordered (next example). For a simple left-to-right running fold with any binary op, partial_sum with a custom operation is the tool."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }
+detailed_tags:
+  - { name: "std::multiplies", url: "https://en.cppreference.com/w/cpp/utility/functional/multiplies" }
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }

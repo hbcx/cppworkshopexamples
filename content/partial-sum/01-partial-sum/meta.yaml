@@ -1,0 +1,11 @@
+title: "partial_sum: running totals"
+standard: "C++11"
+difficulty: 1
+summary: "std::partial_sum writes the running (prefix) sum of a range: each output element is the sum of all input elements up to and including that position. The last output is the total of the whole range. It writes to an output iterator or back into the same range in place."
+notes: "partial_sum(first, last, out) turns a sequence into its prefix sums: out[0] is in[0], out[1] is in[0]+in[1], and so on, so out[i] is the sum of everything through index i. From 1 2 3 4 5 you get 1 3 6 10 15, and the final element (15) is the total of the range. It lives in <numeric>, alongside accumulate. Two practical notes. It can write in place -- passing v.begin() as the output overwrites the range with its own prefix sums -- which is handy and allocation-free. And the output needs room: a back_inserter to build a new container, or a destination already sized to the input length. Its headline use is the PREFIX-SUM ARRAY: precompute the running sums once, and then any range sum [lo, hi) is a single subtraction prefix[hi] - prefix[lo], turning repeated O(n) range-sum scans into O(1) lookups -- one of the most useful precomputations in practice (and skipping it is an anti-pattern here). If you only need the final TOTAL and not the intermediate sums, accumulate is the lighter tool (also an anti-pattern to overlook). partial_sum takes an optional binary operation to compute running products, maxima, and the like, and adjacent_difference is its exact inverse."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

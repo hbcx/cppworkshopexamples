@@ -9,3 +9,5 @@
   note: "The lazy sequence counterpart: std::views::iota generates an increasing range on demand inside a pipeline, where iota writes numbers into a container eagerly -- go there for views, the pipe operator, and lazy generators."
 - slug: "next-permutation"
   note: "A common consumer of iota: fill 0..n-1 with iota, then permute it to enumerate index arrangements -- go there for stepping through and enumerating all orderings of a range."
+- slug: "partial-sum"
+  note: "The cumulative counterpart to iota's straight count: partial_sum builds a running sum and adjacent_difference recovers the steps, the inverse pair behind delta encoding -- go there for prefix sums and difference encoding."

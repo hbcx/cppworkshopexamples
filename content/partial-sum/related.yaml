@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "accumulate-reduce"
+  note: "The fold these extend: accumulate collapses a range to one value, where partial_sum keeps every running total along the way -- go there for sums, custom folds, reduce, and when you want only the final total."
+- slug: "transform"
+  note: "The per-element map next to this per-prefix pass: transform produces one output from each input independently, where a scan carries a running result across elements -- go there for mapping a range and transform_reduce."
+- slug: "fill-generate"
+  note: "The other way to lay down a sequence: iota writes consecutive numbers directly, where partial_sum builds a cumulative one and adjacent_difference recovers the steps -- go there for iota, fill, and generating a range."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: recomputing a range sum per query"
+standard: "C++11"
+difficulty: 2
+summary: "Answering many range-sum queries by scanning each range from scratch is O(n) per query and O(n*q) overall, redoing overlapping work. A prefix-sum array built once with partial_sum turns every range sum into a single subtraction prefix[hi] - prefix[lo] -- O(n) to build, then O(1) per query."
+notes: "When code answers repeated range-sum questions over a fixed array -- the total between two indices, the sum of a window, a cumulative amount up to a point -- summing the range each time is the slow default: each query is an O(n) scan, so q queries cost O(n*q), and the scans overlap enormously, re-adding the same elements again and again. The prefix-sum trick removes all of that. Build a prefix array once, where prefix[i] is the sum of the first i elements (prefix[0] = 0, prefix[i] = in[0..i-1]) -- exactly what partial_sum computes into prefix.begin() + 1. Then the sum of any range [lo, hi) is prefix[hi] - prefix[lo], a single subtraction: O(1) per query after an O(n) precomputation. For q queries the total drops from O(n*q) to O(n + q), which is dramatic when q is large. The one-extra-slot layout (size n+1 with a leading 0) is what makes the subtraction clean and handles lo = 0 without a special case. This generalizes: prefix products (with a running product), 2D prefix sums for rectangle queries, and prefix counts for how-many-in-range all follow the same precompute-once pattern. The trade-off is that the array must be rebuilt if the data changes, so it fits read-mostly data (a Fenwick/segment tree handles frequent updates). The sign to watch for: a loop of range-sum (or range-count) queries each computed with its own accumulate or inner loop over the same unchanging array."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }
+detailed_tags:
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }

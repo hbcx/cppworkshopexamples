@@ -1,0 +1,10 @@
+title: "Anti-pattern: misreading adjacent_difference's first element"
+standard: "C++11"
+difficulty: 2
+summary: "adjacent_difference writes as many elements as the input (n, not n-1), and its first output is a COPY of the first input value, not a difference and not zero. Code that treats the first entry as a gap, or expects an n-1-length result, is off by one."
+notes: "Two related mistakes come from expecting adjacent_difference to behave like 'the list of gaps'. First, LENGTH: the output has n elements, the same as the input, not n-1 -- so sizing a destination to n-1, or looping as if there were one fewer, is wrong. Second, the FIRST ELEMENT: out[0] is a straight copy of in[0], not the difference of in[0] with anything and not zero, so for 5 8 12 20 the output is 5 3 4 8, where the leading 5 is the original value. People who read out[0] as a delta get a nonsense first gap (here they would think the series jumped by 5 from nothing). The reason for this design is inversion: keeping the first value plus the deltas is exactly what partial_sum needs to reconstruct the sequence, so the copied first element is a feature, not a quirk. But it means you must handle it deliberately. If you want only the TRUE differences, skip the first output element (iterate from out.begin() + 1, giving 3 4 8 here). If you want a difference for every position including the first (say, against an implicit previous value of 0), subtract that baseline yourself or prepend it before calling. The sign to watch for: code that reads adjacent_difference's out[0] as a difference, or that assumes the result is one shorter than the input."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::adjacent_difference", url: "https://en.cppreference.com/w/cpp/algorithm/adjacent_difference" }
+detailed_tags: []

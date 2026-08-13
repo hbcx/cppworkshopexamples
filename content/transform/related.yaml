@@ -13,3 +13,5 @@
   note: "The general per-element apply transform is often mistaken for: for_each runs a side effect on each element and returns nothing, where transform produces one output per input -- go there for the plain visit and why a captured push_back should be a transform."
 - slug: "fill-generate"
   note: "The write-only siblings that read no input: fill sets a constant and generate calls a nullary function per element, where transform maps an existing value -- go there for initializing and building ranges from nothing."
+- slug: "partial-sum"
+  note: "The cumulative cousin: transform maps each element independently, where partial_sum carries a running total across them and adjacent_difference reports the steps between -- go there for prefix sums and delta encoding."

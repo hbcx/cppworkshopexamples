@@ -1,0 +1,10 @@
+title: "Anti-pattern: overflowing the element type"
+standard: "C++11"
+difficulty: 2
+summary: "partial_sum accumulates into the output element type, so a running sum of ints overflows once it passes the int maximum -- undefined behavior for signed int and a wrong wrapped result. Use a wide-enough element type (long long) for the running total, exactly like accumulate's init-type trap."
+notes: "A running sum grows monotonically, so it hits the type limit faster than any single element does, and partial_sum uses the OUTPUT element type as its accumulator. Summing four billion-valued ints reaches four billion by the last prefix, well past the ~2.1 billion an int holds; for signed int that overflow is undefined behavior, and in practice the value wraps to a negative or otherwise wrong number -- silently, with no warning. This is the same defect as accumulate with an int init: the accumulator type, not the input values, decides when it overflows. The fix is to make the running total wide enough: give the output a wider element type (a std::vector<long long>), which here means holding or copying the data as long long so the sums accumulate in 64 bits. When writing in place you are stuck with the input's type, so if the sums can grow large, do not accumulate in a narrow container -- scan into a wider one. C++20's saturating and the scan family do not change this: the accumulator width is what matters. Also note that a running PRODUCT (partial_sum with multiplies) overflows even faster -- factorials pass a 32-bit int by 13! -- so wide types matter more there. The sign to watch for: partial_sum (or inclusive_scan) over int or another narrow type whose prefix sums, given the input magnitudes and length, could exceed that type's range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::partial_sum", url: "https://en.cppreference.com/w/cpp/algorithm/partial_sum" }
+detailed_tags: []
