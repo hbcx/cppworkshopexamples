@@ -1,0 +1,3 @@
+common prefix length: 3
+first difference: 100 vs 200
+shared path prefix: /usr/local/

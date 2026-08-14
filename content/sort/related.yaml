@@ -31,3 +31,5 @@
   note: "The inverse of sorting and a standard source of test inputs: shuffle randomizes an order with a seeded engine (the randomized data you then sort in a benchmark), and sample draws an unbiased subset -- go there for random order, selection, and seeding."
 - slug: "clamp-minmax"
   note: "The same comparator on just a value or two: std::min/max/clamp take the exact predicate std::sort does, so best-of-two-by-key and bounding a value share the ordering you sort by -- go there for comparing values, minmax, and clamp."
+- slug: "mismatch-equal"
+  note: "The element-by-element rule sort uses to order sequences: lexicographical_compare is exactly how a sort of words or tuples compares two of them, using the same comparator -- go there for comparing two ranges, dictionary order, and equality."

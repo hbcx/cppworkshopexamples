@@ -1,0 +1,11 @@
+title: "Anti-pattern: the three-argument equal on a shorter range"
+standard: "C++14"
+difficulty: 3
+summary: "The three-argument std::equal and std::mismatch read as many elements from the second range as the first range has, and simply assume it is long enough. If the second is shorter, they read past its end -- undefined behaviour. Use the four-iterator overload that takes both ranges."
+notes: "std::equal(first1, last1, first2) and std::mismatch(first1, last1, first2) take the first range as a full [begin, end) pair but only the START of the second, so they compare exactly as many elements as the first range holds -- and they ASSUME the second range has at least that many. When it does not, they walk past its end, which is undefined behaviour: reading freed or unrelated memory, which may crash, may return a wrong answer, or may look fine in a quick test and fail later. This is a genuinely common bug because the three-argument form is the one shown in most quick examples, and it is only correct when you have already guaranteed the second range is long enough. The fix, standard since C++14, is the four-iterator overload std::equal(first1, last1, first2, last2): it takes both ranges fully, compares their lengths up front (returning false immediately when they differ), and never overruns. std::mismatch has the same four-iterator form and stops at whichever range ends first. Prefer the four-iterator versions by default; reach for the three-argument form only when the lengths are known equal. This example keeps the unsafe call in a comment and runs only the safe overloads. (This file is built as C++14 for the four-iterator overloads.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::equal", url: "https://en.cppreference.com/w/cpp/algorithm/equal" }
+detailed_tags:
+  - { name: "std::mismatch", url: "https://en.cppreference.com/w/cpp/algorithm/mismatch" }

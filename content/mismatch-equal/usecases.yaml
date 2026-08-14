@@ -1,0 +1,15 @@
+- problem: "Expensive work should be skipped when its input has not changed -- a cache rebuilt only when the source differs, a re-render triggered only when the model changed, a save skipped when the document matches what is on disk."
+  why: "std::equal answers has this range changed with a single boolean pass and works across two different container or buffer types, where a hand-written index loop is easy to get subtly wrong and hashing does more work (and can collide) when all you need is a yes/no."
+  signal: "A manual element-by-element comparison loop guarding a costly step, or a hash computed only to compare two in-memory sequences for equality."
+
+- problem: "Two versions of the same data must be compared to find WHERE they first diverge -- a diff view, replication drift between a primary and a replica, the point two log streams stop agreeing, the shared prefix of two file paths or keys."
+  why: "std::mismatch returns the first differing position and, by distance from the start, the length of the common prefix in one pass, where a hand-rolled indexed loop invites off-by-one errors and has to repeat the two-range bookkeeping every time."
+  signal: "A loop with an index that walks two sequences together looking for the first place they differ, or code computing a shared prefix by incrementing a counter."
+
+- problem: "Sequences must be put in dictionary order -- version segments like {1, 4, 0} vs {1, 4, 2}, tuples sorted by their fields in order, byte strings or keys ordered for a comparison or a custom operator<."
+  why: "std::lexicographical_compare implements the compare-until-first-difference, shorter-is-less rule correctly, including the prefix case, where a hand-written comparison routinely mishandles unequal lengths or forgets that a prefix must sort before the longer sequence."
+  signal: "A custom operator< or comparator that compares two sequences field by field with hand-written length handling, especially one that gets the shorter-range case wrong."
+
+- problem: "Comparison must ignore differences that do not matter -- case in a user name or header, insignificant whitespace, or rounding in floating-point results that are equal to the precision you care about."
+  why: "equal and mismatch take a predicate, so case-insensitive or within-tolerance comparison is one call over the original data; normalizing both ranges into temporary lowercased or rounded copies first allocates and copies just to throw the copies away."
+  signal: "Two ranges each transformed into a temporary normalized copy purely so they can be compared with the default ==."

@@ -1,0 +1,11 @@
+title: "mismatch: the first place two ranges differ"
+standard: "C++11"
+difficulty: 2
+summary: "std::mismatch walks two ranges together and returns a pair of iterators to the first position where they differ. The distance to that point is the length of their common prefix -- useful for diffing, shared-prefix, and divergence detection."
+notes: "std::mismatch(first1, last1, first2) compares two ranges in step and stops at the FIRST pair that is not equal, handing back a std::pair of iterators, one into each range, at that spot. Two readings of the result are useful. The distance from the start to diff.first is the length of the COMMON PREFIX -- how far the two ranges agree before they split -- which answers questions like how much of two file paths, keys, or version strings match. And the elements *diff.first and *diff.second are the two values that first disagree, which is the heart of a diff: where, and what changed. Like std::equal, the three-argument form assumes the second range is long enough and has a four-argument (C++14) overload that takes both ranges and stops at the shorter end -- prefer it when lengths can differ. The important gotcha, which becomes an anti-pattern here: when the ranges are EQUAL (or the first is a prefix of the second), mismatch returns the end iterator for the first range, and dereferencing that to read the differing element is out of bounds. Always test diff.first != last1 before reading through it. mismatch is one left-to-right pass and also takes a custom predicate for case-insensitive or tolerant comparison."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mismatch", url: "https://en.cppreference.com/w/cpp/algorithm/mismatch" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

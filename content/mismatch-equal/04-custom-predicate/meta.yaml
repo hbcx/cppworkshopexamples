@@ -1,0 +1,12 @@
+title: "A custom predicate: comparing on your terms"
+standard: "C++14"
+difficulty: 3
+summary: "equal, mismatch and lexicographical_compare each take an optional predicate as a last argument, so equality and order can mean case-insensitive, tolerant, or by-a-field rather than the built-in == and <. One predicate reused across the three keeps the comparison consistent."
+notes: "The last argument of all three algorithms is a binary predicate that redefines the per-element comparison. For std::equal and std::mismatch it is an EQUALITY predicate -- return true when two elements should count as the same -- so a case-insensitive letter compare makes Hello and hello equal, and a tolerance predicate (abs(a - b) < eps) makes two float ranges equal within rounding. For std::lexicographical_compare it is a LESS-THAN predicate defining the order, so a case-folding comparator sorts apple before Banana even though ASCII puts uppercase B before lowercase a. Using the same predicate across the three keeps equality and ordering consistent with each other, which matters when both feed the same data structure. Two practical notes. When case-folding a char, cast to unsigned char before std::tolower -- passing a plain char that is negative is undefined. And the predicate must have the shape each algorithm expects: an equivalence relation for equal/mismatch, and a strict weak ordering for lexicographical_compare (irreflexive, so never report an element less than itself), or the results are meaningless. This is the same predicate mechanism std::sort, std::find_if, and the other algorithms use, applied to two-range comparison."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::equal", url: "https://en.cppreference.com/w/cpp/algorithm/equal" }
+  - { name: "std::lexicographical_compare", url: "https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare" }
+detailed_tags:
+  - { name: "std::mismatch", url: "https://en.cppreference.com/w/cpp/algorithm/mismatch" }

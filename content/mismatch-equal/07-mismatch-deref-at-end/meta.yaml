@@ -1,0 +1,10 @@
+title: "Anti-pattern: dereferencing mismatch when the ranges match"
+standard: "C++14"
+difficulty: 3
+summary: "When two ranges are equal, std::mismatch returns the end iterator, so reading *result to get the differing element is out of bounds. Always compare the returned iterator against last before dereferencing it."
+notes: "std::mismatch returns iterators to the first differing pair, but when the ranges do NOT differ it returns the end of the first range (and the matching position in the second). The bug is to assume a difference always exists and read *result.first straight away: for two equal ranges, or when the first range is a prefix of the second, result.first equals last1, and dereferencing a past-the-end iterator is undefined behaviour. It is easy to miss because the code works on every test where the ranges happen to differ, then crashes or reads garbage the first time they are equal -- exactly the case a diff or a change-detector must handle. The fix is one check: compare result.first against last1 first; if it reached the end there was no difference, otherwise *result.first and *result.second are the real differing elements. This mirrors the rule for std::find and the other iterator-returning algorithms -- the returned iterator can legitimately be the end, and the end must be tested before it is read. The same care applies to the pair's second iterator. (Built as C++14 for the four-iterator mismatch overload used here.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mismatch", url: "https://en.cppreference.com/w/cpp/algorithm/mismatch" }
+detailed_tags: []

@@ -1,0 +1,2 @@
+big equals small (safe four-arg)? false
+compared safely up to index 3 of small

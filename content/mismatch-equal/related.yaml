@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "find-find-if"
+  note: "The single-range searches next to these two-range comparisons: find and find_if locate a value or the first element matching a predicate in ONE range, where mismatch finds the first position two ranges disagree -- go there for searching, find_if_not, and the end-iterator check they share."
+- slug: "sort"
+  note: "Where lexicographical_compare's ordering scales up: it is the element-by-element rule sort uses to order sequences, and the comparator it takes is the same one sort does -- go there for ordering a range, strict weak ordering, and stable_sort."
+- slug: "strings"
+  note: "The type whose comparison IS lexicographical order: std::string's < and compare() are lexicographical_compare over its characters, and equal/mismatch underlie prefix and difference checks on text -- go there for string comparison, size vs capacity, and the small-string optimization."

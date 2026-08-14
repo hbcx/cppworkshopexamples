@@ -1,0 +1,10 @@
+title: "equal: do two ranges hold the same elements"
+standard: "C++14"
+difficulty: 1
+summary: "std::equal walks two ranges in step and returns true only if every element pair matches. The three-argument form assumes the second range is long enough; the four-argument form (C++14) takes both ranges in full and also checks the lengths agree."
+notes: "std::equal(first1, last1, first2) compares two ranges element by element and returns true when all pairs are equal. The catch is in the arguments: this three-argument form takes the first range as a [begin, end) pair but only the START of the second, so it reads exactly as many elements from the second range as the first has -- and it simply ASSUMES the second is at least that long. If it is shorter, equal reads past its end, which is undefined behaviour (the first anti-pattern in this section). The fix, and the better default whenever the two ranges might differ in length, is the four-argument overload added in C++14: std::equal(first1, last1, first2, last2) takes both ranges fully, compares the lengths first, and returns false immediately if they differ -- no chance of overrun. When you are comparing two containers of the same type, a == b expresses the same idea more directly and is what you should reach for; std::equal earns its keep when the ranges come from DIFFERENT container types (a vector against a deque, an array against a list) or when you need a custom predicate instead of ==, such as case-insensitive or tolerant comparison (covered later). equal is a single left-to-right pass, O(n)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::equal", url: "https://en.cppreference.com/w/cpp/algorithm/equal" }
+detailed_tags: []

@@ -6,3 +6,5 @@
   note: "std::string is a container of char with the same size/capacity/reserve growth model, so the reallocation, reserve and erase-remove lessons transfer straight across."
 - slug: "unordered-containers"
   note: "std::string is the default hash-map key: lookup cost scales with its length because the whole string is hashed and then compared, which the hashing tradeoffs there make concrete."
+- slug: "mismatch-equal"
+  note: "The algorithms behind string comparison: std::string's < and compare() are lexicographical_compare over its characters, and equal/mismatch are how you test text for equality or find a common prefix -- go there for comparing two ranges, case-insensitive predicates, and dictionary order."

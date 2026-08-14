@@ -1,0 +1,2 @@
+first difference at index 2: 3 vs 9
+ranges are equal

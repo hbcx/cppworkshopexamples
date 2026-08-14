@@ -1,0 +1,11 @@
+title: "lexicographical_compare: dictionary order"
+standard: "C++11"
+difficulty: 2
+summary: "std::lexicographical_compare orders two ranges like a dictionary orders words: compare element by element, and the first difference decides. If one range is a prefix of the other, the shorter is less. It returns whether the first range comes before the second."
+notes: "std::lexicographical_compare(first1, last1, first2, last2) answers is the first range LESS than the second in dictionary order. It walks both ranges together; at the first position where they differ, the range with the smaller element there is the lesser one; if it reaches the end of one range without a difference, the SHORTER range is less (car before cart), and two equal ranges are neither less than the other. This is precisely the comparison the standard uses for operator< on std::vector, std::string, and other sequences, so understanding it explains how sorting a list of words or a set of tuples orders them. Two things to keep straight. It is an ORDERING, not an equality test: for equal ranges it returns false in both directions, so writing !lexicographical_compare(a, b) to mean equal is wrong -- that expression is a <= b, and testing equality needs std::equal (an anti-pattern here). And, like the others, it takes an optional comparator to define what less means per element (case-insensitive, by a field, reverse), which must be a strict weak ordering. It is a single O(n) pass and stops at the first difference, so it is cheap when ranges diverge early."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::lexicographical_compare", url: "https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

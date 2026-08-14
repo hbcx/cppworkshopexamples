@@ -1,0 +1,3 @@
+"Hello" equals "hello" ignoring case? true
+case-insensitive common prefix length: 9
+"apple" < "Banana" ignoring case? true

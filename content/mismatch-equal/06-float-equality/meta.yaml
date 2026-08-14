@@ -1,0 +1,10 @@
+title: "Anti-pattern: comparing float ranges with exact equality"
+standard: "C++14"
+difficulty: 3
+summary: "std::equal with the default == compares floating-point values bit-for-bit, but rounding makes mathematically equal results differ (0.1 + 0.2 != 0.3). Pass a predicate that compares within a tolerance instead."
+notes: "Floating-point arithmetic rounds, so two computations that are equal on paper usually are not equal in the bits: 0.1 + 0.2 is very slightly more than 0.3, 1.0/3.0 cannot be represented exactly, and any longer calculation accumulates error. std::equal (and std::mismatch) use == by default, which for doubles means EXACT equality, so comparing a computed range against an expected one this way reports them different even when they agree to fifteen digits -- a test that fails for the wrong reason, or a change-detector that always fires. The fix is a tolerance predicate: pass a comparator that returns true when the two values are within a small epsilon, fabs(a - b) <= eps, so near-equal counts as equal. Choosing eps is the real work -- a fixed absolute epsilon like 1e-9 is fine when the magnitudes are known and near 1, but for values that range over many scales a relative or combined tolerance (eps scaled by the larger magnitude) is more honest; there is no single correct epsilon, which is exactly why the default == is the wrong tool and the comparison must be made explicit. The same predicate turns std::mismatch into finding the first element that differs by more than the tolerance. (Built as C++14 for the four-iterator equal overload.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::equal", url: "https://en.cppreference.com/w/cpp/algorithm/equal" }
+detailed_tags: []
