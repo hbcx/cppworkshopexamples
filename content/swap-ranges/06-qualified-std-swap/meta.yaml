@@ -1,0 +1,10 @@
+title: "Anti-pattern: a fully-qualified std::swap"
+standard: "C++11"
+difficulty: 3
+summary: "Calling std::swap(a, b) fully qualified forces the generic std one and blocks argument-dependent lookup, so a type's own optimized swap in its namespace is never found. The idiom is using std::swap; swap(a, b); -- unqualified -- which lets ADL pick the type-specific swap when it exists."
+notes: "A type can provide a better swap than the generic move-based std::swap -- cheaper, or guaranteed noexcept -- by declaring a swap in its own namespace. But that custom swap is found only by argument-dependent lookup (ADL), which is triggered by an UNQUALIFIED call. Writing std::swap(a, b) with the std:: qualifier names the generic template explicitly and shuts ADL out, so the type's own swap is skipped and you silently get the slower or less safe generic one. The example proves it: goodSwap uses the using-std-swap idiom and calls swap unqualified, so geo::swap runs (usedCustom becomes 1); badSwap calls std::swap fully qualified, so geo::swap is bypassed and usedCustom stays 0. The correct pattern in any generic code that swaps is: using std::swap; swap(a, b); -- the using-declaration makes std::swap a fallback candidate for types without their own, and the unqualified call lets ADL prefer a type-specific swap for those that have one. This is the same shape as unqualified begin/end and other customization points. Note that inside your own generic algorithm you cannot know whether T has a custom swap, which is exactly why the idiom matters. The sign to watch for: std::swap(a, b) written with the std:: qualifier in generic code, or any template that swaps values of a template parameter without the using-declaration."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }
+detailed_tags: []

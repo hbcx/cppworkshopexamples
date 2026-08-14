@@ -1,0 +1,11 @@
+title: "iter_swap: swap what two iterators point at"
+standard: "C++11"
+difficulty: 1
+summary: "std::iter_swap(a, b) swaps the elements two iterators refer to -- it dereferences both and swaps the values. It is the low-level building block the rearranging algorithms (reverse, sort, rotate, partition) use internally to move elements around."
+notes: "iter_swap(a, b) is swap for iterators: it exchanges the elements *a and *b point at, effectively swap(*a, *b) but expressed at the iterator level so it works uniformly across iterator kinds and picks up each element type's best swap. On its own it is a small convenience -- iter_swap(v.begin(), v.end()-1) swaps the ends -- but its real significance is that it is the PRIMITIVE the standard rearranging algorithms are built from. reverse walks two iterators inward calling iter_swap; sort, partition, nth_element and rotate all move elements by swapping through iterators; the example's hand-written reverse is exactly what std::reverse does. Understanding that these algorithms move elements by SWAPPING (not copying) explains their behavior: they need no extra storage, they work with move-only types, and they preserve the multiset of elements while reordering. Two practical notes. iter_swap and the values it swaps must be valid and dereferenceable -- swapping with an end() iterator is undefined, just like dereferencing one. And for a range of ranges (swapping whole sub-ranges), swap_ranges is the tool, not iter_swap of container iterators. In everyday code you rarely call iter_swap directly, reaching for std::swap on the values instead; its place is in generic algorithm implementations and when you already hold two iterators and want to exchange their targets."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::iter_swap", url: "https://en.cppreference.com/w/cpp/algorithm/iter_swap" }
+detailed_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }

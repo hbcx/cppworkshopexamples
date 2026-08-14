@@ -1,0 +1,10 @@
+title: "swap_ranges: exchange two ranges"
+standard: "C++11"
+difficulty: 2
+summary: "std::swap_ranges swaps the elements of two equal-length ranges pairwise, so the two ranges exchange contents. It takes the first range as a [first, last) pair and the second by its begin, and works on whole containers or sub-ranges of different containers."
+notes: "swap_ranges(first1, last1, first2) swaps element i of the first range with element i of the second, for the whole length of the first range -- so two ranges exchange their contents in a single pass, each swap using the element type's best swap. It takes the first range as a begin/end pair and the second range by just its begin (the length comes from the first), which is the same asymmetric shape as copy and transform. That shape is also its main hazard: it reads the SECOND range for exactly the first range's length with NO bounds check, so if the second range is shorter it runs past the end -- undefined behavior (an anti-pattern). Its uses are exchanging two parallel blocks: swapping two rows or columns of a matrix stored in row-major order, swapping the first k elements of two buffers, or rotating data between a working area and a backup. Because it can point the two ranges at DIFFERENT containers (or non-overlapping parts of the same one), it is more flexible than swapping whole containers with member swap -- that is O(1) but all-or-nothing, while swap_ranges swaps a chosen span. For a whole-container exchange prefer the O(1) member swap; reach for swap_ranges when you need to exchange a specific range, especially a sub-range or a span across two containers. The two ranges must not overlap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::swap_ranges", url: "https://en.cppreference.com/w/cpp/algorithm/swap_ranges" }
+detailed_tags: []

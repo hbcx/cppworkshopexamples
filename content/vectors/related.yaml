@@ -22,3 +22,5 @@
   note: "Moving elements within a vector without reallocating: rotate slides a block in one in-place pass where erase+insert shifts twice and can reallocate -- go there for reordering, move-to-front, and reversing a segment."
 - slug: "fill-generate"
   note: "Setting a vector's contents: fill and generate write values into it, and the fill constructor v(n, value) or resize(n, value) beats construct-then-fill -- go there for initializing, building with generate_n, and iota sequences."
+- slug: "swap-ranges"
+  note: "The O(1) member swap and the swap-with-empty capacity trick: a vector swaps by exchanging its buffer pointer, and clear() keeps capacity where swap-with-empty releases it -- go there for swap, iter_swap, and swap_ranges."

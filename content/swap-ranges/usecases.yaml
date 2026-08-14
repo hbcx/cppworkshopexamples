@@ -1,0 +1,19 @@
+- problem: "Two buffers alternate roles each cycle -- a graphics front and back buffer, a current and next simulation state, a read and write page -- and the roles must switch without copying the contents."
+  why: "Copying one buffer over the other each frame is O(n) and pointless; swapping them (std::swap on the containers, or the member swap) exchanges their internal pointers in O(1), so the switch is instant no matter how large the buffers are."
+  signal: "Two large buffers whose contents are copied back and forth each iteration, where the two just need to exchange roles."
+
+- problem: "An assignment operator must be exception-safe -- if building the new state throws, the object must be left unchanged, with no half-updated members or leaked resources."
+  why: "The copy-and-swap idiom builds a copy (the only step that can throw), then swaps it into place with a noexcept swap; since the swap cannot fail, the object either fully updates or is untouched, giving the strong exception guarantee for free."
+  signal: "A hand-written operator= that assigns members one by one and can leave the object inconsistent if a middle step throws."
+
+- problem: "Two elements inside a container must be exchanged when you already hold iterators to them -- a hand-written sort or shuffle step, moving a selected item past its neighbour, swapping two entries by position."
+  why: "iter_swap exchanges the elements two iterators point at using each element's best swap, which is exactly how the rearranging algorithms move data -- clearer and more general than dereferencing and calling swap yourself, and correct for move-only element types."
+  signal: "Manual *a-and-*b juggling with a temporary to exchange two elements addressed by iterators."
+
+- problem: "Two equal-length spans must exchange contents -- swapping two rows or columns of a matrix, exchanging the first k entries of two arrays, rotating data between a working area and a scratch region."
+  why: "swap_ranges swaps the spans pairwise in one pass and can point at different containers or sub-ranges, where a whole-container member swap is all-or-nothing; it swaps exactly the chosen span using each element's swap, with no temporary buffer."
+  signal: "A loop that swaps element i of one span with element i of another, or two rows exchanged element by element by hand."
+
+- problem: "A large container is finished with and its memory should be returned to the system, not held for a reuse that will not happen -- freeing a big cache, releasing a buffer after a bulk load."
+  why: "clear() and erase keep the capacity, so the allocation lingers; the swap-with-empty idiom (an empty temporary swapped with the container) hands the old buffer to the temporary, which frees it, dropping capacity to zero where shrink_to_fit is only a non-binding request."
+  signal: "clear() or assigning an empty container used on a large container expecting the memory to be released."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting clear() to free memory"
+standard: "C++11"
+difficulty: 2
+summary: "clear() sets a vector's size to 0 but keeps its capacity -- the allocated buffer is retained for reuse, not freed. To actually release the memory, use the swap-with-empty idiom: std::vector<int>().swap(v) hands the old buffer to a temporary that frees it, leaving v with zero capacity."
+notes: "A common wrong assumption is that clearing a container gives its memory back. clear() (and assigning an empty container, and erasing all elements) reduces the SIZE to zero but deliberately KEEPS the CAPACITY -- the heap buffer stays allocated so the container can be refilled without reallocating. That is the right default for a container you will reuse, but when you have a large vector you are done with and want the memory reclaimed, clear() does nothing for that. The swap-with-empty idiom is the classic fix, and it is why swap belongs in this discussion: std::vector<int>().swap(v) creates a fresh empty temporary (capacity 0), swaps its guts with v in O(1), so v takes the empty capacity and the temporary takes v's old buffer -- then the temporary is destroyed at the end of the statement, freeing that buffer. After it, v has size 0 AND capacity 0. C++11 added shrink_to_fit() as a more direct request to reduce capacity to fit the size, but it is NON-BINDING (an implementation may ignore it), so the swap trick remains the guaranteed way to force the capacity down. The sign to watch for: clear() or erase-all used on a large container in the belief it frees memory, where releasing the allocation actually requires swap-with-empty (or destroying the container)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector::swap", url: "https://en.cppreference.com/w/cpp/container/vector/swap" }
+detailed_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }

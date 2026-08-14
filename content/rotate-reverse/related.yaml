@@ -9,3 +9,5 @@
   note: "The other side of rearranging a vector: rotate MOVES elements while remove/erase deletes them, and both beat a naive erase-in-a-loop -- go there for the erase-remove idiom and removing by value or condition."
 - slug: "next-permutation"
   note: "Another in-place rearrangement, built on reverse: next_permutation steps a range to the next ordering (reversing its tail), and enumerates all arrangements of a small set -- go there for permutations and exhaustive small-scale search."
+- slug: "swap-ranges"
+  note: "The primitive underneath: reverse swaps the two ends inward with iter_swap, and swap_ranges exchanges two spans -- go there for swap, iter_swap, and the O(1) container swap."

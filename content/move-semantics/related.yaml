@@ -20,3 +20,5 @@
   note: "Perfect forwarding generalised to any number of arguments: a forwarding-reference pack plus std::forward passes a whole argument list through in its original value category -- go there for parameter packs, expansion, and fold expressions."
 - slug: "lambdas"
   note: "Where these rules meet closures: init-capture moves a value into a lambda ([p = std::move(ptr)]), and capturing a heavy or move-only object leans on the same move mechanics -- go there for captures, generic and template lambdas, and how a closure stores what it holds."
+- slug: "swap-ranges"
+  note: "The exchange these moves make cheap: std::swap moves three times instead of copying, a noexcept swap pairs with a noexcept move, and copy-and-swap builds assignment on both -- go there for swap, iter_swap, and a custom swap."

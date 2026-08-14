@@ -1,0 +1,2 @@
+manual swap done (3 copies of 1000 elements)
+std::swap done (O(1), no element copies): c[0]=4 d[0]=3

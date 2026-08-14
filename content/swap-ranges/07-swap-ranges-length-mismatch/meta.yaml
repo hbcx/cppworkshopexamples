@@ -1,0 +1,10 @@
+title: "Anti-pattern: swap_ranges with a shorter second range"
+standard: "C++11"
+difficulty: 2
+summary: "swap_ranges takes the length from its first range and reads the second for exactly that many elements, with no bounds check. If the second range is shorter, it walks past the end -- undefined behavior. Drive the swap by the smaller of the two lengths."
+notes: "swap_ranges(first1, last1, first2) is asymmetric: the length is fixed by the FIRST range, and the second is given only by its begin, so the algorithm swaps last1 - first1 pairs assuming the second range has at least that many elements. It never checks. Point it at a first range of five and a second of two, and it swaps five pairs, reading and writing three positions past the end of the shorter container -- undefined behavior, the same trap copy has with a too-small destination and copy_n has with a wrong count. It often does not crash outright (the memory just past a small buffer is frequently accessible), so it can corrupt neighbouring data silently and pass a casual test. The rule is to make the driving range no longer than the shorter of the two: compute n = min(a.size(), b.size()) and swap [begin, begin + n). If the two ranges are meant to be equal length, assert or check that they are before calling. The same caution applies to the whole first-range-drives-the-length family (copy, transform, swap_ranges): the second/output side must be guaranteed long enough, either by construction or by clamping the count. The sign to watch for: swap_ranges (or copy/transform) whose first range can be longer than the second, with nothing bounding it to the shorter length."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::swap_ranges", url: "https://en.cppreference.com/w/cpp/algorithm/swap_ranges" }
+detailed_tags: []

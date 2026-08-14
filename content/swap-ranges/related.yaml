@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "move-semantics"
+  note: "What makes swap cheap: std::swap moves rather than copies, so a noexcept swap and a noexcept move go together -- and the copy-and-swap idiom builds assignment on top of both -- go there for move constructors, noexcept, and why it matters."
+- slug: "rotate-reverse"
+  note: "Rearrangements built on iter_swap: reverse swaps the two ends inward and rotate moves a block, both by swapping elements through iterators -- go there for reversing and moving elements in place."
+- slug: "vectors"
+  note: "Where the O(1) member swap and the swap-with-empty capacity trick live: a vector swaps by exchanging its buffer pointer, and clear() keeps capacity where swap-with-empty releases it -- go there for size, capacity, and growth."
+- slug: "sort"
+  note: "One of the algorithms iter_swap powers: sort, partition and nth_element all reorder by swapping elements through iterators, needing no extra storage -- go there for ordering, comparators, and selection."

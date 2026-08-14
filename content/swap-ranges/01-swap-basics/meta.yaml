@@ -1,0 +1,11 @@
+title: "swap: exchange two values"
+standard: "C++11"
+difficulty: 1
+summary: "std::swap exchanges two objects, moving rather than copying when the type allows, so it is cheap even for expensive objects. Containers add an O(1) member swap that exchanges internal pointers. In generic code, the using-std-swap idiom lets a type's own optimized swap be found by ADL."
+notes: "std::swap(a, b) exchanges the values of two objects. Since C++11 it is implemented with moves -- roughly T tmp = std::move(a); a = std::move(b); b = std::move(tmp) -- so swapping two large movable objects moves three times rather than copying, which is why swap is a cornerstone of efficient and exception-safe code. Containers do better still: they provide a MEMBER swap that runs in O(1) by exchanging their internal bookkeeping (the pointer to the buffer, the size, the capacity) without touching a single element, so swapping two million-element vectors is instant. Three things to carry forward. First, the generic idiom: in a template that swaps values of an unknown type, write using std::swap; swap(a, b); -- the using-declaration makes std::swap a candidate, and the UNQUALIFIED call lets argument-dependent lookup find a better type-specific swap if one exists (calling std::swap fully qualified defeats that, an anti-pattern). Second, a good custom swap should be noexcept, because many standard operations (a vector reallocating, other swaps) rely on swap not throwing. Third, swap is the engine under many other tools -- the copy-and-swap assignment idiom, the swap-with-empty trick to release capacity, and iter_swap and swap_ranges in this section all build on it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }
+detailed_tags:
+  - { name: "std::vector::swap", url: "https://en.cppreference.com/w/cpp/container/vector/swap" }

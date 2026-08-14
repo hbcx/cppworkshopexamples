@@ -1,0 +1,11 @@
+title: "Anti-pattern: hand-rolling a swap with a temporary"
+standard: "C++11"
+difficulty: 1
+summary: "Writing a swap as T tmp = a; a = b; b = tmp; copies where std::swap would move, and for a container it does three full O(n) copies (plus allocations) instead of the O(1) pointer exchange the member swap performs. Use std::swap or the container's member swap."
+notes: "The classic three-line swap -- copy one into a temporary, assign the second over the first, assign the temporary into the second -- is correct but pessimal in two ways. For a movable type it COPIES three times where std::swap MOVES, so an expensive object is duplicated instead of having its guts transferred; and for a container it is catastrophic: three copies of a thousand-element vector is three thousand element copies and two heap allocations, to accomplish what the vector's member swap does in constant time by exchanging its internal pointer, size, and capacity. std::swap knows this -- since C++11 it is move-based, and for standard containers it dispatches to the O(1) member swap -- so it is both faster and less code. The manual version also loses exception safety: a copy in the middle can throw and leave the objects in a half-swapped state, whereas a proper (noexcept) swap cannot. There is essentially never a reason to write the temporary-copy swap by hand; reach for std::swap for values (with the using-std-swap idiom in generic code) or the member swap for a whole container. The sign to watch for: a local temporary that receives a copy of one object, followed by two assignments that shuffle values between two variables -- that is a swap, and std::swap does it better."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }
+detailed_tags:
+  - { name: "std::vector::swap", url: "https://en.cppreference.com/w/cpp/container/vector/swap" }

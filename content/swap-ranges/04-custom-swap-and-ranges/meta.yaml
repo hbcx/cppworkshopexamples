@@ -1,0 +1,12 @@
+title: "A custom swap, and the C++20 ranges form"
+standard: "C++20"
+difficulty: 2
+summary: "A type can provide its own swap -- a noexcept friend function that swaps the members by their own cheap swaps -- found through ADL by the using-std-swap idiom. std::ranges::swap_ranges takes both ranges directly and uses each element type's best swap."
+notes: "Giving a type its own swap is worth doing whenever the default (three moves of the whole object) is not the cheapest exchange, or when you want a guaranteed-noexcept swap for exception safety. The idiom is a friend (or free) function named swap in the type's namespace that swaps the members, each with an unqualified swap under using std::swap -- so a Buffer's swap swaps its name and its data, and data's swap is the vector's O(1) member swap, making the whole Buffer swap cheap and allocation-free. Marking it noexcept matters: the standard library uses swap in places that must not throw (vector reallocation, other algorithms' strong guarantees), and a throwing swap silently disables those optimizations. Client code should still call it through the using-std-swap idiom (using std::swap; swap(a, b);), which is what finds this custom swap by ADL; calling std::swap(a, b) fully qualified would use the generic move-based one instead (an anti-pattern). std::ranges::swap_ranges(r1, r2) is the C++20 form that takes both ranges directly and returns where it stopped; it and std::ranges::swap use the customization-point machinery that finds a type's own swap for you. Since C++20, a type whose members are all swappable is swappable automatically, but a hand-written noexcept swap is still the way to guarantee the no-throw property and to make an owning type's exchange O(1)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }
+  - { name: "std::swap_ranges", url: "https://en.cppreference.com/w/cpp/algorithm/swap_ranges" }

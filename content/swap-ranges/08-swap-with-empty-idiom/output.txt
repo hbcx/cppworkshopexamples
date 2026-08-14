@@ -1,0 +1,2 @@
+after clear: size=0, capacity still >= 1000? true
+after swap-with-empty: size=0, capacity=0

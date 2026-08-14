@@ -1,0 +1,2 @@
+goodSwap used the custom swap? true
+badSwap used the custom swap?  false

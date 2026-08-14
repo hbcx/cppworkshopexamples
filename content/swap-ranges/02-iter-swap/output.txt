@@ -1,0 +1,2 @@
+after swapping ends: 50 20 30 40 10 
+hand-rolled reverse: 6 5 4 3 2 1 
