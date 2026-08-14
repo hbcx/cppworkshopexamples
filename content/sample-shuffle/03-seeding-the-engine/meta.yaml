@@ -1,0 +1,13 @@
+title: "Seeding the engine, and reusing it"
+standard: "C++11"
+difficulty: 2
+summary: "std::mt19937 has a large state, so seed it with std::seed_seq (fed from std::random_device for real randomness, or fixed numbers to reproduce a run) rather than a single value. Keep one engine and draw from it repeatedly instead of rebuilding it each call."
+notes: "The engine that shuffle and sample draw from needs to be set up right, and two mistakes are common. First, SEEDING. std::mt19937 holds 624 words of state; handing it a single 32-bit seed (or the current time) initializes all of that from one number, which is weak and, worse, means two engines started in the same second produce the same stream. std::seed_seq exists to fix this: it takes several entropy values and spreads them across the whole state. For real unpredictability fill it from std::random_device, an OS/hardware entropy source (std::seed_seq seq{rd(), rd(), rd(), rd()}); for a reproducible run -- a test that must be repeatable, a game replayed from a saved seed -- fill it from fixed numbers instead, and the sequence is identical every time. Second, LIFETIME. Create the engine ONCE and keep drawing from it; each call advances its state and yields the next value. Building a brand-new engine inside a function or loop and seeding it the same way every call is the classic bug -- it resets the stream, so you get the same number over and over (an anti-pattern in this section). Distributions (std::uniform_int_distribution and friends) are the right way to map the engine's raw bits onto a range without the modulo bias of rand() % n; one engine can feed many distributions."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+detailed_tags:
+  - { name: "std::seed_seq", url: "https://en.cppreference.com/w/cpp/numeric/random/seed_seq" }
+  - { name: "std::random_device", url: "https://en.cppreference.com/w/cpp/numeric/random/random_device" }
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }

@@ -1,0 +1,3 @@
+well-seeded roll in [1,100]? true
+three dice: 3 5 5
+one coin:  0

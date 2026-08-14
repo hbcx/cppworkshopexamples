@@ -1,0 +1,15 @@
+- problem: "A test suite must not depend on the order its cases run in, and when a random ordering does expose a bug, the exact failing run has to be reproducible for debugging."
+  why: "Shuffling the cases with a seeded std::mt19937 (the seed logged on each run) surfaces hidden order-dependence that a fixed order hides, and replaying the logged seed reproduces the failure exactly -- a bare rand()-based shuffle cannot be replayed, and a hardcoded order never finds the bug at all."
+  signal: "A test runner with a fixed case order, or a shuffle whose seed is not captured, so a failing random run cannot be reproduced."
+
+- problem: "A pipeline processes millions of records and a person needs to eyeball a representative subset for quality checks, or an experiment must assign a fair random fraction of users to a bucket."
+  why: "std::sample draws k items with every element equally likely and no duplicates, giving an unbiased subset in one pass; taking the first k or filtering by an id range is fast but not representative -- it skews toward whatever the storage order or the key correlates with."
+  signal: "A QA or audit step that inspects the first k rows, or bucket assignment keyed off a non-random field like a sequential id or a hash prefix."
+
+- problem: "A card game, lottery, or matchmaker must put a deck or a pool into a fair random order, and the round often has to be replayable from a saved game or an audit log."
+  why: "std::shuffle guarantees a uniform permutation -- every arrangement equally likely -- where a hand-rolled Fisher-Yates is easy to get subtly wrong (swapping with any index instead of the remaining range) and produce a biased deal; seeding the engine lets you save and replay the exact shuffle."
+  signal: "A hand-written shuffle loop using rand(), or a deal/turn-order routine with no seed captured for replay."
+
+- problem: "A service emits far more log lines or events than can be stored, but monitoring needs a uniform random sample of them kept over time without buffering the whole stream."
+  why: "std::sample accepts input iterators and does reservoir sampling in a single pass, keeping only k candidates whatever the total length, so memory stays fixed; buffering everything to sample at the end defeats the purpose and blows up memory on an unbounded stream."
+  signal: "Code that collects an entire stream into a container just to pick a few items from it, or sampled telemetry that first stores all events."

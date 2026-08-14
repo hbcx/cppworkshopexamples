@@ -1,0 +1,12 @@
+title: "sample: pick k of n without replacement"
+standard: "C++17"
+difficulty: 2
+summary: "std::sample copies k randomly chosen elements out of a range into an output, each element equally likely and none picked twice. The chosen elements keep their original relative order, so sampling a sorted range gives a sorted result."
+notes: "std::sample(first, last, out, k, engine) selects k elements at random from [first, last) and writes them to out, sampling WITHOUT replacement -- no element is chosen more than once. Two properties make it the right tool over a hand-rolled loop. Every element has an equal chance, with no bias, because the algorithm does the probability bookkeeping correctly (that is the whole point -- a naive pick-random-index-k-times can repeat elements, and pick-then-remove is O(n) per pick). And the output preserves the INPUT order of the chosen elements, not a random order: sampling a sorted range yields a sorted subset, which is often exactly what a report or a preview wants; if you also want the picks shuffled, run std::shuffle on the result. Asking for more than the range holds is not an error -- sample just returns the whole range, in order, still without duplicates -- so std::sample(..., k, ...) with k >= size is a safe way to say take up to k. Like shuffle it takes an explicit engine, so a fixed seed makes the selection reproducible. std::sample is C++17."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sample", url: "https://en.cppreference.com/w/cpp/algorithm/sample" }
+detailed_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

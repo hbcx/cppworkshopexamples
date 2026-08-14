@@ -5,3 +5,5 @@
   note: "The in-place rearrangement family this belongs to: next_permutation is built from a reverse of the tail, and reverse and rotate are the other ways to rearrange a range without new storage -- go there for reversing and moving elements in place."
 - slug: "fill-generate"
   note: "How to build the range you permute: iota fills 0..n-1 to permute as index arrangements, the common setup before an enumeration loop -- go there for iota, fill, and generating a range from nothing."
+- slug: "sample-shuffle"
+  note: "The random counterpart to walking every arrangement: next_permutation steps through orderings in a defined sequence, where shuffle jumps to one uniformly at random -- go there for a random order, sampling a subset, and the random engine behind them."

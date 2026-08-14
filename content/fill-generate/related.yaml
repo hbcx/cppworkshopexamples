@@ -11,3 +11,5 @@
   note: "A common consumer of iota: fill 0..n-1 with iota, then permute it to enumerate index arrangements -- go there for stepping through and enumerating all orderings of a range."
 - slug: "partial-sum"
   note: "The cumulative counterpart to iota's straight count: partial_sum builds a running sum and adjacent_difference recovers the steps, the inverse pair behind delta encoding -- go there for prefix sums and difference encoding."
+- slug: "sample-shuffle"
+  note: "Filling a range with random values pairs with reordering and selecting them: generate with a captured mt19937 writes random numbers, then shuffle randomizes an order and sample picks a random subset -- go there for the random engine, seeding, and unbiased selection."

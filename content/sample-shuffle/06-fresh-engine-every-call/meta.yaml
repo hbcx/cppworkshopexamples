@@ -1,0 +1,11 @@
+title: "Anti-pattern: a fresh engine on every call"
+standard: "C++11"
+difficulty: 3
+summary: "Building and seeding a random engine inside the function that draws from it resets its state each call. With a constant seed it returns the same value forever; keep one long-lived engine and draw from it repeatedly."
+notes: "A random engine is a STATEFUL object: each draw advances it, and the next value depends on the state the last one left. The bug is to create the engine where you use it -- inside the function or the loop body -- so it is constructed and seeded afresh every call. Seed it with a constant (or the current time at second resolution) and every call restarts from the identical state, so it hands back the SAME number over and over, which shows up as dice that always roll the same or a shuffle that never changes. Reseeding from std::random_device on every call avoids the repeat but trades it for a different problem: random_device is comparatively slow, and it is meant to seed an engine once, not to be your per-value generator. The fix is lifetime, not more seeding: create the engine ONCE and reuse it -- a static local (as here), a class member, or a generator passed in by reference -- so its state carries forward and the sequence actually progresses. The same rule is why std::shuffle and std::sample take the engine by reference and you feed them the same one across calls. (A static engine is fine for single-threaded use; across threads give each thread its own, since the engine is not thread-safe.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+detailed_tags:
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }

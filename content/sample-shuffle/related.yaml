@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "fill-generate"
+  note: "The other place a random engine shows up: generate fills a range by calling a generator, so a captured std::mt19937 plus a distribution writes random values into a buffer -- go there for producing values per element, where this chapter reorders and selects existing ones."
+- slug: "sort"
+  note: "The inverse operation: shuffle destroys order and sort imposes one, and a seeded shuffle is the standard way to build the randomized inputs you then sort in a benchmark -- go there for ordering, comparators, and stable_sort."
+- slug: "next-permutation"
+  note: "The deterministic counterpart to a random order: next_permutation walks the arrangements of a range in a defined sequence, where shuffle jumps to one at random -- go there for enumerating every ordering instead of sampling one."
+- slug: "swap-ranges"
+  note: "The primitive shuffle is built on: it swaps elements through iter_swap to move them into a random order, needing no extra storage -- go there for swap, iter_swap, and swap_ranges."

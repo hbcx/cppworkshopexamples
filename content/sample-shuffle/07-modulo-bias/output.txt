@@ -1,0 +1,2 @@
+raw values per bucket with % 6: 5462 5462 5461 5461 5461 5461  <- not all equal = bias
+unbiased dice: 5 2 1 1 6 6 5 3

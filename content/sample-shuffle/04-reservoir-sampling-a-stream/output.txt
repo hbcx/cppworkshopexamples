@@ -1,0 +1,1 @@
+sampled 5 of a stream: 17 16 14 6 5

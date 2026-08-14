@@ -1,0 +1,3 @@
+sampled 3: 10 40 70
+still ascending? true
+asked for 999, got 10

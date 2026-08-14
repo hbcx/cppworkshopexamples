@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::random_shuffle"
+standard: "C++11"
+difficulty: 3
+summary: "The old std::random_shuffle was deprecated in C++14 and removed in C++17, and even where it exists it cannot be seeded in a controlled way. Use std::shuffle with an explicit engine instead: reproducible and unbiased."
+notes: "std::random_shuffle(first, last) is legacy and should never appear in new code. It was DEPRECATED in C++14 and REMOVED in C++17, so a codebase that moves to a modern standard simply stops compiling -- a real migration cost. The design was flawed too: the two-argument form drew from an unspecified source, in practice std::rand, which you cannot seed in a portable, controlled way (the once-common workaround of passing your own rand-based callback was itself easy to get biased with the rand() % n trap). The replacement, std::shuffle(first, last, engine), fixes both problems: you pass an explicit engine like std::mt19937, so you control the seed and the run is reproducible for tests and replays, and the standard guarantees a uniform permutation with no bias. The migration is mechanical -- add an engine and pass it -- and there is no reason to keep the old call. This example does not invoke random_shuffle at all (it may not exist under -std=c++17); it shows the fix and its reproducibility."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shuffle", url: "https://en.cppreference.com/w/cpp/algorithm/random_shuffle" }
+detailed_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }

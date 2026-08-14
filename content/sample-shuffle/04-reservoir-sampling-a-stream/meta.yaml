@@ -1,0 +1,12 @@
+title: "Reservoir sampling: k from a stream of unknown length"
+standard: "C++17"
+difficulty: 3
+summary: "std::sample accepts input iterators, so it can sample k elements from a stream in a single pass without knowing its length or holding it in memory -- reservoir sampling. When the source is a one-pass input iterator the output must be random-access, so sample into a pre-sized buffer."
+notes: "The hardest sampling problem is choosing k random items from a sequence you cannot fit in memory and whose length you do not know in advance -- lines streaming from a file, events off a socket, rows from a cursor. The classic answer is the reservoir sampling algorithm, and std::sample implements it for you: it accepts plain INPUT iterators, so passing it a std::istream_iterator lets it read the source ONCE, keeping only k candidates (the reservoir) and swapping new items in with the right decreasing probability, so every element ends up equally likely with no second pass and no full copy. One rule the type system enforces: when the population is a one-pass input iterator (like istream_iterator), the OUTPUT must be a random-access iterator, because the algorithm overwrites reservoir slots as it goes -- so you sample into a PRE-SIZED buffer (reservoir(k)) and use reservoir.begin(), not a std::back_inserter (that only works when the population is a forward range). sample returns the end of what it actually wrote: if the stream held fewer than k items you get all of them, and the returned iterator, not k, is the true count. Reproducible with a fixed seed like the others. std::sample is C++17."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sample", url: "https://en.cppreference.com/w/cpp/algorithm/sample" }
+detailed_tags:
+  - { name: "std::istream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/istream_iterator" }
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }

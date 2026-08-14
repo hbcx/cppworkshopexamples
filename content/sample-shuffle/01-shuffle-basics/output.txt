@@ -1,0 +1,4 @@
+shuffled:       7 9 4 6 2 3 10 8 5 1
+same seed:      7 9 4 6 2 3 10 8 5 1
+orders match?  true
+shuffled again: 3 7 6 10 5 4 9 1 2 8

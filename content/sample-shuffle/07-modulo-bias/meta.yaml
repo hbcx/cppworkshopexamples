@@ -1,0 +1,11 @@
+title: "Anti-pattern: rand() % n modulo bias"
+standard: "C++11"
+difficulty: 3
+summary: "rand() % n draws from a low-quality generator and adds modulo bias: unless the raw range divides evenly by n, some outcomes are more likely than others. Use a real engine with std::uniform_int_distribution, which removes the bias."
+notes: "int d = rand() % 6 + 1; is the textbook way to get a random number in a range, and it is wrong twice over. First, std::rand is a weak generator with poor statistical quality and a small, implementation-defined range. Second, and more subtle, the % n step introduces MODULO BIAS: it folds the raw range onto n buckets, and unless the count of raw values is an exact multiple of n, the first few buckets receive one extra raw value each and so come up more often. With a 15-bit generator (32768 raw values) and n = 6, four buckets get 5461 raw values and two get 5462 -- a small but real skew that matters for anything fair (shuffles, sampling, simulations, anything with money or security on it). The example proves the uneven split by counting, without calling rand() (its range differs by platform). The fix is std::uniform_int_distribution<int>(1, 6) fed by a proper engine like std::mt19937: the distribution discards the leftover values that would cause bias (it re-draws them) so every outcome is exactly equally likely, and mt19937 is a far better source than rand(). The rule: pick the range with a distribution object, never with a bare modulo."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }
+detailed_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }

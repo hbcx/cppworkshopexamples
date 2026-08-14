@@ -1,0 +1,11 @@
+title: "shuffle: a uniformly random order"
+standard: "C++11"
+difficulty: 1
+summary: "std::shuffle rearranges a range into a uniformly random permutation, taking a random engine as its source of randomness. Seed the engine with a fixed value for a reproducible order, or from std::random_device for a different order each run."
+notes: "std::shuffle(first, last, engine) is the modern, correct way to randomize the order of a range. Unlike the old std::random_shuffle it takes an explicit random ENGINE (here std::mt19937, the Mersenne Twister), which is the source of random bits -- shuffle draws numbers from it and swaps elements so that every one of the n! orderings is equally likely, with no bias. The engine's SEED decides the sequence: seed with a fixed number (12345 here) and the shuffle is fully reproducible, which is exactly what you want for a test that must be repeatable or for a game that replays from a saved seed. Seed from std::random_device instead and each run differs. Two things to carry forward. Reuse ONE engine and keep drawing from it -- calling shuffle again with the same engine advances its state and gives a fresh, different permutation, whereas building a brand-new engine seeded the same way every call would repeat the same order forever (an anti-pattern). And prefer std::mt19937 over the older engines for general use: it is fast and has good statistical quality. shuffle works on any random-access range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shuffle", url: "https://en.cppreference.com/w/cpp/algorithm/random_shuffle" }
+detailed_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }

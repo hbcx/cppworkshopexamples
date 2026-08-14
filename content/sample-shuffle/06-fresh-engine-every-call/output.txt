@@ -1,0 +1,2 @@
+badRoll: 3 3 3 3 3 3   <- same number every time
+goodRoll: 3 5 6 2 5 5  <- one engine, values advance
