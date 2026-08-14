@@ -1,0 +1,2 @@
+shift_left result (valid part): 2 3 4   <- player 1 was lost
+rotate result:                 2 3 4 1

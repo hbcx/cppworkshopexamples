@@ -1,0 +1,11 @@
+title: "Anti-pattern: shift when you meant rotate"
+standard: "C++20"
+difficulty: 3
+summary: "shift_left and shift_right DROP the elements pushed off the end, while rotate WRAPS them around. Using shift to cycle a queue silently loses elements. Use rotate to move elements without loss, shift only when falling off the end is intended."
+notes: "std::shift_left/shift_right and std::rotate both slide elements along a range, which makes them easy to confuse, but they differ in the one way that matters: shift DISCARDS whatever is pushed past the end and leaves the vacated slots moved-from, whereas rotate WRAPS the displaced elements around and preserves every one. So using shift_left to advance a round-robin or cycle a work queue silently deletes the element that rolls off the front -- the collection shrinks and an entry vanishes, a bug that hides because the remaining data still looks plausible. The fix is std::rotate, which brings the front element to the back so the cycle loses nobody. The reverse mistake exists too: using rotate for a genuine sliding window keeps stale elements wrapped around when you wanted them gone. Pick by intent: rotate to reorder without loss (round-robin, move-to-front, cycling), shift to advance a fixed-size window that should forget the oldest data (streaming buffers, scrolling logs). And remember shift leaves moved-from slots, so always honour the iterator it returns rather than reading the whole range. (This example is C++20 for std::shift_left.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shift_left", url: "https://en.cppreference.com/w/cpp/algorithm/shift" }
+detailed_tags:
+  - { name: "std::rotate", url: "https://en.cppreference.com/w/cpp/algorithm/rotate" }

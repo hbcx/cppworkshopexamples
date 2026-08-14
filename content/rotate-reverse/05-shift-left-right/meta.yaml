@@ -1,0 +1,11 @@
+title: "shift_left and shift_right (C++20)"
+standard: "C++20"
+difficulty: 2
+summary: "std::shift_left and std::shift_right (C++20) move a range's elements toward one end by n positions. Elements pushed off the end are dropped; the vacated slots at the other end are left moved-from. Each returns the new end of the meaningful data."
+notes: "std::shift_left(first, last, n) and std::shift_right(first, last, n), added in C++20, slide the elements of a range n positions toward the front or the back. What matters is what happens at the edges: the elements shifted past the end are DROPPED, and the n slots vacated at the other end are left in a valid-but-unspecified moved-from state, not zeroed. So you must use the RETURNED iterator to know where the meaningful data is -- shift_left returns the new end (the moved-from slots are after it), shift_right returns the new begin (the moved-from slots are before it) -- and never read the vacated region. This is the key difference from std::rotate, which also moves a block but WRAPS the displaced elements around instead of discarding them, and keeps every element. Reach for shift when you genuinely want to drop what falls off -- advancing a fixed-size sliding window over a stream, scrolling a ring of log lines, making room at the front for new samples while old ones age out -- and for rotate when nothing should be lost. Because n moves happen and nothing is copied to a second buffer, shift is an in-place O(n) operation. The example prints only the valid portion each returned iterator delimits, since the moved-from tail is unspecified and would differ from run to run in principle."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shift_left", url: "https://en.cppreference.com/w/cpp/algorithm/shift" }
+  - { name: "std::shift_right", url: "https://en.cppreference.com/w/cpp/algorithm/shift" }
+detailed_tags: []

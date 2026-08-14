@@ -1,0 +1,12 @@
+title: "reverse_copy and rotate_copy: into a new range"
+standard: "C++11"
+difficulty: 2
+summary: "reverse_copy writes a range reversed into a new destination, and rotate_copy writes it rotated around a chosen middle, both leaving the source unchanged. They are the non-mutating forms of reverse and rotate."
+notes: "std::reverse_copy(first, last, out) and std::rotate_copy(first, middle, last, out) are the copying versions of reverse and rotate: instead of rearranging in place, they write the transformed sequence to an output range and leave the source exactly as it was. reverse_copy emits the elements back to front; rotate_copy emits middle..last followed by first..middle, so the element at middle becomes the first of the output -- the same rotation rotate performs, but into a copy. Both follow the copy family's output rules: they write through an output iterator and do not allocate, so the destination must be a std::back_inserter (to grow from empty) or already sized to hold last - first elements; writing into an empty vector through begin() overruns it. Reach for these when you need the reversed or rotated result but must preserve the original -- rendering a view without disturbing the model, producing a rotated schedule while keeping the base order, feeding a transformed copy to another stage. When you do NOT need the source afterwards, the in-place std::reverse and std::rotate are cheaper because they move nothing to a second buffer. The C++20 std::ranges versions take a whole range and are covered in the ranges example."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reverse_copy", url: "https://en.cppreference.com/w/cpp/algorithm/reverse_copy" }
+  - { name: "std::rotate_copy", url: "https://en.cppreference.com/w/cpp/algorithm/rotate_copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }
