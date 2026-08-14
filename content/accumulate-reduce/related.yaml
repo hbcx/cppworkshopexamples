@@ -13,3 +13,5 @@
   note: "The fold that keeps every step: where accumulate returns only the final total, partial_sum writes the running sum at each position -- go there for prefix-sum arrays, cumulative series, and delta encoding."
 - slug: "numeric-helpers"
   note: "The value-level numeric helpers beside these range folds: gcd, lcm and midpoint operate on two numbers where accumulate and inner_product fold a whole range -- go there for reducing fractions, common periods, and overflow-safe averages."
+- slug: "execution-policies"
+  note: "Where reduce's any-order rule pays off: passing std::execution::par splits a fold across threads, which is exactly why reduce (not accumulate) is the parallel-friendly one and why the operation must be associative -- go there for the parallel policies and their hazards."

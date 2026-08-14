@@ -1,0 +1,2 @@
+evens (atomic): 500
+evens (reduce): 500

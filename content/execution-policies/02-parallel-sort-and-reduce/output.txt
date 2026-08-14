@@ -1,0 +1,3 @@
+parallel sum: 500500
+parallel sum of squares: 333833500
+matches sequential? true

@@ -1,0 +1,2 @@
+sum via par + atomic: 500500
+sum via par_unseq reduce: 500500

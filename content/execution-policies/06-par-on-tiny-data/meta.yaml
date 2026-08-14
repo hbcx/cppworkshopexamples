@@ -1,0 +1,12 @@
+title: "Anti-pattern: par on data too small to pay off"
+standard: "C++17"
+difficulty: 3
+summary: "Parallelism has fixed overhead -- splitting the range, waking worker threads, merging results. On small inputs or trivially cheap per-element work that overhead outweighs the work, so par is slower than seq. Parallelize only large ranges with non-trivial work, and measure."
+notes: "par is not a free speed switch. Before any element is processed, a parallel run must divide the range, hand chunks to worker threads (waking or spinning them up), and afterwards merge the partial results and synchronize -- all of which costs time that a sequential loop never pays. When the input is small (a few dozen elements) or the per-element operation is trivial (an add, a comparison), that fixed overhead dominates and par ends up SLOWER than seq, occasionally by an order of magnitude, while producing the identical result -- a pessimization wearing the costume of an optimization. Two factors decide whether parallelism pays back its overhead: the element COUNT (rough rule of thumb, tens of thousands and up before it is worth considering) and the WORK PER ELEMENT (a heavy transform, a decode, a distance computation amortizes the overhead where a bare add cannot). The honest guidance is to default to seq or the plain overload for small or cheap work, reserve par for large ranges doing real work, and MEASURE on the target hardware rather than assuming -- the crossover point depends on the machine, the element type, and the library's backend (which may run serially anyway, in which case par only adds overhead). Reaching for par everywhere is the parallel equivalent of premature optimization."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::execution::seq", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+detailed_tags:
+  - { name: "std::execution::par", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+  - { name: "std::reduce", url: "https://en.cppreference.com/w/cpp/algorithm/reduce" }

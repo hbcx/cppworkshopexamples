@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "accumulate-reduce"
+  note: "Why reduce exists next to accumulate: reduce may combine elements in any order, which is exactly what lets par split a fold across threads -- so the associativity rules there are the precondition for parallel reduction here -- go there for reduce, transform_reduce, and the init-type and associativity traps."
+- slug: "sort"
+  note: "The algorithm that parallelizes most cleanly: std::sort takes a policy and produces the same order however the work is split, so a large sort gets multi-core for one extra argument -- go there for ordering, comparators, and stable_sort."
+- slug: "for-each"
+  note: "The per-element apply you most often parallelize: for_each with par runs the callable across threads, which is where the data-race and no-synchronization rules bite hardest -- go there for the plain visit and why a captured accumulator becomes a race under par."

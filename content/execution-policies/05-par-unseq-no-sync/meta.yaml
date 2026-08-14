@@ -1,0 +1,12 @@
+title: "Anti-pattern: synchronizing under par_unseq"
+standard: "C++17"
+difficulty: 3
+summary: "par_unseq allows vectorization, so element steps may interleave within one thread. Taking a mutex or any blocking lock in that state is undefined behaviour. Use par (threads only) if you must synchronize per element, or restructure as a reduction that needs no synchronization."
+notes: "par and par_unseq permit different things, and the difference decides what your callable may do. par uses multiple THREADS, and within the usual threading rules a callable may take a lock or touch an atomic to coordinate. par_unseq additionally permits VECTORIZATION -- the implementation may interleave the steps of several elements within a single thread of execution -- and that makes any blocking synchronization undefined: if the vectorized loop is halfway through element A's critical section when it starts element B's, a mutex can be locked twice from the same thread and deadlock, and even lock-free waiting can stall a lane that another lane is waiting on. So a par_unseq callable must call NOTHING that locks, blocks, waits, or otherwise synchronizes -- no mutexes, no condition variables, no blocking I/O -- and must not allocate through a lock-based allocator in the hot path. Two fixes. If you genuinely need per-element synchronization, step DOWN to par, which is threads-only and where a mutex or atomic is legal (though a mutex serializes and usually defeats the point). Better, keep par_unseq and remove the shared state: a reduction (reduce, transform_reduce) has each lane accumulate independently and needs no synchronization, which is also the most vectorizable shape. The general guide: par_unseq wants pure, independent, non-synchronizing element work; anything that must coordinate belongs under par or should be reduced away. This example describes the locking version and runs only the safe ones."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::execution::par_unseq", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+detailed_tags:
+  - { name: "std::execution::par", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+  - { name: "std::reduce", url: "https://en.cppreference.com/w/cpp/algorithm/reduce" }

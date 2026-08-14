@@ -1,0 +1,12 @@
+title: "The four execution policies"
+standard: "C++17"
+difficulty: 2
+summary: "Since C++17 many algorithms take an execution policy first: seq (sequential), par (threads), par_unseq (threads plus vectorization), and unseq (vectorization, C++20). Passing one opts the call into parallel execution without any thread code; the result is unchanged, only how it runs."
+notes: "C++17 added parallel overloads to most standard algorithms, selected by passing a std::execution policy tag as the FIRST argument (and including <execution>). There are four. std::execution::seq runs sequentially in the calling thread, like the classic overload, but with the parallel algorithm's other rules. std::execution::par permits the work to be spread across multiple THREADS. std::execution::par_unseq permits threads AND vectorization (SIMD), meaning steps from different elements may be interleaved within a single thread. std::execution::unseq (C++20) permits vectorization without threads. The policy never changes the RESULT -- a sorted range is sorted either way -- only the permitted execution strategy, so it is a drop-in way to use more of the machine without writing std::thread code yourself. The catch is that the policy is a PROMISE you make about the callable and the element operations, and the stronger the policy the stricter the contract: par requires that concurrent element operations not race, and par_unseq additionally forbids any synchronization (no mutexes, no atomics that could deadlock a vectorized loop) and any ordering dependence. Break the promise and the behaviour is undefined -- the following anti-patterns are exactly those broken promises. Note that whether a given library actually parallelizes is a quality-of-implementation matter (some need a backend such as TBB and otherwise run serially), but the SEMANTIC rules you must obey are the same regardless."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::execution::par", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+detailed_tags:
+  - { name: "std::execution::seq", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+  - { name: "std::execution::par_unseq", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }

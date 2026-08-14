@@ -1,0 +1,3 @@
+same result: yes (36)
+for 8 cheap adds, seq is the right call -- par only pays off
+when the data is large AND the per-element work is non-trivial

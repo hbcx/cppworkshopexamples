@@ -1,0 +1,11 @@
+title: "Anti-pattern: throwing out of a parallel algorithm"
+standard: "C++17"
+difficulty: 3
+summary: "If a callable passed to a parallel algorithm lets an exception escape, the runtime calls std::terminate rather than propagating it -- a try/catch around the call cannot catch it. Report errors without throwing, for example through an atomic flag checked afterwards."
+notes: "Error handling changes under a parallel policy. When a callable passed to a policy-taking algorithm throws, and that exception would propagate out of the algorithm, the standard says std::terminate is called -- the exception is NOT delivered to the caller. So the familiar pattern of throwing from deep inside a loop and catching it at the call site simply does not work here: wrapping std::for_each(std::execution::par, ...) in a try/catch cannot catch an exception thrown by its callable, and the program aborts instead. (Allocation failures inside the algorithm itself may throw std::bad_alloc from the algorithm, but exceptions from YOUR callable escaping the element function are the terminate case.) The reason is practical -- there is no well-defined single exception to propagate when many elements are processed concurrently, possibly several throwing at once -- so the standard chose termination over ambiguity. The fix is to signal errors as DATA rather than control flow: set a std::atomic<bool> flag (or push the bad item's index into a synchronized structure, or count failures atomically) from inside the callable, let the algorithm finish, and inspect the flag afterwards to decide what to do. This keeps every thread's reaction to a bad element cheap and race-free, and leaves normal error handling to the sequential code after the parallel call. This example describes the throwing version and runs only the flag-based one, since throwing would terminate the process and fail the build."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::execution::par", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

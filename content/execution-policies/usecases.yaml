@@ -1,0 +1,15 @@
+- problem: "An expensive function must be applied to every element of a very large dataset -- transforming millions of image pixels, stepping a particle simulation, scoring every row of a batch -- and the machine has cores sitting idle."
+  why: "Adding std::execution::par to an existing std::for_each or std::transform spreads the work across all cores for a near-linear speedup with no thread code, where a plain loop leaves the cores idle and hand-rolled std::thread management brings its own bugs in partitioning, joining, and error handling."
+  signal: "A hot std::for_each or transform over a large container doing real per-element work, running single-threaded on a multi-core machine."
+
+- problem: "A large array must be aggregated -- a sum, a maximum, a dot product, a set of statistics -- and the reduction itself is the bottleneck."
+  why: "std::reduce and std::transform_reduce with par split the range, accumulate partials per thread, and merge them, turning an O(n) serial pass into a parallel one; doing it by hand means partitioning the data, spawning threads, collecting partial results, and joining -- exactly the plumbing the parallel algorithm removes."
+  signal: "A std::accumulate or manual summation loop over a huge range on the critical path, or hand-written threads computing partial sums to be added up."
+
+- problem: "A large in-memory dataset must be sorted and the sort dominates the runtime -- ordering millions of records before a report, a join, or a binary-search phase."
+  why: "std::sort with par parallelizes the sort while producing exactly the same ordering, so you get multi-core sorting by adding one argument, instead of writing and debugging your own parallel merge or quicksort with all its partitioning and merging logic."
+  signal: "A single-threaded std::sort of a very large container that shows up as a top entry in a profile."
+
+- problem: "An existing codebase full of standard-algorithm calls needs to go faster, but a rewrite around std::thread or a task framework is too risky or too much work."
+  why: "Execution policies are a drop-in: adding a policy argument to calls that already use std::for_each, transform, sort, reduce parallelizes them without restructuring, without writing synchronization, and without the exception and lifetime hazards of manual threading -- and you can fall back to seq per call where it does not pay off."
+  signal: "Performance-sensitive code already written with standard algorithms, where the elements are independent and the ranges are large, but every call still runs sequentially."

@@ -35,3 +35,5 @@
   note: "The element-by-element rule sort uses to order sequences: lexicographical_compare is exactly how a sort of words or tuples compares two of them, using the same comparator -- go there for comparing two ranges, dictionary order, and equality."
 - slug: "heap-algorithms"
   note: "The sort hiding inside a heap: make_heap + sort_heap is heapsort, in-place with a guaranteed O(n log n) worst case, and the heap ops also give an incremental priority queue that a one-shot sort cannot -- go there for make_heap, push/pop, and when a heap beats sorting."
+- slug: "execution-policies"
+  note: "How to sort across cores: std::sort takes an execution policy and produces the same order however the work is split, so a large sort parallelizes with one extra argument -- go there for the parallel policies, reductions, and the parallel hazards."

@@ -1,0 +1,12 @@
+title: "Parallel reduce and transform_reduce"
+standard: "C++17"
+difficulty: 2
+summary: "std::reduce and std::transform_reduce are the parallel-friendly folds: because they may combine elements in any order, par can split the range across threads and merge the partial results. This only works when the operation is associative and commutative."
+notes: "The numeric folds show why the parallel algorithms are shaped the way they are. std::reduce is std::accumulate's parallel-ready sibling: accumulate folds strictly left to right, but reduce is allowed to combine elements in ANY order and grouping, which is exactly what permits std::execution::par to sum sub-ranges on separate threads and then add the partials. The price of that freedom is a precondition: the operation must be ASSOCIATIVE and COMMUTATIVE. Plain integer + is both, so the parallel sum of 1..1000 is 500500, identical to the sequential one. std::transform_reduce fuses a per-element map with the reduce, so a dot product or a sum of a projected field parallelizes in a single pass. The trap to carry into real code: operations that look fine but are not associative under the hood give different, run-to-run-unstable results under par -- subtraction and division obviously, but also floating-point addition, whose rounding depends on the grouping, so a parallel float sum can differ slightly from the sequential one (usually acceptable, but know it happens). std::sort also takes a policy and parallelizes cleanly because its result is fully defined regardless of how the work is split. Whether the run is actually parallel depends on the library backend; the associativity rule is what you must guarantee either way. This is the parallel face of the accumulate/reduce chapter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reduce", url: "https://en.cppreference.com/w/cpp/algorithm/reduce" }
+  - { name: "std::transform_reduce", url: "https://en.cppreference.com/w/cpp/algorithm/transform_reduce" }
+detailed_tags:
+  - { name: "std::execution::par", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }

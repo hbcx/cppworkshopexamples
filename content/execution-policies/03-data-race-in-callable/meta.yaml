@@ -1,0 +1,12 @@
+title: "Anti-pattern: a data race in the parallel callable"
+standard: "C++17"
+difficulty: 3
+summary: "Under par the callable runs on many threads, so touching shared mutable state without synchronization is a data race -- undefined behaviour. Make the shared state atomic, or, better, avoid it with a reduction like transform_reduce."
+notes: "Passing std::execution::par is a promise that the element operations can run concurrently without conflicting, and the most common way to break it is to write to shared state from the callable. An unsynchronized ++count across threads is a textbook data race: undefined behaviour that may lose updates, read a torn value, or crash -- and it is especially treacherous because a library that runs the policy serially (no parallel backend) will execute it correctly every time, so the bug hides until the code runs on a machine that actually parallelizes. Two fixes, in order of preference. The lesser one is to synchronize the shared state -- make the counter a std::atomic so the increments are safe (a mutex would work too but serializes the threads and throws away much of the benefit). The better one is to remove the shared state altogether: express the work as a REDUCTION. transform_reduce maps each element to a partial result and combines the partials, so each thread accumulates independently and there is nothing to race on -- which is why the parallel algorithms lean on reduce and transform_reduce rather than a shared accumulator. The rule: under par, either an element operation touches only its own element, or the shared thing it touches is atomic, or you restructure as a reduction. This example describes the racing version and runs only the safe ones, since a data race is undefined."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::execution::par", url: "https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+  - { name: "std::transform_reduce", url: "https://en.cppreference.com/w/cpp/algorithm/transform_reduce" }

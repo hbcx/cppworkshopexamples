@@ -1,0 +1,1 @@
+found a bad value; sum of the valid ones is 108
