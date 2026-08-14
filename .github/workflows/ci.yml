@@ -5,9 +5,14 @@
 # checks out this repo and runs driver/build.py against its own content/.
 #
 # ubuntu-latest ships g++, clang++ and python3 preinstalled (both compilers here
-# are "normal" -- no MSYS/cygwin path quirks). The one addition is a newer clang
-# (20) because the preinstalled clang 18 cannot compile C++23 std::expected on
-# ubuntu's libstdc++14; see the install step below.
+# are "normal" -- no MSYS/cygwin path quirks). Two versions are pinned newer than
+# the defaults, because the corpus teaches C++23 features the stock compilers lack:
+#   * g++-14 -- the default g++ (13) has no std::ranges::to, no views::join_with,
+#     and no deducing-this in lambdas (this auto self); all three arrived in
+#     GCC 14 / libstdc++14. Without this those C++23 examples fail to compile.
+#   * clang++-20 -- the preinstalled clang 18 cannot compile C++23 std::expected
+#     on ubuntu's libstdc++14 (the <expected> declaration guards out).
+# Both are installed below and named explicitly in the compile step.
 
 name: build-examples
 
@@ -24,30 +29,33 @@ jobs:
       - name: Check out the corpus
         uses: actions/checkout@v4
 
-      - name: Show toolchain versions
+      - name: Show default toolchain versions
         run: |
           python3 --version
           g++ --version | head -1
           clang++ --version | head -1
 
-      # ubuntu-latest ships clang 18, and clang <=18 paired with libstdc++14
-      # guards out C++23 std::expected (the <expected> declaration disappears),
-      # which breaks the whole `expected` chapter; g++ compiles it fine. Install
-      # clang 20 from apt.llvm.org. IMPORTANT: it is invoked DIRECTLY as
-      # clang++-20 in the compile step below -- the previous update-alternatives
-      # approach silently did nothing, because /usr/bin/clang++ is a plain symlink
-      # (clang 18), not an alternatives-managed link, so `clang++` stayed on 18
-      # and the fix never took effect.
-      - name: Install clang 20 (Ubuntu's clang 18 lacks C++23 std::expected on libstdc++14)
+      # Two newer compilers, both named DIRECTLY in the compile step (no reliance
+      # on update-alternatives -- /usr/bin/{g++,clang++} are plain symlinks to the
+      # stock versions, so alternatives never took over and the old versions stuck).
+      #
+      # g++-14: the default g++ (13) lacks std::ranges::to, views::join_with, and
+      #   deducing-this in lambdas -- the C++23 features arrived in GCC 14. It is in
+      #   ubuntu's universe repo, so a plain apt install is enough (no PPA).
+      # clang++-20: clang <=18 paired with libstdc++14 guards out C++23 std::expected
+      #   (the <expected> declaration disappears), breaking the `expected` chapter.
+      - name: Install g++-14 and clang 20 (stock compilers lack some C++23 features)
         run: |
+          sudo apt-get update
+          sudo apt-get install -y g++-14
+          g++-14 --version | head -1
           wget -qO llvm.sh https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 20
           clang++-20 --version | head -1
 
-      - name: Compile every example with g++ AND clang++-20
+      - name: Compile every example with g++-14 AND clang++-20
         # --strict: a missing requested compiler is an error (both are required
-        # on CI, unlike local dev where one may be skipped). clang++-20 is named
-        # explicitly so the newer clang is definitely the one used, with no
-        # dependence on update-alternatives having taken over `clang++`.
-        run: python3 driver/build.py --strict --compilers g++,clang++-20
+        # on CI, unlike local dev where one may be skipped). Both are named with an
+        # explicit version so the newer toolchains are definitely the ones used.
+        run: python3 driver/build.py --strict --compilers g++-14,clang++-20
