@@ -1,0 +1,4 @@
+title: "Heap algorithms"
+description: "The binary-heap operations that turn a plain range into a max-heap and maintain it. std::make_heap builds the heap, push_heap and pop_heap add and remove the top in O(log n), sort_heap turns a heap into a sorted range (heapsort's last step), and is_heap checks the invariant. These are the machinery inside std::priority_queue, exposed so you can run a heap over your own storage. Covers building a heap and reading its top, the push/pop cycle, sorting a heap, and a min-heap via a comparator -- alongside the anti-patterns: treating a heap as if it were sorted, changing the underlying elements behind the heap's back, and forgetting that pop_heap does not actually remove the element."
+sort_order: 92
+category: "Algorithms"

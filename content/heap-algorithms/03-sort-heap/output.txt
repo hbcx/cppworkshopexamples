@@ -1,0 +1,2 @@
+after sort_heap: 1 1 2 3 4 5 6 9
+sorted? true

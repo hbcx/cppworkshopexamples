@@ -1,0 +1,11 @@
+title: "Anti-pattern: treating a heap as sorted"
+standard: "C++11"
+difficulty: 3
+summary: "A max-heap only guarantees the front is the maximum; the rest is partially ordered, not sorted. Iterating a heap expecting sorted order is wrong. Use sort_heap for a sorted array, or repeated pop_heap plus pop_back to emit elements largest-first."
+notes: "The single most common misunderstanding about heaps is that make_heap sorts the range. It does not: a heap's only ordering guarantee is that each parent outranks its children, which puts the maximum at the FRONT but leaves the rest merely partially ordered. Walking the range after make_heap and expecting descending (or ascending) values gives a sequence that is neither -- the example shows is_sorted returning false even under a descending comparator. Two correct paths depending on what you actually want. If you need the data SORTED as an array, call std::sort_heap, which converts the heap into an ascending range (and, being a sort, leaves it no longer a heap). If you need the elements one at a time largest-first from a heap you keep using -- the priority-queue drain -- repeat std::pop_heap followed by pop_back, which moves each successive maximum to the back and keeps the shrinking prefix a valid heap at every step. The deeper point: a heap deliberately does LESS ordering work than a sort so that build, push, and pop stay cheap; if you find yourself wanting the whole thing in order all at once, a heap was probably the wrong structure and std::sort states it better. Never read meaning into the heap's internal layout beyond front()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sort_heap", url: "https://en.cppreference.com/w/cpp/algorithm/sort_heap" }
+detailed_tags:
+  - { name: "std::pop_heap", url: "https://en.cppreference.com/w/cpp/algorithm/pop_heap" }

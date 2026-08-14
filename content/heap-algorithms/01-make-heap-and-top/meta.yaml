@@ -1,0 +1,11 @@
+title: "make_heap: build a heap, read the top"
+standard: "C++11"
+difficulty: 1
+summary: "std::make_heap rearranges a range in place into a max-heap, where the largest element sits at the front. The rest is only partially ordered, not sorted. is_heap checks the property and is_heap_until finds how far a range satisfies it."
+notes: "std::make_heap(first, last) turns any range into a binary MAX-HEAP in O(n): the elements are rearranged so that each parent is greater than or equal to its children. The one thing a heap promises is that the maximum is at the FRONT (v.front()); everything else is only partially ordered, which is the whole point -- a heap is cheaper to build and maintain than a fully sorted range because it does less work. This is what powers a priority queue: constant-time access to the largest (or, with a comparator, the smallest) element, and O(log n) to add or remove one. std::is_heap(first, last) tests whether a range currently satisfies the heap property, and std::is_heap_until returns an iterator to the end of the longest prefix that does -- useful for spotting where an invariant broke. The standard heap is a max-heap by default; pass a comparator to change what top means (a later example builds a min-heap). Do not read anything into the exact layout beyond the front: several arrangements are valid heaps for the same data, so treat the order after make_heap as unspecified apart from front(), and never assume it is sorted (an anti-pattern here). make_heap, push_heap, pop_heap and sort_heap are the four operations that build on each other."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::make_heap", url: "https://en.cppreference.com/w/cpp/algorithm/make_heap" }
+detailed_tags:
+  - { name: "std::is_heap", url: "https://en.cppreference.com/w/cpp/algorithm/is_heap" }

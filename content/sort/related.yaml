@@ -33,3 +33,5 @@
   note: "The same comparator on just a value or two: std::min/max/clamp take the exact predicate std::sort does, so best-of-two-by-key and bounding a value share the ordering you sort by -- go there for comparing values, minmax, and clamp."
 - slug: "mismatch-equal"
   note: "The element-by-element rule sort uses to order sequences: lexicographical_compare is exactly how a sort of words or tuples compares two of them, using the same comparator -- go there for comparing two ranges, dictionary order, and equality."
+- slug: "heap-algorithms"
+  note: "The sort hiding inside a heap: make_heap + sort_heap is heapsort, in-place with a guaranteed O(n log n) worst case, and the heap ops also give an incremental priority queue that a one-shot sort cannot -- go there for make_heap, push/pop, and when a heap beats sorting."

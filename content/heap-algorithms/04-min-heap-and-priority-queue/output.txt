@@ -1,0 +1,3 @@
+min-heap front (smallest): 1
+after pushing 0, front: 0
+priority_queue drains largest-first: 5 4 3 1 1

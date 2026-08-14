@@ -5,3 +5,5 @@
   note: "The split nth_element is built on: nth_element is quickselect, partitioning around the kth element, and std::partition rearranges a range around a predicate in O(n) -- go there for two-group splits and the partition point."
 - slug: "min-max-element"
   note: "The k=1 case: for a single smallest or largest, min_element and max_element scan in O(n) and leave the range untouched, where these selection algorithms would reorder it -- go there for one extreme and its position."
+- slug: "heap-algorithms"
+  note: "The other route to top-k, for data that arrives over time: a bounded heap keeps the k best of a stream in O(log k) per item, where nth_element and partial_sort need the whole range in hand at once -- go there for make_heap, the push/pop cycle, and priority queues."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting pop_heap to remove"
+standard: "C++11"
+difficulty: 3
+summary: "std::pop_heap does not remove anything: it moves the maximum to the last position and re-heapifies the rest, leaving the container the same size. You must call pop_back afterwards to actually discard the element."
+notes: "The name pop_heap is misleading: it does not pop, in the sense of removing, anything. std::pop_heap(first, last) swaps the front (the maximum) with the last element and restores the heap property over everything EXCEPT that last slot -- so afterwards the old maximum is parked at the back and the container is exactly as long as before. Code that calls pop_heap and then reads front() thinking the top is gone is wrong twice over: the element is still present (size unchanged), and front() now returns the NEW maximum, which can look like the removal worked until you check the size or find the old value lingering at the back. The element is only truly removed when you follow up with pop_back (or erase of the last element). So the remove idiom is always the pair: std::pop_heap(first, last); then container.pop_back();. This split exists precisely because the heap algorithms operate on iterator ranges and cannot resize the container -- they rearrange, the container removes. std::priority_queue::pop hides both steps behind one call, which is part of why the adaptor is more convenient when you do not need direct access. Draining a heap is this pair in a loop, which yields elements largest-first."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pop_heap", url: "https://en.cppreference.com/w/cpp/algorithm/pop_heap" }
+detailed_tags:
+  - { name: "std::make_heap", url: "https://en.cppreference.com/w/cpp/algorithm/make_heap" }

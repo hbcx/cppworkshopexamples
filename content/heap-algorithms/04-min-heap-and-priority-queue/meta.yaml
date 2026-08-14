@@ -1,0 +1,12 @@
+title: "A min-heap, and std::priority_queue"
+standard: "C++11"
+difficulty: 2
+summary: "Pass std::greater to the heap operations to build a min-heap, where the smallest element is at the front. The same comparator must go to every heap call. std::priority_queue wraps these operations and enforces the comparator for you."
+notes: "make_heap and friends default to a max-heap, but they all take an optional comparator, so std::make_heap(first, last, std::greater<>{}) builds a MIN-heap -- the smallest element at the front, the natural shape for a shortest-first scheduler or a Dijkstra frontier. The rule that catches people: the comparator is not remembered anywhere, so you must pass the SAME one to every operation on that range -- make_heap, push_heap, pop_heap, sort_heap. Mix a default max-heap push into a range you built as a min-heap and the invariant silently breaks. Because carrying the comparator by hand is error-prone, the standard gives you std::priority_queue: an adaptor that owns a container (a vector by default), runs make_heap/push_heap/pop_heap internally, and binds the comparator once at the type level so every push and pop uses it. priority_queue is the right tool when you only need the queue behaviour -- push, look at top, pop -- with no direct access to the elements. The raw heap algorithms earn their place when you need the heap over storage you ALSO use in other ways: a vector you index or iterate, a buffer you own, or an algorithm (like a k-way merge) that manipulates the heap directly. This section is the machinery; the std::priority_queue chapter is the packaged container."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::make_heap", url: "https://en.cppreference.com/w/cpp/algorithm/make_heap" }
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+detailed_tags:
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }

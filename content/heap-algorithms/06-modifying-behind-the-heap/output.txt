@@ -1,0 +1,3 @@
+start: is_heap? true, front 9
+after raw push_back(999): is_heap? false, front 9   <- 999 is not at the top
+after push_heap:          is_heap? true, front 999

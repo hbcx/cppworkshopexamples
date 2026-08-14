@@ -1,0 +1,12 @@
+title: "push_heap and pop_heap: add and remove the top"
+standard: "C++11"
+difficulty: 2
+summary: "To add: push_back the value then push_heap to sift it into place. To remove the top: pop_heap moves the max to the last position and re-heapifies the rest, then you pop_back to drop it. Both are O(log n)."
+notes: "push_heap and pop_heap maintain a heap as elements come and go, each in O(log n). Adding is two steps: push_back the new value onto the end of the container, then std::push_heap(first, last), which assumes everything BUT the last element is already a heap and sifts that last element up to its correct spot. Removing the top is the mirror: std::pop_heap(first, last) swaps the front (the maximum) to the LAST position and re-heapifies the range excluding that last slot -- crucially it does NOT remove anything, the container is the same size, the old max is just parked at the back; you then call pop_back to actually discard it. That two-step remove is the single most common heap mistake (forgetting the pop_back, or reading front() expecting the element to be gone), and it is an anti-pattern here. Draining a heap by repeating pop_heap + pop_back emits the elements largest-first, which is exactly the service a priority queue provides. These operations are the moving parts inside std::priority_queue; use them directly when you need a heap over storage you already own (a vector you also index, memory you manage) rather than the sealed adaptor."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::push_heap", url: "https://en.cppreference.com/w/cpp/algorithm/push_heap" }
+  - { name: "std::pop_heap", url: "https://en.cppreference.com/w/cpp/algorithm/pop_heap" }
+detailed_tags:
+  - { name: "std::make_heap", url: "https://en.cppreference.com/w/cpp/algorithm/make_heap" }

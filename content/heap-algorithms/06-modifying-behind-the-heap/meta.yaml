@@ -1,0 +1,11 @@
+title: "Anti-pattern: changing the heap behind its back"
+standard: "C++11"
+difficulty: 3
+summary: "A heap is just an invariant over a range, and the container does not enforce it. A plain push_back or writing through an element breaks the heap without any error. Restore it with push_heap after adding, or re-run make_heap after an in-place change."
+notes: "A heap built by make_heap is nothing more than a particular ARRANGEMENT of a normal range -- there is no heap type guarding it, so any modification that bypasses the heap operations silently violates the invariant. The classic slip is adding with a bare push_back: that appends the value at the end without sifting it into place, so is_heap immediately returns false, and if the new value was the largest, front() no longer gives the maximum -- the priority queue quietly starts handing back the wrong element. The fix for adding is always push_back THEN std::push_heap, which sifts the last element up. Writing through an existing element is the same hazard: increase or decrease a value in the middle and the parent/child order around it may break, and there is no standard fix-one-element call, so you must re-establish the property, in practice by re-running std::make_heap over the whole range (O(n)) -- which is exactly why a heap has no efficient decrease-key and why algorithms that need one reach for other structures. The takeaway: once a range is a heap, only touch it through make_heap, push_heap, and pop_heap; treat direct writes and push_back/insert as invariant-breaking, and re-heapify if you must do them. is_heap is a cheap way to assert the property in tests."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::push_heap", url: "https://en.cppreference.com/w/cpp/algorithm/push_heap" }
+detailed_tags:
+  - { name: "std::is_heap", url: "https://en.cppreference.com/w/cpp/algorithm/is_heap" }

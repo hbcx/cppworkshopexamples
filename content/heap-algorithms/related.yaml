@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "queues"
+  note: "The packaged version of everything here: std::priority_queue wraps make_heap/push_heap/pop_heap over a container and binds the comparator once, so you get the heap behaviour without running the operations by hand -- go there for the adaptor, its container choice, and when to prefer it over the raw algorithms."
+- slug: "sort"
+  note: "Where make_heap + sort_heap becomes heapsort, and why std::sort is usually the better default: sort blends quicksort, heapsort and insertion sort, so reach for the raw heap ops only when the heap itself is the point -- go there for ordering, comparators, and stable_sort."
+- slug: "nth-element"
+  note: "The other answer to top-k without a full heap: nth_element finds the kth element in O(n) and partial_sort orders just the top-k, an alternative to draining a heap when the data is already all in hand -- go there for selection, medians, and partial sorting."

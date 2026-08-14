@@ -1,0 +1,15 @@
+- problem: "Work items arrive over time and must always be served in priority order -- a task scheduler, an event loop pulling the next timer to fire, the frontier of a Dijkstra or A* search that always expands the closest node."
+  why: "A heap adds an item and extracts the current best in O(log n), where keeping the collection fully sorted and re-sorting on every insertion is O(n log n) each time; the heap does only the partial ordering the next-best query needs, not a total order you never read."
+  signal: "A container that is re-sorted after every insertion just to read or remove its front element, or a linear scan for the min/max on each step of a loop that also inserts."
+
+- problem: "The k largest (or smallest) items must be kept from a stream far too big to hold in memory -- the top 100 scores, the 10 slowest requests, the nearest k points as data flows past."
+  why: "A bounded MIN-heap of size k holds the current top-k: each new item is compared against the smallest kept and replaces it only if larger, so memory stays at k and each step is O(log k); sorting the whole stream needs it all in memory and O(N log N) work for k results you could get in O(N log k)."
+  signal: "Collecting an entire stream into a container and sorting it just to take the first k, or a top-k that grows without bound."
+
+- problem: "Several already-sorted sequences must be merged into one sorted output -- combining sorted runs in an external sort, interleaving time-ordered log files, merging sorted shards from different nodes."
+  why: "A heap holding the current head of each of the k inputs picks the next smallest in O(log k) and advances only that input, so the merge is O(N log k); rescanning all k heads for the minimum on every output element is O(k) per element and O(N k) overall."
+  signal: "A k-way merge that scans every input's current element to find the smallest on each step, instead of keeping the heads in a heap."
+
+- problem: "A sort must run with a hard worst-case time bound and no extra memory -- a real-time system that cannot tolerate quicksort's pathological O(n squared) case, or an embedded target with no room for merge sort's buffer."
+  why: "make_heap plus sort_heap is heapsort: fully in place, guaranteed O(n log n) on every input, and non-recursive, so it has no bad-input blowup and allocates nothing; std::sort is faster on average but its guarantees and memory profile are what these constraints actually require."
+  signal: "A sort on a hot real-time path or a memory-tight device where worst-case latency or zero extra allocation is a stated requirement, not just average speed."

@@ -1,0 +1,11 @@
+title: "sort_heap: turn a heap into a sorted range"
+standard: "C++11"
+difficulty: 2
+summary: "std::sort_heap takes a range that is already a heap and sorts it ascending, by repeatedly popping the max to the back. make_heap followed by sort_heap is heapsort: in-place, O(n log n) worst case, no extra memory."
+notes: "std::sort_heap(first, last) requires its input to already be a heap and turns it into a sorted ascending range. The mechanism is just repeated pop_heap: each pop moves the current maximum to the back and shrinks the working heap, so after n pops the elements are laid out smallest to largest. Because make_heap is O(n) and sort_heap is O(n log n), running them back to back IS heapsort -- a sort that is fully in place (no extra buffer), has a guaranteed O(n log n) worst case (no quicksort-style pathological input), and does not recurse. Those guarantees are why heapsort matters in real-time or memory-constrained code. For ordinary use, though, std::sort is the right default: it is typically faster in practice (introsort blends quicksort, heapsort and insertion sort) and states the intent directly. So reach for make_heap/sort_heap when the HEAP is the point -- you were already maintaining one for a priority queue and now want it drained in order -- not merely as a way to sort. A caveat: sort_heap leaves the range sorted, which is of course no longer a heap, so you cannot push_heap onto it afterwards without rebuilding."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sort_heap", url: "https://en.cppreference.com/w/cpp/algorithm/sort_heap" }
+detailed_tags:
+  - { name: "std::make_heap", url: "https://en.cppreference.com/w/cpp/algorithm/make_heap" }

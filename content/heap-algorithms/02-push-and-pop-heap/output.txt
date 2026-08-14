@@ -1,0 +1,4 @@
+top after make_heap: 5
+top after pushing 8: 8
+removed top: 8, new top: 5
+draining largest-first: 5 4 3 1
