@@ -1,0 +1,6 @@
+clamp(-20, 0, 100) = 0
+clamp(0, 0, 100) = 0
+clamp(42, 0, 100) = 42
+clamp(100, 0, 100) = 100
+clamp(137, 0, 100) = 100
+old form max(lo,min(v,hi)) = 100

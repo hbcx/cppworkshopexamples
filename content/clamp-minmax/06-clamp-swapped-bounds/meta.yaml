@@ -1,0 +1,11 @@
+title: "Anti-pattern: clamp with lo greater than hi"
+standard: "C++17"
+difficulty: 3
+summary: "std::clamp requires lo <= hi; passing the bounds swapped is undefined behaviour, easy to hit when the bounds are computed rather than literals. Order them first -- std::minmax gives {min, max} in one call."
+notes: "std::clamp(v, lo, hi) has a precondition the type system cannot enforce: lo must be less than or equal to hi. Call it with the bounds reversed and it is UNDEFINED behaviour -- the standard does not say you get lo, or hi, or v, it says nothing, so the result is whatever the implementation happens to do and cannot be relied on. With literal bounds this never happens, but real bounds are often computed -- a min and max read from config, a low and high derived from two measurements, a range built from user input -- and nothing stops them arriving in the wrong order. The fix is to ORDER the bounds before clamping: std::minmax(a, b) returns a pair {smaller, larger} in one call, so feeding clamp bounds.first and bounds.second guarantees lo <= hi no matter how a and b came in; an assert(lo <= hi) is a lighter alternative when you believe the order but want it checked in debug builds. The same precondition applies under a custom comparator (lo must not be greater than hi by that comparator). The example keeps the undefined call in a comment and runs only the ordered-bounds fix, since the compile gate executes the program."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::clamp", url: "https://en.cppreference.com/w/cpp/algorithm/clamp" }
+detailed_tags:
+  - { name: "std::minmax", url: "https://en.cppreference.com/w/cpp/algorithm/minmax" }

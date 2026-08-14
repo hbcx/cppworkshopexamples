@@ -1,0 +1,11 @@
+title: "Anti-pattern: clamping a value that might be NaN"
+standard: "C++17"
+difficulty: 3
+summary: "Every comparison with NaN is false, and min/max/clamp are built on <, so NaN passes through them in surprising, order-dependent ways: clamp(NaN, lo, hi) returns NaN, and max(NaN, x) versus max(x, NaN) disagree. Check std::isnan before clamping."
+notes: "Floating-point NaN breaks the assumption these functions rest on. IEEE says every comparison involving NaN is false -- NaN < x, x < NaN, even NaN == NaN are all false -- and std::min/max/clamp are defined purely in terms of <, so NaN does not get ordered, it gets passed through by whichever branch the false comparison happens to take. The consequences surprise people: std::clamp(NaN, lo, hi) returns NaN, not a bound, so clamp does NOT sanitize a bad float; and std::max(NaN, x) can differ from std::max(x, NaN) because max returns its first argument when the comparison is false, making the result depend on argument order. This is all DEFINED behaviour (unlike the swapped-bounds case), just not what the code intended, which is why it slips through -- a NaN from a divide-by-zero or a failed parse flows silently into a clamped, supposedly-safe value. The fix is to handle NaN explicitly with std::isnan before you clamp: reject it, substitute a default, or treat it as an error, because no amount of min/max/clamp will turn it into an in-range number. The same applies to any comparator that ultimately uses <. Keep this in mind wherever clamp guards a computed float -- a normalized ratio, a physics value, a parsed measurement."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::clamp", url: "https://en.cppreference.com/w/cpp/algorithm/clamp" }
+detailed_tags:
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }

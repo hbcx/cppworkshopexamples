@@ -1,0 +1,12 @@
+title: "clamp: bound a value to a range"
+standard: "C++17"
+difficulty: 2
+summary: "std::clamp(v, lo, hi) pins a value into [lo, hi]: it returns lo below the range, hi above it, and v inside. One readable call that replaces the error-prone std::max(lo, std::min(v, hi))."
+notes: "std::clamp(v, lo, hi) constrains a value to a closed interval: if v is below lo you get lo, if above hi you get hi, otherwise v itself. It is the clean, self-documenting way to bound input -- a volume held to 0..100, a colour channel to 0..255, a slider position, a retry delay capped at a ceiling. Before C++17 people wrote std::max(lo, std::min(v, hi)), which is correct but reads backwards and is easy to break: swap the min and max and it silently clamps to the wrong end, a bug that survives casual review. clamp states the intent in the natural low..high order and cannot be mis-nested. Like min/max it takes an optional comparator as a fourth argument, so you can clamp under a custom ordering. Two things become anti-patterns and are covered later: clamp requires lo <= hi -- calling it with the bounds swapped is UNDEFINED behaviour, so guard or order dynamic bounds first -- and clamp does not tame NaN, because every comparison with NaN is false, so std::clamp(NaN, lo, hi) returns NaN rather than a bound. clamp also returns a const reference to whichever of v, lo, hi is chosen, so the usual dangling caution applies when those are temporaries. std::clamp is C++17."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::clamp", url: "https://en.cppreference.com/w/cpp/algorithm/clamp" }
+detailed_tags:
+  - { name: "std::min", url: "https://en.cppreference.com/w/cpp/algorithm/min" }
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }

@@ -1,0 +1,15 @@
+- problem: "A value from outside the program -- a user setting, a sensor reading, a parsed config field -- must be forced into a valid range before use: a volume held to 0..100, a colour channel to 0..255, a slider to its track."
+  why: "std::clamp(v, lo, hi) states the bound in one readable call and cannot be mis-nested, where the hand-written std::max(lo, std::min(v, hi)) reads backwards and silently does the wrong thing if you swap the min and max -- a bug that survives casual review."
+  signal: "An if-chain or a nested max/min that pins a variable to a range, especially one repeated at several call sites with the bounds spelled out each time."
+
+- problem: "A computed quantity must be capped so it never runs away: a retry backoff delay limited to a ceiling, an accumulator held below a maximum, a computed buffer size kept within what was allocated."
+  why: "A single std::clamp (or std::min against the cap) expresses the limit at the point of use and keeps the intent local, where scattered if (x > max) x = max; statements drift apart and someone eventually forgets one, letting the value overshoot."
+  signal: "Manual if (x > max) x = max; / if (x < min) x = min; corrections sprinkled through the code instead of one bounding call."
+
+- problem: "Both the smallest and the largest of a small fixed set of values are needed together -- a span or width from a few numbers, an interval from two corners, the low and high of a handful of samples."
+  why: "std::minmax returns {min, max} from one call and one comparison pass, so the two results stay consistent and you do not repeat the comparator; calling std::min and std::max separately duplicates the work and risks the two using slightly different orderings."
+  signal: "Adjacent std::min(...) and std::max(...) calls over the same arguments, or a min and a max computed with two separate expressions that must agree."
+
+- problem: "The better of two candidates must be chosen by a key rather than by natural order: the cheaper of two offers, the shorter of two routes, the later of two timestamps, the higher-priority of two tasks."
+  why: "std::min/std::max with a comparator make best-by-key a single expression that names the intent, where a hand-written ternary spells out the comparison inline, is easy to invert, and gets copy-pasted with the operands swapped when the same choice is made elsewhere."
+  signal: "A ternary like a.price < b.price ? a : b choosing between two objects by a field, repeated in more than one place."

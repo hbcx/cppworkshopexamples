@@ -1,0 +1,12 @@
+title: "Anti-pattern: keeping a reference to the result"
+standard: "C++11"
+difficulty: 3
+summary: "The two-argument std::min/std::max/std::minmax return a const reference to the winning argument, not a copy. Binding that to a reference when the arguments were temporaries leaves it dangling. Take the result by value instead."
+notes: "std::min(a, b) and std::max(a, b) return const T& -- a reference to whichever argument compared smaller or larger, chosen to avoid copying. That is fine while the arguments outlive the reference, but it becomes a dangling-reference bug the moment the arguments are temporaries: const std::string& s = std::min(makeA(), makeB()); binds s to one of two temporaries that are destroyed at the end of the statement, so every later use of s reads freed memory -- undefined behaviour. It is especially sneaky because a quick test usually prints the right value (the freed bytes are still intact for a moment), so it passes review and fails in production. The fix is to bind by VALUE: std::string s = std::min(...) copies the winner out before the temporaries die. If you genuinely want a reference, keep the arguments in named variables that outlive it. Two useful facts: the initializer_list overloads (std::min({...})) return by value, so they never dangle, and std::minmax has the same reference-returning behaviour in its two-argument form, so its pair of references can dangle the same way. The example keeps the dangerous line in a comment and only runs the safe forms, since the compile gate executes the binary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::min", url: "https://en.cppreference.com/w/cpp/algorithm/min" }
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }
+detailed_tags:
+  - { name: "std::minmax", url: "https://en.cppreference.com/w/cpp/algorithm/minmax" }

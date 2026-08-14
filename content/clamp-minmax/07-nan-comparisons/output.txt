@@ -1,0 +1,4 @@
+clamp(NaN, 0, 1) is NaN? true
+max(NaN, 5) is NaN? true
+max(5, NaN) = 5   <- same call, different order, different answer
+guarded result = 0

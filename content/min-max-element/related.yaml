@@ -9,3 +9,5 @@
   note: "Where the projection forms come from: ranges::max_element and ranges::minmax take a whole range and a projection so you rank by a member, and ranges::max returns a value -- go there for range algorithms, views, and projections."
 - slug: "nth-element"
   note: "The step up from one extreme to k: min_element gives the single smallest, where nth_element finds the kth and partial_sort the top-k -- go there for medians, percentiles, and ordered or unordered top-k."
+- slug: "clamp-minmax"
+  note: "The value-level twins of these range functions: std::min/max/minmax compare a couple of arguments and return values (not iterators), and std::clamp bounds a single value to a range -- go there for comparing values, both bounds at once, clamping, and the NaN and swapped-bounds traps."

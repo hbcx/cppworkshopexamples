@@ -1,0 +1,4 @@
+cheaper: pro (900)
+pricier: basic (1200)
+longest word: world
+clamped price: 1000

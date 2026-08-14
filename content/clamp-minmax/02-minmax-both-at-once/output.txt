@@ -1,0 +1,3 @@
+minmax(7, 3): min=3 max=7
+minmax of {4,8,1,6,2}: min=1 max=8
+range width = 7

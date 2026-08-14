@@ -1,0 +1,12 @@
+title: "A custom comparator: best-by-key"
+standard: "C++17"
+difficulty: 3
+summary: "min, max, minmax and clamp all take an optional comparator as a last argument, so smaller and larger can mean by any key -- cheaper by price, longer by length, later by timestamp. This turns best-of-two-by-a-field into a one-liner."
+notes: "The real power of the value algorithms is the optional comparator. std::min(a, b, comp), std::max, std::minmax and std::clamp all accept a two-argument predicate that defines the ordering, so best-by-key needs no hand-written ternary: std::min(a, b, byPrice) is the cheaper product, std::max({...}, byLength) is the longest string, std::max(t1, t2, byTime) is the later timestamp. The comparator has the usual strict-weak-ordering meaning -- return true when the first argument should be considered LESS than the second -- and the same one works across all four functions, so ordering, both-extremes, and clamping stay consistent. This is what makes clamp with a comparator a clean way to hold a domain object into a band defined by two sentinel objects, comparing on the field that matters. Two carry-overs from the mechanics still apply: the two-argument forms return a const reference to the winner, so do not keep that reference when the arguments were temporaries (bind by value instead), and clamp still needs lo <= hi UNDER the comparator. Using min/max with a comparator on values is the value-level twin of passing a comparator to std::sort or std::min_element."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::min", url: "https://en.cppreference.com/w/cpp/algorithm/min" }
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }
+detailed_tags:
+  - { name: "std::clamp", url: "https://en.cppreference.com/w/cpp/algorithm/clamp" }

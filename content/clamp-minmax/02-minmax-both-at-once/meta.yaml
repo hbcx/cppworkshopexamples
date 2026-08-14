@@ -1,0 +1,12 @@
+title: "minmax: both bounds in one call"
+standard: "C++11"
+difficulty: 2
+summary: "std::minmax returns the smaller and larger together as a std::pair{min, max}, from two values or from an initializer_list. It is the one-call way to get both extremes when you would otherwise call min and max separately."
+notes: "std::minmax(a, b) hands back a std::pair whose first is the smaller and second is the larger, so you get both results from one expression instead of writing std::min and std::max side by side. The initializer_list form std::minmax({...}) does the same for a whole set of values -- the smallest and largest of the list at once -- which is the natural way to compute a span or a bounding interval from a fixed handful of numbers. In C++17 structured bindings make it read cleanly: auto [lo, hi] = std::minmax({...}). Two cautions. The two-argument form returns a pair of const REFERENCES into the arguments, so the same dangling trap as min/max applies if the arguments were temporaries and you keep the pair around (an anti-pattern here) -- prefer the initializer_list form or copy out the values. And minmax has a defined tie rule: if elements compare equal, min refers to the first and max to the last, which only matters when equal elements are distinguishable. For the extremes of a whole CONTAINER, the range counterpart is std::minmax_element, which returns iterators and does it in a single pass rather than the two you would spend on separate min_element and max_element calls."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::minmax", url: "https://en.cppreference.com/w/cpp/algorithm/minmax" }
+detailed_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+  - { name: "std::minmax_element", url: "https://en.cppreference.com/w/cpp/algorithm/minmax_element" }

@@ -1,4 +1,4 @@
 title: "nth_element / partial_sort"
 description: "Partial ordering: getting the k smallest, the top-k, or the kth element without sorting the whole range. std::nth_element places one element in its sorted position and partitions around it in O(n) average, std::partial_sort orders just the first k in O(n log k), and partial_sort_copy writes the top-k into a smaller output. Covers nth_element for a median, partial_sort for top-k, partial_sort_copy from a large input, a comparator for top-k by a key, and the C++20 ranges forms with a projection -- alongside the anti-patterns: a full sort to read the k smallest, expecting the range to be sorted after nth_element, using these to find a single extreme where min_element fits, and repeating nth_element for several order statistics a single sort would answer."
-sort_order: 86
+sort_order: 87
 category: "Algorithms"

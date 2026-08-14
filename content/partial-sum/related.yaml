@@ -5,3 +5,5 @@
   note: "The per-element map next to this per-prefix pass: transform produces one output from each input independently, where a scan carries a running result across elements -- go there for mapping a range and transform_reduce."
 - slug: "fill-generate"
   note: "The other way to lay down a sequence: iota writes consecutive numbers directly, where partial_sum builds a cumulative one and adjacent_difference recovers the steps -- go there for iota, fill, and generating a range."
+- slug: "clamp-minmax"
+  note: "The value-level operation a running max is built from: partial_sum with std::max as its operation turns the two-argument max into a cumulative high-water mark across a range -- go there for std::min/max/minmax on values, clamp, and comparators."

@@ -1,4 +1,4 @@
 title: "partition"
 description: "Splitting a range into the elements that satisfy a predicate and those that do not. std::partition rearranges them so the satisfying ones come first and returns the partition point, stable_partition does the same while preserving relative order, partition_copy writes the two groups to separate outputs, and partition_point binary-searches a partitioned range for the boundary. Covers the basic split, stable partitioning, splitting into two outputs, partition_point and is_partitioned, and the C++20 ranges forms with a projection -- alongside the anti-patterns: relying on the unspecified order within groups from plain partition, splitting with two copy_if passes instead of one partition_copy, calling partition_point on a range that is not partitioned, and using stable_partition when order does not matter."
-sort_order: 80
+sort_order: 81
 category: "Algorithms"

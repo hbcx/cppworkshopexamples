@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "min-max-element"
+  note: "The range counterpart to these value functions: min_element, max_element and minmax_element scan a whole container and return ITERATORS to the extreme elements, where std::min/max/minmax here compare a couple of arguments and return values -- go there for finding the largest element of a sequence."
+- slug: "sort"
+  note: "Where the same comparator idea scales up: the predicate you pass to std::min or std::max is exactly the one std::sort takes, so best-by-key and full ordering share a comparator -- go there for ordering a range, strict weak ordering, and stable_sort."
+- slug: "partial-sum"
+  note: "How to turn a value-level max into a running one: partial_sum with std::max as its operation produces a running maximum (a cumulative high-water mark) across a range -- go there for prefix sums, running extremes, and difference encoding."

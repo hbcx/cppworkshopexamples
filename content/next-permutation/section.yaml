@@ -1,4 +1,4 @@
 title: "next_permutation"
 description: "Stepping through the arrangements of a range. std::next_permutation rearranges into the next permutation in lexicographic order and returns false when it wraps from the last back to the first, so a do-while loop from the sorted range enumerates all n! orderings; prev_permutation steps the other way, and is_permutation tests whether two ranges hold the same elements in some order. Covers a single step, enumerating them all, prev_permutation and a comparator, is_permutation, and the C++20 ranges forms with a projection -- alongside the anti-patterns: enumerating without starting from the sorted range, brute-forcing a large set where n! explodes, using operator== instead of is_permutation for an order-independent comparison, and a while loop that skips the first permutation."
-sort_order: 84
+sort_order: 85
 category: "Algorithms"

@@ -1,0 +1,4 @@
+title: "min / max / clamp"
+description: "Comparing values, not ranges. std::min and std::max return the smaller or larger of two arguments (or of an initializer_list), std::minmax returns both at once as a pair, and std::clamp (C++17) bounds a value to [lo, hi] in one call. All four take an optional comparator, so best-by-key is a one-liner. Covers min and max on values and on a list, minmax for both bounds together, clamp as the clean replacement for max(lo, min(v, hi)), and using a custom comparator -- alongside the anti-patterns: keeping a reference to the result (it binds to a temporary and dangles), calling clamp with lo greater than hi (undefined), and clamping a floating-point value that might be NaN. These are the value algorithms; for the largest element of a whole range see min/max_element."
+sort_order: 77
+category: "Algorithms"

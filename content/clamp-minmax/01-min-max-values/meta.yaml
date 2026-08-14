@@ -1,0 +1,12 @@
+title: "min and max: the smaller or larger value"
+standard: "C++11"
+difficulty: 1
+summary: "std::min and std::max return the smaller or larger of their arguments -- two values, or a whole initializer_list in braces. They work on values, not ranges, and read clearer than a nested ternary while composing into the list form."
+notes: "std::min(a, b) and std::max(a, b) are the value-level comparison tools: they take a couple of arguments and hand back the smaller or larger one. The distinction that trips people up is VALUES versus RANGES -- std::min compares the arguments you give it, while std::min_element scans a container and returns an iterator; mixing them up gives std::max(front, back), which ignores everything in between (a separate anti-pattern in the min/max_element section). For more than two candidates, the initializer_list overload std::max({a, b, c, d}) finds the extreme of all of them in one call, which beats nesting max(a, max(b, ...)) or a chain of ifs. A ternary a < b ? b : a computes the same thing for two values, but min/max say the intent, extend to the list form, and -- importantly -- accept an optional comparator as a last argument, so you can find the min/max under any ordering (by absolute value, by a struct field, by string length), not just the built-in <. One nuance to carry to the anti-patterns: the two-argument form returns a const REFERENCE to whichever argument won, so keeping that reference around when the arguments were temporaries dangles; the initializer_list form returns by value instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::min", url: "https://en.cppreference.com/w/cpp/algorithm/min" }
+  - { name: "std::max", url: "https://en.cppreference.com/w/cpp/algorithm/max" }
+detailed_tags:
+  - { name: "std::initializer_list", url: "https://en.cppreference.com/w/cpp/utility/initializer_list" }

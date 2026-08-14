@@ -1,4 +1,4 @@
 title: "iter_swap / swap_ranges"
 description: "Exchanging values. std::swap swaps two objects (moving, not copying, when it can), iter_swap swaps what two iterators point at -- the building block of the rearranging algorithms -- and swap_ranges swaps two equal-length ranges element by element. Covers swap and the container member swap and using-std-swap idiom, iter_swap, swap_ranges, and a custom noexcept swap with the C++20 ranges form -- alongside the anti-patterns: hand-rolling a swap with a temporary copy, calling std::swap fully qualified so ADL cannot find a type's own swap, swap_ranges with a shorter second range, and expecting clear() to free memory where the swap-with-empty idiom is needed."
-sort_order: 87
+sort_order: 88
 category: "Algorithms"
