@@ -1,0 +1,11 @@
+title: "copy_backward: shift right through an overlap"
+standard: "C++11"
+difficulty: 2
+summary: "std::copy_backward copies a range into a destination ending at d_last, working from the back to the front. That order makes it the right tool for shifting a range toward higher positions within the same container, where a forward copy would overwrite elements it has not read yet."
+notes: "std::copy_backward(first, last, d_last) copies the elements of [first, last) into a destination that ENDS at d_last, and it does so from the last element toward the first. The reason to want that reverse order is overlap. When you shift a block to the RIGHT inside the same container, the source and destination ranges overlap and the destination is ahead of the source; a forward std::copy would write an early destination element on top of a source element it still needs to read, corrupting the result (the exact bug in the overlapping-forward-copy anti-pattern). copy_backward writes the tail first, so every source element is read before anything overwrites it, and the shift comes out correct. The argument that trips people is d_last: you pass the END of the destination, not its start, and the result lands in [d_last - (last - first), d_last). The rule for choosing among the three: use plain std::copy when the destination is entirely before the source or they do not overlap; use std::copy_backward when the destination overlaps and is AFTER the source (a right shift); and for either direction std::move / std::move_backward do the same relocation by moving instead of copying. For non-overlapping copies the direction never matters and copy is the clearer choice."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::copy_backward", url: "https://en.cppreference.com/w/cpp/algorithm/copy_backward" }
+detailed_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }

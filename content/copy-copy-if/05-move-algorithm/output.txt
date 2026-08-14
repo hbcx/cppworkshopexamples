@@ -1,0 +1,3 @@
+dest after move: [alpha] [beta] [gamma]
+source still has 3 (moved-from) elements
+after move_backward, last three: [a] [b] [c]

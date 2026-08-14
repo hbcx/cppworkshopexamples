@@ -1,0 +1,11 @@
+title: "move: relocate elements instead of copying"
+standard: "C++11"
+difficulty: 2
+summary: "std::move is std::copy that moves each element instead of copying it, handing over resources for expensive types and leaving the source moved-from. std::move_backward moves back to front, for shifting a range toward higher positions in place."
+notes: "std::move(first, last, out) is the moving counterpart of std::copy: it transfers each element to the destination with a move rather than a copy, so for elements that own resources -- strings, vectors, unique_ptrs -- it hands over the internal buffer instead of duplicating it, which is far cheaper and works for move-only types that cannot be copied at all. The cost is that the source elements are left in a valid but UNSPECIFIED moved-from state: the source range still has the same number of slots (move does not resize), but you must not rely on their values -- assign to them or destroy them, do not read them. Do not confuse this algorithm with std::move from <utility>, which is just a cast to an rvalue; the algorithm moves a whole RANGE. std::move_backward(first, last, d_last) moves the elements back to front, ending at d_last, which is exactly what you need to shift a range toward HIGHER indices within the same container: going front to back there would overwrite elements you have not moved yet, so the backward order avoids the clobber -- the move-family mirror of copy_backward. Reach for std::move when you are draining one container into another and will not need the source contents again (transferring ownership of pooled objects, emptying a staging buffer into permanent storage); use std::copy when the source must stay intact."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move (algorithm)", url: "https://en.cppreference.com/w/cpp/algorithm/move" }
+detailed_tags:
+  - { name: "std::move_backward", url: "https://en.cppreference.com/w/cpp/algorithm/move_backward" }
