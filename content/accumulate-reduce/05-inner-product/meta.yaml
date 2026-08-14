@@ -1,0 +1,12 @@
+title: "inner_product: fold over two ranges"
+standard: "C++11"
+difficulty: 2
+summary: "std::inner_product folds two ranges together: by default it multiplies matched elements and sums the products -- a dot product. A general form takes two operations, the outer combine and the inner pairing, so the same call computes weighted sums, similarity, or a count of matches."
+notes: "std::inner_product(first1, last1, first2, init) walks two ranges in step, and with the defaults it multiplies each matched pair and adds the products to init -- the dot product at the heart of linear algebra, weighted averages, and similarity measures. Like the three-argument std::equal it reads the second range from first2 only and assumes it is at least as long as the first, so the caller guarantees the length. The real power is the four-operation overload: inner_product(first1, last1, first2, init, combineOp, pairOp) replaces the outer + and the inner * with any two functions. Make the inner op == returning 0 or 1 and the outer op + and you count the positions where two ranges agree; make the inner op a distance and the outer op + and you get a sum of differences; other pairings give weighted scores or a running max of pairwise results. It is a strictly SEQUENTIAL, left-to-right fold with a defined order, which is the practical difference from its modern successor: std::transform_reduce (C++17) does the same dot-product and map-then-combine work but may run in parallel and reorder, so it needs an associative, commutative combine. Reach for inner_product when you want the classic two-range fold with ordered evaluation or are on pre-C++17; reach for transform_reduce when you want it parallelizable. The init type follows the same rule as accumulate -- pass 0.0 for a floating-point result, not 0."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::inner_product", url: "https://en.cppreference.com/w/cpp/algorithm/inner_product" }
+detailed_tags:
+  - { name: "std::transform_reduce", url: "https://en.cppreference.com/w/cpp/algorithm/transform_reduce" }
+  - { name: "std::plus", url: "https://en.cppreference.com/w/cpp/utility/functional/plus" }
