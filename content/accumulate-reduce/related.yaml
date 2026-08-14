@@ -11,3 +11,5 @@
   note: "The general per-element apply accumulate is often written as by hand: a for_each with a captured running total is really a fold, and accumulate states it -- go there for the plain visit and when a named algorithm beats a captured accumulator."
 - slug: "partial-sum"
   note: "The fold that keeps every step: where accumulate returns only the final total, partial_sum writes the running sum at each position -- go there for prefix-sum arrays, cumulative series, and delta encoding."
+- slug: "numeric-helpers"
+  note: "The value-level numeric helpers beside these range folds: gcd, lcm and midpoint operate on two numbers where accumulate and inner_product fold a whole range -- go there for reducing fractions, common periods, and overflow-safe averages."

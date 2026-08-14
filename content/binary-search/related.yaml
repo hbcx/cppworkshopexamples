@@ -9,3 +9,5 @@
   note: "The keyed lookup that does this natively: a std::map stores sorted key-value pairs and its member find, lower_bound and equal_range give O(log n) access without a parallel sorted vector -- go there for associative lookup by key."
 - slug: "merge-set-operations"
   note: "The other sorted-range family: where binary_search queries one sorted range, merge and set_union/intersection combine two in O(n+m) -- go there for combining sorted ranges by union, intersection, and difference."
+- slug: "numeric-helpers"
+  note: "How to compute the middle index safely: std::midpoint bisects an interval without the (low + high) / 2 overflow that has bitten binary search for decades -- go there for midpoint, gcd, and lcm."

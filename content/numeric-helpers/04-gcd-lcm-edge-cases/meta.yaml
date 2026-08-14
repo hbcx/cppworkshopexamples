@@ -1,0 +1,11 @@
+title: "Anti-pattern: gcd and lcm at the edges"
+standard: "C++17"
+difficulty: 3
+summary: "gcd(0, 0) is 0 and lcm with a zero argument is 0, so using either result as a divisor or denominator can divide by zero. And lcm overflows for large coprime inputs -- undefined for signed types -- so it needs a wide enough type or an overflow check."
+notes: "gcd and lcm have two sharp edges that quiet, plausible-looking code walks straight into. First, the ZERO cases: std::gcd(0, 0) is defined to be 0, and std::lcm(x, 0) is 0 for any x. Both are mathematically sensible, but they bite when the result is used as a divisor -- reducing a fraction by dividing numerator and denominator by their gcd, or using an lcm as a common denominator -- because a 0 there is a division by zero. Guard for it when the inputs can be zero. Second, OVERFLOW: lcm(a, b) is computed as a / gcd(a, b) * b, and for large coprime values that product easily exceeds the integer type -- lcm of two numbers near a billion is about 1e18, far past a 32-bit int. For unsigned types that wraps to a wrong answer; for signed types it is undefined behaviour, which the example only describes rather than runs. The fixes are to compute in a wide enough type (promote to long long or a 64-bit type before the call, as shown) and, where inputs are unbounded, to check that a / gcd(a, b) will not overflow when multiplied by b. The general lesson: gcd and lcm are exact integer operations with no saturation and no error signal, so the caller owns both the zero edge and the overflow edge."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::lcm", url: "https://en.cppreference.com/w/cpp/numeric/lcm" }
+detailed_tags:
+  - { name: "std::gcd", url: "https://en.cppreference.com/w/cpp/numeric/gcd" }

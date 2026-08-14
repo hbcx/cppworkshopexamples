@@ -1,0 +1,15 @@
+- problem: "Fractions or ratios must be kept in lowest terms -- a rational-number type, an aspect ratio like 1920x1080 reduced to 16:9, gear or timing ratios normalized so equal ratios compare equal."
+  why: "std::gcd reduces a fraction in one step by dividing both parts by their greatest common divisor, where a hand-written Euclidean loop is easy to get wrong on signs or the zero case; normalizing also lets two ratios be compared or hashed as equal when they are equal."
+  signal: "A numerator and denominator carried around unreduced, or a hand-rolled while loop computing a gcd before simplifying."
+
+- problem: "Two periodic processes must be synchronized -- when do a 4-tick and a 6-tick animation line up, when do two cron-like schedules coincide, what buffer size is a common multiple of several frame sizes."
+  why: "std::lcm gives the exact period at which the cycles realign, the correct answer to 'every how many steps', where guessing or looping until they happen to match is slower and easy to bound wrong; it is also the common denominator for adding fractions."
+  signal: "A loop stepping two counters until they are equal again to find a common period, or a common-denominator computed by multiplying denominators (which overshoots) instead of their lcm."
+
+- problem: "The middle of an index or pointer range must be computed in a binary search, a tree walk, or a divide-and-conquer split, and the endpoints can be large."
+  why: "std::midpoint computes the middle without forming low + high, removing the overflow that made mid = (low + high) / 2 a real, long-lived binary-search bug; it also works directly on two pointers into the same array."
+  signal: "mid = (low + high) / 2 over indices or pointers that could be large, the classic overflow-prone bisection."
+
+- problem: "Two values must be averaged where their sum could exceed the type even though the average would not -- midpoints of large timestamps, blending two big counters, halfway between two positions near the type's limit."
+  why: "std::midpoint returns the halfway value without ever adding the two, so it is correct where (a + b) / 2 wraps (unsigned) or is undefined (signed); it also rounds by a defined rule instead of the ad-hoc truncation of a hand-written average."
+  signal: "An (a + b) / 2 average over values that can be large, especially timestamps, offsets, or accumulators near the type maximum."

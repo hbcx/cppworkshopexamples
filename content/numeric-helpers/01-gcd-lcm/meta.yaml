@@ -1,0 +1,11 @@
+title: "gcd and lcm: divisors and multiples"
+standard: "C++17"
+difficulty: 1
+summary: "std::gcd returns the greatest common divisor and std::lcm the least common multiple of two integers (C++17). gcd reduces a fraction to lowest terms; lcm gives a common denominator or the period at which two cycles coincide."
+notes: "std::gcd(a, b) and std::lcm(a, b), added to <numeric> in C++17, are the two classic number-theory helpers. gcd is the greatest common divisor -- the largest integer dividing both -- and its everyday use is reducing a fraction: divide numerator and denominator by their gcd to reach lowest terms, which is how rational arithmetic, aspect ratios, and gear or timing ratios are normalized. lcm is the least common multiple -- the smallest integer both divide into -- which answers when two periodic things line up (events every 4 and every 6 ticks coincide every 12) and gives the common denominator for adding fractions. The two are linked: lcm(a, b) is a / gcd(a, b) * b, and the library computes it that way (dividing before multiplying to reduce, though the product can still overflow -- an anti-pattern here). Both take mixed integer types, and both ignore the sign of their arguments, returning a non-negative result, so gcd(-12, 18) is 6. Two edge cases to remember, covered later: gcd(0, 0) is 0, and lcm with a zero argument is 0. Before C++17 you wrote the Euclidean loop by hand; now reach for the standard functions."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::gcd", url: "https://en.cppreference.com/w/cpp/numeric/gcd" }
+  - { name: "std::lcm", url: "https://en.cppreference.com/w/cpp/numeric/lcm" }
+detailed_tags: []

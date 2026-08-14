@@ -1,0 +1,5 @@
+midpoint(2, 8) = 5
+midpoint(1, 4) = 2
+midpoint(4, 1) = 3
+midpoint(1.0, 2.0) = 1.5
+middle element = 40

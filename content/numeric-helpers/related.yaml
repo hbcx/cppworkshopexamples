@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "clamp-minmax"
+  note: "The other value-level numeric helpers: std::min/max/clamp bound and compare single values where gcd/lcm/midpoint compute on them, and both families are the scalar counterpart to the range algorithms -- go there for comparing values, bounding to a range, and best-by-key."
+- slug: "binary-search"
+  note: "Where midpoint earns its keep: bisecting a sorted range needs a middle index, and midpoint computes it without the (low + high) overflow that has bitten binary search for decades -- go there for lower_bound, upper_bound, and searching sorted data."
+- slug: "accumulate-reduce"
+  note: "The range-level numeric folds next to these value-level helpers: accumulate and reduce collapse a whole range to one number, where gcd/lcm/midpoint operate on two values -- go there for sums, custom folds, and inner_product."

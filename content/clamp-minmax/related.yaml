@@ -5,3 +5,5 @@
   note: "Where the same comparator idea scales up: the predicate you pass to std::min or std::max is exactly the one std::sort takes, so best-by-key and full ordering share a comparator -- go there for ordering a range, strict weak ordering, and stable_sort."
 - slug: "partial-sum"
   note: "How to turn a value-level max into a running one: partial_sum with std::max as its operation produces a running maximum (a cumulative high-water mark) across a range -- go there for prefix sums, running extremes, and difference encoding."
+- slug: "numeric-helpers"
+  note: "The other value-level numeric helpers: gcd and lcm reduce fractions and find common periods, and midpoint averages two values without the overflow of (a + b) / 2 -- the same scalar, two-argument shape as min/max/clamp -- go there for gcd, lcm, and safe midpoints."

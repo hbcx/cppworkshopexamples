@@ -1,0 +1,10 @@
+title: "Anti-pattern: averaging with (a + b) / 2"
+standard: "C++20"
+difficulty: 3
+summary: "(a + b) / 2 forms the sum first, which overflows when the two values are large even if their average fits. For unsigned it wraps to a wrong result; for signed it is undefined behaviour. std::midpoint computes the halfway value without ever adding the two."
+notes: "The textbook way to average two numbers, (a + b) / 2, has a bug that only shows up at scale: it computes the SUM before the division, and that intermediate sum can overflow the type even when the average itself fits comfortably. With unsigned integers the overflow is a defined wraparound to a small wrong value (as the example shows with two values near 4 billion); with signed integers it is undefined behaviour, which is worse because the compiler may assume it cannot happen. This is not a theoretical concern -- it is the famous bug that lurked for years in binary search implementations, where mid = (low + high) / 2 overflowed once the array indices grew large enough. The fixes: std::midpoint(a, b) (C++20) computes the halfway point directly and never forms a + b, so it cannot overflow and it works for integers, floats, and pointers; the older hand-written form low + (high - low) / 2 also avoids the sum and is the standard fix in pre-C++20 code. Reach for std::midpoint anywhere you average two values or bisect a range, and treat a raw (a + b) / 2 over values that could be large as a latent overflow bug."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::midpoint", url: "https://en.cppreference.com/w/cpp/numeric/midpoint" }
+detailed_tags: []

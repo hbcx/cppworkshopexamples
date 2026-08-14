@@ -1,0 +1,10 @@
+title: "midpoint: a safe average of two values"
+standard: "C++20"
+difficulty: 2
+summary: "std::midpoint (C++20) returns the value halfway between two numbers without ever forming a + b, so it cannot overflow. It works on integers (rounding toward the first argument), floating point, and even two pointers into the same array."
+notes: "std::midpoint(a, b) (C++20, in <numeric>) computes the point halfway between a and b, and its whole reason to exist is that it does this WITHOUT the overflow that (a + b) / 2 suffers: it never forms the sum a + b, so it is correct even when both values sit near the type's maximum. For integer types it rounds toward the FIRST argument, so midpoint(1, 4) is 2 and midpoint(4, 1) is 3 -- a defined, documented rounding rule rather than the implementation-defined truncation of a hand-written average. It also works on floating-point values, and, usefully, on two POINTERS into the same array, where it returns the pointer halfway between them -- which is exactly the safe way to pick the middle of a binary-search interval, replacing the historically buggy mid = (low + high) / 2 that overflowed on large indices. Prefer std::midpoint anywhere you would average two numbers or bisect a range: it removes a whole class of overflow bugs for one clear call. The related std::lerp linearly interpolates between two values by a factor, for when you want a point other than the exact middle."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::midpoint", url: "https://en.cppreference.com/w/cpp/numeric/midpoint" }
+detailed_tags: []

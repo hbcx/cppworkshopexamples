@@ -1,0 +1,2 @@
+naive (a + b) / 2 = 1352516352   <- wrong, sum overflowed
+std::midpoint(a, b) = 3500000000

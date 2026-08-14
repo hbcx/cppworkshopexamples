@@ -1,0 +1,4 @@
+title: "gcd / lcm / midpoint"
+description: "Small numeric helpers from <numeric> that work on values, not ranges. std::gcd and std::lcm (C++17) give the greatest common divisor and least common multiple -- for reducing fractions and finding common periods -- and std::midpoint (C++20) computes the average of two numbers (or the midpoint of two pointers) without the overflow that (a + b) / 2 suffers. Covers gcd and lcm, and midpoint on integers and pointers -- alongside the anti-patterns: averaging with (a + b) / 2 where the sum overflows, and the surprising edge cases of gcd and lcm at zero and their overflow on large inputs."
+sort_order: 94
+category: "Algorithms"
