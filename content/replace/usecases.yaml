@@ -1,0 +1,15 @@
+- problem: "A dataset uses a sentinel to mark missing or special entries -- a -1 for no reading, 9999 for unset, an empty marker -- and before analysis those placeholders must become a real default like zero or a computed mean."
+  why: "std::replace substitutes every sentinel in one pass and keeps the element count, which matters when the data lines up with a parallel array or a fixed schema; deleting the placeholders instead (the reflex to remove them) would shift everything and break that alignment."
+  signal: "A loop scanning for a magic value and overwriting it, or a column of data where a known placeholder should be normalized before it is summed or averaged."
+
+- problem: "Values must be forced into a valid band before processing -- negative quantities floored to zero, outliers capped at a limit, readings outside a sensor's range pinned to the nearest bound."
+  why: "std::replace_if rewrites only the elements that fail the rule and leaves the rest exactly as they are, saying only the out-of-range ones change; a std::transform over the whole range would need a mostly-identity lambda that obscures which elements are actually being corrected."
+  signal: "A transform whose lambda returns the input unchanged for most cases and a clamped value for a few, or scattered if (x < lo) x = lo; corrections."
+
+- problem: "A cleaned or redacted version of data is needed for display, export, or logging, while the original must stay exactly as received for storage or audit."
+  why: "std::replace_copy and replace_copy_if produce the substituted result in a new range in a single pass and leave the source untouched, where copying first and then replacing in place is two passes and an extra mutation step that can be forgotten."
+  signal: "Code that copies a container and then runs replace on the copy, or that mutates data in place and separately tries to keep the original around."
+
+- problem: "Characters of a certain class must be masked in text -- digits in an account number turned to asterisks, control or non-printable bytes replaced with a placeholder, whitespace normalized."
+  why: "std::replace_copy_if with a ctype predicate masks by character class in one pass into the output, keeping the source; a hand-written character loop repeats the traversal and the append logic and is easy to get subtly wrong on edge characters."
+  signal: "A manual per-character loop that tests each character and appends either it or a mask to a result string."

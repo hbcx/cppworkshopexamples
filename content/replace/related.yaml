@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "transform"
+  note: "The general form replace is a special case of: transform rewrites every element through a function, where replace/replace_if only rewrite the ones matching a value or predicate -- go there when the new value is COMPUTED from the old rather than a fixed substitute, and for map-into-a-new-range."
+- slug: "remove-erase"
+  note: "The other half of the substitute-versus-drop pair: replace keeps every element and rewrites some, remove deletes the matches and shortens the range via the erase-remove idiom -- go there when you mean to drop elements, not relabel them, and for remove_if and erase_if."
+- slug: "fill-generate"
+  note: "The write-values siblings: fill sets a whole range to one value and generate to a produced one, where replace overwrites only selected elements -- go there for initializing or overwriting a range wholesale rather than conditionally."

@@ -1,0 +1,11 @@
+title: "replace_if: substitute by condition"
+standard: "C++11"
+difficulty: 2
+summary: "std::replace_if overwrites every element for which a predicate returns true, in place. It generalizes replace from an exact value to any condition -- floor negatives to zero, cap outliers at a threshold, blank invalid entries."
+notes: "std::replace_if(first, last, pred, new_value) is replace with a predicate instead of a fixed value: every element for which pred returns true is overwritten with new_value, the rest are left alone, and the range keeps its size. This is the tool for sanitizing by RULE rather than by exact match -- flooring negatives to zero, capping values above a limit, replacing anything outside a valid band with a default, blanking entries that fail a check. The predicate is an ordinary unary test, often a lambda, so it can look at whatever property matters. Two neighbours to keep in view. std::replace_if versus std::transform: transform can also rewrite every element, but you would have to write a lambda that returns the unchanged value for non-matches, which is noisier and hides the intent; replace_if says exactly only the elements matching this condition change. And versus std::remove_if: remove_if DROPS matching elements and shortens the range (via the erase-remove idiom), while replace_if keeps them and rewrites their value -- substitute versus delete, a distinction worth being deliberate about. Like replace it mutates in place and returns nothing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::replace_if", url: "https://en.cppreference.com/w/cpp/algorithm/replace" }
+detailed_tags:
+  - { name: "std::replace", url: "https://en.cppreference.com/w/cpp/algorithm/replace" }

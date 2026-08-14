@@ -1,0 +1,2 @@
+via back_inserter: 20 0 22 0 25
+pre-sized dest:    20 0 22 0 25

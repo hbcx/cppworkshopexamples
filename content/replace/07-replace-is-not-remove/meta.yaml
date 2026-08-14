@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting replace to remove elements"
+standard: "C++11"
+difficulty: 3
+summary: "replace and replace_copy substitute one-for-one, so the length never changes -- there is no replace with nothing. To DROP matching elements use the erase-remove idiom in place, or remove_copy for a shorter copy."
+notes: "replace answers substitute this value with that one, and its defining property is that it is one-for-one: every element stays, some just change value, so the range is exactly as long afterwards. People reach for it expecting to DELETE the matching elements -- replace the 0s with nothing -- and there is no such thing; the size does not move, and if you substitute a value like -1 you have merely relabelled the elements, not removed them. Dropping elements is a different operation with different tools. In place, the erase-remove idiom -- container.erase(std::remove(first, last, value), last) -- compacts the survivors to the front and then erase actually shrinks the container. Into a copy, std::remove_copy writes every element EXCEPT the matches to an output, yielding a shorter result while the source is untouched (and std::remove_copy_if for a predicate). The distinction is worth being deliberate about because both compile and both run: choosing replace when you meant remove leaves phantom elements in the data, and choosing remove when you meant replace throws away information you wanted to keep. Rule of thumb: replace/replace_if keep the count and rewrite values; remove/remove_if change the count and drop elements."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::replace", url: "https://en.cppreference.com/w/cpp/algorithm/replace" }
+detailed_tags:
+  - { name: "std::remove", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }

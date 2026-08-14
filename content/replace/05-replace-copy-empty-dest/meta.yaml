@@ -1,0 +1,11 @@
+title: "Anti-pattern: replace_copy into an empty destination"
+standard: "C++11"
+difficulty: 3
+summary: "replace_copy writes through an output iterator and does not allocate. Passing an empty vector's begin() writes past its end -- undefined behaviour. Use a back_inserter so the destination grows, or pre-size it to the input length."
+notes: "This is the copy family's output-iterator trap, and replace_copy shares it. The algorithm copies each element to the destination through a plain output iterator; it has no idea how big the destination is and it does NOT resize it. So std::replace_copy(src.begin(), src.end(), out.begin(), ...) with an empty out writes to out.begin(), which equals out.end(), and every store is past the end -- undefined behaviour that frequently appears to work because the freshly constructed vector has spare capacity the writes happen to fall into, then corrupts memory or crashes once the sizes line up differently. Two correct forms. Use std::back_inserter(out): it turns each write into a push_back, so the destination grows to fit and you can start from empty -- the usual default. Or pre-size the destination to at least the input length (std::vector<int> out(src.size())) and write to out.begin(), which is right when you know the count and want to avoid the inserter's per-element growth. Because replace_copy is one-for-one, the needed size is exactly the input size -- no more, no less. The same rule governs std::copy, std::transform, and every _copy algorithm: the destination must have room, whether pre-sized or via an inserter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::replace_copy", url: "https://en.cppreference.com/w/cpp/algorithm/replace_copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

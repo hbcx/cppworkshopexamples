@@ -1,0 +1,10 @@
+title: "replace: swap one value for another"
+standard: "C++11"
+difficulty: 1
+summary: "std::replace overwrites every element equal to a given value with a new value, in place, in one pass. It changes only the matching elements and never resizes the range -- the classic use is turning a sentinel like -1 into a real default."
+notes: "std::replace(first, last, old_value, new_value) walks the range once and assigns new_value to every element that equals old_value, leaving the rest untouched. It works in place and returns nothing -- the range you pass is mutated. The defining property, and what separates this whole family from remove, is that it SUBSTITUTES without resizing: the number of elements is exactly the same afterwards, only some values changed. That makes it the right tool for normalizing sentinel or placeholder values -- a -1 or 9999 standing for missing data becomes 0 or a computed default, an old code becomes a new one, a deprecated flag value is migrated. Comparison is by ==, so replacing a value that is expensive or imprecise to compare (a floating-point number) has the usual pitfalls covered in an anti-pattern here. If you want to replace based on a CONDITION rather than an exact value, reach for std::replace_if; if you want the result in a new container without changing the source, std::replace_copy. A hand-written loop does the same thing, but replace states the intent in one line and cannot get the traversal wrong."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::replace", url: "https://en.cppreference.com/w/cpp/algorithm/replace" }
+detailed_tags: []

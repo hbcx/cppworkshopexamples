@@ -1,0 +1,11 @@
+title: "replace_copy: substitute into a new range"
+standard: "C++11"
+difficulty: 2
+summary: "std::replace_copy writes the range to a new destination, substituting a value as it copies, and leaves the source unchanged. The output is always the same length as the input -- one element in, one out."
+notes: "std::replace_copy(first, last, out, old_value, new_value) is the non-mutating form of replace: instead of overwriting the source, it copies each element to the output range, substituting new_value wherever it sees old_value, and leaves the original untouched. Reach for it when you must keep the source intact -- producing a normalized or redacted view for display or export while the raw data stays as it was, or writing a cleaned stream to a file. Two practical points. Like std::copy, it writes through an output iterator and does NOT allocate: the destination must either be pre-sized to hold the results or, more commonly, be a std::back_inserter so it grows to fit -- writing into an empty vector through begin() overruns it (an anti-pattern here). And the output is always exactly as long as the input, because replace_copy substitutes one-for-one; it never drops or adds elements. That one-for-one length is the line between this and remove_copy, which omits the matching elements and yields a shorter result. There is also std::replace_copy_if for the predicate version. The output iterator can be an inserter, another container's begin, or an ostream_iterator to write straight to a stream."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::replace_copy", url: "https://en.cppreference.com/w/cpp/algorithm/replace_copy" }
+detailed_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

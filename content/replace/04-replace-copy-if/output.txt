@@ -1,0 +1,3 @@
+original: user 42 paid 1500
+masked:   user ** paid ****
+to stream: user_42_paid_1500

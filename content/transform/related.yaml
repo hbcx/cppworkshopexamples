@@ -15,3 +15,5 @@
   note: "The write-only siblings that read no input: fill sets a constant and generate calls a nullary function per element, where transform maps an existing value -- go there for initializing and building ranges from nothing."
 - slug: "partial-sum"
   note: "The cumulative cousin: transform maps each element independently, where partial_sum carries a running total across them and adjacent_difference reports the steps between -- go there for prefix sums and delta encoding."
+- slug: "replace"
+  note: "The special case where the map only touches some elements: replace and replace_if rewrite the elements matching a value or condition, where transform rewrites every one through a function -- go there for substituting sentinels, clamping by rule, and the copying versions."

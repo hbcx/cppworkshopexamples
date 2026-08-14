@@ -1,0 +1,11 @@
+title: "Anti-pattern: replacing a floating-point value by equality"
+standard: "C++11"
+difficulty: 3
+summary: "std::replace matches the old value with ==, which for floating-point is exact equality: it misses computed values that are off by rounding, and never matches NaN because NaN == NaN is false. Use replace_if with a tolerance or std::isnan predicate."
+notes: "std::replace finds what to substitute using ==, and for floating-point that is a problem twice over. First, exact equality: a value produced by arithmetic is rarely bit-for-bit equal to the literal you would compare against -- 0.1 + 0.2 is not the double 0.3 -- so std::replace(v, 0.3, x) silently skips the computed one and leaves your data unchanged where it most needed fixing. Second, NaN: every comparison with NaN is false, including NaN == NaN, so std::replace can NEVER match a NaN, and a call meant to scrub NaNs does nothing at all. Both failures are quiet -- the code runs, the size is right, the bad values simply remain. The fix is std::replace_if with a predicate that expresses what you actually mean: std::fabs(x - target) < eps to catch values within a tolerance, and std::isnan(x) to catch the NaN that equality cannot. As always with floating-point, choosing eps is a real decision (absolute versus relative tolerance, and the scale of the data), which is exactly why the bare == of std::replace is the wrong tool for floats and the comparison has to be made explicit. The same reasoning applies to std::find, std::count, and anything else that locates a float by equality."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::replace_if", url: "https://en.cppreference.com/w/cpp/algorithm/replace" }
+detailed_tags:
+  - { name: "std::replace", url: "https://en.cppreference.com/w/cpp/algorithm/replace" }

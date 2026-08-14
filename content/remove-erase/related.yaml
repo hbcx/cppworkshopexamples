@@ -13,3 +13,5 @@
   note: "Moving elements instead of deleting them: rotate repositions an element or block in one in-place pass, the tool to reach for instead of erase+insert -- go there for reordering, move-to-front, and reversing."
 - slug: "partition"
   note: "The other rearrange-and-return-a-point algorithm: partition splits a range by a predicate and returns the boundary, as remove compacts and returns the new end -- go there for two-group splits in place."
+- slug: "replace"
+  note: "The substitute to this drop: replace and replace_if rewrite the matching elements and keep the length, where remove deletes them and shortens the range -- go there when you mean to relabel values rather than remove them, and for the copying forms."

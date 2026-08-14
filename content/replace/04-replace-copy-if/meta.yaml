@@ -1,0 +1,11 @@
+title: "replace_copy_if: the predicate copy"
+standard: "C++11"
+difficulty: 2
+summary: "std::replace_copy_if copies a range to a new destination, substituting every element that matches a predicate, and leaves the source unchanged. It is the copying, condition-based member of the family -- masking digits, redacting a field, cleaning a stream."
+notes: "std::replace_copy_if(first, last, out, pred, new_value) completes the family: it is the copying version of replace_if, or equally the predicate version of replace_copy. Each element is copied to the output; wherever pred returns true, new_value is written instead. The source is untouched and the output is one-for-one the same length, exactly as with replace_copy. This is the natural tool for producing a sanitized or redacted COPY by rule -- masking every digit in a log line with an asterisk, blanking characters that fail a validity test, censoring a token class -- while keeping the original intact for storage or auditing. The output iterator is anything the copy family accepts: a std::back_inserter to grow a container, another range's begin if it is already big enough, or a std::ostream_iterator to write the transformed result straight to a stream in one pass. When masking characters, cast to unsigned char before the ctype predicates like std::isdigit, since passing a negative char is undefined. Choosing among the four is mechanical: value or condition picks replace vs replace_if, and in place or into a copy picks the plain name vs the _copy suffix."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::replace_copy_if", url: "https://en.cppreference.com/w/cpp/algorithm/replace_copy" }
+detailed_tags:
+  - { name: "std::ostream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/ostream_iterator" }

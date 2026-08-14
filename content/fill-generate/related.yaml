@@ -13,3 +13,5 @@
   note: "The cumulative counterpart to iota's straight count: partial_sum builds a running sum and adjacent_difference recovers the steps, the inverse pair behind delta encoding -- go there for prefix sums and difference encoding."
 - slug: "sample-shuffle"
   note: "Filling a range with random values pairs with reordering and selecting them: generate with a captured mt19937 writes random numbers, then shuffle randomizes an order and sample picks a random subset -- go there for the random engine, seeding, and unbiased selection."
+- slug: "replace"
+  note: "The conditional counterpart to writing a whole range: fill and generate overwrite every element, where replace and replace_if overwrite only the ones matching a value or predicate -- go there for substituting sentinels and cleaning selected values."

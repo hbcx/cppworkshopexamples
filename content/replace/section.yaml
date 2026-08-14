@@ -1,0 +1,4 @@
+title: "replace / replace_if"
+description: "Substituting values in a range. std::replace swaps every element equal to some value for a new one, replace_if does the same for every element matching a predicate, and the replace_copy pair writes the substituted result to a new range instead of changing the source. They substitute in place without resizing -- the length never changes, which is exactly what separates them from remove. Covers replacing by value, replacing by condition, and the copying versions -- alongside the anti-patterns: writing replace_copy into an empty destination with no inserter, replacing a floating-point value by exact equality, and expecting replace to drop elements the way remove does."
+sort_order: 93
+category: "Algorithms"
