@@ -244,6 +244,42 @@ def to_compiler_path(p, flavor: str) -> str:
     return p
 
 
+# --- sanitizer capability (per compiler) ------------------------------------
+# A sanitizer requested in meta.yaml is only usable if the compiler can actually
+# build+link with it. ThreadSanitizer in particular does NOT exist on the Windows
+# toolchains -- native mingw g++ has no libtsan (-ltsan is missing) and Cygwin
+# clang rejects the flag outright ("unsupported option for target ...-cygnus").
+# So on those a concurrency example tagged `sanitizers: [thread]` would fail to
+# build even though its code is fine. We probe each (compiler, sanitizer) once by
+# compiling a trivial TU; unsupported ones are dropped for THAT compiler, which
+# lets it still build and RUN the example (real threads, just no race detector),
+# while a sanitizer-capable toolchain (Linux g++/clang locally under WSL, and CI)
+# runs it under the sanitizer for the real correctness check. Flavor detection
+# cannot decide this: native mingw reports the same "native" flavor as Linux.
+_san_cache: dict = {}
+
+
+def sanitizer_supported(cc: str, san: str) -> bool:
+    key = (cc, san)
+    if key not in _san_cache:
+        flavor = compiler_flavor(cc)
+        tmpdir = Path(tempfile.mkdtemp(prefix="cppws_santest_"))
+        try:
+            src = tmpdir / "probe.cpp"
+            src.write_text("int main() { return 0; }\n")
+            out = tmpdir / ("probe" + EXE_SUFFIX)
+            cmd = [cc, f"-fsanitize={san}",
+                   to_compiler_path(src, flavor), "-o", to_compiler_path(out, flavor)]
+            try:
+                r = subprocess.run(cmd, capture_output=True, text=True)
+                _san_cache[key] = (r.returncode == 0)
+            except OSError:
+                _san_cache[key] = False
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
+    return _san_cache[key]
+
+
 def sanitizer_run_env() -> dict:
     env = os.environ.copy()
     # Make any sanitizer report abort with a non-zero exit so run: true fails.
@@ -323,8 +359,21 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
     run_stdouts: list[tuple[str, str]] = []
 
     for cc in compilers:
+        # Drop any requested sanitizer this compiler cannot provide (e.g. thread
+        # on the Windows toolchains), so it still builds and runs the example; a
+        # sanitizer-capable toolchain (Linux/WSL, CI) does the real check.
+        eff_sanitizers = sanitizers
+        if sanitizers:
+            eff_sanitizers = [s for s in sanitizers if sanitizer_supported(cc, s)]
+            dropped = [s for s in sanitizers if s not in eff_sanitizers]
+            if dropped:
+                res.warnings.append(
+                    f"{cc}: sanitizer(s) {','.join(dropped)} unsupported here, "
+                    "built without them (run under a sanitizer-capable toolchain "
+                    "-- Linux g++/clang or CI -- for the real check)")
+
         out = build_root / f"{ex.section}__{ex.slug}__{cc.replace('/', '_')}{EXE_SUFFIX}"
-        cmd = compile_cmd(cc, std_flag, ex, sources, out, sanitizers, werror)
+        cmd = compile_cmd(cc, std_flag, ex, sources, out, eff_sanitizers, werror)
 
         if args.dry_run:
             res.warnings.append(f"[dry-run] {cc}: {' '.join(cmd)}"
@@ -340,11 +389,11 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
         # Optional negative check: one standard lower should NOT compile if the
         # example genuinely requires its declared version. Never fatal.
         if args.std_lower_check:
-            _lower_check(res, cc, ex, sources, standard, sanitizers, werror,
+            _lower_check(res, cc, ex, sources, standard, eff_sanitizers, werror,
                          build_root)
 
         if run:
-            renv = sanitizer_run_env() if sanitizers else None
+            renv = sanitizer_run_env() if eff_sanitizers else None
             # A benchmark legitimately runs for minutes (many sizes x samples).
             limit = 900 if bench else 60
             try:
@@ -354,7 +403,7 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
                 res.failures.append(f"{cc}: run timed out ({limit}s)")
                 continue
             if rp.returncode != 0:
-                reason = "sanitizer report" if sanitizers else "non-zero exit"
+                reason = "sanitizer report" if eff_sanitizers else "non-zero exit"
                 res.failures.append(
                     f"{cc}: run failed ({reason}, exit {rp.returncode})\n"
                     + _indent((rp.stderr or rp.stdout)))
