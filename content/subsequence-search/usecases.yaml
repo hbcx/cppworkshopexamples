@@ -1,0 +1,15 @@
+- problem: "A byte or token pattern must be located inside a larger buffer or stream -- a delimiter sequence, a record separator, a magic-number header that marks the start of a frame in binary data."
+  why: "std::search finds the whole ordered pattern in one call and handles the restart logic when a partial match fails, where a hand-written nested loop has to back up and retry on every near-miss and is a classic source of off-by-one and missed-overlap bugs."
+  signal: "A nested loop comparing a buffer against a fixed pattern element by element, with manual index reset when a partial match breaks."
+
+- problem: "The LAST occurrence of a pattern is the meaningful one -- the final record separator in a buffer, the last boundary marker in a multipart body, the most recent instance of a token in a log scanned front to back."
+  why: "std::find_end reports the last match directly, where getting it from std::search means either scanning repeatedly past each hit or reversing the range and translating the iterators back -- both fiddlier and easy to get wrong at the boundary."
+  signal: "Code that loops calling search from just past the previous match to reach the final one, or reverses a range only to search it."
+
+- problem: "A scanner must stop at the next of several possible characters -- a tokenizer looking for whichever delimiter comes first, input validation looking for the first disallowed character out of a set."
+  why: "std::find_first_of matches the first element belonging to a set in a single pass, where chaining several std::find calls (one per candidate) makes multiple passes and then has to compare their positions to pick the earliest."
+  signal: "Several find calls for different characters whose results are compared with std::min to find which came first, or a loop testing each element against a short if-chain of alternatives."
+
+- problem: "A sustained condition or a repeat must be detected in a series -- N identical failures in a row before raising an alarm, a stuck sensor repeating a reading, the point a monotonic sequence first turns down."
+  why: "std::search_n finds a run of N consecutive matches and std::adjacent_find finds the first neighbouring pair (equal, or breaking a trend) in one pass, where a manual counter loop that resets on every non-match is exactly the code these replace and the place the reset logic tends to be wrong."
+  signal: "A loop with a consecutive-hit counter that resets to zero on any miss, or hand-written comparison of each element with the previous one to spot a repeat or a direction change."

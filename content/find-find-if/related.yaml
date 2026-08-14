@@ -19,3 +19,5 @@
   note: "The O(log n) search for a sorted range: binary_search and lower_bound replace find's linear scan once the data is sorted, giving position, count, and insertion point -- go there for searching sorted data and when sorting first pays off."
 - slug: "mismatch-equal"
   note: "The two-range version of the same walk: where find_if scans one range for a match, mismatch scans two together for the first place they differ, and both must check the returned iterator against end before reading it -- go there for equal, mismatch, and lexicographical ordering."
+- slug: "subsequence-search"
+  note: "The step up from one element to a pattern: find locates a single value where search finds a whole subsequence, find_end its last occurrence, and find_first_of the first element from a set -- go there for pattern search, runs, and the any-of-a-set scan."

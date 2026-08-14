@@ -1,0 +1,3 @@
+find_first_of found 7 after 957 element comparisons
+hash-set scan visited: 20 elements
+both found value: 7

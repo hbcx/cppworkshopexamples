@@ -1,0 +1,3 @@
+adjacent_find says no duplicates? true   <- misleading
+after sorting, duplicate found? true
+hash-set says any duplicate? true

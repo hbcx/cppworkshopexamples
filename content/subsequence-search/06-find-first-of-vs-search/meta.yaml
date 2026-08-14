@@ -1,0 +1,11 @@
+title: "Anti-pattern: confusing find_first_of with search"
+standard: "C++11"
+difficulty: 3
+summary: "std::search looks for the second range as an ordered contiguous block; std::find_first_of treats it as a set and matches any single member. Swapping them compiles and silently gives the wrong answer."
+notes: "These two take the same argument shape -- a haystack range and a second range -- but ask completely different questions, and using one where you meant the other is a quiet logic bug because it still compiles and runs. std::search looks for the second range as an ORDERED, contiguous subsequence: search for cba finds the letters c, b, a appearing in that order, back to back. std::find_first_of treats the second range as an unordered SET of candidates and returns the first haystack element that equals ANY of them: find_first_of with cba returns the first a, b, or c, whichever comes first. In the example the haystack holds abc, so find_first_of finds the a immediately while search for the block cba finds nothing -- opposite answers from the same inputs. The rule: use std::search when order and adjacency matter (a byte pattern, a token sequence, a magic-number header), and std::find_first_of when you want the first element belonging to a set (the next of several delimiters, the first vowel, the first control byte). The mistake usually goes one way -- passing a set of alternatives to search expecting any-of behaviour -- and the fix is simply the right algorithm, since neither can be made to do the other's job with a flag."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find_first_of", url: "https://en.cppreference.com/w/cpp/algorithm/find_first_of" }
+detailed_tags:
+  - { name: "std::search", url: "https://en.cppreference.com/w/cpp/algorithm/search" }

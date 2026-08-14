@@ -1,0 +1,11 @@
+title: "adjacent_find: the first equal neighbours"
+standard: "C++11"
+difficulty: 2
+summary: "std::adjacent_find finds the first place two neighbouring elements are equal -- the first repeated pair. With a predicate it finds the first neighbouring pair satisfying a relation, such as the first descent in a sequence."
+notes: "std::adjacent_find(first, last) scans for the first pair of ADJACENT elements that are equal and returns an iterator to the first of the two (or end if no two neighbours match). It is the tool for questions about consecutive elements: the first place a value repeats back to back, a stuck sensor reading the same number twice, a duplicated line following its twin. The predicate overload compares each element with its successor under any relation, so std::adjacent_find(first, last, [](int a, int b){ return b < a; }) finds the first DESCENT -- the point where a rising run first turns down -- which is how you detect where a monotonic sequence breaks, a peak, or a change of direction. The essential limitation, which becomes an anti-pattern here, is right there in the name: it only looks at NEIGHBOURS. It finds duplicates that sit next to each other, not duplicates scattered through the range -- {1, 2, 1} has a repeat but no adjacent one, so adjacent_find reports nothing. To find ANY duplicate you must first bring equal values together (sort, then adjacent_find or std::unique) or use a set to track what you have seen. adjacent_find is a single O(n) pass and, like the rest of this family, returns an end iterator you must check."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::adjacent_find", url: "https://en.cppreference.com/w/cpp/algorithm/adjacent_find" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

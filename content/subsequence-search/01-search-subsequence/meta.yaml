@@ -1,0 +1,11 @@
+title: "search: find a subsequence"
+standard: "C++11"
+difficulty: 1
+summary: "std::search finds the first place a whole subsequence (the needle) appears inside a range (the haystack), in order and contiguous. It returns an iterator to the start of the match, or end if the needle is not there."
+notes: "std::search(first, last, s_first, s_last) is the pattern-search counterpart to std::find: where find locates a single element, search locates a whole SUBSEQUENCE -- the needle must appear inside the haystack as consecutive elements, in the same order. It returns an iterator to the FIRST element of the first match, or the haystack's end when the needle does not occur, so the same end-check discipline as find applies: test the result against end() before dereferencing or measuring it. The distance from the haystack's begin to the result is where the match starts. This is the generalization of substring search to arbitrary ranges -- running std::search over two strings is exactly finding one piece of text inside another (which is what std::string::find does for characters), but search works on any element type, so you can find a byte pattern in a buffer, a sequence of events in a log, or a run of samples in a signal. It also takes an optional binary predicate to define what two elements matching means. The default algorithm is the straightforward O(n*m) scan; for repeated searches of a big text with a fixed needle, C++17 adds the Boyer-Moore searcher objects, but plain search is the right default for one-off or small needles."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::search", url: "https://en.cppreference.com/w/cpp/algorithm/search" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

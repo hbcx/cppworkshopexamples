@@ -1,0 +1,4 @@
+title: "search / find_end / find_first_of"
+description: "Searching a range for a pattern, not a single value. std::search finds the first occurrence of a whole subsequence, find_end finds the last, search_n finds a run of the same value repeated, find_first_of finds the first element matching any of a set, and adjacent_find finds the first pair of neighbours that are equal. Where find locates one element, these locate a shape. Covers each of the five, their end-iterator result, and their optional predicate -- alongside the anti-patterns: mixing up find_first_of (any of a set) with search (a whole ordered subsequence), the quadratic cost of find_first_of over a large needle set, and expecting adjacent_find to catch non-adjacent duplicates."
+sort_order: 91
+category: "Algorithms"

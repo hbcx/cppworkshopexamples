@@ -1,0 +1,2 @@
+first run of three 0s starts at index 1
+three-in-a-row over 50 starts at index 3

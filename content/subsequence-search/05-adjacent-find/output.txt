@@ -1,0 +1,2 @@
+first equal neighbours: 2 at index 1
+first descent after index 3 (value 8)

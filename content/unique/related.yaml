@@ -9,3 +9,5 @@
   note: "The plain copy behind unique_copy: copy writes every element and copy_if selects a subset, where unique_copy writes runs collapsed to one -- go there for copying ranges out, back_inserter, and printing through an ostream_iterator."
 - slug: "merge-set-operations"
   note: "Where dedup and combining meet: set_union already collapses cross-range duplicates so merge+unique is a set_union in disguise, and making inputs unique first gives the set operations true-set output -- go there for combining two sorted ranges."
+- slug: "subsequence-search"
+  note: "The finder next to unique's remover: adjacent_find LOCATES the first equal neighbours where unique DELETES them, both seeing only consecutive elements and both wanting a sort first for scattered duplicates -- go there for search, find_end, and finding runs and neighbours."

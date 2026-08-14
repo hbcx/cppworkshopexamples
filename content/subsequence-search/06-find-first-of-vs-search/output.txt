@@ -1,0 +1,2 @@
+search for block "cba": not found
+find_first_of any of {c,b,a}: 'a' at index 2

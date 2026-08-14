@@ -1,0 +1,12 @@
+title: "Anti-pattern: find_first_of over a large set"
+standard: "C++11"
+difficulty: 3
+summary: "std::find_first_of compares each haystack element against the whole needle set, so with a large set the cost is O(n*m). When the set of candidates is big, put it in a hash set and scan once with an O(1) membership test."
+notes: "std::find_first_of is perfect for a SMALL fixed set of candidates -- a handful of delimiters, the vowels, a few control bytes -- where the inner scan is cheap. It becomes a performance trap when the candidate set is large, because the algorithm compares every haystack element against the WHOLE needle range until it finds a match: that is O(n*m), and it degrades badly when matches are rare or late. The example counts the element comparisons to make the quadratic shape visible -- a 20-element haystack against a 50-element set does close to 20*50 comparisons before the match at the end. The fix is to change the data structure, not the algorithm: load the candidates into a std::unordered_set once (O(m)), then scan the haystack a single time with std::find_if testing set membership, which is O(1) per element on average, for O(n + m) overall. The trade is a hash set's memory and build cost, which pays off as soon as the set is more than a few elements or the same set is reused across many searches. The tell in real code is a find_first_of whose second range is a large vector, or one built fresh inside a loop. (For ordered candidates a std::set with binary search gives O(n log m), between the two.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find_first_of", url: "https://en.cppreference.com/w/cpp/algorithm/find_first_of" }
+detailed_tags:
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }
+  - { name: "std::find_if", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

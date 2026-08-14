@@ -1,0 +1,2 @@
+first vowel is 'e' at index 2
+first separator '=' at index 4

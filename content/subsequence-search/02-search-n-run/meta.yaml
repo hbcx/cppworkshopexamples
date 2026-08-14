@@ -1,0 +1,11 @@
+title: "search_n: a run of the same value"
+standard: "C++11"
+difficulty: 2
+summary: "std::search_n finds the first run of n consecutive elements equal to a value -- three zeros in a row, five identical readings. With a predicate the run can mean n consecutive elements satisfying a condition, like a sustained overshoot."
+notes: "std::search_n(first, last, count, value) finds the first place where value appears count times CONSECUTIVELY, returning an iterator to the start of that run or end if there is none. It answers the run-length question that plain search does not: not is this exact subsequence present, but is the same thing repeated n times in a row -- three zeros signalling a gap, five identical frames signalling a stuck feed, a stretch of the same byte. The predicate overload, std::search_n(first, last, count, value, pred), generalizes value from equality to any condition against value, so you can ask for n consecutive readings above a threshold -- the shape of an alarm that must only fire after a sustained breach, not a single spike. Two things to remember: the run must be contiguous (a scattered total of n is what std::count answers instead), and like the rest of this family the result is an iterator that can be end, so check it before use. search_n is a single pass and, for the common small count, effectively linear."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::search_n", url: "https://en.cppreference.com/w/cpp/algorithm/search_n" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

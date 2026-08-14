@@ -1,0 +1,12 @@
+title: "Anti-pattern: adjacent_find for any duplicate"
+standard: "C++11"
+difficulty: 3
+summary: "std::adjacent_find only sees neighbouring elements, so on an unsorted range it misses duplicates that are not next to each other and wrongly reports none. Sort first so equal values become neighbours, or track seen values in a hash set."
+notes: "std::adjacent_find answers a question about NEIGHBOURS -- is there a place two consecutive elements are equal -- and it is easy to misread that as does this range contain any duplicate. On unsorted data the two are different: {1, 2, 3, 1, 4} has a duplicate 1, but the two 1s are not adjacent, so adjacent_find walks past them and returns end, and code that treats that as no duplicates is simply wrong. The bug hides well because it is correct whenever the equal values happen to be neighbours, so it passes on tidy test data and fails on real, unordered input. Two fixes, depending on what you have. If you can reorder, SORT first (or sort a copy to preserve the original): sorting brings equal values together, after which adjacent_find -- or std::unique, which is built on the same adjacency -- finds them; cost O(n log n). If you cannot or do not want to sort, track seen values in a std::unordered_set and report the first one that is already present: a single O(n) pass that finds a duplicate wherever it sits, at the cost of the set's memory. The general lesson for this whole family: adjacent_find, unique, and search_n all reason about CONSECUTIVE elements, so they answer questions about order and runs, not about set membership across the range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::adjacent_find", url: "https://en.cppreference.com/w/cpp/algorithm/adjacent_find" }
+detailed_tags:
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

@@ -1,0 +1,11 @@
+title: "find_end: the last occurrence"
+standard: "C++11"
+difficulty: 2
+summary: "std::find_end finds the LAST occurrence of a subsequence in a range, where std::search finds the first. Same arguments, opposite end. Despite the name it is a subsequence search, not a single-element find."
+notes: "std::find_end(first, last, s_first, s_last) is std::search's mirror image: it finds the LAST place the needle appears in the haystack instead of the first, returning an iterator to the start of that final match (or end if the needle never occurs). The name is a common source of confusion -- it is NOT a variant of std::find that looks for one element from the back; it searches for a whole SUBSEQUENCE, just reporting the last match rather than the first. Reach for it when the meaningful occurrence is the trailing one: the last record separator in a buffer, the final boundary marker in a multipart body, the most recent instance of a pattern in a log you scan front to back. Getting the last match from std::search by hand means either scanning repeatedly past each hit or reversing the range and fixing up the iterators -- both fiddlier and easier to get wrong than one call to find_end. It takes the same optional predicate as search and returns an end iterator when there is no match, so the usual check-before-use rule holds. Cost is O(n*m) like search."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find_end", url: "https://en.cppreference.com/w/cpp/algorithm/find_end" }
+detailed_tags:
+  - { name: "std::search", url: "https://en.cppreference.com/w/cpp/algorithm/search" }

@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "find-find-if"
+  note: "The single-element searches these build on: find and find_if locate ONE element by value or predicate, where search, find_end and find_first_of locate a pattern or a member of a set -- go there for the basic linear search and the end-iterator check the whole family shares."
+- slug: "unique"
+  note: "The other adjacency-based algorithm: adjacent_find spots the first equal neighbours and unique removes them, both seeing only consecutive elements, so both want a sort first to act on scattered duplicates -- go there for deduplicating a range and unique_copy."
+- slug: "strings"
+  note: "The type where subsequence search is everyday: std::string::find is std::search over characters, and finding a substring, the last separator, or the first of a set of delimiters are the same operations on text -- go there for string search, size vs capacity, and the erase-remove idiom."

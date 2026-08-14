@@ -1,0 +1,11 @@
+title: "find_first_of: the first element matching any of a set"
+standard: "C++11"
+difficulty: 2
+summary: "std::find_first_of finds the first element of a range that equals any one of a set of values -- the first vowel, the first of several delimiters. Unlike search, it does not look for the set as an ordered block; it matches any single member."
+notes: "std::find_first_of(first, last, s_first, s_last) scans the first range and stops at the first element that matches ANY element of the second range, returning an iterator to it (or end if none match). The critical distinction, and the source of a common mix-up, is against std::search: search looks for the second range as a contiguous ORDERED subsequence, while find_first_of treats the second range as an unordered SET of candidates and matches any single one. Searching text for the delimiters =; with find_first_of finds the first = or ; whichever comes first; searching for them with std::search would look for the exact two-character block =; and find neither. This is the natural tool for scanning to the next of several stop characters -- the first vowel, the first whitespace or punctuation that ends a token, the first byte from a set of control codes -- the opening move of many tokenizers. It takes an optional predicate for custom matching, and returns end when nothing matches. One caveat that becomes an anti-pattern: the default is an O(n*m) scan (each haystack element compared against the whole set), so when the set of candidates is large, a hash set membership test is far faster."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::find_first_of", url: "https://en.cppreference.com/w/cpp/algorithm/find_first_of" }
+detailed_tags:
+  - { name: "std::search", url: "https://en.cppreference.com/w/cpp/algorithm/search" }
