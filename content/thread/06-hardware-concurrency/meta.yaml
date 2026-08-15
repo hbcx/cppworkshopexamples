@@ -1,0 +1,11 @@
+title: "Sizing a pool with hardware_concurrency"
+standard: "C++11"
+difficulty: 2
+summary: "hardware_concurrency() hints how many threads can truly run at once on this machine, so you size a worker pool to the hardware instead of guessing. It may return 0 when unknown, so always guard it. Splitting a fixed job into non-overlapping strided slices keeps the total deterministic however many threads run."
+notes: "Spawning far more threads than the hardware can run in parallel (oversubscription) just adds context-switch overhead; spawning far fewer leaves cores idle. std::thread::hardware_concurrency() lets you match the pool to the machine: it returns the number of threads that can execute concurrently -- typically the count of cores or hardware threads. It is explicitly a HINT and is allowed to return 0 when the implementation cannot tell, so production code must guard it with a sensible fallback, as here. The example also shows the standard way to keep a parallel result reproducible: partition the work so the slices do not overlap and together cover the whole input exactly once. A strided split -- worker w takes indices w, w+n, w+2n, ... -- does that regardless of n, so the final sum is identical whether the machine runs 2 workers or 32, even though n is machine-specific. Each worker accumulates locally and adds to the shared atomic total just once at the end, which keeps contention on the atomic negligible instead of hammering it every iteration. For heavier real workloads a ready-made pool or a parallel algorithm (see the execution-policies section) is usually better than hand-managing threads, but hardware_concurrency is still how you decide how many to run. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::thread::hardware_concurrency", url: "https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency" }

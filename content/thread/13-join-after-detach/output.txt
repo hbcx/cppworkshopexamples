@@ -1,0 +1,3 @@
+double join threw system_error: true
+after detach, joinable? false
+skipped join because thread is not joinable

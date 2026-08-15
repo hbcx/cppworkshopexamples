@@ -1,0 +1,2 @@
+inside thread, argument was copied: true
+with std::ref, n = 1

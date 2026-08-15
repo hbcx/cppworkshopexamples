@@ -5,3 +5,5 @@
   note: "A place these primitives are needed: a pool handed out across threads must guard its free-list -- an atomic or a lock -- and the shared-pool-without-a-lock anti-pattern there is the concrete failure -- go there for pooling, RAII handles, and the thread-safety gap."
 - slug: "flyweight"
   note: "Another shared-state case: the flyweight factory's intern table is read and written from several threads, and its thread-unsafe-factory anti-pattern is a race an atomic or a lock fixes -- go there for interning, intrinsic vs extrinsic state, and the unsynchronized-cache trap."
+- slug: "thread"
+  note: "Where the threads that share these atomics come from: how you start, join, and detach a std::thread, and the anti-patterns of doing it wrong -- go there for launching work, and come back here for how those threads share data without racing."

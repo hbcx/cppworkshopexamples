@@ -1,0 +1,12 @@
+title: "join versus detach"
+standard: "C++11"
+difficulty: 2
+summary: "join waits for the thread and lets you rely on its results; the worker's lifetime is bound to the join point. detach cuts the thread loose to run on its own -- you can no longer join it, so any completion signal or result must be arranged by hand. Prefer join; detach only for true fire-and-forget work."
+notes: "Every std::thread ends its association with the running thread in exactly one of two ways. join() blocks until the worker finishes, then returns; afterwards the results are ready and safely visible, and the worker cannot outlive this scope. detach() severs the link: the OS thread keeps running independently, the std::thread object becomes empty (not joinable), and there is no way to wait for it or retrieve what it did through the thread API. That independence is the whole point of detach -- and its danger. Because you can no longer join, you must build your own way to learn when the work is done and to get its result; the example uses a tiny atomic handshake (the worker stores its result, then sets a done flag, and the main thread waits on that flag). The far bigger hazard is lifetime: a detached thread commonly outlives the scope that launched it, so anything it still refers to -- locals, captured references, objects on the launching stack -- may be destroyed out from under it, a use-after-free that is one of this section's anti-patterns. Practical guidance: prefer join by default; use detach only for genuine fire-and-forget work whose result and completion you do not need, and make sure it only touches data that lives long enough (globals, or state kept alive deliberately). In modern C++ prefer std::jthread, which joins itself and removes the forgot-to-join failure entirely. This runs under ThreadSanitizer on Linux/CI, which confirms the atomic handshake is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::thread::join", url: "https://en.cppreference.com/w/cpp/thread/thread/join" }
+  - { name: "std::thread::detach", url: "https://en.cppreference.com/w/cpp/thread/thread/detach" }

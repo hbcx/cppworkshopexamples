@@ -1,0 +1,11 @@
+title: "Anti-pattern: join or detach on a non-joinable thread"
+standard: "C++11"
+difficulty: 3
+summary: "Calling join() or detach() on a thread that is already joined, already detached, moved-from, or default-constructed throws std::system_error -- it does not silently do nothing. Guard with joinable() before you join, and keep ownership clear so a thread is finished exactly once; std::jthread removes the manual join and the mistake with it."
+notes: "A std::thread is joinable only while it owns a running thread. Once you join it, detach it, or move its ownership away, it is empty, and calling join() or detach() again throws std::system_error with errc::invalid_argument -- the standard chose a thrown error rather than a silent no-op, so the bug surfaces instead of hiding. This bites in ordinary code: a function with several return paths that joins on some but not others, an exception that unwinds past the intended single join, or a thread stored in a container and accidentally finished twice. The example shows two shapes. Case 1 joins the same thread twice and catches the resulting system_error, printing a stable fact (the error code equals invalid_argument) rather than the message string, which differs between standard libraries. Case 2 detaches a thread and then guards the join with joinable(), which reports false, so the join is correctly skipped -- this is the defensive pattern. The fix is to query joinable() before joining and to keep ownership unambiguous so each thread is finished exactly once; better still, use std::jthread, whose destructor performs the single join for you and makes double-finishing impossible. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::thread::joinable", url: "https://en.cppreference.com/w/cpp/thread/thread/joinable" }

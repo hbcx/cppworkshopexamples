@@ -1,0 +1,11 @@
+title: "Anti-pattern: destroying a joinable thread"
+standard: "C++11"
+difficulty: 3
+summary: "A std::thread that is still joinable when its destructor runs calls std::terminate and aborts the program -- the destructor does not join for you. The fix is to join (or detach) before the object goes out of scope; better still, use std::jthread, which joins itself so the mistake cannot happen."
+notes: "This is the std::thread rule people forget most, and it is fatal rather than forgiving. A std::thread is joinable from the moment it is constructed with a callable until you join or detach it. If the object is destroyed while still joinable -- the scope ends, an exception unwinds past the join line, the object is a local that goes away -- the destructor calls std::terminate() and the whole process aborts. There is no exception to catch and no silent auto-join; the language deliberately makes forgetting the decision a crash rather than a quiet resource leak, because a leaked thread is far more dangerous than a leaked allocation. The example describes the terminating version in a comment only -- running it would abort and the build gate cannot capture an abort -- and runs the fix: join before the scope closes, after which the thread is no longer joinable and safe to destroy. The robust remedy is std::jthread (C++20), whose destructor joins automatically, so the joinable-at-destruction state is impossible even on the exception path; prefer it as the default and reach for std::thread only when you need detach or manual control of the join point. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::terminate", url: "https://en.cppreference.com/w/cpp/error/terminate" }

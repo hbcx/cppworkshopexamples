@@ -1,0 +1,11 @@
+title: "Create a thread and join it"
+standard: "C++11"
+difficulty: 1
+summary: "Constructing a std::thread with a callable starts it running at once on a new OS thread. join() blocks until it finishes and makes its results safely visible, which is why you read the worker's output only after the join. Every thread must be joined or detached before it is destroyed."
+notes: "This is the mechanic the whole section is built on. A std::thread takes any callable (a lambda, a function, a functor) and begins running it on a fresh OS thread the moment the object is constructed -- there is no separate start call. main keeps going in parallel, so the two run at the same time. join() is how you wait: it blocks the calling thread until the worker returns, and it also establishes a happens-before relationship, so every write the worker made is visible to you afterwards with no data race. That is why the safe pattern here is worker writes into result, main joins, then main reads and prints result -- reading before the join would race with the worker still writing. Keeping all printing on the main thread and doing it after the join also avoids the two threads interleaving their output mid-line. The one rule you cannot break: a std::thread must be joined OR detached before it is destroyed; a thread that is still joinable when its destructor runs calls std::terminate and aborts the program (the section's first anti-pattern). join ties the worker's lifetime to the current scope and is the right default. This runs under ThreadSanitizer on Linux/CI, which confirms the join makes the handoff race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::thread::join", url: "https://en.cppreference.com/w/cpp/thread/thread/join" }

@@ -1,0 +1,11 @@
+title: "Passing arguments: why std::ref is needed"
+standard: "C++11"
+difficulty: 2
+summary: "A std::thread copies every argument into its own storage before calling the function, so a reference parameter binds to that internal copy, not to your variable. Wrap the argument in std::ref to pass a real reference. Plain by-value arguments are simply copied, which is usually what you want."
+notes: "Arguments listed after the callable are forwarded to it, but std::thread decays and COPIES each one into internal storage first, then invokes the function with those copies. The consequence trips up almost everyone: if the function takes a parameter by reference, that reference binds to the thread's private copy, so writes through it never reach your original variable -- the call compiles and runs, and the variable silently stays unchanged. std::ref (a reference_wrapper) is the fix: it survives the copy and delivers a true reference to the function, so a reference parameter binds to your object. The mirror image, std::cref, passes a const reference. Two safety points come with this. First, because the thread only holds copies, any pointer or reference you hand it (including via std::ref) must outlive the thread -- passing a reference to a local that is destroyed before the thread finishes is a dangling-reference bug (an anti-pattern later in the section); joining in the same scope, as here, keeps it safe. Second, prefer passing by value when you can: the copy makes the worker independent of your stack. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }

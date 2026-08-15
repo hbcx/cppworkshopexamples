@@ -1,0 +1,2 @@
+copy:       hello
+shared_ptr: world

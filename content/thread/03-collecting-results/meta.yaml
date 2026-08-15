@@ -1,0 +1,11 @@
+title: "Collecting results from several threads"
+standard: "C++11"
+difficulty: 2
+summary: "A thread callable's return value is discarded, so the simple way to get results out is to give each worker its own slot in a shared vector. Distinct slots mean no two threads write the same memory, so there is no data race and no lock needed; join everyone, then read and combine the slots."
+notes: "std::thread gives you no channel for a return value -- whatever the callable returns is thrown away, and the mechanism that does capture a return, std::future with std::async or std::promise, is covered separately. Until then, the standard pattern for fan-out work is result slots: pre-size a container with one element per worker and have each worker write ONLY its own index. Because the writes land in disjoint memory, they do not race and need no synchronization at all; the join at the end makes every slot's final value visible to the main thread, which then reduces them (here with std::accumulate) into the answer. This partition-by-index idea scales to any embarrassingly parallel job -- split the input into non-overlapping ranges, compute a partial result per range, combine at the end. Two things keep it correct: never let two workers touch the same slot (that would reintroduce the race the design avoids), and size the container up front so no worker triggers a reallocation that others are reading through. Contrast this with a single shared accumulator, which every worker would have to update atomically or under a lock; separate slots sidestep that contention entirely. This runs under ThreadSanitizer on Linux/CI, which confirms the disjoint writes are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::thread::join", url: "https://en.cppreference.com/w/cpp/thread/thread/join" }

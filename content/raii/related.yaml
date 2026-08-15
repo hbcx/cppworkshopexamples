@@ -8,3 +8,5 @@
   note: "A sibling idiom that leans on RAII: the unique_ptr-to-Impl member is an owning handle and the rule-of-five plumbing is the same -- go there for the compile-firewall use of an owning pointer."
 - slug: "rule-of-0-3-5"
   note: "The special-member decision RAII drives: owning a resource forces you to write three or five special members, while rule of zero is what you get by letting RAII members own it for you -- go there for how many of the five to declare and why they travel as a set."
+- slug: "thread"
+  note: "RAII applied to a thread: std::jthread joins itself in its destructor, turning the forgot-to-join crash into a non-issue the same way an owning handle turns a leak into a non-issue -- go there for launching threads and why jthread is the RAII way to own one."

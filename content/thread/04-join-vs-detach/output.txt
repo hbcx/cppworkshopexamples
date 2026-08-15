@@ -1,0 +1,2 @@
+join:   result = 111
+detach: result = 42

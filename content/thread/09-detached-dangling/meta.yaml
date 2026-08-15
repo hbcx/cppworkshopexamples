@@ -1,0 +1,12 @@
+title: "Anti-pattern: a detached thread outlives its data"
+standard: "C++11"
+difficulty: 3
+summary: "detach lets a thread run past the scope that launched it, so any local it captured by reference can be destroyed while it is still reading them -- a use-after-free. Give a detached thread its own copies, share ownership with a shared_ptr, or do not detach at all; join instead."
+notes: "detach severs the link between the std::thread object and the running thread, which is exactly what makes it dangerous: the thread now has an independent lifetime and commonly outlives the function that started it. Anything it captured by reference -- locals, parameters, objects on the launching stack -- can be destroyed out from under it, and it then reads or writes freed memory. This is undefined behaviour, and it is the worst kind: a short test usually finishes the thread before the stack is reused, so it passes, and the corruption only appears under load in production. The example describes the dangling-capture version in a comment (running real UB is nondeterministic and can crash) and runs two safe alternatives. FIX 1 captures the data BY VALUE so the thread owns an independent copy that cannot dangle. FIX 2 keeps the data alive with a std::shared_ptr the thread co-owns, so the payload lives at least as long as the thread; this is the go-to when a copy is too expensive or the data must be shared. The underlying rule for any detached thread: it may only touch data guaranteed to outlive it -- its own copies, shared ownership, or genuine globals. When you cannot guarantee that, do not detach; join (or use std::jthread) so the launching scope waits for the thread instead. This runs under ThreadSanitizer on Linux/CI, which confirms the safe versions do not race."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::thread::detach", url: "https://en.cppreference.com/w/cpp/thread/thread/detach" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

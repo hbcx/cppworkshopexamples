@@ -1,0 +1,1 @@
+synchronized total = 400000

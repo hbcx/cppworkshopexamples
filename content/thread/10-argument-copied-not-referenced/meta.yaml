@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting a reference, but the argument was copied"
+standard: "C++11"
+difficulty: 3
+summary: "std::thread copies each argument before calling the function, and hands that copy over as an rvalue -- so a non-const reference parameter cannot bind to it. On modern standard libraries this is now a hard compile error (a static_assert added to stop the old silent bug); older ones compiled it and modified a throwaway copy. Wrap the argument in std::ref (or std::cref) to pass a real reference."
+notes: "std::thread decays and copies every argument into internal storage, then invokes the function with those stored copies passed as rvalues. That last detail is the trap: a function taking a non-const reference cannot bind to an rvalue, so passing a plain variable to such a function is wrong. History matters here. On older standard libraries the reference bound to the thread's private copy, the function modified that throwaway, and your original was left unchanged -- a silent do-nothing that was a nasty bug to track down. Modern libstdc++ and libc++ added a static_assert (std::thread arguments must be invocable after conversion to rvalues) that turns this into a hard COMPILE error instead, which is why the offending line in the example is commented out -- it would fail the build. The example still proves the underlying fact at runtime with a copy-counting type: passed by value, the argument's copy count inside the thread is non-zero, so the function is looking at a copy, not your object (the count itself varies by library, so the example prints only whether a copy happened). The fix is std::ref, a reference_wrapper that survives the copy and delivers a true reference (std::cref for const); the referenced object must outlive the thread. Design point: if you only need the value, pass by value on purpose and return the result through a slot or a std::future rather than a reference parameter. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }

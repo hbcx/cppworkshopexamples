@@ -1,0 +1,12 @@
+title: "Anti-pattern: sharing data between threads without synchronization"
+standard: "C++11"
+difficulty: 3
+summary: "Two threads touching the same plain variable where at least one writes is a data race -- undefined behaviour, not just a wrong number. ++ on a shared int loses updates because it is really load-add-store. Synchronize with a std::atomic or a std::mutex, or give each thread its own data so nothing is shared."
+notes: "The moment a program has more than one thread, shared mutable state becomes the default hazard. If two threads access the same object and at least one of them writes, and nothing orders those accesses, the program has a data race, which the C++ memory model defines as undefined behaviour -- the compiler is entitled to assume it never happens, so reasoning about the result is meaningless, even when a run happens to look right. The classic case is a shared counter: ++n compiles to load, add, store, and two threads can read the same old value and both store the same increment, silently losing one. The example describes the racy version in a comment rather than running it, for two reasons: its total is nondeterministic (which would trip the build's output check), and ThreadSanitizer -- which the CI runs -- would detect the race and abort the build, exactly as intended. The fix shown is a std::atomic counter whose fetch_add is a single indivisible operation, so no update is lost and the total is a deterministic 400000; a std::mutex around the increment would also work, at higher cost. The deeper rule is to treat every piece of state reachable from two threads as needing a plan: make it atomic, guard it with a lock, or do not share it -- give each thread its own slot, as in the collecting-results example. This runs under ThreadSanitizer on Linux/CI, which confirms the atomic version is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }

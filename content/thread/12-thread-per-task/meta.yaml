@@ -1,0 +1,11 @@
+title: "Anti-pattern: one thread per task (oversubscription)"
+standard: "C++11"
+difficulty: 3
+summary: "Spawning a thread per task pays the high cost of thread creation once per task and runs far more threads than there are cores, so scheduling overhead swamps the work -- and at large scale it can exhaust the OS thread limit and throw. Size a fixed pool to hardware_concurrency and let each worker pull many tasks."
+notes: "A std::thread maps to a real OS thread: creating one allocates a stack and makes a system call, which costs far more than a small task does. Launching one thread per task therefore pays that cost N times, and it also creates N runnable threads -- usually many more than the machine can run at once. The operating system then time-slices between them, and the context-switching and cache churn (oversubscription) can make the parallel version slower than a plain serial loop. At small N the program still produces the correct answer, which is why the waste is easy to overlook; at large N it degrades sharply and can hit the per-process thread limit, where the constructor throws std::system_error. The example runs both approaches on 64 tasks so you can see they agree, and describes in the code why the naive one does not scale. The fix is a fixed pool sized with std::thread::hardware_concurrency(): each worker loops over a strided slice of the tasks, so the thread count stays near the core count regardless of how many tasks there are, and thread-creation cost is amortised over many tasks. For production, a reusable thread pool or a standard parallel algorithm (see the execution-policies section) is better still than managing raw threads by hand. This runs under ThreadSanitizer on Linux/CI; the shared totals are atomics, so the concurrent updates are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::thread::hardware_concurrency", url: "https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency" }

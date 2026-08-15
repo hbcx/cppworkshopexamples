@@ -1,0 +1,19 @@
+- problem: "A desktop app or a server request handler must stay responsive while it does something slow -- reading a large file, decoding an image, calling a remote service. Doing it inline freezes the UI or blocks the request thread for the whole operation."
+  why: "Moving the slow work to a std::thread keeps the UI loop or the request thread free to keep responding, and join (or a jthread tied to the operation) reattaches the result when it is ready -- where running it inline gives you a frozen window or a stalled handler that a user notices immediately."
+  signal: "A long, blocking call sitting directly on an event loop, UI callback, or request-handling path, with nothing else able to run until it returns."
+
+- problem: "A CPU-bound job over a large data set -- summing, transforming, encoding, searching millions of elements -- runs on a single core while the other cores sit idle, so it takes far longer than the machine is capable of."
+  why: "Splitting the input into non-overlapping slices across hardware_concurrency threads uses all the cores and cuts wall-clock time roughly in proportion, where a serial loop leaves most of the machine unused; for many tiny tasks a pool or a parallel algorithm beats a thread per item, which is why the section warns against the per-task thread."
+  signal: "A hot loop over a big container that is independent per element (an embarrassingly parallel map or reduce) running single-threaded."
+
+- problem: "A program needs work done continuously on the side for its whole lifetime -- flushing a log buffer, publishing metrics on a timer, watching a directory, running a heartbeat or watchdog."
+  why: "One long-lived std::thread that loops on that job keeps it off the main path without re-creating a thread each time, where spawning a thread per event pays creation cost repeatedly and doing it inline blocks the main work; a std::atomic or stop flag lets the main thread ask it to finish at shutdown."
+  signal: "A background chore that must run periodically or continuously, currently either inlined into the main loop or started fresh on every occurrence."
+
+- problem: "A piece of best-effort work should be kicked off and forgotten -- firing an audit event, sending a non-critical notification, kicking a cache refresh -- where the caller does not need the result and must not wait for it."
+  why: "A detached thread runs the work independently so the caller returns at once, where blocking to await a result you do not need wastes the caller's time; the catch is lifetime -- the detached thread must only touch data that outlives it, which is why fire-and-forget is narrow and every other case should join."
+  signal: "A spawned thread whose result is never read and whose completion is never awaited, ideally touching only copies, shared ownership, or globals."
+
+- problem: "A worker's lifetime should match a scope or an owning object, and it must stop promptly when that scope ends -- a progress poller running only while a dialog is open, a background task that a controller owns and must cancel on teardown."
+  why: "A std::jthread member or local joins itself when the scope or object is destroyed, and its stop_token lets the owner ask the worker to exit early, so cleanup is automatic and cancellation is built in -- where a raw std::thread forces you to hand-code a stop flag plus a join on every exit path and crashes if you miss one."
+  signal: "A thread whose lifetime is meant to track an object or a scope, guarded by a hand-rolled bool flag and a join scattered across destructors or return paths."

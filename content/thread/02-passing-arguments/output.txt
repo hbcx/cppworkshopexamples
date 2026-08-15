@@ -1,0 +1,2 @@
+value via std::ref = 50
+sum of copied args = 42

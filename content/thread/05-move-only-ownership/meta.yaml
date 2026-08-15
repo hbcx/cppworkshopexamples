@@ -1,0 +1,11 @@
+title: "std::thread is move-only; keeping threads in a container"
+standard: "C++11"
+difficulty: 2
+summary: "A std::thread owns a single running thread, so it cannot be copied -- only moved, which transfers ownership and empties the source. That is what lets you store threads in a vector and move them as it grows; just remember to join every one before the container is destroyed."
+notes: "std::thread models unique ownership of one OS thread, the same way std::unique_ptr models unique ownership of a resource: copying would imply two owners of a single thread, which makes no sense, so the copy constructor is deleted and only the move is available. Moving transfers the underlying thread from source to destination and leaves the source in the empty, not-joinable state -- after the move, calling join on the moved-from object throws std::system_error, because it no longer owns anything. This move-only design is exactly what makes threads storable in standard containers: a std::vector<std::thread> can hold a pool of workers, emplace_back builds each one in place, and any reallocation the vector does moves the threads rather than copying them. The one obligation the container does not handle for you is the join-or-detach rule: each thread must be joined (or detached) before it is destroyed, so a loop that joins every element before the vector goes out of scope is mandatory -- a vector of still-joinable threads that gets destroyed calls std::terminate. std::jthread (C++20) removes that last chore by joining itself. This runs under ThreadSanitizer on Linux/CI; the shared counter is an atomic so the concurrent increments are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

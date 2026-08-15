@@ -1,0 +1,11 @@
+title: "std::jthread joins itself (C++20)"
+standard: "C++20"
+difficulty: 2
+summary: "std::jthread is a std::thread whose destructor joins automatically, so a thread can never be left unjoined -- the RAII fix for the forgot-to-join crash, including on the exception path. It also supports cooperative cancellation through a stop_token. Prefer jthread; use std::thread only when you need detach or a manual join point."
+notes: "The most common std::thread mistake is destroying one that is still joinable -- by forgetting the join, or by an exception unwinding the scope before the join line runs -- which calls std::terminate and aborts. std::jthread (C++20) fixes this by owning the thread with RAII: its destructor calls join() for you if the thread is still joinable, so the thread is always cleaned up, including when the scope is left early by an exception. In the example there is no explicit join at all; the worker is joined the moment it goes out of scope, and only then does main read the result, so the read is race-free. jthread adds a second feature: cooperative cancellation. It can pass the callable a std::stop_token, and other code can call request_stop() (also called automatically in the destructor before the join); a long-running worker polls stop_requested() and returns early. That cancellation machinery -- stop_token, stop_source, stop_callback -- is substantial enough to be its own subject; here the point is the auto-join. Practical rule: prefer std::jthread as the default thread type in modern code, and drop to std::thread only when you specifically need to detach or to control precisely where the join happens. This runs under ThreadSanitizer on Linux/CI, which confirms the auto-join makes the result visible without a race."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+detailed_tags:
+  - { name: "std::thread::join", url: "https://en.cppreference.com/w/cpp/thread/thread/join" }
