@@ -1,0 +1,11 @@
+title: "Anti-pattern: doing slow work while holding the lock"
+standard: "C++11"
+difficulty: 3
+summary: "Holding a mutex while doing slow, independent work -- I/O, allocation, heavy computation -- forces every other thread to wait its turn, so the lock serializes work that never needed protecting and the program stops scaling. Compute outside the lock and take it only for the brief shared update."
+notes: "A mutex serializes whatever runs inside the critical section, so the length of that section is the length of the queue every other thread waits in. Holding the lock while doing work that does not touch the shared data -- reading a file, allocating, computing a result from local inputs -- makes all of that serial: the threads take turns through the whole slow region and the parallel program behaves like a single-threaded one. The result is still correct, which is why this is easy to miss; it surfaces only as disappointing scaling under load. The fix is to shrink the critical section to just the shared access: do the expensive, independent part with no lock held (so the threads run it at the same time), and lock only to publish the small result. The example computes a per-thread value outside the lock and takes the mutex only for the one += into the shared total; both the slow-under-lock version and this one produce the same number, but only this one actually uses the cores. Related tools: std::unique_lock lets you unlock() early when the rest of a scope no longer needs the lock, and a reader/writer std::shared_mutex avoids serializing reads. The rule of thumb: hold a lock for as few instructions as possible, and never across something slow. This runs under ThreadSanitizer on Linux/CI, which confirms the short critical section is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

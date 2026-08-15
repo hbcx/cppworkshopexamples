@@ -1,0 +1,11 @@
+title: "Anti-pattern: a per-thread local mutex that protects nothing"
+standard: "C++11"
+difficulty: 3
+summary: "A mutex only excludes threads that lock the same instance. A mutex declared locally inside the thread body (or created per call) is a different object for each thread, so none of them exclude each other and the shared data still races. Guard the data with one shared mutex reachable by everyone who touches it."
+notes: "Mutual exclusion is a property of a specific mutex OBJECT: two critical sections are mutually exclusive only if they lock the same instance. A surprisingly common mistake is to create the mutex in the wrong scope -- as a local variable inside the function or lambda each thread runs, or freshly per call -- so every thread dutifully locks its OWN private mutex and none of them ever contend. The code looks synchronized (there is a lock_guard right there), but the shared data is completely unprotected and races exactly as if there were no lock at all. The example describes that version in a comment rather than running it, because it is a real data race that ThreadSanitizer would flag and abort. The fix is to give the mutex the same lifetime and reach as the data it guards: declare it once, outside the threads (or as a member next to the data, as in the thread-safe-class example), and have every thread lock that one object. Watch for the sibling mistakes too: locking a COPY of a mutex (impossible for std::mutex, which is non-copyable, but easy with a wrapper that accidentally copies), or each thread locking a different mutex meant to guard the same data. One datum, one mutex, shared by all its users. This runs under ThreadSanitizer on Linux/CI, which confirms the shared mutex makes the increment race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

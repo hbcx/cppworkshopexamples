@@ -1,0 +1,11 @@
+title: "Guarding an invariant across several variables"
+standard: "C++11"
+difficulty: 2
+summary: "An atomic makes one variable indivisible, but many correctness rules span several variables that must change together. A mutex protects the whole critical section, so a multi-step update -- subtract here, add there -- is seen by other threads only as a completed unit, never half done."
+notes: "This is the case that justifies a mutex over an atomic. An atomic guarantees that operations on a single object are indivisible, but real invariants often tie multiple objects together: two account balances that must sum to a constant, a size field that must match the number of elements, a begin and end index that bound a buffer. Updating such state means writing more than one variable, and correctness requires that no other thread observes the state between those writes. Two separate atomics cannot promise that -- another thread can read the first after it changed and the second before it did, seeing money withdrawn from one account but not yet deposited in the other. A mutex expresses exactly the missing guarantee: it makes the whole multi-variable update a single critical section, so the group changes atomically with respect to every other thread that also locks the mutex. The example runs many transfers between two accounts from several threads; each transfer touches both balances under one lock, and the invariant a + b == 100 holds throughout and at the end. The rule this teaches: pick the mutex when the thing that must stay consistent is bigger than one word. This runs under ThreadSanitizer on Linux/CI, which confirms the guarded transfers are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

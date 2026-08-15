@@ -1,0 +1,11 @@
+title: "scoped_lock: take several mutexes without deadlock"
+standard: "C++17"
+difficulty: 2
+summary: "Locking two mutexes in different orders on different threads can deadlock. std::scoped_lock (C++17) locks any number of mutexes at once using a deadlock-avoidance algorithm, so the naming order does not matter and no thread gets stuck. It is RAII like lock_guard and unlocks them all together."
+notes: "Deadlock is the signature failure of multiple locks. If thread 1 does left.lock() then right.lock(), and thread 2 does right.lock() then left.lock(), an interleaving can leave each holding one mutex and waiting for the other forever -- the program hangs with no crash and no error. The classic manual fix is to impose a global lock order (always acquire left before right everywhere), but that is easy to get wrong as code grows. std::scoped_lock (C++17) removes the hazard: given several mutexes it locks them ALL as one operation, using the same deadlock-avoidance strategy as std::lock, so it never holds one while blocking on another. Because of that, the order in which you list the mutexes to scoped_lock is irrelevant -- the example deliberately names them left,right in half the threads and right,left in the other half, and it still cannot deadlock. scoped_lock is otherwise just like lock_guard: RAII ownership that releases every mutex in its destructor, and with class template argument deduction you do not spell out the types. (For a single mutex, scoped_lock and lock_guard are equivalent; scoped_lock's reason to exist is locking two or more together.) Because a real deadlock would hang the build forever, this section demonstrates the fix by running scoped_lock and only describes the deadlocking hand-locked version. This runs under ThreadSanitizer on Linux/CI, which confirms the guarded transfers are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::scoped_lock", url: "https://en.cppreference.com/w/cpp/thread/scoped_lock" }
+detailed_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }

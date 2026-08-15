@@ -9,3 +9,5 @@
   note: "The primitive that fixes the shared-state hazard here: when a par callable must touch shared data, an atomic (or a reduction) makes it race-free, and the memory-order rules explain the visibility par relies on -- go there for atomic counters, compare_exchange, and memory ordering."
 - slug: "thread"
   note: "The manual level below these policies: when your parallel work is not a standard algorithm, you drop to std::thread and manage the workers, joins, and pool yourself -- go there for launching threads by hand and the pitfalls (oversubscription, forgetting to join) the policies hide from you."
+- slug: "mutex"
+  note: "The other fix for shared state under par, when an atomic is not enough: a mutex guards a multi-variable update the parallel callable performs -- go there for lock_guard and unique_lock, the thread-safe class, and avoiding deadlock with scoped_lock."

@@ -7,3 +7,5 @@
   note: "Another shared-state case: the flyweight factory's intern table is read and written from several threads, and its thread-unsafe-factory anti-pattern is a race an atomic or a lock fixes -- go there for interning, intrinsic vs extrinsic state, and the unsynchronized-cache trap."
 - slug: "thread"
   note: "Where the threads that share these atomics come from: how you start, join, and detach a std::thread, and the anti-patterns of doing it wrong -- go there for launching work, and come back here for how those threads share data without racing."
+- slug: "mutex"
+  note: "What to use when an atomic is not enough: a single word fits an atomic, but an invariant across several variables needs a lock, which serializes a whole critical section -- go there for mutexes, RAII lock owners, deadlock avoidance, and reader/writer locks."

@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "thread"
+  note: "Where the threads that contend for these mutexes come from: how you start, join, and detach a std::thread, and the anti-patterns of doing it wrong -- go there for launching the work, then come back here for how those threads share data safely."
+- slug: "atomic"
+  note: "The lighter-weight alternative when the shared state is a single word: an atomic counter or flag needs no lock and never blocks, so reach for it instead of a mutex when one variable is all you are guarding -- go there for atomics, compare_exchange, and memory ordering, and use a mutex when the invariant is bigger than one word."
+- slug: "execution-policies"
+  note: "The higher level where these same rules apply: a parallel algorithm under std::execution::par runs its callable on many threads, so any shared state it touches still needs a mutex or an atomic -- go there for the parallel algorithms and the data-race hazards a captured accumulator creates under par."

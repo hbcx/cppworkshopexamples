@@ -1,0 +1,11 @@
+title: "Anti-pattern: copying a class with a mutex member"
+standard: "C++11"
+difficulty: 3
+summary: "std::mutex is neither copyable nor movable, so a class with a mutex member has its copy and move implicitly deleted -- copying it does not compile by default. If the type must be copyable, write the copy operations by hand: lock the source, copy only the data, and give the copy its own fresh mutex."
+notes: "A std::mutex owns a single lock and cannot be copied or moved -- both operations are deleted on the type. A class that has a std::mutex data member therefore loses its own implicit copy and move operations (a defaulted copy would have to copy the mutex, which is impossible), so writing Config b = a fails to compile unless you provide copy yourself. Often that deletion is the correct outcome: a shared, lock-protected object usually should not be silently copied. When you genuinely need copy or move semantics, you write them by hand and copy only the DATA, never the mutex: the copy locks the source (so it reads a consistent value), copies the fields, and lets its own default-constructed mutex stand -- a fresh lock for a fresh object. Copy assignment must lock BOTH objects, and to avoid a deadlock when two threads assign in opposite directions it should acquire them with std::lock (or std::scoped_lock) rather than one after the other; the example uses std::lock plus std::adopt_lock so the guards still release via RAII. The example provides these operations and copies a Config so the program compiles and runs, whereas the defaulted copy would not build. The takeaways: a mutex member makes a type non-copyable by default, and correct copying moves the data, not the lock. This example is single-threaded because the subject is the type's copy semantics, not contention."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock", url: "https://en.cppreference.com/w/cpp/thread/lock" }

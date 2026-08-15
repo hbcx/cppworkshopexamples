@@ -1,0 +1,11 @@
+title: "A mutex and lock_guard: the basic critical section"
+standard: "C++11"
+difficulty: 1
+summary: "A std::mutex lets only one thread at a time run the code between lock and unlock, so shared data is touched by one thread at a time instead of racing. std::lock_guard takes the lock in its constructor and releases it in its destructor, so you cannot forget to unlock and it is released even on an early exit."
+notes: "Mutual exclusion is the other half of concurrency, next to atomics. A std::mutex is a lock that at most one thread can hold; the region between acquiring and releasing it is the critical section, and the mutex guarantees threads run that region one at a time, so shared data accessed only inside it is never touched by two threads at once. You almost never lock and unlock a mutex by hand -- that is error-prone (an early return or a thrown exception skips the unlock and deadlocks everyone). Instead you use an RAII lock owner: std::lock_guard locks the mutex when constructed and unlocks it when it goes out of scope, for any reason, so the release is automatic and exception-safe. The example guards a shared counter, and the total comes out exact. It is deliberately the simplest case, and it also shows the mutex's limit: for a single variable a std::atomic is cheaper and non-blocking, so a mutex here is overkill. The mutex earns its keep when the critical section spans SEVERAL variables that must stay consistent together, which an atomic cannot express -- the next example. This runs under ThreadSanitizer on Linux/CI, which confirms the lock makes the shared increment race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

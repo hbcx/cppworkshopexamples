@@ -1,0 +1,11 @@
+title: "try_lock: take the mutex only if it is free"
+standard: "C++11"
+difficulty: 2
+summary: "try_lock() takes the mutex if it is free and returns true, or returns false right away if another thread holds it, without blocking. It lets a thread do other work or skip instead of waiting on a contended lock. On success you own the lock, so release it -- ideally via a unique_lock with std::try_to_lock."
+notes: "Where lock() blocks until the mutex is free, try_lock() makes one non-blocking attempt: true and locked if it was available, false and nothing acquired if someone else holds it. That turns a hard wait into a choice -- a thread that cannot get the lock can move on to other work, retry later, or drop a low-priority update rather than stall. The example makes the outcome deterministic: main takes the mutex, then a worker calls try_lock while main is still holding it, so the attempt always fails and the worker reports that it skipped; after the worker joins, main releases the mutex and a second try_lock succeeds. Two cautions. First, try_lock is allowed to fail spuriously on some platforms even when the mutex is free, so it belongs in a loop or a can-skip path, not where you strictly need the lock. Second, a successful try_lock leaves YOU owning the mutex, so you must unlock it -- the clean way is to give the mutex to std::unique_lock with the std::try_to_lock tag, which attempts the lock and, on success, unlocks via RAII (check owns_lock() to see whether it got it). The blocking-with-a-deadline middle ground is std::timed_mutex with try_lock_for / try_lock_until. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::mutex::try_lock", url: "https://en.cppreference.com/w/cpp/thread/mutex/try_lock" }

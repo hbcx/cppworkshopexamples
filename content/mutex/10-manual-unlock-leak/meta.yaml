@@ -1,0 +1,11 @@
+title: "Anti-pattern: a hand-managed lock leaked past an early exit"
+standard: "C++11"
+difficulty: 3
+summary: "Locking and unlocking a mutex by hand breaks the moment an early return or a thrown exception skips the unlock: the mutex stays locked and the next acquire blocks forever. std::lock_guard releases the lock in its destructor on every exit path, so it can never be leaked."
+notes: "Manual mutex management -- m.lock() ... m.unlock() -- looks fine on the happy path and fails on every other one. An early return between the two, a break or continue, or an exception thrown by anything in the critical section all skip the unlock, leaving the mutex permanently held; the next thread that tries to lock it (or the next call on the same thread) blocks forever, and the bug shows up far from its cause. This is the same reason raw new/delete is discouraged: cleanup that depends on reaching a specific line is cleanup that gets skipped. The fix is RAII: std::lock_guard takes the lock in its constructor and releases it in its destructor, which runs on EVERY way of leaving the scope -- normal fall-through, an early return, or stack unwinding from a thrown exception. The example describes the leaky manual version in a comment and runs the lock_guard version through all three exit paths (a normal deposit, an early return on a negative amount, and a throw on an over-large one), then shows a later deposit still succeeds -- proof the mutex was released each time. The rule: never lock a mutex by hand; always hand it to lock_guard, unique_lock, or scoped_lock. This example is single-threaded because the point is exit-path correctness, not contention."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

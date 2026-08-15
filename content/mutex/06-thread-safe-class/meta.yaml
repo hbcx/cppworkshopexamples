@@ -1,0 +1,11 @@
+title: "Wrapping data and its mutex in a thread-safe class"
+standard: "C++11"
+difficulty: 2
+summary: "Keep the shared data and the mutex that guards it together in one class, and lock inside every method, so callers never touch the raw data and cannot forget to lock. The mutex is mutable so const readers can lock, and accessors return copies so no unlocked reference escapes. This is the monitor pattern."
+notes: "Scattering lock/unlock calls across the code that uses shared data is fragile: one path that forgets to lock reintroduces the race. The robust design moves the responsibility into a type -- the monitor pattern. The class owns both the data and a private std::mutex, and every public method locks that mutex before touching the data, so correctness is guaranteed by the interface rather than by each caller's discipline; callers see only safe operations and never the raw state. Two details make it work in C++. The mutex member is declared mutable, because locking changes the mutex and a const read method (get) must still be allowed to lock it -- const here means logically read-only, and taking a lock does not break that promise. And accessors return a COPY of the data, not a reference or pointer into it: handing back a reference would let the caller read or write the value after the lock is released, quietly defeating the whole design (a dedicated anti-pattern later in the section). A natural consequence is that a std::mutex is neither copyable nor movable, so a class with a mutex member is non-copyable by default, which is usually correct for a shared object -- if you need copying, add copy operations that lock the source and copy only the data, not the mutex. The example runs four threads incrementing one Counter to an exact total. This runs under ThreadSanitizer on Linux/CI, which confirms the encapsulated locking is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

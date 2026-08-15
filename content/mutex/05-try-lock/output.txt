@@ -1,0 +1,2 @@
+worker: mutex busy, skipped the work
+main: got the lock after releasing

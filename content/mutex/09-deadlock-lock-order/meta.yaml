@@ -1,0 +1,11 @@
+title: "Anti-pattern: deadlock from inconsistent lock order"
+standard: "C++11"
+difficulty: 3
+summary: "If one thread locks mutex A then B while another locks B then A, they can each grab one and wait forever for the other -- a deadlock that hangs silently. Fix it by always locking mutexes in the same global order, or by using std::scoped_lock, which takes several at once without deadlock."
+notes: "Deadlock is the signature bug of holding more than one lock. When two threads need both A and B but acquire them in opposite orders, an unlucky interleaving leaves thread 1 holding A and waiting for B while thread 2 holds B and waiting for A; neither can proceed and the program hangs, with no crash, no exception, and nothing in the logs -- just a stuck process. The example describes that inverted-order version in a comment and does not run it, because a genuine deadlock would hang the build forever. Two fixes exist. The classic one, shown running here, is a global lock ORDER: decide that A is always acquired before B everywhere in the program, so no cycle of waits can form; every thread in the example locks A then B and the run completes. The simpler, order-proof fix is std::scoped_lock (the scoped_lock example), which locks all the mutexes it is given in one deadlock-avoiding step, so the order you name them is irrelevant. Either is fine; the cardinal rule is that a fixed acquisition order (or scoped_lock) must be used consistently -- one function that departs from it reintroduces the hazard. This runs under ThreadSanitizer on Linux/CI, whose deadlock detector also flags lock-order inversions, so the consistent order keeps it clean."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::scoped_lock", url: "https://en.cppreference.com/w/cpp/thread/scoped_lock" }

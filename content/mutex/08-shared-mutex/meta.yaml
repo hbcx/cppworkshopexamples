@@ -1,0 +1,13 @@
+title: "shared_mutex: many readers or one writer"
+standard: "C++17"
+difficulty: 3
+summary: "A std::shared_mutex (C++17) can be locked two ways: shared (a read lock, held by many threads at once) or exclusive (a write lock, held by one). When reads far outnumber writes, readers run in parallel instead of serializing on a plain mutex, while a writer still gets exclusive access."
+notes: "A plain std::mutex is pessimistic: it lets exactly one thread in at a time, even when two threads only want to READ, which never conflicts. For read-mostly shared state -- configuration, a routing or lookup table, a cache refreshed occasionally -- that serialization is pure waste. std::shared_mutex (C++17) offers reader/writer locking: you take a SHARED lock with std::shared_lock to read, and any number of readers may hold it at the same time; you take an EXCLUSIVE lock with std::unique_lock (or lock()) to write, and it waits until no readers or writers hold the mutex, then blocks everyone else while it writes. So concurrent reads run in parallel and only writes are serialized. It fits precisely the read-heavy, write-rare pattern; if writes are frequent the extra bookkeeping can make it slower than a plain mutex, so measure. The example runs one writer bumping a value and several readers looping; because each reader holds a shared lock while reading, it always sees a complete value (never a half-written one), which the program checks by asserting every observed value is in the valid range. std::shared_timed_mutex adds try_lock_for/until, and a reader can be upgraded only by dropping the shared lock and taking the exclusive one. This runs under ThreadSanitizer on Linux/CI, which confirms the reader/writer locking is race-free."
+run: true
+sanitizers: [thread]
+requires_runtime: [shared_mutex]
+main_tags:
+  - { name: "std::shared_mutex", url: "https://en.cppreference.com/w/cpp/thread/shared_mutex" }
+detailed_tags:
+  - { name: "std::shared_lock", url: "https://en.cppreference.com/w/cpp/thread/shared_lock" }
+  - { name: "std::unique_lock", url: "https://en.cppreference.com/w/cpp/thread/unique_lock" }

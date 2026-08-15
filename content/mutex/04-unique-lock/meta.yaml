@@ -1,0 +1,12 @@
+title: "unique_lock: when lock_guard is not flexible enough"
+standard: "C++11"
+difficulty: 2
+summary: "std::unique_lock is RAII like lock_guard but tracks whether it holds the mutex, so one lock object can be unlocked and relocked repeatedly. It can also defer locking, be moved, and drive a condition_variable. That flexibility costs a little more, so use lock_guard by default and unique_lock when you need one of its extra abilities -- here, one lock reused across many lock/unlock cycles."
+notes: "lock_guard and unique_lock are both RAII owners of a mutex, and both release the lock when they go out of scope, so both are exception-safe. The difference is flexibility. lock_guard is a sealed box: it locks on construction and unlocks on destruction, nothing else -- which is exactly why it is the right default and slightly cheaper (it stores no extra state). unique_lock tracks whether it currently holds the lock, which lets it do more: construct with std::defer_lock so it does not lock right away; call lock() and unlock() as many times as you like on the SAME object, taking the mutex only for each short update and releasing it in between; take std::try_to_lock or std::adopt_lock for other acquisition modes; be moved, so a function can lock a mutex and return the live lock to its caller; and be handed to std::condition_variable::wait, which needs to unlock and relock the mutex and therefore only accepts a unique_lock. The example shows the reuse ability directly: each thread creates ONE deferred unique_lock and then loops, doing its computation with no lock held (so the threads run in parallel) and taking the lock only briefly to add each batch's result -- the same lock object cycled lock/unlock five times. A lock_guard could not do this; it would force a new guard object per iteration, and could never leave the mutex unlocked between them. Rule of thumb: lock_guard unless you need what only unique_lock offers. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::unique_lock", url: "https://en.cppreference.com/w/cpp/thread/unique_lock" }
+detailed_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

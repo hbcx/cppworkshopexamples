@@ -1,0 +1,12 @@
+title: "What a mutex is: lock and unlock"
+standard: "C++11"
+difficulty: 1
+summary: "A std::mutex is two operations, lock() and unlock(), and between them only one thread can run -- that is the critical section. This shows the raw mechanism directly, but real code never locks by hand: an early return or exception would skip the unlock and deadlock, so you wrap the pair in a lock_guard (the next example)."
+notes: "Before the RAII wrappers, it helps to see the primitive itself. A std::mutex offers lock() and unlock(): lock() blocks until no other thread holds the mutex and then takes it, unlock() releases it. The code between the two runs with mutual exclusion -- one thread at a time -- so shared data touched only there does not race, which the example shows by having two threads increment a shared counter to an exact total. That is the whole idea a mutex adds. But calling lock and unlock by hand is exactly what you should NOT do in practice: any path that leaves the region without reaching unlock() -- an early return, a break, a thrown exception during the critical section -- leaves the mutex locked forever, and the next thread to lock it blocks permanently (a deadlock, and one of this section's anti-patterns). The fix is RAII: hand the mutex to std::lock_guard (the next example), which unlocks in its destructor on every exit path, so the release can never be skipped. Treat this example as the mechanism under the hood; from the next one on, everything uses a lock owner instead of raw lock/unlock. This runs under ThreadSanitizer on Linux/CI, which confirms the lock makes the shared increment race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::mutex::lock", url: "https://en.cppreference.com/w/cpp/thread/mutex/lock" }
+  - { name: "std::mutex::unlock", url: "https://en.cppreference.com/w/cpp/thread/mutex/unlock" }

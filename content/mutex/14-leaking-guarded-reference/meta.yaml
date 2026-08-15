@@ -1,0 +1,11 @@
+title: "Anti-pattern: leaking a reference to guarded data"
+standard: "C++11"
+difficulty: 3
+summary: "An accessor that returns a reference or pointer into mutex-protected data lets the caller touch that data after the lock is released -- a race, even though the accessor locked. Return a copy made under the lock, or run the caller's code inside the lock, so the data never leaves the critical section."
+notes: "Locking inside an accessor is worthless if the accessor then hands the caller a reference or pointer into the protected data. The lock_guard releases the mutex when the accessor returns, so every read or write the caller does through that reference happens with no lock held -- the exact race the mutex was supposed to prevent, now hidden behind a method that looks safe. The same applies to returning a pointer, an iterator, or a view into the guarded container. Two fixes keep the data inside the critical section. Return a COPY taken while locked (snapshot): the caller gets an independent value it can use freely, at the cost of the copy -- usually the right default. Or bring the work to the data: pass a callable that the class runs while holding the lock (with_locked), so the guarded object is never exposed outside the lock; this avoids the copy and lets the caller both read and modify safely. The example uses the callable form to append from four threads and then reads the length through a locked snapshot; all access to the string happens under the mutex. The principle: data protected by a lock must not outlive the lock's scope in any caller's hands. This runs under ThreadSanitizer on Linux/CI, which confirms every access stays inside the lock."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

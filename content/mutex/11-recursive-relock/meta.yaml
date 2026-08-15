@@ -1,0 +1,11 @@
+title: "Anti-pattern: re-locking a non-recursive mutex"
+standard: "C++11"
+difficulty: 3
+summary: "A locked method that calls another method which locks the same std::mutex deadlocks against itself -- locking a mutex the thread already holds is undefined behaviour. Fix it by splitting the logic into a private helper that assumes the lock is held, so the public method locks exactly once."
+notes: "A std::mutex is not re-entrant: if a thread that already holds it tries to lock it again, the second attempt waits on a lock only that same thread could release -- a self-deadlock, and formally undefined behaviour. This happens naturally as code grows: a locked method calls a helper that is itself correctly locked, and the combination re-enters the mutex. It is sneaky because each method is fine in isolation and only deadlocks on the path where one calls the other while holding the lock. The clean fix is to separate locking from logic: put the shared work in a private helper whose precondition is that the caller already holds the mutex (and which never locks), and have each public method take the lock once and call the helper. The example does exactly this and runs two withdrawals that also log, with no re-lock. std::recursive_mutex is the escape hatch -- it lets the owning thread lock repeatedly (unlocking the same number of times) -- and it makes the naive version work, but it is usually a design smell: it papers over the fact that you hold a lock across a re-entrant call, which makes it harder to see where your invariants hold. Prefer the helper split; use recursive_mutex only when a truly re-entrant interface leaves no choice. This example is single-threaded because the failure is about a thread re-locking its own mutex, not about contention."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::recursive_mutex", url: "https://en.cppreference.com/w/cpp/thread/recursive_mutex" }

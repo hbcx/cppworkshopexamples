@@ -1,0 +1,19 @@
+- problem: "A shared, mutable structure whose correctness spans several fields is read and written by many threads -- an in-memory cache with a size and an eviction list, a config object with interdependent settings, two account balances that must stay in sync during a transfer."
+  why: "A mutex protects the whole multi-field update as one critical section, so no thread sees the structure half-updated, where a set of separate atomics can be caught between the writes and observe an inconsistent state; the mutex expresses an invariant an atomic cannot."
+  signal: "A struct or object touched by more than one thread where a correct update writes two or more fields that must change together, currently guarded by separate atomics or by nothing."
+
+- problem: "A resource that is not thread-safe must be shared across threads -- a C library handle, a database or socket connection, a hardware device, or a legacy object never written with concurrency in mind."
+  why: "Wrapping every use in one mutex serializes access so the non-reentrant resource is only ever touched by one thread at a time, where the alternatives are worse: a separate resource per thread may be impossible or expensive, and calling it unsynchronized corrupts its internal state."
+  signal: "A single global handle or connection used from multiple threads, or a library whose docs say not reentrant / not thread-safe being called concurrently."
+
+- problem: "Shared state should be safe to use without every caller remembering to lock -- a bounded work queue, a connection pool, a metrics registry, a logger written to from all over the program."
+  why: "Putting the data and its mutex together in a class and locking inside each method makes safety a property of the type, so no call site can forget the lock, where exposing the raw data and documenting please lock first guarantees that someday someone will not."
+  signal: "Shared data with a matching mutex that callers are expected to lock by hand before touching it, the locking spread across many call sites."
+
+- problem: "State that is read constantly but written rarely sits on a hot path -- a routing or lookup table, feature flags, a configuration snapshot, a cache refreshed occasionally."
+  why: "A std::shared_mutex lets all the readers proceed in parallel and only serializes the rare writer, where a plain mutex forces readers to queue one at a time even though concurrent reads never conflict, throttling the common case for the sake of the uncommon one."
+  signal: "A read-mostly structure behind a plain std::mutex, with reads vastly outnumbering writes and read latency or throughput mattering."
+
+- problem: "A single logical operation must update two independently locked resources together -- transferring between two accounts, moving an item from one guarded container to another, committing across two subsystems."
+  why: "std::scoped_lock takes both mutexes at once with a deadlock-avoidance algorithm, so the pair is updated atomically and safely regardless of the order threads approach them, where locking them one at a time risks either a torn intermediate state or a classic lock-order deadlock."
+  signal: "Code that locks one mutex, then a second, to update two objects as a unit -- especially if different call sites acquire the two in different orders."

@@ -1,6 +1,8 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 - slug: "atomic"
   note: "The primitive threads use to share data safely: the moment two threads touch the same value and one writes, you need synchronization, and an atomic is the lock-free way to do it -- go there for atomic counters, compare_exchange, the wait/notify this section uses for its detach handshake, and the memory ordering behind it all."
+- slug: "mutex"
+  note: "The other way threads share data safely, for state bigger than one word: a mutex guards a whole critical section so a multi-field update stays consistent -- go there for lock_guard and unique_lock, the thread-safe class, scoped_lock against deadlock, and shared_mutex for many readers."
 - slug: "execution-policies"
   note: "The higher-level way to get parallelism without managing threads by hand: pass a parallel policy to a standard algorithm and the library runs it across a thread pool for you -- go there when your parallel work is really a sort, a transform, or a reduce, rather than something that needs raw std::thread."
 - slug: "raii"
