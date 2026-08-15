@@ -280,6 +280,62 @@ def sanitizer_supported(cc: str, san: str) -> bool:
     return _san_cache[key]
 
 
+# --- runtime capability (per compiler) --------------------------------------
+# Some standard-library features COMPILE everywhere but do not RUN on a given
+# platform's runtime. The concrete case: std::shared_mutex on the MSYS2 UCRT64
+# g++ (winpthreads) aborts at run time inside lock_shared() -- an assertion in
+# winpthreads' pthread_rwlock, not a bug in the example -- while Cygwin clang and
+# every Linux toolchain (WSL, CI) run it fine. An example can declare the runtime
+# features it needs with `requires_runtime: [shared_mutex]`; we probe each
+# (compiler, feature) once by compiling AND running a tiny program that exercises
+# it. If the probe aborts, we still BUILD the example on that compiler but SKIP
+# running it there (with a warning), and rely on a runtime-capable toolchain
+# (WSL/CI) for the real execution + sanitizer check -- the same philosophy as the
+# per-compiler sanitizer skip above.
+_rt_cache: dict = {}
+
+RUNTIME_PROBES: dict = {
+    "shared_mutex": (
+        "#include <shared_mutex>\n#include <mutex>\n#include <thread>\n"
+        "int main(){ std::shared_mutex sm;\n"
+        "  auto rd=[&]{ for(int i=0;i<200;++i){ std::shared_lock<std::shared_mutex> l(sm); } };\n"
+        "  std::thread a(rd), b(rd); a.join(); b.join();\n"
+        "  { std::unique_lock<std::shared_mutex> w(sm); } return 0; }\n"
+    ),
+}
+
+
+def runtime_supported(cc: str, feature: str, std_flag: str) -> bool:
+    key = (cc, feature)
+    if key not in _rt_cache:
+        probe = RUNTIME_PROBES.get(feature)
+        if probe is None:
+            _rt_cache[key] = True          # unknown feature: do not block running
+            return True
+        flavor = compiler_flavor(cc)
+        tmpdir = Path(tempfile.mkdtemp(prefix="cppws_rttest_"))
+        try:
+            src = tmpdir / "probe.cpp"
+            src.write_text(probe)
+            out = tmpdir / ("probe" + EXE_SUFFIX)
+            cmd = [cc, f"-std={std_flag}",
+                   to_compiler_path(src, flavor), "-o", to_compiler_path(out, flavor)]
+            try:
+                c = subprocess.run(cmd, capture_output=True, text=True)
+                if c.returncode != 0:
+                    # Cannot even build the probe -> treat as unsupported here.
+                    _rt_cache[key] = False
+                else:
+                    r = subprocess.run([str(out)], capture_output=True, text=True,
+                                       timeout=30)
+                    _rt_cache[key] = (r.returncode == 0)
+            except (OSError, subprocess.TimeoutExpired):
+                _rt_cache[key] = False
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
+    return _rt_cache[key]
+
+
 def sanitizer_run_env() -> dict:
     env = os.environ.copy()
     # Make any sanitizer report abort with a non-zero exit so run: true fails.
@@ -344,6 +400,7 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
         return res
 
     sanitizers = ex.meta.get("sanitizers") or []
+    required_runtime = ex.meta.get("requires_runtime") or []
     werror = ex.meta.get("werror", True)
 
     # Benchmarks are timing measurements, not correctness checks: their numbers
@@ -392,7 +449,21 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
             _lower_check(res, cc, ex, sources, standard, eff_sanitizers, werror,
                          build_root)
 
-        if run:
+        # Skip RUNNING (not building) on a compiler whose runtime cannot execute a
+        # feature this example needs (e.g. shared_mutex on winpthreads g++). A
+        # runtime-capable toolchain (WSL/CI) still runs it for the real check.
+        run_here = run
+        if run_here and required_runtime:
+            unsupported = [f for f in required_runtime
+                           if not runtime_supported(cc, f, std_flag)]
+            if unsupported:
+                run_here = False
+                res.warnings.append(
+                    f"{cc}: runtime feature(s) {','.join(unsupported)} not usable "
+                    "here (built, not run -- run under a runtime-capable toolchain "
+                    "-- Linux g++/clang or CI -- for the real check)")
+
+        if run_here:
             renv = sanitizer_run_env() if eff_sanitizers else None
             # A benchmark legitimately runs for minutes (many sizes x samples).
             limit = 900 if bench else 60
