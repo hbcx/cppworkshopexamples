@@ -1,0 +1,11 @@
+title: "load, store, and exchange"
+standard: "C++11"
+difficulty: 2
+summary: "Atomic values are accessed only through their operations: store() writes and load() reads, each indivisible. exchange() sets a new value and returns the old one in a single step -- the atomic test-and-set behind claiming a resource exactly once."
+notes: "A std::atomic<T> is not read or written like a plain variable; you use its member operations, each of which is indivisible. store(v) writes, load() reads, and the implicit conversions call those under the hood -- so a concurrent read never tears or races with a write. The operation that unlocks patterns is exchange(v): it atomically replaces the value with v and RETURNS what was there before, with no window between the read and the write for another thread to interleave. That single-step read-then-set is exactly what test-and-set needs: have every thread exchange a bool flag to true, and precisely one of them sees the old value false -- that thread has claimed the resource, and the rest see true and back off. Doing the same with a separate load then store would reopen the race (two threads could both load false before either stores true), which is why exchange exists as one operation. exchange is the unconditional cousin of compare_exchange (the next example), which sets the new value only if the current one matches an expected value. All of these take an optional memory_order argument, defaulting to the safe sequentially-consistent ordering. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::atomic::exchange", url: "https://en.cppreference.com/w/cpp/atomic/atomic/exchange" }

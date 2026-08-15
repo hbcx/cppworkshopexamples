@@ -1,0 +1,10 @@
+title: "Anti-pattern: volatile instead of atomic"
+standard: "C++11"
+difficulty: 3
+summary: "In C++, volatile is for memory-mapped hardware, not threads: it gives neither atomicity nor cross-thread ordering or visibility. Sharing data between threads through a volatile variable is a data race. Use std::atomic, which provides both."
+notes: "volatile is one of the most misunderstood keywords in C++, largely because it means something else in Java and C#. In C++ volatile tells the compiler only do not optimize away or reorder THIS access, and it exists for memory that changes outside the program's control -- hardware registers mapped into memory, and objects touched by a signal handler. It says NOTHING about threads: a volatile read-modify-write like ++counter is still a non-atomic load, add, store, so concurrent increments are lost exactly as with a plain variable; and volatile provides no happens-before, no acquire/release, so a volatile flag does not safely publish data to another thread. Using volatile for inter-thread communication is therefore a data race and undefined behaviour, even though it may appear to work because the compiler happens not to cache the value. The correct tool is std::atomic, which guarantees the operation is indivisible AND carries a memory_order that establishes the cross-thread visibility volatile lacks. The two keywords are unrelated and neither substitutes for the other: use volatile for MMIO and signal-visible state, use atomic for sharing between threads. (volatile std::atomic exists for the rare case of atomic access to genuinely hardware-volatile memory, but that is a specialist tool, not the default.) This example describes the volatile version and runs the atomic fix, whose total is exact."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags: []

@@ -6,3 +6,5 @@
   note: "The eviction fix in depth: a flyweight factory that must not grow forever holds weak_ptr, so an interned object expires with its last user -- see this chapter's unbounded-pool anti-pattern, then weak_ptr for lock() and expired()."
 - slug: "state"
   note: "Flyweight in the wild: because a stateless state object is identical for every context, the State pattern shares one immutable instance per state as a singleton and a transition becomes a pointer reassignment -- go there to see intrinsic-only sharing applied to a behavioural pattern."
+- slug: "atomic"
+  note: "What the thread-unsafe-factory anti-pattern needs to be correct: the intern table read and written from several threads must be synchronized, and an atomic (or a lock) is the fix -- go there for atomic operations, one-shot flags, and memory ordering."

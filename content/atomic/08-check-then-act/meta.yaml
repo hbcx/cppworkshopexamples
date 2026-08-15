@@ -1,0 +1,11 @@
+title: "Anti-pattern: non-atomic check-then-act"
+standard: "C++11"
+difficulty: 3
+summary: "A guard like if (!done) { done = true; ... } on a plain bool splits the check and the set into two steps, so several threads pass the check before any sets the flag -- the body runs more than once, and the shared bool is a data race. Use an atomic exchange (test-and-set) or std::call_once."
+notes: "Check-then-act is the classic concurrency bug: a decision is made by reading shared state, then acted on by writing it, but between the read and the write another thread can change things. A run-once guard written as if (!done) { done = true; doInit(); } over a plain bool has exactly this gap -- multiple threads can each read done == false before any of them stores true, so doInit runs several times, and on top of that the unsynchronized reads and writes of done are a data race, which is undefined behaviour that ThreadSanitizer reports immediately. Making done a std::atomic<bool> is necessary but NOT sufficient, because the check and the set are still two separate atomic operations with a gap between them. The fix is to fuse them into ONE atomic step: done.exchange(true) atomically sets the flag and returns the previous value, so exactly one thread sees false and runs the body while the rest see true and skip -- the same test-and-set from the exchange example. More generally, any check-then-act on an atomic must be a single read-modify-write (exchange or a compare_exchange loop), not a load followed by a separate store. And for genuine one-time initialization, prefer std::call_once with a std::once_flag: it is the purpose-built primitive, runs the initializer exactly once even under contention, and correctly propagates an exception thrown during initialization so a failed init can be retried. This example describes the racy guard and runs only the atomic fix."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic::exchange", url: "https://en.cppreference.com/w/cpp/atomic/atomic/exchange" }
+detailed_tags:
+  - { name: "std::call_once", url: "https://en.cppreference.com/w/cpp/thread/call_once" }

@@ -1,0 +1,12 @@
+title: "notify_all: release every waiter at once"
+standard: "C++20"
+difficulty: 2
+summary: "notify_all wakes every thread waiting on the atomic, where notify_one wakes just one. It is the tool for a start gate that holds many workers until a single signal, or a shutdown flag that every parked thread must see -- one store plus one notify_all releases them all together."
+notes: "notify_one and notify_all differ only in how many waiters they release. notify_one wakes a single thread parked in wait -- right for a one-item handoff, where waking more would just make them re-check and go back to sleep. notify_all wakes all of them, which is what you want when one state change should free many threads at once: a start gate that keeps a pool of workers blocked until the go signal, a shutdown flag every thread is waiting on, a phase change in a barrier. The pattern is the same as with notify_one -- change the value first (here store 1 to open the gate), then notify -- but with notify_all the change becomes visible to and releases every waiter. Getting this wrong is a real bug: notify_one where you needed notify_all leaves all but one thread parked forever, a hang that looks like a deadlock. The reverse, notify_all where notify_one would do, is only mildly wasteful -- the extra threads wake, see nothing for them, and wait again. When unsure, notify_all is the safe default. This runs under ThreadSanitizer on Linux/CI, which confirms the gate and the counter are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::atomic::notify_all", url: "https://en.cppreference.com/w/cpp/atomic/atomic/notify_all" }
+  - { name: "std::atomic::wait", url: "https://en.cppreference.com/w/cpp/atomic/atomic/wait" }

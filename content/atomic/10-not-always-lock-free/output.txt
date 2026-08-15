@@ -1,0 +1,2 @@
+atomic<int>      always lock-free? true
+atomic<BigState> always lock-free? false

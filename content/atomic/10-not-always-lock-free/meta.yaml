@@ -1,0 +1,11 @@
+title: "Anti-pattern: assuming atomic is lock-free"
+standard: "C++17"
+difficulty: 3
+summary: "std::atomic<T> is lock-free only for small types the CPU can handle directly; for larger types it falls back to an internal lock, so it blocks and cannot be used in a signal handler. Check is_lock_free() / is_always_lock_free rather than assuming."
+notes: "Reaching for std::atomic is usually a bid for LOCK-FREE progress -- no mutex, no blocking, safe in a signal handler. But atomicity and lock-freedom are different things. For types the hardware can operate on directly -- int, long, pointers, and small trivially-copyable structs up to the platform's widest atomic instruction (8 bytes everywhere, 16 with cmpxchg16b on x86-64) -- std::atomic uses real lock-free instructions. For anything larger, the implementation makes the operation APPEAR atomic by taking an internal lock (a spinlock or mutex from a global hashed table keyed on the object's address). Such an atomic still gives correct, race-free results, but it BLOCKS like a mutex, offers none of the progress guarantees, and must NOT be used where a lock is forbidden -- most importantly a signal handler, where locking is undefined. The bug is assuming atomic<BigThing> is cheap and lock-free when it is quietly serializing on a shared lock. Check, do not assume: is_lock_free() reports what a given object uses at runtime, and is_always_lock_free is a compile-time constant you can static_assert on when a type is required to be lock-free. If a large type must be shared lock-free, the fix is to shrink what is shared -- store a pointer or an index atomically and swap the big object behind it -- rather than making the whole struct atomic. This example only inspects the property, so it needs no threads; is_always_lock_free is C++17, and it deliberately avoids constructing a large atomic object, which would also pull in the libatomic support library."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::atomic::is_lock_free", url: "https://en.cppreference.com/w/cpp/atomic/atomic/is_lock_free" }
+detailed_tags:
+  - { name: "std::atomic::is_always_lock_free", url: "https://en.cppreference.com/w/cpp/atomic/atomic/is_always_lock_free" }

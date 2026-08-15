@@ -1,0 +1,12 @@
+title: "wait and notify_one: block instead of spin"
+standard: "C++20"
+difficulty: 2
+summary: "C++20 gives an atomic its own wait/notify: wait(old) blocks the thread while the value still equals old, and notify_one wakes one waiter after the value changes. It replaces a CPU-burning busy-spin loop with an efficient parked wait, and needs no separate mutex like a condition variable does."
+notes: "Waiting for an atomic to reach a value used to mean a busy-spin -- while (flag.load() == old) {} -- which pins a CPU core doing nothing but reloading. C++20 adds wait and notify directly on std::atomic. flag.wait(old) blocks the calling thread as long as the atomic still holds old; the OS parks the thread so it uses no CPU, and wait returns only once the value is different AND a notification has arrived. It also re-checks the value internally, so a spurious wake does not fall through -- you do not write your own predicate loop as you must with a bare condition variable. The waking side does two things in order: it changes the value (store, exchange, a CAS -- the waiter observes THIS, notify carries no data), then calls notify_one to wake a single waiting thread. The store must happen before the notify. Compared with std::condition_variable, wait/notify needs no separate mutex and closes the classic lost-wakeup window, because the wait is bound to the atomic's own value rather than to a predicate you guard by hand. Use notify_one to hand off to one waiter (a queue slot, a single worker); use notify_all when every waiter should be released (see the next example). This runs under ThreadSanitizer on Linux/CI, which confirms the handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::atomic::wait", url: "https://en.cppreference.com/w/cpp/atomic/atomic/wait" }
+  - { name: "std::atomic::notify_one", url: "https://en.cppreference.com/w/cpp/atomic/atomic/notify_one" }

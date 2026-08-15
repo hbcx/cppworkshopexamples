@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "execution-policies"
+  note: "Where the rules here bite at scale: a callable under std::execution::par runs on many threads, so a shared counter must be atomic (or a reduction) exactly as in this chapter -- go there for the parallel algorithms and their data-race and synchronization hazards."
+- slug: "object-pool"
+  note: "A place these primitives are needed: a pool handed out across threads must guard its free-list -- an atomic or a lock -- and the shared-pool-without-a-lock anti-pattern there is the concrete failure -- go there for pooling, RAII handles, and the thread-safety gap."
+- slug: "flyweight"
+  note: "Another shared-state case: the flyweight factory's intern table is read and written from several threads, and its thread-unsafe-factory anti-pattern is a race an atomic or a lock fixes -- go there for interning, intrinsic vs extrinsic state, and the unsynchronized-cache trap."

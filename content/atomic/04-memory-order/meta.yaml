@@ -1,0 +1,11 @@
+title: "Memory order: relaxed vs acquire/release"
+standard: "C++11"
+difficulty: 3
+summary: "Atomic operations take a memory_order. relaxed gives atomicity but no ordering -- fine for a standalone counter. To publish data to another thread you need a release store paired with an acquire load, which creates the happens-before edge that makes the other writes visible."
+notes: "Every atomic operation carries a memory_order that controls how it orders with OTHER memory accesses; the default is memory_order_seq_cst (sequentially consistent), the strongest and easiest to reason about. Two weaker levels matter in practice. memory_order_relaxed provides atomicity but NO ordering or synchronization: increments still are not lost, so it is perfect for a standalone counter or statistic where nothing else is published through it -- and cheaper than seq_cst. But relaxed does NOT make your other writes visible to another thread. Publishing data needs a RELEASE store paired with an ACQUIRE load: the producer writes the payload and then does ready.store(true, release); the consumer does ready.load(acquire) and then reads the payload. The release-acquire pair establishes a happens-before relationship, so everything the producer wrote before the release is guaranteed visible to the consumer after the matching acquire -- that is what makes the plain, non-atomic payload safe to read. Get this wrong -- use relaxed on the flag -- and the consumer can see the flag set before the payload write lands, reading stale data: a data race and undefined behaviour (an anti-pattern here). The guidance: default to seq_cst until profiling says otherwise; use relaxed only for counters and flags that synchronize nothing; and use release/acquire for the one-way handoff of data between threads. ThreadSanitizer on Linux/CI verifies this handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

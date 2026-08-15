@@ -1,0 +1,11 @@
+title: "Anti-pattern: load + store is not an atomic RMW"
+standard: "C++11"
+difficulty: 3
+summary: "counter.store(counter.load() + 1) uses two atomic operations with a gap between them, so another thread can update in that gap and have its change overwritten -- a lost update. A read-modify-write must be one operation: fetch_add or a compare_exchange loop."
+notes: "This is the subtle sibling of the plain-variable race. Here the variable IS a std::atomic, and both counter.load() and counter.store(...) are individually atomic -- which is exactly what makes the bug convincing. The problem is that a read-modify-write built from a separate load and store has a GAP between the two: thread A loads 5, thread B loads 5 and stores 6, then thread A stores 6 as well -- B's increment is silently overwritten, a LOST UPDATE. The atomic guarantees each access is not torn, but it cannot connect two separate accesses into one indivisible unit. Note this particular shape is not necessarily a data race in the technical sense (each access is atomic, so ThreadSanitizer may stay quiet) -- it is a correctness bug that just yields a wrong total, which makes it easy to ship. The fix is to use a single atomic read-modify-write: fetch_add (and fetch_sub, fetch_and, fetch_or, fetch_xor) do the read, the operation, and the store as ONE step; for operations outside that set, a compare_exchange loop achieves the same by retrying when the value changed under it. The rule: never express a read-modify-write on an atomic as load() then a separate store(); reach for fetch_* or CAS. This example runs only the correct fetch_add version, whose total is exact."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }
+detailed_tags:
+  - { name: "std::atomic::compare_exchange_weak", url: "https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange" }

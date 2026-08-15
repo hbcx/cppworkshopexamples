@@ -1,0 +1,11 @@
+title: "compare_exchange: the CAS loop"
+standard: "C++11"
+difficulty: 3
+summary: "compare_exchange installs a new value only if the current one still matches an expected value, updating the expected with the fresh value on failure. Looped, it turns any compute-from-old-then-install operation into a lock-free one -- atomic max, saturating add, lock-free stacks."
+notes: "fetch_add and friends cover add, sub, and, or, xor -- but not arbitrary operations like max, min, or a saturating add. compare_exchange (compare-and-swap, CAS) is the general primitive that does. compare_exchange_weak(expected, desired) atomically checks whether the atomic still equals expected: if so it stores desired and returns true; if not, it writes the atomic's CURRENT value back into expected (by reference) and returns false. The standard idiom is a loop: read the current value, compute the new value from it, and try to install it; if another thread changed it in between, the CAS fails, expected is refreshed, and you recompute and retry. That loop -- read, compute, CAS, retry -- turns any read-modify-write into a lock-free operation, which is how atomic max/min, saturating counters, and lock-free stacks and queues are built. Two practical points. Use compare_exchange_WEAK inside a loop: it is allowed to fail spuriously (return false even when the values matched) on some architectures but is cheaper, and the loop absorbs the spurious failure; use compare_exchange_STRONG when you attempt exactly once and cannot tolerate a spurious failure. And remember expected is an in/out parameter -- it is updated on failure, which is exactly what lets the next iteration retry against the real value. Runs under ThreadSanitizer on Linux/CI, which confirms the loop is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic::compare_exchange_weak", url: "https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

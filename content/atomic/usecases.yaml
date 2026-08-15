@@ -1,0 +1,15 @@
+- problem: "A value is incremented from many threads on a hot path -- request and error counters, cache hit/miss statistics, a rate limiter's token count, progress across worker threads."
+  why: "An atomic fetch_add is a single lock-free instruction, so counting scales under contention with no blocking and no deadlock risk, where a mutex around a plain counter serializes every increment and becomes the bottleneck the counter was meant to be too cheap to be."
+  signal: "A shared counter guarded by a mutex whose critical section is nothing but ++n, or a plain counter incremented from more than one thread."
+
+- problem: "An object is shared by several owners across threads and must be destroyed exactly when the last owner releases it -- the reference count behind a shared_ptr, a handle, or a cached resource."
+  why: "The count must be an atomic: increments and decrements race otherwise, and a lost decrement leaks while a lost increment double-frees; an atomic fetch_sub with the right ordering makes the drop-to-zero decision correct, and it stays lock-free where a mutex per copy would be far too heavy."
+  signal: "A hand-rolled reference count that is a plain integer touched by multiple threads, or a resource freed based on a non-atomic counter reaching zero."
+
+- problem: "Worker threads must be told to stop, or to proceed once setup is done -- a cooperative shutdown flag polled in a loop, a ready/done signal, a one-time lazy initialization."
+  why: "An atomic<bool> (with release/acquire when it also publishes data) is the lightweight signal for this, where a mutex plus condition variable is heavier than a boolean needs and volatile is simply broken in C++ -- it provides neither atomicity nor the cross-thread visibility the flag relies on."
+  signal: "A volatile bool used as a thread flag, or a busy-poll loop reading a plain bool set by another thread."
+
+- problem: "A shared data structure must stay correct under concurrency without the contention or priority-inversion of a lock -- a lock-free stack or queue, a version counter for optimistic concurrency, a seqlock."
+  why: "compare_exchange loops let you install a new state only if the old one has not changed, building lock-free structures that make progress without blocking, where a mutex-based version risks deadlock, convoying, or a thread holding the lock being descheduled and stalling everyone."
+  signal: "A lock-based container on a contended fast path, or optimistic-concurrency code that re-reads and re-checks a version but stores it non-atomically."

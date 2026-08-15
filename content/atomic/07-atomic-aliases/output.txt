@@ -1,0 +1,7 @@
+counter = 5
+ready   = true
+atomic_int    == atomic<int>?    true
+atomic_bool   == atomic<bool>?   true
+atomic_size_t == atomic<size_t>? true
+atomic_llong  == atomic<long long>? true
+atomic_flag   == atomic<bool>?   false

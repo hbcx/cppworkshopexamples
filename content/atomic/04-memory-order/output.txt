@@ -1,0 +1,2 @@
+relaxed counter = 400000
+handed over payload = 42

@@ -1,0 +1,12 @@
+title: "The atomic_* aliases: atomic_int, atomic_bool, and friends"
+standard: "C++11"
+difficulty: 1
+summary: "<atomic> ships convenience typedefs -- atomic_int, atomic_bool, atomic_size_t, atomic_llong, and many more -- that are pure aliases for std::atomic<T>. They are the exact same type, not a different atomic. The one thing to know: atomic_flag is a separate type, not one of these aliases."
+notes: "For every common scalar, <atomic> defines a typedef alias: std::atomic_bool, std::atomic_char, std::atomic_int, std::atomic_uint, std::atomic_long, std::atomic_llong, std::atomic_size_t, std::atomic_intptr_t, and so on across the integer, character, and pointer-sized types. Each is literally the same type as the template it names -- std::atomic_int IS std::atomic<int>, provable with std::is_same, which is why the two are freely interchangeable and neither is faster or safer than the other. They exist as spelling sugar and to echo the C11 <stdatomic.h> names, so shared C/C++ headers line up. Pick whichever reads better in context. The one real trap is std::atomic_flag: despite the matching name it is NOT an alias for std::atomic<bool>. It is a distinct, minimal type -- the only atomic the standard guarantees is lock-free on every platform -- exposing just test_and_set and clear, with no load, store, or arithmetic. Reach for atomic_flag only when you specifically want that lock-free test-and-set primitive (for example a spinlock); for an ordinary boolean shared between threads use atomic_bool. This example is single-threaded: the aliases are a type-system fact, so it just constructs a couple, uses them, and lets the compiler confirm the identities."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::atomic_flag", url: "https://en.cppreference.com/w/cpp/atomic/atomic_flag" }
+  - { name: "std::is_same", url: "https://en.cppreference.com/w/cpp/types/is_same" }

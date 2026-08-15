@@ -5,3 +5,5 @@
   note: "The algorithm that parallelizes most cleanly: std::sort takes a policy and produces the same order however the work is split, so a large sort gets multi-core for one extra argument -- go there for ordering, comparators, and stable_sort."
 - slug: "for-each"
   note: "The per-element apply you most often parallelize: for_each with par runs the callable across threads, which is where the data-race and no-synchronization rules bite hardest -- go there for the plain visit and why a captured accumulator becomes a race under par."
+- slug: "atomic"
+  note: "The primitive that fixes the shared-state hazard here: when a par callable must touch shared data, an atomic (or a reduction) makes it race-free, and the memory-order rules explain the visibility par relies on -- go there for atomic counters, compare_exchange, and memory ordering."

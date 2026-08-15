@@ -1,0 +1,11 @@
+title: "An atomic counter: fetch_add"
+standard: "C++11"
+difficulty: 1
+summary: "A std::atomic<T> makes read-modify-write indivisible: fetch_add (or ++ on an atomic) increments safely from many threads with no lost updates, where a plain ++ on a shared variable is a data race. The final total is exact."
+notes: "The atomic counter is the simplest reason std::atomic exists. Incrementing a shared plain long from several threads is a data race: ++counter is really load, add one, store, and two threads can read the same old value and both write back the same new one, silently losing an increment -- undefined behaviour that also gives wrong totals. Wrapping it in std::atomic<long> and using fetch_add (or the equivalent ++counter, which on an atomic is a single atomic operation) makes the whole read-modify-write INDIVISIBLE, so every increment is counted exactly once and the final total is deterministic. fetch_add returns the value from BEFORE the addition, which is useful for handing out unique ids or slots. This is a genuine lock-free operation on the common integer types -- no mutex, so no blocking and no risk of deadlock -- which is why atomics are the go-to for counters, statistics, and reference counts under contention. The load() at the end reads the final value; on an atomic even a plain read must go through load (or the implicit conversion), never a raw access, so the read is not racing with the concurrent writes. This example runs under ThreadSanitizer on Linux/CI, which would flag the non-atomic version instantly."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }
