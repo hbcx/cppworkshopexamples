@@ -7,9 +7,15 @@
 # ubuntu-latest ships g++, clang++ and python3 preinstalled (both compilers here
 # are "normal" -- no MSYS/cygwin path quirks). Two versions are pinned newer than
 # the defaults, because the corpus teaches C++23 features the stock compilers lack:
-#   * g++-14 -- the default g++ (13) has no std::ranges::to, no views::join_with,
+#   * g++-15 -- the default g++ (13) has no std::ranges::to, no views::join_with,
 #     and no deducing-this in lambdas (this auto self); all three arrived in
-#     GCC 14 / libstdc++14. Without this those C++23 examples fail to compile.
+#     GCC 14 / libstdc++14. We go one further to g++-15 (libstdc++15) because
+#     libstdc++14's std::ranges::to PIPE adaptor (r | std::ranges::to<C>()) has a
+#     defect that clang cannot compile -- an internal forward_like<> with a
+#     deduced return type "used before it is defined" -- which broke three
+#     ranges-cpp23 examples on clang++-20 only. It is fixed in libstdc++15, and
+#     clang++-20 picks up the newest installed libstdc++ automatically. g++-15 is
+#     not in ubuntu's default repos, so it comes from the ubuntu-toolchain-r PPA.
 #   * clang++-20 -- the preinstalled clang 18 cannot compile C++23 std::expected
 #     on ubuntu's libstdc++14 (the <expected> declaration guards out).
 # Both are installed below and named explicitly in the compile step.
@@ -39,23 +45,27 @@ jobs:
       # on update-alternatives -- /usr/bin/{g++,clang++} are plain symlinks to the
       # stock versions, so alternatives never took over and the old versions stuck).
       #
-      # g++-14: the default g++ (13) lacks std::ranges::to, views::join_with, and
-      #   deducing-this in lambdas -- the C++23 features arrived in GCC 14. It is in
-      #   ubuntu's universe repo, so a plain apt install is enough (no PPA).
+      # g++-15: the default g++ (13) lacks std::ranges::to, views::join_with, and
+      #   deducing-this in lambdas. GCC 14 covers those, but libstdc++14's
+      #   std::ranges::to pipe adaptor breaks clang (see the header note above), so
+      #   we take g++-15 whose libstdc++15 fixes it. g++-15 is NOT in ubuntu's
+      #   default repos, hence the ubuntu-toolchain-r/test PPA. clang++-20 then uses
+      #   libstdc++15 automatically (it selects the newest installed GCC).
       # clang++-20: clang <=18 paired with libstdc++14 guards out C++23 std::expected
       #   (the <expected> declaration disappears), breaking the `expected` chapter.
-      - name: Install g++-14 and clang 20 (stock compilers lack some C++23 features)
+      - name: Install g++-15 and clang 20 (stock compilers lack some C++23 features)
         run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
           sudo apt-get update
-          sudo apt-get install -y g++-14
-          g++-14 --version | head -1
+          sudo apt-get install -y g++-15
+          g++-15 --version | head -1
           wget -qO llvm.sh https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 20
           clang++-20 --version | head -1
 
-      - name: Compile every example with g++-14 AND clang++-20
+      - name: Compile every example with g++-15 AND clang++-20
         # --strict: a missing requested compiler is an error (both are required
         # on CI, unlike local dev where one may be skipped). Both are named with an
         # explicit version so the newer toolchains are definitely the ones used.
-        run: python3 driver/build.py --strict --compilers g++-14,clang++-20
+        run: python3 driver/build.py --strict --compilers g++-15,clang++-20
