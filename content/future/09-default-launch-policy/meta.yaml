@@ -1,0 +1,13 @@
+title: "Anti-pattern: assuming the default launch policy runs on a thread"
+standard: "C++11"
+difficulty: 3
+summary: "std::async(fn) with no policy uses launch::async | launch::deferred, and the implementation may choose either. If it defers, the task runs lazily on the calling thread at the first get()/wait() -- and if you never wait, it never runs at all. Pass std::launch::async explicitly when you need a background thread, and always consume the future."
+notes: "The one-argument std::async(fn, args...) does NOT promise you a thread. Its policy is the combination launch::async | launch::deferred, and the standard lets the implementation pick whichever it likes -- possibly per call. If it chooses deferred, nothing runs concurrently: the task is stored and only executed when you call get() or wait(), synchronously, on the calling thread. Worse, if you drop the future without ever waiting (easy to do when you called async purely for a side effect), a deferred task runs never. That is why code that fires off std::async(do_background_work) and moves on can work on one machine or compiler and silently do nothing on another. The example shows the hazard deterministically with launch::deferred -- a legal choice of the default -- and a future that is never consumed: the side effect does not happen. The fix has two parts: pass std::launch::async explicitly whenever you actually need the work to run on its own thread, and always consume the future (get()/wait()) so a deferred task is at least forced to run. Reserve launch::deferred for when you deliberately want a lazily computed value. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::async", url: "https://en.cppreference.com/w/cpp/thread/async" }
+  - { name: "std::launch", url: "https://en.cppreference.com/w/cpp/thread/launch" }
+detailed_tags:
+  - { name: "std::future::get", url: "https://en.cppreference.com/w/cpp/thread/future/get" }
+  - { name: "std::future::wait", url: "https://en.cppreference.com/w/cpp/thread/future/wait" }

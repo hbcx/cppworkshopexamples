@@ -1,0 +1,13 @@
+title: "Launch policy: async vs deferred"
+standard: "C++11"
+difficulty: 2
+summary: "The launch policy passed to std::async decides how the task runs. std::launch::async runs it right away on a new thread. std::launch::deferred does not run it at all until the first get() or wait(), and then runs it on the calling thread -- lazy, synchronous evaluation. The default policy is async-or-deferred, chosen by the implementation, so you must not assume either."
+notes: "std::async has two launch policies and they are genuinely different tools. launch::async means real concurrency: the task starts on a fresh thread immediately. launch::deferred means lazy evaluation: nothing happens until someone calls get() or wait() on the future, at which point the task runs synchronously on that caller's thread -- no new thread is ever created. You can see the split here without any timing tricks: a deferred future reports future_status::deferred from wait_for, and when it finally runs its thread id equals main's, while an async task's id differs. The trap is the DEFAULT: std::async(fn) with no policy is launch::async | launch::deferred, and the implementation picks. That means the task might run on a thread, or might be deferred and never run at all if you never call get() -- so relying on the default to give you a background thread, or to run for its side effects, is a bug. Pass launch::async explicitly when you need concurrency; use launch::deferred deliberately when you want a lazily-computed value on the current thread. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::async", url: "https://en.cppreference.com/w/cpp/thread/async" }
+  - { name: "std::launch", url: "https://en.cppreference.com/w/cpp/thread/launch" }
+detailed_tags:
+  - { name: "std::future::wait_for", url: "https://en.cppreference.com/w/cpp/thread/future/wait_for" }
+  - { name: "std::future_status", url: "https://en.cppreference.com/w/cpp/thread/future_status" }

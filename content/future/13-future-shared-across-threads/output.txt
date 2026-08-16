@@ -1,0 +1,1 @@
+shared_future, all 4 threads saw 100 = true

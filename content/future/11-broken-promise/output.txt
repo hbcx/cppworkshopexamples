@@ -1,0 +1,2 @@
+unset promise: broken_promise = true
+fulfilled promise: value = 7

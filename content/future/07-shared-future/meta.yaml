@@ -1,0 +1,13 @@
+title: "shared_future: broadcast one result to many"
+standard: "C++11"
+difficulty: 3
+summary: "A std::future is move-only and get() consumes the result, so it serves one consumer. std::shared_future is copyable, and every copy can call get() to read the same value (get returns a const reference). Give each waiter its own copy and a single set_value releases them all with the same one-shot result -- a broadcast."
+notes: "std::future owns its result exclusively: it is move-only, and get() moves the value out, so it can be read once by one thread. That is the right model for a point-to-point handoff, but not when several threads must all act on the same computed-once value -- a loaded configuration, a warmed cache, a go-ahead that carries data. std::shared_future is the shared-ownership version: you make one with future.share() (or by copying an existing shared_future), it is freely copyable, and get() returns a const reference to the stored value without consuming it, so many threads can call get() and all see the same result. Hand each waiter its own copy (capture by value), and a single producer's set_value releases every one of them. If the producer stores an exception instead, every waiter's get() re-throws that same exception -- the error broadcasts too. The trade-off versus a plain future is shared ownership overhead and that the result is read-only through get(); use it only when more than one consumer really needs the same value. This runs under ThreadSanitizer on Linux/CI, which confirms the shared reads are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::shared_future", url: "https://en.cppreference.com/w/cpp/thread/shared_future" }
+  - { name: "std::promise", url: "https://en.cppreference.com/w/cpp/thread/promise" }
+detailed_tags:
+  - { name: "std::future::share", url: "https://en.cppreference.com/w/cpp/thread/future/share" }
+  - { name: "std::shared_future::get", url: "https://en.cppreference.com/w/cpp/thread/shared_future/get" }

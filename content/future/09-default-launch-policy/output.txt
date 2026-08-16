@@ -1,0 +1,2 @@
+deferred, never waited on: side effect ran = false
+explicit launch::async + get: side effect ran = true

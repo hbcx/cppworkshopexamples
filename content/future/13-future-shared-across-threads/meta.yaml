@@ -1,0 +1,13 @@
+title: "Anti-pattern: sharing one std::future across threads"
+standard: "C++11"
+difficulty: 3
+summary: "A std::future is a single-consumer, move-only handle, and get() consumes the result. Having several threads call get()/wait() on the same future by reference is a data race -- undefined behaviour -- and only one could take the value anyway. When many threads must observe one result, use std::shared_future and give each thread its own copy."
+notes: "std::future models exclusive ownership of a one-shot result: it is move-only, get() is a consuming, non-const operation, and it is not safe to call get() or wait() on the same future object from more than one thread concurrently. So passing one std::future by reference to several threads and having them all get() it is a data race on the future's internal state -- undefined behaviour that ThreadSanitizer would flag -- and even setting the race aside, only one get() can transfer the value out, so the design cannot work. The example describes that broken version in a comment and does NOT run it (UB is nondeterministic); it runs only the fix. The fix is std::shared_future: build it with .share() (or copy an existing one), and give each thread its OWN copy, captured by value. Every copy is an independent handle to the same shared result, get() is safe to call from each, returns a const reference, and hands the same value (or re-throws the same exception) to all of them. Rule of thumb: a future crossing to exactly one other thread stays a future; a result that fans out to many must become a shared_future. This runs under ThreadSanitizer on Linux/CI, which confirms the shared reads are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::shared_future", url: "https://en.cppreference.com/w/cpp/thread/shared_future" }
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+detailed_tags:
+  - { name: "std::future::share", url: "https://en.cppreference.com/w/cpp/thread/future/share" }
+  - { name: "std::shared_future::get", url: "https://en.cppreference.com/w/cpp/thread/shared_future/get" }

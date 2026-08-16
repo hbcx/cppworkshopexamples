@@ -11,3 +11,5 @@
   note: "What to use when an atomic is not enough: a single word fits an atomic, but an invariant across several variables needs a lock, which serializes a whole critical section -- go there for mutexes, RAII lock owners, deadlock avoidance, and reader/writer locks."
 - slug: "condition-variable"
   note: "The classic, pre-C++20 way to wait for a condition, and the general one: where atomic wait/notify handles a single word, a condition variable waits on a mutex-guarded predicate over arbitrary state -- go there for the producer/consumer queue, notify_all gates, and timed waits."
+- slug: "future"
+  note: "When the handoff needs to carry a VALUE, not just flip a flag: atomic wait/notify signals that a word changed, but a std::future delivers a result (or an exception) from one thread to another and does the synchronization for you -- go there for async, promise, packaged_task, and shared_future."

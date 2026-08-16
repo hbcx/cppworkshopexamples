@@ -1,0 +1,3 @@
+first call, result = 25
+second call threw, already_satisfied = true
+fresh task, result = 36

@@ -1,0 +1,13 @@
+title: "Anti-pattern: invoking a packaged_task twice"
+standard: "C++11"
+difficulty: 3
+summary: "A std::packaged_task fulfils its future exactly once. The first call runs the callable and stores the result; a second call throws std::future_error with future_errc::promise_already_satisfied, because the future is already satisfied. A packaged_task is a single-use job, not a reusable function object -- build a fresh task to run the work again."
+notes: "A packaged_task looks like a callable, so it is tempting to treat it like a std::function you can invoke repeatedly -- but it owns a one-shot result channel. The first invocation runs the wrapped callable and stores its return (or exception) into the associated future; there is no second slot, so a second invocation throws std::future_error with code() == future_errc::promise_already_satisfied. This shows up in a thread pool that accidentally dispatches the same task twice, or a retry loop that re-invokes the task it already ran. The example runs the mistake (a defined exception, not UB) and catches it. The fix is to treat one packaged_task as one execution: to run the same work again, construct a new packaged_task (with its own get_future()). If you genuinely need a repeatable job that produces a fresh future each time, wrap the callable in a small factory that hands back a new packaged_task per call, rather than reusing one. Note reset() exists but re-arms the task with a BRAND NEW future, invalidating the old one -- rarely what you want. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::packaged_task", url: "https://en.cppreference.com/w/cpp/thread/packaged_task" }
+  - { name: "std::future_error", url: "https://en.cppreference.com/w/cpp/thread/future_error" }
+detailed_tags:
+  - { name: "std::packaged_task::operator()", url: "https://en.cppreference.com/w/cpp/thread/packaged_task/operator()" }
+  - { name: "std::future_errc", url: "https://en.cppreference.com/w/cpp/thread/future_errc" }

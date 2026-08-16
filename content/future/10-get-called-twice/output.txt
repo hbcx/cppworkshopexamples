@@ -1,0 +1,3 @@
+first get  = 21
+second get threw, no_state = true
+shared_future get twice = 21, 21

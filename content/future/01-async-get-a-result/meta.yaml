@@ -1,0 +1,13 @@
+title: "async and get: run a function, collect its result"
+standard: "C++11"
+difficulty: 1
+summary: "std::async runs a function (here on a new thread) and returns a std::future, a handle to a result that is not ready yet. future.get() blocks until the function finishes and returns what it computed. The future carries the value and does the synchronization, so there is no shared variable, no join, and no mutex to write."
+notes: "This is the highest-level way to run work off the current thread and get an answer back. std::async(std::launch::async, fn, args...) starts fn(args...) and returns a std::future<R> immediately, where R is fn's return type. You keep running; when you need the answer you call future.get(), which blocks until the task is done and then returns the value. The future is a one-shot channel: get() can be called once and transfers the result out. Compared with a raw std::thread, async removes three chores at once -- you do not allocate a slot for the result, you do not join the thread by hand, and you do not guard the handoff with a mutex, because get() establishes the happens-before for you. Passing std::launch::async explicitly guarantees a separate thread here; the default policy does not (see the launch-policy example). This runs under ThreadSanitizer on Linux/CI, which confirms the value handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::async", url: "https://en.cppreference.com/w/cpp/thread/async" }
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+detailed_tags:
+  - { name: "std::future::get", url: "https://en.cppreference.com/w/cpp/thread/future/get" }
+  - { name: "std::launch", url: "https://en.cppreference.com/w/cpp/thread/launch" }

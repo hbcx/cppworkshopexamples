@@ -1,0 +1,2 @@
+async task threw: negative input not allowed
+promise forwarded: negative input not allowed

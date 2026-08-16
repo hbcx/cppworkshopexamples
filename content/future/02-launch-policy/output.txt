@@ -1,0 +1,3 @@
+deferred, before get: not started yet = true
+deferred ran on the calling thread       = true
+async ran on a different thread          = true

@@ -1,0 +1,19 @@
+- problem: "A request must run several independent pieces of work and combine their results -- fetch from three services at once, score a batch of items in parallel, split a computation across cores and sum the parts."
+  why: "std::async launches each piece and hands back a future, so you fan out the work, then gather results by calling get() on each; the return values and any exceptions come back through the futures with no shared result array, no manual join, and no mutex, where doing it with raw std::threads means allocating a result slot per thread, joining them all by hand, and inventing your own way to carry an error out."
+  signal: "A loop that spawns std::threads, writes each result into a pre-sized vector by index, joins them all, then reads the vector back -- the future/get version replaces all of that plumbing."
+
+- problem: "A long or blocking call -- a database query, a file read, a network round-trip -- must not freeze the thread that started it, which needs to stay responsive and pick up the answer once it is ready."
+  why: "std::async runs the call in the background and returns a future you can poll with wait_for or block on with get() exactly when you need the value, keeping the caller free in the meantime, where hand-rolling it means a thread plus a shared result variable plus a flag or condition variable you write and synchronize yourself."
+  signal: "A worker thread launched only to compute one value, writing it to a shared variable guarded by a flag or condition variable that the starter thread later checks -- a future collapses the value, the ready signal, and the synchronization into one object."
+
+- problem: "One thread must deliver a single value to another thread that is already running, and the producer is not the code that started the consumer -- the value arrives from a callback, an I/O completion, an event handler, or a thread doing other work."
+  why: "A std::promise/std::future pair is a one-shot channel where the producer calls set_value from wherever it happens to be and the consumer blocks on get(), decoupling who produces from who waits, where a std::condition_variable would need a mutex, a shared slot, a predicate, and careful ordering to move the same single value safely."
+  signal: "A condition_variable, a mutex, a bool ready flag, and a shared result variable all introduced together only to pass ONE value from one thread to one other thread exactly once."
+
+- problem: "A thread pool or job runner must accept work from callers, run it on its own worker threads, and give each caller back the result of their specific job."
+  why: "std::packaged_task bundles a callable with its future, so a caller submits the task and keeps the future while a worker pulls the task off the queue and invokes it -- the worker never needs to know who is waiting, where wiring this by hand means creating a std::promise per job and passing it into the worker alongside the callable yourself."
+  signal: "A task queue whose entries pair a callable with a separately-created promise, or worker threads that write results back through side channels the submitter has to match up to its request."
+
+- problem: "A value computed once must be observed by many threads -- a configuration loaded at startup, a warmed cache entry, a handshake result that gates a group of workers before they proceed."
+  why: "std::shared_future is copyable and its get() returns a const reference, so every waiter holds its own copy and reads the same result (or the same exception) after a single producer sets it once, where a condition_variable approach means shared storage plus a ready predicate that every thread re-checks, and a plain std::future cannot be read by more than one consumer at all."
+  signal: "Several threads blocked on the same ready flag before all reading one shared, computed-once value -- or an attempt to hand the same std::future to more than one waiter."

@@ -1,0 +1,13 @@
+title: "Anti-pattern: calling future.get() twice"
+standard: "C++11"
+difficulty: 3
+summary: "std::future::get() moves the result out and leaves the future with no shared state, so a second get() throws std::future_error with future_errc::no_state. get() is a one-shot transfer, not a re-readable accessor. Store the value if you need it in several places, or use std::shared_future whose get() returns a const reference and can be called repeatedly."
+notes: "A std::future owns its result exclusively, and get() is how you take ownership: it waits for the result, then MOVES it out to the caller and drops the future's shared state, so afterwards valid() is false. Calling get() a second time is therefore an error -- it throws std::future_error whose code() is future_errc::no_state. This bites when the same future is read from two code paths, or when get() is called in a loop, or when a value is needed both to log and to return. The example runs the mistake (it is a defined exception, not undefined behaviour) and catches it. There are two fixes depending on intent: if a single thread needs the value more than once, call get() ONCE into a local variable and use the variable; if several readers each need it, convert to a std::shared_future with .share(), whose get() returns a const reference and may be called any number of times by any number of copies. The same one-shot rule is why you must not call get() on a future you also passed to wait() expecting to read later -- wait() does not consume, but get() does. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+  - { name: "std::future_error", url: "https://en.cppreference.com/w/cpp/thread/future_error" }
+detailed_tags:
+  - { name: "std::future::get", url: "https://en.cppreference.com/w/cpp/thread/future/get" }
+  - { name: "std::future_errc", url: "https://en.cppreference.com/w/cpp/thread/future_errc" }

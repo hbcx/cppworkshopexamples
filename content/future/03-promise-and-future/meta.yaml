@@ -1,0 +1,13 @@
+title: "promise and future: hand a value across threads"
+standard: "C++11"
+difficulty: 2
+summary: "std::promise is the write end of a one-shot channel and std::future is the read end. One thread calls promise.set_value once; another calls future.get() and blocks until the value arrives. Unlike std::async you choose which thread produces the value and when, so it fits handoffs that do not have a call-a-function-and-return shape."
+notes: "A promise/future pair is the manual, lower-level version of what std::async automates. You create a std::promise<T>, take its std::future<T> with get_future() BEFORE handing the promise off (the promise is move-only, so get the future first), and give the promise to whichever thread will produce the value. That thread calls set_value(v) exactly once; the consumer's get() blocks until then and returns v. The pair establishes a happens-before, so everything the producer did before set_value is visible to the consumer after get() -- no extra mutex needed. Reach for promise/future instead of async when the producer is not simply 'a function you call and return from': the value might be set from inside a callback, an event handler, an I/O completion, or a thread that already exists and is doing other work. It is also the building block the higher-level tools sit on: std::async and std::packaged_task both hand you a future backed by a promise underneath. This runs under ThreadSanitizer on Linux/CI, which confirms the handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::promise", url: "https://en.cppreference.com/w/cpp/thread/promise" }
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+detailed_tags:
+  - { name: "std::promise::set_value", url: "https://en.cppreference.com/w/cpp/thread/promise/set_value" }
+  - { name: "std::promise::get_future", url: "https://en.cppreference.com/w/cpp/thread/promise/get_future" }

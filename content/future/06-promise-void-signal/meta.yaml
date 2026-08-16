@@ -1,0 +1,13 @@
+title: "promise<void>: a one-shot signal with no value"
+standard: "C++11"
+difficulty: 2
+summary: "A std::promise<void> transports no value; it is a pure one-time signal. A waiter blocks on the future until set_value() is called. Because the future creates a happens-before, whatever the signalling thread wrote before set_value() is visible to the waiter afterwards, giving a clean go latch between two threads with no mutex of your own."
+notes: "Not every handoff needs to carry data -- sometimes you only need to say 'you may proceed now'. std::promise<void> / std::future<void> is exactly that: the future's wait() (or get()) blocks until the promise is fulfilled with set_value(), which passes no value. What you still get is the ordering guarantee: the pair establishes a happens-before, so any state the signalling thread set up before set_value() is safely visible to the waiter after it wakes, without a separate mutex. This makes it a tidy one-shot latch -- start a worker but hold it until initialization is done, then release it once. Compared with a std::condition_variable this is simpler when the event happens exactly ONCE and goes to ONE waiter: there is no lock to take, no predicate to write, and no lost-wakeup window, because the future remembers that it was fulfilled even if wait() is called after set_value(). For a repeated signal, or to release MANY waiters, reach for a condition_variable or a std::shared_future instead. This runs under ThreadSanitizer on Linux/CI, which confirms the ordering is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::promise", url: "https://en.cppreference.com/w/cpp/thread/promise" }
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+detailed_tags:
+  - { name: "std::promise::set_value", url: "https://en.cppreference.com/w/cpp/thread/promise/set_value" }
+  - { name: "std::future::wait", url: "https://en.cppreference.com/w/cpp/thread/future/wait" }

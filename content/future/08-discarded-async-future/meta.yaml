@@ -1,0 +1,13 @@
+title: "Anti-pattern: discarding the async future serializes the work"
+standard: "C++11"
+difficulty: 3
+summary: "The future from std::async(launch::async, ...) blocks in its DESTRUCTOR until the task finishes. If you do not store it, the temporary dies at the end of the statement and waits there, so a loop of fire-and-forget async calls runs strictly one after another with no parallelism. Keep the futures and get() them after launching all the work."
+notes: "This is the most surprising rule about std::async: the future it returns for the async policy has a blocking destructor -- when that future is destroyed, it waits for the task to complete. So std::async(std::launch::async, work); as a bare statement launches the task and then immediately blocks, because the temporary future is destroyed at the end of the full expression. Put that in a loop and every iteration waits for its own task before the next begins: you paid for threads but got fully serial execution. The example proves the serialization without any timing -- each task records how many tasks had already finished when it started, and the discarded-future version prints 0 1 2 3, meaning each one waited for all the earlier ones. The fix is to STORE the futures (here in a vector), which lets all the tasks run at once, and only then call get() to collect the results. The same trap bites a single std::async whose future you ignore: it looks asynchronous but the destructor makes the call synchronous. Note this blocking-destructor behaviour is specific to futures from std::async; a future from a std::promise or packaged_task does not wait. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::async", url: "https://en.cppreference.com/w/cpp/thread/async" }
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+detailed_tags:
+  - { name: "std::future::~future", url: "https://en.cppreference.com/w/cpp/thread/future/~future" }
+  - { name: "std::launch", url: "https://en.cppreference.com/w/cpp/thread/launch" }

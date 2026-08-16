@@ -1,0 +1,13 @@
+title: "Anti-pattern: destroying a promise without setting it"
+standard: "C++11"
+difficulty: 3
+summary: "A future expects exactly one delivery: a value or an exception. If a std::promise is destroyed having set neither -- an early return, a thrown exception on the producer path, a forgotten set_value -- the shared state is broken and the waiting future.get() throws std::future_error with future_errc::broken_promise. Every path that owns a promise must fulfil it."
+notes: "The promise/future contract is that the producer end delivers one result before it goes away. std::promise enforces this: if a promise with an associated future is destroyed without a set_value or set_exception ever having been called, its destructor stores a broken_promise error into the shared state so the consumer is not left blocked forever. The waiter's get() then throws std::future_error with code() == future_errc::broken_promise. The realistic way to hit this is not forgetting entirely, but a code path you did not think about: an early return on an error branch, an exception thrown inside the producer before it reached set_value, a promise captured into a task that never runs. The example triggers it with a shortcut return and catches the resulting exception (a defined exception, not UB). The fix is to guarantee fulfilment on every path -- set a value on success and forward the exception with set_exception(std::current_exception()) on failure (see the exceptions example), typically by wrapping the producer body in try/catch. Treating a promise like a resource that must be 'released' exactly once, on all paths, is the right mental model. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::promise", url: "https://en.cppreference.com/w/cpp/thread/promise" }
+  - { name: "std::future_error", url: "https://en.cppreference.com/w/cpp/thread/future_error" }
+detailed_tags:
+  - { name: "std::promise::set_value", url: "https://en.cppreference.com/w/cpp/thread/promise/set_value" }
+  - { name: "std::future_errc", url: "https://en.cppreference.com/w/cpp/thread/future_errc" }

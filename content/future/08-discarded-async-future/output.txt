@@ -1,0 +1,2 @@
+discarded futures, start order = 0 1 2 3 (strictly serial)
+kept futures, results collected = 4 (ran concurrently)

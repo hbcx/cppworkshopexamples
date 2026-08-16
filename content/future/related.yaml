@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "thread"
+  note: "The lower-level tool these sit on top of: std::async, promise and packaged_task all give you a result and the synchronization for free, but when you need to own the thread itself -- name it, detach it, run a long loop -- you drop back to std::thread. Go there for launching, joining, and the ownership rules, then come back here to get a value out without the manual plumbing."
+- slug: "condition-variable"
+  note: "The tool for a REPEATED wait, where a future is one-shot: a future or promise delivers a single value once, but a worker that waits, handles an event, and loops back to wait again needs a condition variable. Go there for the producer/consumer queue and graceful shutdown, and use a future when exactly one result is produced once."
+- slug: "mutex"
+  note: "What you still need when the shared state is more than a one-shot result: a future hands one value across a boundary race-free, but ongoing shared data -- a queue the pool pulls from, a map many threads update -- needs a lock. Go there for lock_guard and unique_lock, the thread-safe class, and deadlock avoidance."
+- slug: "atomic"
+  note: "The lighter option when the handoff is a single word and you do not need a value channel: C++20 gives std::atomic its own wait/notify for a one-flag signal. Go there for atomic counters, compare_exchange, and wait/notify, and use a future when you need to carry a value or an exception, not just flip a flag."

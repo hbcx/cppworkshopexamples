@@ -1,0 +1,13 @@
+title: "packaged_task: a callable plus its future"
+standard: "C++11"
+difficulty: 2
+summary: "std::packaged_task wraps a callable together with a future for its result. Taking get_future() gives you the result handle up front; invoking the task later runs the callable and fulfils that future. This separates making a job from running it, which is exactly what a task queue or thread pool needs."
+notes: "std::packaged_task<R(Args...)> is a callable that, when invoked, stores its result into an associated future instead of just returning it. The pattern is: build the task around a callable, call get_future() to get the std::future<R> the caller will wait on, then move the task somewhere to be run -- onto a queue, into a thread pool, into another thread. When something eventually invokes the task, the future becomes ready. This is the piece std::async and std::promise do not give you: async runs the work immediately, and a raw std::thread cannot return a value at all, whereas a packaged_task lets you decouple WHO creates the job from WHO runs it and WHEN. That is the backbone of a thread pool -- callers submit packaged_tasks and keep the futures, worker threads pull tasks off a shared queue and invoke them. A packaged_task is move-only (it owns the shared result state) and single-use: invoke it once. This runs under ThreadSanitizer on Linux/CI, which confirms the queue handoff and the results are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::packaged_task", url: "https://en.cppreference.com/w/cpp/thread/packaged_task" }
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+detailed_tags:
+  - { name: "std::packaged_task::get_future", url: "https://en.cppreference.com/w/cpp/thread/packaged_task/get_future" }
+  - { name: "std::packaged_task::operator()", url: "https://en.cppreference.com/w/cpp/thread/packaged_task/operator()" }

@@ -5,3 +5,5 @@
   note: "Where the waiters and notifiers run: the producer, the consumers, and the worker whose shutdown this section models are all std::threads -- go there for launching and joining them, and the ownership and join rules the graceful-shutdown example relies on."
 - slug: "atomic"
   note: "The lighter alternative when the condition is a single word: C++20 gives std::atomic its own wait/notify, so a one-flag handoff needs no mutex at all -- go there for atomic wait/notify and compare_exchange, and use a condition variable when the wait involves a mutex-guarded predicate or a queue."
+- slug: "future"
+  note: "The one-shot version of waiting for another thread: where a condition variable handles a repeated wait-notify handoff, a std::future waits for a single value produced once and carries it (or its exception) back to you -- go there for async, promise, and packaged_task, and use a condition variable when the signal repeats or many waiters share a mutex-guarded predicate."

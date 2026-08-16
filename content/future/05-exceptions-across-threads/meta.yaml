@@ -1,0 +1,13 @@
+title: "Exceptions across the thread boundary"
+standard: "C++11"
+difficulty: 2
+summary: "If a task throws, the future captures the exception and re-throws it when you call get(). So a failure on another thread reaches you as an ordinary try/catch around get(), not as a crash on a foreign stack. std::async does this automatically; std::promise does it explicitly with set_exception and std::current_exception."
+notes: "An exception thrown on another thread cannot unwind into yours -- it is on a different stack, and an uncaught exception that escapes a thread's top function calls std::terminate. Futures give you the missing channel: the exception is stored in the shared state and re-thrown at the point you call get(), so the error arrives exactly where you consume the result. With std::async this is automatic -- whatever the task throws comes back out of get(). With std::promise you do it by hand: catch the exception in the producer and call set_exception(std::current_exception()), which stores it so the consumer's get() re-throws it. Either way, get() delivers EITHER the value OR the exception, never both, and the producer must set one of them -- a promise destroyed without setting either makes get() throw std::future_error with broken_promise. This is a real advantage over passing results through a shared variable, where you would have to invent your own way to signal and carry the error. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::future", url: "https://en.cppreference.com/w/cpp/thread/future" }
+  - { name: "std::promise", url: "https://en.cppreference.com/w/cpp/thread/promise" }
+detailed_tags:
+  - { name: "std::promise::set_exception", url: "https://en.cppreference.com/w/cpp/thread/promise/set_exception" }
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
