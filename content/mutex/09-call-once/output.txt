@@ -1,0 +1,2 @@
+init ran 1 time(s)
+8 threads each saw config, total = 336

@@ -1,0 +1,12 @@
+title: "call_once: thread-safe one-time initialization"
+standard: "C++11"
+difficulty: 2
+summary: "std::call_once with a std::once_flag runs an initializer exactly once across all threads. The first thread to arrive runs the function; the others block until it finishes, then skip it. It is the purpose-built tool for thread-safe lazy initialization -- a config loaded on first use, a singleton, a connection opened once -- and the correct fix for the racy check-a-bool-then-set-it run-once guard."
+notes: "Lazy, thread-safe one-time initialization is a common need -- build a config, a singleton, or a cache the first time it is used, and never again -- and getting it right by hand is surprisingly hard. A plain if (!done) { done = true; init(); } is a data race and can run init more than once; even an atomic exchange, which does make the run-once decision correct, lets the other threads race PAST while the winner is still building the object, so they can observe it half-initialized. std::call_once solves both problems: you keep a std::once_flag next to the state, and every thread calls std::call_once(flag, init). Exactly one thread runs init, and all the others BLOCK until that run completes, so no one proceeds until the state is fully built. It also handles failure correctly: if init throws, the flag is left unset and the exception propagates, so the next thread to call call_once will try the initialization again rather than leave it permanently half-done. Put the once_flag where the state lives -- a namespace-scope flag for a global, or a member flag for per-object lazy init (declare it alongside the data it guards). call_once and once_flag live in <mutex>. This runs under ThreadSanitizer on Linux/CI, which confirms the initialization is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::call_once", url: "https://en.cppreference.com/w/cpp/thread/call_once" }
+  - { name: "std::once_flag", url: "https://en.cppreference.com/w/cpp/thread/once_flag" }
+detailed_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
