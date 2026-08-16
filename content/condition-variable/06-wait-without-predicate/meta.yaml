@@ -1,0 +1,11 @@
+title: "Anti-pattern: waiting without a predicate"
+standard: "C++11"
+difficulty: 3
+summary: "A bare cv.wait(lock) with no predicate is broken two ways: a notify sent before the thread waits is lost (notifications are not remembered), so it can sleep forever; and a spurious wakeup can return from wait when the condition is false. Always use the predicate form (or a while loop) so the wait re-checks the shared state."
+notes: "A condition variable notification is an edge, not a stored token: notify_one/notify_all wake threads that are ALREADY waiting and are otherwise lost. So a bare cv.wait(lock) has two failure modes. LOST WAKEUP: if the producer sets the state and notifies before the consumer reaches wait(), the notify is gone and the bare wait sleeps forever, even though the condition is already true. SPURIOUS WAKEUP: the standard explicitly allows wait() to return without any notify, so code placed right after a predicate-less wait can run when the condition does not hold. Both are fixed by the predicate overload, cv.wait(lock, pred), which is equivalent to while (!pred()) cv.wait(lock);: it checks the predicate before sleeping (so an already-true condition returns immediately -- no wakeup to lose) and re-checks after every wakeup (so a spurious one just loops). The example forces the lost-wakeup race by notifying before the consumer waits, and the predicate form still works because ready is already true when wait evaluates it. The rule is absolute: never wait on a condition variable without a predicate tied to real shared state. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }

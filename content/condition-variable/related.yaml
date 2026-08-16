@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "mutex"
+  note: "The lock a condition variable is always paired with: wait releases and re-acquires a mutex, and the shared state it checks must be changed under that same mutex -- go there for lock_guard and unique_lock, the RAII owners you hand to wait, and why the state change must be locked."
+- slug: "thread"
+  note: "Where the waiters and notifiers run: the producer, the consumers, and the worker whose shutdown this section models are all std::threads -- go there for launching and joining them, and the ownership and join rules the graceful-shutdown example relies on."
+- slug: "atomic"
+  note: "The lighter alternative when the condition is a single word: C++20 gives std::atomic its own wait/notify, so a one-flag handoff needs no mutex at all -- go there for atomic wait/notify and compare_exchange, and use a condition variable when the wait involves a mutex-guarded predicate or a queue."

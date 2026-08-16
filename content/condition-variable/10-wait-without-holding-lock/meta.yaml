@@ -1,0 +1,12 @@
+title: "Anti-pattern: calling wait without holding the lock"
+standard: "C++11"
+difficulty: 3
+summary: "cv.wait requires the unique_lock to own the mutex on entry: it releases the mutex while sleeping and re-locks on wake. Passing a lock that is not currently locked -- one built with defer_lock, or one you already unlocked -- is undefined behaviour. Take the lock, then wait, and keep holding it across the predicate re-checks."
+notes: "std::condition_variable::wait has a precondition that is easy to miss: the unique_lock you pass must own its mutex when wait is called. wait works by atomically releasing that mutex as the thread goes to sleep and re-acquiring it before it returns, so the predicate can be re-checked under the lock; if the mutex is not held on entry, there is nothing for wait to release and the behaviour is undefined. The usual way to trip this is a lock constructed with std::defer_lock (which does not lock) or a unique_lock you unlock()ed earlier and forgot to relock, then handed to wait. The fix is simply to hold the lock: construct the unique_lock so it locks on construction (the default), call wait with it, and do not unlock it yourself around the wait -- wait manages the release and re-acquire for you, and you keep the lock afterwards so the code that acts on the now-true condition still runs under mutual exclusion. The example does exactly that and runs the correct version. This pairs with the other rules of the protocol: hold the lock to wait, change the state under the lock, and use a predicate. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }
+  - { name: "std::unique_lock", url: "https://en.cppreference.com/w/cpp/thread/unique_lock" }

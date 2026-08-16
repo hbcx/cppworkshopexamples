@@ -9,3 +9,5 @@
   note: "Where the threads that share these atomics come from: how you start, join, and detach a std::thread, and the anti-patterns of doing it wrong -- go there for launching work, and come back here for how those threads share data without racing."
 - slug: "mutex"
   note: "What to use when an atomic is not enough: a single word fits an atomic, but an invariant across several variables needs a lock, which serializes a whole critical section -- go there for mutexes, RAII lock owners, deadlock avoidance, and reader/writer locks."
+- slug: "condition-variable"
+  note: "The classic, pre-C++20 way to wait for a condition, and the general one: where atomic wait/notify handles a single word, a condition variable waits on a mutex-guarded predicate over arbitrary state -- go there for the producer/consumer queue, notify_all gates, and timed waits."

@@ -1,0 +1,2 @@
+case 1 (already ready): true
+case 2 (times out):    false

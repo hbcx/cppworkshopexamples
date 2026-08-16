@@ -1,0 +1,12 @@
+title: "The producer/consumer queue"
+standard: "C++11"
+difficulty: 2
+summary: "The canonical use of a condition variable: a consumer sleeps while a shared queue is empty and wakes when a producer pushes work, instead of busy-polling. One mutex guards the queue, the cv signals that its state changed, and a done flag lets the consumer exit once no more items are coming."
+notes: "This is the pattern condition variables exist for. A shared queue is guarded by a mutex; the consumer loops taking the lock and calling cv.wait(lock, pred) with the predicate 'queue not empty OR done', so it sleeps whenever there is nothing to do and consumes no CPU while idle. The producer pushes an item under the same lock and calls notify_one, which wakes the sleeping consumer; the consumer re-locks, drains everything currently in the queue, and goes back to sleep. Two details make it correct and complete. First, the consumer drains the WHOLE queue on each wake (a while loop, not a single pop), which tolerates the producer pushing several items between wakeups and avoids losing notifications. Second, shutdown needs its own signal: a done flag set under the lock and followed by a final notify tells the consumer that no more items will arrive, so it can drain the remainder and exit rather than block forever waiting for work that will never come; the consumer only breaks when the queue is empty AND done is set, guaranteeing every item is processed. Scaling this up -- multiple producers, multiple consumers, a bounded capacity with a second condition for 'not full' -- is how thread pools and work queues are built. This runs under ThreadSanitizer on Linux/CI, which confirms the queue handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }
+  - { name: "std::unique_lock", url: "https://en.cppreference.com/w/cpp/thread/unique_lock" }

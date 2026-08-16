@@ -1,0 +1,12 @@
+title: "notify_all: release every waiter at a gate"
+standard: "C++11"
+difficulty: 2
+summary: "notify_one wakes a single waiter; notify_all wakes all of them. Use notify_all when one state change should release many threads at once -- a start gate holding a pool of workers, a phase change, a shutdown flag every thread waits on. One state update under the lock plus notify_all frees them together."
+notes: "The two notify calls differ only in how many sleeping threads they wake. notify_one releases a single waiter, which is right for a one-item handoff like the producer/consumer queue, where waking more just makes them re-check and sleep again. notify_all releases every thread waiting on the condition variable, which is what you want when a single event should free many of them at once: a start gate that keeps a pool of workers blocked until a go signal, a barrier/phase change, or a stop flag that all threads are parked on. The example blocks eight workers on the same predicate and then, after setting the flag under the lock, calls notify_all to release them all; with notify_one, seven would stay asleep. Note that every waiter still re-checks its predicate on waking, so notify_all is safe even when the woken threads then contend for the mutex one at a time -- they wake, see the condition, and proceed. Getting this wrong is a real bug in both directions: notify_one where notify_all was needed leaves waiters stuck forever (a hang that looks like a deadlock), while notify_all where notify_one would do merely wastes a few wakeups. When unsure, notify_all is the safe default. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::notify_all", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_all" }
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }

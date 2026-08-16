@@ -1,0 +1,12 @@
+title: "Anti-pattern: changing the state without the mutex before notify"
+standard: "C++11"
+difficulty: 3
+summary: "If the producer sets the shared flag without holding the mutex and then notifies, the notify can land in the gap between the waiter checking its predicate and falling asleep -- a lost wakeup, so the waiter blocks forever. Change the state under the same mutex the waiter uses, then notify."
+notes: "The predicate protects the waiter from a lost wakeup only if the state it reads cannot change during the tiny window between the check and the sleep. cv.wait(lock, pred) holds the mutex while it evaluates pred and only releases it as it goes to sleep, atomically. So if the producer changes the state under that SAME mutex, the change cannot slip into the window -- either it happens before the waiter takes the lock (the predicate sees it and does not sleep) or after the waiter has gone to sleep (the following notify wakes it). Break that by mutating the flag WITHOUT the lock, and the change can happen exactly after the waiter evaluated the predicate as false but before it slept; the notify then wakes nobody, and the waiter sleeps forever with the condition true. The fix is the discipline every condition-variable protocol follows: change the shared state while holding the mutex, then call notify (the notify itself may be done inside or just outside the lock -- notifying with the lock held is correct and sometimes marginally slower because the woken thread immediately blocks on the lock). The example runs only the correct version. Note this is separate from the predicate rule: you need BOTH a predicate AND the state change under the lock. This runs under ThreadSanitizer on Linux/CI, which also flags the unlocked write as a data race on the flag."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::notify_one", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_one" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }

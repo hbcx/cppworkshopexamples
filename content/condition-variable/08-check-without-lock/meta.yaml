@@ -1,0 +1,12 @@
+title: "Anti-pattern: checking the condition without the lock"
+standard: "C++11"
+difficulty: 3
+summary: "The state a condition variable is about is shared, so reading it without holding the mutex -- an unlocked peek, or using the guarded payload after releasing the lock -- races with the writer. cv.wait evaluates its predicate while holding the lock; every other access to that state must take the lock too."
+notes: "It is easy to remember that the WAIT needs a lock and forget that every other touch of the same shared state needs it as well. The producer writes the flag and payload under the mutex; any thread that reads them without the mutex races with that write, which is undefined behaviour and can observe a torn or stale value even on hardware where it 'usually works'. Common shapes of this bug: an unlocked pre-check like if (ready) before deciding whether to wait, reading the payload after the unique_lock has gone out of scope, or a separate status-reporting thread that peeks at the flag without locking. The safe rule mirrors the mutex chapter: the mutex guards the data everywhere, not only inside wait. cv.wait(lock, pred) is safe precisely because it evaluates the predicate while holding the lock, and in the example the consumer reads payload while still holding that same lock; a later reader in main takes the mutex again before reading the flag. If you need a lock-free peek at readiness, that is what a std::atomic flag is for (see the atomic section) -- but then the atomic, not an unlocked plain bool, is the synchronized access. This runs under ThreadSanitizer on Linux/CI, which flags exactly the unlocked-read race the anti-pattern warns about."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }

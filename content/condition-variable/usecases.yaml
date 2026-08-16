@@ -1,0 +1,19 @@
+- problem: "A pool of worker threads must pull tasks from a shared queue and sit idle when there is nothing to do -- a thread pool, a job runner, a request dispatcher feeding handlers."
+  why: "A condition variable lets each worker sleep while the queue is empty and wake the instant a task is pushed, consuming no CPU in between, where a busy-poll loop burns a core spinning and a fixed sleep either adds latency or wastes wakeups checking an empty queue."
+  signal: "A worker loop that repeatedly locks a queue, checks if it is empty, and either spins or sleeps a fixed interval when it is."
+
+- problem: "A producer and consumer run at different speeds through a fixed-size buffer, and each must pause when it cannot proceed -- the producer when the buffer is full, the consumer when it is empty (a bounded queue, a pipeline stage, backpressure between components)."
+  why: "Two condition variables (or two predicates on one) let 'not full' and 'not empty' each block the right side until the other makes progress, which caps memory and applies backpressure automatically, where an unbounded queue lets a fast producer grow memory without limit and a spin-wait wastes CPU on whichever side is blocked."
+  signal: "A queue with a capacity limit whose producer or consumer currently drops items, spins, or sleeps a fixed time when the buffer is full or empty."
+
+- problem: "Threads must wait until some milestone before proceeding together -- workers held until initialization finishes, all parties gathered before a phase begins, a batch released at a start signal."
+  why: "A condition variable with a broadcast (notify_all) parks every waiter until the milestone flag flips and releases them all at once, where polling a shared flag wastes CPU and hand-rolled sleeps make the release ragged and slow."
+  signal: "Several threads spinning on or repeatedly sleeping to poll a shared ready or phase flag before starting their real work."
+
+- problem: "A long-lived background thread must be shut down cleanly -- told to stop, allowed to finish in-flight work, and joined -- without it spinning while idle or blocking so deeply it never notices the request."
+  why: "A stop flag set under the lock plus a notify wakes the thread out of its wait so it can drain and exit, giving prompt, CPU-free shutdown, where a busy-poll wastes cycles the whole time the thread is idle and a plain blocking wait with no stop signal can leave it stuck forever."
+  signal: "A worker thread that either polls a running flag in a spin loop or blocks on work with no separate way to be woken for shutdown."
+
+- problem: "One thread must wait for a repeated signal another thread produces -- successive frames ready, a periodic tick, a state change it should react to each time it happens."
+  why: "A condition variable is built for these recurring wait-then-continue handoffs, where a std::future or std::promise fits a ONE-shot result and cannot be reused; reach for a future when a single value is produced once, and a condition variable when the signal repeats."
+  signal: "Code that waits for an event, handles it, and loops back to wait for the next occurrence -- a repeating signal rather than a single delivered result."

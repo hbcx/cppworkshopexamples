@@ -1,0 +1,11 @@
+title: "wait_for: waiting with a timeout"
+standard: "C++11"
+difficulty: 2
+summary: "wait_for(lock, duration, predicate) is wait with a deadline: it returns the predicate's value -- true if the condition held before the timeout, false if it timed out -- so you can take a timeout path instead of blocking forever. wait_until does the same against an absolute time point."
+notes: "A plain wait blocks until notified; sometimes you must not wait indefinitely -- you want to retry, log a stall, or fall back after a bound. wait_for adds a timeout. In the predicate form, wait_for(lock, duration, pred) keeps waiting (re-checking the predicate on each wakeup) until either the predicate holds or the duration elapses, and it RETURNS the predicate's final value: true means the condition arrived in time, false means it timed out. That return is the branch you act on. The example shows both outcomes deterministically: first the condition is already true, so wait_for returns true at once without spending the timeout; then nothing ever sets the condition, so wait_for waits out a short 50 ms timeout and returns false. Prefer the predicate overload here too -- the version without a predicate returns a cv_status (no_timeout or timeout) and forces you to re-check the state yourself, and it does not protect against spurious wakeups. Use wait_until instead of wait_for when several waits must share one fixed overall deadline: wait_for restarts the duration on every spurious wakeup and so can drift, while wait_until targets a fixed absolute time point. This example is single-threaded because the point is the timed API and its return value, not contention."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait_for", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait_for" }

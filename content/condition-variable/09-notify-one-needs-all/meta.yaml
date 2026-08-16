@@ -1,0 +1,12 @@
+title: "Anti-pattern: notify_one where notify_all is needed"
+standard: "C++11"
+difficulty: 3
+summary: "notify_one wakes a single waiter. When one state change should release several waiters -- a gate opening for a pool of threads, a broadcast, a shutdown flag many threads wait on -- notify_one leaves all but one asleep, and they can hang forever. Use notify_all when an event satisfies more than one waiter."
+notes: "notify_one and notify_all are not interchangeable; picking the narrower one when several waiters need releasing is a classic cause of a thread that never wakes. notify_one wakes exactly one thread waiting on the condition variable, which is correct for a handoff where each event satisfies exactly one waiter -- the producer/consumer queue, where one pushed item should wake one consumer. But when a single change makes the predicate true for MANY waiters at once -- a start gate releasing a whole pool, a configuration broadcast, a stop flag that every worker is parked on -- notify_one releases just one and the others stay asleep; unless some later notify happens to arrive, they block forever, a hang that looks like a deadlock. The example parks eight workers on one predicate and releases them with notify_all; with notify_one, seven would be stuck and the joins would never complete (so the anti-pattern's broken line is only described, not run). The reverse mistake, notify_all where notify_one would do, is merely a little wasteful -- the extra threads wake, re-check their predicate, and go back to sleep. So when unsure which applies, notify_all is the safe default. This overlaps the notify_all-gate mechanic on purpose: there it is shown as the right tool, here as the consequence of reaching for the wrong one. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::notify_all", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_all" }
+  - { name: "std::condition_variable::notify_one", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_one" }

@@ -1,0 +1,12 @@
+title: "wait and notify: block until a condition is true"
+standard: "C++11"
+difficulty: 1
+summary: "A std::condition_variable lets a thread sleep until shared state becomes true, instead of busy-checking. It works with a mutex and a predicate: wait(lock, pred) releases the mutex, sleeps until notified, re-locks, and loops until the predicate holds. The other thread changes the state under the lock and calls notify_one."
+notes: "A condition variable answers the question 'how does a thread wait for something another thread will make true, without spinning'. It is never used alone: it always pairs with a std::mutex that guards the shared state, and with a predicate that expresses the condition. The waiter takes a std::unique_lock and calls cv.wait(lock, pred); wait atomically releases the mutex and puts the thread to sleep, and when woken it re-acquires the mutex and evaluates the predicate, going back to sleep if it does not yet hold. Always use this predicate form (or an equivalent while loop): it makes the wait correct against two classic hazards -- a SPURIOUS wakeup, where the thread wakes for no reason and must re-check, and a LOST wakeup, where the notify arrives before the wait begins (here, if ready is already true, wait returns immediately and nothing is missed). The notifying side does two things in order: it changes the shared state while holding the SAME mutex, then calls notify_one (or notify_all) -- possibly after releasing the lock. Setting the state under the mutex is what closes the lost-wakeup window; notify only wakes threads, it carries no data, so the waiter learns what happened by re-reading the state. This runs under ThreadSanitizer on Linux/CI, which confirms the handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }
+  - { name: "std::condition_variable::notify_one", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_one" }

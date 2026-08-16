@@ -1,0 +1,2 @@
+payload under lock = 42
+final ready = true

@@ -1,0 +1,11 @@
+title: "Anti-pattern: relying on notify to be counted or remembered"
+standard: "C++11"
+difficulty: 3
+summary: "A notify is edge-triggered: it wakes threads already waiting and is otherwise lost, and it does not accumulate. You cannot notify N times up front and expect N later waits to each return. Record the work in shared state -- a count or a queue -- and let the predicate read it, so nothing depends on when a notify arrived."
+notes: "The mental trap here is thinking of notify like a semaphore post that increments a counter the next wait will consume. It is not. notify_one/notify_all wake whatever threads are waiting AT THAT MOMENT and have no other effect: a notify sent when no one is waiting is simply lost, and three notifies sent back to back do not queue up three future wakeups. So any design that leans on the number or timing of notifications is broken -- notify before the consumer waits and it hears nothing; notify three times before it waits once and it still only ever sees the state as it is when it finally looks. The fix is the same discipline all condition-variable code follows: the authoritative information lives in shared STATE (here a pending count, elsewhere a queue's contents or a flag), the predicate reads that state, and notify is only a nudge that says go re-check. Shared state is level-triggered -- it is still there whenever a thread looks -- so it does not matter whether the notify came early, late, or (harmlessly) more often than needed. The example increments a pending count under the lock for each item and the consumer decrements it, so all three are consumed regardless of how the notifications interleaved. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }

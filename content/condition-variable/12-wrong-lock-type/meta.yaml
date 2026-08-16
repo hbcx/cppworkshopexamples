@@ -1,0 +1,12 @@
+title: "Anti-pattern: condition_variable with the wrong lock type"
+standard: "C++11"
+difficulty: 3
+summary: "std::condition_variable::wait only accepts a std::unique_lock<std::mutex>; it will not compile with a lock over a recursive_mutex, a shared_lock, or a custom lockable. When you must wait while holding a different lock, use std::condition_variable_any, which works with any lock type -- at a small extra cost."
+notes: "std::condition_variable is deliberately specialized: its wait takes exactly a std::unique_lock<std::mutex>, which lets it use the platform's native, cheapest wait primitive. The upside is speed; the cost is inflexibility -- if you need to wait while holding anything else (a std::unique_lock<std::recursive_mutex>, a std::shared_lock<std::shared_mutex> for a reader, or a lock over a custom mutex type), it simply will not compile with condition_variable. The general-purpose alternative is std::condition_variable_any, whose wait is templated on the lock type and accepts anything meeting the BasicLockable requirement (it has lock() and unlock()). It costs a little more (it typically uses an internal mutex to bridge to the arbitrary lock), so the guidance is: use plain condition_variable when a unique_lock<std::mutex> fits -- which is the vast majority of the time -- and reach for condition_variable_any only when you genuinely must wait under a different lock. The example uses condition_variable_any with a recursive_mutex to show the general form compiling and running; swapping in a plain condition_variable there would be a compile error. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable_any", url: "https://en.cppreference.com/w/cpp/thread/condition_variable_any" }
+  - { name: "std::recursive_mutex", url: "https://en.cppreference.com/w/cpp/thread/recursive_mutex" }

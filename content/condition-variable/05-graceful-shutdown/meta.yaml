@@ -1,0 +1,12 @@
+title: "Graceful shutdown of a worker thread"
+standard: "C++11"
+difficulty: 3
+summary: "A long-lived worker sleeps on a condition variable while idle and is woken by either new work or a stop request. A stopping flag set under the lock plus a notify wakes the worker out of its wait so it can drain and exit cleanly, instead of spinning or blocking forever."
+notes: "A background worker that processes a queue needs two things a condition variable provides together: it must sleep (not spin) while there is no work, and it must be woken promptly when asked to stop, even if it is currently idle. The pattern is one predicate covering both events -- 'queue not empty OR stopping' -- so the same wait handles new work and shutdown. submit pushes a job under the lock and notifies; stop sets the stopping flag under the lock and notifies, which wakes the worker out of its wait so it can finish. The worker drains the whole queue on each wake and returns only when the queue is empty AND stopping is set, so no submitted job is dropped on shutdown. Two correctness points worth copying. The std::thread member is declared LAST in the class, so it is constructed after the mutex, condition variable, and queue -- the thread's run() therefore never touches a member that is not yet built (member destruction is reverse order, so the thread is also joined via stop() before those members are destroyed). And the stop flag is set under the same mutex the waiter uses, closing the lost-wakeup window just like the queue updates do. This is the skeleton of a real worker thread or a single-thread task runner. This runs under ThreadSanitizer on Linux/CI, which confirms the submit/stop handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }
+  - { name: "std::condition_variable::notify_one", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_one" }
