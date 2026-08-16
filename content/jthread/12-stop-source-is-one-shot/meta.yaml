@@ -1,0 +1,13 @@
+title: "Anti-pattern: reusing a stopped stop_source"
+standard: "C++20"
+difficulty: 3
+summary: "A stop_source is one-shot: once request_stop() succeeds it stays stopped permanently, with no reset. Every token taken from it afterwards is born already stopped, so the next worker you give it to cancels instantly and does no work. Make a fresh stop_source for each cancellable operation."
+notes: "Cancellation state is latching and does not recycle. request_stop() moves a stop_source into the stopped state and it stays there for the life of the shared state -- there is deliberately no reset(), because a token that could un-stop would make stop_requested() unreliable for anyone still holding it. The consequence bites when a source is treated as a reusable member: you cancel one operation, then start another reusing the same source, and every token it hands out already reads stop_requested() == true. The new worker sees the stop immediately and returns without doing anything, which looks like the work mysteriously not running. The example shows exactly that -- a worker given a token from an already-stopped source does no work -- and then the fix: allocate a fresh std::stop_source for the new operation so its tokens start un-stopped. In practice this means the source's lifetime should match ONE cancellable operation (a request, a job, a run), not the long-lived object that performs many of them; create it when the operation begins and let it go when the operation ends. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::stop_source", url: "https://en.cppreference.com/w/cpp/thread/stop_source" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::stop_source::request_stop", url: "https://en.cppreference.com/w/cpp/thread/stop_source/request_stop" }
+  - { name: "std::stop_token::stop_requested", url: "https://en.cppreference.com/w/cpp/thread/stop_token/stop_requested" }

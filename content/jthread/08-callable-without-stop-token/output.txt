@@ -1,0 +1,2 @@
+no-token worker uncancellable, finished on its own = true
+fixed worker (takes the token) observed stop        = true

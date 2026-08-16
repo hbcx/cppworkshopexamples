@@ -1,0 +1,5 @@
+stop possible          = true
+stop requested (before) = false
+request_stop returned   = true
+stop requested (after)  = true
+worker finished         = true

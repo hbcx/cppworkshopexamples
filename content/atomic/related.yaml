@@ -13,3 +13,5 @@
   note: "The classic, pre-C++20 way to wait for a condition, and the general one: where atomic wait/notify handles a single word, a condition variable waits on a mutex-guarded predicate over arbitrary state -- go there for the producer/consumer queue, notify_all gates, and timed waits."
 - slug: "future"
   note: "When the handoff needs to carry a VALUE, not just flip a flag: atomic wait/notify signals that a word changed, but a std::future delivers a result (or an exception) from one thread to another and does the synchronization for you -- go there for async, promise, packaged_task, and shared_future."
+- slug: "jthread"
+  note: "The standard cancellation protocol built on top of an atomic flag: a stop_token is a latching atomic with a callback list and jthread integration, so where you would hand-roll an atomic<bool> stop flag, stop_token gives you request_stop, stop_callback, and interruptible waits -- go there for cooperative cancellation."

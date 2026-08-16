@@ -1,0 +1,13 @@
+title: "Requesting a stop early"
+standard: "C++20"
+difficulty: 2
+summary: "A jthread owns a std::stop_source, so you can cancel it before the destructor runs by calling request_stop() on the jthread (or on a token/source you got from it). The token side reads the shared state: stop_possible() says a source exists, stop_requested() says a stop has been made. request_stop() returns true only for the call that actually made the request."
+notes: "Cancellation does not have to wait for scope exit. Behind the token is a std::stop_source that owns the shared cancellation state; a jthread holds one, and exposes it through get_stop_source(), get_stop_token(), and a convenience request_stop() that forwards to the source. Calling request_stop() flips the state that every associated std::stop_token observes, so the worker's next while (!st.stop_requested()) check ends the loop. Two query functions matter: stop_requested() tells you whether a stop has already been asked for, and stop_possible() tells you whether one still COULD be -- it is true while a stop_source exists (even before any request) and only becomes false for a token with no source behind it, so a spin loop can bail out early when cancellation can never come. request_stop() is idempotent and race-safe: exactly one call returns true (the one that made the request), the rest return false, so competing cancellers do not double-fire. Requesting a stop does not block or join; here we call join() explicitly only to order the printed lines, but the destructor would join anyway. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::jthread::request_stop", url: "https://en.cppreference.com/w/cpp/thread/jthread/request_stop" }
+  - { name: "std::stop_token::stop_possible", url: "https://en.cppreference.com/w/cpp/thread/stop_token/stop_possible" }

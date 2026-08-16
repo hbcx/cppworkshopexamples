@@ -1,0 +1,13 @@
+title: "Interruptible wait: condition_variable_any with a stop_token"
+standard: "C++20"
+difficulty: 3
+summary: "std::condition_variable_any has a wait overload taking a stop_token: it waits until the predicate holds OR a stop is requested, and wakes for the stop. It returns the predicate value -- false means it woke because of cancellation. This removes the hand-rolled stopping flag a plain condition_variable needs in its predicate: the stop_token is the shutdown signal."
+notes: "A worker blocked in cv.wait cannot poll a stop_token, so cancelling it needs a way to wake the wait itself. Before C++20 you did this by hand: add a bool stopping next to the shared state, put it in the predicate (wait(lock, [&]{ return has_work || stopping; })), and remember to set it under the lock and notify on shutdown. std::condition_variable_any -- the version that works with any lockable, not just std::unique_lock<std::mutex> -- provides an overload wait(lock, stop_token, pred) that folds all of that in: it waits until pred() is true or the token is stopped, and internally registers a stop_callback that notifies the wait when a stop is requested. It returns pred()'s final value, so false tells you the wake was a cancellation rather than real work. This is exactly the graceful worker shutdown a raw std::thread has to hand-roll, now built in and paired naturally with jthread's automatic request_stop() on destruction. It is race-free against the stop arriving early, because the overload checks the token when the wait begins. Note this needs condition_variable_any, not plain condition_variable, which has no stop_token overload (see the anti-pattern). This runs under ThreadSanitizer on Linux/CI, which confirms the wake-on-cancel is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable_any", url: "https://en.cppreference.com/w/cpp/thread/condition_variable_any" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::condition_variable_any::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable_any/wait" }
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }

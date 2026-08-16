@@ -1,0 +1,13 @@
+title: "Anti-pattern: a jthread callable with no stop_token parameter"
+standard: "C++20"
+difficulty: 3
+summary: "jthread accepts a callable with a leading std::stop_token OR one with none. Write the worker like an old std::thread lambda -- []{...} with no token -- and it compiles and runs, but the worker never receives the token, so request_stop() has no channel to it. The cancellation looks wired up but is not. Accept std::stop_token as the first parameter."
+notes: "This is the sneakier sibling of ignoring the token: here the worker does not even have one. jthread's constructor checks whether the callable is invocable with a std::stop_token prepended; if it is, jthread passes in its own token, and if it is not, jthread just calls the callable with no token. Both are legal, which is convenient but means a worker written as a plain []{ ... } lambda -- the habit from std::thread -- silently runs WITHOUT any connection to the jthread's stop_source. You still get the automatic join (that is jthread's other feature), but request_stop() and the destructor's auto-request have nothing on the worker side to observe them, so the work cannot be cancelled. As with ignoring the token, an unbounded loop then hangs the destructor's join; the example uses a bounded stand-in to show the symptom without hanging, and describes the hang in a comment. The fix is a one-line signature change: give the worker std::stop_token as its first parameter (std::stop_token st) and check st.stop_requested(). If you cannot change the signature, capture a token yourself with get_stop_token() and check that instead. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::stop_token::stop_requested", url: "https://en.cppreference.com/w/cpp/thread/stop_token/stop_requested" }
+  - { name: "std::jthread::get_stop_token", url: "https://en.cppreference.com/w/cpp/thread/jthread/get_stop_token" }

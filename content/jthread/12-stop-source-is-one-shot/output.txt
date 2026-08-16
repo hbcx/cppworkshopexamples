@@ -1,0 +1,2 @@
+reused stopped source: worker did any work = false
+fresh source: worker did its work          = true

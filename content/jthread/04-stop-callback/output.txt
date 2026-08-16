@@ -1,0 +1,3 @@
+before request: cleanup ran = false
+after request:  cleanup ran = true
+late callback ran at once   = true

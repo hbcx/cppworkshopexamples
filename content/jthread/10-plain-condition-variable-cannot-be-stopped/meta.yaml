@@ -1,0 +1,13 @@
+title: "Anti-pattern: a stop cannot wake a plain condition_variable"
+standard: "C++20"
+difficulty: 3
+summary: "std::condition_variable has no stop_token wait overload, so a worker blocked in cv.wait does not wake when request_stop() is called and hangs on shutdown. Either use std::condition_variable_any with wait(lock, token, pred), or keep the plain cv and bridge the stop with a std::stop_callback that notifies it."
+notes: "Only std::condition_variable_any has the interruptible wait(lock, stop_token, pred) overload; plain std::condition_variable does not. So if a worker sleeps in an ordinary cv.wait and you call request_stop() expecting it to wake, nothing happens -- notify is what wakes a condition_variable, and a stop request does not notify it -- and the jthread's destructor then blocks forever trying to join a thread that will never leave its wait. The example describes that hang in a comment and does not run it. The clean fix is condition_variable_any plus the stop_token overload (the interruptible-wait example). When you must keep a plain condition_variable -- say it is shared with pre-C++20 code -- bridge the two worlds with a std::stop_callback: register a callback on the token that sets a stopping flag and calls cv.notify_one(), and put that flag in the wait predicate. Two care points make the bridge race-free here: the flag is a std::atomic checked inside the predicate (so a notify that races the wait is not lost, because the predicate re-checks it), and the callback does NOT lock the mutex (so it cannot deadlock if it fires synchronously on the worker thread while that thread already holds the lock at construction). This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+  - { name: "std::stop_callback", url: "https://en.cppreference.com/w/cpp/thread/stop_callback" }
+detailed_tags:
+  - { name: "std::condition_variable_any", url: "https://en.cppreference.com/w/cpp/thread/condition_variable_any" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }

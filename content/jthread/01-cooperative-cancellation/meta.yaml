@@ -1,0 +1,13 @@
+title: "Cooperative cancellation with jthread and stop_token"
+standard: "C++20"
+difficulty: 1
+summary: "std::jthread joins itself in its destructor and hands its callable a std::stop_token. On destruction it calls request_stop() then join(), so a worker that loops on stop_requested() is asked to stop and exits on its own -- all automatic. Cancellation in C++ is always cooperative: the worker must check the token, there is no forced kill."
+notes: "std::jthread (C++20) is a std::thread with two additions that together give you clean cancellation. First, it is RAII: its destructor joins the thread, removing the classic std::thread footgun where a forgotten join or an exception skipping the join calls std::terminate. Second, it carries a std::stop_token: if the callable's first parameter is a std::stop_token, jthread passes in its own, and the destructor calls request_stop() BEFORE it joins. So the whole cancellation dance is automatic -- when the jthread goes out of scope, the token flips, a worker looping on while (!st.stop_requested()) leaves its loop, and the join then completes. The key idea is that C++ has no way to forcibly kill a thread (that would leave locks held and objects half-destroyed); cancellation is COOPERATIVE, meaning the worker must poll its stop_token at safe points and choose to return. Put the check at the top of a work loop, or between chunks of a long computation. Compared with the hand-rolled std::atomic<bool> stop flag plus manual join, jthread makes both the flag and the join disappear. This runs under ThreadSanitizer on Linux/CI, which confirms the cancellation handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::stop_token::stop_requested", url: "https://en.cppreference.com/w/cpp/thread/stop_token/stop_requested" }
+  - { name: "std::jthread::~jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread/~jthread" }

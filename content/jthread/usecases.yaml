@@ -1,0 +1,19 @@
+- problem: "A long-lived background thread owned by an object must shut down cleanly when that object is destroyed -- a logger flush loop, a metrics sampler, a poller -- without the owner's destructor forgetting to stop and join it."
+  why: "A std::jthread member (declared last) auto-calls request_stop() then join() in its destructor, so the owner gets clean shutdown for free, where a std::thread member forces you to hand-write a stop flag, remember to set it, and join in the destructor -- and a missed join or an exception on the way there calls std::terminate."
+  signal: "A class with a std::thread member plus a std::atomic<bool> running flag, whose destructor sets the flag and joins -- the whole pattern collapses into a single jthread member."
+
+- problem: "A long computation must be abandonable on demand -- a user clicks Cancel, a request deadline passes, a newer query supersedes an in-flight one -- and the work runs deep inside functions, not in one visible loop."
+  why: "A std::stop_token passed down the call stack lets any level check stop_requested() at a safe point and unwind, and the canceller just calls request_stop(), where the pre-C++20 alternative is threading a bool& or a shared flag through every function signature and inventing your own thread-safe read of it."
+  signal: "A cancel or timeout that currently sets a global or a bool& read at various depths of a computation, or a long routine with no cancellation path at all that the UI has to wait out."
+
+- problem: "Several workers attack the same problem and the first useful answer makes the rest pointless -- redundant replicas queried for latency, parallel search strategies, speculative execution -- and the losers should stop as soon as there is a winner."
+  why: "One std::stop_source shared to every worker cancels them all with a single request_stop() the instant one succeeds, freeing CPU and I/O immediately, where per-worker flags mean iterating over the group to signal each one and getting the memory ordering right yourself."
+  signal: "A group of threads launched for the same result where, after one finishes, the others keep running until they notice through some ad-hoc shared boolean -- or keep running to completion wastefully."
+
+- problem: "A worker blocked waiting for the next item on a queue must wake promptly for shutdown, not only when new work arrives -- a thread-pool worker, a pipeline stage, an event consumer parked on a condition variable."
+  why: "std::condition_variable_any's wait(lock, stop_token, pred) wakes the blocked thread on cancellation and tells you (via its return) that the wake was a stop, so shutdown is immediate and race-free, where a plain condition_variable needs a hand-rolled stopping flag added to the predicate and a remembered notify on the shutdown path."
+  signal: "A consumer whose wait predicate is return has_work || stopping, with a separate stopping bool set and notified by hand on shutdown -- the stop_token overload folds that flag away."
+
+- problem: "A cancel must reach an operation that is blocked, not looping -- a socket read, an async request in flight, an open transaction -- so polling a token cannot help because the thread is not running code to poll."
+  why: "A std::stop_callback registered on the token fires the moment a stop is requested and can unblock the specific primitive -- close the socket, cancel the I/O, roll the transaction back -- where a polled stop_requested() never runs while the thread is parked inside the blocking call."
+  signal: "A cancellable operation whose cancel path has nowhere to check a flag because the thread spends its time inside a single blocking call rather than a loop."

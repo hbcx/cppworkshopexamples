@@ -1,0 +1,13 @@
+title: "stop_token as a standalone cancellation handle"
+standard: "C++20"
+difficulty: 2
+summary: "A std::stop_token is not tied to jthread. Create a std::stop_source yourself, pass its token into any function or thread as an ordinary parameter, and cancel by calling request_stop() on the source. This is how you make a deep, normal computation cancellable -- the token is just a handle to has-a-stop-been-requested that you thread through the call stack."
+notes: "The cancellation machinery is three small types and only one of them is a thread. A std::stop_source owns the shared state; std::stop_token is a lightweight, copyable read handle onto it; and jthread is merely a convenient owner of a source that wires a token into its callable for you. Nothing forces you to use jthread: you can make a std::stop_source, call get_token() as many times as you like, and pass those tokens into plain functions running on plain std::threads -- or into no thread at all. That is what makes an arbitrary long computation cancellable without rewriting it around a thread type: the function takes a std::stop_token by value like any parameter and checks stop_requested() between units of work, and whoever holds the source decides when to request the stop. Tokens are cheap to copy and all copies share one source's state, so you can spread the same token across a whole call tree or a set of workers. Pass the token by value (it is a handle, not the state) and the atomic bool by std::ref through the thread constructor, as usual. This runs under ThreadSanitizer on Linux/CI, which confirms the cross-thread cancellation is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::stop_source", url: "https://en.cppreference.com/w/cpp/thread/stop_source" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::stop_source::get_token", url: "https://en.cppreference.com/w/cpp/thread/stop_source/get_token" }
+  - { name: "std::stop_source::request_stop", url: "https://en.cppreference.com/w/cpp/thread/stop_source/request_stop" }

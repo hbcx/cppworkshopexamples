@@ -1,0 +1,13 @@
+title: "stop_callback: react to a stop instead of polling"
+standard: "C++20"
+difficulty: 3
+summary: "A std::stop_callback runs a function the moment a stop is requested, so you can react to cancellation from outside a worker's loop -- wake a wait, close a socket, roll back -- instead of polling stop_requested(). It fires once, on the thread that calls request_stop(). Registering one when a stop was already requested runs it immediately, so a late listener never misses the event."
+notes: "Polling stop_requested() is fine inside a compute loop, but it cannot help a thread that is BLOCKED -- asleep on a socket read, or in a wait -- because a blocked thread is not looping to check anything. std::stop_callback is the push side of cancellation: you construct one from a std::stop_token and a callable, and the callable runs when (or if) a stop is requested on the associated source. That lets cancellation reach into a blocked operation to unblock it: the callback can notify a condition variable, cancel an async I/O, close a handle, or set an eventfd. The timing rules are precise and worth knowing. If a stop is requested while the callback is registered, it runs synchronously on the thread that called request_stop(). If the stop was ALREADY requested when you construct the stop_callback, it runs immediately on the constructing thread -- so there is no lost-event window. And destroying a stop_callback deregisters it; if a stop is firing on another thread as you destroy it, the destructor waits for that callback to finish (unless it is destroying itself from inside its own call). Keep the callback short and non-blocking, since it runs inline on the canceller's thread. This example needs no threads to show the semantics; it runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stop_callback", url: "https://en.cppreference.com/w/cpp/thread/stop_callback" }
+  - { name: "std::stop_source", url: "https://en.cppreference.com/w/cpp/thread/stop_source" }
+detailed_tags:
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+  - { name: "std::stop_source::request_stop", url: "https://en.cppreference.com/w/cpp/thread/stop_source/request_stop" }

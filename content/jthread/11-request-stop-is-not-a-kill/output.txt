@@ -1,0 +1,2 @@
+result after request_stop = 500000500000 (full sum, not interrupted)
+token-checking worker stopped = true

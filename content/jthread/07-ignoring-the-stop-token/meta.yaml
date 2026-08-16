@@ -1,0 +1,13 @@
+title: "Anti-pattern: taking a stop_token but never checking it"
+standard: "C++20"
+difficulty: 3
+summary: "jthread hands the worker a stop_token and auto-requests a stop on destruction, but that only sets a flag -- the worker must call stop_requested(). A loop that never checks it cannot be cancelled, so the auto-cancellation is silently useless, and an unbounded such loop makes the destructor's join hang forever. Check the token at a safe point in the work loop."
+notes: "Cancellation in C++ is cooperative, which means the token is a request, not a command: jthread's request_stop() (and the automatic one in its destructor) sets shared state, and nothing happens unless the worker polls that state with stop_requested(). It is easy to write a worker that accepts a std::stop_token -- so the cancellation LOOKS wired up -- and then never reads it, at which point request_stop is a no-op and the whole point of jthread is lost. The real danger is an unbounded loop: the destructor calls request_stop() then join(), and since the loop never notices the stop, join() blocks forever and the program hangs on scope exit. This example describes that hang in a comment and does not run it; the bounded stand-in runs to its natural end to show the symptom without hanging -- the stop was requested but the worker ignored it and completed anyway. The fix is to check the token where it is safe to stop: at the top of a work loop, or between chunks of a long computation. If the work is a single long blocking call rather than a loop, polling cannot help -- use a std::stop_callback to unblock that specific operation instead (see the other anti-patterns). This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::stop_token::stop_requested", url: "https://en.cppreference.com/w/cpp/thread/stop_token/stop_requested" }
+  - { name: "std::jthread::request_stop", url: "https://en.cppreference.com/w/cpp/thread/jthread/request_stop" }

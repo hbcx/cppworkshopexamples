@@ -1,0 +1,2 @@
+ignored the stop, ran to the end = true
+fixed worker observed the stop  = true

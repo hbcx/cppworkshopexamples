@@ -1,0 +1,12 @@
+title: "Anti-pattern: detaching a jthread"
+standard: "C++20"
+difficulty: 3
+summary: "detach() severs a jthread from its thread: joinable() becomes false, so the destructor no longer auto-requests a stop or joins. You throw away both of jthread's features and are back to a raw detached thread with its dangling and lifetime hazards -- and must hand-roll the synchronization jthread gave you for free. Do not detach a jthread."
+notes: "The entire value of jthread is that its destructor calls request_stop() and then join(), so a thread can never be left unjoined and a cancellable worker is always asked to stop. Calling detach() undoes exactly that: it releases ownership of the underlying thread, joinable() returns false, and the destructor becomes a no-op -- no auto-join, no auto-request_stop. What you are left with is a plain detached thread, which is the very thing jthread was designed to save you from: if it outlives the data it touches you get dangling-reference undefined behaviour, and you have no built-in way to know when it finished. The example shows the fallout deterministically: after detach the only way to observe completion is to add a promise/future by hand -- re-introducing the manual synchronization jthread removed -- and it describes the dangling-UB version in a comment rather than running it. The fix is simply not to detach: let the jthread join in its destructor. If you truly need a fire-and-forget thread that outlives its creating scope, that is a design decision for std::thread with explicit lifetime management, not a jthread; reaching for jthread and then detaching gets you the worst of both. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+detailed_tags:
+  - { name: "std::jthread::detach", url: "https://en.cppreference.com/w/cpp/thread/jthread/detach" }
+  - { name: "std::jthread::joinable", url: "https://en.cppreference.com/w/cpp/thread/jthread/joinable" }

@@ -1,0 +1,13 @@
+title: "One stop_source cancelling many workers"
+standard: "C++20"
+difficulty: 3
+summary: "Every token copied from a std::stop_source shares one cancellation state, so handing tokens from the same source to a group of threads lets a single request_stop() cancel them all at once. This fan-out cancel is the shape behind first-result-wins and shutting a whole worker pool down together."
+notes: "A std::stop_token is a handle, not the state -- copying one is cheap and every copy points at the same std::stop_source. That is what makes group cancellation trivial: give each worker a token from the same source, and one request_stop() flips the state that all of them observe, so they wind down together at their next check. Two common patterns use exactly this. First, a worker pool: hold the source at the owner, hand each worker a token, and cancel the whole pool on shutdown with a single call -- no per-worker flag, no iterating over threads to signal each one. Second, first-result-wins races: launch several strategies against the same problem, and when one finds the answer it requests the stop so the others abandon their now-pointless work. Note that a jthread whose callable takes a stop_token gets its OWN token; here the workers deliberately ignore that and watch the shared source instead, which is the whole point -- the cancellation authority is external and common, not per-thread. Destroying the jthreads (here via vector::clear) joins them, and since the stop was already requested each join returns promptly. This runs under ThreadSanitizer on Linux/CI, which confirms the shared cancellation is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::stop_source", url: "https://en.cppreference.com/w/cpp/thread/stop_source" }
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+detailed_tags:
+  - { name: "std::stop_source::get_token", url: "https://en.cppreference.com/w/cpp/thread/stop_source/get_token" }
+  - { name: "std::stop_token::stop_requested", url: "https://en.cppreference.com/w/cpp/thread/stop_token/stop_requested" }

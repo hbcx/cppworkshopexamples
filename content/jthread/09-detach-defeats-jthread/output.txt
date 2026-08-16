@@ -1,0 +1,3 @@
+after detach, joinable = false
+had to hand-roll a wait, result = 123
+fixed jthread auto-joined, result = 456

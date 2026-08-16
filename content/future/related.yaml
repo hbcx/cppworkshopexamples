@@ -7,3 +7,5 @@
   note: "What you still need when the shared state is more than a one-shot result: a future hands one value across a boundary race-free, but ongoing shared data -- a queue the pool pulls from, a map many threads update -- needs a lock. Go there for lock_guard and unique_lock, the thread-safe class, and deadlock avoidance."
 - slug: "atomic"
   note: "The lighter option when the handoff is a single word and you do not need a value channel: C++20 gives std::atomic its own wait/notify for a one-flag signal. Go there for atomic counters, compare_exchange, and wait/notify, and use a future when you need to carry a value or an exception, not just flip a flag."
+- slug: "jthread"
+  note: "Cancellation running the other direction: a future carries a result from worker to caller, while a stop_token carries a stop request from caller to worker -- go there for jthread's auto-join and cooperative cancellation, and combine the two when a cancellable job also has to return a value."

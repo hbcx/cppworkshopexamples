@@ -1,0 +1,13 @@
+title: "Anti-pattern: treating request_stop as a forced kill"
+standard: "C++20"
+difficulty: 3
+summary: "request_stop() is not preemption. It sets a flag; it does not interrupt a running computation or break a thread out of a blocking system call. A worker that does not check the token between units of work, or is stuck in a long blocking read, runs to the end regardless. To actually stop, the work must poll the token at safe points or use a stop_callback to unblock the blocking call."
+notes: "The word cancellation invites the wrong mental model. There is no std::jthread::kill and no way to yank a thread off the CPU, because a forced stop mid-execution would leave mutexes locked, half-built objects around, and buffers in unknown states -- unrecoverable. So request_stop() does the only safe thing: it records that a stop was asked for and returns. Whether anything comes of that is entirely up to the worker. A CPU-bound loop that never calls stop_requested() finishes its whole computation, as the example shows -- the full sum comes out even though a stop was requested first. A thread blocked in a long read() or a plain condition_variable wait is worse: it is not even executing code that could check a flag, so it stays blocked. The two remedies match the two situations: for compute-bound work, check the token between chunks and return when it is set; for a blocked operation, register a std::stop_callback that unblocks that specific primitive (notify the condition variable, close the socket, cancel the async I/O). Either way you are cooperating with the request, never overriding the thread. This example runs the ignored-stop case (bounded, so it terminates) and the token-checking fix, both deterministically, under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+  - { name: "std::stop_token", url: "https://en.cppreference.com/w/cpp/thread/stop_token" }
+detailed_tags:
+  - { name: "std::jthread::request_stop", url: "https://en.cppreference.com/w/cpp/thread/jthread/request_stop" }
+  - { name: "std::stop_token::stop_requested", url: "https://en.cppreference.com/w/cpp/thread/stop_token/stop_requested" }
