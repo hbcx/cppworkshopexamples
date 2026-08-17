@@ -1,0 +1,11 @@
+title: "compare_exchange_strong: a single-attempt claim"
+standard: "C++11"
+difficulty: 2
+summary: "compare_exchange_strong makes one attempt and never fails spuriously, so it is the right form when you are NOT looping: a one-shot claim, a try-once state transition, an elect-a-winner. Many threads race to move a slot from unclaimed to their own id, and exactly one succeeds."
+notes: "The two compare_exchange forms differ in one point: the weak form may fail SPURIOUSLY (report a mismatch even when the value did equal expected), while the strong form does not. That difference decides which to use. In a retry LOOP -- the CAS loop from the previous example -- weak is preferred: a spurious failure just means another spin, and on some architectures weak compiles to a cheaper instruction sequence. But when there is NO loop, a spurious failure would be a bug: you would wrongly conclude the value had changed and take the failure branch, so you want strong's guarantee that failure means the value really did not match. This example is the classic no-loop case: a one-shot claim. Each thread does a single compare_exchange_strong from 0 to its id; the first to run succeeds and moves the slot off 0, and every later thread sees expected != 0, fails, and gives up -- so exactly one winner, deterministically, whatever the interleaving (winners == 1). On failure compare_exchange writes the current value back into expected, which is how a loser learns who won. Reach for strong on a single try-once transition (claim a resource, flip a state exactly once, elect a leader) and weak inside a CAS retry loop. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::atomic::compare_exchange_strong", url: "https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange" }

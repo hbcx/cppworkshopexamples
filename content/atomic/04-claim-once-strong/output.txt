@@ -1,0 +1,1 @@
+exactly one thread claimed the slot = true, owner in 1..8 = true
