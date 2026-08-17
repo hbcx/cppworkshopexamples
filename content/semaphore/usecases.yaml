@@ -1,0 +1,19 @@
+- problem: "A service talks to a database (or any backend) through a pool of a fixed number of connections, and many request-handling threads need one at a time. More than the pool size trying to work at once must wait, not fail or open extra connections."
+  why: "A counting_semaphore sized to the pool lets each thread acquire before it takes a connection and release when done, blocking the surplus until one frees -- where a std::mutex would serialise everything to a single connection, and a hand-rolled counter plus condition_variable is more code and more ways to miscount."
+  signal: "A fixed-size resource pool guarded by a mutex-protected free count and a condition_variable, or code that opens a new connection when the pool is empty instead of waiting."
+
+- problem: "A worker calls a third-party API that rate-limits by concurrency -- at most N requests may be in flight at once or the provider returns errors -- but the work is produced by many threads that do not coordinate among themselves."
+  why: "A counting_semaphore of N is the concurrency cap itself: every outbound call acquires a permit and releases it on completion, so the (N+1)-th call waits rather than tripping the limit, where a mutex caps you at one (throwing away the allowed parallelism) and a manual atomic counter needs its own wait/wake logic to block the overflow."
+  signal: "Outbound calls throttled by an atomic in-flight counter that is spun on or checked in a retry loop, or a comment about the provider's max-concurrent limit with no primitive actually enforcing it."
+
+- problem: "A pipeline stage feeds items to a slower stage through a fixed-size buffer and must apply backpressure: when the buffer is full the producer has to wait, and when it is empty the consumer has to wait, so memory stays bounded under a burst."
+  why: "Two counting semaphores -- free slots and filled slots -- enforce both limits at once and hand each slot off exactly once, giving bounded memory for free, where an unbounded queue grows without limit under load and a single mutex-and-condition-variable queue needs careful predicate handling to get both the full and empty waits right."
+  signal: "A producer/consumer queue with no capacity limit, or one with an ad-hoc size check and a condition_variable where the full-wait and empty-wait predicates are hand-written."
+
+- problem: "A background worker thread should sleep until there is something to do, and an unrelated thread -- an I/O callback, a timer, a request handler -- needs to wake it when work arrives. The waker is not the same thread as the waiter and holds no shared lock."
+  why: "A binary_semaphore is a clean cross-thread wake: the worker acquire()s and the producer release()s from wherever it runs, because a semaphore has no owner -- where a std::mutex cannot be unlocked by a different thread, and a condition_variable needs an associated mutex and a predicate just to signal a single wake."
+  signal: "A worker that polls a flag in a sleep loop to notice new work, or a condition_variable used purely as a wake with a trivial always-true predicate and no shared state to guard."
+
+- problem: "A program shares a small fixed set of scarce resources -- hardware devices, GPU compute slots, floating software-license tokens -- among more threads than there are resources, and a thread must block until one is available rather than exceed the count."
+  why: "A counting_semaphore sized to the number of tokens models the allocation exactly: acquire to take a token, release to hand it back, and the count is the hard limit the vendor or hardware imposes -- where a mutex would allow only one holder and a plain counter would need extra machinery to make the over-limit thread wait."
+  signal: "A fixed pool of device handles or license slots tracked by an integer that is decremented and checked against zero by hand, with a sleep or spin when none are left."

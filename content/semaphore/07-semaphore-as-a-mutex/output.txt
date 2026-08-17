@@ -1,0 +1,1 @@
+8 threads x 1000, mutex-guarded counter = 8000

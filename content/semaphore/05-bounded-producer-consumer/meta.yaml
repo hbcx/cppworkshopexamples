@@ -1,0 +1,12 @@
+title: "A bounded producer/consumer buffer from two semaphores"
+standard: "C++20"
+difficulty: 3
+summary: "Two counting semaphores build a fixed-size queue with backpressure: empty_slots (starts at the capacity) and full_slots (starts at zero). The producer acquires an empty slot then releases a full one; the consumer mirrors it. A full buffer blocks the producer, an empty one the consumer -- no mutex, because each slot is handed off once."
+notes: "This is the textbook semaphore pattern and the reason counting semaphores exist. The two counts are complementary: empty_slots + full_slots is always the capacity, so the pair enforces both invariants at once -- never write into an occupied slot, never read from an empty one -- which is the backpressure a plain unbounded queue lacks. There is no mutex because the semaphores serialise access to each individual slot: when the producer writes buffer[i % CAP], empty_slots guaranteed the previous occupant (item i-CAP) was already consumed and its slot released, so the two never touch the same slot at the same time, and full_slots.release() synchronizes-with the consumer's matching acquire() so the write is visible before the read. That is what ThreadSanitizer checks here -- the run on Linux/CI is clean, proving the hand-off is race-free. For more than one producer or consumer you would add a mutex around the index arithmetic, but the semaphore pair stays the heart of it. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::counting_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/acquire" }
+  - { name: "std::counting_semaphore::release", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/release" }

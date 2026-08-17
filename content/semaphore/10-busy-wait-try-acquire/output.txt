@@ -1,0 +1,1 @@
+main step 1, worker step 2 (worker waited without spinning)

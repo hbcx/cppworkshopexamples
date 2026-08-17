@@ -1,0 +1,12 @@
+title: "try_acquire_for: wait with a timeout"
+standard: "C++20"
+difficulty: 2
+summary: "acquire() waits forever for a permit. try_acquire_for() waits at most a given duration and returns true if it got one, false if it timed out -- the way to add a deadline or a fallback. try_acquire() is the no-wait version and try_acquire_until() waits to a fixed time point."
+notes: "The three non-blocking variants let you decide how long to wait: try_acquire() checks once and returns immediately, try_acquire_for(duration) waits up to a relative timeout, and try_acquire_until(time_point) waits until an absolute deadline. All return a bool -- true means a permit was taken, false means none became free in time -- so you branch on it: serve a degraded response, shed load, retry later. This example is deterministic on purpose: two permits are free so the first two try_acquire_for calls return true at once, then with the pool drained the third waits its short timeout and returns false, no matter the machine speed (nobody is going to release). A real timeout can spuriously wake early, so in production you still loop or re-check the condition; here there is nothing to re-check. This is single-threaded and needs no sanitizer -- the point is the timed-acquire API, not a data hand-off."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::counting_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::try_acquire_for", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/try_acquire_for" }
+  - { name: "std::counting_semaphore::try_acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/try_acquire" }

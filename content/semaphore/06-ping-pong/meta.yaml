@@ -1,0 +1,12 @@
+title: "Two binary semaphores taking strict turns"
+standard: "C++20"
+difficulty: 3
+summary: "Give each of two threads its own binary_semaphore: a thread waits on its own, does one step, then releases the other's. They alternate in a fixed A, B, A, B order. It is a hand-off in both directions -- something a single mutex cannot express, because a mutex cannot say whose turn is next."
+notes: "This turns two semaphores into a rendezvous that enforces ordering, not just mutual exclusion. Each thread's permit is its permission to act: A starts with its permit set to 1 and B's at 0, so A runs first, and by releasing B's permit at the end of its step it both wakes B and gives up its own next turn (its permit is now 0 until B releases it back). The result is strict alternation with no busy-waiting. Notice the shared std::string log is written with no mutex and still races-free: the alternation guarantees exactly one thread is between its acquire() and release() at any moment, and each release()/acquire() pair orders one thread's write before the other's, so all appends are totally ordered -- which is what ThreadSanitizer confirms on Linux/CI. The same two-semaphore shape scales to coroutine-style step-by-step coordination or a simple two-stage pipeline. For more than two participants a std::barrier is the better fit. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::binary_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/acquire" }
+  - { name: "std::counting_semaphore::release", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/release" }

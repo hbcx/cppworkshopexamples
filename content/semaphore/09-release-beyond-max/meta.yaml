@@ -1,0 +1,12 @@
+title: "Anti-pattern: releasing past the maximum"
+standard: "C++20"
+difficulty: 3
+summary: "A counting_semaphore holds at most max() permits, and release() has a precondition that the count must not exceed it. Releasing more permits than you acquired pushes the count past the maximum -- undefined behaviour, not a clamp or an exception. Size the maximum to the real capacity and keep acquire and release balanced."
+notes: "The template parameter LeastMaxValue is a promise about the largest count the semaphore must support; the standard only requires max() to be at least that, and release() must never carry the count above max(). Overshooting is UB, which means it may appear to work, then corrupt state or crash on another build -- the worst kind of bug. The usual way to reach it is a release() with no matching acquire(): a signaller that fires once per event with nothing consuming at the same rate, so the count only ever grows. Because it is UB we describe the offending line and do not execute it; instead we run a correctly sized semaphore that starts empty, is released exactly up to its capacity, and drained back to zero -- the count stays in range the whole time. The general rule is that permits are conserved: every release should correspond to a permit you (or your protocol) conceptually took, which is exactly how the bounded-buffer example keeps its two semaphores in range. This is single-threaded and needs no sanitizer -- the lesson is the precondition, not a data race."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::counting_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::release", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/release" }
+  - { name: "std::counting_semaphore::max", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/max" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: a semaphore used as a mutex"
+standard: "C++20"
+difficulty: 3
+summary: "A binary_semaphore acquired and released around a critical section looks like a lock but is not one: it has no owner (any thread can release it), an over-release is undefined behaviour rather than a defined error, and there is no lock_guard. For mutual exclusion use std::mutex; keep semaphores for signaling and counting."
+notes: "The trap is that the shapes match -- acquire/release reads like lock/unlock -- so a semaphore gets reached for as a lock, and the differences only show up under stress. Ownership is the big one: a std::mutex remembers which thread locked it and only that thread may unlock, while a semaphore is just a counter, so a release() from unrelated code (or a duplicated one) silently raises the permit count and lets a second thread into a supposedly exclusive region. Worse, releasing a binary_semaphore that already holds its one permit pushes the count past its maximum, which is undefined behaviour -- we describe that line but never run it, because UB is nondeterministic and would diverge between compilers. And there is no std::lock_guard for a semaphore, so a permit leaks on any early return or exception. The remedy is simply to pick the tool that matches the intent: std::mutex with std::lock_guard when you need mutual exclusion (this example runs that version, and the guarded counter lands on exactly 8000), a semaphore when you genuinely need to signal across threads or count interchangeable permits. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::binary_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

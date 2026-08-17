@@ -9,3 +9,5 @@
   note: "The lighter option when the handoff is a single word and you do not need a value channel: C++20 gives std::atomic its own wait/notify for a one-flag signal. Go there for atomic counters, compare_exchange, and wait/notify, and use a future when you need to carry a value or an exception, not just flip a flag."
 - slug: "jthread"
   note: "Cancellation running the other direction: a future carries a result from worker to caller, while a stop_token carries a stop request from caller to worker -- go there for jthread's auto-join and cooperative cancellation, and combine the two when a cancellable job also has to return a value."
+- slug: "semaphore"
+  note: "The lighter signal when the hand-off carries NO value: a future delivers one result (or exception) and blocks until it is ready, while a binary_semaphore just flips a permit to wake another thread -- go there for cross-thread signals, capping concurrency to N, and bounded producer/consumer buffers."

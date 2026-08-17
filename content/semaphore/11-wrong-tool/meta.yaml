@@ -1,0 +1,11 @@
+title: "Anti-pattern: a semaphore where a latch or future fits"
+standard: "C++20"
+difficulty: 3
+summary: "A semaphore is a general permit counter, so you can bend it into wait-for-N-tasks or signal-a-result -- but a std::latch, std::barrier, or std::future says those intents directly and is harder to get wrong. Use a semaphore when you are really counting interchangeable permits: pool slots, rate limits, buffer slots."
+notes: "Because a counting semaphore is so general it is tempting to make it do every coordination job, but the specialised primitives read better and remove whole classes of mistake. Rebuilding wait-for-N-to-finish out of a semaphore -- start at 0, release once per finished task, acquire N times on the waiter -- works only if the N on the waiting side exactly matches the number of releases; miscount and acquire() blocks forever, whereas a std::latch takes the count once and its wait() has no separate number to keep in sync. A one-shot ready signal that must carry a value or an exception is a std::future/std::promise, which does the hand-off and the error propagation for you. A per-round rendezvous of a fixed group is a std::barrier. The honest test is what you are counting: if the units are interchangeable PERMITS (connections, GPU slots, bytes of buffer) the semaphore is exactly right; if you are really counting DOWN to an event or handing back a RESULT, name that with the matching tool. This example runs the latch version of wait-for-five, which is shorter and self-documenting (total 60). Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::counting_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::latch", url: "https://en.cppreference.com/w/cpp/thread/latch" }

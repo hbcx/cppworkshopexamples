@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "mutex"
+  note: "The tool for the job a semaphore is often wrongly bent to: when you want mutual exclusion (one holder, with an owner and RAII), a std::mutex is clearer and safer than a binary_semaphore -- go there for lock_guard, unique_lock, and why a lock has an owner while a semaphore is just a counter."
+- slug: "condition-variable"
+  note: "The general wait-for-a-condition primitive a semaphore is a lighter special case of: where a semaphore counts interchangeable permits, a condition_variable waits on an arbitrary mutex-guarded predicate -- go there for the producer/consumer queue with complex conditions and many waiters, and come back here when the wait is really just counting permits."
+- slug: "latch-barrier"
+  note: "The right tools when you are counting DOWN to an event rather than counting permits: a std::latch waits for N tasks to finish and a std::barrier rendezvouses a fixed group each phase -- go there instead of hand-building either from a semaphore, which is the wrong-tool anti-pattern this section ends on."
+- slug: "future"
+  note: "The tool when a one-shot signal must also carry a VALUE or an exception across threads: a binary_semaphore only flips a flag, while a std::future delivers a result and propagates errors -- go there for async, promise, and packaged_task, and use a semaphore when the signal carries nothing."

@@ -7,3 +7,5 @@
   note: "The thread type these examples use, and the cancellation angle: a group parked on a latch or barrier still needs a way to be shut down, which is where jthread's stop_token comes in -- go there for auto-join and cooperative cancellation to pair with this section's coordination."
 - slug: "atomic"
   note: "What a latch and barrier are built from underneath: their counters are atomics with wait/notify, so for a bare one-word signal a std::atomic (or its C++20 wait/notify) is lighter -- go there for atomics, and use a latch or barrier when you are counting arrivals from many threads rather than flipping one flag."
+- slug: "semaphore"
+  note: "The other C++20 counting primitive, for a different question: a latch counts DOWN to an event and a barrier rendezvouses a group, while a std::counting_semaphore hands out N reusable permits to cap concurrency or gate a resource pool -- go there when you are limiting how many threads proceed rather than waiting for all of them."

@@ -1,0 +1,12 @@
+title: "binary_semaphore: signal from one thread to another"
+standard: "C++20"
+difficulty: 1
+summary: "A std::binary_semaphore holds one permit. Start it at 0, have a worker acquire() (which blocks), and let another thread release() when it is time -- the worker wakes and proceeds. It is the simplest cross-thread signal, and unlike a mutex the releaser need not be the acquirer."
+notes: "std::binary_semaphore is std::counting_semaphore<1> (C++20, header semaphore) -- a permit counter that is 0 or 1. acquire() takes the permit and blocks while there is none; release() adds one and wakes a waiter. The key difference from a mutex is ownership: a mutex may only be unlocked by the thread that locked it, but ANY thread can release a semaphore, which is exactly why it works as a one-way signal here -- main releases the permit the worker is waiting on. You also get the memory ordering for free: release() synchronizes-with the acquire() that observes it, so everything main did before the release (writing payload) is visible to the worker after acquire() returns, with no separate lock. Compared with a condition_variable this needs no mutex and no predicate for a single hand-off; compared with a std::future it does not carry a value, just the signal. This runs under ThreadSanitizer on Linux/CI, which confirms the hand-off is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::binary_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/acquire" }
+  - { name: "std::counting_semaphore::release", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/release" }

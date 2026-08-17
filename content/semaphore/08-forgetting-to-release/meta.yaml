@@ -1,0 +1,12 @@
+title: "Anti-pattern: forgetting to release a permit"
+standard: "C++20"
+difficulty: 3
+summary: "A permit only returns when you release it. An early return or exception between acquire() and release() leaks it, and unlike a leaked lock it permanently lowers the pool's capacity -- enough leaks and every acquirer deadlocks. Tie the release to a destructor so it happens on every exit path."
+notes: "This is the semaphore version of forgetting to unlock a mutex, but with a nastier failure mode: a mutex you forgot to unlock blocks that one lock, while a semaphore permit you forgot to release is subtracted from the pool for the rest of the program, so a rare error path slowly starves capacity until acquire() hangs forever. The bug hides on the uncommon branches -- an early return, a thrown exception, a `continue` -- exactly where manual cleanup is easy to miss. Rather than run the deadlock (which would hang CI) we describe it and run the fix: a small RAII releaser whose destructor releases, so the permit comes back whether the worker finishes normally or bails out early. Half the workers here take an early return and the pool still ends full, proving nothing leaked. This is the same reason std::lock_guard exists for mutexes; the standard just does not ship one for semaphores, so you provide it (see the RAII guard example for a version that also acquires). Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::counting_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/acquire" }
+  - { name: "std::counting_semaphore::release", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/release" }

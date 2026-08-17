@@ -1,0 +1,12 @@
+title: "Anti-pattern: busy-waiting on try_acquire"
+standard: "C++20"
+difficulty: 3
+summary: "Looping on try_acquire() to wait for a permit spins a CPU core at full tilt doing nothing until one frees. acquire() blocks the thread and lets the OS wake it on release -- no wasted cycles and usually lower latency. Spin only when you truly mean check-and-move-on."
+notes: "try_acquire() is a non-blocking probe: it takes a permit if one is free and returns false otherwise, right away. That makes `while (!sem.try_acquire()) {}` a hot spin loop -- it keeps a core at 100% and starves other runnable threads, which on a busy machine can make the wait LONGER, not shorter. The whole point of a semaphore is that acquire() can park the thread efficiently and the runtime wakes exactly one waiter on release(), so blocking is both cheaper and simpler. Reserve try_acquire() for the genuine case where you want to attempt the work and do something else if the resource is busy (never block the caller); reach for try_acquire_for() or try_acquire_until() when you want to wait but with a deadline; and use plain acquire() for an unbounded wait. This example runs the correct blocking version: the worker sleeps in acquire() until main releases, so the steps come out in a fixed order (main 1, worker 2) with no spinning. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::binary_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/acquire" }
+  - { name: "std::counting_semaphore::try_acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/try_acquire" }

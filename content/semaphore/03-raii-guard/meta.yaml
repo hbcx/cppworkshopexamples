@@ -1,0 +1,13 @@
+title: "An RAII acquire/release guard"
+standard: "C++20"
+difficulty: 2
+summary: "The library ships std::lock_guard for a mutex but nothing for a semaphore, so a permit is easy to leak on an early return or exception. A tiny guard that acquires in its constructor and releases in its destructor makes the release automatic on every exit path, exactly like lock_guard."
+notes: "A leaked permit is worse than a leaked lock: it does not just block that object, it permanently lowers the pool's capacity, and enough leaks deadlock every future acquirer. Manual acquire()/release() is exactly the pattern std::lock_guard was invented to replace for mutexes -- but the standard provides no equivalent RAII wrapper for std::counting_semaphore, so you write a small one. The guard here takes the semaphore's LeastMaxValue as a template parameter so it binds to the right type, deletes copy to keep single ownership, acquires in the constructor and releases in the destructor. We show it works by having half the workers take an early return: the permit is returned regardless, so at the end both permits are free and two fresh acquires succeed. The same idea generalises -- if you need try_acquire_for with a timeout or a move-only owner, model it on std::unique_lock. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::counting_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/acquire" }
+  - { name: "std::counting_semaphore::release", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/release" }
+  - { name: "std::counting_semaphore::try_acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/try_acquire" }

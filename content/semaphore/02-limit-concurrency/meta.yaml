@@ -1,0 +1,12 @@
+title: "counting_semaphore: cap how many threads run at once"
+standard: "C++20"
+difficulty: 2
+summary: "Start a std::counting_semaphore with K permits and at most K threads can be inside the guarded region at a time -- each acquires before entering and releases on the way out. It is the direct way to limit concurrency to N, which a mutex cannot express because a mutex limits you to one."
+notes: "The template argument (here 3) is the LeastMaxValue -- the largest permit count the semaphore must be able to hold; the runtime start value passed to the constructor is separate and must not exceed it. With K permits, the (K+1)-th thread blocks in acquire() until someone releases, so K is a hard ceiling on how many threads run the section together. This is the everyday use of a counting semaphore: a bounded resource -- N database connections, N in-flight requests to a slow service, N GPU slots -- handed to whichever threads need one. We prove the ceiling holds by tracking a high-water mark with an atomic compare_exchange and checking it never passed LIMIT. Note the difference from a mutex: a mutex serializes to exactly one, so if you actually want up to N in parallel a semaphore is the tool, and if you want exactly one a mutex is clearer (and gives ownership and RAII). Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::counting_semaphore", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore" }
+detailed_tags:
+  - { name: "std::counting_semaphore::acquire", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/acquire" }
+  - { name: "std::counting_semaphore::release", url: "https://en.cppreference.com/w/cpp/thread/counting_semaphore/release" }
