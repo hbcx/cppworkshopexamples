@@ -1,0 +1,12 @@
+title: "seq_cst: the default order"
+standard: "C++20"
+difficulty: 1
+summary: "Every atomic operation takes a memory_order; omit it and you get memory_order_seq_cst, the strongest. All seq_cst operations act as if run in one global sequence every thread agrees on, which makes code easy to reason about. It is the right default -- weaken it only with a reason you have checked."
+notes: "Sequential consistency is the model most people already assume the hardware has: there is a single total order of all seq_cst operations, consistent with each thread's program order, and every thread sees that same order. That is why omitting the memory_order (or writing memory_order_seq_cst) is the safe starting point -- code written against it matches intuition and cannot exhibit the surprising reorderings that weaker orders allow. The cost is that seq_cst may require the strongest hardware barriers (a full fence on some architectures), which is why the rest of this chapter exists: for a pure counter, relaxed is enough; for a publish/consume handoff, release/acquire is enough; you drop to those only when a profile shows the barrier matters and you have proven the weaker order is still correct. This example just uses the default on a shared counter, so all 8x1000 increments are counted -- 8000 -- with the simplest possible reasoning. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }

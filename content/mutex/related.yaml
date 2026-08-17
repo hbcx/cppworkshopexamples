@@ -15,3 +15,5 @@
   note: "The lock-free option when the shared state is a single object, not a multi-field invariant: a mutex serializes a whole critical section, while std::atomic_ref makes one plain int or field's updates indivisible with no blocking -- go there when you are guarding one value and can drop the lock, and keep the mutex when several variables must stay consistent together."
 - slug: "atomic-shared-ptr"
   note: "The lock-free way to publish a whole object to read-mostly threads: instead of locking a shared object on every read, hand out an immutable snapshot through std::atomic<std::shared_ptr> and swap in a new one to update -- go there for the config hot-swap, and keep the mutex for write-heavy or multi-field state it cannot express."
+- slug: "memory-order"
+  note: "What a lock gives you for free: locking is an acquire and unlocking is a release, so a critical section has the happens-before that chapter derives by hand from atomics -- go there when you want to understand the ordering a mutex provides, or to hand-tune atomics where a lock costs too much."

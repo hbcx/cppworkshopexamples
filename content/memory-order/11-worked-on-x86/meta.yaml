@@ -1,0 +1,11 @@
+title: "Anti-pattern: it worked on x86"
+standard: "C++20"
+difficulty: 3
+summary: "x86's strong (total-store-order) hardware hides many synchronization bugs: a missing release/acquire or a wrongly-relaxed operation often works on x86 and breaks on ARM or POWER, or after an optimization. Correctness is defined by the C++ memory model, not the CPU you tested on -- reason with happens-before and check with ThreadSanitizer."
+notes: "This is a methodology bug more than a single wrong line, and it is why memory-order mistakes are so dangerous. x86 gives almost sequential consistency in hardware, so code that omits a release, uses relaxed for a handoff, or otherwise lacks a happens-before edge frequently runs correctly on a developer's x86 machine -- and then fails intermittently on a phone's ARM core, a server's POWER chip, or on x86 itself once the compiler reorders the surrounding plain accesses. Passing tests on strongly-ordered hardware is not evidence of correctness; a data race is undefined behaviour regardless of whether a given CPU happens to reveal it. The defense is to reason at the level of the abstract machine (does every piece of shared data sit on the correct side of a synchronizes-with edge?) and to run ThreadSanitizer, which models the C++ memory model rather than one architecture and flags races x86 would hide. This example uses the release/acquire the model requires, so it is portable to every target. It is deterministic and prints 99. Runs under ThreadSanitizer on Linux/CI -- exactly the check this anti-pattern is about."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

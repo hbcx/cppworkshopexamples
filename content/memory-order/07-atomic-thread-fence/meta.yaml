@@ -1,0 +1,13 @@
+title: "atomic_thread_fence: ordering as a barrier"
+standard: "C++20"
+difficulty: 3
+summary: "std::atomic_thread_fence is a standalone ordering barrier, separate from any single atomic operation. A release fence before relaxed stores, paired with an acquire fence after a relaxed load, gives the same happens-before as a release store paired with an acquire load -- useful when one fence must order several relaxed operations at once."
+notes: "Tagging an operation (store with release, load with acquire) attaches the order to that one operation. A fence detaches it: std::atomic_thread_fence(memory_order_release) orders everything before it against a later relaxed store, and std::atomic_thread_fence(memory_order_acquire) orders a prior relaxed load against everything after it. A release fence synchronizes-with an acquire fence through a flag they bracket, producing the same happens-before as the tagged version. The payoff is amortization: if a producer writes ten relaxed variables and then flips one flag, a single release fence before the flag publishes all ten, instead of ten release stores. Fences are also how you publish ordinary NON-atomic data with relaxed atomics -- the classic use -- though here the payload is a relaxed atomic so the example stays self-contained. Fences are lower-level and easier to get subtly wrong than tagged operations, so prefer tagged release/acquire unless you specifically need to order a batch. One practical note: ThreadSanitizer cannot fully model a standalone fence (GCC even warns that atomic_thread_fence is unsupported under -fsanitize=thread), which is another reason to prefer tagged operations -- so this example turns off -Werror to build under the sanitizer; its data is a relaxed atomic, so there is no plain-variable race for the tool to miss anyway. The relaxed load reliably reads 99. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+werror: false
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic_thread_fence", url: "https://en.cppreference.com/w/cpp/atomic/atomic_thread_fence" }
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

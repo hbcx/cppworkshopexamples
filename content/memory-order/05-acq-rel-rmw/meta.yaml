@@ -1,0 +1,11 @@
+title: "acq_rel: a read-modify-write that does both"
+standard: "C++20"
+difficulty: 3
+summary: "memory_order_acq_rel is for a read-modify-write that synchronizes in both directions at once: it acquires (sees the previous actor's writes) and releases (publishes its own) in a single atomic step. A baton relay -- each worker extends what the last left and advances a shared turn with fetch_add(acq_rel) -- shows the order in use."
+notes: "A plain load takes an acquire and a plain store takes a release, but a read-modify-write (fetch_add, fetch_sub, exchange, compare_exchange) touches the value in one indivisible step and may need BOTH: memory_order_acq_rel gives it acquire semantics on the read part and release semantics on the write part. The two canonical uses are a hand-off chain, as here -- each worker must see the predecessor's contribution (acquire) and publish its own to the successor (release) as it advances the shared counter -- and a reference-count decrement, where fetch_sub(acq_rel) lets every releaser publish its last uses and lets the thread that hits zero acquire all of them before destroying the object. In this relay the plain baton is safe without a lock because the acq_rel fetch_add on turn serialises the workers: worker i's advance releases its baton write, and worker i+1's acquire load of the new turn value synchronizes-with it, so the writes are strictly ordered and the total is a deterministic 100. Use acq_rel when an RMW sits on both sides of a synchronization; use plain acquire or release when only one side matters (a lock take needs only acquire, an unlock only release). Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }

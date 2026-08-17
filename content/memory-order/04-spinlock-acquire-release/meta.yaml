@@ -1,0 +1,11 @@
+title: "A spinlock: acquire to lock, release to unlock"
+standard: "C++20"
+difficulty: 3
+summary: "A lock is the clearest use of acquire and release together: locking acquires (so you see the last holder's writes) and unlocking releases (so the next holder sees yours). A spinlock from an atomic<bool> -- exchange with acquire to take it, store with release to free it -- makes acquire/release concrete and guards a plain counter correctly."
+notes: "Every mutex is built on this pattern, and writing a tiny one makes the memory orders tangible. The acquire on the lock-taking exchange imports all writes the previous holder made before its release-unlock, so the critical section starts with a consistent view; the release on unlock exports this holder's writes so the next acquirer sees them. Together they bracket the critical section, which is why the plain (non-atomic) counter inside is race-free even though only the lock is atomic -- the same happens-before mechanism as the publish handoff, applied on both sides of the section. A note on acq_rel: the lock's exchange is a read-modify-write, and here acquire is all it needs (we do not publish anything on the way IN); a RMW that must synchronize in BOTH directions at once -- a reference-count decrement, a hand-off that both consumes and publishes -- uses memory_order_acq_rel, which the next example shows. This spinlock is a teaching tool: a real one would back off rather than spin hot, and std::mutex is the right choice in practice. The counter lands on exactly 8000. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic::exchange", url: "https://en.cppreference.com/w/cpp/atomic/atomic/exchange" }

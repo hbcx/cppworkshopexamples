@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "atomic"
+  note: "Where these orders are actually applied: every std::atomic operation takes one of the memory orders this chapter explains, and the atomic chapter introduces them on real operations (counter, CAS, wait/notify) -- go there for the atomic toolkit, and come back here for the full model behind the order argument."
+- slug: "atomic-ref"
+  note: "The same memory-order argument on a plain object you did not declare atomic: atomic_ref's load/store/fetch_add all take these orders, so a relaxed reduction or a release/acquire publish works exactly as here -- go there when the atomic access is an overlay on an existing plain int or field."
+- slug: "atomic-shared-ptr"
+  note: "The orders applied to a shared_ptr handoff: the config hot-swap publishes with release and reads with acquire, the same pairing this chapter builds -- go there for the read-mostly publish pattern and lock-free structures that put these orders to work on a whole object."
+- slug: "mutex"
+  note: "The ordering you get for free when you do not want to reason about it: a std::mutex lock is an acquire and an unlock is a release, so a critical section has the happens-before this chapter derives by hand -- go there when a lock is simpler than hand-tuned atomics, and use explicit orders only where a profile says the lock costs too much."

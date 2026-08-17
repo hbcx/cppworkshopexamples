@@ -1,0 +1,1 @@
+spinlock-guarded counter = 8000

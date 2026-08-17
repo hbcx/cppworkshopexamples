@@ -1,0 +1,11 @@
+title: "release/acquire: the publish handoff"
+standard: "C++20"
+difficulty: 2
+summary: "A store with memory_order_release paired with a load with memory_order_acquire on the same atomic creates a synchronizes-with edge: once the acquire load sees the released value, every write the producer made before the release is visible to the consumer after the acquire. It publishes data at lower cost than seq_cst."
+notes: "This is the pattern most lock-free code is built from, and the two key terms are worth internalising. SYNCHRONIZES-WITH: a release store and the acquire load that reads its value form a one-way synchronization. HAPPENS-BEFORE: because of that edge, everything sequenced before the release in the producer is ordered before everything sequenced after the acquire in the consumer -- so the consumer may read the plain payload with no race even though payload itself is not atomic. Only the flag needs to be atomic; it carries the ordering for the ordinary data around it. Release/acquire is cheaper than seq_cst because it constrains only this one pair's ordering, not a global total order over all atomics -- on many CPUs it needs no full barrier. Two cautions shown elsewhere in this chapter: the pairing must be release-on-one-side AND acquire-on-the-other (a lone acquire synchronizes with nothing), and it does NOT give a global total order (that is when you need seq_cst). The consumer spins here for brevity; production code would use wait/notify. Runs under ThreadSanitizer on Linux/CI, which verifies the handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

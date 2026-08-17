@@ -1,0 +1,11 @@
+title: "relaxed: atomicity without ordering"
+standard: "C++20"
+difficulty: 2
+summary: "memory_order_relaxed gives atomicity and nothing else -- the operation is indivisible but is not ordered against other memory. That is enough for a pure counter whose value never gates access to other data, and it is the cheapest order. It is NOT enough to publish data (see the release/acquire handoff)."
+notes: "Relaxed is the minimum an atomic can offer: no torn or lost updates, but no synchronizes-with edge, so a relaxed store does not publish anything else you wrote and a relaxed load does not import anything another thread wrote. For a statistic -- requests served, bytes processed, cache hits -- that is exactly right: you only care that the final total is correct, not that any particular increment orders other memory, so paying for barriers would be waste. The subtlety is that DURING the run different threads may observe different partial totals (relaxed does not force a single global order like seq_cst), which is fine for a counter and wrong for anything used as a flag. Note the final read here is correct not because relaxed guarantees it, but because joining the threads establishes a happens-before edge that makes every increment visible. The rule of thumb: relaxed for counters and statistics; the moment the value's job is to signal that OTHER data is ready, you need at least release/acquire. This runs under ThreadSanitizer on Linux/CI, and the total is a deterministic 8000."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }

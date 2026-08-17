@@ -1,0 +1,11 @@
+title: "Anti-pattern: an order is not atomicity"
+standard: "C++20"
+difficulty: 3
+summary: "A memory_order orders the visibility of accesses that are already synchronized; it does not make a plain data race safe. Two threads writing the same non-atomic variable with no happens-before edge is undefined behaviour no matter what order you put on some other atomic. To make concurrent updates safe, make the value atomic or lock it."
+notes: "Memory orders and atomicity are two different guarantees, and conflating them is a real mistake. Atomicity means an individual operation on a value is indivisible; a memory order means operations become visible to other threads in a certain order. A release/acquire pair carries ORDINARY data across a synchronizes-with edge -- data written before the release, read after the acquire -- and it makes that data safe precisely because the edge gives it a happens-before relationship, not because the order magically protects any variable you like. If two threads update the same plain variable concurrently with no such edge between THEM, that is a data race regardless of how carefully you order an unrelated flag: the order was never about that variable. The fix is to give the raced value its own protection -- make it std::atomic (so each update is indivisible), or guard it with a lock. This example does the former: the shared counter is atomic, so 8x1000 concurrent increments are defined and total exactly 8000. The takeaway: choose the order to publish data across a boundary, but make the concurrently-updated data itself atomic or locked. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }

@@ -7,3 +7,5 @@
   note: "The same idea for objects you do not own the type of: atomic_ref overlays atomic operations onto a plain int or field, while atomic<shared_ptr> is a built-in specialization for the shared_ptr handle -- go there when the shared thing is a plain value rather than a smart pointer, and note both share the rule that all access must go through the atomic."
 - slug: "mutex"
   note: "The right tool when atomic<shared_ptr> is the wrong one: a mutex guards several related values as one transaction and suits write-heavy state, where a single atomic pointer only swaps one object wholesale -- go there for lock_guard, unique_lock, and guarding a multi-field invariant this specialization cannot express."
+- slug: "memory-order"
+  note: "The orders behind the publish: the config hot-swap stores with release and loads with acquire, and this chapter explains why that pairing is what makes the swap safe -- go there for seq_cst vs relaxed vs release/acquire, fences, and the ordering pitfalls."

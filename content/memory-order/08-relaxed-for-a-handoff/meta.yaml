@@ -1,0 +1,11 @@
+title: "Anti-pattern: relaxed for a publish handoff"
+standard: "C++20"
+difficulty: 3
+summary: "relaxed makes the flag atomic but creates no synchronizes-with edge, so it does not publish the data written before it -- a consumer can see the flag set and still read a stale payload. Publishing data needs a release store paired with an acquire load."
+notes: "This is the most common memory-order bug and the one the release/acquire example exists to prevent. The mental slip is thinking 'the flag is atomic, so this is fine'; but atomicity of the flag is not the point -- the point is ORDERING the payload around the flag, and relaxed provides none. Without a release on the store, nothing the producer did before it is ordered relative to the consumer, so even after the consumer observes the flag as true, reading the payload is a data race that may return the old value (reliably so on ARM or POWER, and even on x86 the compiler may reorder the plain write). Because it is undefined behaviour we describe it and run only the fix: release on the store, acquire on the load, which establishes the happens-before that carries the payload. A useful check: any time an atomic's value is used to decide that OTHER memory is ready, the store needs release and the load needs acquire (or stronger). Runs under ThreadSanitizer on Linux/CI, which is the tool that catches the relaxed version."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

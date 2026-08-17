@@ -1,0 +1,11 @@
+title: "Anti-pattern: reaching for consume"
+standard: "C++20"
+difficulty: 3
+summary: "memory_order_consume was meant to be a cheaper acquire that orders only value-dependent operations, but it is so hard to specify and implement that every major compiler promotes it to acquire. It buys nothing today and the standard discourages it. Write memory_order_acquire, which is what you actually get."
+notes: "consume targets a real optimization: on some architectures, ordering only the operations that DEPEND on a loaded pointer (dereferencing it, indexing through it) is cheaper than ordering everything after the load, as acquire does. The trouble is defining 'dependent' in a way compilers can preserve through optimization -- carrying dependency chains intact turned out to be impractical, so implementations gave up and made consume an alias for acquire. That means using it gains no speed, and its subtle, in-flux specification is a trap for the reader who assumes it does something acquire does not. The guidance from the committee is to avoid it pending a redesign. The practical rule is simple: whenever you might type consume, type acquire -- you get identical behaviour on every real compiler, with none of the confusion. This example publishes a pointer with release and reads it with acquire, the ordinary and correct idiom. It is deterministic (the consumer spins until the pointer is non-null, then reads 7). Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

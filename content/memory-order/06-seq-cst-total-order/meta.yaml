@@ -1,0 +1,11 @@
+title: "When only seq_cst gives a total order"
+standard: "C++20"
+difficulty: 3
+summary: "release/acquire orders one producer/consumer pair; it does not create a global order across independent atomics. The store-buffering pattern -- two threads each set their own flag then read the other's -- can have BOTH reads return 0 under release/acquire or relaxed, but never under seq_cst, which forces a single global sequence."
+notes: "This is the one place the extra cost of seq_cst buys something release/acquire cannot. In store buffering each thread writes its own variable and reads the other's; the surprising-but-legal outcome under weak ordering is that both reads see the old value 0, because each thread's own store can be delayed (buffered) past its load, and there is no rule tying the two independent variables into a common order. seq_cst adds exactly that rule: every seq_cst operation takes a position in one global total order, so the two stores are ordered relative to each other and at least one precedes the load that would otherwise miss it -- both-zero becomes impossible. Release/acquire only orders a release with the acquire that reads ITS value; it says nothing about two unrelated variables, which is why it is cheaper and why it is not enough here. Cases that truly need this are rare (some mutual-exclusion algorithms like Dekker's, and multi-atomic protocols), which is the honest reason seq_cst is the default but weaker orders dominate real code. We cannot reliably show the both-zero violation on x86 (its hardware is close to seq_cst already), so we run the seq_cst version and confirm the guarantee holds across many rounds -- both_zero_ever stays false. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

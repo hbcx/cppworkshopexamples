@@ -1,0 +1,1 @@
+seq_cst forbids both-zero, ever seen = false

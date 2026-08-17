@@ -21,3 +21,5 @@
   note: "The same atomic operations, but on an object you did NOT declare atomic: std::atomic_ref overlays load, store, fetch_add and compare_exchange onto a plain int, array element, or struct field -- go there when you need atomicity on data whose type must stay plain (an int* buffer, a copyable struct, a type you do not own)."
 - slug: "atomic-shared-ptr"
   note: "The atomic specialization for a shared_ptr handle: the same load/store/exchange/compare_exchange/wait, but swapping a whole shared_ptr atomically so threads can publish and read it without racing -- go there for the read-mostly config hot-swap and lock-free structures with safe reclamation."
+- slug: "memory-order"
+  note: "The full model behind the order argument these operations take: seq_cst vs relaxed vs release/acquire, happens-before, fences, and the anti-patterns that make lock-free code subtly wrong -- go there when you need to choose or reason about the memory_order, not just use the default."

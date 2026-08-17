@@ -1,0 +1,11 @@
+title: "Anti-pattern: a lone acquire or release"
+standard: "C++20"
+difficulty: 3
+summary: "Ordering requires a matched pair: a release store synchronizes-with the acquire load that reads its value. An acquire on a load whose value was stored with relaxed pairs with nothing and synchronizes nothing. Both the store and the load must carry the order; fixing one side alone fixes nothing."
+notes: "This is the subtler cousin of the relaxed-handoff bug: here the consumer correctly uses acquire, so the code LOOKS synchronized, but the producer's store is relaxed, so there is no release for the acquire to pair with -- and synchronizes-with is defined only between a release and the acquire that reads the value it wrote. No pair, no happens-before, and the payload is still published unsafely. The lesson is that acquire and release are two halves of one edge, not independent 'make it safe' annotations you can sprinkle on whichever side you happen to be editing. When you add acquire to a load, find the store whose value it reads and make that a release (or seq_cst); when you add release to a store, make sure the reader uses acquire. The same applies to a release with a relaxed reader. Because the broken version is a data race (undefined behaviour) we describe it and run the correctly-paired version, where release and acquire together carry the payload. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }
+detailed_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
