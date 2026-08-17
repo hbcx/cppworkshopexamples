@@ -1,0 +1,1 @@
+every reader saw a valid published value = true

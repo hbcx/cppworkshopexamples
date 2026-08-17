@@ -1,0 +1,12 @@
+title: "Anti-pattern: the deprecated atomic_load/atomic_store"
+standard: "C++20"
+difficulty: 3
+summary: "The pre-C++20 way to access a shared_ptr atomically was the free functions std::atomic_load/atomic_store taking &sp. They are deprecated in C++20 and slated for removal, and they share atomic_ref's footgun: any plain access to the same shared_ptr silently breaks atomicity. Use the std::atomic<std::shared_ptr<T>> specialization instead."
+notes: "C++11 through C++17 had no atomic<shared_ptr> specialization, so it offered overloads of std::atomic_load, std::atomic_store, std::atomic_exchange, and std::atomic_compare_exchange_* that took a pointer to an ordinary shared_ptr. They worked, but they had the same weakness as atomic_ref: the shared_ptr is still a plain object, so a single ordinary read or write of it anywhere -- easy to add by accident -- reintroduces the data race, with nothing in the type to stop it. C++20 both fixed this (with the atomic<std::shared_ptr> specialization, where the atomicity is part of the type) and deprecated the free functions; a later standard removes them. Calling them now typically warns, which under this project's -Werror would fail the build, so we describe them in a comment rather than run them, and run the modern specialization instead. If you meet the free functions in existing code, the migration is mechanical: a std::atomic<std::shared_ptr<T>> member, and atomic_load(&sp)/atomic_store(&sp,x) become sp.load()/sp.store(x). The output reports only that every reader saw a valid value, so the run is deterministic. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::load", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::atomic<std::shared_ptr>::store", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }

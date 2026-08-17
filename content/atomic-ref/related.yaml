@@ -7,3 +7,5 @@
   note: "Where a lock-free reduction with atomic_ref pays off: a standard algorithm under std::execution::par runs its callable across many threads, so a shared accumulator it writes must be atomic -- go there for the parallel algorithms, and use atomic_ref to make the shared buffer they tally into safe without changing its type."
 - slug: "thread"
   note: "Where the threads that share these objects come from: how you start and join a std::thread (or jthread) and the ownership rules the sharing depends on -- go there for launching the work, and come back here for how those threads update shared plain data without racing."
+- slug: "atomic-shared-ptr"
+  note: "The same atomic-view idea, but built in for a smart pointer: where atomic_ref overlays a plain value, std::atomic<std::shared_ptr> is a standard specialization that swaps a whole shared_ptr handle atomically -- go there when the shared thing is a reference-counted pointer rather than a plain int or field."

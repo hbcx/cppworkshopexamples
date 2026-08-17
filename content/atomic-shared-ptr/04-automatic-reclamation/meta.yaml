@@ -1,0 +1,13 @@
+title: "Old versions free themselves by reference count"
+standard: "C++20"
+difficulty: 2
+summary: "When a store() replaces the pointer, the old object is not freed while any reader still holds a snapshot of it -- it is destroyed only when the last snapshot goes away. This reference-counted reclamation is what lets a reader keep using an old version safely while a writer publishes a new one."
+notes: "The safety of the whole publish/subscribe pattern rests on this: a reader's load() returns an OWNING copy, so publishing a new pointer with store() does not pull the rug out from under readers still using the old object. The old version's reference count simply drops by one when the atomic stops holding it, and the object is destroyed at the moment the count reaches zero -- which is when the last reader releases its snapshot, not a moment sooner. We make that visible with a type that counts live instances in its constructor and destructor: one alive after the first publish, two while a reader holds the old version and the writer has published a new one, and back to one once the reader releases. No garbage collector, no manual free, no reader ever touching a freed object -- the same mechanism that makes a plain shared_ptr safe, now working across the atomic hand-off. This is also why you never delete a published object by hand; you just stop referencing it. The atomic additionally supports wait()/notify to block until the pointer changes, like any atomic. Single-threaded and needs no sanitizer: the point is the lifetime guarantee, not a data race."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::store", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::atomic<std::shared_ptr>::load", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

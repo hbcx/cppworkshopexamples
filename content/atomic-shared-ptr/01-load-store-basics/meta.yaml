@@ -1,0 +1,13 @@
+title: "Concurrent load and store of a shared_ptr"
+standard: "C++20"
+difficulty: 1
+summary: "A shared_ptr's reference count is atomic, but the handle object is not, so concurrent load and store of the same instance is a data race. std::atomic<std::shared_ptr<T>> makes the whole handle atomic: load() returns a safe owning snapshot and store() swaps in a new pointer atomically."
+notes: "This is the gap std::atomic<std::shared_ptr> was made to close. A shared_ptr is two pointers -- one to the object, one to the control block -- plus the control block's reference count. The reference count is atomic, which is why COPYING a shared_ptr across threads is fine. But assigning a shared_ptr overwrites both of its internal pointers, and that is not atomic: a thread reading the same shared_ptr instance while another reassigns it can see a torn, half-updated handle. Wrapping the handle in std::atomic<std::shared_ptr<T>> (a C++20 specialization in header memory) makes load() and store() update all of that atomically. Crucially, load() returns a full OWNING copy: it bumps the reference count under the hood, so the object stays alive for as long as you hold the returned shared_ptr even if another thread stores a different pointer the very next instant. The output only reports whether every reader saw a valid value (0 or 42), which is always true, so the run is deterministic even though which value each reader sees depends on timing. Runs under ThreadSanitizer on Linux/CI, which confirms the handle access is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::load", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::atomic<std::shared_ptr>::store", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }

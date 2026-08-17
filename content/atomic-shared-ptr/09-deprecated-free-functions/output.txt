@@ -1,0 +1,1 @@
+modern atomic<shared_ptr> replaces the deprecated free functions = true

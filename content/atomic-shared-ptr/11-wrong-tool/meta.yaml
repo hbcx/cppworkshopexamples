@@ -1,0 +1,12 @@
+title: "Anti-pattern: atomic<shared_ptr> where a mutex fits"
+standard: "C++20"
+difficulty: 3
+summary: "atomic<shared_ptr> is for one read-mostly value swapped wholesale. It is the wrong tool for updating several related values together (one atomic pointer cannot span two objects transactionally), for write-heavy state (it is not lock-free, so stores just contend on an internal lock), or for a pointer never shared across threads. For those, a std::mutex is clearer."
+notes: "The strength of atomic<shared_ptr> -- atomically swapping one whole object -- is also its limit. If an operation must keep two independent pieces of state consistent (move value from one account to another, update an index and its metadata together), a single atomic pointer cannot help: you would need one pointer over a combined object, at which point you are back to publishing immutable snapshots of everything, or you simply take a lock. Because the specialization is not lock-free, a write-heavy workload gains nothing over a std::mutex -- both serialise on a lock, and the mutex version is easier to read and reason about. And if the pointer never actually crosses a thread boundary, the atomic wrapper is pure overhead; a plain shared_ptr copy suffices. The honest test: is this ONE value, read far more than written, that you replace as a unit? If yes, atomic<shared_ptr> fits; otherwise reach for a mutex (or a plain shared_ptr). This example runs the mutex version of a two-account transfer, whose invariant (a+b is conserved) a lone atomic pointer cannot maintain -- the total stays 1000. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

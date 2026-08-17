@@ -14,3 +14,5 @@
   note: "Where sharing is the wrong default: a memento that copies a shared_ptr shares the buffer instead of snapshotting it, so an edit corrupts the saved state -- go there for the shallow-copy trap and why a snapshot needs its own deep copy, not a shared handle."
 - slug: "raii"
   note: "The idiom shared_ptr automates for shared ownership: tie a resource to object lifetime so it is released without a manual call -- go there for the pattern itself and how to write your own single-owner guard."
+- slug: "atomic-shared-ptr"
+  note: "How to share the shared_ptr HANDLE itself between threads: the reference count is atomic but the handle is not, so concurrent load/store of one shared_ptr races -- go there for std::atomic<std::shared_ptr>, the read-mostly config hot-swap, and lock-free structures built on it."

@@ -1,0 +1,12 @@
+title: "Anti-pattern: mutating the pointed-to object"
+standard: "C++20"
+difficulty: 3
+summary: "atomic<shared_ptr> makes swapping the pointer atomic, not the object it points to. Several threads that load() the same pointer and then write through it all race on the one pointee. Treat published objects as immutable: to change state, build a new object and store() it, so readers see the whole old or whole new object."
+notes: "The atomicity here is about the HANDLE, and it is easy to over-read that as protecting the pointed-to data too. It does not: once you load() a pointer, dereferencing and writing through it is an ordinary access to an ordinary object, and if other threads hold the same pointer and also write, that is a plain data race on the pointee -- exactly what you would have without the atomic wrapper. The correct mental model is publish-and-subscribe with immutable values: a published object is never mutated, so readers can share it freely; to advance the state you construct a new object and store() the new pointer, and old versions are reclaimed by the reference count when their last reader leaves. Declaring the pointee const (as here, shared_ptr<const State>) makes the compiler enforce the immutability. We describe the racy mutate-in-place version and run the immutable-snapshot version, with a SINGLE writer so its load-then-store loop cannot lose updates (multiple writers would need compare_exchange, as in the lock-free stack) -- giving a deterministic final total of 1000. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::load", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::atomic<std::shared_ptr>::store", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }

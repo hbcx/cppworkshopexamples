@@ -13,3 +13,5 @@
   note: "The counting cousin of a mutex, and the tool a semaphore is often wrongly used as instead: a mutex caps a region at ONE holder, while a std::counting_semaphore lets up to N in at once (a pool, a rate limit) and has no owner -- go there for capping concurrency, cross-thread signals, and why a semaphore is not a lock."
 - slug: "atomic-ref"
   note: "The lock-free option when the shared state is a single object, not a multi-field invariant: a mutex serializes a whole critical section, while std::atomic_ref makes one plain int or field's updates indivisible with no blocking -- go there when you are guarding one value and can drop the lock, and keep the mutex when several variables must stay consistent together."
+- slug: "atomic-shared-ptr"
+  note: "The lock-free way to publish a whole object to read-mostly threads: instead of locking a shared object on every read, hand out an immutable snapshot through std::atomic<std::shared_ptr> and swap in a new one to update -- go there for the config hot-swap, and keep the mutex for write-heavy or multi-field state it cannot express."

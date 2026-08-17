@@ -1,0 +1,1 @@
+pushed nodes on the stack = 800

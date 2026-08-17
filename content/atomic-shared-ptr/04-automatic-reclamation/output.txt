@@ -1,0 +1,3 @@
+after first publish, alive = 1
+reader still holds the old one, alive = 2
+after reader releases, alive = 1

@@ -1,0 +1,1 @@
+every snapshot was self-consistent = true

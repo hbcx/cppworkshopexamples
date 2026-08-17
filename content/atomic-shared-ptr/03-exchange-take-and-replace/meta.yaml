@@ -1,0 +1,11 @@
+title: "exchange: atomically take and replace"
+standard: "C++20"
+difficulty: 2
+summary: "exchange() installs a new pointer and returns the previous one in one atomic step, with no moment where the slot is empty or doubly owned. It is how you rotate a buffer, claim the current item, or drain a batch -- and because the swap is atomic, each value that passes through the slot is taken by exactly one thread."
+notes: "Where load()/store() read or overwrite the slot, exchange() does both at once and gives you the old value back, which is exactly what a take-and-replace needs: a producer/consumer that rotates a filled buffer out and an empty one in, a scheduler that claims the current task and drops in the next, a stats collector that swaps in a fresh accumulator and processes the old one. The atomicity guarantees there is no lost or duplicated hand-off -- no two threads can both come away with the same old pointer, and none is dropped. This example turns that guarantee into a deterministic check: N workers each exchange in a unique value and record the value they took out, so across all the recovered values plus the one left in the slot, each of 0..N appears exactly once and the sum is fixed (36 for N=8) no matter how the threads interleave. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::exchange", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }

@@ -19,3 +19,5 @@
   note: "Higher-level coordination built on atomic counters: a std::latch and std::barrier count arrivals from many threads with atomic wait/notify inside -- go there when you are waiting for N threads to reach a point rather than flipping or counting a single atomic yourself."
 - slug: "atomic-ref"
   note: "The same atomic operations, but on an object you did NOT declare atomic: std::atomic_ref overlays load, store, fetch_add and compare_exchange onto a plain int, array element, or struct field -- go there when you need atomicity on data whose type must stay plain (an int* buffer, a copyable struct, a type you do not own)."
+- slug: "atomic-shared-ptr"
+  note: "The atomic specialization for a shared_ptr handle: the same load/store/exchange/compare_exchange/wait, but swapping a whole shared_ptr atomically so threads can publish and read it without racing -- go there for the read-mostly config hot-swap and lock-free structures with safe reclamation."

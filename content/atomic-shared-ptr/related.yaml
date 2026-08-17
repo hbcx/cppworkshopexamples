@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "shared-ptr"
+  note: "The pointer this section makes thread-safe to share, and why it is needed: shared_ptr's reference count is atomic but the handle is not, as the atomic-refcount example there explains -- go there for shared ownership, make_shared, weak_ptr, and the control block, then come back for how to hand the pointer itself between threads without racing."
+- slug: "atomic"
+  note: "The general atomic toolkit this is a specialization of: the load/store/exchange/compare_exchange/wait operations and the memory-order model are the same as for std::atomic<T> -- go there for atomics on plain values, the CAS loop, and the ordering rules that carry over here."
+- slug: "atomic-ref"
+  note: "The same idea for objects you do not own the type of: atomic_ref overlays atomic operations onto a plain int or field, while atomic<shared_ptr> is a built-in specialization for the shared_ptr handle -- go there when the shared thing is a plain value rather than a smart pointer, and note both share the rule that all access must go through the atomic."
+- slug: "mutex"
+  note: "The right tool when atomic<shared_ptr> is the wrong one: a mutex guards several related values as one transaction and suits write-heavy state, where a single atomic pointer only swaps one object wholesale -- go there for lock_guard, unique_lock, and guarding a multi-field invariant this specialization cannot express."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: not taking one snapshot"
+standard: "C++20"
+difficulty: 3
+summary: "Each load() can return a different object, because a writer may store a new pointer between two loads. Loading the atomic several times within one operation can mix fields from two published versions. Load once into a local shared_ptr and use that stable owning copy for the whole operation."
+notes: "atomic<shared_ptr> gives you a consistent view only if you take the view once. Every call to load() is an independent observation, and a concurrent writer can publish a new object between any two of them, so code like `if (cfg.load()->enabled) use(cfg.load()->value)` can test a field on version A and then read another field from version B -- an inconsistency that no amount of atomicity prevents, because you asked two separate questions. The library cannot help here: each load is individually correct. The fix is a discipline, not an API -- snapshot once into a local shared_ptr and read every field from that local, which also keeps the object alive for the whole operation regardless of later stores. This example follows the rule: a single load() per iteration, both fields read from that one snapshot, so the invariant (enabled implies value==20) always holds and mismatches stays 0. It is deterministic because the correct version has no window to observe. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::load", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }

@@ -1,0 +1,1 @@
+final published total = 1000

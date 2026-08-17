@@ -1,0 +1,12 @@
+title: "A lock-free stack push with compare_exchange"
+standard: "C++20"
+difficulty: 3
+summary: "compare_exchange builds lock-free structures on atomic<shared_ptr>, and shared_ptr handles the hard part -- safe reclamation. Many threads push onto a linked stack with a compare-exchange loop: read the head, link the new node to it, and swap it in only if the head is unchanged, retrying on a race. A node frees only when its last holder drops it."
+notes: "Lock-free data structures have two hard problems: making the update atomic, and freeing nodes safely (a thread must never delete a node another thread is about to read -- the reclamation problem, which hazard pointers and epoch schemes exist to solve). atomic<shared_ptr> addresses both at once: compare_exchange_weak does the atomic head swap, and the shared_ptr reference count means a node is destroyed only after every thread that loaded it has let go, so a reader never touches freed memory. The push is the textbook Treiber loop: point the new node's next at the current head, then compare_exchange the head from that old value to the new node; if another thread pushed first the exchange fails, refreshes our node->next to the new head, and we try again. Reference counting also sidesteps the ABA problem that plagues a raw-pointer version. The result is deterministic -- all 8x100 nodes land on the stack (count 800) whatever the interleaving. This trades some cost (atomic<shared_ptr> is not lock-free and refcounting is not free) for correctness and simplicity; a production structure might use hazard pointers instead, but this is dramatically easier to get right. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::compare_exchange_weak", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

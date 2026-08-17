@@ -1,0 +1,1 @@
+each value handed off exactly once, sum = 36 (expected 36)

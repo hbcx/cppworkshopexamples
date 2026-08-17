@@ -1,0 +1,12 @@
+title: "Why it is not lock-free (and why that is fine)"
+standard: "C++20"
+difficulty: 2
+summary: "std::atomic<std::shared_ptr> must update a pointer and a reference count together, which no single hardware instruction does, so the standard defines is_always_lock_free as false for it -- implementations use an internal lock. It is still much cheaper than a full mutex for read-mostly use, and it supports the whole memory_order set."
+notes: "It is natural to assume anything called std::atomic is lock-free, but this specialization cannot be: an atomic store has to swap the object pointer AND adjust reference counts on both the old and new control blocks as one indivisible unit, and there is no single CPU instruction that does all of that. So implementations fall back to an internal lock -- commonly a small pool of spinlocks selected by the object's address -- and is_always_lock_free is specified as false, which this prints. Two things keep it worthwhile anyway. First, correctness never depends on being lock-free; the operations are still atomic and safe. Second, for the read-mostly pattern it targets, the cost is tiny compared with a std::mutex guarding the whole object: the internal lock is held only for the pointer-and-refcount swap, not for the reader's use of the object. If you truly need lock-free single-word publication, publish an index or a plain pointer into pre-owned storage instead. This example also shows load/store taking explicit memory orders (release to publish, acquire to consume) exactly like any atomic. It is single-threaded and needs no sanitizer: the point is the is_always_lock_free contract and the ordering API, not a data hand-off."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::is_always_lock_free", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }

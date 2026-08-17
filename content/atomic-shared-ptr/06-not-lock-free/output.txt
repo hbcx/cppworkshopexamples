@@ -1,0 +1,2 @@
+atomic<shared_ptr> is_always_lock_free = false
+value after release/acquire store = 2

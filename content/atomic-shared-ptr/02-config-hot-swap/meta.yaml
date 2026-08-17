@@ -1,0 +1,13 @@
+title: "A read-mostly config hot-swap"
+standard: "C++20"
+difficulty: 2
+summary: "The classic atomic<shared_ptr> pattern: a value read constantly and replaced rarely. Readers load() a snapshot and use it; a writer builds a new immutable object and store()s it. Readers never see a half-updated object and never block each other or the writer -- no mutex -- and old snapshots free themselves by reference count."
+notes: "This is a lightweight form of read-copy-update (RCU), and it is where atomic<shared_ptr> earns its keep. The rule that makes it safe is that a published object is IMMUTABLE: to change the config you never edit the live one, you build a whole new Config and store() the pointer to it. A reader's load() hands back an owning snapshot, so it sees a complete, self-consistent object (here the invariant limit_times_ten == limit*10 always holds) for the entire time it uses it, no matter how many times the writer republishes meanwhile. Compare the alternatives: a std::mutex around the config makes every one of the many reads take and release a lock, serialising the hot read path for the sake of a rare write; a plain shared_ptr shared between the threads is a data race on the handle. atomic<shared_ptr> gives lock-free-feeling reads (the read path just copies a pointer and bumps a refcount) with correct, wait-free-ish publication. The output reports only whether every snapshot was consistent, which is always true, so the run is deterministic despite the timing-dependent number of reads. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::load", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::atomic<std::shared_ptr>::store", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

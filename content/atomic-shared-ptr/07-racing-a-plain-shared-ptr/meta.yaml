@@ -1,0 +1,13 @@
+title: "Anti-pattern: racing a plain shared_ptr"
+standard: "C++20"
+difficulty: 3
+summary: "shared_ptr's thread-safety is only its atomic reference count -- copying one across threads is safe. The handle itself is not atomic, so reassigning a shared_ptr instance while another thread reads the same instance is a data race. Wrap a shared handle in std::atomic<std::shared_ptr<T>> and access it through load()/store()."
+notes: "This is the single most common shared_ptr misconception and the reason the specialization exists. The guarantee shared_ptr actually gives is that its control block's reference count is atomic, so two threads each holding their OWN copy of a shared_ptr can copy, destroy, and reset those copies freely. What is NOT safe is two threads touching the SAME shared_ptr instance when at least one writes it: assignment overwrites the object pointer and the control-block pointer, and a concurrent reader can observe them mid-update -- a genuine data race with undefined behaviour, not merely a stale read. Because the racy version is UB (and would trip ThreadSanitizer), we describe it in a comment and run only the fixed version, where the shared handle is a std::atomic<std::shared_ptr<int>> and every reader and the writer go through load()/store(). The output reports only that every reader obtained a valid pointer, which is always true, so the run is deterministic. Runs under ThreadSanitizer on Linux/CI, which is exactly the tool that catches the plain-shared_ptr version."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic<std::shared_ptr>", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::atomic<std::shared_ptr>::load", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
+  - { name: "std::atomic<std::shared_ptr>::store", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/atomic2" }
