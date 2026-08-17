@@ -1,0 +1,4 @@
+title: "std::latch and std::barrier"
+description: "Two C++20 primitives for making a group of threads wait for each other. A std::latch is a single-use countdown: threads count it down and waiters block until it reaches zero, then it is spent. A std::barrier is its reusable cousin: a fixed group meets at it once per phase, everyone waits for the last to arrive, an optional completion runs, and then it resets for the next phase. Covers the latch as a done-signal and as a start gate, arrive_and_wait for a one-time rendezvous, the reusable barrier across phases, the per-phase completion function, and arrive_and_drop to leave the group -- alongside the anti-patterns of getting them wrong: reusing a spent latch, waiting on a latch nobody counts down to zero, a barrier whose arrival count does not match the number of threads, and a completion function that throws. Examples run under ThreadSanitizer on Linux/CI."
+sort_order: 102
+category: "Concurrency"

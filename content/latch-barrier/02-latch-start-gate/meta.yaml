@@ -1,0 +1,12 @@
+title: "latch as a start gate"
+standard: "C++20"
+difficulty: 2
+summary: "A latch of 1 works as a start gate: every worker waits on it, you finish your setup, then a single count_down() releases them all at the same moment. Useful for benchmarks and staged startup where you want the threads parked and then let go together, instead of trickling in as each one happens to start."
+notes: "The countdown direction of a latch is symmetric, so the same primitive that waits for many tasks to finish can also release many tasks at once. Construct a std::latch with count 1, have each worker call wait() as its first action so it parks, and once everything is set up call count_down() a single time to open the gate -- every waiter is released together. This matters in two common cases. In benchmarking, you do not want thread 0 to have run for milliseconds before thread 3 is even created; parking them all and releasing at once makes the measurement fair. In staged startup, you want workers constructed and ready but idle until some initialization completes, then all activated. It is the same idea as the condition-variable notify_all gate, but with no mutex and no predicate to write: the latch IS the gate. The release also carries the usual happens-before, so setup done before count_down() is visible to every worker after wait() returns. Remember it is still one-shot: this gate opens once. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::latch", url: "https://en.cppreference.com/w/cpp/thread/latch" }
+detailed_tags:
+  - { name: "std::latch::wait", url: "https://en.cppreference.com/w/cpp/thread/latch/wait" }
+  - { name: "std::latch::count_down", url: "https://en.cppreference.com/w/cpp/thread/latch/count_down" }

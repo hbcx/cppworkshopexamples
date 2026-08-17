@@ -1,0 +1,11 @@
+title: "barrier: reusable phase synchronization"
+standard: "C++20"
+difficulty: 2
+summary: "A std::barrier is the reusable version of a latch. A fixed group of threads meets at it once per phase: each calls arrive_and_wait(), all block until the last arrives, all are released, and the barrier resets for the next phase. Use it for iterative algorithms where every thread must finish step k before any starts step k+1."
+notes: "A latch is spent when it hits zero; a std::barrier (C++20) automatically resets and can be used again, which is exactly what iterative, phased work needs. You construct a barrier with the number of threads in the group (its expected arrival count), and each thread calls arrive_and_wait() at the end of every phase. The barrier blocks all arrivals until the last one shows up, then releases them together and immediately re-arms for the next phase with the same count. The value is the guarantee it gives between phases: no thread races ahead into phase k+1 while another is still finishing phase k, so any data one thread wrote in phase k is safely visible to the others in phase k+1. That is the backbone of parallel simulations, cellular automata, iterative solvers, and multi-pass image processing, where each round reads the previous round's results. This example keeps the per-phase work independent for clarity, but the arrive_and_wait between phases is what makes cross-thread data dependencies safe. A barrier also supports a completion function and a way to leave the group early -- separate examples. This runs under ThreadSanitizer on Linux/CI, which confirms the phase synchronization is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier" }
+detailed_tags:
+  - { name: "std::barrier::arrive_and_wait", url: "https://en.cppreference.com/w/cpp/thread/barrier/arrive_and_wait" }

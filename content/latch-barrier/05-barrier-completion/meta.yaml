@@ -1,0 +1,12 @@
+title: "barrier completion function"
+standard: "C++20"
+difficulty: 3
+summary: "A std::barrier can run a completion function once per phase: when the last thread arrives, the barrier runs your function on that thread while all others are still blocked, then releases everyone. It is the ideal place to combine the phase's results and set up the next phase, because it runs exactly once, alone, with no other worker touching the shared state."
+notes: "The barrier's completion function turns a plain synchronization point into a place to do per-phase bookkeeping safely. You pass a callable as the barrier's second constructor argument; when the final thread of a phase arrives, the barrier invokes that callable ON THAT THREAD, after all arrivals but BEFORE any thread is released. That timing is the whole point: the completion runs exactly once per phase, single-threaded, at the one moment when every worker has finished the phase and none has started the next -- so it can read the phase's combined results, aggregate them, reset shared accumulators, decide whether to continue, or publish state for the next round, all without a lock. Here it records each phase's sum and clears the accumulator for the next phase; the results come out 6, 12, 18 for phases 1, 2, 3. Two rules matter: the completion function must be noexcept (an exception from it calls std::terminate), and it should be quick, since every worker is blocked waiting for it to return. This is what makes std::barrier more than a reusable latch -- it has a built-in hook for the between-phases step that iterative parallel algorithms always need. This runs under ThreadSanitizer on Linux/CI, which confirms the aggregation is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier" }
+detailed_tags:
+  - { name: "std::barrier::arrive_and_wait", url: "https://en.cppreference.com/w/cpp/thread/barrier/arrive_and_wait" }
+  - { name: "std::barrier::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier/barrier" }

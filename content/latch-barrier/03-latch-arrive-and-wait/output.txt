@@ -1,0 +1,1 @@
+each worker saw the full total (600) = true

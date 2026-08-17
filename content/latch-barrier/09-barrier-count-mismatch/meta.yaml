@@ -1,0 +1,12 @@
+title: "Anti-pattern: barrier count not matching the threads"
+standard: "C++20"
+difficulty: 3
+summary: "A std::barrier(K) completes a phase only when exactly K threads arrive. Size it too high (a coordinator you counted but that never arrives) and every worker deadlocks waiting for the missing arrival; size it too low and the phase releases before the last thread arrives, whose late arrival then corrupts the next phase. Derive the count from the actual number of participating threads."
+notes: "A barrier's expected count is a contract: each phase needs exactly that many arrive calls to complete. The bug is an off-by-one between the count you passed and the threads that actually arrive. Too high is a deadlock: barrier(N+1) when only N threads call arrive_and_wait -- a classic cause is sizing it for a coordinator or main thread that you assumed participates but does not -- so the phase's last arrival never comes and the whole group waits forever. Too low is subtler and worse: barrier(N-1) with N threads means the phase completes and releases everyone as soon as N-1 have arrived, and the Nth thread's arrive then counts toward the NEXT phase, so from there on the phases are skewed and the synchronization guarantee is silently gone -- no crash, just wrong results. The remedy is to have a single source of truth for the group size and build both the barrier and the thread group from it, rather than writing a literal in one place and a loop bound in another. Decide explicitly whether the coordinating thread is a participant (does it call arrive_and_wait?) and count it if and only if it is. This example runs the correctly-matched case and describes both mismatches in a comment. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier" }
+detailed_tags:
+  - { name: "std::barrier::arrive_and_wait", url: "https://en.cppreference.com/w/cpp/thread/barrier/arrive_and_wait" }
+  - { name: "std::barrier::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier/barrier" }

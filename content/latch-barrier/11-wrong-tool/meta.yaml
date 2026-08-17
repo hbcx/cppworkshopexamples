@@ -1,0 +1,12 @@
+title: "Anti-pattern: a latch where a join would do"
+standard: "C++20"
+difficulty: 2
+summary: "A latch shines for waiting on signals from threads you do NOT own and cannot join. But if you own the threads and will join them, a latch on top is ceremony: join already waits for completion and gives the happens-before to read results. Match the tool -- join for threads you own, a latch for signals from threads you do not, a barrier for a group that meets repeatedly."
+notes: "New coordination primitives invite over-use. A std::latch is genuinely the right tool when the thing you wait on is not a thread you can join: workers in a pool that outlive the task, detached threads, asynchronous callbacks that count down as each fires, or a producer that must signal readiness without exposing its thread. In all of those, join is not available and a latch (or barrier) is how you wait. But when you own the threads and are going to join them anyway, wrapping the same wait in a latch adds nothing: join() already blocks until the thread finishes and already establishes the happens-before that makes the thread's writes visible afterwards -- which is exactly what latch::wait() provides. Counting a latch down at the end of each worker and waiting on it before the joins just does the join's job twice. The example does the clean thing: std::jthread workers that auto-join at scope exit, after which the results are safe to read. Keep the mapping straight -- join to wait for threads you own, a latch to wait for signals from threads you do not, and a barrier for a fixed group that must rendezvous again and again. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::latch", url: "https://en.cppreference.com/w/cpp/thread/latch" }
+  - { name: "std::jthread", url: "https://en.cppreference.com/w/cpp/thread/jthread" }
+detailed_tags:
+  - { name: "std::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier" }

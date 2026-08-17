@@ -1,0 +1,12 @@
+title: "latch: wait for N tasks to finish"
+standard: "C++20"
+difficulty: 1
+summary: "A std::latch is a one-shot countdown. Build it with a count, have threads call count_down() as they finish, and a waiter calls wait() to block until it reaches zero. It is the clean way to wait for N tasks to all complete -- no mutex, no condition variable, no hand-rolled counter -- and once it hits zero it stays there, so a latch is single-use."
+notes: "std::latch (C++20) packages the most common thread-coordination need -- wait until a known number of things have happened -- into one object. You construct it with a starting count, each finishing party calls count_down() (optionally by more than one), and any number of waiters call wait() to block until the count reaches zero. Compared with rolling your own from a std::mutex, a counter, and a std::condition_variable, the latch is smaller, harder to get wrong, and expresses the intent directly. It also gives you the memory ordering for free: each count_down() synchronizes-with a wait() that sees zero, so everything a worker did before counting down is visible to the waiter after wait() returns -- which is why we can read the workers' results here without any lock. The one rule to remember is that a latch is SINGLE-USE: once it reaches zero it cannot be reset or reused (reach for std::barrier when you need a reusable version). There is also count_down() without waiting, wait() without counting, arrive_and_wait() that does both, and try_wait() for a non-blocking peek. This runs under ThreadSanitizer on Linux/CI, which confirms the handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::latch", url: "https://en.cppreference.com/w/cpp/thread/latch" }
+detailed_tags:
+  - { name: "std::latch::count_down", url: "https://en.cppreference.com/w/cpp/thread/latch/count_down" }
+  - { name: "std::latch::wait", url: "https://en.cppreference.com/w/cpp/thread/latch/wait" }

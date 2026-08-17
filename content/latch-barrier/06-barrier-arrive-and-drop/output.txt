@@ -1,0 +1,1 @@
+phase-2 participants after one dropped = 2

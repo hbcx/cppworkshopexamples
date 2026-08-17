@@ -1,0 +1,19 @@
+- problem: "A service must not start handling requests until a fixed set of startup tasks has each finished -- caches warmed, config loaded, connection pools opened, subsystems registered -- and those tasks run on threads the main thread does not own or join directly."
+  why: "A std::latch sized to the number of tasks lets each one count_down() as it finishes and the main thread wait() until all are done, then go live, where join is not an option because the work runs on a pool or as callbacks, and a hand-rolled counter plus condition_variable is more code for the same wait."
+  signal: "A startup sequence gated on a shared counter and a condition variable, or one that sleeps or spins waiting for an is-ready flag to flip before the server accepts traffic."
+
+- problem: "A benchmark or load test must start all its worker threads at the same instant, so the measurement is not skewed by threads that began working while others were still being created."
+  why: "A latch of one used as a start gate parks every worker on wait() and releases them together with a single count_down() after they are all constructed, where launching threads and letting each begin as it spawns means the first has run for milliseconds before the last exists, biasing the numbers."
+  signal: "Threads created in a loop that begin their timed work immediately in the constructor, with no synchronized release point before the clock starts."
+
+- problem: "An iterative parallel algorithm advances in rounds where every thread must finish round k before any thread reads round k's results in round k+1 -- a physics or weather simulation, a cellular automaton, an iterative solver, a multi-pass image filter."
+  why: "A std::barrier sized to the worker count makes each thread arrive_and_wait() at the end of every round, guaranteeing no thread races ahead into the next round while another is still writing this one, where a latch cannot do this (it is single-use) and rebuilding a latch or re-spawning threads each round is wasteful and error-prone."
+  signal: "A parallel loop over rounds where threads read neighbours' or the previous round's data, currently synchronized by recreating threads per round or by an ad-hoc phase counter and condition variable."
+
+- problem: "Each round of a phased parallel computation ends with a small serial step -- reduce the partial results, decide whether to continue, swap double buffers, publish the round's output -- that must run exactly once, after all workers finish the round and before the next begins."
+  why: "A std::barrier completion function runs that step once per phase on the last arriving thread, single-threaded with everyone else blocked, so it needs no lock and cannot interleave with the workers, where doing the reduction under a mutex every phase reintroduces contention and the risk of running it at the wrong time."
+  signal: "A per-phase reduction or bookkeeping step currently guarded by a mutex and a check for who is last, or a designated thread that other threads signal to run the between-phase step."
+
+- problem: "A fork-join computation splits work into partitions that finish at different times -- a divide-and-conquer search, an adaptive grid where some regions converge early -- and finished workers should stop participating in the remaining rounds."
+  why: "barrier::arrive_and_drop() lets a done worker leave the group, lowering the expected count so the remaining threads still synchronize correctly, where the alternatives are keeping idle threads cycling through arrive_and_wait doing nothing, or tearing down and rebuilding the barrier with a new size between phases."
+  signal: "A phased computation where some threads have no work left in later rounds but keep arriving at the barrier just to avoid deadlocking the others."

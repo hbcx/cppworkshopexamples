@@ -9,3 +9,5 @@
   note: "The one-shot version of waiting for another thread: where a condition variable handles a repeated wait-notify handoff, a std::future waits for a single value produced once and carries it (or its exception) back to you -- go there for async, promise, and packaged_task, and use a condition variable when the signal repeats or many waiters share a mutex-guarded predicate."
 - slug: "jthread"
   note: "The built-in way to make the graceful-shutdown wait here interruptible: condition_variable_any plus a stop_token wakes a blocked worker on cancellation, folding away the hand-rolled stopping flag this section's shutdown example needs -- go there for jthread, stop_token, and the interruptible wait."
+- slug: "latch-barrier"
+  note: "The ready-made shortcuts for the two most common waits you would otherwise build here by hand: a std::latch is this section's counter-plus-wait folded into one object for a one-shot countdown, and a std::barrier is the reusable phase version -- go there when the wait is a fixed arrival count rather than an arbitrary predicate."

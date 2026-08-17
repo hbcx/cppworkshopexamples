@@ -1,0 +1,12 @@
+title: "Anti-pattern: missing a latch count_down"
+standard: "C++20"
+difficulty: 3
+summary: "A latch(N) reaches zero only after N count_downs. If a worker takes an early exit -- an error return, a thrown exception, a branch that forgets to signal -- one count_down is missing and wait() blocks forever. Make count_down happen on every path with an RAII guard whose destructor counts down."
+notes: "A latch turns 'wait for N things' into one object, but it trusts you to actually produce N count_downs. The dangerous case is not forgetting entirely -- it is an exit path you did not think about. A worker that returns early on an error, or lets an exception propagate out, or has a conditional branch that skips the signal, produces one fewer count_down than promised, and then the waiter's wait() never sees zero and hangs forever. This is the same shape as a leaked lock or an unbalanced reference count: a resource (here, the obligation to signal) that must be released on ALL paths. The fix is the same too -- RAII. Wrap the count_down in a small guard whose destructor performs it, and construct that guard at the top of the worker; now every way out of the scope, normal or exceptional, counts the latch down exactly once. This example gives half the workers an early return and still completes, because the guard signals regardless; it describes the deadlocking hand-written version in a comment rather than hanging on it. The mirror-image bug -- MORE than N count_downs -- is undefined behaviour (the counter must not go below zero), so the count and the number of signalling paths must match exactly. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::latch", url: "https://en.cppreference.com/w/cpp/thread/latch" }
+detailed_tags:
+  - { name: "std::latch::count_down", url: "https://en.cppreference.com/w/cpp/thread/latch/count_down" }
+  - { name: "std::latch::wait", url: "https://en.cppreference.com/w/cpp/thread/latch/wait" }

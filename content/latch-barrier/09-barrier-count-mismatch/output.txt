@@ -1,0 +1,1 @@
+threads that passed the barrier = 3 of 3

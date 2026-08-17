@@ -1,0 +1,12 @@
+title: "arrive_and_wait: a one-time rendezvous"
+standard: "C++20"
+difficulty: 2
+summary: "latch::arrive_and_wait() is count_down() and wait() in one call -- I am done and I will wait for everyone else. Give each worker its own count and have all call arrive_and_wait(), and you get a one-time rendezvous: no thread passes the line until every thread has reached it. Each worker can then safely read data all of them produced before the meeting point."
+notes: "Sometimes you do not want a separate producer and waiter; you want a group of peers to all reach the same point before any continues. std::latch::arrive_and_wait(n = 1) is built for that: it counts the latch down and then blocks until the count is zero, so if N workers each call it once on a latch of N, they rendezvous -- the last to arrive releases all of them together. The pattern here is produce-then-meet-then-consume: each worker writes its own part before the rendezvous, and reads the whole set after it. The latch guarantees this is race-free, because every count_down (the arrive half) synchronizes-with the wait that observes zero, so all the pre-rendezvous writes are visible to every worker's post-rendezvous reads. It is a one-time meeting only -- for a group that must meet repeatedly, once per phase, that is exactly what std::barrier adds. Note also try_wait(), which checks whether the count has reached zero without blocking, useful when a thread has other work to do while it waits. This runs under ThreadSanitizer on Linux/CI, which confirms the rendezvous is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::latch", url: "https://en.cppreference.com/w/cpp/thread/latch" }
+detailed_tags:
+  - { name: "std::latch::arrive_and_wait", url: "https://en.cppreference.com/w/cpp/thread/latch/arrive_and_wait" }
+  - { name: "std::latch::try_wait", url: "https://en.cppreference.com/w/cpp/thread/latch/try_wait" }

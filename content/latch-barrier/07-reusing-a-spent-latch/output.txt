@@ -1,0 +1,1 @@
+barrier ran 2 rounds, total = 12

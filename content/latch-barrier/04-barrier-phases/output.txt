@@ -1,0 +1,1 @@
+3 workers x 3 phases, total = 18

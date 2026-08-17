@@ -1,0 +1,12 @@
+title: "Anti-pattern: heavy or throwing barrier completion"
+standard: "C++20"
+difficulty: 3
+summary: "A barrier completion runs on the last arriving thread while every other thread is blocked, so it must be noexcept (an escaping exception calls std::terminate, and the type requires noexcept) and quick (the whole group is parked until it returns). Put heavy or fallible work in the workers' phase; keep the completion a tiny non-throwing publish/reset step."
+notes: "The barrier completion function is a privileged spot -- it runs exactly once per phase, single-threaded, with everyone else blocked -- and that is precisely why it must be disciplined. Two constraints follow from when it runs. First, it must not throw: std::barrier requires the completion to be noexcept, and if an exception escapes it the program calls std::terminate, so anything that can fail (I/O, allocation you do not guard, a query) does not belong there raw. Second, it must be fast: every worker is stuck at arrive_and_wait until the completion returns, so slow or blocking work in it serializes the whole group behind one thread and destroys the parallelism the barrier was coordinating. The temptation is to treat the completion as 'the place the phase's real work happens' and pile a database write or a big reduction into it. Resist that: do the heavy, parallelizable, or fallible work in the workers during the phase, and let the completion be only the small, safe, between-phases step -- publish an already-computed result, swap buffers, reset a counter. This example keeps the completion to a load, a push, and a reset, and describes the bad version in a comment. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier" }
+detailed_tags:
+  - { name: "std::barrier::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier/barrier" }
+  - { name: "std::barrier::arrive_and_wait", url: "https://en.cppreference.com/w/cpp/thread/barrier/arrive_and_wait" }

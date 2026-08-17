@@ -1,0 +1,1 @@
+joined workers, total = 100

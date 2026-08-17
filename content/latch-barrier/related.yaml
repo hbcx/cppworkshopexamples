@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "condition-variable"
+  note: "The general primitive these are specialized shortcuts for: a latch or barrier is a mutex, a counter, and a condition_variable folded into one object for the specific job of counting arrivals -- go there when your wait is on an arbitrary predicate rather than a fixed count, and use a latch or barrier when it is a countdown or a phase rendezvous."
+- slug: "thread"
+  note: "Where the threads that meet at a latch or barrier come from, and the plain alternative: when you OWN the threads and just need to wait for them to finish, join does that with the same happens-before a latch gives -- go there for launching and joining, and reach for a latch only when you cannot join what you are waiting on."
+- slug: "jthread"
+  note: "The thread type these examples use, and the cancellation angle: a group parked on a latch or barrier still needs a way to be shut down, which is where jthread's stop_token comes in -- go there for auto-join and cooperative cancellation to pair with this section's coordination."
+- slug: "atomic"
+  note: "What a latch and barrier are built from underneath: their counters are atomics with wait/notify, so for a bare one-word signal a std::atomic (or its C++20 wait/notify) is lighter -- go there for atomics, and use a latch or barrier when you are counting arrivals from many threads rather than flipping one flag."

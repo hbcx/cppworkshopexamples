@@ -11,5 +11,7 @@
   note: "The higher-level way to get parallelism without managing threads by hand: pass a parallel policy to a standard algorithm and the library runs it across a thread pool for you -- go there when your parallel work is really a sort, a transform, or a reduce, rather than something that needs raw std::thread."
 - slug: "jthread"
   note: "The C++20 upgrade of everything here: std::jthread joins itself in its destructor (killing the forgot-to-join crash) and carries a stop_token for cooperative cancellation -- go there for auto-join, request_stop, stop_source/stop_callback, and interruptible waits, and treat raw std::thread as the manual version."
+- slug: "latch-barrier"
+  note: "Higher-level ways to make threads wait for each other: a std::latch waits for N tasks to finish (when you cannot join them), and a std::barrier synchronizes a fixed group across repeated phases -- go there when join is not the right fit, and come back here for the launching and joining they sit on top of."
 - slug: "raii"
   note: "The ownership idea std::jthread is built on: a destructor that cleans up automatically is exactly what turns the forgot-to-join crash into a non-issue -- go there for RAII in general, then see why jthread is just RAII applied to a thread."

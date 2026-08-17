@@ -7,3 +7,5 @@
   note: "The other way to get a result or a signal across threads without polling: a std::future carries one value (or exception) and blocks until it is ready, while a stop_token carries cancellation the other direction -- go there for async, promise, and packaged_task, and combine the two when a cancellable job also has to return something."
 - slug: "atomic"
   note: "What a stop_token is underneath and when to use one directly: cancellation is a latching atomic flag with a callback list, so for a plain one-way boolean signal a std::atomic<bool> (or its wait/notify) is lighter -- go there for atomics, and reach for stop_token when you want the standard cancellation protocol, callbacks, and jthread integration."
+- slug: "latch-barrier"
+  note: "The coordination primitives a group of these threads meets at: a std::latch waits for N of them to finish and a std::barrier rendezvouses them each phase -- go there for countdown and phase synchronization, and pair it with jthread's stop_token when the coordinated group also needs a clean shutdown."

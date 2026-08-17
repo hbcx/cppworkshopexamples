@@ -1,0 +1,13 @@
+title: "Anti-pattern: reusing a spent latch"
+standard: "C++20"
+difficulty: 3
+summary: "A std::latch is single-use. Once it reaches zero it stays there: wait() returns immediately with no new synchronization, and calling count_down() again pushes the counter below zero, which is undefined behaviour. You cannot run a second round on the same latch. For repeated rounds use the reusable primitive, std::barrier."
+notes: "The single-use nature of std::latch is easy to forget when a task is naturally repetitive. A latch has no reset: after the count hits zero it is spent. Two things then go wrong if you try to reuse it for another round. A fresh wait() sees the count already at zero and returns instantly, so it synchronizes nothing -- the second round's threads are not actually made to wait for each other. And calling count_down() again decrements below zero, which the standard says is undefined behaviour (count_down(n) requires n to not exceed the current count). So a loop that reuses one latch per iteration is broken in both directions. The fix is to use the right tool for repetition: std::barrier is exactly a reusable latch -- it re-arms automatically after every phase -- so a fixed group can meet at it round after round. This example runs two rounds correctly on one barrier and describes the broken latch reuse in a comment rather than running its undefined behaviour. If for some reason you want latch semantics per round (different participants each time), construct a NEW latch for each round instead of reusing one. This runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::latch", url: "https://en.cppreference.com/w/cpp/thread/latch" }
+  - { name: "std::barrier", url: "https://en.cppreference.com/w/cpp/thread/barrier" }
+detailed_tags:
+  - { name: "std::latch::count_down", url: "https://en.cppreference.com/w/cpp/thread/latch/count_down" }
+  - { name: "std::barrier::arrive_and_wait", url: "https://en.cppreference.com/w/cpp/thread/barrier/arrive_and_wait" }
