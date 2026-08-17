@@ -1,0 +1,13 @@
+title: "Publishing data with release/acquire"
+standard: "C++20"
+difficulty: 3
+summary: "atomic_ref supports the same memory orders as std::atomic, so you can build a release/acquire handoff on plain variables. The producer writes the payload then stores a plain ready flag with release; the consumer loads the flag with acquire and then reads the payload -- with the ordering guaranteed even though neither variable is std::atomic."
+notes: "This is the message-passing idiom, done on objects you did not declare atomic. The key is that a store with memory_order_release and a load with memory_order_acquire on the same object (the ready flag, viewed through atomic_ref) form a synchronizes-with relationship: once the consumer's acquire load observes true, everything the producer did BEFORE its release store -- here the write to payload -- is guaranteed visible, so the consumer may read payload plainly without a race. That is what lets a plain int be published safely between threads. Note two things: the flag MUST be accessed through atomic_ref on both sides (a plain read of ready would be a race), and relaxed ordering would NOT be enough here -- it makes the flag itself atomic but gives no guarantee about payload, which is the relaxed-ordering trap covered in the std::atomic chapter. The consumer spins for brevity; real code would use atomic_ref's wait()/notify or another primitive instead of burning a core. Runs under ThreadSanitizer on Linux/CI, which verifies the handoff is race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::store", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/store" }
+  - { name: "std::atomic_ref::load", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/load" }
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }

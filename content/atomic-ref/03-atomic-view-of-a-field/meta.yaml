@@ -1,0 +1,11 @@
+title: "An atomic view of a struct field"
+standard: "C++20"
+difficulty: 2
+summary: "You need an atomic counter inside a struct, but the struct must stay trivially copyable -- for memcpy, serialization, or an API. A std::atomic member would make it non-copyable and change its layout. Keep the field a plain int and update it atomically through an atomic_ref."
+notes: "std::atomic has a deleted copy constructor, so a struct with a std::atomic member is itself non-copyable and no longer trivially copyable -- which breaks the moment you need to memcpy the struct into a shared-memory region, snapshot it, or pass it to a C API. atomic_ref decouples the two concerns: the type stays a plain aggregate (Metrics here is still copyable, and we prove it by copying it into a snapshot at the end), while any thread that needs to update a field atomically wraps just that field in an atomic_ref. The trade-off is that atomicity is now the caller's responsibility rather than the type's: nothing forces a reader elsewhere to also go through an atomic_ref, so this pattern is right when the type MUST stay plain, and a std::atomic member is better when it need not (see the wrong-tool anti-pattern). We copy the struct only after every worker has joined, so the copy reads no field concurrently. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/fetch_add" }

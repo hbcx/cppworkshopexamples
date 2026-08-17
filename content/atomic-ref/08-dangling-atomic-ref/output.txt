@@ -1,0 +1,1 @@
+stable storage, no dangling ref, total = 4000

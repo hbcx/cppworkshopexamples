@@ -1,0 +1,12 @@
+title: "A compare-exchange loop on a plain value"
+standard: "C++20"
+difficulty: 3
+summary: "The fetch_ family covers add, sub, and, or, xor -- but not, say, an atomic maximum. For those you write a compare-exchange loop: load, compute, and swap the new value in only if the old one is unchanged, retrying on a race. atomic_ref offers compare_exchange_weak, so the loop works on an ordinary int."
+notes: "compare_exchange_weak(expected, desired) atomically checks whether the object still equals expected and, if so, sets it to desired; otherwise it writes the current value back into expected and returns false. That is the general primitive from which every other atomic read-modify-write can be built, and it is how you implement operations the fetch_ functions do not provide -- here an atomic max. The loop guard combines two tests: stop if our candidate is no longer larger (another thread already set something bigger), and otherwise keep trying until the swap succeeds. Because compare_exchange_weak refreshes current on failure, the retry always compares against the latest value, so the result is the true maximum (80) regardless of thread timing -- which is why the output is deterministic even though the operation is a race. weak (rather than strong) is the right choice inside a loop: it may fail spuriously but is cheaper on some platforms, and the loop absorbs the spurious failures. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::compare_exchange_weak", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/compare_exchange" }
+  - { name: "std::atomic_ref::load", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/load" }

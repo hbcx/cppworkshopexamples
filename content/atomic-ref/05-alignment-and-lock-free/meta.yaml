@@ -1,0 +1,12 @@
+title: "Alignment and the lock-free constants"
+standard: "C++20"
+difficulty: 2
+summary: "atomic_ref requires its object to meet atomic_ref<T>::required_alignment, which can be stricter than the type's normal alignof. atomic_ref<T>::is_always_lock_free (a compile-time constant) tells you whether operations avoid a lock. alignas with required_alignment guarantees a valid, lock-free layout."
+notes: "A std::atomic<T> controls its own storage, so it can align itself; an atomic_ref borrows storage you provided, so the alignment is YOUR responsibility. required_alignment is the contract: the referenced object must be aligned to at least that value, and for some types it exceeds the ordinary alignof (a lock-free 64-bit access, for instance, may need 8-byte alignment the type would not otherwise guarantee inside a packed or byte-addressed buffer). Meeting it with alignas, as here, keeps the ref well-defined and lets the implementation use a real lock-free instruction; miss it and you have undefined behaviour (see the misalignment anti-pattern). is_always_lock_free is a constexpr bool you can branch on at compile time; for a plain int on mainstream 64-bit CPUs it is true, which is what this prints -- on such targets an atomic int needs no lock. There is also a runtime is_lock_free() member that agrees, but we avoid it here: on some toolchains it calls into libatomic, which is not linked by default, while is_always_lock_free needs no library. This example is single-threaded and needs no sanitizer: the point is the alignment and lock-free API, not a data hand-off."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::required_alignment", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+  - { name: "std::atomic_ref::is_always_lock_free", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }

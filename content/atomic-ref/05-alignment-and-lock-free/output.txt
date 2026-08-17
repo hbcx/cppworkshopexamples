@@ -1,0 +1,3 @@
+required_alignment = 4
+is_always_lock_free = true
+value after atomic store = 7

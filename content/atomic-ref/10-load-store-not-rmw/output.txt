@@ -1,0 +1,1 @@
+fetch_add (not load+store), counter = 8000

@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "atomic"
+  note: "The owning version and the source of everything atomic_ref does: std::atomic<T> bakes atomicity into the type when you control the declaration, while atomic_ref borrows it onto an object you do not -- go there for the operations (fetch_add, compare_exchange, wait/notify) and memory-order model that atomic_ref shares, and use std::atomic whenever you own the type."
+- slug: "mutex"
+  note: "What to use when the shared state is more than one word or spans several fields at once: an atomic_ref makes a single object's accesses indivisible, but an invariant across multiple variables needs a lock -- go there for lock_guard, unique_lock, and guarding a whole critical section rather than one value."
+- slug: "execution-policies"
+  note: "Where a lock-free reduction with atomic_ref pays off: a standard algorithm under std::execution::par runs its callable across many threads, so a shared accumulator it writes must be atomic -- go there for the parallel algorithms, and use atomic_ref to make the shared buffer they tally into safe without changing its type."
+- slug: "thread"
+  note: "Where the threads that share these objects come from: how you start and join a std::thread (or jthread) and the ownership rules the sharing depends on -- go there for launching the work, and come back here for how those threads update shared plain data without racing."

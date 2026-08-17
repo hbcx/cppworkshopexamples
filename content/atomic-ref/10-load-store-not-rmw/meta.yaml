@@ -1,0 +1,13 @@
+title: "Anti-pattern: load plus store is not an atomic RMW"
+standard: "C++20"
+difficulty: 3
+summary: "Each atomic_ref operation is atomic on its own, but a load() followed by a store() is two operations with a gap between them where another thread can intervene, so increments done that way lose updates. Use one read-modify-write -- fetch_add, or a compare_exchange loop -- to make the read and write indivisible."
+notes: "Atomicity applies per operation, not per pair of operations, and this is the mistake that catches people who think 'I used atomic_ref, so it is safe'. Writing an increment as `ref.store(ref.load() + 1)` performs an atomic read and an atomic write, but between them another thread can load the same old value and store its own increment, and one of the two updates is silently overwritten -- the lost-update race, unchanged from doing it on a plain int. The fix is to use a genuine read-modify-write that the hardware performs as one indivisible step: fetch_add (and its siblings fetch_sub/and/or/xor) for the operations they cover, or a compare_exchange_weak loop for anything else (see the atomic-max example). This is the same rule as for std::atomic; atomic_ref does not change it. We describe the broken load+store version and run the fetch_add version, which lands on the exact 8000. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/fetch_add" }
+  - { name: "std::atomic_ref::load", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/load" }
+  - { name: "std::atomic_ref::store", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/store" }

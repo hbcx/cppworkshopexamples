@@ -11,3 +11,5 @@
   note: "The manual level below these policies: when your parallel work is not a standard algorithm, you drop to std::thread and manage the workers, joins, and pool yourself -- go there for launching threads by hand and the pitfalls (oversubscription, forgetting to join) the policies hide from you."
 - slug: "mutex"
   note: "The other fix for shared state under par, when an atomic is not enough: a mutex guards a multi-variable update the parallel callable performs -- go there for lock_guard and unique_lock, the thread-safe class, and avoiding deadlock with scoped_lock."
+- slug: "atomic-ref"
+  note: "The lock-free way to tally a parallel reduction into a shared buffer: std::atomic_ref makes each slot update of a plain array atomic without changing the array's type, so a par callable can accumulate into it safely -- go there when the shared target is a plain buffer you must keep as int* rather than std::atomic<int>[]."

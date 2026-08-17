@@ -1,0 +1,12 @@
+title: "atomic_ref: atomic operations on a plain object"
+standard: "C++20"
+difficulty: 1
+summary: "std::atomic_ref<T> wraps an existing non-atomic object and gives it the atomic operations of std::atomic -- load, store, fetch_add, compare_exchange -- without changing the object's type. Build one over a plain int and many threads can increment it with no lost updates and no lock."
+notes: "std::atomic_ref (C++20, header atomic) is the tool for when you need atomic access to an object you did not, or could not, declare as std::atomic. It is a non-owning reference: constructing atomic_ref<int>{counter} does not copy or replace counter, it gives you an atomic view of that same int, and the operations you call on the ref are applied atomically to the underlying object. The one rule that makes it safe is that FOR AS LONG AS an atomic_ref refers to an object, every access to that object -- from any thread -- must also go through an atomic_ref; a plain read or write racing an atomic_ref access is still a data race (see the mixing anti-pattern). Multiple atomic_refs to the same object are fine, which is exactly what happens here: each thread makes its own ref to the shared counter. We use memory_order_relaxed because a counter only needs the increments to be indivisible, not ordered against other memory. Runs under ThreadSanitizer on Linux/CI, which confirms the updates are race-free."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/fetch_add" }
+  - { name: "std::memory_order", url: "https://en.cppreference.com/w/cpp/atomic/memory_order" }

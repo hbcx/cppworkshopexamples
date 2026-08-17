@@ -1,0 +1,12 @@
+title: "Anti-pattern: an under-aligned referent"
+standard: "C++20"
+difficulty: 3
+summary: "atomic_ref has a precondition that the referenced object be aligned to atomic_ref<T>::required_alignment, which can exceed the type's normal alignof. Building one on under-aligned storage -- a value inside a byte buffer or a packed struct -- is undefined behaviour. Align the object with alignas to the required value."
+notes: "A std::atomic aligns its own storage; an atomic_ref borrows yours, so meeting the alignment is on you, and the requirement can be stricter than you expect. required_alignment may be larger than alignof(T) because a lock-free instruction for a wide type often needs natural alignment the type would not otherwise guarantee -- so a 64-bit integer carved out of a 1-byte-aligned buffer, or a field in a #pragma pack struct, can be under-aligned even though the int64 itself compiles fine. Constructing an atomic_ref on it is undefined behaviour, which may appear to work on x86 (tolerant of misalignment) and then fault or tear on another architecture -- the worst kind of portability bug. We describe the under-aligned case and do not run it; the runnable version aligns the object with alignas(required_alignment), so the ref is well-defined and the atomic adds land on 42. The general habit: whenever you overlay atomic_ref on storage you did not get from a normal variable declaration (a buffer, a mapped region, a packed layout), check required_alignment. This example is single-threaded and needs no sanitizer -- the lesson is the alignment precondition, not a race."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::required_alignment", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+  - { name: "std::atomic_ref::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/fetch_add" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: mixing atomic_ref with plain access"
+standard: "C++20"
+difficulty: 3
+summary: "atomic_ref makes an access atomic only when it goes through the ref. While an object is shared, every concurrent access must go through an atomic_ref -- a plain read or write racing an atomic_ref update is still a data race. Route all concurrent accesses through atomic_ref for as long as the object is shared."
+notes: "This is the defining rule of atomic_ref and the easiest one to break, precisely because the object still LOOKS like a plain int that you could just read. But atomicity is a property of the ACCESS, not of the object: the standard requires that if any thread accesses an object through an atomic_ref, all accesses to that object throughout its lifetime (while shared) also be atomic. A single plain read that races an atomic_ref write is undefined behaviour -- the read may tear, or the compiler may reorder or cache it -- even though the writer was careful. This is the extra footgun std::atomic does not have: with std::atomic the atomicity is baked into the type, so you cannot accidentally do a plain access. Because the racy version is UB (nondeterministic, and it would trip ThreadSanitizer), we describe it and run only the correct version, where every worker updates through a ref and the single plain read happens after all workers have joined and no ref is live -- at which point there is no concurrency to race with. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/fetch_add" }

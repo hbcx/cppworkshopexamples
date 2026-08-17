@@ -11,3 +11,5 @@
   note: "The higher-level way to move ONE result across threads without locking it yourself: std::async and std::promise hand a value (or an exception) to a waiter through a future that does the synchronization for you -- go there for async, promise, packaged_task, and shared_future, and keep a mutex for ongoing shared state rather than a single handoff."
 - slug: "semaphore"
   note: "The counting cousin of a mutex, and the tool a semaphore is often wrongly used as instead: a mutex caps a region at ONE holder, while a std::counting_semaphore lets up to N in at once (a pool, a rate limit) and has no owner -- go there for capping concurrency, cross-thread signals, and why a semaphore is not a lock."
+- slug: "atomic-ref"
+  note: "The lock-free option when the shared state is a single object, not a multi-field invariant: a mutex serializes a whole critical section, while std::atomic_ref makes one plain int or field's updates indivisible with no blocking -- go there when you are guarding one value and can drop the lock, and keep the mutex when several variables must stay consistent together."

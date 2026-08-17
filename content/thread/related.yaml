@@ -15,3 +15,5 @@
   note: "Higher-level ways to make threads wait for each other: a std::latch waits for N tasks to finish (when you cannot join them), and a std::barrier synchronizes a fixed group across repeated phases -- go there when join is not the right fit, and come back here for the launching and joining they sit on top of."
 - slug: "raii"
   note: "The ownership idea std::jthread is built on: a destructor that cleans up automatically is exactly what turns the forgot-to-join crash into a non-issue -- go there for RAII in general, then see why jthread is just RAII applied to a thread."
+- slug: "atomic-ref"
+  note: "How these threads update shared PLAIN data without racing: std::atomic_ref overlays atomic operations onto an ordinary int, array element, or struct field, so worker threads can tally into a shared buffer with no lock and no change to its type -- go there for atomic access to objects you did not declare atomic."

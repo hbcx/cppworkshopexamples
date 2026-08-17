@@ -1,0 +1,11 @@
+title: "A lock-free parallel reduction into a shared array"
+standard: "C++20"
+difficulty: 2
+summary: "Many threads tally into a shared std::vector<int> -- a histogram or partial-sum buffer. atomic_ref makes each slot update atomic without turning the array into std::atomic<int>[], so the buffer stays a plain int array you can still pass to code that wants int*, and there is no per-bucket mutex."
+notes: "This is the everyday reason atomic_ref exists. Two obvious alternatives are worse: making the array std::atomic<int>[] changes its type (std::atomic is not copyable and the array can no longer be memcpy'd, serialized, or handed to an int*-taking API), and a mutex per bucket serializes updates and adds contention on the hot slots. atomic_ref threads the needle -- the storage stays a plain contiguous int array, and only the read-modify-write on a given element is made indivisible, one atomic_ref bound to that element for the duration of the update. Several threads can hold atomic_refs to the same element at once; that is allowed as long as every access goes through a ref, which here it does. relaxed ordering is right because a counter just needs indivisible increments, not ordering against other data. Note the vector is sized once and never resized, so element addresses stay stable while the refs are live (resizing would dangle them -- see the dangling anti-pattern). Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/fetch_add" }

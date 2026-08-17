@@ -1,0 +1,19 @@
+- problem: "A parallel computation tallies results into a shared numeric buffer -- a histogram, a partial-sum grid, a per-cell accumulator -- and the buffer is later handed to code that requires a plain contiguous array: a BLAS call, a serialization pass, a GPU upload, a file write."
+  why: "std::atomic_ref makes each slot update atomic while the buffer stays a plain std::vector<int> or array, where switching the element type to std::atomic<int> would make the array non-copyable and unusable by any int*-taking API, and a mutex per slot serializes the hot cells and adds contention the atomic avoids."
+  signal: "A shared results array updated from several threads, currently guarded by one big mutex over the whole array, or a comment worrying that making the elements atomic would break the code that consumes the buffer as a plain pointer."
+
+- problem: "A struct must stay trivially copyable -- it is memcpy'd into a shared-memory ring, snapshotted for a metrics dump, or passed to a C API by value -- but one of its integer fields is a counter that several threads increment."
+  why: "atomic_ref applies atomicity to just that field while the struct stays a plain aggregate, where embedding a std::atomic member would delete the struct's copy constructor and change its layout, breaking every memcpy, snapshot, and by-value pass the design depends on."
+  signal: "A POD or standard-layout struct that is memcpy'd or serialized wholesale, with a counter field that is updated concurrently and currently protected by an external lock or left racy."
+
+- problem: "You need atomic updates on data whose type you do not control -- a struct defined in a third-party header, a field in a generated protocol type, an array returned by a library -- and you cannot add a std::atomic member or otherwise edit the declaration."
+  why: "atomic_ref overlays atomicity from the outside, at the point of use, without touching the type, where the only alternatives are forking the dependency to change its fields or wrapping every access in a mutex you must remember everywhere."
+  signal: "Concurrent updates to fields of a type owned by another library or an auto-generated header, currently wrapped in an external mutex because the type itself cannot be changed."
+
+- problem: "A large, mostly-immutable data structure has a few hot integer fields that many threads update -- a shared frame buffer with an atomic write index, a big telemetry array with a handful of live counters -- and making the entire structure atomic would be wasteful and would change its type."
+  why: "atomic_ref lets you make just the hot fields atomic in place, leaving the rest plain and cheap to read, where wrapping the whole structure in std::atomic is impossible for a non-trivial type and a global lock over it would serialize unrelated reads."
+  signal: "A large buffer or record read locklessly on the fast path but with a few fields that a writer thread bumps, currently protected by a coarse lock that also blocks the unrelated reads."
+
+- problem: "Two threads (or a thread and an interrupt/callback) coordinate through a fixed memory layout you did not design as atomic -- a mmap'd region, a DMA descriptor, a shared-memory header of plain integers -- and each side must update or observe fields without tearing or reordering."
+  why: "atomic_ref overlays the layout with atomic load/store and the release/acquire ordering needed to publish changes safely, where the fixed on-disk or on-wire layout forbids swapping the integers for std::atomic, and a lock cannot be placed inside a structure another process or device also reads."
+  signal: "Plain integer fields in a memory-mapped or shared-memory structure read and written by more than one thread or process, currently accessed directly with no synchronization, or with a volatile that was meant to provide atomicity it does not give."

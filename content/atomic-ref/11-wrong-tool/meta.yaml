@@ -1,0 +1,12 @@
+title: "Anti-pattern: atomic_ref where std::atomic fits"
+standard: "C++20"
+difficulty: 3
+summary: "atomic_ref is for objects whose type you cannot change -- a plain array for an int* API, a field that must stay trivially copyable, a type you do not own. When you own the declaration, std::atomic<int> is simpler and safer: the atomicity is part of the type, so a plain access is impossible, there is no alignment precondition, and no ref lifetime to manage."
+notes: "atomic_ref trades a guarantee for flexibility: it lets you get atomicity on an object that must stay a plain type, at the cost of moving the responsibility from the type to every access site. That trade is worth it exactly when the type is fixed -- the array handed to a library expecting int*, the struct that must remain memcpy-able, the third-party type you cannot edit. It is NOT worth it when you control the declaration, because then std::atomic<int> gives the same atomicity with the footguns removed: you cannot accidentally do a plain access (the mixing anti-pattern becomes impossible), the storage is aligned for you (no required_alignment to check), and there is no non-owning reference whose lifetime you must keep valid. The honest test is: can I change this object's type to std::atomic without breaking anything? If yes, do that; reach for atomic_ref only when the answer is no. This example runs the std::atomic version of the counter -- the guarantee stated once, in the type, and the count lands on 8000. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::atomic::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic/fetch_add" }

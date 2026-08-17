@@ -17,3 +17,5 @@
   note: "The standard cancellation protocol built on top of an atomic flag: a stop_token is a latching atomic with a callback list and jthread integration, so where you would hand-roll an atomic<bool> stop flag, stop_token gives you request_stop, stop_callback, and interruptible waits -- go there for cooperative cancellation."
 - slug: "latch-barrier"
   note: "Higher-level coordination built on atomic counters: a std::latch and std::barrier count arrivals from many threads with atomic wait/notify inside -- go there when you are waiting for N threads to reach a point rather than flipping or counting a single atomic yourself."
+- slug: "atomic-ref"
+  note: "The same atomic operations, but on an object you did NOT declare atomic: std::atomic_ref overlays load, store, fetch_add and compare_exchange onto a plain int, array element, or struct field -- go there when you need atomicity on data whose type must stay plain (an int* buffer, a copyable struct, a type you do not own)."

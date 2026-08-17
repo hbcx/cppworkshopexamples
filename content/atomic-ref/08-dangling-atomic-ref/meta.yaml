@@ -1,0 +1,11 @@
+title: "Anti-pattern: a dangling atomic_ref"
+standard: "C++20"
+difficulty: 3
+summary: "atomic_ref is a non-owning reference, so it dangles if the referenced object is destroyed or moves while the ref is still in use. Binding one to a std::vector element and then growing the vector is the classic trap -- reallocation moves the element and the ref points at freed memory. Keep the storage stable for the ref's whole lifetime."
+notes: "Because atomic_ref only borrows storage, its safety depends entirely on that storage outliving it and not moving. The subtle version of the bug is not an obvious use-after-free but a container reallocation: a std::vector that grows past its capacity moves every element to a new buffer and frees the old one, and any atomic_ref bound to an element is left pointing into the freed block -- a dangling write that the type system cannot catch, because the ref looks perfectly valid. The same applies to any object whose lifetime ends (a local that goes out of scope, an element erased from a container) while a ref to it is still live, possibly on another thread. The fix is to guarantee stable storage: size the vector once (or reserve enough) so it never reallocates while refs exist, and order lifetimes so the referent outlives every ref. We describe the reallocation UB rather than run it (it is undefined and would be nondeterministic), and run a version with a fixed-size buffer whose addresses never change. Runs under ThreadSanitizer on Linux/CI."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic_ref", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref" }
+detailed_tags:
+  - { name: "std::atomic_ref::fetch_add", url: "https://en.cppreference.com/w/cpp/atomic/atomic_ref/fetch_add" }
