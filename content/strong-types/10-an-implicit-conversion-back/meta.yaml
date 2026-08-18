@@ -1,0 +1,11 @@
+title: "Anti-pattern: an implicit conversion back to the raw type"
+standard: "C++11"
+difficulty: 3
+summary: "Adding an implicit operator T() to the wrapper for convenience undoes the whole point: the strong type decays to its raw value wherever one is accepted, so a wrong-type argument slips through and two unrelated strong types even compare equal by both decaying to int. Expose the value only through an explicit get()."
+notes: "This is the mirror image of the leaky constructor: there a raw value flowed IN implicitly, here the wrapped value flows OUT implicitly. An implicit conversion operator makes the strong type usable everywhere the raw type is, which sounds handy but means every protection evaporates at the boundary -- a UserId is accepted where a plain int is wanted, and because both a UserId and a ProductId decay to int, comparing them compiles and reports equal even though neither declares an operator==. The value should leave the wrapper only when you ask for it, so replace operator T() with an explicit get() (or an explicit conversion operator, which at least forces a cast). Keeping conversions explicit in BOTH directions is what makes a strong type actually strong; a single implicit conversion, either way, is enough to hollow it out."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "conversion operator", url: "https://en.cppreference.com/w/cpp/language/cast_operator" }
+detailed_tags:
+  - { name: "explicit", url: "https://en.cppreference.com/w/cpp/language/explicit" }

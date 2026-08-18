@@ -1,0 +1,4 @@
+title: "Strong types"
+description: "A strong type wraps a plain value (an int, a double, a string) in a distinct type marked by a phantom tag, so the compiler treats a UserId and a ProductId as unrelated even though both hold an int -- turning a whole class of argument-swap and wrong-unit bugs into compile errors. Shown as the basic mechanic, function signatures that cannot be mixed up, opt-in operators added as CRTP mixins so each type gets only the operations that make sense, using a strong type as a hash-map key, and unit safety where meters over seconds yields a speed -- alongside the anti-patterns: a type alias mistaken for a strong type, a leaky implicit constructor, sharing one tag between two meanings, blanket operators that let money times money compile, and an implicit conversion back to the raw type that undoes all the safety."
+sort_order: 107
+category: "Techniques"

@@ -1,0 +1,11 @@
+title: "Anti-pattern: blanket operators"
+standard: "C++11"
+difficulty: 3
+summary: "Putting every arithmetic operator on the wrapper once, so all strong types share them, lets meaningless operations compile: money times money, one user id plus another. The type stops describing what is legal. Add operators per concept instead -- the opt-in mixin approach."
+notes: "This is the mistake the hand-rolled wrapper that started this section made -- an operator+ (and there a broken one) baked into the single class. A strong type earns its keep by making illegal states not compile, and a blanket set of operators throws that away: if every wrapper can add and multiply, then money-squared and the sum of two ids are both well-formed, and the compiler can no longer flag them. Worse, a one-size operator often has the wrong result type -- multiplying two lengths should yield an area, not another length. The remedy is to opt in: keep the base operator-free and attach only the capabilities each concept needs, as the CRTP-mixin example does. Ask of every operator you add whether the operation makes sense for the thing the type represents; if not, leave it off and let the wrong use fail to compile."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }

@@ -1,0 +1,8 @@
+- slug: "crtp"
+  note: "The mechanism behind the opt-in operators here: each mixin is a CRTP base templated on the strong type, so the base can build and read the derived value at compile time -- go there for the pattern in full, static polymorphism versus virtual, and the wrong-derived-type mistake this section warns about."
+- slug: "rule-of-0-3-5"
+  note: "Why a well-made strong type needs to write no special members: it holds one value with a trivial type, so the compiler-generated copy, move and destructor are correct -- go there for when to define, default, or delete the five, and why the rule of zero is the goal."
+- slug: "type-traits"
+  note: "The compile-time toolkit a general strong-type library is built from: traits and enable_if decide which operators a wrapper exposes and constrain its constructors -- go there for the introspection and transformation templates that make an opt-in design like this one generic."
+- slug: "chrono"
+  note: "A strong-typed unit system already in the standard library: std::chrono::duration is meters-over-seconds for time, with typed hours, seconds and milliseconds that will not silently mix -- go there for the production-grade version of the unit-safety example."

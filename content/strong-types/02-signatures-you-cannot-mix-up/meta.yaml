@@ -1,0 +1,11 @@
+title: "Function signatures that cannot be mixed up"
+standard: "C++11"
+difficulty: 1
+summary: "The payoff of strong types shows at call sites. A function taking (double, long) accepts its two arguments in either order, so a swap is a silent bug. Taking (Money, AccountId) instead makes the swapped call a compile error -- the mistake is caught before it runs."
+notes: "This is the everyday reason to reach for strong types: adjacent parameters of the same built-in type are a classic bug source, because the compiler cannot tell a good order from a swapped one. Wrapping each parameter in its own type gives the compiler the information it was missing. The rule of thumb: when a function takes two or more arguments of the same primitive type -- two ints, a pair of doubles, several strings -- and getting their order wrong would be a real bug, that is exactly where a strong type pays for itself."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "explicit", url: "https://en.cppreference.com/w/cpp/language/explicit" }
+detailed_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }

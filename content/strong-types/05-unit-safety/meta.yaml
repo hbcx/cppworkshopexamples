@@ -1,0 +1,12 @@
+title: "Unit safety: meters over seconds is a speed"
+standard: "C++14"
+difficulty: 3
+summary: "The strong-type idea extends to physical units. Give meters, seconds and m/s each their own type, then define the operators that relate them: adding two lengths stays a length, but dividing a length by a time returns a speed. Mixing units the wrong way -- meters plus seconds -- stops compiling."
+notes: "This is dimensional analysis enforced by the type system, the same idea std::chrono uses for time. The trick is that operators can CHANGE the tag: operator/ takes Meters and Seconds and returns MetersPerSecond, so the result carries its dimension forward and cannot be mistaken for a raw number or a distance. Only the combinations you define exist, so meters + seconds has no operator and fails to compile -- the classic Mars Climate Orbiter unit mix-up becomes a build error. Marking the constructor and operators constexpr lets the whole calculation run at compile time, which is why the static_assert works. A full library (units, mp-units, or std::chrono for time) generalises this with the exponents of each base dimension, but the core mechanic is exactly this: one type per unit, operators that map between them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }

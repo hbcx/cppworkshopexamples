@@ -1,0 +1,3 @@
+user 1 is Ada
+user 2 is Linus
+map size: 2

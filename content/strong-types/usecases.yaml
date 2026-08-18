@@ -1,0 +1,19 @@
+- problem: "A service passes ids around as plain integers -- user id, order id, product id all long or int. A refactor reorders two parameters, or a caller swaps two ids, and the wrong record is read or written with no error at build or run time until a customer notices."
+  why: "A comment or a type alias names the parameter but the compiler still sees int, so it cannot object to a swap. A strong type per id makes the swap a compile error, catching the class of bug that unit tests miss because each id is a valid int on its own."
+  signal: "Function signatures with several parameters of the same integer type (long userId, long orderId), or an id passed positionally into a call whose parameters are all ints."
+
+- problem: "A financial or billing system carries money as double or long cents mixed in with plain counts, rates and quantities. Someone adds a price to a quantity, or multiplies two amounts, and the number is wrong in a way that compiles and runs."
+  why: "A raw double accepts any arithmetic, so money times money or money plus count are all legal. Wrapping money in its own type with only the operators that make sense (add money, multiply money by a scalar, but not by money) turns the meaningless operations into build errors instead of silent miscalculations."
+  signal: "Monetary values held as bare double or long that flow through general arithmetic, especially multiplications where the units of the result are never checked."
+
+- problem: "Engineering, robotics, aerospace or physics code passes distances, times, angles and masses as doubles. A value in meters is used where feet were expected, or seconds are added to meters, and the mistake surfaces as a wrong trajectory rather than a compiler complaint."
+  why: "std::chrono already proves the model for time; extending it to other units means a Meters that cannot be added to Seconds and a division that yields a Speed. The famous Mars Climate Orbiter loss was a unit mix-up that a typed-units approach would have refused to build."
+  signal: "Physical quantities carried as bare double with the unit only in the variable name or a comment (double distance_m, double t_sec), and arithmetic that mixes them."
+
+- problem: "Code indexes into several parallel arrays or a 2D grid using bare ints -- a row index, a column index, an index into a lookup table -- and a row index is accidentally used where a column index belongs, reading a plausible but wrong cell."
+  why: "All the indices are int, so the compiler cannot tell a row from a column and the wrong one is accepted. A RowIndex and a ColumnIndex as separate strong types make the mix a compile error, which is the only place the mistake is cheap to catch."
+  signal: "Multiple int index variables in scope (row, col, i, j) indexing different dimensions or containers, passed into helpers that take several ints."
+
+- problem: "An API hands out opaque handles or tokens -- a file descriptor, a session token, a database connection id -- as ints or strings. A file descriptor is passed where a session id is expected, or two kinds of handle are compared, and nothing stops it."
+  why: "Handles are meant to be opaque, so an implicit conversion to int is exactly the wrong default; a strong type keeps each handle distinct and blocks arithmetic and cross-type comparison that never make sense for a token. The wrapper also documents which function produces and which consumes each handle."
+  signal: "Integer or string handles from a C-style API (int fd, long sessionId, std::string token) passed between functions, with no type distinguishing one kind of handle from another."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a type alias is not a strong type"
+standard: "C++11"
+difficulty: 3
+summary: "using UserId = int; reads like a strong type but is not one -- an alias is just another name for the same type, so UserId and ProductId are both int and mix freely. The swapped call compiles and returns a wrong answer with no diagnostic. Only a real wrapper type separates them."
+notes: "This is the trap that makes people believe they already have strong typing when they do not. A using or typedef alias is fully transparent: every alias of int IS int, so the compiler sees no difference between a UserId and a ProductId and cannot object to a swap. The alias improves how the signature reads, which is worth something, but it provides no checking whatsoever -- the wrong-id call here compiles and returns 30. The remedy is the wrapper from the first example: a distinct class per meaning, which the compiler genuinely treats as a separate type. Rule of thumb: if you wrote using or typedef, you have documentation, not safety; if you want the compiler to reject a mix, you need a class."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type alias", url: "https://en.cppreference.com/w/cpp/language/type_alias" }
+detailed_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }

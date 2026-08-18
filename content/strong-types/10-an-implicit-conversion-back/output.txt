@@ -1,0 +1,2 @@
+user id slipped through as int, price = 30
+unrelated types compare equal via int: true

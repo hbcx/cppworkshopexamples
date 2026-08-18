@@ -16,3 +16,5 @@
   note: "How to constrain the templates CRTP is built from: a concept states what the derived type must provide, so a CRTP base can require its interface and reject a wrong parameter with a clear message -- go there for concepts, requires-expressions, and constrained templates."
 - slug: "template-basics"
   note: "The foundation CRTP is a pattern of: a class template whose parameter is its own derived type -- go there for function and class templates, specialization, and the deduction and dependent-name rules every template idiom rests on."
+- slug: "strong-types"
+  note: "CRTP in real use as a mixin: a strong type keeps a bare wrapper and inherits only the operators it needs from small CRTP bases -- go there for the opt-in Addable/Printable/Comparable design and how it avoids handing every wrapper every operator."

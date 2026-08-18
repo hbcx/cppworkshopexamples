@@ -1,0 +1,11 @@
+title: "Anti-pattern: a leaky implicit constructor"
+standard: "C++11"
+difficulty: 3
+summary: "A strong type whose constructor is not explicit lets any raw value convert into it silently. banUser(500) then compiles, because 500 becomes a UserId on its own -- so the wrapper no longer forces the caller to state intent. The fix is one keyword: explicit."
+notes: "A strong type has two jobs: keep unrelated types apart, and make conversions between the wrapper and the raw value deliberate. Forgetting explicit on the constructor breaks the second job. An implicit constructor is a conversion the compiler will apply for you, so a bare int flows into any function taking the wrapper, and the call site no longer has to name what the number is -- exactly the discipline the type was meant to enforce. It is an easy slip because the wrapper still compiles and still keeps two DIFFERENT wrappers apart; only the raw-to-wrapper direction leaks. Mark every value-taking constructor of a strong type explicit. The related trap is the opposite direction -- an implicit conversion OUT of the wrapper back to the raw type -- which the last anti-pattern in this section covers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "explicit", url: "https://en.cppreference.com/w/cpp/language/explicit" }
+detailed_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }

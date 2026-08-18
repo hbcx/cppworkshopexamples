@@ -1,0 +1,12 @@
+title: "The mechanic: a phantom tag makes two ints incompatible"
+standard: "C++11"
+difficulty: 1
+summary: "A strong type is a value wrapped in a class template with an extra phantom Tag parameter. The tag holds no data; it exists only to make Strong<int, UserTag> and Strong<int, ProductTag> separate types, so a UserId can never be passed where a ProductId is wanted."
+notes: "Two ingredients make this work. First, the Tag template parameter: it never appears in a member, so it costs nothing at run time, but it makes each specialization a distinct type -- this is the phantom type trick. Second, the explicit constructor: without it a raw int would convert to a UserId on its own and the wrapper would buy nothing. Expose the value only through get(), never with an implicit conversion. This tiny class is the whole idea; the rest of the section adds only the operators each concept actually needs and shows the traps."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }
+detailed_tags:
+  - { name: "explicit", url: "https://en.cppreference.com/w/cpp/language/explicit" }
+  - { name: "type alias", url: "https://en.cppreference.com/w/cpp/language/type_alias" }

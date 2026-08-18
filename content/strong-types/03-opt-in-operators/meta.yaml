@@ -1,0 +1,11 @@
+title: "Opt-in operators as CRTP mixins"
+standard: "C++11"
+difficulty: 2
+summary: "A strong type should carry only the operations that make sense for it: money adds but does not multiply, a user id compares but does not add. The clean way is a bare base with no operators plus small CRTP mixins (Addable, Printable, EqualityComparable), and each type inherits only the ones it wants."
+notes: "This is the design that keeps a strong type honest, and it fixes the most common bug in hand-rolled versions: giving every wrapper every operator. Each mixin is a CRTP base templated on the concrete strong type -- Addable<Money>, not Addable<double> -- so its hidden friend operator builds and reads a Money. Passing the wrapped value type there instead of the derived type is the classic CRTP mistake and makes the operators ill-formed. Defining the operators as friends inside the mixin means they are found by argument-dependent lookup through the base, and take part in overload resolution like free functions. Money lists Addable and Printable; UserId lists EqualityComparable and Printable and pointedly omits Addable, so adding two ids does not compile. Compose the capabilities per concept instead of handing out a blanket set."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "CRTP", url: "https://en.cppreference.com/w/cpp/language/templates" }
+detailed_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }

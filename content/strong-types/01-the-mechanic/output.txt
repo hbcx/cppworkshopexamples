@@ -1,0 +1,2 @@
+Hello, user #42
+raw values are equal: true, but the two types never mix

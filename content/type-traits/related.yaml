@@ -1,5 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "strong-types"
+  note: "Traits at work in a small design: an opt-in strong type uses traits and enable_if to decide which operators a wrapper exposes -- go there for a practical, self-contained use of the introspection toolkit."
 - slug: "concepts"
   note: "What traits grew into: a concept is a named compile-time bool built from traits, put in the template signature and used to order overloads -- go there for named requirements, requires-expressions, and how the standard concepts wrap these traits."
 - slug: "decltype-declval"

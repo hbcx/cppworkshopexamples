@@ -1,0 +1,11 @@
+title: "Anti-pattern: sharing a tag between two types"
+standard: "C++11"
+difficulty: 3
+summary: "The phantom tag is the only thing separating Strong<int, A> from Strong<int, B>. Reuse the same tag for two meanings -- easy to do by copy-paste -- and the two aliases become the same type, so they mix freely and the wrapper protects nothing. Give each meaning its own unique tag."
+notes: "This bug is quiet because everything still looks like a strong type: there is a wrapper, there is a tag, the names read well. But two aliases built from the same T and the same Tag name the identical specialization, so the compiler sees one type and lets a ProductId flow into a UserId slot. It usually creeps in through copy-paste -- duplicate the using line, change the value name, forget the tag -- or by declaring the tag as a shared struct meant to be reused. The rule is simple: a tag exists only to be unique, so mint a fresh one per strong type and never reuse it. Defining the tag inline (Strong<int, struct UserTag>) helps, because a new struct name is right there in the alias and cannot be shared by accident."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }
+detailed_tags:
+  - { name: "type alias", url: "https://en.cppreference.com/w/cpp/language/type_alias" }

@@ -1,0 +1,11 @@
+title: "Using a strong type as a hash-map key"
+standard: "C++11"
+difficulty: 2
+summary: "A strong type is often a map key -- a UserId to a name, an OrderId to a record. std::unordered_map needs an equality and a hash. Add operator== to the type and specialise std::hash for it, forwarding to the wrapped value's hash, and the key works with no extra hasher argument at the call site."
+notes: "Specialising std::hash for your own type inside namespace std is explicitly allowed by the standard, as long as the specialisation depends on a program-defined type (here Strong) -- this is the sanctioned way to make a type hashable. Forwarding to std::hash<T> on the wrapped value reuses the standard library's hashing for the underlying int, string, or whatever T is, so you inherit its quality and never write a hash function by hand. The alternative -- passing a custom hasher as the map's third template argument -- works too but has to be repeated at every declaration; the std::hash specialisation is written once and every unordered_map and unordered_set of that key picks it up automatically. This is exactly what the original hand-rolled wrapper was reaching for, done in the standard-blessed spot."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }

@@ -1,0 +1,3 @@
+price + tax = 12
+money * money compiles (it should not): 20
+userId + userId compiles (it should not): 3

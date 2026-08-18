@@ -1,0 +1,3 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "strong-types"
+  note: "The general idea std::chrono::duration is one instance of: wrap a value in a distinct type so the compiler keeps units apart -- go there for the same technique applied to ids, money and hand-rolled units, and why explicit conversions keep it safe."
