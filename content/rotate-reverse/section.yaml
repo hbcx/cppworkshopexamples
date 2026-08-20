@@ -1,4 +1,4 @@
 title: "rotate / reverse"
 description: "Rearranging a range in place. std::reverse flips the order of a range, and std::rotate cyclically shifts it so a chosen element becomes the new first -- the in-place workhorse for moving an element or block to a new position. Covers reverse and rotate, the reposition idiom, the reverse_copy and rotate_copy forms that write to a new range, the C++20 shift_left and shift_right that drop what falls off the end, and the C++20 ranges forms -- alongside the anti-patterns: using std::reverse on a list where a member reverse relinks nodes, reinventing rotate with a temporary buffer, moving an element with erase plus insert instead of one rotate, reversing unsorted data expecting descending order, and using shift to cycle a queue where it silently loses elements rotate would keep."
-sort_order: 79
+sort_order: 22
 category: "Algorithms"

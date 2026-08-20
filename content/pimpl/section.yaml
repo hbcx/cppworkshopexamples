@@ -1,4 +1,4 @@
 title: "pimpl idiom"
 description: "The pointer-to-implementation idiom: a class holds only a unique_ptr to a forward-declared Impl struct, moving every private member and heavy include into the .cpp -- a compile firewall that keeps the header and the ABI stable when internals change. Shown as the basic mechanic and its out-of-line destructor, the compile-firewall payoff, making a pimpl class copyable with a deep copy, and move semantics done right -- alongside the incomplete-type special members that fail to compile, leaking the Impl back into the header, the shallow-copy double free, const that does not propagate through the pointer, and putting pimpl on a small hot value type where it only costs."
-sort_order: 51
+sort_order: 80
 category: "C++ idioms"

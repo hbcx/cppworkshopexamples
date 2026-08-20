@@ -1,4 +1,4 @@
 title: "transform"
 description: "The mapping algorithm: apply a function to each element and write the results to an output. Covers the unary form to a new container or in place, the binary form that combines two ranges element by element, transforming to a different output type, and the C++20 ranges::transform with a projection (plus the lazy views::transform) -- alongside the anti-patterns: transforming into an empty output through begin() instead of a back_inserter, a stateful function that relies on transform's unspecified order of application, and using transform where you actually need to filter, since it is strictly one output per input."
-sort_order: 72
+sort_order: 15
 category: "Algorithms"

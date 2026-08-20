@@ -1,4 +1,4 @@
 title: "sample / shuffle"
 description: "Random selection and random order. std::shuffle puts a range into a uniformly random permutation, and std::sample picks k elements out of n without replacement, keeping their relative order. Both take a random engine (std::mt19937), so the same seed gives the same result -- reproducible when you want it, varied when you seed from entropy. Covers shuffling with a seeded engine, sampling k of n, seeding the engine properly and reusing it, and reservoir sampling a stream of unknown length in one pass -- alongside the anti-patterns: the removed std::random_shuffle and its rand()-based bias, building a fresh engine on every call so the sequence never advances, seeding a large engine from a single 32-bit value, and shuffling with rand() % n by hand."
-sort_order: 89
+sort_order: 32
 category: "Algorithms"

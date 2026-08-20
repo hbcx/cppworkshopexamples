@@ -1,5 +1,5 @@
 title: "Template Method"
 description: "Fix the skeleton of an algorithm in a base-class method and defer the varying steps to overridable operations, so subclasses redefine the steps without changing the algorithm's structure -- the base calls down to the subclass rather than the other way round (the Hollywood principle). Shown as the classic non-virtual skeleton over virtual steps, the Non-Virtual Interface idiom, optional hooks, and the compile-time CRTP form -- alongside the virtual-call-in-constructor trap, the missing-override pitfall, and when Strategy's composition beats inheritance."
-sort_order: 39
+sort_order: 73
 category: "Design patterns"
 family: "Behavioral"

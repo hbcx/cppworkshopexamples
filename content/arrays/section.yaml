@@ -1,4 +1,4 @@
 title: "std::array"
 description: "The fixed-size array that knows its own size: no allocation, no decay to a pointer, and the length carried in the type. What it fixes about the C array, the initialization rules that catch people out (including the uninitialized default), why the size being part of the type changes how you pass one around, the tuple interface that makes structured bindings work, and the compile-time tables it enables."
-sort_order: 8
+sort_order: 9
 category: "Containers"

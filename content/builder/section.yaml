@@ -1,5 +1,5 @@
 title: "Builder"
 description: "Separate the construction of a complex object from its representation: assemble it step by step through a builder instead of a telescoping constructor -- shown as the modern fluent builder for objects with many optional fields, required-vs-optional handling, and the classic GoF abstract Builder plus Director that build different representations from the same steps."
-sort_order: 24
+sort_order: 58
 category: "Design patterns"
 family: "Creational"

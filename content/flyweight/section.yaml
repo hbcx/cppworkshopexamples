@@ -1,5 +1,5 @@
 title: "Flyweight"
 description: "Support huge numbers of fine-grained objects by sharing: split each object's state into intrinsic state that is shared and immutable and extrinsic state the client supplies per use, then let a factory intern the intrinsic part so many logical objects reference a few physical ones. Shown as an interning factory, the intrinsic-versus-extrinsic split for a forest of trees, extrinsic state passed to the operation, and string interning for O(1) identity comparison."
-sort_order: 34
+sort_order: 68
 category: "Design patterns"
 family: "Structural"

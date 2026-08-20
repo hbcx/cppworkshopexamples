@@ -1,4 +1,4 @@
 title: "Tag dispatch"
 description: "Tag dispatch: select a function overload at compile time by passing an extra argument whose type encodes a compile-time property, so overload resolution picks the right implementation with no run-time branch. Shown as the bare mechanic with empty tag structs, trait-based dispatch through std::true_type and std::false_type, the standard library's own iterator-category dispatch with its tag inheritance, and a user-extensible trait as a customization point -- alongside the anti-patterns: a run-time if on a compile-time property that must compile both branches, trying to dispatch on a run-time value, a missing overload for a weaker iterator category, and tag dispatch where the two paths do not actually differ."
-sort_order: 56
+sort_order: 85
 category: "C++ idioms"

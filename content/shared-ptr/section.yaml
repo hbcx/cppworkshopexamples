@@ -1,4 +1,4 @@
 title: "std::shared_ptr"
 description: "Shared ownership by reference count: the object lives until the last shared_ptr goes, so several owners can hold it without deciding who frees it. make_shared fuses the object and its control block into one allocation, a unique_ptr can be widened into a shared_ptr but never the reverse, weak_ptr observes without keeping the object alive, enable_shared_from_this hands out a shared_ptr to this, custom deleters live in the control block rather than the type, and the reference count is atomic so owners on different threads are safe -- though the object itself is not. Plus the misuses that give shared_ptr its reputation: reference cycles that leak, a raw pointer wrapped twice into two control blocks, shared_ptr(this), and the atomic-refcount cost paid where a unique_ptr would do."
-sort_order: 11
+sort_order: 40
 category: "Smart pointers"

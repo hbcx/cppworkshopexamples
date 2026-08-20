@@ -1,4 +1,4 @@
 title: "Ranges"
 description: "C++20 ranges: algorithms that take a whole range instead of an iterator pair, and lazy composable views that transform data on demand with no intermediate containers. Covers range algorithms, why views are lazy, the pipe operator, the iota generator, projections, keys/values/elements, materialising a view, the take_while/drop slicing family, join to flatten, split to tokenize, reverse and common_view, and the range concepts -- alongside the anti-patterns: a view over a temporary that dangles, treating a view as a container, an infinite view consumed without take, and re-iterating a lazy view that recomputes."
-sort_order: 62
+sort_order: 91
 category: "Generic programming"

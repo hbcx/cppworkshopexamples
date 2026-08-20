@@ -1,4 +1,4 @@
 title: "for_each"
 description: "Applying a callable to every element of a range. std::for_each invokes a function on each element in order, can mutate through a reference, works on a sub-range, and returns its function object so a stateful functor can gather a result. Covers the basic apply, in-place mutation and sub-ranges, the returned functor, and the C++20 ranges::for_each with a projection plus for_each_n -- alongside the anti-patterns: reaching for for_each where a range-based for loop is clearer, using it to do a transform or an accumulate, resizing the container inside the callback, and emulating early exit that find_if or any_of expresses directly."
-sort_order: 80
+sort_order: 23
 category: "Algorithms"

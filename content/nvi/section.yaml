@@ -1,4 +1,4 @@
 title: "Non-Virtual Interface"
 description: "The Non-Virtual Interface idiom: make the public function non-virtual and the customization point a private virtual it calls, so the base owns everything around the virtual step -- validation, locking, logging, invariants -- and no subclass can skip or reorder it. Shown as the basic public-wrapper-plus-private-virtual mechanic, the language fact that a private virtual can still be overridden, a wrapper that enforces an invariant an override cannot bypass, and a protected virtual for chained overrides -- alongside the anti-patterns: a public virtual doing double duty as both interface and hook, a derived class that hides the non-virtual wrapper, an override that re-enters the wrapper, and an empty wrapper that adds nothing over a plain virtual."
-sort_order: 57
+sort_order: 86
 category: "C++ idioms"

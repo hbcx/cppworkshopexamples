@@ -1,5 +1,5 @@
 title: "Composite"
 description: "Compose objects into part-whole tree structures and give the parts and the wholes one interface, so a client treats a single object and a group of objects the same way: a Component interface, Leaf nodes with no children, and Composite nodes that hold children and define each operation in terms of their children's. Shown as the filesystem size tree, operations that cascade through a scene graph, an expression tree that evaluates itself, and the transparency-versus-safety choice for where child management lives."
-sort_order: 32
+sort_order: 66
 category: "Design patterns"
 family: "Structural"

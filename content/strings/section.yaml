@@ -1,4 +1,4 @@
 title: "std::string"
 description: "The workhorse string type and the details behind its convenience: how it stores and inspects text, the small-string optimization that keeps short strings off the heap, building strings efficiently with reserve instead of a chain of temporaries, searching and slicing with find/substr and the npos sentinel, converting to and from numbers, handing a null-terminated buffer to a C API, and std::string_view for looking at text you do not own -- plus the misuses that quietly cost allocations or dangle."
-sort_order: 13
+sort_order: 42
 category: "Strings & text"

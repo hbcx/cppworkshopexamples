@@ -1,4 +1,4 @@
 title: "mismatch / equal / lexicographical_compare"
 description: "Comparing two ranges. std::equal asks whether two ranges hold the same elements, std::mismatch finds the first position where they differ, and std::lexicographical_compare puts them in dictionary order (the < that sorting a sequence of sequences uses). All three take an optional predicate, so case-insensitive or tolerant comparison is a one-liner. Covers equal and its safe length-checking overload, mismatch and the common-prefix it finds, lexicographical ordering, and a custom predicate -- alongside the anti-patterns: the three-argument form reading past the end of a shorter second range, comparing floating-point ranges with exact equality, and dereferencing mismatch's result when the ranges actually matched."
-sort_order: 90
+sort_order: 33
 category: "Algorithms"

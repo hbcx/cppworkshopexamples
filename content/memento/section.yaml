@@ -1,5 +1,5 @@
 title: "Memento"
 description: "Capture an object's internal state in an opaque snapshot so it can be restored later, without exposing that state to anyone but the object itself. Three roles: the originator that produces and restores snapshots, the memento that carries the state opaquely, and the caretaker that stores mementos (an undo history) but never looks inside them. Shown as the basic save-and-restore, the C++ encapsulation that keeps the memento opaque, an undo/redo history, and incremental deltas -- alongside the leaky-memento, aliasing-snapshot, shallow-copy, and unbounded-history traps."
-sort_order: 43
+sort_order: 77
 category: "Design patterns"
 family: "Behavioral"

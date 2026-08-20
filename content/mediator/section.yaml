@@ -1,5 +1,5 @@
 title: "Mediator"
 description: "Encapsulate how a set of objects interact in one mediator, so colleagues refer only to the mediator and not to each other -- turning a many-to-many mesh of direct references into a hub-and-spoke, and letting the interaction be changed in one place. Shown as a chat room, a dialog that centralises its widget-coordination rules, an arbiter with real scheduling state, and a lightweight std::function event bus -- alongside the god-mediator, notification-loop, dangling-colleague, and over-engineering traps the pattern invites."
-sort_order: 42
+sort_order: 76
 category: "Design patterns"
 family: "Behavioral"

@@ -1,4 +1,4 @@
 title: "binary_search / lower_bound"
 description: "Searching a SORTED range in O(log n). std::binary_search answers whether a value is present, lower_bound returns the first element not less than it, upper_bound the first greater, and equal_range both bounds at once -- the sub-range of all equal elements. Covers the membership test, lower and upper bound, equal_range, searching with a matching comparator and finding a sorted insertion point, and the C++20 ranges forms with a projection -- alongside the anti-patterns: binary-searching an unsorted range, using a comparator that does not match the sort order, running std::lower_bound on a set or list where the member is O(log n), and following binary_search with a linear find to get the position lower_bound already gives."
-sort_order: 83
+sort_order: 26
 category: "Algorithms"

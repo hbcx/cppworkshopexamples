@@ -1,5 +1,5 @@
 title: "Visitor"
 description: "Represent an operation to perform on the elements of an object structure as a separate object, so a new operation is a new visitor class rather than a change to every element type. The mechanism is double dispatch -- element.accept(visitor) calls visitor.visit(concreteElement) -- so the operation is chosen by both the element's and the visitor's dynamic type. Shown as the classic accept/visit pair, adding operations without touching elements, the modern std::variant + std::visit form, and an expression-tree evaluator -- alongside the type-switch it replaces, the double-dispatch and missing-visit traps, and the expression-problem trade-off that decides when Visitor is the wrong tool."
-sort_order: 44
+sort_order: 78
 category: "Design patterns"
 family: "Behavioral"

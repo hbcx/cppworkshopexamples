@@ -1,5 +1,5 @@
 title: "Execution policies"
 description: "Opting standard algorithms into parallel execution. Since C++17 many algorithms take an execution policy as their first argument -- std::execution::seq (sequential), par (multiple threads), par_unseq (threads plus vectorization), and unseq (vectorization, C++20) -- turning a serial call into a parallel one without writing any thread code. The policy is a promise you make about the callable, and breaking it is undefined. Covers the four policies and how to pass them, and the parallel sort and reduce -- alongside the anti-patterns: a data race in the callable under par, an exception escaping a parallel algorithm (which calls terminate), synchronizing under par_unseq (forbidden), and reaching for par on data too small to pay back the overhead."
-sort_order: 95
+sort_order: 38
 category: "Algorithms"
 family: "Parallel algorithms"

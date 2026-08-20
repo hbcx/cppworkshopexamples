@@ -1,4 +1,4 @@
 title: "Variadic templates"
 description: "Templates that take any number of arguments of any types through a parameter pack, and the ways to work with one: sizeof... to count it, pack expansion to spread it, recursion to process it before C++17, and fold expressions to reduce it in one line since C++17. Covers pack basics, expansion patterns, advanced multi-pack and index expansion, recursion, the four fold forms, a comma fold for per-element work, std::apply and std::invoke, variadic perfect forwarding, a variadic class template (the overloaded visitor), and constraining a whole pack -- alongside the anti-patterns: a unary fold over an empty pack, unspecified evaluation order when expanding into a function call, forwarding a pack by value, and using recursion where a fold is simpler."
-sort_order: 65
+sort_order: 94
 category: "Generic programming"

@@ -1,5 +1,5 @@
 title: "Observer"
 description: "Define a one-to-many dependency so that when a subject changes state, every registered observer is notified automatically -- decoupling the thing that changes from the things that react to it. Shown as the classic observer interface, subscribers as std::function callbacks, push versus pull notification, and RAII subscription tokens that auto-unsubscribe to solve the dangling-observer problem C++ makes central."
-sort_order: 36
+sort_order: 70
 category: "Design patterns"
 family: "Behavioral"

@@ -1,5 +1,5 @@
 title: "Dependency Injection"
 description: "Give an object its collaborators from the outside instead of letting it construct or look them up itself: depend on an interface and receive the implementation through the constructor, so behaviour can be swapped, unit-tested with a fake, and wired in one place -- shown as constructor injection, injecting a test double for a deterministic unit test, assembling the object graph at a composition root, and the ownership choices (shared instance vs non-owning reference, constructor vs setter injection). A technique and the standard alternative to a global singleton, not a GoF pattern."
-sort_order: 27
+sort_order: 61
 category: "Design patterns"
 family: "Creational"

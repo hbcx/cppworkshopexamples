@@ -1,5 +1,5 @@
 title: "Iterator"
 description: "Provide a way to traverse a collection without exposing how it stores its elements -- in C++ an iterator is a protocol a type satisfies (dereference, advance, compare), which wires it into range-based for and the entire standard algorithm library. Shown as making your own type iterable, a real container with iterator and const_iterator, iterator categories and traits, and a lazy generator with no storage at all -- alongside the invalidation, dangling, end-dereference, and lying-category traps that make iterators the source of C++'s most common bugs."
-sort_order: 40
+sort_order: 74
 category: "Design patterns"
 family: "Behavioral"
