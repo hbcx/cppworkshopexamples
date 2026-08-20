@@ -1,0 +1,24 @@
+# Where to reach for std::format -- problem -> tool, with the alternative each beats.
+- problem: "A service writes structured log or report lines where columns must line up -- a timestamp, a level, a fixed-width id, then a message."
+  why: "std::format sets each fields width and alignment in one readable string, where iostream needs setw, setfill and left manipulators interleaved with << that leak into the next output when you forget to reset them."
+  signal: "a log or table-printing site built from a << chain with setw/setfill/left scattered through it"
+
+- problem: "A tool prints numbers for people to read -- a hex dump, an aligned numeric table, money with a fixed two decimals."
+  why: "std::format is type-safe and puts base, precision and width in the spec, where printf silently prints garbage or crashes when the percent-specifier and the argument type disagree."
+  signal: "printf or snprintf calls whose percent-specifiers must be kept in sync by hand with the argument types"
+
+- problem: "Building one string from several parts -- a report filename, a URL, a cache key, an error message carrying a few values."
+  why: "a single std::format call reads left to right as the finished string, where a chain of + and std::to_string allocates a temporary per piece and scatters the layout across the expression."
+  signal: "a string assembled with operator+ and to_string across several values"
+
+- problem: "Serializing many records to a text format -- CSV rows, a log file, a simple line protocol -- on a hot path."
+  why: "format_to writes straight into one reused buffer, where std::ostringstream carries per-insertion overhead and a fresh allocation per record."
+  signal: "a serialization loop built on std::ostringstream, or per-record std::format that allocates a string each iteration"
+
+- problem: "User-facing numbers in a localized UI -- amounts, counts and measurements shown with the readers grouping and decimal conventions."
+  why: "the L option applies a chosen locale per field while the default stays locale-independent, where iostream follows the process-wide global locale so the same code formats differently by environment."
+  signal: "numbers shown to users formatted under the global locale, or thousands separators inserted by hand"
+
+- problem: "A domain type used all over the code -- a Money, a Duration, an Id -- that must appear the same way in logs and messages."
+  why: "one std::formatter<T> specialization makes the type work with plain {} everywhere, where a hand-written to_string per call site drifts and has to be remembered at each log line."
+  signal: "a type printed through a bespoke to_string helper repeated at many call sites instead of one formatter"

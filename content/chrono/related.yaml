@@ -1,3 +1,5 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 - slug: "strong-types"
   note: "The general idea std::chrono::duration is one instance of: wrap a value in a distinct type so the compiler keeps units apart -- go there for the same technique applied to ids, money and hand-rolled units, and why explicit conversions keep it safe."
+- slug: "format"
+  note: "How to turn a duration or time point into text: std::format understands chrono types with specifiers like %Y-%m-%d and %H:%M:%S -- go there for building the formatted timestamps and durations you print."

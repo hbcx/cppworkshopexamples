@@ -1,5 +1,5 @@
 title: "Chain of Responsibility"
 description: "Pass a request along a chain of handlers, each deciding to process it or forward it to the next, so the sender is decoupled from whichever handler ends up doing the work. Shown in both flavours -- the pure chain where exactly one handler processes and stops, and the middleware pipeline where every handler wraps the next -- as a classic handler hierarchy, a std::function chain, an onion-style pipeline, and GUI event bubbling, alongside the traps of unhandled requests, missing short-circuits, fragile ordering, and chains that should have been a lookup table."
-sort_order: 77
+sort_order: 78
 category: "Design patterns"
 family: "Behavioral"

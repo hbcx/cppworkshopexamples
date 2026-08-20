@@ -1,0 +1,11 @@
+title: "Anti-pattern: a custom formatter that drops the spec"
+standard: "C++20"
+difficulty: 3
+summary: "A std::formatter whose parse() returns begin() without consuming the spec leaves the iterator off the closing brace, so any caller that writes a spec like {:.1f} fails to compile -- inherit from an existing formatter so its parse handles the spec."
+notes: "A formatter has two jobs, and it is easy to do only one. format() writes the value, but parse() must consume the spec between the colon and the closing brace and return an iterator sitting ON that closing brace. A common shortcut -- parse() just returns ctx.begin() -- works for callers who write plain {}, but the moment someone writes a spec like {:.1f} the returned iterator points at the spec text instead of the brace, and the compile-time format check rejects it: the whole call FAILS TO COMPILE. So a half-written formatter is not a silent runtime bug; it quietly forbids every spec, and a teammate who tries to set a width or precision gets an inscrutable error. The clean fix for a type that wraps a formattable value is to INHERIT from that value's formatter -- here std::formatter<Temp> : std::formatter<double> -- so the base parse() consumes the numeric spec for you; then override format() to call the base format() on the number and append your suffix. Now {:.1f} and width specs work as the reader expects. Write parse() properly, or delegate to a formatter that already does."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::formatter", url: "https://en.cppreference.com/w/cpp/utility/format/formatter" }
+detailed_tags:
+  - { name: "std::format_parse_context", url: "https://en.cppreference.com/w/cpp/utility/format/basic_format_parse_context" }

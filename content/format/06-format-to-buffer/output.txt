@@ -1,0 +1,3 @@
+id=0007 name=gadget
+needs 5 chars
+wrote 6 of 7 chars: 123456

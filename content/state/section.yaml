@@ -1,5 +1,5 @@
 title: "State"
 description: "Let an object change its behaviour when its internal state changes, so it appears to change its class -- each state is an object that handles the requests and decides the transitions, and the context just delegates, with no state-checking branches of its own. Shown as the classic delegating context, behaviour and legality that vary per state, states shared as stateless singletons, and the transition-table alternative -- alongside the enum-and-switch design State replaces and the C++ lifetime traps of self-transition."
-sort_order: 74
+sort_order: 75
 category: "Design patterns"
 family: "Behavioral"

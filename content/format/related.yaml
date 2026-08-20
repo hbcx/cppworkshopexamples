@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "strings"
+  note: "The type std::format returns and format_to fills: go there for owning, editing and growing the std::string you just built, and for the older to_string and stream ways this replaces."
+- slug: "chrono"
+  note: "Where a custom formatter really pays off: chrono durations and time points have std::format support, so {:%Y-%m-%d} and friends format dates and times directly -- go there for the clocks and durations you format."
+- slug: "regex"
+  note: "The read side of text work: regex matches and extracts, std::format composes and rewrites -- go there when you need to find or pull fields out rather than build a string from values."

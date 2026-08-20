@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 13}, {"file": "main.cpp", "line": 14, "out": "{ \"count\": 3 }\n"}, {"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 19, "out": "value: {not a placeholder}\n"}, {"file": "main.cpp", "line": 20}, {"file": "main.cpp", "line": 21}]}

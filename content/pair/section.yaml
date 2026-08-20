@@ -1,4 +1,4 @@
 title: "std::pair"
 description: "The two-value bundle: one object holding two values of possibly different types, reached through the public .first and .second members. Covers make_pair and the decay that turns a string literal into const char* rather than std::string, the C++17 structured bindings that give the members real names, returning two results from a function at once, the lexicographic comparison that makes a pair a ready-made composite sort key, std::tie for unpacking into existing variables and writing a multi-key operator<, and piecewise_construct that builds the members in place with no extra move. Plus the misuses: a pair where a named struct belongs, the range-for that silently copies every map entry because its element type is pair<const Key, Value>, make_pair with explicit template arguments, and a reference member left dangling on a temporary."
-sort_order: 46
+sort_order: 47
 category: "Vocabulary types"

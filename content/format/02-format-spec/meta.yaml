@@ -1,0 +1,11 @@
+title: "The format spec: fill, align, width, precision"
+standard: "C++20"
+difficulty: 2
+summary: "After a colon in a placeholder comes a compact spec -- fill, alignment (< > ^), width, a .precision and a type -- that controls how one argument is laid out, replacing iostream setw, setfill, left and setprecision."
+notes: "Everything after the colon in a placeholder is the format spec, read in a fixed order: an optional fill character, an alignment (< left, > right, ^ center), a minimum width, an optional .precision, and a type letter. So {:>8} right-aligns in a field of 8, {:*^8} centers and pads with asterisks, and {:08.2f} sets width 8, zero fill and two decimals. Precision means different things by type: on a string it TRUNCATES to that many characters ({:.3} of truncated is tru), while on a float it is the number of digits after the point. This is the same set of controls as the iostream manipulators setw, setfill, left/right and setprecision, but gathered into one readable string next to the value instead of scattered across a << chain where a leftover manipulator can silently affect the next output. Width is a MINIMUM: a value wider than the field is printed in full, never cut (except by an explicit precision)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "format spec", url: "https://en.cppreference.com/w/cpp/utility/format/spec" }

@@ -1,4 +1,4 @@
 title: "std::optional"
 description: "A value that may be absent, made explicit in the type: optional<T> either holds a T or holds nothing (nullopt), so a missing result stops being a magic sentinel or a parallel bool flag. Covers checking with has_value and the bool conversion, reading with *, -> and the checked value()/value_or, returning an optional from a fail-able lookup or parse, telling an unset field apart from a valid zero, constructing in place with make_optional, std::in_place and emplace, the reset and reassign lifecycle, and the C++23 monadic and_then/transform/or_else that chain optionals without nested checks. Plus the misuses: dereferencing a disengaged optional, an always-evaluated value_or default, optional where the caller needs the reason for failure and not just its absence, and wrapping a pointer that is already nullable."
-sort_order: 48
+sort_order: 49
 category: "Vocabulary types"

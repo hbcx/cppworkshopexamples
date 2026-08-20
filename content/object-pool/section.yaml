@@ -1,5 +1,5 @@
 title: "Object Pool"
 description: "Reuse a fixed set of pre-constructed objects instead of creating and destroying them on demand: acquire a free object from the pool, use it, and return it to be recycled -- shown as the explicit acquire and release mechanic, the RAII handle whose custom deleter returns the object to the pool automatically, and a buffer pool that resets recycled objects to a clean state before the next borrower sees them."
-sort_order: 62
+sort_order: 63
 category: "Design patterns"
 family: "Creational"

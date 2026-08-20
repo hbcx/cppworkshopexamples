@@ -1,4 +1,4 @@
 title: "decltype & declval"
 description: "Deducing types with decltype and std::declval: decltype gives the exact type of an expression without evaluating it, and declval names a value of a type in an unevaluated context so you can ask about it without building one. Covers the basics, the value-category rules including the decltype with extra parentheses trap, declval, extracting a data member's type and a member function's return type, function traits that reach parameter types, the trailing return type, and decltype(auto) that preserves references where auto strips them -- alongside the anti-patterns: decltype(auto) returning a dangling reference, auto silently dropping const and references, declval used where it is actually evaluated, and taking decltype of an overloaded function."
-sort_order: 92
+sort_order: 93
 category: "Generic programming"

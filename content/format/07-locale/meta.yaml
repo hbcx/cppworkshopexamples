@@ -1,0 +1,11 @@
+title: "Locale-aware output with the L option"
+standard: "C++20"
+difficulty: 2
+summary: "std::format is locale-independent by default -- stable output for machines -- and only applies locale grouping and decimal rules when you add the L option and pass a locale, which keeps human formatting an explicit, opt-in choice."
+notes: "A long-standing iostream problem is that number formatting quietly follows the global locale, so the same code prints 1234567 on one machine and 1.234.567 on another and a data file becomes unreadable. std::format fixes this by being locale-independent by default: no thousands separators, always a '.' decimal point, regardless of the environment. You opt IN to locale formatting per placeholder with the L option, and you pass the locale to use as the first argument to std::format, rather than relying on the process-wide global. This example builds a small comma-grouping locale (so it prints the same everywhere) and shows {:L} producing 1,234,567 under it and 1234567 under the classic locale. The rule that follows: use L only for text a person reads (a UI label, a printed report), and never for anything another program parses -- keep logs, CSV, JSON and wire formats on the default, locale-independent path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "std::numpunct", url: "https://en.cppreference.com/w/cpp/locale/numpunct" }

@@ -1,4 +1,4 @@
 title: "std::tuple"
 description: "The N-value generalization of pair: one object holding a fixed sequence of values of possibly different types, reached by compile-time index with std::get<I> since there are no first/second names. Covers make_tuple and its decay, fetching an element by its unique type with get<T> (C++14), returning several results at once and naming them with C++17 structured bindings, joining tuples end to end with tuple_cat, calling a function on a tuple's elements with std::apply, and traversing a heterogeneous tuple generically -- with apply plus a fold, or an index_sequence expansion. Plus the misuses: a tuple where a named struct belongs, forward_as_tuple whose references outlive their arguments, and reaching for a runtime index where get needs a compile-time constant."
-sort_order: 47
+sort_order: 48
 category: "Vocabulary types"

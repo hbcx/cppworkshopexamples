@@ -1,5 +1,5 @@
 title: "Facade"
 description: "Provide one simplified entry point to a subsystem of many classes: the facade knows the right objects to call and the order to call them in, so a client makes one call instead of orchestrating the parts -- without sealing the subsystem, which advanced callers may still use directly. Shown as the basic one-call wrap, orchestrating a multi-step workflow with rollback, keeping the subsystem accessible for cases the facade does not cover, and using the facade as an interface seam that decouples the client so the subsystem behind it can be swapped or faked."
-sort_order: 66
+sort_order: 67
 category: "Design patterns"
 family: "Structural"

@@ -1,0 +1,11 @@
+title: "Building strings with std::format"
+standard: "C++20"
+difficulty: 1
+summary: "std::format fills {} placeholders in a format string with its arguments and returns a std::string -- a type-safe, readable replacement for printf and a chain of stream inserters."
+notes: "std::format (C++20) takes a format string with {} placeholders and the values to drop into them, and returns the finished std::string -- it does not print, so you pass the result to std::cout or store it. Each plain {} consumes the next argument in order; a number inside, like {0} or {1}, is a positional index that lets you reuse or reorder arguments. To put a real brace in the output you double it: {{ becomes { and }} becomes }. Compared with the two older ways, it beats printf because it is type-safe (the argument types are checked, so there is no %d-with-a-string crash) and beats a chain of stream << inserters because the layout lives in one readable string instead of being cut apart by << and stream manipulators. This is the foundation for everything else in the chapter; the details of alignment, width and number formatting go after the colon in the placeholder."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "std::formatter", url: "https://en.cppreference.com/w/cpp/utility/format/formatter" }

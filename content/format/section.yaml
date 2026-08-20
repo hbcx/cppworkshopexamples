@@ -1,0 +1,4 @@
+title: "Formatting with std::format"
+description: "The <format> library (C++20): building text from a format string and arguments, type-safe and checked at compile time. Covers the {} placeholder and positional arguments, the format-spec mini-language (fill, align, width, precision, type), integer and floating-point formatting, width and precision taken from an argument, writing a std::formatter for your own type, formatting straight into a buffer with format_to and format_to_n, locale-aware output with the L option, and the compile-time check versus runtime std::vformat -- alongside the traps: passing a runtime string to std::format, a vformat argument mismatch that throws only at runtime, per-line std::format in a hot loop, forgetting to double literal braces, using a locale in machine-readable output, and a custom formatter that drops the spec."
+sort_order: 45
+category: "Strings & text"

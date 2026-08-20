@@ -1,0 +1,11 @@
+title: "Formatting your own type with std::formatter"
+standard: "C++20"
+difficulty: 3
+summary: "Specialize std::formatter<T> with a parse() and a const format() and your type drops into any std::format call with {} -- one definition, and it works in logs, format_to, and every other format-based API."
+notes: "std::format is extensible: to make your own type formattable you specialize std::formatter<T>. It needs two members. parse(format_parse_context&) reads the spec (the text between the colon and the closing brace) and returns an iterator to the closing brace; the simplest version accepts only an empty spec and returns ctx.begin() unchanged. format(const T&, format_context&) const writes the output through ctx.out(), usually by delegating to std::format_to with the pieces of the value. Two rules the compiler enforces: format() must be const, and parse() must leave the returned iterator ON the closing brace, or the compile-time check rejects any caller. The payoff is big -- once the specialization exists, the type works with plain {} in every std::format, std::format_to and logging call, so you write the layout ONCE instead of a hand-rolled to_string at each site. To also support a spec such as precision or width, inherit from an existing formatter (for example std::formatter<double>) so its parse handles the spec for you -- shown in the broken-formatter anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::formatter", url: "https://en.cppreference.com/w/cpp/utility/format/formatter" }
+detailed_tags:
+  - { name: "std::format_to", url: "https://en.cppreference.com/w/cpp/utility/format/format_to" }

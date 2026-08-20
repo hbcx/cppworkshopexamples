@@ -1,0 +1,12 @@
+title: "Writing into a buffer with format_to and format_to_n"
+standard: "C++20"
+difficulty: 2
+summary: "format_to writes through an output iterator so it appends into a string or buffer you already own instead of allocating a result; format_to_n bounds the write to a fixed buffer and reports truncation, and formatted_size tells you the length in advance."
+notes: "std::format is convenient but always allocates and returns a fresh std::string. When you are assembling a larger string or writing into a fixed buffer, std::format_to skips that: it takes an output iterator (for example std::back_inserter over a std::string you are building, or a char* into an array) and writes the formatted text through it, reusing the target's storage. std::formatted_size runs the formatting logic without producing output and returns the character count, so you can reserve exactly or check a size before committing. std::format_to_n writes at most n characters into a fixed buffer and returns a struct with out (one past the last character written) and size (how many characters the FULL result would have taken) -- comparing size to n tells you whether it was truncated, which is how you use it safely with a stack buffer. Reach for these on hot paths and in fixed-size contexts; keep plain std::format for the common case where a returned string is fine."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format_to", url: "https://en.cppreference.com/w/cpp/utility/format/format_to" }
+detailed_tags:
+  - { name: "std::format_to_n", url: "https://en.cppreference.com/w/cpp/utility/format/format_to_n" }
+  - { name: "std::formatted_size", url: "https://en.cppreference.com/w/cpp/utility/format/formatted_size" }

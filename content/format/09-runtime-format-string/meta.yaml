@@ -1,0 +1,11 @@
+title: "Anti-pattern: a runtime string passed to std::format"
+standard: "C++20"
+difficulty: 3
+summary: "std::format requires a compile-time-constant format string, so handing it a plain std::string (from config, a translation table, user input) is a compile error -- the fix is std::vformat, not casting the string around."
+notes: "People hit this the first time they try to store a format string in a variable: std::format(someString, args...) does not compile, and the error about a consteval or non-constant argument is confusing. It is by design -- std::format takes its format string as a compile-time-checked parameter, so a value only known at run time cannot be used there. The right tool is std::vformat, which is built exactly for this: it takes a std::string_view format and a type-erased argument pack from std::make_format_args, and formats without the compile-time check. So a translation catalog, a user-configurable template, or a format string assembled at run time goes through std::vformat. Do not try to force it back into std::format by tricks; and remember the trade-off you accepted -- the compile check is gone, so a broken runtime string now throws std::format_error instead of failing to build, which means external format strings must be validated. Keep std::format for literals so you still get the check where you can."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vformat", url: "https://en.cppreference.com/w/cpp/utility/format/vformat" }
+detailed_tags:
+  - { name: "std::make_format_args", url: "https://en.cppreference.com/w/cpp/utility/format/make_format_args" }

@@ -1,4 +1,4 @@
 title: "std::condition_variable"
 description: "Blocking until a condition becomes true, without busy-waiting. A std::condition_variable pairs with a mutex: a thread waits on it (releasing the mutex while it sleeps) until another thread changes some shared state and notifies. Covers the wait-with-predicate handoff, the producer/consumer queue it is built for, notify_all to release many waiters at a gate, wait_for with a timeout, and a graceful worker shutdown -- alongside the anti-patterns of getting it wrong: waiting without a predicate (lost and spurious wakeups), changing the shared state without the mutex, checking the condition without the lock, notify_one where notify_all is needed, and calling wait without holding the lock. Examples run under ThreadSanitizer on Linux/CI."
-sort_order: 101
+sort_order: 102
 category: "Concurrency"

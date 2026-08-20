@@ -1,0 +1,11 @@
+title: "Anti-pattern: a vformat argument mismatch at runtime"
+standard: "C++20"
+difficulty: 3
+summary: "Because std::vformat skips the compile-time check, a runtime format string with more placeholders than arguments (or the wrong types) is not caught until it runs, when vformat throws std::format_error -- so runtime format strings need validation and error handling."
+notes: "This is the price of the escape hatch from the previous anti-pattern. std::vformat exists to format a runtime string, but that means the safety net of std::format is gone: if the string has two placeholders and you pass one argument, or a placeholder asks for a presentation the argument cannot do, nothing complains at build time -- std::vformat throws std::format_error when it runs. The dangerous version is a translation catalog or a user-editable template where a translator adds a stray {} or reorders fields: the program builds fine and then throws on the one locale nobody tested. The fixes are ordinary but must be deliberate: keep the runtime string and its argument list in sync, wrap std::vformat in a try/catch (or otherwise handle failure) wherever the string is not fully under your control, and validate externally-supplied format strings when they are loaded rather than on a rare code path. Where the string can be a literal, prefer std::format so the mismatch is a compile error instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vformat", url: "https://en.cppreference.com/w/cpp/utility/format/vformat" }
+detailed_tags:
+  - { name: "std::format_error", url: "https://en.cppreference.com/w/cpp/utility/format/format_error" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: forgetting to escape literal braces"
+standard: "C++20"
+difficulty: 3
+summary: "In a format string a bare { or } is a placeholder delimiter, so writing JSON or any brace-heavy literal without doubling the braces is a compile error -- {{ and }} produce a single literal brace."
+notes: "The very characters std::format uses for placeholders are the ones you often want literally -- building a snippet of JSON, a code template, or anything with { and }. A lone brace in the format string is taken as the start or end of a placeholder, so std::format(\"{ \\\"count\\\": {} }\", n) does not parse and is a compile error (with std::vformat it would throw at run time instead). The fix is to double every literal brace: {{ emits a single { and }} emits a single }. So the JSON object is written as {{ \"count\": {} }}. One point that trips people the other way: the doubling rule applies ONLY to the format string itself. Braces that appear inside an ARGUMENT are copied to the output unchanged and are never re-parsed, so a value like {not a placeholder} passed to {} prints verbatim -- you do not, and must not, escape data. When a format string is mostly braces, it is often clearer to keep the literal parts in normal strings and format only the variable pieces."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "format spec", url: "https://en.cppreference.com/w/cpp/utility/format/spec" }

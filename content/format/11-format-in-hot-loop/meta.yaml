@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::format per line in a hot loop"
+standard: "C++20"
+difficulty: 3
+summary: "Each std::format call allocates and returns a new std::string; calling it once per row and appending the result means one throwaway allocation per iteration -- format_to writes directly into the buffer you are building and reuses its capacity."
+notes: "std::format is the right default for a one-off string, but every call allocates a fresh std::string for its result. In a loop that builds a big report -- a line per row, a record per item -- that is an allocation and a copy for each line, all discarded after being appended. On a hot path this shows up clearly in a profile. The fix is std::format_to: give it an output iterator over the string (or buffer) you are assembling, and it writes the formatted text straight in, reusing the target's capacity with no per-line temporary. Reserve the buffer up front when you can estimate the size. Both versions here produce identical output; the difference is only in allocations, which is why this is an efficiency anti-pattern, not a correctness one. The same applies to std::format inside a tight logging loop -- format into a reused buffer, or use an API that takes format_to, rather than minting a string per message."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format_to", url: "https://en.cppreference.com/w/cpp/utility/format/format_to" }
+detailed_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }

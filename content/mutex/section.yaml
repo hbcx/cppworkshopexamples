@@ -1,4 +1,4 @@
 title: "std::mutex"
 description: "Mutual exclusion: protecting shared data so only one thread touches it at a time. A std::mutex marks a critical section, and RAII lock owners (lock_guard, unique_lock, scoped_lock) take and release it so you cannot forget to unlock. Covers the raw lock/unlock a mutex is built from, the lock_guard that wraps it safely, why a mutex guards multi-variable invariants an atomic cannot, unique_lock reused across many lock/unlock cycles, non-blocking try_lock, wrapping data and its mutex in a thread-safe class, scoped_lock to take several mutexes without deadlock, shared_mutex for many-readers-one-writer, and call_once for thread-safe one-time initialization -- alongside the anti-patterns of locking done wrong: deadlock from inconsistent lock order, a hand-managed lock leaked past an early return, re-locking a non-recursive mutex, doing slow work while holding the lock, a per-call local mutex that protects nothing, handing a reference to guarded data outside the lock, and copying a class with a mutex member. Examples run under ThreadSanitizer on Linux/CI."
-sort_order: 100
+sort_order: 101
 category: "Concurrency"

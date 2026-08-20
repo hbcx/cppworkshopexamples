@@ -1,0 +1,11 @@
+title: "Anti-pattern: a locale in machine-readable output"
+standard: "C++20"
+difficulty: 3
+summary: "Using the L option (or formatting under a grouping locale) for output another program parses inserts thousands separators and locale decimal points, so a CSV amount becomes 1,234,567 and the parser reads three fields -- machine output must stay locale-independent."
+notes: "std::format is locale-independent by default precisely so that serialized numbers are stable, and the L option is the deliberate opt-in to locale rules. The bug is using L (or running under a global grouping locale) for data another program reads: a thousands separator turns 1234567 into 1,234,567, and inside a CSV that comma is a field separator, so the row now has an extra column and the amount is corrupted -- silently, because it still looks like a number. The same class of problem hits a decimal comma locale, where 3.14 becomes 3,14 and breaks JSON or a wire protocol. The rule is to split the two audiences: machine-readable output (CSV, JSON, logs, network messages, filenames) uses the default, locale-independent formatting with plain {}, and the L option is reserved for text a person reads on screen -- a dashboard label, a printed invoice. When in doubt, leave L off; you can always format a human-facing copy separately."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "std::numpunct", url: "https://en.cppreference.com/w/cpp/locale/numpunct" }

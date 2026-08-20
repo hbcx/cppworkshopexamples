@@ -1,0 +1,2 @@
+point = (3, 4)
+line from (0, 0) to (2, 5)

@@ -1,0 +1,11 @@
+title: "Compile-time checking and runtime std::vformat"
+standard: "C++20"
+difficulty: 2
+summary: "std::format checks the format string against the argument types at compile time, so a mismatch is a build error, not a crash; when the string is only known at run time you drop that check and use std::vformat with make_format_args."
+notes: "The biggest safety win over printf is that std::format takes its format string as a special consteval-checked parameter: the string must be a compile-time constant, and the compiler verifies that every placeholder matches the type of its argument. A wrong spec like {:d} for a string does not compile, so the classic printf bug of a format specifier that disagrees with its argument is caught at build time. The trade-off appears when the format string is NOT a constant -- it comes from a config file, a translation catalog, or user input. Then the compile-time check cannot apply, and passing such a string to std::format is itself a compile error. The escape hatch is std::vformat, which takes a std::string_view and a type-erased pack built by std::make_format_args; it formats without the compile check. The cost is that errors move to run time (a bad string throws std::format_error), so validate externally-supplied format strings. Rule of thumb: literal string, use std::format and keep the check; runtime string, use std::vformat and validate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vformat", url: "https://en.cppreference.com/w/cpp/utility/format/vformat" }
+detailed_tags:
+  - { name: "std::make_format_args", url: "https://en.cppreference.com/w/cpp/utility/format/make_format_args" }

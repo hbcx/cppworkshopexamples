@@ -1,0 +1,5 @@
+dec 255  hex ff  HEX FF  oct 377  bin 11111111
+with prefix: 0xff 0377 0b11111111
+sign + zero-pad: +00042
+fixed 12345.68  sci 1.23e+04  general 12345.7
+bool: true  char from 65: A

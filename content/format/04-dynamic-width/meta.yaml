@@ -1,0 +1,11 @@
+title: "Width and precision taken from an argument"
+standard: "C++20"
+difficulty: 2
+summary: "A nested {} inside a spec reads the width or precision from an argument at run time -- {:>{}} takes the width from the next value, {:.{}f} takes the precision -- so layout can depend on data instead of being fixed in the string."
+notes: "Sometimes the width or precision is not known when you write the code -- it comes from a config value, the widest item in a table, or a user setting. A nested replacement field handles that: inside the spec, {} stands for an argument that supplies the number. So {:>{}} right-aligns using a width read from the next argument, and {:.{}f} sets the precision from an argument. You can combine them, and with positional indices you control exactly which argument is the value, which is the width, and which is the precision ({0:>{1}.{2}f}). This is how you build aligned tables whose column width is computed from the data, without pasting numbers into the format string or falling back to setw. One rule to remember: a format string uses EITHER automatic indexing (all bare {}) or manual indexing (all numbered) -- do not mix the two, including in the nested fields."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "format spec", url: "https://en.cppreference.com/w/cpp/utility/format/spec" }

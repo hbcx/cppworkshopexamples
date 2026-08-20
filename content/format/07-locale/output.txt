@@ -1,0 +1,4 @@
+default:     1234567
+default:     1234.50
+grouped (L): 1,234,567
+classic (L): 1234567

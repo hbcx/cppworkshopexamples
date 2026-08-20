@@ -1,0 +1,3 @@
+no spec : 21.567C
+with .1f: 21.6C
+width   : [      21.6C]

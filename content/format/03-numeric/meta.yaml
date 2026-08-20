@@ -1,0 +1,11 @@
+title: "Numbers: bases, signs, precision and types"
+standard: "C++20"
+difficulty: 2
+summary: "The type letter and flags in a spec control number output -- d/x/o/b pick the integer base, # adds the base prefix, + and 0 handle sign and padding, and f/e/g choose fixed, scientific or general float form."
+notes: "For an integer the type letter selects the base: d decimal, x and X lower/upper hex, o octal, b binary; the # flag adds the matching prefix (0x, 0, 0b), and reusing one argument with a positional index ({0:x} ... {0:b}) shows the same value several ways. Sign and padding are flags too: + always shows a sign, a space reserves a column for it, and a leading 0 zero-fills to the width, so {:+06d} of 42 is +00042. For floating point, f is fixed notation, e is scientific, and g is the general form that trims trailing zeros and picks whichever is shorter; the .N precision sets the digit count. Two small ones: bool formats as the words true/false by default (use {:d} for 1/0), and the c type prints an integer as the character with that code. All of this is locale-independent unless you add the L option, which keeps machine output stable."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "format spec", url: "https://en.cppreference.com/w/cpp/utility/format/spec" }
