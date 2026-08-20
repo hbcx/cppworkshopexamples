@@ -1,4 +1,4 @@
 title: "Rule of 0/3/5"
 description: "How many of the five special members you must write, and why: the destructor, copy constructor, copy assignment, move constructor and move assignment come as a set. Rule of zero -- hold self-managing members and declare none -- is the modern default; rule of three (destructor plus both copies) is forced when you own a raw resource; rule of five adds the two moves. Shown as the five members made visible, rule of zero, rule of three, and defaulting the rest when one declaration suppresses the others -- alongside the anti-patterns: a custom destructor with a shallow default copy that double-frees, an assignment with no self-assignment guard, hand-writing five where zero would do, and a move declaration that silently deletes the copy."
-sort_order: 85
+sort_order: 86
 category: "C++ idioms"

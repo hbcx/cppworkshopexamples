@@ -1,0 +1,11 @@
+title: "Anti-pattern: assuming PCRE features std::regex lacks"
+standard: "C++11"
+difficulty: 3
+summary: "std::regex ECMAScript supports lookahead and numbered backreferences, but it has no lookbehind and no named groups; a pattern copied from a PCRE, Python or .NET cheatsheet that uses them throws std::regex_error at runtime rather than working."
+notes: "People reach for std::regex expecting PCRE, and it is a smaller language. The default ECMAScript grammar does support a lot -- character classes, greedy and lazy quantifiers, alternation, anchors, backreferences, and LOOKAHEAD ((?=...) and (?!...)). But two commonly-copied features are simply absent: LOOKBEHIND ((?<=...) and (?<!...)) and NAMED capture groups ((?<name>...) or (?P<name>...)). Because the pattern is only checked when the std::regex is constructed, a borrowed pattern that uses them does not fail to compile -- it throws std::regex_error when the code runs, often on a path you did not test. The workarounds are ordinary: replace a lookbehind by capturing the leading context in a numbered group and reading the group after it, and replace named groups with numbered ones (m[1], m[2]). If you truly need lookbehind or the richer syntax, that is a sign to use a real PCRE library instead of std::regex. Check what your grammar supports before copying a pattern from another language."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_constants::syntax_option_type", url: "https://en.cppreference.com/w/cpp/regex/syntax_option_type" }

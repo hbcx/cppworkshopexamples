@@ -1,0 +1,5 @@
+naive 'a.c' on 'aXc'          : true
+escaped 'a\.c' on 'aXc'       : false
+escaped 'a\.c' on 'a.c'       : true
+escaped user 'a.c' on 'aXc'   : false
+escaped user 'a.c' on 'a.c'   : true

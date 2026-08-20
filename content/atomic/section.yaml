@@ -1,4 +1,4 @@
 title: "std::atomic"
 description: "The lock-free building block for sharing data between threads. A std::atomic<T> makes reads, writes, and read-modify-write operations indivisible, so concurrent access is defined behaviour instead of a data race. Covers the atomic counter (fetch_add), load/store/exchange, the compare-exchange (CAS) loop for operations the fetch_ family does not offer, memory ordering (relaxed for counting versus acquire/release to publish data), the C++20 wait/notify_one/notify_all that block a thread instead of busy-spinning, and the atomic_int/atomic_bool convenience aliases -- alongside the anti-patterns: a non-atomic check-then-act race, using volatile where you meant atomic, assuming every atomic is lock-free, and using relaxed ordering where a release/acquire handoff is required. Concurrency examples run under ThreadSanitizer on Linux/CI."
-sort_order: 97
+sort_order: 98
 category: "Concurrency"

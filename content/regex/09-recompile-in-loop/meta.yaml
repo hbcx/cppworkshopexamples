@@ -1,0 +1,11 @@
+title: "Anti-pattern: recompiling the regex on every call"
+standard: "C++11"
+difficulty: 3
+summary: "Constructing a std::regex parses the pattern and builds a state machine -- an expensive step; doing it inside a function called in a loop, or per iteration, repeats that build every time and swamps the actual matching."
+notes: "The cost of std::regex is split unevenly: building the object (parsing the pattern, compiling the automaton) is heavy, while running a match on a short string is comparatively cheap. So a helper that constructs its std::regex on every call, or a loop that builds the pattern each iteration, pays the expensive part again and again for no reason -- benchmarks routinely show this is most of the time spent. The fix is to build the regex ONCE and reuse it: a function-local static const std::regex (built on first use, and thread-safe to initialize since C++11), a data member, or a namespace-scope constant. The optimize flag helps repeated matching further. This is not about correctness -- both versions here give the same answers -- it is purely about not throwing away the most expensive thing you built. The same rule applies to regex_replace in a loop: hoist the pattern out."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_match", url: "https://en.cppreference.com/w/cpp/regex/regex_match" }

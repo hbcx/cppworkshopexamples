@@ -1,0 +1,12 @@
+title: "Capture groups: pulling fields out with smatch"
+standard: "C++11"
+difficulty: 1
+summary: "Parentheses in a pattern create capture groups; after a match, std::smatch gives you each group as a substring plus its offset and length, with group 0 the whole match and groups 1..n the parenthesised parts."
+notes: "A match does more than say yes or no: the parts of the pattern wrapped in ( ) are captured, and std::regex_match / regex_search fill a std::smatch (the match_results type for a std::string subject) with them. m[0] is the whole matched text, m[1], m[2], ... are the groups in order of their opening parenthesis, and m.size() is one more than the group count. Each element is a sub_match; call .str() to get its text as a std::string, and m.position(i) / m.length(i) to find where group i sits in the subject and how long it is. This is how you turn a shape like (\\d{4})-(\\d{2})-(\\d{2}) into named fields (year, month, day) in a few lines. Two things to remember: a group that did not participate in the match has .matched == false and an empty string, and std::regex has no NAMED groups -- you refer to captures by number (see the unsupported-features anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::smatch", url: "https://en.cppreference.com/w/cpp/regex/match_results" }
+  - { name: "std::sub_match", url: "https://en.cppreference.com/w/cpp/regex/sub_match" }

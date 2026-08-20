@@ -1,0 +1,2 @@
+safe on 40 a's       : true
+safe on 40 a's + '!' : false

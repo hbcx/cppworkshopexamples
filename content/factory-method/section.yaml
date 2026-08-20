@@ -1,5 +1,5 @@
 title: "Factory Method"
 description: "Defer WHICH concrete product to create to a virtual method a subclass overrides, so a shared algorithm depends only on the product interface -- shown in modern C++ (unique_ptr, virtual destructor, rule of zero), with the anti-pattern where a std::function beats a whole creator hierarchy."
-sort_order: 56
+sort_order: 57
 category: "Design patterns"
 family: "Creational"

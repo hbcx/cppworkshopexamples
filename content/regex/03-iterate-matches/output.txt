@@ -1,0 +1,4 @@
+found 3 addresses:
+  10.0.0.1 at offset 3
+  10.0.0.254 at offset 16
+  8.8.8.8 at offset 32

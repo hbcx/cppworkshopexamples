@@ -1,0 +1,4 @@
+match("12345")             = true
+match("order 12345 ...")   = false
+search("order 12345 ...")  = true
+match(full-line pattern)   = true

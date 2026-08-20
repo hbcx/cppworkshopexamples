@@ -1,0 +1,4 @@
+title: "Regular expressions"
+description: "The <regex> library (C++11): matching, searching, extracting, and rewriting text with patterns. Covers regex_match versus regex_search, capture groups with smatch, iterating every match, regex_replace with backreferences, the grammar and option flags (icase, grammars, optimize, nosubs), splitting with a token iterator, error handling with regex_error, and backreferences and anchors -- alongside the traps that make std::regex slow or wrong: recompiling the pattern in a loop, a match_results that dangles into a temporary, catastrophic backtracking (ReDoS), unescaped metacharacters and patterns built from user input, features it does not have (lookbehind, named groups), and reaching for regex on nested structures it cannot parse."
+sort_order: 44
+category: "Strings & text"

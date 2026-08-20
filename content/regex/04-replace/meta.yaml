@@ -1,0 +1,11 @@
+title: "Rewriting text with regex_replace and backreferences"
+standard: "C++11"
+difficulty: 2
+summary: "regex_replace substitutes every match with a format string in which $1, $2 refer to capture groups and $& is the whole match; format flags control replacing only the first match or dropping the unmatched text."
+notes: "regex_replace walks the subject, replaces each match with a format string, and returns a new std::string (it never edits in place). Inside the format string the dollar sequences are backreferences: $1..$n insert capture groups, $& inserts the whole match, $` and $' insert the text before and after it, and $$ is a literal dollar. That is what lets you REFORMAT rather than just delete -- turning 555-1234 into 555-XXXX by keeping group 1 and rewriting group 2. Two flags are worth knowing: format_first_only stops after the first match instead of replacing all of them, and format_no_copy outputs only the replacements and discards the parts that did not match (handy for pulling every match out as a joined string). Because it copies the whole subject for each call, prefer building the std::regex once (see the recompile anti-pattern) when you replace in a loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_replace", url: "https://en.cppreference.com/w/cpp/regex/regex_replace" }

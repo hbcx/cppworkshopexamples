@@ -1,0 +1,13 @@
+bad (recompiles each call):
+  42 -> true
+  -7 -> true
+  3.14 -> false
+  x9 -> false
+  1000 -> true
+good (compiled once):
+  42 -> true
+  -7 -> true
+  3.14 -> false
+  x9 -> false
+  1000 -> true
+same answers -- but the good version built the regex once, not 5 times.

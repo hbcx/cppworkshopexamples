@@ -1,0 +1,4 @@
+flat   greedy -> [ level1 ]
+nested greedy -> [ a { b } c ]
+nested lazy   -> [ a { b ]
+neither is the balanced group: regex cannot count pairs. Use a real parser (a stack, or a grammar) for nested structures.

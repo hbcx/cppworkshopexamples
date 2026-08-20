@@ -1,0 +1,12 @@
+title: "Anti-pattern: an smatch that points into a temporary"
+standard: "C++11"
+difficulty: 3
+summary: "A std::smatch stores iterators into the searched string, not copies, so searching a temporary or a soon-destroyed string leaves the results dangling -- which is why regex_search on an rvalue string is a deleted overload since C++14."
+notes: "match_results (smatch) does not copy the matched text; each sub_match is a pair of iterators INTO the subject string. So the subject must outlive every read of the smatch. The sharpest form of the bug is searching a temporary -- regex_search(std::string(build()), m, re) -- where the string dies at the end of the statement and m immediately dangles; the standard makes this a compile error by deleting the std::string&& overload of regex_search (since C++14), so the language stops you. The quieter form still compiles: an smatch filled from a local string that then goes out of scope, or stored past the life of its subject. Two safe habits avoid all of it. Keep the subject string alive for as long as you use the smatch, OR copy what you need out immediately with .str(), which gives you an owning std::string that no longer points back at the subject. Returning m[1].str() from a helper is the common safe move, as extractYear does here."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::smatch", url: "https://en.cppreference.com/w/cpp/regex/match_results" }
+  - { name: "std::regex_search", url: "https://en.cppreference.com/w/cpp/regex/regex_search" }

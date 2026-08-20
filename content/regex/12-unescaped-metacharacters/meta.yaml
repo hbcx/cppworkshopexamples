@@ -1,0 +1,11 @@
+title: "Anti-pattern: unescaped metacharacters and user input"
+standard: "C++11"
+difficulty: 3
+summary: "Characters like . ^ $ ( ) [ ] { } * + ? | have special meaning in a pattern, so a dot matches ANY character, not a literal dot; building a pattern from user text without escaping turns their input into regex syntax -- a wildcard, or a stray paren that throws."
+notes: "A pattern is code, not text: . matches any character, * + ? repeat, ( ) group, [ ] start a class, and so on. So a.c is not the three-character string a.c -- it matches aXc, a1c, anything with a middle character. To match a metacharacter literally you escape it with a backslash: a\\.c matches only a.c. The dangerous version of this bug is building a pattern by pasting user input into it. Their text is then interpreted as regex: a . becomes a wildcard, a .* becomes match-everything (a filter that lets through what it should block -- regex injection), and an unbalanced ( throws std::regex_error and can crash the request. The fix is to escape any string that should be matched literally before it becomes part of a pattern -- the escapeRegex helper here puts a backslash in front of every metacharacter using regex_replace. As a rule, never feed unescaped external input into a std::regex, and prefer a plain substring search (std::string::find) when you are not actually using pattern features."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_replace", url: "https://en.cppreference.com/w/cpp/regex/regex_replace" }

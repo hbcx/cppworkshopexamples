@@ -1,5 +1,5 @@
 title: "Interpreter"
 description: "For a small, well-defined language, represent its grammar as a class per rule and interpret sentences by walking a tree of those classes. Terminal expressions (literals, variables) and non-terminal expressions (and, or, comparisons) each interpret themselves against a shared Context that holds the inputs. Shown as a boolean expression evaluator, a context of variable bindings, parsing text into a tree, and a record-filtering rule engine -- alongside the traps of outgrowing the pattern, mixing parsing with interpretation, re-parsing on every run, and using globals instead of a context."
-sort_order: 80
+sort_order: 81
 category: "Design patterns"
 family: "Behavioral"

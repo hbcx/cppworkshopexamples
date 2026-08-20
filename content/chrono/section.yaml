@@ -1,4 +1,4 @@
 title: "std::chrono"
 description: "The type-safe time library: durations that carry their unit in the type so a millisecond can never be mistaken for a second, the clocks and what each is actually for -- steady_clock to measure intervals, system_clock for wall-clock timestamps -- time_points as a duration since a clock's epoch, converting between units with duration_cast and the C++17 floor/ceil/round that get the rounding right, the C++14 literals that make 100ms readable, and the misuses that cause wrong timings: measuring with a clock that can jump backwards, passing a bare int where a duration belongs, and reading .count() in the wrong unit."
-sort_order: 44
+sort_order: 45
 category: "Time"

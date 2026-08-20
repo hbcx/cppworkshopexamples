@@ -1,0 +1,6 @@
+fields: 4
+  [a]
+  [b]
+  [c]
+  [d]
+separators: 3

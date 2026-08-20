@@ -1,0 +1,11 @@
+title: "Splitting text with sregex_token_iterator"
+standard: "C++11"
+difficulty: 2
+summary: "A regex_token_iterator yields chosen submatches as it walks the text; asking for submatch -1 gives the pieces BETWEEN matches, which turns a separator pattern into a split -- something the standard library has no dedicated function for."
+notes: "There is no std::split in C++, and std::sregex_token_iterator is the closest standard tool. You give it the subject range, a separator pattern, and which submatch to emit at each step. Submatch 0 (the default) yields the matches themselves; a specific group number yields that capture; and the special value -1 yields the text between matches -- the fields of a split. So a separator pattern like \\s*,\\s* (a comma with any surrounding spaces) with -1 splits a,  b ,c into clean fields with the spaces already trimmed, which a plain character split would not do. You can even pass a list of submatch indices to interleave, say, the fields and the separators. The catch is cost: this spins up the full regex engine, so for splitting on a single fixed character a hand-written scan over the string is far cheaper -- reach for the token iterator when the separator itself needs a pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::sregex_token_iterator", url: "https://en.cppreference.com/w/cpp/regex/regex_token_iterator" }

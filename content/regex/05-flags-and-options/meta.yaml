@@ -1,0 +1,11 @@
+title: "Flags and grammars: icase, ERE, optimize, nosubs"
+standard: "C++11"
+difficulty: 2
+summary: "The std::regex constructor takes syntax_option_type flags that change how the pattern is read -- icase for case-insensitive, a grammar such as extended (POSIX ERE) or grep, optimize to trade build time for match speed, and nosubs to skip capturing."
+notes: "A std::regex is built with a pattern AND a set of option flags from std::regex_constants. The default grammar is ECMAScript (the richest one, with lookahead and backreferences); you can switch to POSIX basic or extended, or awk/grep/egrep, when you are porting patterns from those tools -- but note the metacharacters differ between grammars. Behaviour flags are independent of the grammar: icase makes matching case-insensitive; optimize asks the engine to spend more effort constructing the automaton so repeated matches run faster (useful for a regex you reuse a lot); nosubs turns every group into a non-capturing one, so smatch holds only the whole match, which saves work when you only need a yes/no. One flag people look for is missing here: multiline (so ^ and $ match at line breaks) was only added in C++17 -- in C++11 ^ and $ anchor to the whole subject unless you split the text into lines yourself."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_constants::syntax_option_type", url: "https://en.cppreference.com/w/cpp/regex/syntax_option_type" }

@@ -1,0 +1,12 @@
+title: "regex_match vs regex_search: whole string or anywhere"
+standard: "C++11"
+difficulty: 1
+summary: "regex_match succeeds only when the ENTIRE string matches the pattern, while regex_search succeeds if the pattern appears anywhere inside it -- mixing them up is the most common std::regex mistake."
+notes: "These two functions look interchangeable and are not. regex_match anchors the pattern to both ends: it returns true only if the whole subject is described by the pattern, so the pattern \\d+ matches 12345 but NOT order 12345 shipped, because the letters are left over. regex_search scans for the pattern as a substring, so the same \\d+ finds the digits inside the sentence and returns true. The practical rule: use regex_match to VALIDATE that a string has exactly a given shape (a whole date, a whole identifier), and regex_search to FIND or extract a piece out of a larger text. If you want match to accept something embedded, the pattern has to describe the surrounding text as well -- which is why the full-line pattern here matches. Neither function needs leading ^ or trailing $ for regex_match, since it already requires a full match; those anchors matter for regex_search."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_match", url: "https://en.cppreference.com/w/cpp/regex/regex_match" }
+  - { name: "std::regex_search", url: "https://en.cppreference.com/w/cpp/regex/regex_search" }

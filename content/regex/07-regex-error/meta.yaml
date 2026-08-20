@@ -1,0 +1,11 @@
+title: "When the pattern is wrong: std::regex_error"
+standard: "C++11"
+difficulty: 2
+summary: "A bad pattern is not caught by the compiler -- constructing the std::regex throws std::regex_error at runtime, and its code() names the problem in a way you can test portably, unlike the human-readable what() message."
+notes: "The pattern string is data, so the compiler cannot check it; an unbalanced parenthesis or a stray quantifier is only discovered when the std::regex is CONSTRUCTED, and it reports the failure by throwing std::regex_error. This matters most when the pattern comes from config or user input: wrap the construction in a try/catch and handle the error, rather than letting an exception escape and take down the program. The exception carries a code() of type regex_constants::error_type -- error_paren, error_brack, error_badrepeat and so on -- which you can compare against the named constants for a stable, testable reason. Prefer code() over what() for logic: what() gives a readable message but its exact wording is implementation-defined and differs between libstdc++ and libc++. Build patterns once and validate them at startup where you can, so a broken pattern fails loudly and early instead of on a rare code path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_error", url: "https://en.cppreference.com/w/cpp/regex/regex_error" }

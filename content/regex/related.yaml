@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "strings"
+  note: "Where the matched text ends up: std::string is the subject you search and the type smatch groups copy into, and its find handles the fixed-substring searches that do not need a pattern at all."
+- slug: "subsequence-search"
+  note: "The cheaper tool when the pattern is really a fixed substring or a set of characters: search, find_end and find_first_of do it in linear time with none of the regex build cost."
+- slug: "string-view"
+  note: "The lightweight way to pass and slice the text you are about to search -- but note std::regex needs a std::string or iterators, not a view, so you materialize before matching."

@@ -1,0 +1,24 @@
+# Where to reach for std::regex -- problem -> tool, with the alternative each beats.
+- problem: "A web form or API validates fields with a fixed shape -- a postal code, an E.164 phone number, an ISBN, an ISO date -- and must reject malformed values before storing them."
+  why: "one regex_match states the whole shape in a single line and is easy to adjust, where a hand-written character scan for the same rule sprawls into nested loops and off-by-one bugs that drift from the spec."
+  signal: "a validation function that is a long chain of isdigit, length and position checks re-implementing one fixed textual format"
+
+- problem: "A tool reads server log lines -- an nginx access line, a stack-trace frame, a timestamped event -- and needs the timestamp, status code and path as separate fields."
+  why: "capture groups name the parts in one pattern, where a manual find and substr chain re-derives every offset by hand and breaks the moment a field width or a separator changes."
+  signal: "a line parser built from repeated find + substr with hard-coded offsets to slice one line into fields"
+
+- problem: "A text pipeline rewrites content -- redact card numbers and tokens from logs, turn bare URLs into links, collapse whitespace -- across large bodies of text."
+  why: "regex_replace does the find-and-rewrite in one pass and keeps the parts you want with backreferences, where a manual scan-and-rebuild loop re-implements both the matching and the splicing by hand."
+  signal: "a loop that scans for a pattern and rebuilds a new string piece by piece just to substitute matches"
+
+- problem: "Input is split on a separator that is itself a pattern -- runs of whitespace, a comma with optional spaces, any of several delimiters -- rather than one fixed character."
+  why: "a sregex_token_iterator with submatch -1 splits on the pattern directly, where a char-by-char split needs its own state machine to collapse runs and handle the optional spaces."
+  signal: "a hand-rolled split that special-cases multiple or variable-width delimiters instead of a single character"
+
+- problem: "A small internal tool recognizes a handful of simple line formats -- a directive, a key=value pair, a comment -- where writing a full parser is more than the job needs."
+  why: "a few regex patterns match the line shapes in far less code than a hand parser, as long as the grammar stays flat -- but reach for a real parser the moment it starts to nest."
+  signal: "a config reader matching a fixed, non-recursive set of line shapes with no nesting"
+
+- problem: "A developer tool searches files or a buffer for a user-supplied pattern -- find every TODO, every match of a query -- and reports each hit with its location."
+  why: "a sregex_iterator yields every match with its position for free, where a plain substring search only handles literal queries and cannot express the character classes or alternation the user typed."
+  signal: "a search feature offering only literal std::string::find where users expect pattern syntax"

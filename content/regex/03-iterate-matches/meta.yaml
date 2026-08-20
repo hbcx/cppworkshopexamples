@@ -1,0 +1,11 @@
+title: "Every match in the text with sregex_iterator"
+standard: "C++11"
+difficulty: 2
+summary: "regex_search finds only the first match; std::sregex_iterator steps through all non-overlapping matches in a string, giving a full smatch at each step so you can collect or process every occurrence."
+notes: "A single regex_search stops at the first hit, so to process all of them you either loop on the suffix by hand or -- cleaner -- use std::sregex_iterator. You build it from the subject range and the pattern; incrementing it advances to the next non-overlapping match, and a default-constructed iterator is the end. Dereferencing gives a std::smatch, so every capture group is available at each step, and m.position() tells you where in the subject the match sits. This is the tool for extract-all jobs: every IP address in a line, every tag in a document, every number in a report. Two notes: matches are non-overlapping and found left to right, and constructing the iterator holds references into the subject string, so the subject must stay alive for the whole loop (the same lifetime rule as smatch). For splitting instead of extracting, reach for the token iterator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::sregex_iterator", url: "https://en.cppreference.com/w/cpp/regex/regex_iterator" }

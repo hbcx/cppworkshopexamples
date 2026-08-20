@@ -1,0 +1,12 @@
+title: "Backreferences, anchors and word boundaries"
+standard: "C++11"
+difficulty: 3
+summary: "A backreference \\1 makes the pattern require the same captured text again (a doubled word); anchors ^ and $ pin a pattern to the string ends for whole-string validation; \\b matches a word boundary so you match a whole word, not a fragment."
+notes: "These are the pieces that make patterns precise. A backreference like \\1 inside the pattern (distinct from $1 in a replacement) refers back to what group 1 captured and demands the same text again -- so \\b(\\w+)\\s+\\1\\b finds a word repeated twice, a repeated-word linter in one line. Anchors ^ and $ match the start and end of the subject (in C++11 single-line mode, the whole string), which is how you turn a search pattern into a validator: ^[A-Za-z_]\\w*$ accepts a string only if the entire thing is a valid identifier. \\b is a zero-width word boundary between a word character and a non-word character, so \\bcat\\b matches cat in a cat. but not the cat inside category. To scan for every repeat, this example advances with m.suffix() -- the text after the current match -- and searches again, the manual version of the match iterator. Backreferences and lookahead are ECMAScript features; the POSIX grammars do not all support them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_search", url: "https://en.cppreference.com/w/cpp/regex/regex_search" }
+  - { name: "std::smatch", url: "https://en.cppreference.com/w/cpp/regex/match_results" }

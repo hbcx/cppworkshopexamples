@@ -1,4 +1,4 @@
 title: "CRTP"
 description: "The Curiously Recurring Template Pattern: a base class templated on its own derived class (Derived : Base<Derived>), so the base can static_cast to the derived type and call its methods at compile time -- static polymorphism with no vtable. Shown as the basic mechanic, static polymorphism versus virtual, injecting reusable behaviour as a mixin, and per-type static state -- alongside deriving from the wrong type, using CRTP where runtime polymorphism is needed, calling into the derived part before it is constructed, the cryptic error when a required method is missing, and the code bloat of one base copy per type."
-sort_order: 82
+sort_order: 83
 category: "C++ idioms"

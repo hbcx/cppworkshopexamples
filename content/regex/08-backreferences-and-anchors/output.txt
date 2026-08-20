@@ -1,0 +1,6 @@
+doubled word: the
+doubled word: sat
+'user_id' is an identifier : true
+'9lives' is an identifier  : false
+whole word 'cat' in 'a cat.'  : true
+whole word 'cat' in 'category': false

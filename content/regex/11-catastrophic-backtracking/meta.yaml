@@ -1,0 +1,11 @@
+title: "Anti-pattern: catastrophic backtracking (ReDoS)"
+standard: "C++11"
+difficulty: 3
+summary: "A pattern with a quantifier over a group that itself repeats a quantified atom -- (a+)+ -- can make the backtracking engine try exponentially many ways to match before failing, so a short input hangs for seconds; on user input that is a denial-of-service."
+notes: "std::regex uses a backtracking engine, and some patterns let it explore an exponential number of match attempts. The classic shape is a quantifier applied to a group that repeats a quantified atom -- (a+)+, (a*)*, (.*)* -- where the same run of characters can be divided among the inner and outer repeats in 2^N ways. As long as the string matches, one split is found quickly; the blow-up happens on input that ALMOST matches, because the engine must try every split before it can report failure. A few dozen characters can freeze the thread for seconds or minutes. When the pattern and the input both come from outside, this is a real denial-of-service vector (ReDoS). We do not run the bad pattern here on purpose. The fixes: rewrite to a single quantifier that describes the same language (^a+$ instead of ^(a+)+$), avoid overlapping nested repeats, bound the input length before matching, and treat any pattern built from or run against untrusted input as suspect. When the format is simple, a hand-written scan has predictable linear cost and no backtracking at all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_match", url: "https://en.cppreference.com/w/cpp/regex/regex_match" }

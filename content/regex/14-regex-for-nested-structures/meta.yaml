@@ -1,0 +1,11 @@
+title: "Anti-pattern: regex for nested or recursive structures"
+standard: "C++11"
+difficulty: 3
+summary: "Regular expressions cannot count matching pairs, so they cannot find the balanced group in nested input -- greedy .* grabs from the first open to the LAST close, lazy .*? stops at the first close, and neither is the outermost balanced span."
+notes: "A regular language has no memory of how deep it is, so a regex cannot match balanced, nested constructs -- brackets inside brackets, tags inside tags, JSON, HTML. The example shows a brace-matcher that looks right on flat input and breaks the moment there is nesting: greedy \\{(.*)\\} runs to the last } and swallows the inner pair, while lazy \\{(.*?)\\} stops at the first } and cuts the group short. There is no flag that fixes this, because the limitation is in the model, not the syntax (some engines add a non-standard recursion feature; std::regex does not). This is the reason the internet says do not parse HTML with regex. Regex is the right tool for FLAT, token-level patterns -- a number, an identifier, a delimiter, a single tag in isolation. For anything that nests you need something that can count: a hand-written scan with a depth counter or an explicit stack, or a real parser generated from a grammar. Using a view or std::string scan with a counter is often both simpler and correct here."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::regex", url: "https://en.cppreference.com/w/cpp/regex/basic_regex" }
+detailed_tags:
+  - { name: "std::regex_search", url: "https://en.cppreference.com/w/cpp/regex/regex_search" }

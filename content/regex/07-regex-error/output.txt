@@ -1,0 +1,3 @@
+caught regex_error
+unbalanced parenthesis : true
+valid pattern on '(closed)' : true

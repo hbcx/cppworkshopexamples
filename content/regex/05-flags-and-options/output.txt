@@ -1,0 +1,4 @@
+icase 'color' in 'Color'      : true
+extended 'colou?r' on 'colour': true
+optimize on '555-1234'        : true
+nosubs -> extra groups kept   : 0
