@@ -1,0 +1,3 @@
+isKeyword("while") = true
+isKeyword("foo")   = false
+isKeyword(probe)    = true

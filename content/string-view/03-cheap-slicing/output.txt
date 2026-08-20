@@ -1,0 +1,6 @@
+[id] [name] [role] [city] 
+fields: 4
+  offset 0, len 2 -> id
+  offset 3, len 4 -> name
+  offset 8, len 4 -> role
+  offset 13, len 4 -> city

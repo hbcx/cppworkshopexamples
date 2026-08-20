@@ -1,5 +1,5 @@
 title: "Proxy"
 description: "Stand a surrogate in front of another object that shares its interface, to control access to it: the proxy looks like the real subject to the client but decides whether, when, and how the real call happens -- deferring creation until first use, checking permissions, representing a remote object, or serving a cached answer. Shown as the virtual proxy (lazy init), the protection proxy (access control), a smart-reference proxy via operator->, a caching proxy contrasted with Decorator, and a remote stub that hides the wire."
-sort_order: 65
+sort_order: 66
 category: "Design patterns"
 family: "Structural"

@@ -1,4 +1,4 @@
 title: "Interface Segregation Principle"
 description: "The fourth SOLID principle: no client should be forced to depend on methods it does not use -- split fat interfaces into small, client-specific roles. Shown as role interfaces a class implements only what it needs, depending on the narrowest interface that covers a need, composing a type from several small interfaces, and the compile-time version where a template requires exactly the operations it calls -- alongside the fat multi-function interface, one interface bundling unrelated method groups, the header coupling a fat interface forces, the giant test doubles it demands, the empty stubs partial implementers are forced to write, and the over-segregation that splits too far."
-sort_order: 53
+sort_order: 54
 category: "Design principles"

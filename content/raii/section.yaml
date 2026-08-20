@@ -1,4 +1,4 @@
 title: "RAII"
 description: "Resource Acquisition Is Initialization: tie a resource to an object's lifetime so the constructor acquires it and the destructor releases it -- making cleanup automatic and exception-safe for any resource, not just memory. Shown as the basic acquire-in-constructor/release-in-destructor mechanic, cleanup that runs on every exit path including exceptions, move-only ownership transfer, and a generic scope guard -- alongside the unnamed guard temporary that releases immediately, a copyable owner that releases twice, throwing from a destructor, the gap between acquiring a resource and the guard taking it, and putting fallible work only in a destructor where failure is silently lost."
-sort_order: 82
+sort_order: 83
 category: "C++ idioms"

@@ -1,4 +1,4 @@
 title: "constexpr / consteval"
 description: "Compile-time evaluation in C++: constexpr for code that can run at compile time or at run time, and consteval for code that must. Covers a constexpr function's dual nature, constexpr variables where a constant is required, constexpr literal types, consteval immediate functions for compile-time validation, constinit for constant initialization of globals, std::is_constant_evaluated to take a different path at compile time, and constexpr containers that build a table baked into the binary -- alongside the anti-patterns: assuming constexpr forces compile-time evaluation, mistaking const for constexpr, is_constant_evaluated inside if constexpr which is always true, and calling a consteval function with a run-time argument."
-sort_order: 89
+sort_order: 90
 category: "Generic programming"

@@ -1,5 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "string-view"
+  note: "The non-owning way to look at the same characters: pass and slice text with no copy and no allocation when a function only reads it -- go there for borrowing text, and for the dangling traps that borrowing brings."
 - slug: "move-semantics"
   note: "std::string is the textbook move type: moving one hands over its heap buffer in O(1) while a copy allocates, and it is the object most of those examples use to show moved-from state."
 - slug: "vectors"

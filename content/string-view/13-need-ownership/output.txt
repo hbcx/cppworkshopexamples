@@ -1,0 +1,4 @@
+length("borrow me") = 9
+could not open definitely-missing.cfg
+cached key = kept forever
+picked the owner wherever the value must outlive the call

@@ -1,4 +1,4 @@
 title: "std::counting_semaphore and std::binary_semaphore"
 description: "The C++20 counting semaphore: a permit counter that threads acquire and release, blocking when no permit is free. Unlike a mutex it has no owner, so one thread can release what another acquired, which makes it both a way to cap how many threads run a section at once and a plain cross-thread signal. std::binary_semaphore is the one-permit special case. Covers a binary semaphore as a one-way signal, a counting semaphore capping concurrency to N, an RAII acquire/release guard, try_acquire_for for a bounded wait, a bounded producer/consumer buffer built from two semaphores, and two binary semaphores taking strict turns -- alongside the anti-patterns of getting them wrong: using a semaphore as a mutex, leaking a permit by forgetting to release, releasing past the maximum (undefined behaviour), busy-waiting on try_acquire, and reaching for a semaphore where a latch, barrier, or future says the intent directly. Examples run under ThreadSanitizer on Linux/CI."
-sort_order: 103
+sort_order: 104
 category: "Concurrency"

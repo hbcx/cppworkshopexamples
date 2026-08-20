@@ -1,0 +1,13 @@
+title: "Heterogeneous lookup: find by view, build no key"
+standard: "C++17"
+difficulty: 3
+summary: "A std::map with the transparent comparator std::less<> lets find() accept a std::string_view directly, so looking up a std::string key from a view or a literal allocates no temporary std::string."
+notes: "A std::map<std::string,int> keyed by std::string normally forces every lookup argument into a std::string first: map.find(some_view) constructs a std::string from the view, allocates, compares, and throws it away. Declaring the map with the transparent comparator std::less<> (note the empty angle brackets) turns on heterogeneous lookup: find, count, lower_bound and equal_range become templates that accept anything comparable with the key, so a string_view or a literal is compared against the stored std::string keys with no temporary and no allocation. This is the standard fix for a hot lookup path that receives views. Two caveats: the type you pass must be order-comparable with the key (string_view vs std::string is, via the mixed operators), and for std::unordered_map the same idea needs a transparent hash AND is_transparent, which only arrived in C++20 -- the ordered std::map shown here works since C++14."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::less<>", url: "https://en.cppreference.com/w/cpp/utility/functional/less_void" }
+  - { name: "std::map::find", url: "https://en.cppreference.com/w/cpp/container/map/find" }

@@ -1,0 +1,7 @@
+first '/' at 0
+last  '/' at 14
+first '.' or '-': none
+basename = clang
+base == "clang" : true
+base <  "gcc"   : true
+under /usr : true

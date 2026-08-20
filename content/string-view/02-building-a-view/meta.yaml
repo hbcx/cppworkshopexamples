@@ -1,0 +1,12 @@
+title: "Building a view from anything that holds characters"
+standard: "C++17"
+difficulty: 1
+summary: "A string_view can be built from a std::string, a string literal, a char buffer, or a (pointer,length) pair -- and the sv literal keeps a length past an embedded NUL, where a const char* stops at the first NUL."
+notes: "Every way to make a std::string_view just records a pointer and a length; nothing is copied. From a std::string the conversion is implicit. From a string literal it counts characters up to the first NUL, so an embedded NUL cuts it short -- the operator sv (from std::string_view_literals) instead keeps the literals full length, which matters for binary or protocol data. From a raw buffer you pass the (pointer, length) constructor, which is the only way to view memory that is not null-terminated at all. A default-constructed view is empty and its data() may be null, while a view of an empty literal is empty with a non-null pointer -- so test emptiness with empty() or size(), never by comparing data() to null. Because a view owns nothing, all of these are cheap to build and cheap to copy: sizeof(string_view) is just the pointer and the length."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "sv string_view literal", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv" }
+  - { name: "std::string_view::empty", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/empty" }

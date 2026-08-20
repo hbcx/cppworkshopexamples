@@ -1,0 +1,3 @@
+key=[host] val=[localhost]
+key=[port] val=[8080]
+(no '=')

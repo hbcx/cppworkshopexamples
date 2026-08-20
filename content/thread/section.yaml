@@ -1,4 +1,4 @@
 title: "std::thread"
 description: "Starting and managing threads of execution. A std::thread runs a callable on a new OS thread the moment it is constructed; you then either join it (wait for it) or detach it (let it run on its own), and it must be one or the other before the object is destroyed. Covers creating and joining a thread, how arguments are copied (and std::ref to pass a real reference), collecting results through per-thread slots, join versus detach, why std::thread is move-only and how to keep threads in a container, sizing a pool with hardware_concurrency, and the C++20 jthread that joins itself -- alongside the anti-patterns of thread misuse. Examples run under ThreadSanitizer on Linux/CI."
-sort_order: 97
+sort_order: 98
 category: "Concurrency"

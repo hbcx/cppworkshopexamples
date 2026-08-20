@@ -1,0 +1,12 @@
+title: "Cheap slicing: substr and remove_prefix build no strings"
+standard: "C++17"
+difficulty: 2
+summary: "substr on a view returns another window into the same buffer in O(1), and remove_prefix walks that window forward -- so a tokenizer can split a string into fields without copying a single character."
+notes: "std::string::substr allocates and copies a fresh string every call; std::string_view::substr just returns a new pointer and length into the SAME memory, so it is O(1) and allocates nothing. Paired with remove_prefix (which moves the start of the window forward) this makes a zero-copy tokenizer: find the delimiter, take the field as a view with substr, then remove_prefix past the delimiter and repeat. The example splits a CSV line and then prints each tokens offset inside the original buffer to show the views really do point into it -- no per-field std::string is ever built. The only allocation here is the std::vector that holds the views. The catch is the usual one: the returned views are valid only while the source string stays alive and unchanged, so this is for processing a buffer in place, not for keeping the pieces around."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string_view::substr", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/substr" }
+  - { name: "std::string_view::remove_prefix", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/remove_prefix" }

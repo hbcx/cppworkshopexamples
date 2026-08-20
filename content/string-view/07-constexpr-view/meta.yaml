@@ -1,0 +1,12 @@
+title: "constexpr string tables that std::string cannot build"
+standard: "C++17"
+difficulty: 3
+summary: "std::string_view is a literal type with constexpr members, so a table of names and the searches over it can be evaluated at compile time -- something std::string cannot do before C++20 because its constructor allocates."
+notes: "Because a string_view is just a pointer and a length into data that already exists (string literals live for the whole program), it is a literal type: you can declare constexpr string_view values, put them in a constexpr std::array, and call its const members -- find, compare, ==, substr -- inside constexpr functions. The example builds a compile-time keyword table and answers isKeyword and firstSpace entirely with static_assert, so no lookup code runs at all; the same functions then work unchanged on a runtime view. std::string cannot back this: its constructor allocates, and allocation in a constant expression was not allowed until C++20 (and even then a std::string that escapes constant evaluation has limits). So for fixed sets of names -- keywords, enum labels, protocol tokens -- a constexpr array of string_view is the tool that turns the lookup table into read-only data with zero startup cost."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "constexpr", url: "https://en.cppreference.com/w/cpp/language/constexpr" }
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }

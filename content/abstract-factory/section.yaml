@@ -1,5 +1,5 @@
 title: "Abstract Factory"
 description: "One factory object creates a whole FAMILY of related products through several factory methods, so a client builds a matching set without naming a concrete class or being able to mix families -- with the anti-patterns where independent factory calls let families drift and a god factory switches on an enum in every method."
-sort_order: 56
+sort_order: 57
 category: "Design patterns"
 family: "Creational"

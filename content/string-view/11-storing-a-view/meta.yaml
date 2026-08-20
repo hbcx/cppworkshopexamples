@@ -1,0 +1,11 @@
+title: "Anti-pattern: storing a string_view in an object"
+standard: "C++17"
+difficulty: 3
+summary: "A string_view data member borrows its source for the whole life of the object, so if the source string dies first every later read dangles -- a value you keep must be owned (std::string), even if you accept it as a view."
+notes: "Passing a view across a call is safe because the callers argument is guaranteed alive for the duration of the call. STORING a view is a different promise: the member now has to stay valid for as long as the object does, and nothing keeps the underlying text alive that long. The classic bug is a struct with a std::string_view field constructed from a local or a temporary -- the moment that source goes out of scope the member points at freed memory, and it compiles cleanly and often seems to work while the bytes are briefly untouched. The fix is about ownership, not lifetime tricks: if the object must keep the text, the member is a std::string. You can still take the constructor argument as a string_view (so callers pass a std::string, a literal or a buffer for free) and copy it into the owning member once, as Label does here. Reach for a stored view only in a deliberately short-lived, non-owning type whose whole contract is that it must not outlive its source."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

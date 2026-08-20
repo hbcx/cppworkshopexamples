@@ -1,0 +1,12 @@
+title: "Designing a borrowing API: one signature for every caller"
+standard: "C++17"
+difficulty: 2
+summary: "A read-only function that takes std::string_view accepts a std::string, a string literal, and a raw char buffer with the same signature and no allocation at any call site -- the reason string_view is the default parameter type for text a function only inspects."
+notes: "Before string_view, a function that only read text had to choose: const std::string& forced every literal and char buffer caller to build a temporary std::string first, while const char* could not take a std::string without .c_str() and lost the length. A single std::string_view parameter accepts all of them -- std::string, literal, buffer -- by reference to the callers own bytes, so there is no conversion and no allocation on the way in. The config-line parser here shows the payoff: parseLine and its trim helper do all their work on views, splitting on = and stripping blanks by moving the window, and never allocate. Use string_view for parameters a function only reads during the call. Do not use it as a return type for data the function produced locally, and do not store it -- those are the dangling traps covered later. And if the callee needs a null-terminated C string, string_view is the wrong choice (see the ownership anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string_view::find_first_not_of", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/find_first_not_of" }
+  - { name: "std::string_view::remove_suffix", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/remove_suffix" }

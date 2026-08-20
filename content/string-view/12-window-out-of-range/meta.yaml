@@ -1,0 +1,12 @@
+title: "Anti-pattern: shrinking the window out of range"
+standard: "C++17"
+difficulty: 3
+summary: "substr throws out_of_range when the POSITION is past the end but silently clamps an oversized LENGTH, while remove_prefix and remove_suffix check nothing at all -- shrinking past size() is undefined behaviour, so clamp before you shrink."
+notes: "The two ways to narrow a view behave differently, and mixing them up is a real bug. substr(pos, count) validates pos: if pos > size() it throws std::out_of_range, so a bad position is a catchable error, not silent corruption; but count is clamped to what remains, so substr(4, 100) on a 6-char view just gives the last two characters. remove_prefix(n) and remove_suffix(n) are the opposite: they are documented as undefined behaviour when n > size(), and they do NOT check -- they simply advance the pointer or cut the length, so an oversized shrink walks the window off the buffer and every later read is undefined. The trap is code that computes a shrink amount from a search or arithmetic that can exceed the size (a delimiter that was not found, an off-by-one). The fix is to clamp with std::min(n, sv.size()) before calling remove_prefix / remove_suffix, or to prefer substr when you want the bounds check. Treat remove_prefix/remove_suffix as fast and unchecked -- yours to keep in range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string_view::remove_prefix", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/remove_prefix" }
+  - { name: "std::string_view::substr", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/substr" }

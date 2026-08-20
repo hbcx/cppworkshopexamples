@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "strings"
+  note: "The owning counterpart: when the text must be kept, modified, or handed to a C API as a null-terminated string, you need a std::string -- go there for building, editing, and owning text."
+- slug: "maps"
+  note: "Where the heterogeneous-lookup example pays off: a std::map with std::less<> lets a string_view find a std::string key with no temporary, so go there for the ordered container whose lookups this speeds up."
+- slug: "subsequence-search"
+  note: "The algorithms behind a view's search members: find is std::search over characters and find_first_of scans for any of a set, so go there for pattern search and delimiter scanning on ranges."

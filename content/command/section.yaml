@@ -1,5 +1,5 @@
 title: "Command"
 description: "Package a request as an object -- bind a receiver and its arguments behind one execute() call -- so requests can be stored, queued, logged, replayed, undone, and triggered by an invoker that knows nothing about what they do. Shown as the classic command/receiver/invoker split, a command as a std::function callable, queuing and macro commands, and execute-plus-undo with a history and redo stack."
-sort_order: 71
+sort_order: 72
 category: "Design patterns"
 family: "Behavioral"

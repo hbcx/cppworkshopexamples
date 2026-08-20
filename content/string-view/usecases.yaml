@@ -1,0 +1,20 @@
+# Where to reach for std::string_view -- problem -> tool, with the alternative each beats.
+- problem: "A service tokenizes large in-memory text -- log lines, CSV rows, protocol frames -- into many fields that are only read, not modified."
+  why: "string_view::substr slices each field in O(1) with no allocation, where std::string::substr allocates and copies a fresh string per field, turning a scan into a storm of tiny heap allocations."
+  signal: "a split or parse loop calling std::string::substr for pieces that are only inspected and then discarded"
+
+- problem: "A read-only text helper -- log a line, hash it, validate it -- called throughout the codebase with std::string values, string literals, and slices of bigger buffers alike."
+  why: "one std::string_view parameter binds all three with no conversion, where const std::string& forces every literal or char-pointer argument into a temporary std::string at the call site."
+  signal: "a function overloaded on const std::string& and const char*, or a read-only callee that still takes std::string by value"
+
+- problem: "A fixed set of names checked over and over -- language keywords, enum labels, protocol tokens -- that never changes at runtime."
+  why: "a constexpr array of string_view is read-only data with the lookup resolvable at compile time, where a static std::map or std::unordered_map of std::string keys allocates every key at startup and searches at runtime."
+  signal: "a static std::map or unordered_map of literal string keys built once and only ever read"
+
+- problem: "A hot lookup path into a std::string-keyed map that is queried with views or literals -- a request router, a header table, a symbol table."
+  why: "a transparent std::less<> comparator lets find accept a string_view directly, where a default std::map constructs a throwaway std::string key on every single lookup."
+  signal: "map.find(std::string(sv)) at a lookup site, or a profile showing string allocations that exist only to be a key"
+
+- problem: "Reading fields out of a long-lived buffer that outlives the parse -- a memory-mapped file, a received network packet, a static blob."
+  why: "a view records a pointer and length into the buffer that already holds the bytes, where copying each field into a std::string duplicates data the buffer is already keeping alive."
+  signal: "fields copied out of a mmap region or packet buffer into std::string members that are only read"

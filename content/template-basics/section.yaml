@@ -1,4 +1,4 @@
 title: "Template basics"
 description: "The foundations the rest of generic C++ is built on: one definition that works for many types. Covers function templates and argument deduction, class templates, when deduction fails and you supply arguments explicitly, non-type template parameters, default template arguments, full and partial specialization, template template parameters, alias and variable templates, class template argument deduction with a deduction guide, dependent type names with typename, the template disambiguator for a dependent member template, and how an auto function parameter is really a template -- alongside the anti-patterns: a template definition left in a .cpp that fails to link, trying to partially specialize a function template, a function-template specialization that overload resolution never picks, and templating code that a plain function would serve better."
-sort_order: 87
+sort_order: 88
 category: "Generic programming"

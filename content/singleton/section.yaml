@@ -1,5 +1,5 @@
 title: "Singleton"
 description: "Guarantee a type has exactly one instance with a global access point -- the modern C++ Meyers Singleton (a thread-safe function-local static), a realistic settings store, and the anti-patterns that make Singleton the most criticised pattern: hand-rolled lazy init and the hidden global dependency that dependency injection removes."
-sort_order: 57
+sort_order: 58
 category: "Design patterns"
 family: "Creational"

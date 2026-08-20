@@ -1,4 +1,4 @@
 title: "Open-Closed Principle"
 description: "The second SOLID principle: software entities should be open for extension but closed for modification -- new behaviour arrives as new code, not edits to code that already works. Shown as extending a report by adding a Shape subclass, injecting the varying rule as a callable, a registry the dispatcher never edits, and compile-time policies -- alongside the type-tag switch, editing tested code to extend it, boolean-flag explosion, an incomplete extension seam, and the speculative generality that over-applies the principle."
-sort_order: 51
+sort_order: 52
 category: "Design principles"

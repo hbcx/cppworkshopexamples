@@ -1,4 +1,4 @@
 title: "Concepts"
 description: "C++20 concepts: named, reusable constraints on template parameters, so generic code states what it needs and rejects wrong types at the call site with a clear message instead of a wall of instantiation errors. Covers the mechanic, the four kinds of requirement in a requires-expression, the standard library concepts, composing concepts with and/or/not, every place a constraint can be written, constraint-based overloading and subsumption, concepts on classes and members, and a concept used as a compile-time bool -- alongside the anti-patterns: a concept that checks syntax but not meaning, over-constraining that rejects valid types, an unconstrained auto that constrains nothing, and overloads whose constraints do not subsume and go ambiguous."
-sort_order: 88
+sort_order: 89
 category: "Generic programming"

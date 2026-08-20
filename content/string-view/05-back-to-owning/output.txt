@@ -1,0 +1,3 @@
+owned = ada (size 3)
+"borrowed literal"
+box = ada

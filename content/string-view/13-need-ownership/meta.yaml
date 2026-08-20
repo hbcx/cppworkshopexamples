@@ -1,0 +1,12 @@
+title: "Anti-pattern: a view where you needed to own the text"
+standard: "C++17"
+difficulty: 3
+summary: "string_view is for reading borrowed text during a call; reach for it where you actually need to keep the value or hand a C API a null-terminated string and you get a dangle or a wrong pointer -- the fix is to own a std::string."
+notes: "string_view has become the reflexive parameter type, but it answers exactly one question well: I only READ this text, and only for the duration of this call. Two situations break that contract. First, an interface that needs a real C string -- fopen, exec, any const char* API -- cannot take a view, because a view is not guaranteed null-terminated (its own anti-pattern); passing path.data() there is a bug, and the honest signature takes a const std::string& (or std::string) so c_str() is available. Second, a value the code KEEPS -- stored in a container, cached, returned for later use -- must outlive the call, so it has to be owned; a returned or stored view dangles. This example lays the choice out as a rule of thumb: read during the call takes string_view; read but need a C string takes const std::string&; store or keep takes std::string by value and moves it into place, which lets an rvalue caller skip the copy. The mistake is treating string_view as a free replacement for std::string everywhere, instead of the borrowing tool it is."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "std::string::c_str", url: "https://en.cppreference.com/w/cpp/string/basic_string/c_str" }

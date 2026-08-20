@@ -1,0 +1,5 @@
+view = clang (size 5)
+printf("%s") on data(): clang-format
+strlen(data()) = 12 but view size = 5
+printf on copy.c_str(): clang
+strlen(c_str()) = 5

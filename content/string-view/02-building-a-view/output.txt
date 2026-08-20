@@ -1,0 +1,6 @@
+a = from a std::string  size 18
+b = from a literal  size 14
+c = abcd  size 4
+d size = 12, but const char* stops at NUL: 8
+e.empty() = true, e.data() == nullptr : true
+f.empty() = true, f.data() == nullptr : false

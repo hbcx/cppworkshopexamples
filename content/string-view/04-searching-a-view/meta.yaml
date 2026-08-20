@@ -1,0 +1,12 @@
+title: "Searching and comparing a view"
+standard: "C++17"
+difficulty: 2
+summary: "A string_view carries the same read-only search interface as std::string -- find, rfind, find_first_of, compare and the comparison operators -- so you can locate and compare substrings without owning or copying the text."
+notes: "std::string_view has every const member that inspects text: find and rfind for a character or substring, find_first_of and find_last_of for a set of characters, compare, and the full set of comparison operators. All of them return offsets or bools and none of them copy, so parsing a path or a header is just a few finds plus substr, with the result still a view into the original buffer. Comparisons mix with string literals directly, because a const char* converts to a string_view, so base == \"clang\" needs no std::string. starts_with and ends_with are the obvious helpers, but they were added to string_view in C++20; before that you write the one-line prefix test shown here (compare substr(0, n) to the prefix). Keep in mind that these are byte operations, not Unicode-aware ones -- find works on chars, not code points."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string_view::find", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/find" }
+  - { name: "std::string_view::compare", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/compare" }

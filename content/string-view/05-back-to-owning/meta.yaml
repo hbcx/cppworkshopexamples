@@ -1,0 +1,12 @@
+title: "Crossing back to an owning std::string"
+standard: "C++17"
+difficulty: 2
+summary: "A view does not implicitly convert to std::string -- you ask for the copy explicitly with std::string(sv), append(sv) or assign(sv) -- which marks exactly the point where borrowing ends and ownership (and an allocation) begins."
+notes: "The conversion std::string_view -> std::string is deliberately explicit: since it allocates and copies, the language makes you write it so the cost is visible. std::string owned(sv) constructs a copy; s.append(sv), s += sv and s.assign(sv) copy a view into an existing string (all gained string_view overloads in C++17). The design pattern that falls out of this is borrow in, own out: take parameters by string_view so callers pay nothing, do the read-only work on views, and materialize a std::string only at the boundary where the result must outlive the call -- what the quote() function here does when it builds and returns a new string. Reserve first when you know the final size, as shown, to make it a single allocation. The reverse direction (std::string -> std::string_view) is implicit and free, because it only records a pointer and a length."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+  - { name: "std::string::append", url: "https://en.cppreference.com/w/cpp/string/basic_string/append" }

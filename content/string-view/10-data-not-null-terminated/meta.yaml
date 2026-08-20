@@ -1,0 +1,11 @@
+title: "Anti-pattern: handing view.data() to a C API"
+standard: "C++17"
+difficulty: 3
+summary: "A string_view is not guaranteed null-terminated, so passing view.data() to a function that stops at NUL (printf %s, strlen, fopen) reads past the view into whatever follows -- a wrong result at best, undefined behaviour at worst."
+notes: "std::string_view stores a pointer and a length; it does NOT guarantee a NUL after the last character, because the view is often a slice out of the MIDDLE of a bigger buffer. data() returns that raw pointer with no terminator promise, so any C interface that finds the end by scanning for a NUL -- printf with %s, strlen, strcpy, fopen -- ignores the views length and reads until it happens to hit a zero byte. The example takes a view of the first 5 chars of clang-format and shows strlen(data()) returning 12, not 5, because the scan runs past clang into -format; it is defined only because those bytes belong to the same NUL-terminated std::string, but a view into a non-terminated char array is genuine undefined behaviour. The fix is to stop pretending a view is a C string: either copy exactly the view into a std::string and pass c_str(), or use an API that takes a pointer AND a length (fwrite, std::string_view-aware calls) so the terminator never matters."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string_view", url: "https://en.cppreference.com/w/cpp/string/basic_string_view" }
+detailed_tags:
+  - { name: "std::string_view::data", url: "https://en.cppreference.com/w/cpp/string/basic_string_view/data" }
