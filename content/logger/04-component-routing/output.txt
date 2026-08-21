@@ -1,0 +1,14 @@
+=== all (global) ===
+2026-08-21 14:05:00.000 #0 [INFO|minor|storage] saving blob-42 (8192 bytes) (storage.cpp:11 void storage::save)
+2026-08-21 14:05:00.250 #1 [ERROR|CRITICAL|storage] object blob-42 exceeds the quota (storage.cpp:13 void storage::save)
+2026-08-21 14:05:00.500 #2 [INFO|minor|network] connecting to 10.0.0.9:443 (network.cpp:8 void network::connect)
+2026-08-21 14:05:00.750 #3 [ERROR|CRITICAL|network] handshake with 10.0.0.9 failed (network.cpp:9 void network::connect)
+=== network.log ===
+2026-08-21 14:05:00.500 #2 [INFO|minor|network] connecting to 10.0.0.9:443 (network.cpp:8 void network::connect)
+2026-08-21 14:05:00.750 #3 [ERROR|CRITICAL|network] handshake with 10.0.0.9 failed (network.cpp:9 void network::connect)
+=== storage.log ===
+2026-08-21 14:05:00.000 #0 [INFO|minor|storage] saving blob-42 (8192 bytes) (storage.cpp:11 void storage::save)
+2026-08-21 14:05:00.250 #1 [ERROR|CRITICAL|storage] object blob-42 exceeds the quota (storage.cpp:13 void storage::save)
+=== alerts (critical only) ===
+2026-08-21 14:05:00.250 #1 [ERROR|CRITICAL|storage] object blob-42 exceeds the quota (storage.cpp:13 void storage::save)
+2026-08-21 14:05:00.750 #3 [ERROR|CRITICAL|network] handshake with 10.0.0.9 failed (network.cpp:9 void network::connect)

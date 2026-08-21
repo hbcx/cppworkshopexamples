@@ -1,4 +1,6 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "logger"
+  note: "std::format as the message layer of a real component: the logging library formats every line with a compile-time-checked format string and pairs it with std::source_location for the call site -- go there to see the variadic-format-plus-location trick and a full logger built on it."
 - slug: "strings"
   note: "The type std::format returns and format_to fills: go there for owning, editing and growing the std::string you just built, and for the older to_string and stream ways this replaces."
 - slug: "chrono"

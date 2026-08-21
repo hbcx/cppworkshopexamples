@@ -1,0 +1,14 @@
+title: "Compile-time level, severity and component"
+standard: "C++20"
+difficulty: 3
+summary: "One function template log<Level, Severity, Component>(fmt, args...) with the kind and severity as compile-time parameters, format-checked arguments, an automatic call site, and a level below the minimum removed by the compiler."
+notes: "This is the call API. Level, severity and component are non-type template parameters, so they are fixed at compile time and cost nothing at runtime, and a wrong one is a compile error rather than a bad string. The message is a std::format string whose arguments are checked at compile time. Two things make the ergonomics work. First, the call site is captured automatically: the format string is wrapped in a FormatWithLocation whose consteval constructor defaults a std::source_location::current() argument, which is the standard way to sneak a call-site location into a variadic function (a plain trailing default cannot follow a parameter pack). std::type_identity_t keeps that wrapper in a non-deduced context so the pack still deduces from the real arguments. Second, a compile-time minimum level gates output: if constexpr drops any call below it, so a release build with min_level = Info builds the debug calls away to nothing -- note this removes the formatting and the emit, but the arguments are still evaluated at the call site, so a truly zero-cost debug log (skipping argument evaluation too) needs a macro form. On the component: standard C++ has no reflection, so it cannot read the file path or namespace to fill the component in for you. Pass it as a template argument, or bind it once per file with a small wrapper -- log_storage(...) rather than log<..., Component::Storage>(...) -- which example 04 does. Such a wrapper keeps the correct call site: the location is captured by the FormatWithLocation argument where it is built, at the real call site, not inside the wrapper, so forwarding it through one more function does not move it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+  - { name: "std::format_string", url: "https://en.cppreference.com/w/cpp/utility/format/basic_format_string" }
+detailed_tags:
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+  - { name: "std::type_identity", url: "https://en.cppreference.com/w/cpp/types/type_identity" }
+  - { name: "if constexpr", url: "https://en.cppreference.com/w/cpp/language/if" }

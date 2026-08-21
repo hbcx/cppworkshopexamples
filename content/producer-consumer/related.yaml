@@ -1,4 +1,6 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "logger"
+  note: "This queue put to work in a real component: the logging library uses the bounded blocking queue as its async backbone -- logging threads are the producers, one background writer is the consumer -- so go there to see the pattern applied end to end."
 - slug: "condition-variable"
   note: "The primitive this recipe is built from: the wait-with-predicate handoff, notify_one versus notify_all, wait_for, and the classic ways to get each one wrong -- go there to understand the pieces before assembling them into a queue here."
 - slug: "mutex"

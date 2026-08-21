@@ -1,0 +1,3 @@
+2026-08-21 14:05:00.000 #0 [INFO|minor|network] listening on port 8080 (main.cpp:15 int main)
+2026-08-21 14:05:00.250 #1 [ERROR|CRITICAL|storage] disk sda1 at 100% (main.cpp:16 int main)
+2026-08-21 14:05:00.500 #2 [INFO|major|general] startup complete (main.cpp:28 int main)

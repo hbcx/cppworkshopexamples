@@ -1,0 +1,32 @@
+# Where to reach for a logger built this way -- problem -> tool.
+- problem: "An application must log to different places in different environments: a local file in development, a network collector or syslog in production, and nothing (or an in-memory buffer) in tests."
+  why: "a LogSink interface makes the destination a runtime choice -- swap or add a sink at startup with no change to the thousands of call sites, where a logger that writes to a fixed std::ofstream forces an edit and a rebuild to retarget."
+  signal: "log calls that write to a hard-coded std::ofstream or std::cout, or an #ifdef around the logging destination per build"
+
+- problem: "Logging sits on a request or frame path, but formatting the line and writing it to a file or socket is far slower than the work being logged and must not add that latency."
+  why: "an async logger pushes a record onto a queue and returns, moving the format and I/O onto one background thread, where logging synchronously blocks the request thread on the disk or the network for every line."
+  signal: "a std::ofstream or socket write performed inline in business code, often under a global logging mutex that serialises the worker threads"
+
+- problem: "A large system's subsystems each need their own log file for debugging, while operators still want one combined log of everything."
+  why: "per-component routing sends each record to its component's sink AND to the global sink at once, so one call populates both, where a separate logger object per subsystem duplicates config and loses the combined view."
+  signal: "a separate logger instance constructed per module, or grep pipelines used after the fact to split one flat log back into per-subsystem files"
+
+- problem: "Debug logging is wanted in development but must cost nothing in a release build -- not even the cost of formatting a line that is then discarded by a runtime level check."
+  why: "making the level a template parameter lets if constexpr (or a macro) remove a below-threshold call at compile time, where a runtime if (level >= current) still evaluates arguments and pays a branch on every call."
+  signal: "a runtime level comparison guarding every log statement, or debug strings still being built and formatted before being dropped"
+
+- problem: "Every log line should say where it came from -- file, line, and function -- without a developer hand-writing __FILE__ and __LINE__ at each call, which drifts and gets copy-pasted wrong."
+  why: "a defaulted std::source_location::current() argument captures the call site automatically and correctly, where __FILE__/__LINE__ macros are easy to forget, wrong after a copy-paste, and impossible to pass through a normal helper function."
+  signal: "__FILE__ and __LINE__ threaded manually through logging calls, or log lines that do not say where they came from"
+
+- problem: "Most logs go to a file, but critical events must also reach an alerting channel -- a pager, an ops webhook, a separate high-priority stream -- without every call site knowing about it."
+  why: "routing by severity sends critical records to an extra sink on top of their normal destinations, decided in one place, where sprinkling if (critical) alert(...) through the code duplicates the policy and is forgotten at some call sites."
+  signal: "ad-hoc alert or paging calls next to some but not all critical log statements"
+
+- problem: "Tests need to assert that code logged the right thing -- that an error was reported, at the right severity, for the right component."
+  why: "an in-memory sink implementing the same LogSink interface captures records for the test to inspect, where a logger hard-wired to a file forces tests to read and parse files or to not check logging at all."
+  signal: "tests that read a log file back to assert on it, or logging behaviour left untested because it only goes to a file"
+
+- problem: "One event needs to reach several destinations at once -- the console for a developer watching, a file for history, and a network collector for aggregation -- from a single call."
+  why: "the logger loops over a list of sinks, so one call reaches all of them, where a chain of separate write-to-console then write-to-file then send-to-network calls at each site is verbose and drifts out of sync."
+  signal: "the same message written to the console and a file (and maybe a socket) by separate statements at the call site"

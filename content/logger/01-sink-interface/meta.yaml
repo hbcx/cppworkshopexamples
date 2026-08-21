@@ -1,0 +1,13 @@
+title: "The sink interface: pluggable log destinations"
+standard: "C++20"
+difficulty: 2
+summary: "A LogRecord, a LogSink interface, and a logger that fans each record out to every sink -- so where a log goes (file, socket, in-memory) is chosen by adding a class, not by editing the calling code."
+notes: "The first decision in a logger is the one that lets everything else stay flexible: separate WHAT is logged (a LogRecord: level, severity, component, message, and the source location) from WHERE it goes (a LogSink). LogSink is a tiny virtual interface -- write(record) and flush() -- so a new destination is a new class, nothing more. StreamSink covers the common case by writing formatted lines to any std::ostream, which is a file through std::ofstream, the console through std::cout, or a std::ostringstream in a test. The demo adds a second, custom NetworkSink to show the extension point: it frames each line and would put it on a socket. Both sinks are registered on one Logger, which simply loops over them, so a single call reaches every destination at once. This logger is synchronous and single-threaded on purpose -- example 02 gives it an ergonomic compile-time-typed call API, example 03 moves the writing onto a background thread, and example 04 adds per-component routing. Every record carries the time it happened: the logger reads its clock when it builds the record. That clock is a dependency defaulting to std::chrono::system_clock::now, and the demos inject a deterministic StepClock (a fixed start plus a fixed step) so the timestamps in the output are reproducible -- the same trick makes time-dependent logging testable. The source location is captured for free by a defaulted std::source_location::current() argument, and the basename helper keeps the output independent of the build path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "std::ostream", url: "https://en.cppreference.com/w/cpp/io/basic_ostream" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

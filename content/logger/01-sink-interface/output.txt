@@ -1,0 +1,6 @@
+--- file sink ---
+2026-08-21 09:30:00.000 #0 [INFO|minor|general] service starting (main.cpp:39 int main)
+2026-08-21 09:30:00.250 #1 [ERROR|CRITICAL|network] connection refused (main.cpp:40 int main)
+--- network sink (bytes it would send) ---
+2026-08-21 09:30:00.000 #0 [INFO|minor|general] service starting (main.cpp:39 int main)
+2026-08-21 09:30:00.250 #1 [ERROR|CRITICAL|network] connection refused (main.cpp:40 int main)

@@ -1,0 +1,14 @@
+title: "The full logger: components, global, and routing"
+standard: "C++20"
+difficulty: 3
+summary: "Everything wired: two subsystems in their own files log through bound log_storage/log_network front-ends into one application-installed logger that routes each record to global, per-component, and critical sinks at once."
+notes: "This is the recipe assembled into a shape you lift into a program. It pulls together three things. Routing: the RoutingLogger is the async logger from example 03 with a richer dispatch -- a set of global sinks that see everything, a map from component to that component's own sink, and a critical list -- so one critical network record lands in the global log, the network log, and the alert channel at the same time; that is how each subsystem gets its own file while operators still get one combined log and a separate stream that pages when something is critical. A global logger: the application creates one RoutingLogger and installs it with set_global_logger, so subsystems log without being handed the object; the owner (main) controls its lifetime, which sidesteps the static-destruction ordering trap a Meyers singleton would bring, where the background thread can outlive objects it still uses at program exit. Per-component front-ends: log_storage and log_network bind the component once, so a subsystem writes log_storage(...) instead of repeating log<..., Component::Storage>(global_logger(), ...), while the generic form stays available; the wrappers keep the true call site because the location is captured by the FormatWithLocation where the argument is built, not inside the wrapper. Because the storage and network components live in their own .cpp files, source_location tags each record with the file it really came from. The demo uses a single producer so the order is deterministic; swap the in-memory streams for std::ofstreams and add your own sinks or components to fit your system."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

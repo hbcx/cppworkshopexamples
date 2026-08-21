@@ -1,0 +1,7 @@
+--- written by the background thread ---
+2026-08-21 14:05:00.000 #0 [INFO|minor|general] startup complete (main.cpp:32 int main)
+2026-08-21 14:05:00.250 #1 [INFO|minor|network] bound to port 8080 (main.cpp:33 int main)
+2026-08-21 14:05:00.500 #2 [ERROR|CRITICAL|storage] write failed: ENOSPC (main.cpp:34 int main)
+
+--- concurrent logging ---
+records delivered: 2000 of 2000  OK

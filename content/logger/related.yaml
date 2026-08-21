@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "producer-consumer"
+  note: "The engine under the async logger: the bounded blocking queue and the background-worker pattern the logging threads feed into are exactly that recipe -- go there for the queue, the graceful shutdown, and the thread pool it also powers."
+- slug: "format"
+  note: "How each log line is built: the message uses std::format with a compile-time-checked format string and its arguments -- go there for the format-spec mini-language, writing a formatter for your own types, and the L option for locale-aware fields."
+- slug: "condition-variable"
+  note: "The primitive the queue is built on: the wait-with-predicate handoff and notify that let the worker sleep until a record arrives -- go there to understand the blocking that makes the async logger cheap when idle."

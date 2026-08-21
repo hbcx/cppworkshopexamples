@@ -1,0 +1,14 @@
+title: "Logging on a background thread"
+standard: "C++20"
+difficulty: 3
+summary: "The log call formats a record and pushes it onto the bounded queue and returns; a single worker thread does the sink writes, so the slow I/O leaves the caller's hot path -- the producer-consumer recipe applied to logging."
+notes: "Writing a log line means formatting text and then a file or socket write, and that write is far too slow to sit on a request path. The fix is the producer-consumer pattern: the logging threads are producers, one background thread is the consumer. A log call builds the record and pushes it onto the BoundedBlockingQueue from that recipe, then returns; the worker pops records and writes them to the sinks. So many threads can log at once, the writes are serialised through one consumer (no interleaved half-lines, no lock around each sink), and a burst is absorbed by the bounded queue rather than by stalling the callers. Two design points keep it correct under ThreadSanitizer: the sinks are fixed at construction and touched only by the worker, so nothing guards them, and the queue is the single synchronised handoff; and shutdown closes the queue so the worker drains every queued record before it joins, so nothing logged is lost on exit (the destructor calls shutdown too). The demo shows both halves: a single-producer part whose output is fully deterministic, and a four-thread part where only the delivered COUNT is checked because the interleaving -- and so the line order -- is not deterministic. Each record carries its event time, read from the logger's clock when the record is built (before it waits in the queue), so a delayed write still shows when the event actually happened; the clock is injectable and the single-producer demo uses a deterministic one for reproducible timestamps, while the concurrent part keeps the default system_clock. A real logger would add the thread id here too."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }

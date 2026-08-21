@@ -1,0 +1,4 @@
+title: "A logging library"
+description: "A complete, adaptable logging library built from the ground up: pluggable output sinks behind one interface (file, socket, or your own class), a compile-time-typed call API where the level, severity and component are template parameters and the call site is captured automatically with std::source_location, an asynchronous logger that does the slow writes on a background thread using the producer-consumer queue, and per-component routing that sends one record to several destinations at once. A worked recipe you extend by adding a sink class or a component, not a tour of one feature."
+sort_order: 113
+category: "Recipes"
