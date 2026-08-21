@@ -1,4 +1,4 @@
 title: "std::any"
 description: "A single value of any type, with the type erased and recovered at runtime: any holds one object of an arbitrary type decided at assignment, reports it via type(), and hands it back only to a matching std::any_cast. Covers storing and retrieving a value, the two any_cast forms -- the value cast that throws bad_any_cast and the pointer cast that returns null on a mismatch -- the exact-type rule with no conversions, reassigning to a different type and resetting, constructing in place with make_any and in_place_type, and a heterogeneous store (vector of any) dispatched on type(). Plus the misuses: casting to the wrong or a merely-convertible type, any where a closed variant fits, any as a substitute for a real interface, and modifying the copy any_cast returns instead of the stored value."
-sort_order: 51
+sort_order: 52
 category: "Vocabulary types"

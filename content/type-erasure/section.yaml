@@ -1,4 +1,4 @@
 title: "Type erasure"
 description: "Type erasure: a value type that can hold any object satisfying a required interface, dispatching at run time through a hidden abstract base, without the held type inheriting from anything and without templating the holder. Shown as the hand-rolled Concept/Model mechanic, std::function as the standard library's ready-made version, adding value semantics with clone(), and non-intrusive dispatch through a free function so you can wrap types you cannot modify -- alongside the anti-patterns: a missing virtual destructor, a shallow copy that double-frees, reaching for erasure where a template would do, and downcasting back to the concrete type which defeats the whole idiom."
-sort_order: 86
+sort_order: 87
 category: "C++ idioms"

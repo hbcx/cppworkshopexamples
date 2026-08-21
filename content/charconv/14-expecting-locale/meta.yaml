@@ -1,0 +1,12 @@
+title: "Anti-pattern: expecting locale-aware conversion"
+standard: "C++17"
+difficulty: 3
+summary: "charconv is locale-independent by contract: the decimal point is always '.', there is no grouping, and a comma decimal will not parse -- do not use it for human-facing localized text."
+notes: "This is less a bug than a mismatch of expectations, but it bites people migrating from std::stringstream, where the global locale silently changes the output. <charconv> never consults any locale: to_chars always writes '.' as the decimal point and never inserts thousands separators, and from_chars only accepts '.' -- feed it a German-style \"3,14\" and it reads 3 and stops at the comma. That is by design and is the whole reason the library exists: machine-readable formats (files, wire protocols, JSON) must be byte-for-byte the same on every machine, and a locale-sensitive conversion corrupts them the moment the program runs somewhere else. The fix is to pick the right tool for the job: use charconv for machine formats, and when you genuinely want a localized string for a human (grouped thousands, a locale's decimal mark) use std::format with the L option, or the <locale> num_put / num_get facets."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::chars_format", url: "https://en.cppreference.com/w/cpp/utility/chars_format" }

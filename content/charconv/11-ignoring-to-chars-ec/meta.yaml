@@ -1,0 +1,11 @@
+title: "Anti-pattern: ignoring the to_chars error code"
+standard: "C++17"
+difficulty: 3
+summary: "When the buffer is too small to_chars returns value_too_large and writes nothing usable, so code that assumes success and reads ptr gets a wrong length over unspecified bytes."
+notes: "to_chars can fail: if the range cannot hold the result it returns { last, value_too_large } and leaves the buffer contents unspecified. Code that ignores ec and computes a length from ptr walks straight into the trap, because on failure ptr is set to last -- so ptr - buf is the whole buffer size, not the digit count, and the bytes it covers were never written. Reading them prints garbage, and because the contents are unspecified the garbage can even differ between compilers. The fix is one branch: check ec == std::errc{} before you trust ptr, and on value_too_large grow the buffer (or report the error). This example does not read the unspecified bytes at all -- it shows the misleading length the wrong code would use, then the correct check."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

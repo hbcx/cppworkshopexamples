@@ -1,0 +1,2 @@
+10-byte buffer for INT_MIN: value_too_large
+sized buffer (12 bytes): -2147483648

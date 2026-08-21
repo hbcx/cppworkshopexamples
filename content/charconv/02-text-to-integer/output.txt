@@ -1,0 +1,2 @@
+parsed: 2048
+consumed the whole string: 1

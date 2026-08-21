@@ -6,6 +6,8 @@
   note: "When the text has a shape, not just content: pattern matching, extracting fields with capture groups, and find-and-replace -- go there when find and substr are re-deriving a format by hand."
 - slug: "format"
   note: "The modern way to BUILD strings: std::format composes text from values with a type-safe, compile-checked format string -- go there instead of a + and to_string chain or a stream of << inserters."
+- slug: "charconv"
+  note: "The fast, non-allocating number conversions: std::to_chars and std::from_chars replace std::to_string and std::stoi on hot paths -- go there when the per-call std::string allocation and the locale lookup cost too much, or when the code must not throw."
 - slug: "move-semantics"
   note: "std::string is the textbook move type: moving one hands over its heap buffer in O(1) while a copy allocates, and it is the object most of those examples use to show moved-from state."
 - slug: "vectors"

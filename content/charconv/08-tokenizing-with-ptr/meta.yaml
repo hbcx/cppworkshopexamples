@@ -1,0 +1,11 @@
+title: "Tokenizing a line by chaining ptr"
+standard: "C++17"
+difficulty: 3
+summary: "The ptr returned by from_chars is where the number ended, so feeding it back in walks a whole line of numbers with no substr and no allocation."
+notes: "from_chars returns where it stopped, and that turns it into a scanner: parse a number, then start the next parse at the returned ptr, and repeat to the end of the line. No std::string is built per token, nothing is split into a std::vector<std::string> first, and there is no allocation beyond the container you fill -- the whole line is read in place over a single [first, last) range. The one manual step is separators: from_chars does not skip whitespace, so you advance past spaces yourself before each call. This is the pattern behind a fast reader for space- or comma-separated numbers -- coordinates, sensor rows, a command's arguments. Compare it with std::istringstream and >>, which allocates a stream and copies, or a split-then-convert pass, which copies every token before it even looks at the digits."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::from_chars_result", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }

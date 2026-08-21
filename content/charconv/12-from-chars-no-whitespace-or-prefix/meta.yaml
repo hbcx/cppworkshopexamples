@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting from_chars to skip whitespace or a prefix"
+standard: "C++17"
+difficulty: 3
+summary: "from_chars is stricter than strtol/stoi: it does not skip leading whitespace, does not accept a leading '+', and does not consume a '0x' prefix."
+notes: "People migrating from std::stoi or strtol assume from_chars is lenient in the same ways, and it is not. A leading space makes it fail with invalid_argument -- it does not skip whitespace. A leading '+' on an integer is also rejected (only '-' is accepted). And a '0x' prefix is not recognised even in base 16: from_chars reads the '0', stops at the 'x', and reports SUCCESS with the value 0, which is a silently wrong parse rather than an error. The grammar is deliberately minimal so the function stays fast and unambiguous. The fix is to normalise the input yourself before the call: skip whitespace, handle the sign, and strip any prefix, then hand the bare digits and the matching base to from_chars. This strictness is a feature for machine formats, where hidden whitespace tolerance hides bugs."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

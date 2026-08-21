@@ -1,0 +1,7 @@
+default (shortest):  12345.6789
+fixed:               12345.6789
+fixed, precision 2:  12345.68
+scientific:          1.23456789e+04
+scientific, prec 3:  1.235e+04
+general:             12345.6789
+hex:                 1.81cd6e631f8a1p+13

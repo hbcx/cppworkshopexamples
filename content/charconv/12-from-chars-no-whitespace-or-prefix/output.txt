@@ -1,0 +1,5 @@
+" 42" -> invalid_argument
+"+42" -> invalid_argument
+"0x1f" -> value 0 (stopped early)
+"1f" -> value 31 (all consumed)
+after trimming "  +42": 42

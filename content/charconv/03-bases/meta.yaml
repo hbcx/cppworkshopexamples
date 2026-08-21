@@ -1,0 +1,12 @@
+title: "Integer bases 2 to 36"
+standard: "C++17"
+difficulty: 2
+summary: "Both to_chars and from_chars take an optional base from 2 to 36, so the same call formats and parses binary, octal, hex and anything up to base 36."
+notes: "For integers (not floating point) to_chars and from_chars take an extra base argument, any value from 2 to 36; it defaults to 10. Digits above 9 use the letters a..z, and on the parse side the letters are case-insensitive. This one parameter replaces the scattered older tools: std::stoi's base argument, the std::hex / std::oct stream manipulators, and printf's %x / %o. Two things to remember. First, there is no prefix handling: to_chars writes just the digits (no leading 0x or 0b), and from_chars will not accept one either -- give it the bare digits and the matching base. Second, the base only makes sense for integers; floating point uses chars_format instead, which the next examples cover."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "<charconv>", url: "https://en.cppreference.com/w/cpp/header/charconv" }

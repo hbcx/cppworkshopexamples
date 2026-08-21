@@ -1,4 +1,4 @@
 title: "std::expected"
 description: "A result that is either a value or an error, both first-class in the type: expected<T, E> holds a T on success or an E on failure, so a fallible function reports what went wrong in its return type instead of throwing or setting a global. Covers constructing from a value or std::unexpected, checking with has_value, reading the value with * / -> / value() and the error with error(), value() throwing bad_expected_access that carries the error, returning expected from a fallible operation with a rich error type, dispatching a closed set of failure causes as an enum error in a switch, chaining steps with the C++23 monadic and_then/transform/or_else and translating errors with transform_error, and expected<void, E> for an operation that either succeeds or fails with a reason. Plus the misuses: reading the wrong side, expected where a reasonless optional would do, an ambiguous same-type value and error, and silently discarding the result."
-sort_order: 50
+sort_order: 51
 category: "Vocabulary types"

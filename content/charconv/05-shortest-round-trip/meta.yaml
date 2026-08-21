@@ -1,0 +1,11 @@
+title: "The shortest round-trip form"
+standard: "C++17"
+difficulty: 2
+summary: "to_chars with no precision writes the fewest digits that read back to the identical double -- the right default for saving floats to a text file."
+notes: "Call to_chars on a double with no chars_format and no precision and you get a special guarantee: the shortest decimal string that, when read back with from_chars, gives the exact same double. Not an approximation and not padded -- the fewest characters that round-trip. This is the correct default for any text format that must preserve floats: config files, scene and save files, data exports, anything you will read back later. The old habit was to guess a precision -- std::setprecision(17) or printf(\"%.17g\") -- because 17 significant digits are always enough to round-trip a double. But 17 is the worst case: for 0.1 it prints 0.10000000000000001, longer and no more accurate than 0.1. to_chars computes the right length per value, so it is both shorter and exactly reversible. Under the hood this is the Ryu / Grisu style shortest-representation algorithm; you just get it for free."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+detailed_tags:
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }

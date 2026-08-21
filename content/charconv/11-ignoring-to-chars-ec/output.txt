@@ -1,0 +1,2 @@
+ignoring ec: claimed length = 4 (nothing valid was written)
+checking ec (right): buffer too small for 123456

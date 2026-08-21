@@ -1,0 +1,4 @@
+title: "Primitive numeric conversions (charconv)"
+description: "The <charconv> library (C++17): the fastest, lowest-level way to convert numbers to and from text -- std::to_chars and std::from_chars, which never allocate, never throw, and ignore the locale (always '.'). Covers integer to text and back, the 2..36 base parameter, floating-point formatting with chars_format (fixed, scientific, general, hex) and precision, the shortest round-trip form that reads back to the identical double, parsing floats, the errc error codes, tokenizing a line of numbers by chaining the returned ptr, and a comparison with the older stoi/to_string/stringstream/snprintf ways -- alongside the traps: reading the buffer as a C-string, ignoring the to_chars error code, from_chars not skipping whitespace or a 0x prefix, ignoring the returned ptr and accepting trailing junk, expecting locale-aware output, and an undersized buffer."
+sort_order: 46
+category: "Strings & text"

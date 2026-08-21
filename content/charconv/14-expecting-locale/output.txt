@@ -1,0 +1,2 @@
+"3,14" parsed as 3 (stopped at the comma)
+one million: 1000000 (no grouping)

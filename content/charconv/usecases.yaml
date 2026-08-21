@@ -1,0 +1,24 @@
+# Where to reach for <charconv> -- problem -> tool, with the alternative each beats.
+- problem: "A parser for a text format read in bulk -- CSV columns, JSON numbers, a line protocol -- turns thousands of numeric fields per second into ints and doubles on a hot path."
+  why: "from_chars reads straight out of the existing buffer (a string_view slice) with no allocation and no locale lookup, where std::stoi/std::stod build a std::string per field and throw on bad input, and sscanf re-scans the text under the global locale."
+  signal: "a parse loop calling std::stoi or std::stod(std::string(field)) once per column, or sscanf inside a tight loop"
+
+- problem: "A service writes numbers into a fixed output buffer on a hot path -- a log line, a wire message, a metrics record -- and wants the formatting cost to be predictable."
+  why: "to_chars writes the digits directly into the caller's buffer with zero allocation, where std::to_string allocates a temporary string per value and std::ostringstream allocates and carries per-insertion overhead."
+  signal: "a serialization or logging path building lines with operator+ and std::to_string, or an ostringstream constructed per record"
+
+- problem: "A program saves doubles to a text format -- a config file, a scene file, a data export -- and must read them back as the exact same value, with no drift and no bloat."
+  why: "to_chars with no precision emits the shortest decimal that round-trips to the identical double, where a hand-picked setprecision(17) or %.17g prints more digits than needed and a smaller precision silently loses the low bits."
+  signal: "setprecision(17) or %.17g sprinkled through a serializer to be safe about float exactness"
+
+- problem: "A desktop or server app runs under a non-English locale (a comma decimal separator, grouped thousands) but must still write and read a machine format that requires a '.' decimal point."
+  why: "to_chars and from_chars ignore the global locale by contract and always use '.', where std::ostringstream and printf follow the process-wide locale and silently corrupt the file when the app runs on a localized machine."
+  signal: "numbers gaining a ',' decimal separator in a file after the app is run on a localized machine, or defensive imbue(std::locale::classic()) on every stream"
+
+- problem: "Code needs to walk a line of whitespace-separated numbers -- coordinates, a sensor reading, a command's arguments -- and pull them out one after another."
+  why: "chaining from_chars through its returned ptr steps across the line with no substr and no split into a vector of strings, where an istringstream with >> allocates and a split-then-convert pass copies every token first."
+  signal: "std::istringstream iss(line); while (iss >> x), or a split into std::vector<std::string> followed by std::stoi on each piece"
+
+- problem: "A codebase compiled with -fno-exceptions, or a real-time / embedded path with a fixed latency budget, needs to parse and format numbers without allocating or throwing."
+  why: "to_chars and from_chars report failure through a returned errc instead of throwing and never touch the heap, where std::stoi/std::stod throw on bad input and cannot be used where exceptions are off."
+  signal: "a -fno-exceptions build, or a real-time path that must avoid malloc, still reaching for std::stoi/std::stod to convert numbers"

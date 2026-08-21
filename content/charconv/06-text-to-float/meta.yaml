@@ -1,0 +1,11 @@
+title: "Text to floating point"
+standard: "C++17"
+difficulty: 2
+summary: "from_chars parses doubles too, and an optional chars_format says which grammar to accept -- general, fixed, scientific, or hex."
+notes: "The floating-point from_chars mirrors to_chars: it reads a double out of a range and takes an optional std::chars_format. The default is general, which accepts either a plain decimal (3.14) or a scientific form (6.022e23). Passing a specific format narrows what is legal: fixed rejects an exponent, scientific REQUIRES one, and hex reads the hexadecimal form (with a 'p' binary exponent and, as always in <charconv>, no 0x prefix). As with integers, from_chars does not skip leading whitespace and always uses '.' for the decimal point regardless of locale. This is the parsing engine you want under a JSON reader or a config loader: it is exact (it produces the nearest double, correctly rounded), it does not allocate, and it does not throw -- unlike std::stod, which builds a std::string and throws on bad input."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::chars_format", url: "https://en.cppreference.com/w/cpp/utility/chars_format" }

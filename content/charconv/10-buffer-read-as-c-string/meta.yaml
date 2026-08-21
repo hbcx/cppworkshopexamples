@@ -1,0 +1,11 @@
+title: "Anti-pattern: reading the buffer as a C-string"
+standard: "C++17"
+difficulty: 3
+summary: "to_chars does not write a terminating '\\0', so treating the buffer as a C-string reads past the digits into whatever bytes follow."
+notes: "The single most common to_chars mistake: forgetting that it does not null-terminate. The written text is exactly [buf, ptr); the bytes after ptr are untouched, and in a real (uninitialised) buffer they are indeterminate. Pass buf.data() to anything that expects a C-string -- printf(\"%s\"), std::string(const char*), strlen -- and it runs past the number until it happens to hit a zero byte, which is undefined behaviour. The fix is to always carry the length: use the returned ptr, either as std::string_view(buf, ptr - buf) or as the (buf, ptr) pair. In this example we plant a terminator on purpose so the wrong output is defined and reproducible; real code gets no such guarantee, which is exactly why the bug is dangerous -- it often prints correctly by luck in a debug build and corrupts output later."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+detailed_tags:
+  - { name: "std::to_chars_result", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }

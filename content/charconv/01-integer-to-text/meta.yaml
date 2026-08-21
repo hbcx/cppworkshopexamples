@@ -1,0 +1,12 @@
+title: "Integer to text with std::to_chars"
+standard: "C++17"
+difficulty: 1
+summary: "std::to_chars writes a number's digits into a caller-owned buffer with no allocation, no exceptions and no locale -- the length comes from the returned ptr, not a null terminator."
+notes: "std::to_chars (C++17, header <charconv>) is the lowest-level number-to-text conversion in the standard library. You give it a character range [first, last) and a value; it writes the shortest correct digits into that range and returns a std::to_chars_result, which is just { char* ptr; std::errc ec; }. ptr points one past the last character written, and ec is value-initialised (equal to std::errc{}) on success. Three things make it different from every older option: it never allocates (you own the buffer), it never throws (errors come back in ec), and it never looks at the locale (the output is always the same regardless of the machine). One catch drives the rest of the chapter: it does NOT write a terminating '\\0', so the written text is exactly the range [buf, ptr) -- you must use ptr (or ptr - buf as a length) to know where the number ends, never treat the buffer as a C-string."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+detailed_tags:
+  - { name: "std::to_chars_result", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+  - { name: "<charconv>", url: "https://en.cppreference.com/w/cpp/header/charconv" }

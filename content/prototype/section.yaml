@@ -1,5 +1,5 @@
 title: "Prototype"
 description: "Create new objects by cloning an existing instance instead of constructing from scratch: a virtual clone() copies a polymorphic object through its base interface without naming the concrete type -- shown as the clone mechanic, a registry of named prototypes cloned on demand, a CRTP helper that writes clone() once, and the traps of shallow clones and slicing."
-sort_order: 62
+sort_order: 63
 category: "Design patterns"
 family: "Creational"

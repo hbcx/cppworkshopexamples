@@ -1,4 +1,4 @@
 title: "Type traits"
 description: "The compile-time introspection toolkit in <type_traits>: templates that answer questions about types (is this integral, is this a base of that, are these the same) and transform them (strip a reference, decay, pick the common type). Covers what a trait is and the integral_constant/value/type conventions, the type-category and type-property predicates, type relationships, type transformations, the array and pointer/member-pointer traits, the constructibility and assignability family, conditional and common_type, enable_if, integer_sequence, type_identity and non-deduced contexts, writing your own trait by specialization, the logical traits and is_invocable, and how traits are the building blocks concepts are made of -- alongside the anti-patterns: forgetting ::value or ::type, a trait seeing cv and reference qualifiers you did not strip, is_convertible being directional and permissive, and the deprecated traits is_pod and result_of."
-sort_order: 96
+sort_order: 97
 category: "Generic programming"

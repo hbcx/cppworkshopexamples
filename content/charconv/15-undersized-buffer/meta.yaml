@@ -1,0 +1,12 @@
+title: "Anti-pattern: an undersized buffer"
+standard: "C++17"
+difficulty: 3
+summary: "Sizing the buffer for the typical value forgets the worst case -- the sign and the widest number -- so INT_MIN overflows a 10-byte buffer that fit every other int."
+notes: "A buffer sized for the values you tested passes every test and then fails on the extremes. A 32-bit int is at most 10 digits, so a 10-byte buffer looks fine -- until INT_MIN, which is -2147483648: eleven characters counting the sign. to_chars then returns value_too_large and writes nothing, and if you also ignored ec (the earlier anti-pattern) the bug is invisible. The fix is to size for the worst case up front. For a base-10 integer type the safe width is numeric_limits<T>::digits10 + 3 (the +1 that digits10 undercounts, plus room for a sign, plus a small margin); for floating point the scientific and hex forms are longer still. In practice a single generous fixed buffer -- char buf[64] -- comfortably holds any one built-in number in any form, so it is the easy correct default and you reserve the tight sizing for when the buffer count really matters."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }

@@ -1,5 +1,5 @@
 title: "Adapter"
 description: "Convert the interface of an existing class into the one a client expects, so incompatible code works together without changing either side: wrap the adaptee and translate each call -- shown as the object adapter (composition), the class adapter (private inheritance), adapting a third-party type you cannot modify, and giving a legacy collection the iterator interface a range-for expects."
-sort_order: 65
+sort_order: 66
 category: "Design patterns"
 family: "Structural"

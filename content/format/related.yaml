@@ -5,3 +5,5 @@
   note: "Where a custom formatter really pays off: chrono durations and time points have std::format support, so {:%Y-%m-%d} and friends format dates and times directly -- go there for the clocks and durations you format."
 - slug: "regex"
   note: "The read side of text work: regex matches and extracts, std::format composes and rewrites -- go there when you need to find or pull fields out rather than build a string from values."
+- slug: "charconv"
+  note: "The bare primitive under a single number: when you do not need the format-spec mini-language, std::to_chars converts one value with no allocation and no locale, and from_chars reads it back -- go there for the fastest number-to-text and text-to-number on a hot path."

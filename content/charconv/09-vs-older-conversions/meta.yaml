@@ -1,0 +1,13 @@
+title: "charconv versus the older conversions"
+standard: "C++17"
+difficulty: 2
+summary: "The same conversion done five ways -- to_chars/from_chars, to_string/stoi, stringstream, and snprintf/sscanf -- and what each one costs."
+notes: "All of these turn 1234 into text and back, so the choice is about cost, not capability. std::to_string and std::stoi are the easiest but each allocates a std::string, stoi throws on bad input, and neither lets you control layout. std::ostringstream / >> are the most flexible but allocate, carry per-operation overhead, and -- the sharp edge -- follow the process-wide locale, so the same code can emit '1.234,5' on a localized machine. snprintf / sscanf do not allocate and are fast, but the format string is not type-checked: a %-specifier that disagrees with its argument is undefined behaviour, and sscanf is also locale-sensitive. std::to_chars / std::from_chars are the newest: no allocation, no exceptions, no locale, and correctly rounded -- the price is that you manage a buffer and check ec yourself. Rule of thumb: reach for to_chars/from_chars on hot paths and in machine formats; keep to_string/stoi for one-off convenience where a throw and an allocation do not matter; use std::format when you want readable layout."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "std::stoi", url: "https://en.cppreference.com/w/cpp/string/basic_string/stol" }

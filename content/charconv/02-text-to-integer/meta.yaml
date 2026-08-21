@@ -1,0 +1,12 @@
+title: "Text to integer with std::from_chars"
+standard: "C++17"
+difficulty: 1
+summary: "std::from_chars reads a number out of a character range without allocating or throwing -- success is told by ec, and the returned ptr says how far it got."
+notes: "std::from_chars is the mirror of std::to_chars: it reads a number out of a [first, last) range and writes it into an out-parameter. It returns a std::from_chars_result, which is { const char* ptr; std::errc ec; }. You read two things from it: ec == std::errc{} means a number was parsed with no error, and ptr points one past the last character consumed. Like to_chars it never allocates and never throws (this is the whole point over std::stoi, which builds a std::string and throws on bad input). If nothing parses, the out-parameter is left untouched, so always initialise it. Comparing ptr against the end of the input tells you whether the WHOLE string was a number or only a leading part -- a distinction that matters enough to get its own anti-pattern later in the chapter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::from_chars_result", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

@@ -1,4 +1,4 @@
 title: "Ranges (C++23)"
 description: "What C++23 added on top of C++20 ranges: the eager ranges::to that turns a lazy pipeline into a real container in one step, and a batch of new views and algorithms. Covers ranges::to, zip and enumerate, the chunk / stride / slide / adjacent windowing family and their transform variants, cartesian_product, repeat, the fold_left / fold_right / fold_left_first reductions, join_with, chunk_by, and ranges::contains -- alongside the anti-patterns: zip silently truncating to the shortest range, a cartesian_product that blows up to the product of the sizes, fold_left_first returning an empty optional, chunk mistaken for slide, and ranges::to placed mid-pipeline where it kills laziness."
-sort_order: 95
+sort_order: 96
 category: "Generic programming"

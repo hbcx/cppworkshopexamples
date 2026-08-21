@@ -1,0 +1,11 @@
+title: "Floating point to text with chars_format"
+standard: "C++17"
+difficulty: 2
+summary: "For doubles, to_chars takes a std::chars_format (fixed, scientific, general, hex) and an optional precision, so one function covers every numeric style."
+notes: "The floating-point overloads of to_chars add a std::chars_format argument that picks the style: fixed writes 12345.6789 with no exponent, scientific writes 1.23456789e+04, general picks whichever is shorter, and hex writes the exact hexadecimal form used internally. An extra integer precision argument, when present, fixes the number of digits (its meaning follows printf: digits after the point for fixed and scientific, significant digits for general). With no format argument at all you get the shortest round-trip form, which the next example is about. This is the low-level engine; std::format's number specifiers ({:.2f}, {:e}, {:a}) are the readable front end built on the same idea. Note the output here is deterministic and locale-independent -- the decimal point is always '.'."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }
+detailed_tags:
+  - { name: "std::chars_format", url: "https://en.cppreference.com/w/cpp/utility/chars_format" }

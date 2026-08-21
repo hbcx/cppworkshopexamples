@@ -1,0 +1,2 @@
+as a C-string (wrong): 42#############
+using ptr (right):     42

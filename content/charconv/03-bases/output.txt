@@ -1,0 +1,6 @@
+255 in base 2: 11111111
+255 in base 8: 377
+255 in base 16: ff
+255 in base 36: 73
+"ff" read as base 16: 255
+"Z" read as base 36:  35

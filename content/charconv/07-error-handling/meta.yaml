@@ -1,0 +1,12 @@
+title: "Error handling with std::errc"
+standard: "C++17"
+difficulty: 2
+summary: "from_chars reports invalid_argument for no number and result_out_of_range for overflow; to_chars reports value_too_large when the buffer is too small."
+notes: "Because <charconv> never throws, every failure comes back as a std::errc in the result's ec field, and there are exactly three you meet. On the parse side, from_chars returns invalid_argument when the text does not start with a number at all (nothing was written, ptr equals first), and result_out_of_range when a number IS there but does not fit the target type (the sign and magnitude are still readable through ptr, but the value is not stored). On the format side, to_chars returns value_too_large when the buffer cannot hold the result; crucially it then writes nothing usable, so you must check ec before reading the buffer -- an assumption of success is the subject of a later anti-pattern. Compare each errc against std::errc{} for success, or against the named constants; they are the same std::errc enum used across <system_error>."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }
+  - { name: "std::to_chars", url: "https://en.cppreference.com/w/cpp/utility/to_chars" }

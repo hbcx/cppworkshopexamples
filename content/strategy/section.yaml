@@ -1,5 +1,5 @@
 title: "Strategy"
 description: "Define a family of interchangeable algorithms, encapsulate each behind a common interface, and let a context delegate the varying step to whichever one it holds -- so the algorithm can change independently of the code that uses it. Shown in C++'s idiomatic forms: a classic object interface, a std::function the caller supplies a lambda for, the standard library's own comparators as strategies, and a compile-time policy template with zero overhead."
-sort_order: 72
+sort_order: 73
 category: "Design patterns"
 family: "Behavioral"

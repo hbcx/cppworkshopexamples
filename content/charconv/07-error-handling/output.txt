@@ -1,0 +1,4 @@
+"42" -> ok: 42
+"xyz" -> invalid_argument (no number)
+"99999999999999999999" -> result_out_of_range (overflow)
+to_chars into a 3-byte buffer: value_too_large

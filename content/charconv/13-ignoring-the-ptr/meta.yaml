@@ -1,0 +1,11 @@
+title: "Anti-pattern: ignoring the returned ptr"
+standard: "C++17"
+difficulty: 3
+summary: "from_chars succeeds on any leading number, so checking only ec accepts trailing junk like 12abc as valid -- you must also require ptr to reach the end."
+notes: "from_chars stops at the first character that is not part of the number and reports success for the prefix it managed to read. So \"12abc\" parses as 12, \"3.14xyz\" as 3.14, and \"5;\" as 5 -- all with ec == std::errc{}. Validation that checks only ec therefore accepts input it should reject, letting malformed fields through a parser silently. The ptr in the result exists precisely to catch this: it points one past the last consumed character, so the field is fully numeric only when ptr equals the end of the input. The fix is a two-part check -- ec == std::errc{} AND ptr == last -- whenever the ENTIRE field must be a number. (When you are scanning and expect more to follow, as in the tokenizing example, you use ptr as the next position instead; the point is that ignoring ptr entirely is the bug.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::from_chars", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }
+detailed_tags:
+  - { name: "std::from_chars_result", url: "https://en.cppreference.com/w/cpp/utility/from_chars" }

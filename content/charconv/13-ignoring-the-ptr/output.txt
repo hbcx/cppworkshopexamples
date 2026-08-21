@@ -1,0 +1,3 @@
+"42"	ec-only: 42	whole-field: 42
+"12abc"	ec-only: 12	whole-field: reject
+"5;"	ec-only: 5	whole-field: reject

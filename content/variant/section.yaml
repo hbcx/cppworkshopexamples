@@ -1,4 +1,4 @@
 title: "std::variant"
 description: "A type-safe union: variant<Ts...> holds exactly one value from a fixed, closed set of alternative types, tracks which one is active, and destroys it correctly -- the RAII, checked replacement for a hand-rolled enum-plus-union. Covers querying the active alternative with index() and holds_alternative, reading it with get<T>/get<I> and the checked get_if, dispatching over all alternatives with std::visit (exhaustive at compile time), the overloaded lambda-set visitor idiom, std::monostate as an empty first alternative, modelling a closed set of states or shapes as a variant instead of a class hierarchy, and using variant purely as a compile-time type list queried with variant_size and variant_alternative_t. Plus the misuses: a manual holds_alternative ladder instead of visit, an ambiguous conversion selecting the wrong alternative, the valueless_by_exception state after a throwing assignment, and variant for an open, extensible set of types where inheritance belongs."
-sort_order: 52
+sort_order: 53
 category: "Vocabulary types"
