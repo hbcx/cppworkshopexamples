@@ -1,0 +1,11 @@
+title: "span versus the older alternatives"
+standard: "C++20"
+difficulty: 2
+summary: "The same read-only sum written three ways -- a pointer-and-size pair, a const vector reference, and a span -- and what each one costs the caller."
+notes: "All three read a run of ints, so the choice is about the interface, not the work. A (pointer, size) pair works with any contiguous source and is C-compatible, but it is two arguments that can silently disagree, it carries no range interface, and nothing bounds it -- the classic source of off-by-one and buffer overruns. A const std::vector<int>& is safe and simple but demands a std::vector: a caller holding a std::array or a C array (or a slice) must copy it into a vector first, which allocates. std::span<const int> keeps the good parts of both: one argument, the size travelling with the pointer, a real range interface, and any contiguous source converting implicitly with no copy -- while staying a plain value to pass. Its one responsibility shifts to the caller: the viewed data must outlive the call, which for a read-only parameter that returns is automatic. Rule of thumb: take span<const T> to read and span<T> to write; keep a const container reference only when you specifically need that container's own operations, and reserve the pointer-and-size pair for a C boundary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

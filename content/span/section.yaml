@@ -1,0 +1,4 @@
+title: "std::span"
+description: "The non-owning view over a contiguous sequence (C++20): a pointer plus a size that views a std::vector, a std::array, a C array or any contiguous range without copying or owning it. Covers building a view over contiguous data, the one-parameter function that accepts any contiguous source, cheap first/last/subspan subviews, static versus dynamic extent, writing through a span versus a read-only span of const, the raw-byte view with as_bytes, and a comparison with the pointer-and-size and const-vector-reference alternatives -- alongside the traps: a span dangling over a temporary, a span invalidated when its vector reallocates, the missing bounds check on operator[] and subspan, const span versus span of const, a stored span that does not own its data, and passing a span by reference instead of by value."
+sort_order: 114
+category: "Containers"

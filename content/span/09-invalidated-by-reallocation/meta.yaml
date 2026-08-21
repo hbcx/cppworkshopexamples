@@ -1,0 +1,11 @@
+title: "Anti-pattern: a span invalidated by reallocation"
+standard: "C++20"
+difficulty: 3
+summary: "A span into a std::vector points at the vector's current buffer, so any operation that reallocates it -- push_back past capacity, resize, reserve -- leaves the span dangling."
+notes: "Even when the container clearly outlives the span, the span can still be invalidated -- because it stores a raw pointer to the elements, and some vector operations move the elements to a new block. push_back past capacity, resize to a larger size, reserve, insert: each may reallocate, freeing the old buffer the span still points at. This is the span version of the classic iterator-invalidation rule, and it is easy to miss because the vector variable is right there, looking alive. The fix is order: finish changing the vector's size, THEN make the span, and do not hold a span across anything that can grow the container. If you must keep a stable view while the container changes, index by position instead, or reserve enough capacity up front so no reallocation happens. The example proves the trap without undefined behaviour: it captures the buffer address, forces a reallocation, and shows the address moved -- so the old span no longer points at the vector's storage -- rather than reading through the stale span."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

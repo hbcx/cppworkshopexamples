@@ -1,4 +1,6 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "span"
+  note: "The same borrow generalised to any element type: std::string_view is really a view of const char, and std::span is the view over any contiguous sequence -- go there for viewing arrays and vectors of any type, static extents, and writing through the view, with the same dangling traps."
 - slug: "strings"
   note: "The owning counterpart: when the text must be kept, modified, or handed to a C API as a null-terminated string, you need a std::string -- go there for building, editing, and owning text."
 - slug: "maps"

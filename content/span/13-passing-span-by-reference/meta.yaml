@@ -1,0 +1,11 @@
+title: "Anti-pattern: passing a span by reference"
+standard: "C++20"
+difficulty: 3
+summary: "A span is already a pointer and a size, so pass it by value; taking it by const reference adds a pointless indirection for no saving."
+notes: "A span is two words -- a pointer and a size, typically 16 bytes on a 64-bit build -- so it is in the same category as an int or a pointer: cheap to copy and meant to be passed by value. Writing a parameter as const std::span<const T>& adds an indirection (the callee now dereferences a reference to reach the pointer-and-size) and buys nothing, because there is no larger object being copied to avoid; it also reads as if span were an expensive type, which misleads the next person. This is a style-and-clarity issue rather than a correctness bug, but it is worth getting right because span parameters are everywhere once you adopt it. Just take std::span<const T> (to read) or std::span<T> (to write) by value. The example calls a by-reference and a by-value version to show they do the same thing, and prints sizeof(span) to make the point that there is nothing worth a reference."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::span::size", url: "https://en.cppreference.com/w/cpp/container/span/size" }

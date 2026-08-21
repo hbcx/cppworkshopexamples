@@ -1,0 +1,2 @@
+through const span<int>, v[0] = 99
+span<const int> can read v[0] = 99

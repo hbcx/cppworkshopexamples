@@ -1,5 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "span"
+  note: "The non-owning view over a vector's buffer: pass or slice a vector's elements with no copy by handing out a std::span, and see why growing the vector (a reallocation) invalidates any span into it -- go there for the borrow that pairs with this owner."
 - slug: "move-semantics"
   note: "Why a growing vector sometimes copies instead of moves: element moves are only used during reallocation when they cannot throw."
 - slug: "lists"

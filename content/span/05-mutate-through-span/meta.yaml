@@ -1,0 +1,11 @@
+title: "Writing through a span"
+standard: "C++20"
+difficulty: 2
+summary: "span<T> is a writable view: assigning through it changes the caller's data in place; span<const T> is read-only, and a writable span converts to it for free."
+notes: "Whether a span can modify what it views is decided by its element type. span<int> is a writable window: writing through it -- x = ..., or through a reference from range-for -- goes straight to the underlying elements, so a function taking span<int> transforms the caller's buffer in place with no allocation and no copy back. span<const int> is read-only: the elements cannot be assigned, which is what you want for a function that only inspects. A writable span converts implicitly to a read-only one (adding const is safe), but not the reverse. This mirrors pointers: span<T> is like T*, span<const T> like const T*. Combined with subspan you can hand a function write access to just a WINDOW of a buffer. Note the const goes inside the angle brackets to protect the elements -- a common mix-up covered in the anti-patterns."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::span::subspan", url: "https://en.cppreference.com/w/cpp/container/span/subspan" }

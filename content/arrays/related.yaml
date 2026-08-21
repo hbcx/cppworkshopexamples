@@ -1,5 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "span"
+  note: "The view that pairs with a fixed array: a std::span<T, N> borrows a std::array<T, N> with the size known at compile time on both sides, so a function can read or write the array's elements with no copy -- go there for the non-owning window over contiguous data."
 - slug: "vectors"
   note: "The dynamic sibling: reach for it the moment the element count is not fixed at compile time."
 - slug: "move-semantics"

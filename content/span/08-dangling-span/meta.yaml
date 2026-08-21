@@ -1,0 +1,11 @@
+title: "Anti-pattern: a span dangling over a temporary"
+standard: "C++20"
+difficulty: 3
+summary: "A span does not own or extend the lifetime of what it views, so binding one to a temporary leaves it dangling the moment the full expression ends."
+notes: "A span is a borrow, like a pointer or a reference, and it does nothing to keep the borrowed data alive. Point one at a temporary -- the value returned by a function, a std::vector{...} built in the argument, the result of an expression -- and the temporary is destroyed at the end of the statement, leaving the span pointing at freed memory; reading it afterwards is undefined behaviour that often appears to work until it does not. This is the same trap std::string_view has, and it bites the same way. The fix is to make sure the viewed object outlives the span: bind the container to a named variable first, then make the span from that. As a rule, never store the result of make_something() into a span in a way that outlives the full expression, and be wary of a span whose source is not a named object you can see living long enough. The example describes the dangling case in comments (running it would be undefined) and runs only the correct version."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::span::data", url: "https://en.cppreference.com/w/cpp/container/span/data" }

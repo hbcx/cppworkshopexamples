@@ -1,0 +1,12 @@
+title: "A non-owning view over contiguous data"
+standard: "C++20"
+difficulty: 1
+summary: "A std::span is a pointer plus a size that views a contiguous sequence -- a vector, an array, a C array -- without copying or owning it."
+notes: "std::span (C++20, header <span>) is the contiguous-range counterpart of std::string_view: a lightweight object holding just a pointer to the first element and a count, giving a uniform view over anything laid out contiguously in memory -- std::vector, std::array, a C array, or a slice of one. It copies nothing and owns nothing; it points AT data that lives elsewhere, so it stays valid only as long as that data does (the traps at the end of the chapter are all about this). Through a span you get the usual range interface -- size, front, back, operator[], begin/end, so range-for just works -- and reading or writing goes straight to the underlying elements. Because it stores only data() and size(), it is cheap to make and to pass. This first example just builds spans over a vector and an array and reads them; the real value shows up in the next example, where one span parameter replaces a template or a pointer-and-size pair."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::span::size", url: "https://en.cppreference.com/w/cpp/container/span/size" }
+  - { name: "std::span::data", url: "https://en.cppreference.com/w/cpp/container/span/data" }

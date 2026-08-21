@@ -1,0 +1,4 @@
+ptr:         6
+span:        6
+vec (copied):6
+span vector: 22

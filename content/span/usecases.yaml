@@ -1,0 +1,24 @@
+# Where to reach for std::span -- problem -> tool, with the alternative it beats.
+- problem: "A function processes a run of contiguous elements and callers hold it in different ways -- a std::vector here, a std::array there, a C array from a driver, a slice of a bigger buffer -- and you do not want a template or an overload per type."
+  why: "one std::span<const T> parameter accepts them all with no copy and no template instantiation, where a (pointer, size) pair is two arguments that can disagree and a const std::vector<T>& forces every caller to hold a vector."
+  signal: "a function templated only to accept any container, an overload set that differs just by container type, or a (const T*, size_t) parameter pair"
+
+- problem: "A large buffer is processed in pieces -- network packets in a receive buffer, frames in an audio block, columns of a row -- and each piece is handed to a helper without copying it out."
+  why: "subspan/first/last return a view into the same memory in O(1), so a window costs nothing, where slicing into a fresh std::vector per piece allocates and copies on every step."
+  signal: "std::vector<T> temporaries built from begin()+offset ranges just to pass a subrange to a function"
+
+- problem: "Code sits at a C boundary -- a callback or API hands over a (pointer, length) -- and the rest of the code wants a safe, range-based value to pass around and slice."
+  why: "wrapping the pointer and length in a std::span once gives size(), range-for, and subviews from then on, where threading the raw pointer and length through every call invites off-by-one and overruns."
+  signal: "a raw pointer and a separate length passed together through several functions, with manual index arithmetic"
+
+- problem: "An interface requires an exact number of elements -- a 3D vector, an RGBA pixel, a 16-byte key -- and passing the wrong count should be caught before the program runs."
+  why: "a static-extent std::span<T, N> puts the size in the type, so a wrong length is a compile error and the span stores only a pointer, where a dynamic span or a pointer-and-size checks the count (if at all) at runtime."
+  signal: "a function that asserts or checks arg.size() == N at runtime, or a fixed-size job taking a pointer plus a hard-coded expected length"
+
+- problem: "A hot, widely-called function should not live in a header as a template, because that grows compile times and re-instantiates per caller type, but it still must accept any contiguous source."
+  why: "a non-template function taking std::span<const T> can be declared in a header and defined in a .cpp, compiled once, where template<class Range> must be visible at every call site and instantiated repeatedly."
+  signal: "a container-generic function kept in a header only to stay generic, showing up as template instantiation cost in build profiles"
+
+- problem: "A routine fills or transforms a caller-provided buffer in place -- decode into it, scale it, zero it -- and must not allocate or hand back a new container."
+  why: "a std::span<T> parameter is a writable view, so the routine edits the caller's storage directly, where returning a std::vector<T> allocates a new buffer and copies the result back."
+  signal: "a transform that takes a container by value or const reference and returns a new container, when the caller already owns a buffer to write into"

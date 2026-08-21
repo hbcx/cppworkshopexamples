@@ -1,0 +1,3 @@
+after double: 2 4 6 8
+sum: 20
+v[1] after windowed write: 99

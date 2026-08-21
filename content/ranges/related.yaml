@@ -1,5 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "span"
+  note: "The simplest concrete view: a std::span is a contiguous view that is also a range, so it slots straight into the range algorithms and the pipe syntax here -- go there for the non-owning window over an array or vector that these views often start from."
 - slug: "concepts"
   note: "The foundation ranges is built on: the range, view and borrowed_range concepts constrain every algorithm and adaptor, and the clear errors come from them -- go there for named requirements, requires-expressions, and how the constraints are written."
 - slug: "iterator"

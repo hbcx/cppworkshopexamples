@@ -1,0 +1,12 @@
+title: "The raw-byte view with as_bytes"
+standard: "C++20"
+difficulty: 3
+summary: "std::as_bytes views a span as read-only std::byte, and as_writable_bytes as mutable bytes -- the same memory, no copy, for serialization, hashing, or raw I/O."
+notes: "Sometimes you need the bytes behind an object, not its elements: writing a buffer to a socket or file, hashing it, or computing a checksum. std::as_bytes takes any span and returns a std::span<const std::byte> over the SAME memory -- no copy, just a reinterpretation as bytes; its size is the element count times sizeof(element). std::as_writable_bytes is the mutable version (only for a span of non-const elements), useful for zeroing or filling a buffer in place. std::byte is a distinct type meant exactly for raw storage, so you work with it via std::to_integer and std::byte{...} rather than doing arithmetic on char. Keep in mind the byte ORDER is the platform's endianness: dumping the bytes of a multi-byte integer gives little-endian order on x86, so anything that must be portable across machines has to fix an order itself. The example sums the bytes, which is order-independent, so its output is stable."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::as_bytes", url: "https://en.cppreference.com/w/cpp/container/span/as_bytes" }
+detailed_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+  - { name: "std::byte", url: "https://en.cppreference.com/w/cpp/types/byte" }

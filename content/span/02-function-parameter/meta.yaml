@@ -1,0 +1,11 @@
+title: "One parameter for any contiguous sequence"
+standard: "C++20"
+difficulty: 1
+summary: "A std::span parameter accepts a vector, a std::array, a C array or a slice -- read-only via span<const T> -- with no copy, no template, and no overload per container type."
+notes: "This is the reason span exists. Before it, a function that wanted to read a run of ints had three bad options: a template (which leaks into a header and gets instantiated per caller type), a (pointer, size) pair (two arguments that can disagree, with no bounds and no range interface), or a std::vector<int> const& (which forces callers to have a vector, so a std::array or C array must be copied into one first). A single std::span<const int> parameter replaces all three: any contiguous source converts to it implicitly, the size travels with the pointer as one argument, and the body uses the normal range interface. Use span<const T> when the function only reads (the common case) and span<T> when it writes back (next examples). Pass the span by value -- it is just a pointer and a size. The one caveat is lifetime: the span is only valid while the caller's data is; a function that merely reads its argument and returns is always safe, which is exactly this case."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::span::subspan", url: "https://en.cppreference.com/w/cpp/container/span/subspan" }

@@ -1,0 +1,2 @@
+sum via stored span: 30
+owned copy still valid: size 3, sum 30

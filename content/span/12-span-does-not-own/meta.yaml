@@ -1,0 +1,11 @@
+title: "Anti-pattern: a stored span that does not own"
+standard: "C++20"
+difficulty: 3
+summary: "Returning a span that views a local, or storing one as a member, only works while the viewed data lives elsewhere; a span never keeps that data alive."
+notes: "The dangling trap is not only about temporaries -- it comes back whenever a span OUTLIVES the data it points at. Two common shapes: a function that builds a local container and returns a span into it (the container dies at the return, the span dangles), and a class that stores a span as a member (fine only if every instance is given data that outlives it). A span member is a promise the caller must keep, and it is easy to break by accident. The fix depends on intent: if the view is short-lived and the data clearly outlives it, a span member is correct and cheap -- document the lifetime requirement; if the object must KEEP the data, store an owning container (a std::vector, or copy the elements out) instead of a span. The example shows a type that stores a span correctly (the owner outlives it), then, to keep data past the owner's life, copies the elements into an owning vector -- because that is what ownership actually requires."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

@@ -1,0 +1,11 @@
+title: "Static versus dynamic extent"
+standard: "C++20"
+difficulty: 2
+summary: "span<T> stores its size at runtime (dynamic extent); span<T, N> puts the size in the type, so a wrong size is a compile error and the span stores only a pointer."
+notes: "A span has an extent -- its element count -- which is either dynamic (the default, std::dynamic_extent) or static (a compile-time N). span<int> holds a pointer and a runtime size and views any length. span<int, 3> fixes the length in the type: it accepts only a source of exactly three elements (a std::array<int,3> or int[3]), a wrong size is a compile error rather than a runtime surprise, and because the size is known at compile time the object stores just the pointer -- so sizeof(span<int,3>) is smaller than sizeof(span<int>). Use a static extent when the count is genuinely fixed by the interface -- a 3D vector, a fixed-size key, an RGBA pixel -- to move the check to compile time and shrink the object; use the dynamic default everywhere the length varies. You can convert between them (a static extent decays to dynamic freely; going the other way is a checked/explicit step)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::dynamic_extent", url: "https://en.cppreference.com/w/cpp/container/span/dynamic_extent" }

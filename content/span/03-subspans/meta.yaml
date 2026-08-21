@@ -1,0 +1,12 @@
+title: "Cheap subviews with first, last and subspan"
+standard: "C++20"
+difficulty: 2
+summary: "first(n), last(n) and subspan(offset, count) return a new span into the same data in O(1) -- windows over a buffer with no copying."
+notes: "A span slices for free. first(n) is the leading n elements, last(n) the trailing n, and subspan(offset, count) an arbitrary window; subspan(offset) alone runs from offset to the end. Each returns another span -- a new pointer and size into the SAME memory -- so slicing costs nothing and allocates nothing, unlike copying a subrange into a new vector. This is what makes span good for processing a large buffer in pieces: take a window, hand it to a function (which takes span, from the previous example), advance, repeat. Subviews compose: s.subspan(1).first(3) is a window of a window. The one rule is range validity: the offset and count must stay within the span, because subspan does not check them (an out-of-range subspan is undefined behaviour -- see the bounds-checking anti-pattern later)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span::subspan", url: "https://en.cppreference.com/w/cpp/container/span/subspan" }
+detailed_tags:
+  - { name: "std::span::first", url: "https://en.cppreference.com/w/cpp/container/span/first" }
+  - { name: "std::span::last", url: "https://en.cppreference.com/w/cpp/container/span/last" }

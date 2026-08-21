@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "string-view"
+  note: "The same idea specialised to text: std::string_view is a non-owning view over characters, with the same borrow-and-do-not-own model and the same dangling traps -- go there when the contiguous thing you are viewing is a string, and come back here for the general version over any element type."
+- slug: "vectors"
+  note: "The container a span most often views: std::vector owns a contiguous buffer, and a span borrows a window into it -- go there for the owning growable array, the capacity and reallocation rules, and why growing a vector invalidates a span into it."
+- slug: "arrays"
+  note: "The fixed-size contiguous container: a std::array<T, N> pairs naturally with a static-extent std::span<T, N>, size known at compile time on both sides -- go there for the stack-allocated fixed array a span so often views."
+- slug: "ranges"
+  note: "The wider world of views: a span is a contiguous view, and the ranges library is the general framework of lazy views and range algorithms that compose over any range -- go there for transform, filter, and the pipe syntax that a span slots into as a range."

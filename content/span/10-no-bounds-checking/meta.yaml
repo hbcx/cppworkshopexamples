@@ -1,0 +1,11 @@
+title: "Anti-pattern: assuming span checks bounds"
+standard: "C++20"
+difficulty: 3
+summary: "span::operator[] and subspan are NOT bounds-checked: an out-of-range index or offset is undefined behaviour, and span has no .at() before C++26."
+notes: "It is tempting to treat a span as a safe, modern replacement for pointer arithmetic, but operator[] does no bounds checking -- an index past size() is undefined behaviour, exactly like indexing a raw array -- and subspan(offset, count) is undefined if the offset or count runs off the end. Unlike std::vector, span has no .at() that throws (one is only added in C++26), so before then you get no runtime guard at all. The safety span gives is that the size travels WITH the pointer, so you always have size() to check against -- but you have to actually check it. The fixes are ordinary: compare an index against size() before using it, and clamp a subspan offset/count to size() so the subview stays valid (a zero-length subview at the end is fine). The example takes a deliberately out-of-range index and offset and handles both defensively instead of invoking the undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::span::subspan", url: "https://en.cppreference.com/w/cpp/container/span/subspan" }

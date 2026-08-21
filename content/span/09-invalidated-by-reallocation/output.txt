@@ -1,0 +1,3 @@
+vector storage moved: 1
+old span still points at the old block (now stale)
+fresh span size: 3, back: 3

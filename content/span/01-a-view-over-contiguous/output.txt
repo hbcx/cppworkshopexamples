@@ -1,0 +1,6 @@
+size: 4
+first: 10, last: 40
+s[2]: 30
+elements: 10 20 30 40
+array view size: 3
+views the vector's own storage: 1

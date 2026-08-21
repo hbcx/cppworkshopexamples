@@ -1,0 +1,11 @@
+title: "Anti-pattern: const span versus span of const"
+standard: "C++20"
+difficulty: 3
+summary: "const span<int> makes the span object const (you cannot re-point it) but leaves the ELEMENTS writable; read-only elements need span<const int>."
+notes: "This is a placement-of-const mix-up that compiles and silently does the wrong thing. const std::span<int> makes the SPAN object const: you cannot reassign it to view something else, but the elements it views are still int, so writing through it modifies the underlying data -- no protection at all for the values. To make the ELEMENTS read-only you move the const inside the angle brackets: std::span<const int>, which is a (possibly reassignable) view whose elements cannot be assigned. The mental model is pointers: const span<int> is like int* const (a const pointer to mutable ints), while span<const int> is like const int* (a pointer to const ints) -- and it is the latter you almost always mean for a read-only view. The example writes through a const span<int> to show it really does mutate the source, then contrasts it with span<const int>, whose element assignment would not compile."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::span", url: "https://en.cppreference.com/w/cpp/container/span" }
+detailed_tags:
+  - { name: "std::span::operator[]", url: "https://en.cppreference.com/w/cpp/container/span/operator_at" }

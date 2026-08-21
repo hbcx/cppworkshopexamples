@@ -1,0 +1,5 @@
+cross x-component: -3
+dynamic size: 5
+static extent value: 5
+sizeof dynamic span: 16
+sizeof static span:  8
