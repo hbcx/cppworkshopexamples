@@ -1,0 +1,15 @@
+title: "The full pattern: a multi-stage pipeline"
+standard: "C++17"
+difficulty: 3
+summary: "Everything wired together: a three-stage ingest-process-collect pipeline joined by two bounded queues, with backpressure in both directions and an ordered shutdown that loses no in-flight item."
+notes: "This is the recipe assembled into a shape you can lift into a real program. Three stages -- an ingest thread, a group of processing workers, and a collector -- are connected by two BoundedBlockingQueue instances, one per boundary. Because both queues are bounded, backpressure flows both ways: a slow collector fills stage2 and stalls the workers, a slow worker set fills stage1 and stalls ingest, so no stage can run ahead and pile up unbounded memory -- the queue capacities cap the total work in flight. The part worth copying is the shutdown ORDER: close a queue only after the stage that feeds it has fully finished. Ingest is joined first, THEN stage1 is closed so the workers drain the last raw items before exiting; the workers are joined, THEN stage2 is closed so the collector drains the last results before exiting. Closing in the wrong order -- or exiting a stage without draining -- is exactly how a pipeline silently drops the tail of its data. The result (count and sum of squares) is order-independent, so it is deterministic and checkable, and the whole thing runs clean under ThreadSanitizer. Swap the square for real work, the int for your record type, and add stages the same way."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::condition_variable::notify_all", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_all" }
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }

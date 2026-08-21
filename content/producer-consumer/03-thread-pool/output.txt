@@ -1,0 +1,4 @@
+tasks submitted: 2000
+sum of task ids: 2001000
+expected sum:    2001000
+result: OK

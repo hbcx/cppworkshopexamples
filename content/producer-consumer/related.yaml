@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "condition-variable"
+  note: "The primitive this recipe is built from: the wait-with-predicate handoff, notify_one versus notify_all, wait_for, and the classic ways to get each one wrong -- go there to understand the pieces before assembling them into a queue here."
+- slug: "mutex"
+  note: "The lock that guards the queue's state: std::mutex with unique_lock and lock_guard, and why every read and write of the shared queue must happen under it -- go there for the locking basics this relies on."
+- slug: "future"
+  note: "The other way to get a result back from a worker: std::async and std::future hand back one value per call, where this queue streams many items between long-lived threads -- go there when you have a one-shot task rather than a stream, or want a result back from each pool task."

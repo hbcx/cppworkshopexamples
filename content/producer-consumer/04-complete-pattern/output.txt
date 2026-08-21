@@ -1,0 +1,5 @@
+items ingested:  5000
+items collected: 5000
+sum of squares:  41679167500
+expected:        41679167500
+result: OK

@@ -1,4 +1,6 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "producer-consumer"
+  note: "The streaming counterpart to a one-shot future: where async and future carry a single result back once, a bounded blocking queue moves many items between long-lived threads -- go there for the thread pool built on it, and combine the two when each pooled task should hand a value back through a future."
 - slug: "thread"
   note: "The lower-level tool these sit on top of: std::async, promise and packaged_task all give you a result and the synchronization for free, but when you need to own the thread itself -- name it, detach it, run a long loop -- you drop back to std::thread. Go there for launching, joining, and the ownership rules, then come back here to get a value out without the manual plumbing."
 - slug: "condition-variable"

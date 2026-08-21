@@ -1,0 +1,17 @@
+title: "A reusable bounded blocking queue"
+standard: "C++17"
+difficulty: 2
+summary: "A header-only BoundedBlockingQueue<T> on a mutex and two condition variables: blocking push and pop, backpressure when full, and a close that drains -- the core piece the rest of the recipe builds on."
+notes: "This is the component to copy. It keeps a std::queue guarded by a std::mutex, plus two condition variables: not_full wakes producers, not_empty wakes consumers. push waits with a predicate while the queue is full and closed is not set, which is the backpressure -- a fast producer is forced to wait for a slow consumer, so the queue can never grow past its capacity and eat memory. pop waits while the queue is empty and returns std::optional, giving a consumer a clean stop signal: while (auto item = q.pop()) processes items and ends when pop returns nullopt. close is what makes shutdown clean: it sets the flag under the lock and notify_all, so producers blocked in push wake and get false, while items already queued are still drained by consumers before pop finally returns nullopt -- nothing in flight is lost. Every access to the shared state is under the mutex and the waits use the predicate form, so it is correct against spurious and lost wakeups and runs clean under ThreadSanitizer. The individual primitives (wait-with-predicate, notify_one vs notify_all, wait_for) are the condition_variable chapter; here they are assembled into something you use."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::condition_variable::wait", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait" }
+  - { name: "std::condition_variable::notify_one", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_one" }
+  - { name: "std::condition_variable::notify_all", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/notify_all" }
+  - { name: "std::unique_lock", url: "https://en.cppreference.com/w/cpp/thread/unique_lock" }
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }

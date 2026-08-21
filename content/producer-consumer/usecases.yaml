@@ -1,0 +1,32 @@
+# Where to reach for a bounded blocking producer-consumer queue -- problem -> tool.
+- problem: "A service accepts requests faster than it can process them -- an upload endpoint, a message handler, an order intake. Under a traffic spike the backlog must not grow without limit and exhaust memory."
+  why: "a bounded queue between the accept thread and a worker pool makes the bound the policy: when it fills, submitting blocks (backpressure) and the spike is felt as slowdown at the edge, where an unbounded std::queue keeps accepting until the process runs out of memory and is killed."
+  signal: "an unbounded std::queue plus a mutex that only ever grows under load, or requests processed inline on the accept thread"
+
+- problem: "Logging or metrics on a hot path: request threads must record events, but the formatting and the file or network write are slow and would add that latency to every request."
+  why: "the request threads push a small record and move on while one background consumer does the slow I/O, so the cost leaves the hot path; writing to the file directly under a shared mutex instead serializes the request threads on the disk."
+  signal: "a std::ofstream or socket written to directly inside business code, guarded by a global logging mutex"
+
+- problem: "A processing pipeline with stages of different speeds -- decode, then transform, then encode or write -- where the fast stages must not outrun the slow one."
+  why: "a bounded queue between each pair of stages balances their rates and caps the memory held between them; hand-rolling the handoff with a shared buffer and condition flags re-implements this queue badly and usually drops the last items on shutdown."
+  signal: "pipeline stages coupled by a shared buffer and ad-hoc done/ready flags, or sleeps used to let a slow stage catch up"
+
+- problem: "Many short-lived jobs need running concurrently -- image thumbnails, per-row work, RPC handlers -- but spawning a thread per job would create thousands of threads and thrash the scheduler."
+  why: "a fixed worker pool consuming a bounded task queue caps concurrency at the number of workers and throttles submitters when the queue is full, where std::thread per job has no ceiling on threads or memory."
+  signal: "std::thread constructed inside a per-item loop, or a task list processed with manual locking and no limit on parallelism"
+
+- problem: "A batch or ETL job reads records from a source and loads them into a slower sink (a database, an index), and reading everything into memory first is not an option for a large input."
+  why: "reader threads push records into a bounded queue that worker threads drain into the sink, so the reader is throttled to the sink's speed and only a bounded window of records is ever in memory, unlike a read-all-into-a-vector pass."
+  signal: "an input fully loaded into a std::vector before processing, or a producer with no backpressure overwhelming a slow writer"
+
+- problem: "A callback, interrupt handler, or UI-thread event must return almost immediately, but the work it triggers is heavy (parsing, a DB write, a computation)."
+  why: "the callback pushes an event onto the queue and returns at once while worker threads do the heavy part, keeping the source responsive; doing the work inside the callback blocks the device, the event loop, or the UI thread that called it."
+  signal: "significant work performed directly inside an ISR, a network callback, or a UI event handler"
+
+- problem: "A service must stop cleanly on shutdown without losing the jobs already accepted -- a payment queue, an outbox, a task runner that has promised to finish what it took."
+  why: "close-then-drain lets producers stop while consumers finish everything already queued before exiting, so no accepted job is dropped; a bare stop flag that makes consumers exit immediately discards whatever was still in the queue."
+  signal: "a shutdown path that sets a running=false flag and joins at once, with items potentially still sitting in the queue"
+
+- problem: "A source is bursty -- events arrive in clumps -- but the downstream system needs a steady, capped rate and a predictable amount of buffering."
+  why: "a bounded queue is a shock absorber with a hard ceiling: it smooths short bursts and, when full, applies backpressure instead of buffering without limit, where an unbounded buffer 'smooths' a burst by growing until it becomes the problem."
+  signal: "an unbounded buffer used to absorb bursts, or a producer that never blocks no matter how far behind the consumer falls"

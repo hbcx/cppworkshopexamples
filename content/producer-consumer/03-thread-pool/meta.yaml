@@ -1,0 +1,14 @@
+title: "A thread pool built on the queue"
+standard: "C++17"
+difficulty: 3
+summary: "A fixed-size ThreadPool is the producer-consumer pattern applied: the items are std::function tasks, callers are producers, workers are consumers, and the bounded queue gives submit() its backpressure for free."
+notes: "Once the bounded blocking queue exists, a thread pool is almost no extra code -- which is the whole argument for building the queue as a reusable component. The pool holds a BoundedBlockingQueue of std::function<void()> and starts a fixed number of worker threads, each running the same consumer loop from example 01: while (auto task = tasks.pop()) run it. submit is just push, so it inherits the backpressure -- if the workers fall behind and the queue fills, the submitting thread blocks instead of letting an unbounded backlog build. shutdown is close plus join: closing lets the workers finish every task already queued (nothing submitted is dropped) and then makes pop return nullopt so they exit, and the destructor calls shutdown so the pool cleans up even on an early return or an exception. A real pool often adds a future per task (see the future chapter) so callers can get a result back; the tasks here are fire-and-forget std::function, which keeps the pattern visible. Note std::function requires copyable callables -- a move-only task type would need a small move-only function wrapper."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+detailed_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }

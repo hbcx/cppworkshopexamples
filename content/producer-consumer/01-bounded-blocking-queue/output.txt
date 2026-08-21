@@ -1,0 +1,5 @@
+produced items: 4000
+consumed items: 4000
+sum of values:  2002000
+expected sum:   2002000
+result: OK

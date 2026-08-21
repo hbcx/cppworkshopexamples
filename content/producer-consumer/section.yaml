@@ -1,0 +1,4 @@
+title: "Producer-consumer queue"
+description: "A complete, adaptable producer-consumer recipe built on std::condition_variable: a reusable bounded blocking queue you can drop into your own code, then the pieces that build on it. Covers the BoundedBlockingQueue<T> component (a mutex, a not-full and a not-empty condition variable, blocking push and pop with backpressure, a close that drains), non-blocking try-operations and wait_for timeouts, a thread pool built on the queue, and a full multi-stage pipeline that wires two bounded queues and a set of workers together with an ordered, no-item-lost shutdown. A worked, ready-to-adapt pattern rather than a tour of one primitive; the primitive itself is the condition_variable chapter."
+sort_order: 112
+category: "Recipes"

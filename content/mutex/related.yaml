@@ -1,4 +1,6 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "producer-consumer"
+  note: "A worked component that lives on this lock: a bounded blocking queue guards its state with a std::mutex and every push and pop touches that state only under it -- go there for a complete, adaptable example of the locking discipline this chapter teaches, plus the thread pool and pipeline built on it."
 - slug: "thread"
   note: "Where the threads that contend for these mutexes come from: how you start, join, and detach a std::thread, and the anti-patterns of doing it wrong -- go there for launching the work, then come back here for how those threads share data safely."
 - slug: "atomic"

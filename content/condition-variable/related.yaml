@@ -1,4 +1,6 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "producer-consumer"
+  note: "The applied, ready-to-copy version of this chapter: the wait-with-predicate handoff assembled into a reusable bounded blocking queue, then a thread pool and a full pipeline built on it -- go there when you want the finished component to drop into real code rather than the primitive on its own."
 - slug: "mutex"
   note: "The lock a condition variable is always paired with: wait releases and re-acquires a mutex, and the shared state it checks must be changed under that same mutex -- go there for lock_guard and unique_lock, the RAII owners you hand to wait, and why the state change must be locked."
 - slug: "thread"

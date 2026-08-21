@@ -1,0 +1,14 @@
+title: "Timeouts and non-blocking try-operations"
+standard: "C++17"
+difficulty: 2
+summary: "The same queue extended with try_push/try_pop that never block and push_for/pop_for that wait with a deadline -- for threads that must stay responsive instead of blocking forever."
+notes: "Blocking push and pop are the common case, but real systems need a thread to give up waiting: a UI or control thread that must not stall, a worker that has to poll its own shutdown flag, a caller that wants to drop work rather than back up. try_push and try_pop are the non-blocking pair -- they take the lock, act only if the queue has room or an item right now, and otherwise return false or nullopt immediately. push_for and pop_for are the time-limited pair, built on condition_variable::wait_for with the SAME predicate as the blocking versions; wait_for returns false when the deadline passes with the predicate still false, which the method turns into a timeout result. Two things stay true: the predicate is still what guards against spurious wakeups, and close still wins -- a thread blocked in pop_for is released at once when the queue closes, rather than sitting out the whole timeout, which is what makes shutdown feel instant. The demo prints what each call RETURNS, not how long it took, so the result is deterministic even though the timing is not."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::condition_variable::wait_for", url: "https://en.cppreference.com/w/cpp/thread/condition_variable/wait_for" }
+detailed_tags:
+  - { name: "std::condition_variable", url: "https://en.cppreference.com/w/cpp/thread/condition_variable" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+  - { name: "std::unique_lock", url: "https://en.cppreference.com/w/cpp/thread/unique_lock" }
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }

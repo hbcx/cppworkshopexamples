@@ -1,0 +1,9 @@
+try_push 10:        1
+try_push 20:        1
+try_push 30 (full): 0
+try_pop:            10
+try_pop:            20
+try_pop (empty):    empty
+pop_for 20ms empty: timed out
+pop_for 5s, got:    99
+pop_for after close: empty (closed)
