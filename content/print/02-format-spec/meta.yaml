@@ -1,0 +1,12 @@
+title: "The format spec"
+standard: "C++23"
+difficulty: 2
+summary: "print reuses std::format's spec after a colon in the placeholder: alignment and width, fill, precision, sign, base, and argument indices."
+notes: "Everything after a colon in a {} placeholder is a format spec, identical to std::format's mini-language -- so print inherits the whole toolkit. Alignment and width: {:<8} left, {:>8} right, {:^8} centered, with an optional fill character before the alignment ({:*^8}). Numbers take a precision ({:.3f}), a forced sign ({:+}), and a base with prefix and zero-padding ({:#06x}). Argument indices ({0}, {1}) let you reorder or reuse arguments. Because this is the same engine as std::format, anything you can do there works here; the format chapter covers the spec in full. This example runs through the common specs."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::println", url: "https://en.cppreference.com/w/cpp/io/println" }
+detailed_tags:
+  - { name: "format spec", url: "https://en.cppreference.com/w/cpp/utility/format/spec" }

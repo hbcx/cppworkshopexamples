@@ -1,0 +1,16 @@
+# Where to reach for std::print -- problem -> tool, with the alternative it beats.
+- problem: "New code needs to write formatted output to the console -- a CLI tool, a small utility, a program's normal results -- clearly and safely."
+  why: "std::println composes the line in one type-safe, compile-time-checked call that takes std::string directly, where a std::cout << chain is verbose and needs manipulators for formatting, and printf is terse but silently undefined on a wrong specifier."
+  signal: "long std::cout << chains with manipulators for simple lines, or printf calls with .c_str() and format specifiers that must be kept in sync with the arguments by hand"
+
+- problem: "A program must print non-ASCII text -- names, translated strings, symbols -- correctly on a Windows console, not as mojibake."
+  why: "std::print treats text as UTF-8 and transcodes to the console encoding, so accented and non-Latin text just works, where std::cout writes raw bytes and needs the console code page set up by hand to avoid garbled output."
+  signal: "SetConsoleOutputCP or chcp calls sprinkled around output code, or bug reports about garbled accented or CJK characters on Windows"
+
+- problem: "Output needs precise formatting -- aligned columns, fixed decimals, hex, zero-padding -- for a report or a table, written straight to the console."
+  why: "print carries the full std::format spec ({:>10}, {:.2f}, {:#06x}) in the format string, so the layout is declared in place, where the stream equivalent is a chain of sticky manipulators that is verbose and leaks state onto the stream."
+  signal: "iomanip manipulator chains (setw, setprecision, hex) building console output, or manual padding to align columns"
+
+- problem: "A tool must send diagnostics to stderr, formatted the same clean way as its data, so the two streams stay separate for redirection and pipes."
+  why: "std::println(stderr, ...) formats an error with the same spec as the data and keeps it off stdout, where routing diagnostics through cout pollutes the data stream and a raw fprintf(stderr, ...) is not type-safe."
+  signal: "warnings printed to stdout, or fprintf(stderr, ...) with format specifiers alongside type-safe std::print used elsewhere"

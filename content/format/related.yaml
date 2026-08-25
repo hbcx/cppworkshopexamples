@@ -15,3 +15,5 @@
   note: "Where formatted text often ends up: build a line with std::format, then write it to a file with ofstream -- go there for opening files, the getline read loop, and binary vs text output."
 - slug: "iomanip"
   note: "The stream way to do what std::format does, and what it replaces: setw, setprecision, fixed and hex format through sticky manipulators -- go there for the pre-C++20 approach, its width/base/precision flags, and why they leak state."
+- slug: "print"
+  note: "format that writes instead of returning: std::print and std::println (C++23) take this same format string and spec but send it straight to the output, type-checked and Unicode-aware -- go there for printing formatted text to the console rather than building a string."

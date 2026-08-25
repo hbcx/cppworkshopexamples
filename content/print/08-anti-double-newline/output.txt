@@ -1,0 +1,6 @@
+intended single line
+
+next line
+---
+single line, no extra newline
+also fine with explicit newline

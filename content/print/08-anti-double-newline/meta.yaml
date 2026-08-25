@@ -1,0 +1,12 @@
+title: "Anti-pattern: a newline on println"
+standard: "C++23"
+difficulty: 1
+summary: "std::println already appends a newline, so ending the string with '\\n' prints an extra blank line -- the classic double-spacing bug when converting from printf or cout."
+notes: "std::println appends a newline for you. Ending the format string with '\\n' as well -- a habit carried over from printf or from std::cout where you add the newline yourself -- prints the line followed by a blank line, so the whole output comes out double-spaced. It is a small, common mistake that is easy to miss. The fix is to choose one: use println WITHOUT a trailing '\\n' (it adds one), or use print WITH an explicit '\\n' when you want the control -- never both. This example shows the extra blank line from a stray '\\n' and the two correct forms."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::println", url: "https://en.cppreference.com/w/cpp/io/println" }
+detailed_tags:
+  - { name: "std::print", url: "https://en.cppreference.com/w/cpp/io/print" }

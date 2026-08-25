@@ -1,0 +1,12 @@
+title: "print and println"
+standard: "C++23"
+difficulty: 1
+summary: "std::print writes formatted text with {} placeholders; std::println does the same and appends a newline, replacing a std::cout chain or a printf."
+notes: "std::print (C++23, from <print>) writes a format string with {} placeholders filled by the arguments -- the same idea as std::format, but writing straight to the output instead of returning a string. std::println is print plus a trailing newline, which is what you want most of the time; println() with no arguments writes a blank line. Compared to std::cout it is one call instead of a chain of << and it is type-safe; compared to printf it checks the format at compile time and takes types like std::string directly. On this libstdc++ it writes to stdout by default (a FILE*); pass stderr for diagnostics. This example shows print without a newline, println with arguments, and a blank line."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::println", url: "https://en.cppreference.com/w/cpp/io/println" }
+detailed_tags:
+  - { name: "std::print", url: "https://en.cppreference.com/w/cpp/io/print" }

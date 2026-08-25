@@ -1,0 +1,4 @@
+title: "std::print and std::println"
+description: "The C++23 <print> header: std::print and std::println, the type-safe, Unicode-aware replacement for a std::cout insertion chain or a printf call. Covers the basics of print and println and the newline it adds, the format spec reused from std::format, targeting stderr for diagnostics, correct UTF-8 output where std::cout needs console setup, and why print beats cout and printf -- alongside the traps: a runtime format string that will not compile, interleaving print with std::cout, and adding a newline to println that already adds one. On this libstdc++ toolchain print targets a FILE* (stdout, stderr or a fopen'd file); the standard's std::ostream overload is not yet available. Each example links stdc++exp for print's terminal support."
+sort_order: 122
+category: "Files & I/O"

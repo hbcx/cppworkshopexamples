@@ -1,0 +1,12 @@
+title: "print versus cout and printf"
+standard: "C++23"
+difficulty: 2
+summary: "print is type-safe like cout but terse like printf, checks the format string at compile time, takes std::string directly, and reads in natural left-to-right order."
+notes: "print earns its place by beating both older tools on their strong points. Against std::cout it removes the chain of << inserters and the manipulator dance for formatting, and reads in natural order. Against printf it is type-safe: the format string is checked at COMPILE time, so a placeholder with no argument or a spec that does not fit its argument is a compile error, not the undefined behaviour a mismatched printf specifier gives at run time -- and it takes a std::string directly, with no .c_str() and no risk of the wrong %-specifier. The result is printf's brevity with the compiler's guarantees. This example contrasts the three and shows a compile-time-checked call."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::println", url: "https://en.cppreference.com/w/cpp/io/println" }
+detailed_tags:
+  - { name: "std::print", url: "https://en.cppreference.com/w/cpp/io/print" }

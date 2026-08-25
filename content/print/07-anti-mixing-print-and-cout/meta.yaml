@@ -1,0 +1,12 @@
+title: "Anti-pattern: mixing print with cout"
+standard: "C++23"
+difficulty: 3
+summary: "std::print writes through C stdio while std::cout has its own buffer; interleaving them can print out of order, especially after sync_with_stdio(false)."
+notes: "std::print writes through the C stdio FILE* (stdout), while std::cout buffers separately in the C++ stream layer. By default the C++ streams are synchronised with C stdio, so mixing print and cout usually comes out in order -- but that guarantee is exactly what sync_with_stdio(false), the common fast-I/O switch, turns off, and then the two buffers flush independently and their output can appear in a different order than the code wrote it. The clean rule is to pick ONE output path per program: use std::print throughout, or std::cout throughout, and do not interleave them. This example uses only std::print, and describes the interleaving hazard in a comment rather than producing unspecified order."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::print", url: "https://en.cppreference.com/w/cpp/io/print" }
+detailed_tags:
+  - { name: "std::println", url: "https://en.cppreference.com/w/cpp/io/println" }

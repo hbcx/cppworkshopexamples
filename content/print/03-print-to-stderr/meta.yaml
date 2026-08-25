@@ -1,0 +1,12 @@
+title: "Printing to stderr"
+standard: "C++23"
+difficulty: 2
+summary: "print and println take a FILE* target: stdout by default, or stderr for diagnostics, keeping error text off the data stream just like std::cerr."
+notes: "The first argument of print/println can be a FILE*: stdout, stderr, or a file opened with fopen. Passing stderr sends diagnostics to standard error, so they stay off stdout and a shell can separate them (prog > data.txt keeps errors on screen) -- the same discipline as std::cerr, now with type-safe formatting. A note specific to this toolchain: libstdc++ currently provides the FILE* overloads but not the std::ostream overload the C++23 standard also specifies, so pass a FILE* (stdout/stderr) rather than std::cout here. This example writes a result to stdout and a warning to stderr."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::print", url: "https://en.cppreference.com/w/cpp/io/print" }
+detailed_tags:
+  - { name: "std::println", url: "https://en.cppreference.com/w/cpp/io/println" }

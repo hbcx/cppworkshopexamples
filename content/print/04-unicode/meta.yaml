@@ -1,0 +1,12 @@
+title: "Unicode output"
+standard: "C++23"
+difficulty: 2
+summary: "std::print treats text as UTF-8 and, on a Windows console, transcodes to what the console needs, so non-ASCII text shows correctly where std::cout often prints mojibake."
+notes: "A real advantage of print over cout is Unicode handling. print treats the format string and arguments as UTF-8 and, when the target is a Windows console, transcodes to the console's encoding, so accented Latin, Cyrillic, CJK and emoji display correctly out of the box -- where std::cout writes the raw bytes and shows mojibake unless the console code page was configured by hand. When the output is redirected to a file or a pipe rather than a console, print writes the UTF-8 bytes straight through, which is exactly right for a UTF-8 file. This example prints text in several scripts. (The source file is UTF-8, and the build harness captures redirected output, so what you see is the UTF-8 bytes.)"
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::println", url: "https://en.cppreference.com/w/cpp/io/println" }
+detailed_tags:
+  - { name: "std::print", url: "https://en.cppreference.com/w/cpp/io/print" }

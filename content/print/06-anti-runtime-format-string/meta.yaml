@@ -1,0 +1,13 @@
+title: "Anti-pattern: a runtime format string"
+standard: "C++23"
+difficulty: 3
+summary: "print's format parameter is checked at compile time, so a std::string chosen at runtime will not compile; go through vformat or vprint_unicode for a runtime format."
+notes: "The compile-time checking that makes print safe also means the format string must be a constant expression. Pass a std::string built at runtime -- loaded from a config, chosen by a branch -- and it does not compile, because it cannot be verified against the arguments at compile time. That surprises people converting from printf, where the format is just a runtime const char*. The C++23 way to use a runtime format is the type-erased path: std::vformat(fmt, std::make_format_args(args...)) builds a string from a runtime fmt, and std::vprint_unicode(stdout, fmt, std::make_format_args(args...)) writes it straight out. (C++26 adds std::runtime_format for a shorter spelling.) Note make_format_args takes lvalue arguments. This example takes a runtime format string and uses both the vformat and vprint paths."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::vformat", url: "https://en.cppreference.com/w/cpp/utility/format/vformat" }
+detailed_tags:
+  - { name: "std::vprint_unicode", url: "https://en.cppreference.com/w/cpp/io/vprint_unicode" }
+  - { name: "std::make_format_args", url: "https://en.cppreference.com/w/cpp/utility/format/make_format_args" }

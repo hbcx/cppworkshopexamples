@@ -1,0 +1,8 @@
+[left    ]
+[   right]
+[  mid   ]
+[**pad***]
+pi = 3.142
+hex = 0x00ff
+signed = +42
+a b a

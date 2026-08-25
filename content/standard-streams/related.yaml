@@ -5,3 +5,5 @@
   note: "The in-memory stream, and the rdbuf trick these examples use to capture stderr: redirect a stream's buffer to an ostringstream to grab its text. Go there for building and parsing strings with the stream operators."
 - slug: "iomanip"
   note: "How to format what you send to these streams: setw, setprecision, hex and the sticky-flag rules apply to cout and cerr just as to any stream. Go there for width, precision, base and alignment."
+- slug: "print"
+  note: "The modern C++23 alternative to cout for output: std::print and std::println are type-safe and Unicode-aware, though they write through C stdio, so mixing them with cout has the same interleaving caveats covered here. Go there for the format-string-based console output."

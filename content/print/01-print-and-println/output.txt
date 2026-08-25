@@ -1,0 +1,5 @@
+no newline here; still the same line
+hello, world!
+2 + 3 = 5
+
+after a blank line

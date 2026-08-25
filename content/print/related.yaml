@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "format"
+  note: "The engine underneath: print takes exactly std::format's format string and spec, but writes it to the output instead of returning a string. Go there for the full spec mini-language, custom formatters, and building strings rather than printing them."
+- slug: "standard-streams"
+  note: "What print replaces and how they interact: cout/cerr, buffering, and why mixing print with cout can interleave. Go there for the predefined streams, stdout-versus-stderr, and the I/O performance knobs."
+- slug: "iomanip"
+  note: "The stream way to do print's formatting: setw, setprecision and hex through sticky manipulators, which the format spec collapses into one placeholder. Go there for the pre-C++20 approach and why those flags leak state."

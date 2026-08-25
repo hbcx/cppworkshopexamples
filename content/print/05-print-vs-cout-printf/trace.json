@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 4}, {"file": "main.cpp", "line": 5}, {"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 14, "out": "user Ada has 3 items\n"}, {"file": "main.cpp", "line": 19, "out": "3 squared is 9\n"}, {"file": "main.cpp", "line": 20}, {"file": "main.cpp", "line": 21}]}
