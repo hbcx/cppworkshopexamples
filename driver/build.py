@@ -7,7 +7,7 @@ to the content it checks, and is run both locally and by this repo's GitHub
 Actions CI (see .github/workflows/ci.yml). See CLAUDE.md sec. 5.
 
 What it does, per example dir (content/<section>/<example>/):
-  * read meta.yaml (standard, run, sanitizers, werror, sources);
+  * read meta.yaml (standard, run, sanitizers, werror, sources, libs);
   * map "C++NN" -> -std=c++NN;
   * pick sources BY CONVENTION -- every *.cpp in the dir, compiled together with
     -I <dir> so local headers resolve; one dir = one executable. .hpp files are
@@ -361,6 +361,10 @@ def compile_cmd(cc: str, std_flag: str, ex: Example, sources: list[Path],
         cmd.append("-fsanitize=" + ",".join(sanitizers))
         cmd.append("-g")
     cmd += [to_compiler_path(s, flavor) for s in sources]
+    # Extra link libraries (e.g. stdc++exp for std::print's terminal support on
+    # libstdc++). Placed after the sources so the linker resolves them correctly.
+    for lib in (ex.meta.get("libs") or []):
+        cmd.append(f"-l{lib}")
     cmd += ["-o", to_compiler_path(out, flavor)]
     return cmd
 
@@ -567,6 +571,8 @@ def _write_trace_file(ex: Example, compilers: list[str], std_flag: str,
     cmd = [cc, f"-std={std_flag}", "-I", to_compiler_path(ex.path, flavor),
            "-O0", "-g"]
     cmd += [to_compiler_path(s, flavor) for s in ex.sources()]
+    for lib in (ex.meta.get("libs") or []):
+        cmd.append(f"-l{lib}")
     cmd += ["-o", to_compiler_path(out, flavor)]
     proc = subprocess.run(cmd, capture_output=True, text=True)
     if proc.returncode != 0:
