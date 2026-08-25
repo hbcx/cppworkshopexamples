@@ -1,0 +1,4 @@
+joined: var/log/app/today.txt
+append (/=): report/final
+concat (+=): report-final
+mixed:       var/log/backup.2026

@@ -1,0 +1,12 @@
+title: "Anti-pattern: losing Unicode through string()"
+standard: "C++17"
+difficulty: 3
+summary: "The narrow string() re-encodes a path to the platform's active code page on Windows, mangling non-ASCII names; u8path and u8string keep bytes lossless as UTF-8."
+notes: "Round-tripping a non-ASCII path through the plain narrow string() is lossy on Windows: it re-encodes to the active code page, which often cannot represent characters like the Polish l-with-stroke, an umlaut, or CJK names, so they come back mangled or throw. The safe channel is UTF-8: construct from UTF-8 bytes with fs::u8path (available in C++17) and read them back with u8string(), which yields the same bytes on every platform. This example builds a path from a UTF-8 name, confirms its byte length is stable, and shows the round trip through UTF-8 gives back an equal path. Keep filenames in UTF-8 end to end and only convert to the native form at the moment you hand a path to the OS."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::u8string", url: "https://en.cppreference.com/w/cpp/filesystem/path/string" }
+  - { name: "std::filesystem::u8path", url: "https://en.cppreference.com/w/cpp/filesystem/path/u8path" }

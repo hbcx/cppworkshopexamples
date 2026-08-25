@@ -1,0 +1,12 @@
+title: "Anti-pattern: months when you meant days"
+standard: "C++20"
+difficulty: 3
+summary: "One month later and thirty days later are different, and month arithmetic can produce an invalid date; use months/years for calendar steps and sys_days + days for an exact day count."
+notes: "There are two kinds of date arithmetic and they are not interchangeable. Adding months or years to a year_month_day is calendrical -- it keeps the day-of-month -- and can overflow to an invalid date. Adding days works on sys_days and is an exact count that always lands on a real date. Reaching for the wrong one is a quiet bug: computing a thirty-day payment window as + months{1} is off by a day or three and may even produce a non-date (January 31 + 1 month), while computing same day next month as + days{30} drifts across months over a year. The rule is intent-driven: if the requirement says a number of DAYS (a 30-day trial, 90 days past due), do it on sys_days with days{n}; if it says a calendar step (same day next month, one year from signup), use months{}/years{} and then check ok() or snap to the month end. The example contrasts the two on the same start date so the difference -- and the invalid result -- is visible."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }
+detailed_tags:
+  - { name: "std::chrono::month", url: "https://en.cppreference.com/w/cpp/chrono/month" }
+  - { name: "std::chrono::duration", url: "https://en.cppreference.com/w/cpp/chrono/duration" }

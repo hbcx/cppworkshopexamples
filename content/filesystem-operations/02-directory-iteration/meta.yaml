@@ -1,0 +1,11 @@
+title: "Listing a directory"
+standard: "C++17"
+difficulty: 1
+summary: "directory_iterator walks one directory's entries; each directory_entry already cached its path and type, so entry.is_regular_file() needs no extra disk call -- but sort before printing."
+notes: "directory_iterator yields the entries of a single directory (not its subdirectories). Each entry is a directory_entry that captured its path and status while the directory was read, so entry.is_regular_file() and entry.path() answer from that cache with no further disk hit -- cheaper than calling the free functions again per entry (the anti-pattern later). One thing the standard does NOT promise is order: the OS returns entries in whatever order it likes, so collect the names and sort them before printing or the output is not reproducible from run to run or machine to machine. This example lists the regular files by filename, sorted."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::directory_iterator", url: "https://en.cppreference.com/w/cpp/filesystem/directory_iterator" }
+detailed_tags:
+  - { name: "std::filesystem::directory_entry", url: "https://en.cppreference.com/w/cpp/filesystem/directory_entry" }

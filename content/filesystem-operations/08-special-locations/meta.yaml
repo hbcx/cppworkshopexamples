@@ -1,0 +1,11 @@
+title: "The working directory and temp"
+standard: "C++17"
+difficulty: 2
+summary: "current_path() reads or, with an argument, changes the working directory; temp_directory_path() is an existing absolute directory for scratch files."
+notes: "temp_directory_path() returns a directory that exists and is writable, meant for scratch files -- its exact location varies by machine, so rely on its properties, not its text. current_path() with no argument reads the process working directory; with an argument it CHANGES it, which is process-global state, so save the old value and restore it when you are done -- leaving the cwd where you found it avoids surprising the rest of the program. This example checks temp's properties, moves into a scratch directory, confirms the move by filename, then restores. Because the actual paths differ per machine, it prints only stable facts."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::current_path", url: "https://en.cppreference.com/w/cpp/filesystem/current_path" }
+detailed_tags:
+  - { name: "std::filesystem::temp_directory_path", url: "https://en.cppreference.com/w/cpp/filesystem/temp_directory_path" }

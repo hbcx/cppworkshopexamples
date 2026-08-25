@@ -1,0 +1,13 @@
+title: "Calendar types: year, month, day"
+standard: "C++20"
+difficulty: 1
+summary: "A civil date is a std::chrono::year_month_day, built from strong year/month/day types with the / operator, and ok() tells you whether the date is real."
+notes: "The C++20 calendar replaces struct tm with real types. year, month and day are distinct strong types -- not ints -- so you cannot silently swap a month for a day, and the / operator composes them into a year_month_day in a natural reading order: 2026y/August/21d with the calendar literals, or year{2026}/8/21 with plain values. The order is flexible (year/month/day is the usual one). Each part converts back to a number when you need it: int(ymd.year()), unsigned(ymd.month()), unsigned(ymd.day()). The crucial method is ok(): a year_month_day can hold impossible fields (2026-02-30) without any error at construction, and ok() is how you find out before the bad value does damage -- the anti-patterns later are mostly about skipping this check. This example just builds dates and inspects them; the following ones do arithmetic, weekdays, formatting and time zones on top."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }
+detailed_tags:
+  - { name: "std::chrono::year", url: "https://en.cppreference.com/w/cpp/chrono/year" }
+  - { name: "std::chrono::month", url: "https://en.cppreference.com/w/cpp/chrono/month" }
+  - { name: "std::chrono::day", url: "https://en.cppreference.com/w/cpp/chrono/day" }

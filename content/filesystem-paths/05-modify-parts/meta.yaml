@@ -1,0 +1,13 @@
+title: "Editing parts of a path"
+standard: "C++17"
+difficulty: 2
+summary: "replace_extension, replace_filename and remove_filename change a path in place without touching the disk -- the usual way to turn one filename into a related one."
+notes: "These members rewrite the stored path; no file is read or moved. replace_extension swaps the suffix (a .cpp becomes a .o), replace_filename keeps the directory and changes the last component, and remove_filename leaves the parent directory with a trailing separator. The classic real job is mapping a source file to its build output: take the input's filename, drop it into another directory tree with operator/, and swap the extension -- exactly what a compiler driver does. Note extension()'s rules (see the anti-pattern) so replace_extension does what you expect on dotfiles and multi-dot names."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::replace_extension", url: "https://en.cppreference.com/w/cpp/filesystem/path/replace_extension" }
+  - { name: "path::replace_filename", url: "https://en.cppreference.com/w/cpp/filesystem/path/replace_filename" }
+  - { name: "path::remove_filename", url: "https://en.cppreference.com/w/cpp/filesystem/path/remove_filename" }

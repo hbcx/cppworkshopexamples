@@ -1,0 +1,12 @@
+title: "Formatting and parsing dates"
+standard: "C++20"
+difficulty: 2
+summary: "std::format prints a date with chrono specifiers like %Y-%m-%d and %A, and std::chrono::parse reads one back from text through a stream -- no strftime or strptime."
+notes: "Dates go to and from text with the same chrono machinery. std::format takes the same specifiers strftime uses -- %Y-%m-%d for ISO, %d/%m/%Y for day-first, %A and %B for the full weekday and month name -- but it is type-checked and works directly on a year_month_day (or a sys_days when the specifier needs a weekday). Reading a date back is std::chrono::parse: you feed it a format and a target through a stream, in >> parse(\"%Y-%m-%d\", ymd), and it fills the date or sets the stream's fail bit if the text does not match -- which is how you validate input. This replaces the C pair strftime/strptime and their locale and buffer pitfalls. The weekday and month NAMES follow the stream's locale; the numeric %Y-%m-%d form is locale-independent, so prefer it for anything machine-readable (a file, a wire format) and keep the named forms for text shown to people."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::parse", url: "https://en.cppreference.com/w/cpp/chrono/parse" }
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }
+detailed_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }

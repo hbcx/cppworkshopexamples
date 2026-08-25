@@ -1,0 +1,12 @@
+title: "Time zones with zoned_time"
+standard: "C++20"
+difficulty: 3
+summary: "std::chrono::zoned_time pairs an instant with a named IANA time zone and gives the local wall-clock time there, daylight saving included, and converts both directions between UTC and local."
+notes: "A time zone turns an instant into a wall-clock time, and C++20 does it with the IANA database, not a hand-picked offset. A sys_time is an instant in UTC; a zoned_time bundles that instant with a named zone (America/New_York, Asia/Tokyo, Europe/London) and, when you format or query it, gives the local time there with daylight saving already applied. Formatting a zoned_time with %Z prints the zone abbreviation and %z the offset; get_info().offset gives the offset as a duration. It converts both ways: construct from a sys_time to go UTC to local, or from a local_time (local_days{...} + hours) to interpret a wall-clock time in that zone and get the UTC instant back with get_sys_time(). The two time kinds are distinct types on purpose -- a sys_time and a local_time never mix silently -- which is what stops the classic off-by-the-offset bug. Time zones need the tz database present at runtime; it ships with the standard library on the platforms here. Store and compute in UTC, and use a zone only at the edges where a human reads or enters a time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::zoned_time", url: "https://en.cppreference.com/w/cpp/chrono/zoned_time" }
+detailed_tags:
+  - { name: "std::chrono::time_zone", url: "https://en.cppreference.com/w/cpp/chrono/time_zone" }
+  - { name: "std::format", url: "https://en.cppreference.com/w/cpp/utility/format/format" }

@@ -1,0 +1,4 @@
+a == b: 0
+a == c: 0
+normalised a==b: 1
+normalised a==c: 1

@@ -1,0 +1,6 @@
+exists(file):          1
+is_regular_file(file): 1
+is_directory(file):    0
+is_directory(dir):     1
+exists(missing):       0
+type is regular:       1

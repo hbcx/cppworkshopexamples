@@ -1,0 +1,6 @@
+last of Feb 2024: 2024-02-29
+last of Feb 2026: 2026-02-28
+days in Feb 2024: 29
+days in Feb 2026: 28
+2024 is leap: 1
+2026 is leap: 0

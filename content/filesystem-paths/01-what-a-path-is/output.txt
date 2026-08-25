@@ -1,0 +1,5 @@
+fromLiteral: docs/report.txt
+fromString:  images/logo.png
+equal to fromLiteral: 1
+default path empty:   1
+has a filename:       1

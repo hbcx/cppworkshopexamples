@@ -1,0 +1,10 @@
+path:        project/src/main.cpp
+filename:    main.cpp
+stem:        main
+extension:   .cpp
+parent_path: project/src
+root_directory: /
+root_path:      /
+relative_path:  usr/local/bin/clang
+has_extension:   1
+has_parent_path: 1

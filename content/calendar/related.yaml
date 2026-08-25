@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "chrono"
+  note: "The foundation this sits on: durations, clocks and time_points -- a sys_days is a time_point in days, and every instant a zoned_time works with is a system_clock time_point -- go there for the units and the clocks, then come back here for calendar dates and time zones built on them."
+- slug: "format"
+  note: "How dates turn into text: std::format takes the same %Y-%m-%d and %A specifiers used here, type-checked -- go there for the format-spec mini-language, custom formatters, and the locale option, all of which apply to the date formatting in this chapter."
+- slug: "strong-types"
+  note: "Why year, month and day are distinct types and not ints: they are the standard library's own strong types, so a month cannot be passed where a day belongs -- go there for the general technique of wrapping a value in a type to keep the compiler checking your units."

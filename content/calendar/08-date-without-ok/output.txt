@@ -1,0 +1,4 @@
+date fields: 2026-02-30
+ok(): 0
+as sys_days and back: 2026-03-02 (not what was intended)
+rejected: 2026-02-30 is not a real date

@@ -1,0 +1,5 @@
+ISO:       2026-08-21
+written:   Friday, August 21, 2026
+day-first: 21/08/2026
+parsed ok: 1 -> 2026-12-25
+bad input failed: 1

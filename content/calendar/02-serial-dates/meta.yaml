@@ -1,0 +1,12 @@
+title: "Serial dates and day arithmetic with sys_days"
+standard: "C++20"
+difficulty: 2
+summary: "std::chrono::sys_days is a date as a count of days since the epoch; convert a year_month_day to it to add or subtract days and to get the number of days between two dates."
+notes: "A year_month_day is good for reading and displaying a date, but not for arithmetic -- you cannot add days to it directly. sys_days is the other view: a time_point measured in whole days since the system_clock epoch (1970-01-01), i.e. a serial day number. The conversion both ways is implicit -- sys_days sd = ymd; and year_month_day back = sd; -- and it is the bridge between the calendar and arithmetic. On a sys_days you do ordinary math: sd + days{10} moves ten days forward and always lands on a real date, and subtracting two sys_days gives a chrono::days duration -- the exact number of days between them, leap years handled for you. This is the tool for deadlines, ages in days, and any exact day offset. Reserve month and year arithmetic (the next example) for calendar steps like same day next month, which behave differently and can overflow."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }
+detailed_tags:
+  - { name: "std::chrono::system_clock", url: "https://en.cppreference.com/w/cpp/chrono/system_clock" }
+  - { name: "std::chrono::duration", url: "https://en.cppreference.com/w/cpp/chrono/duration" }

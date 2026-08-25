@@ -1,0 +1,5 @@
+0 README.md
+1 docs/guide.md
+1 src/main.cpp
+2 src/gpu/shader.cpp
+files seen when skipping docs/: 3

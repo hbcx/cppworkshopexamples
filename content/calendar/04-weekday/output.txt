@@ -1,0 +1,5 @@
+2026-08-21 is a Friday
+iso (Mon=1..Sun=7): 5
+weekend: 0
+2nd Thursday of Aug 2026: 2026-08-13
+last Friday of Aug 2026: 2026-08-28

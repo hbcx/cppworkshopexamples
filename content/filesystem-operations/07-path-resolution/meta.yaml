@@ -1,0 +1,13 @@
+title: "Resolving paths against the disk"
+standard: "C++17"
+difficulty: 3
+summary: "absolute() is lexical and needs nothing on disk; canonical() resolves .. and symlinks and requires the file to exist; weakly_canonical() allows a missing tail; relative() expresses one path against a base."
+notes: "These four turn a path into another path, but differ in how much they touch the disk. absolute() just joins a relative path onto the current directory -- purely lexical, no existence needed, and it does NOT resolve .. or symlinks. canonical() returns the real resolved path: it collapses .., follows symlinks, and REQUIRES the whole path to exist (it throws otherwise). weakly_canonical() is canonical() for a path whose tail does not exist yet -- it resolves the part that is there and keeps the rest lexically, which is exactly what you want for an output file you are about to create. relative() expresses a path against a base directory. This example prints only stable facts (is_absolute, a filename, a relative tail) because the absolute values differ per machine. Contrast with the lexical lexically_normal in the paths chapter, which never reads the disk."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::canonical", url: "https://en.cppreference.com/w/cpp/filesystem/canonical" }
+detailed_tags:
+  - { name: "std::filesystem::absolute", url: "https://en.cppreference.com/w/cpp/filesystem/absolute" }
+  - { name: "std::filesystem::weakly_canonical", url: "https://en.cppreference.com/w/cpp/filesystem/canonical" }
+  - { name: "std::filesystem::relative", url: "https://en.cppreference.com/w/cpp/filesystem/relative" }

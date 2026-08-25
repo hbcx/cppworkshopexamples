@@ -1,0 +1,11 @@
+title: "Anti-pattern: building paths with string +"
+standard: "C++17"
+difficulty: 3
+summary: "Gluing a path with std::string + makes you place the separator by hand, and edge cases -- a trailing slash, an empty piece -- give doubled or leading separators."
+notes: "It is tempting to build a path as dir + \"/\" + name, but then the separator is your problem: a directory that already ends in a slash yields a doubled separator, an empty piece yields a leading one, and on Windows you may pick the wrong slash entirely. operator/ exists precisely to remove this class of bug -- it inserts exactly one separator and never doubles it, whether or not the left side already ends in one. The fix is a one-for-one replacement: wrap the pieces in fs::path and join with /. This example shows the doubled-separator case from string gluing and the clean result from operator/."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "operator/", url: "https://en.cppreference.com/w/cpp/filesystem/path/operator_slash" }

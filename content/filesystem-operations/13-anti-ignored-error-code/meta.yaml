@@ -1,0 +1,11 @@
+title: "Anti-pattern: ignoring the error_code"
+standard: "C++17"
+difficulty: 3
+summary: "Passing an error_code to the non-throwing form and never checking it lets an operation fail silently, so the code marches on using a bogus sentinel result."
+notes: "The error_code overloads exist so failure does not throw -- but that only helps if you look at the code. Pass one and ignore it, and a failed operation returns a sentinel that the rest of the code treats as real: file_size returns uintmax_t(-1) on failure, which read as a size is an enormous number, and a program that then allocates or loops on it misbehaves far from the real cause. This is worse than the exception you were avoiding, because nothing announces the failure. The fix is to check the code immediately after the call (if (ec) ...), or to use the throwing form when you would rather it propagate. This example shows the ignored sentinel and then the same call handled properly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::file_size", url: "https://en.cppreference.com/w/cpp/filesystem/file_size" }
+detailed_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }

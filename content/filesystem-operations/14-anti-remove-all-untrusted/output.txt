@@ -1,0 +1,4 @@
+'keep' allowed:      1
+'../../etc' allowed: 0
+refused to delete outside the workspace
+important.txt still here: 1

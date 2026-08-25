@@ -1,0 +1,12 @@
+title: "The last day of a month, and leap years"
+standard: "C++20"
+difficulty: 2
+summary: "year/month/last is the last day of a month with no length table, its day() is the number of days in the month, and year::is_leap answers the leap-year question."
+notes: "How many days are in a month is a question the calendar answers for you. year/month/last builds a year_month_day_last -- the last day of that month -- so 2024y/February/last is February 29 and 2026y/February/last is February 28, with the leap rule applied automatically. Converting it to a year_month_day (year_month_day{ymdl}) gives the concrete date, and its day() member, read as an unsigned, is exactly the number of days in the month -- the clean way to get 28/29/30/31 without a lookup table or a modulo-400 leap formula. When you only need the leap-year answer itself, year has is_leap(). Reach for year/month/last whenever you snap a date to a month boundary (the overflow fix from the arithmetic example), compute a monthly cycle's end, or need the month length -- billing periods, calendars, days-remaining counts."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::year_month_day_last", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day_last" }
+detailed_tags:
+  - { name: "std::chrono::year", url: "https://en.cppreference.com/w/cpp/chrono/year" }
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }

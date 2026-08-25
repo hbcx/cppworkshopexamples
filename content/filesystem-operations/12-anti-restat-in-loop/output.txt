@@ -1,0 +1,3 @@
+cached is_regular: 1
+cached size:       5
+after refresh: 9

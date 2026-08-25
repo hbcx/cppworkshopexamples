@@ -1,0 +1,4 @@
+UTC time:    12:00 UTC
+Berlin time: 14:00 CEST
+Berlin wall read as UTC: 14:00 -- off by the offset
+correct UTC again: 12:00

@@ -1,0 +1,15 @@
+title: "Taking a path apart"
+standard: "C++17"
+difficulty: 1
+summary: "A path splits into named parts -- filename, stem, extension, parent_path and the root parts -- and every query reads the stored text without touching the disk."
+notes: "These member queries read the path's structure, never the filesystem. filename() is the last component, stem() is that without its extension, extension() is the trailing suffix (with the dot), and parent_path() is everything before the filename. For an absolute path the root parts matter: a POSIX-style path has a root-directory / and, after it, the relative_path; on Windows an absolute path also carries a root-name like C: (see the portability example). has_extension() and has_parent_path() let you branch without surprises. These are the pieces you recombine and edit in the examples that follow."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::filename", url: "https://en.cppreference.com/w/cpp/filesystem/path/filename" }
+  - { name: "path::stem", url: "https://en.cppreference.com/w/cpp/filesystem/path/stem" }
+  - { name: "path::extension", url: "https://en.cppreference.com/w/cpp/filesystem/path/extension" }
+  - { name: "path::parent_path", url: "https://en.cppreference.com/w/cpp/filesystem/path/parent_path" }
+  - { name: "path::relative_path", url: "https://en.cppreference.com/w/cpp/filesystem/path/relative_path" }

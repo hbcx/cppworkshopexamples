@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 7}, {"file": "main.cpp", "line": 12, "out": "throwing form: caught filesystem_error\nerror_code form failed: 1\nsentinel size returned: 1\ncleared on success: 1\n"}]}

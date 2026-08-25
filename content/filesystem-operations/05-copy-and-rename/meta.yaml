@@ -1,0 +1,13 @@
+title: "Copying and renaming"
+standard: "C++17"
+difficulty: 2
+summary: "copy_file copies one file with copy_options deciding overwrite-or-skip, copy with the recursive option copies a tree, and rename moves a file atomically."
+notes: "copy_file copies a single file; a copy_options flag decides what happens when the target exists -- overwrite_existing replaces it, skip_existing leaves it, and the default is to fail. copy handles directories, and with copy_options::recursive it duplicates a whole tree. rename MOVES or renames: the old name disappears and the new one appears, and on the same filesystem it is atomic, which makes it the standard way to publish a file you built under a temporary name -- readers see either the old file or the finished new one, never a half-written one. This example copies a file, backs up a directory tree, and renames a temp file into its final place."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::copy", url: "https://en.cppreference.com/w/cpp/filesystem/copy" }
+detailed_tags:
+  - { name: "std::filesystem::copy_file", url: "https://en.cppreference.com/w/cpp/filesystem/copy_file" }
+  - { name: "std::filesystem::copy_options", url: "https://en.cppreference.com/w/cpp/filesystem/copy_options" }
+  - { name: "std::filesystem::rename", url: "https://en.cppreference.com/w/cpp/filesystem/rename" }

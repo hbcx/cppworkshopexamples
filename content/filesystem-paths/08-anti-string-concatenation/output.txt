@@ -1,0 +1,3 @@
+string glue: output//result.csv
+operator/:   output/result.csv
+no slash:    output/result.csv

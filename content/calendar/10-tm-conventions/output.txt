@@ -1,0 +1,3 @@
+tm fields into chrono: 0126-07-21 (year 126, month 7 -- wrong)
+chrono values:        2026-08-21
+converted from tm:    2026-08-21

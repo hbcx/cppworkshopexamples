@@ -1,0 +1,2 @@
+utf8 byte length: 18
+round trip equal: 1

@@ -1,0 +1,4 @@
+replace_extension: src/engine/render.o
+replace_filename:  src/engine/render.hpp
+remove_filename:   src/engine/
+build output:      build/obj/render.o

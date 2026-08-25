@@ -1,0 +1,3 @@
+generic: assets/textures/wood.png
+equal: 1
+ordered: 1

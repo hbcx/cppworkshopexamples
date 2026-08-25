@@ -1,0 +1,11 @@
+title: "Anti-pattern: a recursive walk that follows symlinks"
+standard: "C++17"
+difficulty: 3
+summary: "recursive_directory_iterator does not follow directory symlinks by default; turning on follow_directory_symlink without guarding cycles can loop forever on a link that points back up."
+notes: "By default recursive_directory_iterator does NOT follow directory symlinks, which is what keeps it safe -- it visits the real tree once. Passing directory_options::follow_directory_symlink turns following on, and if the tree contains a link that points back into an ancestor, the walk revisits the same directories again and again: it either loops forever or throws when it runs out of handles. This example does not build a symlink cycle (creating symlinks is privileged on some systems), so it demonstrates the SAFE default walk and describes the trap in a comment. If you genuinely must follow symlinks, bound the depth or remember the canonical() paths you have already entered and stop when one repeats -- that is what breaks the cycle."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::recursive_directory_iterator", url: "https://en.cppreference.com/w/cpp/filesystem/recursive_directory_iterator" }
+detailed_tags:
+  - { name: "std::filesystem::directory_options", url: "https://en.cppreference.com/w/cpp/filesystem/directory_options" }

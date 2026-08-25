@@ -1,0 +1,13 @@
+title: "Creating and removing"
+standard: "C++17"
+difficulty: 1
+summary: "create_directory makes one level, create_directories makes the whole chain; remove deletes a file or empty directory, remove_all deletes a tree and returns the count."
+notes: "create_directory makes a single directory and fails if its parent is missing; create_directories makes every missing level of the path, which is what you almost always want -- and it is idempotent, returning false (nothing created) rather than failing when the directory already exists. On the removal side, remove deletes one file or one EMPTY directory and returns whether something was removed, while remove_all deletes a whole tree recursively and returns how many entries it removed. remove_all is powerful and unforgiving -- the anti-pattern chapter shows why you must never point it at an unchecked path. This example creates a nested tree and tears it down, reading the remove_all count."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::create_directories", url: "https://en.cppreference.com/w/cpp/filesystem/create_directory" }
+detailed_tags:
+  - { name: "std::filesystem::create_directory", url: "https://en.cppreference.com/w/cpp/filesystem/create_directory" }
+  - { name: "std::filesystem::remove", url: "https://en.cppreference.com/w/cpp/filesystem/remove" }
+  - { name: "std::filesystem::remove_all", url: "https://en.cppreference.com/w/cpp/filesystem/remove" }

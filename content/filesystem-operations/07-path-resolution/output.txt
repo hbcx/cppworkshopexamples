@@ -1,0 +1,5 @@
+absolute is_absolute: 1
+canonical filename: config.ini
+no dotdot left: 1
+weakly is_absolute: 1
+relative: app/config.ini

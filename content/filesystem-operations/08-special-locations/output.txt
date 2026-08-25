@@ -1,0 +1,4 @@
+temp is_absolute: 1
+temp exists:      1
+moved into work:  1
+restored:         1

@@ -1,0 +1,20 @@
+# Where to reach for the filesystem operations -- problem -> tool, with the alternative it beats.
+- problem: "A tool must process every file under a directory -- a linter over a source tree, a media indexer, a backup that walks a folder -- including nested subdirectories, and skip a few branches like .git or node_modules."
+  why: "recursive_directory_iterator walks the whole tree with one loop and disable_recursion_pending prunes a branch in place, where hand-rolled recursion with opendir/readdir (or FindFirstFile on Windows) is per-platform code you must write twice and get the descent and cleanup right in both."
+  signal: "a manual recursive walk built on opendir/readdir or FindFirstFile, or a queue of directories processed with platform #ifdefs"
+
+- problem: "A build or asset step should only redo work when the input changed: recompile a .cpp when it is newer than its .o, re-encode an image when the source beat the cache."
+  why: "last_write_time gives each file's modification time and comparing the two file_time_type values answers newer-than directly, where shelling out to stat or storing your own timestamps adds a dependency and a second source of truth that drifts."
+  signal: "up-to-date checks that shell out to 'stat' or 'ls -l', or a hand-kept manifest of timestamps compared against the filesystem"
+
+- problem: "A program writes a file that readers must never see half-written -- a config it rewrites, a cache entry, a downloaded artifact -- even if it crashes mid-write."
+  why: "writing to a temp name and then rename() into place is atomic on one filesystem, so a reader sees either the old file or the whole new one, where writing in place leaves a truncated file visible the moment the process dies partway through."
+  signal: "output opened directly on the final path and written incrementally, with no temp-file-then-rename step"
+
+- problem: "A service creates scratch files -- an upload staging area, an extracted archive, intermediate render output -- that must land in a writable place and be cleaned up afterwards."
+  why: "temp_directory_path() names a writable scratch location without hardcoding /tmp or %TEMP%, create_directories makes the workspace, and remove_all tears it down and reports the count, where a hardcoded temp path breaks on the other OS or a locked-down account."
+  signal: "a literal \"/tmp/...\" or getenv(\"TEMP\") path, or scratch files left behind because cleanup was manual and partial"
+
+- problem: "Code opens or stats a path and must handle the file being absent or unreadable without the whole request aborting -- a cache miss, an optional config, a file a user may have deleted."
+  why: "the error_code overloads report a missing or unreadable file in a code you branch on, keeping the miss on the normal path, where the throwing form turns an expected miss into an exception you must wrap every call in try/catch to survive."
+  signal: "filesystem calls wrapped in try/catch purely to treat 'not found' as a normal outcome, or an exists() pre-check bolted on to dodge the throw"

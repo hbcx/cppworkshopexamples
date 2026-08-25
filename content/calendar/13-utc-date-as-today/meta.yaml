@@ -1,0 +1,11 @@
+title: "Anti-pattern: taking the UTC date as today"
+standard: "C++20"
+difficulty: 3
+summary: "The date of an instant depends on the time zone: near midnight the UTC date and the user's local date differ, so deriving today from a UTC instant can be off by a day."
+notes: "A date is not a property of an instant alone -- it depends on the zone you read the instant in. The common shortcut, today = floor<days>(system_clock::now()), gives the date in UTC, which for a user whose local time is late evening or early morning is the wrong day: at 23:30 in New York it is already the next day in UTC, so a due today check, a daily report boundary, or a birthday reminder fires a day early or late. The fix is to take the date in the RELEVANT zone: build a zoned_time for the user's zone and floor its local time to days, or otherwise convert to local before extracting the date. Store instants in UTC, but compute a calendar date only after deciding whose day you mean. The example uses a fixed late-night New York instant (so the output is reproducible; the real bug uses now()) and shows the UTC date and the New York date landing on different days."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::zoned_time", url: "https://en.cppreference.com/w/cpp/chrono/zoned_time" }
+detailed_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }

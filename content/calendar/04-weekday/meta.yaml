@@ -1,0 +1,11 @@
+title: "Weekdays and the nth weekday of a month"
+standard: "C++20"
+difficulty: 2
+summary: "std::chrono::weekday gives the day of the week for a date, and year/month/Weekday[n] finds things like the 2nd Thursday or the last Friday of a month."
+notes: "The weekday of a date is computed from its sys_days: weekday wd{sys_days{ymd}}. No Zeller's congruence, no lookup table. You compare it against the named constants (Monday .. Sunday), format it with %a (short) or %A (full), or read it as a number -- but mind the two conventions, covered in an anti-pattern: c_encoding() is 0..6 with Sunday = 0, iso_encoding() is 1..7 with Monday = 1. The calendar also expresses indexed weekdays directly: year/month/Weekday[n] is the nth weekday of that month (2026y/August/Thursday[2] is the second Thursday), and Weekday[last] is the last one (Friday[last]). These give a year_month_weekday (or ..._last) that converts to sys_days like any date. This is the tool for recurring rules -- the second Tuesday's meeting, payroll on the last Friday, a holiday on the fourth Thursday -- which are painful to compute by hand."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::weekday", url: "https://en.cppreference.com/w/cpp/chrono/weekday" }
+detailed_tags:
+  - { name: "std::chrono::year_month_weekday", url: "https://en.cppreference.com/w/cpp/chrono/year_month_weekday" }

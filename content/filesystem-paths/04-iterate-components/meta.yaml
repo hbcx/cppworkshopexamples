@@ -1,0 +1,12 @@
+title: "Iterating a path's components"
+standard: "C++17"
+difficulty: 2
+summary: "A path is iterable: range-for yields its components in order (the root first for an absolute path), so you can walk or rebuild a path piece by piece."
+notes: "A path models a range of components. Range-for over it yields each part in order; for an absolute path the first component is the root (/ or a root-name). Because it exposes begin()/end(), the standard iterator algorithms work on it -- std::distance counts the components without a manual loop. Rebuilding with /= gives the original path back, which is the basis for path transforms that filter or remap components. This is the structural view; the decomposition example gives the named-part view of the same path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::begin", url: "https://en.cppreference.com/w/cpp/filesystem/path/begin" }
+  - { name: "operator/", url: "https://en.cppreference.com/w/cpp/filesystem/path/operator_slash" }

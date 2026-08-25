@@ -1,0 +1,5 @@
+created nested: 1
+exists a/b/c:   1
+second call:    0
+remove one file:  1
+remove_all count: 4

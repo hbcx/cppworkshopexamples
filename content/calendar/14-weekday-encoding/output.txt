@@ -1,0 +1,4 @@
+Friday  c_encoding=5 iso_encoding=5 (agree)
+Sunday  c_encoding=0 iso_encoding=7 (differ)
+Monday-first index of Sunday: 6
+Sunday-first index of Sunday: 0

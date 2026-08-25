@@ -1,0 +1,12 @@
+title: "Anti-pattern: comparing path text for same file"
+standard: "C++17"
+difficulty: 3
+summary: "Path equality is purely lexical, so ./a and a and a/../a are all unequal though they name the same place; normalise for a text answer, or use fs::equivalent for a real one."
+notes: "Deciding two paths point at the same file by comparing their text is wrong twice over. First, equality (and ordering) is purely lexical: data/x, ./data/x and data/../data/x are all unequal even though they name the same location. Normalising both with lexically_normal first makes those match -- that is the fix when a TEXT answer is enough. Second, even normalised text cannot see through symlinks, hard links, or two mounts of the same volume: the only true same-file test is fs::equivalent(a, b), which resolves both against the real filesystem (and needs the files to exist -- it lives in the operations chapter). Use the lexical form for tidy-up and de-duplication, and equivalent() when the question is really whether two paths are the same file on disk."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::lexically_normal", url: "https://en.cppreference.com/w/cpp/filesystem/path/lexically_normal" }
+  - { name: "std::filesystem::equivalent", url: "https://en.cppreference.com/w/cpp/filesystem/equivalent" }

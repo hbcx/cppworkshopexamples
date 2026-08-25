@@ -1,0 +1,12 @@
+title: "Anti-pattern: guessing what extension() returns"
+standard: "C++17"
+difficulty: 3
+summary: "extension() keeps the leading dot, uses only the LAST dot, treats a leading-dot name as all-stem, and is empty when there is no dot -- not what people assume."
+notes: "Several assumptions about extension() are wrong and cause real bugs. It KEEPS the dot: extension() of photo.jpg is .jpg, not jpg. It uses only the LAST dot: archive.tar.gz has extension .gz and stem archive.tar. A leading dot is NOT an extension: .gitignore has an empty extension and is all stem. And a name with no dot has an empty extension, so code that blindly strips or compares an extension must handle the empty case. The remedy is to know these rules, compare extensions case-insensitively when you mean to (photo.JPG keeps its case), and never assume a file has an extension at all. This example prints the surprising cases side by side."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::extension", url: "https://en.cppreference.com/w/cpp/filesystem/path/extension" }
+  - { name: "path::stem", url: "https://en.cppreference.com/w/cpp/filesystem/path/stem" }

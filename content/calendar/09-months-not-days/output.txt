@@ -1,0 +1,2 @@
+start + months{1}: 2026-02-31 ok=0
+start + days{30}:  2026-03-02 ok=1

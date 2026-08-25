@@ -1,0 +1,12 @@
+title: "Anti-pattern: canonical() on a missing path"
+standard: "C++17"
+difficulty: 3
+summary: "canonical() resolves against the real filesystem and throws if the path is absent, so using it on a not-yet-created output path crashes; use weakly_canonical() or absolute()."
+notes: "canonical() returns the real, fully resolved path -- which means it must read the filesystem, and it THROWS filesystem_error if any part of the path does not exist. Reaching for it to normalise an OUTPUT path you are about to write crashes exactly in the normal case, because the output is not there yet. Two fixes: weakly_canonical() resolves the part that exists and keeps the missing tail lexically, so it works on a path you have not created; and absolute(), which is purely lexical, makes a path absolute without touching the disk or requiring existence (it just does not resolve .. or symlinks). Pick weakly_canonical when you want symlink/.. resolution on the existing prefix, absolute when you only need an absolute form. This example shows canonical throwing and both fixes succeeding."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::canonical", url: "https://en.cppreference.com/w/cpp/filesystem/canonical" }
+detailed_tags:
+  - { name: "std::filesystem::weakly_canonical", url: "https://en.cppreference.com/w/cpp/filesystem/canonical" }
+  - { name: "std::filesystem::absolute", url: "https://en.cppreference.com/w/cpp/filesystem/absolute" }

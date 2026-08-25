@@ -1,0 +1,11 @@
+title: "Walking a directory tree"
+standard: "C++17"
+difficulty: 2
+summary: "recursive_directory_iterator descends into subdirectories; depth() tells you how deep an entry sits, and disable_recursion_pending() prunes a branch you do not want to enter."
+notes: "recursive_directory_iterator is the whole-tree version: it visits every file and directory under a root, descending automatically. depth() reports how many levels down the current entry is. To skip a subtree -- a node_modules, a .git, a directory you have no business reading -- call disable_recursion_pending() when you reach that directory and the iterator will not descend into it. As with the flat iterator, order is unspecified, so this example builds each line as depth plus the path relative to the root (computed lexically, which is exact because the iterator's paths are built from the root) and sorts before printing. By default the walk does NOT follow directory symlinks, which keeps it safe from cycles (see the anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::recursive_directory_iterator", url: "https://en.cppreference.com/w/cpp/filesystem/recursive_directory_iterator" }
+detailed_tags:
+  - { name: "recursive_directory_iterator::disable_recursion_pending", url: "https://en.cppreference.com/w/cpp/filesystem/recursive_directory_iterator/disable_recursion_pending" }

@@ -1,0 +1,13 @@
+title: "Joining paths with operator/"
+standard: "C++17"
+difficulty: 1
+summary: "The non-member operator/ joins two paths and inserts the separator for you; /= appends a new component while += glues onto the last one."
+notes: "operator/ is a free (non-member) function that is the right way to build a path: it inserts exactly one directory separator, so you never guess whether to add a slash. The member /= does the same in place (append: a new component with a separator), while += concatenates onto the last component with no separator -- append turns report into report/final, concat turns report into report-final. You mix them when a name needs a new component and then a suffix, like adding a .2026 backup extension. Contrast this with the anti-pattern of gluing paths with string +, which gets the separators wrong at the edges."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "operator/", url: "https://en.cppreference.com/w/cpp/filesystem/path/operator_slash" }
+  - { name: "path::append", url: "https://en.cppreference.com/w/cpp/filesystem/path/append" }
+  - { name: "path::concat", url: "https://en.cppreference.com/w/cpp/filesystem/path/concat" }

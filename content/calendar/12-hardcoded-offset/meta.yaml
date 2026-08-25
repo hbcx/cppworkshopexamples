@@ -1,0 +1,11 @@
+title: "Anti-pattern: hardcoding a zone offset"
+standard: "C++20"
+difficulty: 3
+summary: "A zone's offset from UTC changes with daylight saving, so a fixed number like UTC-5 is right for half the year and wrong for the other half; let zoned_time and the tz database decide."
+notes: "It is tempting to write New York is UTC-5 and add a constant, but a zone's offset is not constant: most of the United States and Europe shift by an hour for daylight saving, so New York is UTC-5 in winter and UTC-4 in summer, and a hardcoded number puts every timestamp in the other half of the year an hour off. The offset also depends on the DATE, not just the zone, and the rules change over the years by legislation -- which is exactly what the IANA time zone database tracks and a hand-picked constant cannot. The fix is to never write the offset yourself: build a zoned_time from the zone name and the instant, and read the local time or the offset from it, so daylight saving and historical rule changes are applied for you. The example formats the same New York clock in July and in January to show the offset really does differ, and confirms the two are not equal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::zoned_time", url: "https://en.cppreference.com/w/cpp/chrono/zoned_time" }
+detailed_tags:
+  - { name: "std::chrono::time_zone", url: "https://en.cppreference.com/w/cpp/chrono/time_zone" }

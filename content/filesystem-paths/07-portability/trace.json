@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 11}, {"file": "main.cpp", "line": 12, "out": "generic: assets/textures/wood.png\n"}, {"file": "main.cpp", "line": 22}, {"file": "main.cpp", "line": 23, "out": "equal: 1\n"}, {"file": "main.cpp", "line": 27, "out": "ordered: 1\n"}, {"file": "main.cpp", "line": 28}, {"file": "main.cpp", "line": 29}]}

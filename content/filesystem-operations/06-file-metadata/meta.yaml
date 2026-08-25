@@ -1,0 +1,13 @@
+title: "File size and modification time"
+standard: "C++17"
+difficulty: 2
+summary: "file_size reports the byte length, resize_file grows or shrinks it, and last_write_time both reads and writes the modification time as a file_time_type."
+notes: "file_size returns the file's byte length. resize_file grows the file (padding with zero bytes) or shrinks it -- handy for preallocating. last_write_time is two functions in one: called with a path it reads the modification time, called with a path and a time it sets it. The value is a file_time_type, which is on its OWN clock (std::chrono::file_clock), not system_clock -- so compare file times against each other and take differences between them, which stays on one clock. Crossing clocks is the anti-pattern later; here we stamp one file an hour later and confirm the order. All three are free functions that stat or modify the file directly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::last_write_time", url: "https://en.cppreference.com/w/cpp/filesystem/last_write_time" }
+detailed_tags:
+  - { name: "std::filesystem::file_size", url: "https://en.cppreference.com/w/cpp/filesystem/file_size" }
+  - { name: "std::filesystem::resize_file", url: "https://en.cppreference.com/w/cpp/filesystem/resize_file" }
+  - { name: "std::filesystem::file_time_type", url: "https://en.cppreference.com/w/cpp/filesystem/file_time_type" }

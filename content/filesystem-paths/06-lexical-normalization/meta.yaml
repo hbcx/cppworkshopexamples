@@ -1,0 +1,11 @@
+title: "Cleaning a path by text alone"
+standard: "C++17"
+difficulty: 2
+summary: "lexically_normal collapses . and .. and doubled separators, and lexically_relative expresses one path against a base -- both purely by text, with no disk access."
+notes: "The lexically_* members simplify a path using its text only: they never open a directory, never resolve a symlink, and work fine on paths that do not exist. lexically_normal removes . segments, applies .. segments, and collapses doubled separators. lexically_relative rewrites a path relative to a base, walking up with .. when the target sits outside the base. This is the safe, cheap way to tidy or compare paths before they ever reach the filesystem -- the disk-based counterpart, canonical(), lives in the operations chapter and requires the files to exist. Reach for the lexical form whenever you are normalising untrusted input or building a path you have not created yet."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::lexically_normal", url: "https://en.cppreference.com/w/cpp/filesystem/path/lexically_normal" }

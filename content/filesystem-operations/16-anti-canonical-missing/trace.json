@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 11}, {"file": "main.cpp", "line": 12}, {"file": "main.cpp", "line": 13}, {"file": "main.cpp", "line": 14}, {"file": "main.cpp", "line": 15}, {"file": "main.cpp", "line": 18, "out": "canonical threw on the missing path\nweakly_canonical is_absolute: 1\nends with out.o: 1\nabsolute is_absolute: 1\n"}]}

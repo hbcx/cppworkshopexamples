@@ -1,0 +1,5 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "filesystem-operations"
+  note: "The disk side of the same library: once a path names a location, these free functions act on it -- exists, iterate a directory, copy, rename, read sizes and times -- and canonical() is the on-disk counterpart of the lexical cleanup here. Go there to make paths do something."
+- slug: "strings"
+  note: "What a path is built from and converts back to: paths are constructed from std::string and hand you std::string via string()/generic_string(). Go there for growing, editing and searching the text you turn into paths and read back out of them."

@@ -1,0 +1,12 @@
+title: "Month and year arithmetic"
+standard: "C++20"
+difficulty: 2
+summary: "Adding months or years to a year_month_day is calendrical -- it keeps the day-of-month -- so it can land on a date that does not exist, which ok() catches and you snap to the month end."
+notes: "Unlike days, months and years add directly to a year_month_day, and they are CALENDRICAL rather than a fixed span: date + months{1} keeps the same day number and moves to the next month, which is what people mean by same day next month. The catch is that the day number may not exist in the target month -- January 31 plus one month is February 31, which is not a real date -- and, exactly like a typed-wrong date, this does not throw; the result simply has ok() == false. The standard fix is to detect the overflow and snap to the last valid day of that month with year/month/last (see the last-day example). Years behave the same way, so February 29 plus one year overflows on a common year. Rule of thumb: use months and years for calendar steps and always check ok() (or snap); use sys_days + days (previous example) when you want an exact number of days, which can never overflow."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }
+detailed_tags:
+  - { name: "std::chrono::month", url: "https://en.cppreference.com/w/cpp/chrono/month" }
+  - { name: "std::chrono::year", url: "https://en.cppreference.com/w/cpp/chrono/year" }

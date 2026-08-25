@@ -1,0 +1,4 @@
+canonical threw on the missing path
+weakly_canonical is_absolute: 1
+ends with out.o: 1
+absolute is_absolute: 1

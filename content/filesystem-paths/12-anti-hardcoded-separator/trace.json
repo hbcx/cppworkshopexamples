@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 20, "out": "path:     logs/2026/app.log\n"}, {"file": "main.cpp", "line": 21, "out": "filename: app.log\n"}, {"file": "main.cpp", "line": 22, "out": "parent:   logs/2026\n"}, {"file": "main.cpp", "line": 23}, {"file": "main.cpp", "line": 24}]}

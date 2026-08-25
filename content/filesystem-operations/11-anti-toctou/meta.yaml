@@ -1,0 +1,11 @@
+title: "Anti-pattern: check then use"
+standard: "C++17"
+difficulty: 3
+summary: "Testing exists() and then acting treats the answer as if it still holds; another process can change the file in the gap, so the check is a promise the OS never made."
+notes: "The check-then-use pattern -- if exists(p) then open/read p -- has a race: between the exists() call and the use, another process or thread can delete, replace or swap the file, so the check tells you nothing about the moment you actually act. This is a TOCTOU (time-of-check to time-of-use) bug, and it is also a security hole when the path is under someone else's control. The fix is to not pre-check at all: perform the real operation and handle its failure in one step -- open the file and test the stream, or use the error_code overload -- so there is no window to lose the race in. This example makes the race deterministic by deleting the file itself between the check and the use, showing the check passed yet the use still failed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::exists", url: "https://en.cppreference.com/w/cpp/filesystem/exists" }
+detailed_tags:
+  - { name: "std::filesystem::file_size", url: "https://en.cppreference.com/w/cpp/filesystem/file_size" }

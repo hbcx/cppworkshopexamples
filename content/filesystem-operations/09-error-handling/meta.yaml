@@ -1,0 +1,12 @@
+title: "Exceptions or error codes"
+standard: "C++17"
+difficulty: 3
+summary: "Almost every operation has two forms: a throwing one that reports failure with filesystem_error, and one taking a std::error_code& that reports failure without throwing."
+notes: "The filesystem operations come in pairs. The default form throws std::filesystem_error on failure, carrying the paths involved -- convenient when failure is exceptional and you want it to propagate. The overload that takes a std::error_code& never throws: it writes the failure into the code and returns a sentinel (for example file_size returns uintmax_t(-1)), which suits a hot path or a case where failure is expected and you want to branch on it. The rule is to pick one per call site and actually honour it: catch the exception, or check the error_code right after (the anti-pattern is passing a code and ignoring it). On success the same error_code is cleared to no-error, so you can reuse it. This example triggers both forms on a missing file."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::filesystem_error", url: "https://en.cppreference.com/w/cpp/filesystem/filesystem_error" }
+detailed_tags:
+  - { name: "std::filesystem::file_size", url: "https://en.cppreference.com/w/cpp/filesystem/file_size" }
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: hardcoding the separator"
+standard: "C++17"
+difficulty: 3
+summary: "Writing a separator into a literal like logs\\app.log makes the backslash an ordinary filename character on Linux and macOS, so the whole thing becomes one weird filename."
+notes: "Baking a separator into a string literal -- logs\\2026\\app.log with backslashes, or even a forward slash you assume is right everywhere -- ties the code to one platform. On Windows the OS accepts the backslash, but on Linux and macOS a backslash is an ordinary FILENAME character, not a separator, so logs\\2026\\app.log becomes a single strange filename with no directories at all. The bug shows up only on the other platform, which is the worst kind to debug. The fix is to never hardcode a separator: build from components with operator/, let the library choose the right one, and print with generic_string(). We print only the correct result here, because the broken parse differs by platform -- which is exactly the portability problem being described."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "operator/", url: "https://en.cppreference.com/w/cpp/filesystem/path/operator_slash" }

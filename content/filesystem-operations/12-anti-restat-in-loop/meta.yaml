@@ -1,0 +1,12 @@
+title: "Anti-pattern: re-querying the disk in a loop"
+standard: "C++17"
+difficulty: 3
+summary: "Calling fs::is_regular_file or fs::file_size on each entry inside an iteration re-stats a file the directory_entry already cached; use the entry's own accessors."
+notes: "When you iterate a directory, each directory_entry captured the file's type and size while the directory was read. Calling the free functions on entry.path() inside the loop -- fs::is_regular_file(e.path()), fs::file_size(e.path()) -- throws that cache away and issues a fresh stat per entry, which over a big directory is a lot of avoidable syscalls. Use the entry's own accessors (e.is_regular_file(), e.file_size()) instead. The one caveat is that the entry is a SNAPSHOT from when it was created: if the file changes afterwards, call refresh() so the entry re-reads current metadata (the free functions always read current state). How much an entry caches is implementation-defined, so refresh() after a change you care about rather than assuming a value is frozen. This example shows the cached accessors, then a refreshed size after the file grows."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::directory_entry", url: "https://en.cppreference.com/w/cpp/filesystem/directory_entry" }
+detailed_tags:
+  - { name: "directory_entry::refresh", url: "https://en.cppreference.com/w/cpp/filesystem/directory_entry/refresh" }
+  - { name: "std::filesystem::directory_iterator", url: "https://en.cppreference.com/w/cpp/filesystem/directory_iterator" }

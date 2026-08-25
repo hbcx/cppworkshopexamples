@@ -1,0 +1,11 @@
+title: "Anti-pattern: confusing sys_time and local_time"
+standard: "C++20"
+difficulty: 3
+summary: "A sys_time is an instant in UTC and a local_time is a wall-clock reading in some zone; relabelling one as the other, instead of converting through a zone, shifts everything by the offset."
+notes: "C++20 gives UTC instants and local wall-clock times DIFFERENT types -- sys_time and local_time -- precisely so you cannot mix them by accident. The bug appears when code defeats that on purpose: it takes the numbers of a local time and treats them as UTC, or vice versa, usually by pulling a count out of one and stuffing it into the other. The values then differ by the zone's offset -- an hour or many -- and the error is invisible because both are just times. The correct move is never to relabel: go through a zoned_time (or the zone's to_sys / to_local), which applies the real offset. The mental rule: store and compare instants as sys_time (UTC), turn them into local_time only to show or read a wall-clock value, and let a time zone do every conversion between the two. The example takes one instant, shows it as UTC and as Berlin local time, then demonstrates the shift you get by reading the Berlin wall-clock numbers as if they were UTC."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::zoned_time", url: "https://en.cppreference.com/w/cpp/chrono/zoned_time" }
+detailed_tags:
+  - { name: "std::chrono::time_zone", url: "https://en.cppreference.com/w/cpp/chrono/time_zone" }

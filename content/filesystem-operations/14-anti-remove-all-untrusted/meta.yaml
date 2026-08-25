@@ -1,0 +1,12 @@
+title: "Anti-pattern: remove_all on an unchecked path"
+standard: "C++17"
+difficulty: 3
+summary: "remove_all deletes a whole tree and does not care which; an empty string, a root, or a path with .. that climbs out of your workspace can wipe far more than you meant."
+notes: "remove_all is one of the sharpest edges in the library: it recursively deletes whatever tree you name and returns a count, with no confirmation. Point it at a path built from outside input without checking, and an empty string, a bare root, or a ../.. that climbs above your working directory can erase data far outside the target. The fix is containment: normalise the candidate with lexically_normal, express it relative to a known root, and refuse it if the relative form starts with .. (it escapes) -- only hand a validated, contained path to remove_all. This example checks a safe name and an escaping name, deletes nothing outside the sandbox, and confirms an important file was left untouched."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::remove_all", url: "https://en.cppreference.com/w/cpp/filesystem/remove" }
+detailed_tags:
+  - { name: "path::lexically_normal", url: "https://en.cppreference.com/w/cpp/filesystem/path/lexically_normal" }
+  - { name: "path::lexically_relative", url: "https://en.cppreference.com/w/cpp/filesystem/path/lexically_normal" }

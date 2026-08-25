@@ -1,0 +1,3 @@
+size: 6
+after resize: 10
+moved forward: 1

@@ -1,0 +1,13 @@
+title: "What a path is"
+standard: "C++17"
+difficulty: 1
+summary: "A std::filesystem::path is a value that holds a pathname; building one touches no disk, and generic_string() prints it the same way on every platform."
+notes: "A path is just a stored string with pathname structure -- constructing one never looks at the filesystem, so the file need not exist. You can build it from a string literal, a std::string, or another path. Print it with generic_string() so the separator is a forward slash everywhere; native() would use a backslash on Windows. Two paths spelled the same compare equal, a default-constructed path is empty(), and has_filename() tells you whether the last component names a file. This example only makes and inspects paths; the rest of the chapter decomposes, joins and edits them, and the operations chapter is where paths finally meet the disk."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path constructor", url: "https://en.cppreference.com/w/cpp/filesystem/path/path" }
+  - { name: "path::generic_string", url: "https://en.cppreference.com/w/cpp/filesystem/path/generic_string" }
+  - { name: "path::empty", url: "https://en.cppreference.com/w/cpp/filesystem/path/empty" }

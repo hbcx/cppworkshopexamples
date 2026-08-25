@@ -1,0 +1,24 @@
+# Where to reach for the chrono calendar -- problem -> tool, with the alternative it beats.
+- problem: "Billing and subscriptions need calendar rules: an invoice due on the same day next month, a renewal one year on, the last day of the billing period -- with the end-of-month cases handled correctly."
+  why: "year_month_day + months/years does the same day next month directly, year/month/last gives the period end, and ok() flags the February-31 cases to snap, where hand-rolled day counting with mktime re-derives leap years and month lengths and gets the boundaries wrong."
+  signal: "date math done by adding a magic number of days, or a month-length or leap-year table maintained by hand for due dates"
+
+- problem: "A schedule is defined by weekday rules: a meeting on the second Tuesday, payroll on the last Friday of the month, a holiday on the fourth Thursday."
+  why: "year/month/Weekday[n] and Weekday[last] compute these directly and convert to a date, where finding the nth weekday by hand means computing the first weekday of the month and doing modular arithmetic that is easy to get off by one."
+  signal: "loops that step day by day counting weekdays, or a Zeller's-congruence style day-of-week calculation"
+
+- problem: "The system reports ages and intervals in days: days until expiry, days past due, a person's age, the gap between two events."
+  why: "subtracting two sys_days yields the exact number of days with leap years already handled, where subtracting time_t values or differencing struct tm invites off-by-one and leap-day errors."
+  signal: "an interval computed by dividing a seconds difference by 86400, or age logic that special-cases February"
+
+- problem: "Dates cross the boundary with text: read 2026-08-21 from a config file or a CSV, write dates into logs or a report, in a fixed, locale-independent format."
+  why: "std::format with %Y-%m-%d writes the ISO form directly and std::chrono::parse reads it back and sets a fail bit on bad input, where strftime/strptime carry buffer sizing, locale surprises, and no clear error signal."
+  signal: "date strings built or scanned with sprintf/sscanf, or strftime/strptime calls with manual buffers"
+
+- problem: "A service works across time zones: store an event in UTC, show it in each user's local time, convert a meeting time between two offices, and stay correct across daylight saving."
+  why: "zoned_time applies the IANA database rules for a named zone, including daylight saving and historical changes, where adding a hardcoded offset is wrong for half the year and rots as the rules change."
+  signal: "a fixed +/- N hours added to convert times, or timestamps that drift by an hour twice a year"
+
+- problem: "User- or file-supplied dates must be validated before use: reject February 30, a 13th month, an impossible day, without a custom month-length check."
+  why: "building the year_month_day and testing ok() validates it with the leap rule applied, where a hand-written check needs a per-month day-count table and its own leap-year logic to match."
+  signal: "input validation that compares the day against a hard-coded array of month lengths, with a separate leap-year branch for February"

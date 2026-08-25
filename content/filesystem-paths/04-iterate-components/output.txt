@@ -1,0 +1,4 @@
+components: / etc nginx sites default.conf
+count: 5
+rebuilt: /etc/nginx/sites/default.conf
+matches: 1

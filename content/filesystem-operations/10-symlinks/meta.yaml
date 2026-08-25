@@ -1,0 +1,13 @@
+title: "Symbolic links"
+standard: "C++17"
+difficulty: 3
+summary: "create_symlink makes a link, read_symlink reads its target, is_symlink detects it, and symlink_status inspects the link itself while status() follows it to the target."
+notes: "A symlink is a file whose content is another path. create_symlink makes one, read_symlink returns the target it points at, and is_symlink detects it. The key distinction is status() versus symlink_status(): status() FOLLOWS the link and reports the target (so a link to a file looks like a regular file), while symlink_status() reports the link ITSELF. Creating a symlink needs a privilege on some systems -- notably Windows without Developer Mode -- so this example uses the error_code form of create_symlink and bails out cleanly where links are not permitted, rather than crashing. That guard also means the printed output depends on the environment; the value here is seeing which function answers about the link and which about its target."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::create_symlink", url: "https://en.cppreference.com/w/cpp/filesystem/create_symlink" }
+detailed_tags:
+  - { name: "std::filesystem::read_symlink", url: "https://en.cppreference.com/w/cpp/filesystem/read_symlink" }
+  - { name: "std::filesystem::is_symlink", url: "https://en.cppreference.com/w/cpp/filesystem/is_symlink" }
+  - { name: "std::filesystem::symlink_status", url: "https://en.cppreference.com/w/cpp/filesystem/status" }

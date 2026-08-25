@@ -1,0 +1,14 @@
+title: "Does it exist, and what is it?"
+standard: "C++17"
+difficulty: 1
+summary: "The query free functions -- exists, is_regular_file, is_directory, status, file_size -- ask the disk what is at a path, returning booleans and, from status(), the type in one call."
+notes: "These are non-member functions that read the real filesystem. exists() answers presence; is_regular_file() and is_directory() answer what kind of thing is there. Each is_* call stats the file, so when you need several answers about the same path, call status() once and compare its type() -- one disk hit instead of many. This example builds a small sandbox under temp_directory_path(), then queries a file, a directory and a missing path so the booleans are reproducible. The sandbox is created and removed with the operation functions the rest of the chapter covers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::exists", url: "https://en.cppreference.com/w/cpp/filesystem/exists" }
+detailed_tags:
+  - { name: "std::filesystem::is_regular_file", url: "https://en.cppreference.com/w/cpp/filesystem/is_regular_file" }
+  - { name: "std::filesystem::is_directory", url: "https://en.cppreference.com/w/cpp/filesystem/is_directory" }
+  - { name: "std::filesystem::status", url: "https://en.cppreference.com/w/cpp/filesystem/status" }
+  - { name: "std::filesystem::file_size", url: "https://en.cppreference.com/w/cpp/filesystem/file_size" }

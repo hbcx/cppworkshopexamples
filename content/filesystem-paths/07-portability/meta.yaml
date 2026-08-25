@@ -1,0 +1,13 @@
+title: "Writing portable paths"
+standard: "C++17"
+difficulty: 2
+summary: "Build paths with operator/ and print them with generic_string() so the separator is / everywhere; equality is component-wise, and a path orders as a map key."
+notes: "The portable recipe is: assemble from components with operator/ and never write a separator yourself, then print with generic_string() so stored config, logs and git-tracked text look identical on Windows, Linux and macOS. native()/string() use the platform's preferred separator (a backslash on Windows), exposed as the compile-time constant path::preferred_separator -- that form is for handing to the OS, not for storing or comparing across machines. Equality compares component by component, so paths assembled in different ways but naming the same location are equal everywhere; a path also orders, which makes it a usable map key or set element for de-duplicating file lists. Non-ASCII names need care -- see the losing-Unicode anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "path::generic_string", url: "https://en.cppreference.com/w/cpp/filesystem/path/generic_string" }
+  - { name: "path::native", url: "https://en.cppreference.com/w/cpp/filesystem/path/native" }
+  - { name: "path comparison", url: "https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp" }

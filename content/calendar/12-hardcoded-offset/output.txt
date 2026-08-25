@@ -1,0 +1,3 @@
+New York, July: 08:00 EDT (-0400)
+New York, Jan:  07:00 EST (-0500)
+same offset all year? no

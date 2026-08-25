@@ -1,0 +1,16 @@
+# Where to reach for std::filesystem::path -- problem -> tool, with the alternative it beats.
+- problem: "A build or asset tool maps every input file to an output: a .cpp to a build/obj/x.o, a .png to a cache/x.webp, keeping the stem and redirecting the directory and extension."
+  why: "filename(), a target directory joined with operator/, and replace_extension express the mapping directly and portably, where find-the-last-dot-and-substr string code has to reimplement extension rules and separator handling and gets dotfiles and multi-dot names wrong."
+  signal: "output paths built with substr and rfind('.') plus manual slash insertion, or sprintf assembling a path from pieces"
+
+- problem: "A program must find its config, assets or plugins relative to a known base -- the executable's directory or a data root -- and run the same on Windows, Linux and macOS."
+  why: "operator/ builds the location with the platform's own separator and generic_string() gives one stable spelling for logs and config, where hardcoded slashes or backslashes tie the code to one OS and break on the others."
+  signal: "path strings with a literal '/' or '\\' embedded, or #ifdef _WIN32 branches that swap the separator by hand"
+
+- problem: "A server or archive extractor takes a filename from outside -- an upload, a zip entry, a URL segment -- and must keep it inside a target directory, refusing names that climb out with .. or a leading slash (the zip-slip vulnerability)."
+  why: "lexically_normal collapses the .. segments and relative_path strips a rooted name, so a prefix check can confirm the result stays under the root, where a naive base + name join silently lets ../../etc/passwd or /etc/passwd escape."
+  signal: "a user-supplied filename concatenated onto a directory and opened without a containment check, or a path used before any .. is resolved"
+
+- problem: "A tool routes or groups files by kind: send .log files one way and .csv another, count files per extension, pick an icon by type."
+  why: "extension() gives the suffix with its real rules in one call, so a case-insensitive compare classifies the file, where hand-written suffix matching mishandles no-extension names, leading-dot names, and .tar.gz style double extensions."
+  signal: "classification done with string ends_with on a hardcoded suffix, or a manual scan for the last '.' to slice the type off"

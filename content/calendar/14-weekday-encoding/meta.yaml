@@ -1,0 +1,11 @@
+title: "Anti-pattern: mixing the weekday encodings"
+standard: "C++20"
+difficulty: 3
+summary: "weekday has two numberings -- c_encoding() is 0..6 with Sunday 0, iso_encoding() is 1..7 with Monday 1 -- so using the wrong one, or building weekday{n} expecting ISO, is off by a day."
+notes: "A weekday can be read as a number two ways, and they disagree. c_encoding() returns 0..6 with Sunday = 0 (the C and struct tm convention), while iso_encoding() returns 1..7 with Monday = 1 and Sunday = 7 (ISO 8601). The values happen to match for Monday through Friday, which is why the bug hides -- it only shows up at the weekend, where Sunday is 0 one way and 7 the other. Two mistakes follow: reading c_encoding() as if it were a Monday-first index (so Sunday looks like the first day of the week, not the last), and constructing weekday{n} from an ISO number (weekday{7} is not Sunday -- the constructor uses the Sunday-0 convention). The fix is to be explicit: build a weekday from a date or a named constant (Monday .. Sunday), and when you need an index, choose the encoding that matches your week layout -- iso_encoding() - 1 for a Monday-first 0-based index, c_encoding() for a Sunday-first one. The example prints both encodings for Friday and Sunday and derives a Monday-first index correctly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::weekday", url: "https://en.cppreference.com/w/cpp/chrono/weekday" }
+detailed_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }

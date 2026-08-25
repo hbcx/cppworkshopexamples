@@ -1,0 +1,5 @@
+copy size: 5
+backup has a.txt: 1
+backup has b.txt: 1
+old gone:  1
+new there: 1

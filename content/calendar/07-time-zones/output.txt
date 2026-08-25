@@ -1,0 +1,5 @@
+UTC:      2026-08-21 12:00 UTC
+New York: 2026-08-21 08:00 EDT
+Tokyo:    2026-08-21 21:00 JST
+NY offset from UTC: -0400
+London 09:00 local = 08:00 UTC

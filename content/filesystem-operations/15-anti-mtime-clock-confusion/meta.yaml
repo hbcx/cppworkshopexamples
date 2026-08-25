@@ -1,0 +1,12 @@
+title: "Anti-pattern: treating a file time as system_clock"
+standard: "C++17"
+difficulty: 3
+summary: "last_write_time returns a file_time_type on std::chrono::file_clock, not system_clock; feeding it to system_clock::to_time_t is wrong, and in C++17 there is no portable conversion."
+notes: "last_write_time gives a file_time_type, whose clock is std::chrono::file_clock with its own epoch -- NOT system_clock. Passing it to system_clock::to_time_t, or subtracting a system_clock time_point from it, either fails to compile or, if a cast forces it through, yields a nonsense wall-clock time. The right habit is to stay on one clock: compare file times against each other and take differences between them, which answers the real question (which file is newer, how far apart) without leaving file_clock. Converting a file time to a human wall-clock time is a C++20 feature (std::chrono::clock_cast<system_clock>); in C++17 the file_clock epoch is implementation-defined, so there is no portable conversion. This example describes the wrong cross-clock call in a comment and runs only the correct same-clock comparison and duration."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::last_write_time", url: "https://en.cppreference.com/w/cpp/filesystem/last_write_time" }
+detailed_tags:
+  - { name: "std::filesystem::file_time_type", url: "https://en.cppreference.com/w/cpp/filesystem/file_time_type" }
+  - { name: "std::chrono::file_clock", url: "https://en.cppreference.com/w/cpp/chrono/file_clock" }

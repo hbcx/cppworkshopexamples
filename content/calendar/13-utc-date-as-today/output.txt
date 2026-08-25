@@ -1,0 +1,3 @@
+UTC 'today':    2026-08-22
+New York today: 2026-08-21
+they differ: 1

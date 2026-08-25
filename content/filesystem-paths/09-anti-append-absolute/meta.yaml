@@ -1,0 +1,12 @@
+title: "Anti-pattern: joining a rooted path"
+standard: "C++17"
+difficulty: 3
+summary: "operator/ throws away the left side when the right-hand path starts with a separator, so base / \"/etc/passwd\" becomes /etc/passwd -- an easy way to escape a directory."
+notes: "operator/ follows the standard's algorithm: if the right-hand path is absolute (or rooted), it replaces the left side entirely rather than appending under it. So base / \"/etc/passwd\" is not base/etc/passwd -- it is /etc/passwd, having discarded base. This is the mechanism behind path-escape bugs, where a filename that arrives with a leading slash (or, in an archive, an absolute member name) breaks out of the directory you meant to confine it to. The fix is to append the RELATIVE part only: strip the root with relative_path() (or reject rooted input) before joining, so the result stays under base. Pair this with lexically_normal and a prefix check when the input is untrusted."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::filesystem::path", url: "https://en.cppreference.com/w/cpp/filesystem/path" }
+detailed_tags:
+  - { name: "operator/", url: "https://en.cppreference.com/w/cpp/filesystem/path/operator_slash" }
+  - { name: "path::relative_path", url: "https://en.cppreference.com/w/cpp/filesystem/path/relative_path" }

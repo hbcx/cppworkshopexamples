@@ -1,0 +1,11 @@
+title: "Anti-pattern: using a date without checking ok()"
+standard: "C++20"
+difficulty: 3
+summary: "An invalid year_month_day does not throw; converting it to sys_days silently normalises to a different, wrong date, so check ok() before trusting a date."
+notes: "The calendar types are deliberately permissive at construction: a year_month_day holding 2026-02-30 is created without complaint, because building a date and validating it are separate steps. The trap is what happens next. Converting an invalid date to sys_days does not error -- it NORMALISES, rolling the excess days over, so February 30 becomes March 2, and every later computation is quietly wrong with nothing to point at. This is the single most common calendar mistake, and it hides especially well behind month arithmetic, which produces invalid dates on purpose (January 31 + 1 month). The fix is one call: check ymd.ok() after building or computing a date and before using it, and reject or snap the ones that fail. Treat ok() the way you treat a parsed-number error code -- the value is not usable until you have checked it. The example builds an impossible date, shows ok() is false, and shows the silent normalisation you get if you ignore it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::chrono::year_month_day", url: "https://en.cppreference.com/w/cpp/chrono/year_month_day" }
+detailed_tags:
+  - { name: "std::chrono::system_clock", url: "https://en.cppreference.com/w/cpp/chrono/system_clock" }
