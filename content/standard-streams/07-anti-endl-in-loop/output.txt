@@ -1,0 +1,6 @@
+row 0
+row 1
+row 2
+row 3
+row 4
+wrote 5 rows with a single flush

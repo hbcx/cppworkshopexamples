@@ -1,0 +1,3 @@
+cerr flushes each op (unitbuf): 1
+clog is buffered:               1
+captured clog: diagnostic: started

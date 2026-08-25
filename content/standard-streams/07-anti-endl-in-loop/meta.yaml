@@ -1,0 +1,11 @@
+title: "Anti-pattern: endl on every line"
+standard: "C++11"
+difficulty: 2
+summary: "std::endl flushes each time, so using it on every line of output forces a physical write per line -- often far slower than buffering and flushing once."
+notes: "The same lesson as in the file-streams chapter, applied to std::cout. endl writes a newline AND flushes; on every line of a loop that is one physical write per iteration, and to a file or pipe the difference from buffered output can be large -- a hot output loop is a place where reflexive endl quietly costs throughput. The fix is to write '\\n' and let the stream buffer, flushing once at the end (or not at all -- it flushes at program exit). Use std::flush explicitly only at the specific points where the output must be on the destination immediately. This example writes several lines buffered and flushes a single time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::endl", url: "https://en.cppreference.com/w/cpp/io/manip/endl" }
+detailed_tags:
+  - { name: "std::flush", url: "https://en.cppreference.com/w/cpp/io/manip/flush" }

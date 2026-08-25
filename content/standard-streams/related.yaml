@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "file-streams"
+  note: "The same buffering and flush behaviour on a file: an ofstream buffers like cout, endl flushes it, and the open modes and getline loop live there. Go there for reading and writing files rather than the console."
+- slug: "string-streams"
+  note: "The in-memory stream, and the rdbuf trick these examples use to capture stderr: redirect a stream's buffer to an ostringstream to grab its text. Go there for building and parsing strings with the stream operators."
+- slug: "iomanip"
+  note: "How to format what you send to these streams: setw, setprecision, hex and the sticky-flag rules apply to cout and cerr just as to any stream. Go there for width, precision, base and alignment."

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 16}, {"file": "main.cpp", "line": 17, "out": "trace via cout, flushed now: "}, {"file": "main.cpp", "line": 18, "out": "reached the checkpoint\n"}, {"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 20}]}

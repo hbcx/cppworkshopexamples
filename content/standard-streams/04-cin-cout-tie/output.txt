@@ -1,0 +1,2 @@
+cin tied to cout by default: 1
+after untie, cin.tie() is null: 1

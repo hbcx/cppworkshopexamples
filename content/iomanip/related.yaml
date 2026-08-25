@@ -5,3 +5,5 @@
   note: "The same manipulators apply to a file stream: setw, hex and fixed format what you write to disk exactly as they do on cout. Go there for opening files, the getline loop, and text versus binary output."
 - slug: "format"
   note: "The modern replacement for a chain of manipulators: std::format (C++20) puts the whole layout in one type-checked format string with no sticky state to leak. Go there when you can target C++20 and want the clearer tool."
+- slug: "standard-streams"
+  note: "The streams these manipulators format, and how they flush: cout/cerr/clog, endl versus '\\n', tie and sync_with_stdio. Go there for the predefined streams, buffering, and the I/O performance knobs."

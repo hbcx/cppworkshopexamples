@@ -1,0 +1,11 @@
+title: "Anti-pattern: debugging a crash with cout"
+standard: "C++11"
+difficulty: 3
+summary: "cout is buffered, so if the program aborts before the buffer is flushed, the last prints -- often the ones right before the crash -- are lost, making it look like the code never reached them."
+notes: "A classic debugging trap: sprinkling std::cout prints to find where a program crashes. Because cout is buffered, output that has not been flushed when the process dies -- a segfault, std::abort, an uncaught exception hitting terminate -- is lost, and the most important prints, the last ones right before the crash, are exactly the ones that vanish. So the trace stops earlier than the code actually reached, and you chase the wrong line. The fix is to send debug traces to std::cerr, which is unbuffered (each line is on the terminal before the next statement runs), or to flush cout explicitly with std::flush or endl immediately before the risky operation. This example writes a trace to cerr and a flushed trace to cout, the two reliable ways to see output up to the moment of a crash."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cerr", url: "https://en.cppreference.com/w/cpp/io/cerr" }
+detailed_tags:
+  - { name: "std::flush", url: "https://en.cppreference.com/w/cpp/io/manip/flush" }

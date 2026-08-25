@@ -1,0 +1,11 @@
+title: "sync_with_stdio"
+standard: "C++11"
+difficulty: 2
+summary: "C++ streams are kept in sync with C stdio by default so cout and printf interleave correctly; sync_with_stdio(false) drops that for a big speedup, if you then use only C++ I/O."
+notes: "By default the C++ streams are synchronised with the C stdio streams (printf/scanf/getchar), so you can freely mix std::cout and printf and the output appears in program order. That synchronisation has a real cost on high-volume I/O. std::ios_base::sync_with_stdio(false) turns it off and typically speeds up bulk reading and writing substantially -- the other half of the fast-I/O setup with cin.tie(nullptr). The catch: once unsynced, the C and C++ layers buffer independently, so mixing printf and cout can interleave out of order (the anti-pattern). Call it ONCE, at the very top of main before any I/O, and from then on use only C++ streams. It returns the previous setting. This example disables sync and reports the prior state without mixing in any C I/O."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "ios_base::sync_with_stdio", url: "https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio" }
+detailed_tags:
+  - { name: "std::cout", url: "https://en.cppreference.com/w/cpp/io/cout" }

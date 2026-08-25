@@ -1,0 +1,11 @@
+title: "endl versus a bare newline"
+standard: "C++11"
+difficulty: 1
+summary: "'\\n' writes a newline and lets the stream buffer; std::endl writes a newline AND flushes -- same text, but endl forces a physical write every time."
+notes: "This is the most common performance mistake in C++ output, and its home is here. A bare '\\n' writes a newline character and leaves the data in the buffer, to be flushed when the buffer fills or the program ends. std::endl writes a newline and then FLUSHES the buffer to the destination. The visible text is identical, but the flush is real work: in a loop that writes many lines, endl forces one physical write per line, which to a file or pipe can be dramatically slower than buffering and flushing once. The rule is simple: use '\\n' by default, and reach for endl (or std::flush) only when you genuinely need the output on the destination right now -- before a prompt, before a long wait. This example contrasts the two and writes a small buffered loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::endl", url: "https://en.cppreference.com/w/cpp/io/manip/endl" }
+detailed_tags:
+  - { name: "std::cout", url: "https://en.cppreference.com/w/cpp/io/cout" }

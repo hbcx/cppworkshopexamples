@@ -1,0 +1,13 @@
+title: "The four standard streams"
+standard: "C++11"
+difficulty: 1
+summary: "cout is buffered stdout, cerr is unbuffered stderr, clog is buffered stderr, and cin is stdin; keeping data on stdout and diagnostics on stderr lets a shell separate them."
+notes: "Four streams are predefined. std::cout is standard output (stdout), buffered, for the program's normal output. std::cerr and std::clog both go to standard error (stderr) -- cerr unbuffered for urgent errors, clog buffered for diagnostic logging. std::cin is standard input (stdin). The important design point is that stdout and stderr are DIFFERENT destinations, so a shell can split them: prog > data.txt sends the data to the file while errors still appear on screen, and prog | next feeds only the data downstream. This is why diagnostics belong on cerr/clog, not cout. To show stderr text in this chapter (the build harness records stdout), the examples temporarily redirect a stderr stream into a string with rdbuf and print that. This example writes to stdout and captures a line written to stderr."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cout", url: "https://en.cppreference.com/w/cpp/io/cout" }
+detailed_tags:
+  - { name: "std::cerr", url: "https://en.cppreference.com/w/cpp/io/cerr" }
+  - { name: "std::clog", url: "https://en.cppreference.com/w/cpp/io/clog" }
+  - { name: "basic_ios::rdbuf", url: "https://en.cppreference.com/w/cpp/io/basic_ios/rdbuf" }

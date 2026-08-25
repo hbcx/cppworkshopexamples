@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 16}, {"file": "main.cpp", "line": 17}, {"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 20, "out": "sync disabled; using only C++ streams from here\nno printf mixed in, so the order is well-defined\n"}]}

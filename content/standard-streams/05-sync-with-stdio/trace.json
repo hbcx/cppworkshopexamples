@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 12}, {"file": "main.cpp", "line": 13}, {"file": "main.cpp", "line": 16}, {"file": "main.cpp", "line": 21}, {"file": "main.cpp", "line": 22, "out": "streams were synced before: 1\nnow using C++ streams only, unsynced\n"}]}

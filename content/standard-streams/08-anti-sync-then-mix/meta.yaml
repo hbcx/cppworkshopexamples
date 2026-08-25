@@ -1,0 +1,11 @@
+title: "Anti-pattern: unsync then mix C and C++ I/O"
+standard: "C++11"
+difficulty: 3
+summary: "After sync_with_stdio(false), printf and cout have separate buffers that flush independently, so mixing them can print output out of the order the code wrote it."
+notes: "sync_with_stdio(false) is worth it for speed, but it removes the guarantee that makes mixing safe. With sync on, the C and C++ layers share ordering, so printf and cout interleave as written. Turn sync off and they buffer independently -- output can appear in a different order than the statements ran, a bug that is maddening because the code looks correct. The rule is: once you disable sync, commit to ONE I/O system (pick C++ streams) and never call printf/scanf again in that program. Also call sync_with_stdio(false) BEFORE any I/O has happened; afterwards it may not take effect. This example disables sync and then uses only C++ streams, and describes the mixing hazard in a comment rather than demonstrating the unspecified order."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "ios_base::sync_with_stdio", url: "https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio" }
+detailed_tags:
+  - { name: "std::cout", url: "https://en.cppreference.com/w/cpp/io/cout" }

@@ -1,0 +1,2 @@
+sync disabled; using only C++ streams from here
+no printf mixed in, so the order is well-defined

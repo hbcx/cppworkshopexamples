@@ -1,0 +1,20 @@
+# Where to reach for the standard streams -- problem -> tool, with the alternative it beats.
+- problem: "A command-line tool must compose with others: its real output goes down a pipe or into a file, while progress and error messages still reach the user."
+  why: "putting data on std::cout and diagnostics on std::cerr lets the shell separate them (prog > out.txt keeps errors on screen; prog | next feeds only data), where printing everything to cout mixes error text into the data and corrupts the file or the pipe."
+  signal: "warnings or progress lines printed to cout, or a tool whose piped output contains status messages the next stage cannot parse"
+
+- problem: "A program does heavy bulk I/O -- reading a million numbers, writing a large result -- and the default stream setup is the bottleneck."
+  why: "sync_with_stdio(false) with cin.tie(nullptr) and '\\n' instead of endl removes the C-stdio synchronisation, the per-read cout flush, and the per-line flush, which together dominate bulk I/O time, where the defaults pay for interactive safety you do not need here."
+  signal: "a data-crunching or competitive-programming program using endl in a loop and the default synced streams, spending most of its time in I/O"
+
+- problem: "An interactive program prints a prompt or a progress indicator that must appear on screen BEFORE it blocks on input or starts a long computation."
+  why: "std::cin's default tie to cout flushes the prompt automatically before a read, and std::flush forces a partial line out before a long pause, where a bare buffered write can leave the prompt invisible until later, so the program looks hung."
+  signal: "a prompt printed without a newline that does not show before input, or a progress line that appears only after the work finishes"
+
+- problem: "A service emits diagnostic logging separate from its results -- verbose in debug builds, quiet in production -- without slowing the hot path."
+  why: "std::clog is buffered like cout, so high-volume log lines do not force a flush each time, keeping logging cheap, where cerr (unbuffered) would flush on every line and routing logs through cout would pollute the data."
+  signal: "verbose logs written to cerr and slowing the program, or diagnostic output interleaved with real results on stdout"
+
+- problem: "Debugging why a program crashes: trace prints must show exactly how far execution got, right up to the failing statement."
+  why: "std::cerr is unbuffered, so each trace line is on the terminal before the next statement runs and survives a segfault or abort, where buffered cout prints made just before the crash are lost and the trace misleadingly stops early."
+  signal: "cout debug prints whose last lines never appear before a crash, or a trace that seems to stop before code you know executed"

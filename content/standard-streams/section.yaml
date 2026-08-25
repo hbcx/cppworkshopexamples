@@ -1,0 +1,4 @@
+title: "Standard streams and performance"
+description: "The predefined streams -- std::cout, std::cin, std::cerr and std::clog -- and the buffering and configuration that decide their performance. Covers what each stream is and why stdout and stderr are separate, endl versus a bare newline and the flush it forces, explicit flushing and the terminal-versus-pipe buffering difference, why std::cin is tied to std::cout so prompts appear, sync_with_stdio and the speedup from turning it off, and the buffering difference between cerr and clog -- alongside the traps: endl in a loop, disabling sync_with_stdio and then mixing C and C++ I/O, writing diagnostics to stdout so they pollute the data, and debugging a crash with buffered cout prints that are lost. These streams and flags are how a program's output behaves on a terminal, in a file and through a pipe."
+sort_order: 121
+category: "Files & I/O"

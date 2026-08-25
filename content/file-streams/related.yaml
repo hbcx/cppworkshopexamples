@@ -9,3 +9,5 @@
   note: "The fast, non-throwing way to turn the text you read into numbers and back: from_chars parses a field with no locale and no allocation, where operator>> is slower and sets failbit on bad input. Go there for the conversion under each field on a hot path."
 - slug: "string-streams"
   note: "The same iostream types with a string behind them instead of a file: build and parse text in memory with ostringstream/istringstream, using the very same <<, >> and getline. Go there when the data is already a std::string rather than on disk."
+- slug: "standard-streams"
+  note: "The console versions of the same buffering: cout buffers and endl flushes exactly as an ofstream does, plus stdout-versus-stderr, tie and sync_with_stdio. Go there for the predefined streams and the I/O performance knobs."

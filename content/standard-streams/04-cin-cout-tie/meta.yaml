@@ -1,0 +1,11 @@
+title: "Why cin flushes cout"
+standard: "C++11"
+difficulty: 2
+summary: "std::cin is tied to std::cout by default, so every input operation flushes cout first -- which is why a prompt appears before the program blocks for input; untie for speed."
+notes: "A subtle default makes interactive programs work: std::cin is TIED to std::cout, meaning any read from cin first flushes cout. That is why std::cout << \"Enter name: \" (no newline, so not flushed on its own) still shows before std::cin >> name blocks -- the read triggers the flush. tie() returns the currently tied stream, and by default cin.tie() is &cout. For bulk input where there are no prompts to show, untying with cin.tie(nullptr) removes a flush on every read and speeds things up -- the standard half of a fast-I/O setup, paired with sync_with_stdio(false). If you untie, you become responsible for flushing prompts yourself. This example checks the default tie and then unties and restores it, without reading any actual input."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "basic_ios::tie", url: "https://en.cppreference.com/w/cpp/io/basic_ios/tie" }
+detailed_tags:
+  - { name: "std::cin", url: "https://en.cppreference.com/w/cpp/io/cin" }

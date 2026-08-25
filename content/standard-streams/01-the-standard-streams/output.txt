@@ -1,0 +1,2 @@
+this is data on stdout
+captured from stderr: this is an error on stderr

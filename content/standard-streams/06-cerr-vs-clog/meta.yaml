@@ -1,0 +1,12 @@
+title: "cerr versus clog"
+standard: "C++11"
+difficulty: 2
+summary: "Both write to stderr, but cerr has unitbuf set so it flushes after every operation (survives a crash), while clog is buffered like cout -- better for high-volume logging."
+notes: "cerr and clog share a destination (stderr) but differ in buffering, and choosing between them matters. std::cerr has unitbuf SET, so it flushes after every output operation: an error message is on the terminal immediately, even if the program crashes on the next line. That safety costs a flush per write, so it is wrong for high-volume output. std::clog is buffered like cout, which makes it the right choice for verbose diagnostic logging where you do not need each line out instantly and throughput matters. Both stay off stdout, so neither pollutes the program's data. The rule of thumb: cerr for errors that must appear even on a crash, clog for bulk logs. This example observes the unitbuf flag on each and captures a clog line to show its text."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cerr", url: "https://en.cppreference.com/w/cpp/io/cerr" }
+detailed_tags:
+  - { name: "std::clog", url: "https://en.cppreference.com/w/cpp/io/clog" }
+  - { name: "std::unitbuf", url: "https://en.cppreference.com/w/cpp/io/manip/unitbuf" }

@@ -1,0 +1,11 @@
+title: "Flushing and buffering"
+standard: "C++11"
+difficulty: 2
+summary: "cout buffers output; to a terminal it is usually line-buffered, to a file or pipe fully buffered. std::flush forces the buffer out now, and unitbuf flushes after every operation."
+notes: "Understanding when output actually leaves the buffer prevents a class of confusing bugs. To a TERMINAL, cout is typically line-buffered, so each newline appears promptly. To a FILE or a PIPE, it is fully buffered: output sits in memory until the buffer fills or the program ends, so a partial line -- a progress indicator, a prompt -- may not appear when you expect. std::flush pushes the buffer out immediately without writing a newline, which is what you want before a long computation or before blocking on input. std::unitbuf goes further, flushing after EVERY output operation (this is exactly how cerr behaves); it is useful for debugging but expensive for throughput, and std::nounitbuf turns it off. This example shows a flush before a pause and unitbuf mode."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flush", url: "https://en.cppreference.com/w/cpp/io/manip/flush" }
+detailed_tags:
+  - { name: "std::unitbuf", url: "https://en.cppreference.com/w/cpp/io/manip/unitbuf" }

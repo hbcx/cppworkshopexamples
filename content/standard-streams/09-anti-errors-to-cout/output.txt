@@ -1,0 +1,4 @@
+what a `> file` redirection would capture:
+WARNING: using defaults
+42
+-- the warning polluted the data. Send diagnostics to std::cerr.

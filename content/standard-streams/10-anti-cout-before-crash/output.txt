@@ -1,0 +1,1 @@
+trace via cout, flushed now: reached the checkpoint

@@ -1,0 +1,12 @@
+title: "Anti-pattern: diagnostics on stdout"
+standard: "C++11"
+difficulty: 2
+summary: "Writing errors, warnings or logs to std::cout puts them in the data stream, so `prog > out.txt` captures them into the output file and a pipe feeds them downstream as if they were data."
+notes: "stdout is for the program's DATA; diagnostics belong on stderr. Send a warning or log line to std::cout and it merges with the real output, so prog > result.txt writes the warning into result.txt, and prog | parser feeds the parser text it never expected -- a corruption that only shows up once someone redirects or pipes the program. The fix is to route all diagnostics to std::cerr (urgent) or std::clog (bulk), keeping stdout clean for data that a downstream tool consumes. This example captures what a `> file` redirection of stdout would receive when a warning is wrongly printed to cout, showing the warning polluting the data, and states the fix."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cerr", url: "https://en.cppreference.com/w/cpp/io/cerr" }
+detailed_tags:
+  - { name: "std::cout", url: "https://en.cppreference.com/w/cpp/io/cout" }
+  - { name: "basic_ios::rdbuf", url: "https://en.cppreference.com/w/cpp/io/basic_ios/rdbuf" }
