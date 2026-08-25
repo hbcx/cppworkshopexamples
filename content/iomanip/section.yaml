@@ -1,0 +1,4 @@
+title: "Stream formatting"
+description: "Controlling how streams format output with the manipulators from <iomanip> and <ios>. Covers field width, fill and alignment (setw, setfill, left/right/internal), the integer base (hex/oct/dec with showbase and uppercase), floating-point formats (fixed, scientific, defaultfloat and what setprecision means in each), boolalpha and the sign/point flags, the crucial sticky-versus-one-shot rule that setw resets while the rest persist, std::quoted for round-tripping strings with spaces and quotes, and saving and restoring a stream's formatting state -- alongside the traps: expecting setw to be sticky, leaking a sticky flag onto a shared stream, misreading setprecision without fixed, and a long chain of manipulators where std::format would be clearer. These flags apply to any stream, so they work the same on std::cout, a file stream and a string stream."
+sort_order: 120
+category: "Files & I/O"

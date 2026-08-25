@@ -1,0 +1,11 @@
+title: "Sticky versus one-shot"
+standard: "C++11"
+difficulty: 2
+summary: "Almost every manipulator is sticky -- it stays until changed -- but setw is the one exception: it applies to the next output only and then resets to zero."
+notes: "This is the single most important thing to internalise about stream formatting. Nearly all manipulators are STICKY: set hex, fixed, setfill, boolalpha or an alignment and it stays in effect for every following value until you change it. setw is the exception -- it is a ONE-SHOT that affects only the very next output and then resets the width to 0. So a common surprise is that setfill keeps padding subsequent fields while setw does not, meaning you must re-apply setw for each field you want widened but you only set setfill once. Understanding this explains both the leaking-state bug (a sticky flag left on a shared stream) and the setw-not-sticky bug in the anti-patterns. This example prints three values to show which manipulator persists and which does not."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::setw", url: "https://en.cppreference.com/w/cpp/io/manip/setw" }
+detailed_tags:
+  - { name: "std::setfill", url: "https://en.cppreference.com/w/cpp/io/manip/setfill" }

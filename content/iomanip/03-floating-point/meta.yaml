@@ -1,0 +1,11 @@
+title: "Floating-point formats"
+standard: "C++11"
+difficulty: 2
+summary: "fixed, scientific and defaultfloat pick the float format, and setprecision means significant digits in the default format but digits after the point once fixed or scientific is set."
+notes: "The float format and setprecision work together, and the interaction is the thing to learn. In the DEFAULT (general) format, setprecision(n) sets the number of SIGNIFICANT digits, and the stream picks fixed or scientific notation to fit. Once you set std::fixed, setprecision(n) instead means n digits AFTER the decimal point -- this is what you want for money or a fixed number of decimals. std::scientific forces mantissa-and-exponent form, again with precision counting digits after the point. std::defaultfloat returns to the general format. All are sticky. Getting this wrong -- expecting setprecision(2) to mean two decimals without fixed -- is a common bug, shown in the anti-patterns. This example prints a value in each mode."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::setprecision", url: "https://en.cppreference.com/w/cpp/io/manip/setprecision" }
+detailed_tags:
+  - { name: "std::fixed / std::scientific / std::defaultfloat", url: "https://en.cppreference.com/w/cpp/io/manip/fixed" }

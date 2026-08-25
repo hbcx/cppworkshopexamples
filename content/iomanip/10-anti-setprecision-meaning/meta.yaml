@@ -1,0 +1,11 @@
+title: "Anti-pattern: setprecision without fixed"
+standard: "C++11"
+difficulty: 2
+summary: "setprecision(2) does not mean two decimal places on its own -- in the default format it is two significant digits, so a large value prints in scientific form."
+notes: "A frequent mistake is writing setprecision(2) to get two decimal places and being surprised by the result. In the DEFAULT (general) float format, setprecision sets SIGNIFICANT digits, not digits after the point, so 1234.5 with precision 2 comes out as 1.2e+03 -- two significant figures, in scientific notation. To actually get a fixed number of decimals you must set std::fixed first; then setprecision(2) means two digits after the decimal point and 1234.5 prints as 1234.50. This matters most for money and any aligned decimal column. This example shows the wrong output without fixed and the intended output with it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::setprecision", url: "https://en.cppreference.com/w/cpp/io/manip/setprecision" }
+detailed_tags:
+  - { name: "std::fixed / std::scientific / std::defaultfloat", url: "https://en.cppreference.com/w/cpp/io/manip/fixed" }

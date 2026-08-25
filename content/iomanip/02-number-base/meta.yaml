@@ -1,0 +1,12 @@
+title: "Integer base"
+standard: "C++11"
+difficulty: 1
+summary: "hex, oct and dec select the base an integer prints in; showbase adds the 0x or 0 prefix, and uppercase capitalises the hex digits and the X."
+notes: "dec, hex and oct choose the base for integer input and output; the default is decimal. showbase prepends the C-style prefix -- 0x for hex, 0 for octal -- so the base is unambiguous, and uppercase renders the hex digits and the X in capitals (0XFF instead of 0xff). All of these are sticky: set hex and every following integer prints in hex until you set dec again, which is a common source of the leaking-state bug in the anti-patterns. This is the tool for addresses, byte values, colour codes and bitmasks. This example prints one value in each base and then resets to decimal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hex", url: "https://en.cppreference.com/w/cpp/io/manip/hex" }
+detailed_tags:
+  - { name: "std::showbase", url: "https://en.cppreference.com/w/cpp/io/manip/showbase" }
+  - { name: "std::uppercase", url: "https://en.cppreference.com/w/cpp/io/manip/uppercase" }

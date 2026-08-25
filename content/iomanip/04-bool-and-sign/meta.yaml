@@ -1,0 +1,12 @@
+title: "Booleans, sign and point"
+standard: "C++11"
+difficulty: 2
+summary: "boolalpha prints bools as true/false, showpos adds a leading + to non-negative numbers, and showpoint keeps the decimal point and trailing zeros on whole floats."
+notes: "A few smaller flags round out formatting. boolalpha prints a bool as true or false instead of 1 or 0, which is far more readable in logs and reports (and it also works on input, parsing true/false back). showpos adds an explicit + in front of non-negative numbers, useful for signed deltas and diffs. showpoint forces the decimal point and trailing zeros to appear even for a value that is a whole number, so 3.0 prints as 3.000 rather than 3 -- handy when a column must look uniformly decimal. All three are sticky, with noboolalpha, noshowpos and noshowpoint to turn them back off. This example shows each with and without the flag."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::boolalpha", url: "https://en.cppreference.com/w/cpp/io/manip/boolalpha" }
+detailed_tags:
+  - { name: "std::showpos", url: "https://en.cppreference.com/w/cpp/io/manip/showpos" }
+  - { name: "std::showpoint", url: "https://en.cppreference.com/w/cpp/io/manip/showpoint" }

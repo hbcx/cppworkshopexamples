@@ -1,0 +1,12 @@
+title: "Anti-pattern: a chain of manipulators for one line"
+standard: "C++11"
+difficulty: 3
+summary: "A long chain of sticky manipulators to format one line is verbose, order-dependent and leaks state; keep it local to a stringstream, or use std::format for a fixed template."
+notes: "Formatting one line with a pile of manipulators -- setw, setfill, fixed, setprecision, hex all in one insertion chain -- is hard to read, sensitive to order, and leaks state onto the stream unless you restore it. For a fixed template, std::format (C++20) expresses the same thing in one compact format string with no sticky state at all, and is the better tool where it is available. When you are on C++11/17 and must use streams, the mitigation is to keep the formatting LOCAL: build the line in a throwaway std::ostringstream so the manipulators cannot leak onto std::cout, then print the resulting string. This example builds a formatted line inside a local stringstream and shows the equivalent std::format call in a comment for comparison."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::setfill", url: "https://en.cppreference.com/w/cpp/io/manip/setfill" }
+detailed_tags:
+  - { name: "std::setprecision", url: "https://en.cppreference.com/w/cpp/io/manip/setprecision" }
+  - { name: "std::ostringstream", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream" }

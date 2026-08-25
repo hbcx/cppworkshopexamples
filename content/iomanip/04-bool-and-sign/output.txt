@@ -1,0 +1,4 @@
+default bool: 1 0
+boolalpha:    true false
+showpos: +42 -42
+showpoint: 3.000

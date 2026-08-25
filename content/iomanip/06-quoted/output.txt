@@ -1,0 +1,2 @@
+encoded: "she said \"hi\", then left"
+decoded matches original: 1

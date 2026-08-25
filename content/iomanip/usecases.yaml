@@ -1,0 +1,20 @@
+# Where to reach for stream formatting -- problem -> tool, with the alternative it beats.
+- problem: "A tool prints a table or a report with aligned columns -- names left-justified, numbers right-justified, everything lining up regardless of value length."
+  why: "setw with left/right and setfill lays out fixed-width columns directly in the output, where building aligned columns by measuring string lengths and adding spaces by hand is fiddly and breaks the moment a value changes width."
+  signal: "manual column alignment with hand-counted spaces or string padding loops, or tables that misalign when a value is wider than expected"
+
+- problem: "Numeric output needs a specific shape: money with exactly two decimals, a percentage, a measurement, a very large or small value in scientific notation."
+  why: "std::fixed/std::scientific with setprecision pin the decimal shape exactly, where the default float format switches between plain and scientific and shows a variable number of digits, so amounts do not line up and cents go missing."
+  signal: "prices or measurements printed with the default float format, or setprecision used without fixed and getting significant digits instead of decimals"
+
+- problem: "Debug or diagnostic output shows raw bytes and addresses -- a hex dump, a packet trace, a colour code, a bitmask."
+  why: "std::hex with setw, setfill('0') and showbase renders each byte as a fixed two-digit hex value and prefixes addresses cleanly, where decimal output is unreadable for bit patterns and manual hex conversion is error-prone."
+  signal: "byte values printed in decimal in a debug log, or hand-written nibble-to-hex conversion for dumps"
+
+- problem: "A free-text field with spaces or quotes must be written to a delimited record and read back exactly -- a name in a CSV, a message in a space-separated log, a path with spaces."
+  why: "std::quoted escapes and re-parses the field so it survives the round trip intact, where a bare operator>> stops at the first space and splits the value, and hand-rolled quoting has to handle embedded quotes and escapes itself."
+  signal: "fields corrupted or split on read because they contained spaces, or custom quote-and-escape code around a delimited format"
+
+- problem: "A library function writes formatted output to a stream the caller owns and must not change the caller's formatting for whatever they print next."
+  why: "saving flags/precision/fill (or a small RAII guard that restores them in its destructor) contains the sticky manipulators to the function, where leaving hex or fixed set leaks formatting onto the caller and causes bugs far from the function."
+  signal: "output formatting that changes unexpectedly after calling a logging or print helper, or manipulators set on cout with no matching restore"

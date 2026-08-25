@@ -1,0 +1,12 @@
+title: "Saving and restoring format state"
+standard: "C++11"
+difficulty: 3
+summary: "Because manipulators are sticky, a function that formats should save the stream's flags, precision and fill, do its work, then restore them so it does not affect later output."
+notes: "Sticky formatting means a function that writes to a shared stream can quietly change how everything AFTER it prints. The disciplined pattern is to save the relevant state, format, and restore: flags() reads and sets the format flag bits, precision() the float precision, and fill() the pad character. Save those three, do the work, then set them back. When you want to reset EVERYTHING at once rather than track individual pieces, copyfmt from a default-constructed stream (stream.copyfmt(std::ios(nullptr))) restores all formatting to defaults in one call. Libraries especially should do this so their output does not leak formatting onto the caller's stream -- the use cases include a scope guard that automates it. This example formats a value as zero-padded hex, then restores and prints normally."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ios_base::flags", url: "https://en.cppreference.com/w/cpp/io/ios_base/flags" }
+detailed_tags:
+  - { name: "std::basic_ios::copyfmt", url: "https://en.cppreference.com/w/cpp/io/basic_ios/copyfmt" }
+  - { name: "std::basic_ios::fill", url: "https://en.cppreference.com/w/cpp/io/basic_ios/fill" }

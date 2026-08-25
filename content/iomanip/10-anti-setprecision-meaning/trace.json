@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 8}, {"file": "main.cpp", "line": 10, "out": "wrong (no fixed): 1.2e+03\n"}, {"file": "main.cpp", "line": 13, "out": "right (fixed):    "}, {"file": "main.cpp", "line": 14, "out": "1234.50\n"}, {"file": "main.cpp", "line": 15}, {"file": "main.cpp", "line": 16}]}

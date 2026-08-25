@@ -1,0 +1,4 @@
+default p4:   3.142
+fixed p2:     3.14
+scientific:   1.23e+06
+defaultfloat: 1.23457e+06

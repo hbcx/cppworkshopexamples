@@ -1,0 +1,6 @@
+dec: 255
+hex: ff
+oct: 377
+showbase hex: 0xff
+uppercase:    0XFF
+back to dec: 255

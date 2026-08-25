@@ -7,3 +7,5 @@
   note: "The modern replacement for building strings with <<: std::format composes text from a type-checked format string, clearer than an ostringstream for a fixed template. Go there for the C++20 way, keeping the stream for conditional or piece-by-piece building."
 - slug: "charconv"
   note: "The fast, locale-free single-value conversion the anti-patterns point you to: to_chars and from_chars convert one number with no allocation, no locale and no throw, where a stringstream carries a whole locale. Go there for the primitive under one field."
+- slug: "iomanip"
+  note: "The manipulators that shape what you build: setw, setfill, fixed and hex format the values you stream into an ostringstream, and the sticky-flag rules explain why formatting sometimes carries over. Go there for width, precision, base and alignment."

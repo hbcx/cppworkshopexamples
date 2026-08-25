@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "string-streams"
+  note: "The safe place to use these manipulators: build a formatted string in an ostringstream so the sticky flags cannot leak onto a shared stream, then take .str(). Go there for assembling and parsing strings in memory."
+- slug: "file-streams"
+  note: "The same manipulators apply to a file stream: setw, hex and fixed format what you write to disk exactly as they do on cout. Go there for opening files, the getline loop, and text versus binary output."
+- slug: "format"
+  note: "The modern replacement for a chain of manipulators: std::format (C++20) puts the whole layout in one type-checked format string with no sticky state to leak. Go there when you can target C++20 and want the clearer tool."

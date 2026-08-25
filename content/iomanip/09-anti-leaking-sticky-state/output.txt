@@ -1,0 +1,4 @@
+before: 255
+ff
+after bad helper: ff
+after dec reset: 255

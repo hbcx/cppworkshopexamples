@@ -1,0 +1,2 @@
+wrong (no fixed): 1.2e+03
+right (fixed):    1234.50

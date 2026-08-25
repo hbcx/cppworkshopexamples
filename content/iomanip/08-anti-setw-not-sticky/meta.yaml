@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting setw to be sticky"
+standard: "C++11"
+difficulty: 2
+summary: "setw applies to the next output only and then resets, so setting it once pads just the first value and jams the rest together."
+notes: "Because setfill and the alignment flags are sticky, it is natural to assume setw is too -- but it is the one manipulator that is NOT. setw(n) sets the width for the very next inserted value and then resets to 0, so writing setw(6) once and then streaming several values pads only the first; the others print at their natural width, right up against each other. The fix is simply to re-apply setw before every field you want widened. This trips people up most in table-printing loops, where the width must be set each time through. This example shows the single-padded wrong version and the per-field right version side by side."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::setw", url: "https://en.cppreference.com/w/cpp/io/manip/setw" }
+detailed_tags:
+  - { name: "std::setfill", url: "https://en.cppreference.com/w/cpp/io/manip/setfill" }

@@ -1,0 +1,11 @@
+title: "Round-tripping strings with quoted"
+standard: "C++14"
+difficulty: 2
+summary: "std::quoted wraps a string in quotes on output and strips them on input, escaping embedded quotes, so a value with spaces or quotes survives a stream round trip intact."
+notes: "std::quoted (C++14) solves a real problem: operator>> stops at whitespace, so a string with spaces cannot be written and read back through a stream without being split. quoted wraps the string in double quotes on output and ESCAPES any quotes inside it; on input it reads a quoted token, unescapes it, and gives back the exact original -- spaces, quotes and all. This is what makes it safe to store a free-text field in a space- or delimiter-separated record and parse it back later. You can pass a different delimiter and escape character if you need to. This example encodes a string containing both spaces and quotes, then reads it back and confirms it matches. Labeled C++14, the version that introduced quoted."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::quoted", url: "https://en.cppreference.com/w/cpp/io/manip/quoted" }
+detailed_tags:
+  - { name: "std::stringstream", url: "https://en.cppreference.com/w/cpp/io/basic_stringstream" }

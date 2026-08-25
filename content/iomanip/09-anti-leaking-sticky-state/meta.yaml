@@ -1,0 +1,11 @@
+title: "Anti-pattern: leaking a sticky flag"
+standard: "C++11"
+difficulty: 3
+summary: "A function that sets a sticky manipulator on a shared stream and does not restore it silently changes formatting for everything printed after it."
+notes: "Sticky flags plus a shared stream are a trap: a helper that does std::cout << std::hex << n and returns leaves the stream in hex, so the NEXT unrelated number prints in hex too -- a bug that shows up far from the function that caused it, often as mysteriously wrong output elsewhere. The same happens with fixed, setprecision, boolalpha and setfill. The fix is for any function that changes formatting on a stream it does not own to restore the state before returning: save flags/precision/fill and set them back, or copyfmt from a default stream, or use a scope guard (see the use cases). This example shows a hex helper leaking onto later output, then resets and states the fix."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hex", url: "https://en.cppreference.com/w/cpp/io/manip/hex" }
+detailed_tags:
+  - { name: "std::basic_ios::copyfmt", url: "https://en.cppreference.com/w/cpp/io/basic_ios/copyfmt" }

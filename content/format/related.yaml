@@ -13,3 +13,5 @@
   note: "The bare primitive under a single number: when you do not need the format-spec mini-language, std::to_chars converts one value with no allocation and no locale, and from_chars reads it back -- go there for the fastest number-to-text and text-to-number on a hot path."
 - slug: "file-streams"
   note: "Where formatted text often ends up: build a line with std::format, then write it to a file with ofstream -- go there for opening files, the getline read loop, and binary vs text output."
+- slug: "iomanip"
+  note: "The stream way to do what std::format does, and what it replaces: setw, setprecision, fixed and hex format through sticky manipulators -- go there for the pre-C++20 approach, its width/base/precision flags, and why they leak state."

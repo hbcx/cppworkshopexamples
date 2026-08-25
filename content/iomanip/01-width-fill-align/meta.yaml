@@ -1,0 +1,12 @@
+title: "Width, fill and alignment"
+standard: "C++11"
+difficulty: 1
+summary: "setw sets the field width for the next output, setfill sets the padding character, and left/right/internal choose where the padding goes."
+notes: "These three build fixed-width columns. setw(n) makes the NEXT value occupy at least n characters, padding with the fill character (a space by default). setfill(c) changes that pad character -- a dot for a dotted leader, a zero for zero-padding. The alignment flags decide which side the padding lands: right (the default for numbers) pads on the left, left pads on the right, and internal puts the padding between a sign and the digits, which is how you get -0000042. Alignment and fill are sticky (they persist), but setw is not -- it resets after one field, which the sticky-versus-one-shot example makes explicit. This example lays out the same values several ways."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::setw", url: "https://en.cppreference.com/w/cpp/io/manip/setw" }
+detailed_tags:
+  - { name: "std::setfill", url: "https://en.cppreference.com/w/cpp/io/manip/setfill" }
+  - { name: "std::left / std::right / std::internal", url: "https://en.cppreference.com/w/cpp/io/manip/left" }
