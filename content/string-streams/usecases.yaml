@@ -1,0 +1,20 @@
+# Where to reach for string streams -- problem -> tool, with the alternative it beats.
+- problem: "Code has a line of structured text in memory -- a log line, a key value pair, a CSV row already read from a file -- and needs typed fields out of it."
+  why: "wrapping the line in an istringstream and extracting with >> (or splitting with getline and a delimiter) parses mixed types in a few lines, where hand-written find/substr slicing re-derives the field boundaries and the number conversions itself and breaks on spacing changes."
+  signal: "a parser built from repeated find(',') and substr calls, or sscanf into fixed buffers on a std::string you already hold"
+
+- problem: "A message or identifier is composed from mixed values -- text, numbers, a computed field -- built up conditionally, in older code that cannot use std::format."
+  why: "an ostringstream lets you stream the pieces in with << and add parts inside an if or a loop, where a chain of + and std::to_string is noisier and re-allocates at each concatenation, and cannot interleave stream formatting."
+  signal: "a string assembled with a long + and to_string chain, or pieces appended in a loop with operator+"
+
+- problem: "Output needs fixed formatting as a string -- zero-padded ids, fixed-decimal money, hex codes, fixed-width columns for a table or a report."
+  why: "an ostringstream carries the iomanip manipulators (setw, setfill, setprecision, hex), so the formatted result is captured as a std::string you can store, log or reuse, where formatting straight to cout cannot be captured and manual padding is error-prone."
+  signal: "manual space or zero padding built with loops or substr, or numbers formatted inline with no reusable string result"
+
+- problem: "A generic helper must convert between text and an arbitrary type T decided at compile time -- a settings loader, a command-line binder, a lexical_cast-style utility."
+  why: "a stringstream templated on T uses operator<< / operator>> to convert any streamable type through one code path, where a switch over specific types or a family of to_string/stoX overloads must be written and maintained per type."
+  signal: "a conversion utility with an overload or specialization per supported type, or a template that falls back to stringstream anyway"
+
+- problem: "Tests or logging need the TEXT form of an object that defines operator<< -- to assert on its printed shape, or to fold its representation into a bigger message."
+  why: "streaming the object into an ostringstream captures exactly what operator<< would print, as a string you can compare or embed, where there is no other portable way to intercept what an object writes to a stream."
+  signal: "a test that prints to cout and inspects it by eye, or a custom to-string reimplemented separately from the object's existing operator<<"

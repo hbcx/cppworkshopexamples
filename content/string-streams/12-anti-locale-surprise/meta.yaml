@@ -1,0 +1,12 @@
+title: "Anti-pattern: locale-dependent formatting"
+standard: "C++11"
+difficulty: 3
+summary: "A stream formats numbers through its locale, so imbuing one changes the decimal separator and adds grouping -- the same code produces different text, and cross-locale text fails to parse."
+notes: "A stringstream is not locale-neutral: it formats and parses numbers through the locale it carries. The default is the classic C locale (dot decimal, no grouping), but imbue a European-style locale and 1234.5 becomes 1.234,5 -- a comma decimal and a grouping dot. That is fine for a number shown to a user, but a disaster for machine-readable output: text written under one locale can be misread under another (a dot that was a decimal point is now a grouping separator), so a config or data file silently corrupts. The fix for anything stored, exchanged or compared is to pin the classic locale (std::locale::classic()), or better use std::to_chars/std::from_chars, which are locale-independent by design. This example formats the same value under the classic locale and a custom comma-grouping facet (used instead of a named system locale so the result is the same everywhere) to show the divergence; the read-side hazard is described in the comments."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ostringstream", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream" }
+detailed_tags:
+  - { name: "std::numpunct", url: "https://en.cppreference.com/w/cpp/locale/numpunct" }
+  - { name: "std::locale", url: "https://en.cppreference.com/w/cpp/locale/locale" }

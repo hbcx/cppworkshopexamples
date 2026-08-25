@@ -1,0 +1,11 @@
+title: "Anti-pattern: reusing without clear()"
+standard: "C++11"
+difficulty: 3
+summary: "After a stream reads to the end, failbit/eofbit stay set; calling str() to load new content but skipping clear() makes every read on the new content fail."
+notes: "The subtle half of reuse: str(newContent) replaces the buffer but leaves the state bits alone. If the previous pass read to the end -- which is exactly what a while (in >> x) loop does -- eofbit and failbit are set, and because a failed stream stays failed, the first read on the new content does nothing. The value is left unchanged (a stream that is already in a failed state does not even run the extraction), so you silently process nothing. The fix is one call: clear() resets the state bits, and then str() loads the new content cleanly (the correct-reuse example does both). This example reads one string to the end, swaps in another with str() only, watches the read fail, then fixes it with clear()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istringstream", url: "https://en.cppreference.com/w/cpp/io/basic_istringstream" }
+detailed_tags:
+  - { name: "basic_ios::clear", url: "https://en.cppreference.com/w/cpp/io/basic_ios/clear" }

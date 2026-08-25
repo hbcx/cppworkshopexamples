@@ -1,0 +1,11 @@
+title: "Building a string"
+standard: "C++11"
+difficulty: 1
+summary: "std::ostringstream builds a string in memory: stream values in with <<, exactly as to std::cout, then take the result with .str()."
+notes: "std::ostringstream is an output stream whose sink is a std::string it grows for you. You write to it with << just like std::cout -- mixing text, numbers and computed values -- and when you are done, .str() hands back the accumulated std::string. This is the pre-C++20 way to assemble a string from parts without a chain of + and std::to_string, and it is still useful for conditional building where you add pieces in a loop or an if. (In C++20 std::format is usually clearer for a fixed template; see the related chapters.) This example composes one line from several values and reads back its length."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ostringstream", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream" }
+detailed_tags:
+  - { name: "ostringstream::str", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream/str" }

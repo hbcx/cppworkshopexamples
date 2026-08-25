@@ -1,0 +1,12 @@
+title: "Anti-pattern: c_str() of a temporary str()"
+standard: "C++11"
+difficulty: 3
+summary: "str() returns a new std::string by value; taking c_str() of that temporary gives a pointer that dangles the moment the statement ends."
+notes: "str() returns the stream's content as a NEW std::string, by value. Write const char* p = ss.str().c_str(); and the temporary string is destroyed at the end of the full expression, leaving p pointing at freed memory -- a use-after-free that often appears to work until the allocator reuses the block, then corrupts data or crashes. It is the same lifetime trap as returning c_str() of a local string. The fix is to keep the std::string alive: assign str() to a named variable and take c_str() of THAT, or, if you only need the string, use it directly and skip the raw pointer. This example does not dereference a dangling pointer (that would be undefined behaviour); it shows the two safe forms."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ostringstream", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream" }
+detailed_tags:
+  - { name: "basic_string::c_str", url: "https://en.cppreference.com/w/cpp/string/basic_string/c_str" }
+  - { name: "ostringstream::str", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream/str" }

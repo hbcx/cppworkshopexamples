@@ -1,0 +1,12 @@
+title: "Numbers to and from text"
+standard: "C++11"
+difficulty: 2
+summary: "A stringstream converts between numbers and text with >> and <<, but for a single value the standalone helpers to_string / stoi (or to_chars in C++17) are simpler and faster."
+notes: "Historically the stringstream was the general number-text converter: feed text to an istringstream and extract to get a number, or stream a number into an ostringstream and take .str() to get text. It still earns its place when you convert SEVERAL values at once, or need formatting along the way. But for a SINGLE value the dedicated helpers are simpler and cheaper: std::to_string(n) for number to text, std::stoi/std::stod for text to number (they throw on bad input), and in C++17 std::to_chars/std::from_chars for the fastest, locale-free path with no allocation. This example shows both directions through a stringstream and the direct helpers side by side; the anti-pattern chapter makes the case against reaching for a stringstream when one value is all you have."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istringstream", url: "https://en.cppreference.com/w/cpp/io/basic_istringstream" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "std::stoi", url: "https://en.cppreference.com/w/cpp/string/basic_string/stol" }

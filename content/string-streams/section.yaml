@@ -1,0 +1,4 @@
+title: "String streams"
+description: "In-memory streams over a std::string -- std::ostringstream, std::istringstream and std::stringstream from <sstream>. Covers building a string by streaming values in with <<, parsing values out with >>, splitting a line into fields with getline and a delimiter, converting between numbers and text, using a stringstream as a read-write buffer, resetting one for reuse with str() and clear(), and building formatted text with manipulators -- alongside the traps: reusing a stream without clearing its state, spinning up a stringstream to convert a single value, taking c_str() of the temporary that str() returns, accepting a partial parse as valid, and locale-dependent number formatting. These are the same iostream types as the file-stream chapter, but the source and sink is a string in memory rather than a file. Labeled C++11; the API itself dates to C++98."
+sort_order: 119
+category: "Files & I/O"

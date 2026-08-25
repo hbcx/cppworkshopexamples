@@ -10,6 +10,8 @@
   note: "The fast, non-allocating number conversions: std::to_chars and std::from_chars replace std::to_string and std::stoi on hot paths -- go there when the per-call std::string allocation and the locale lookup cost too much, or when the code must not throw."
 - slug: "filesystem-paths"
   note: "Where a std::string becomes a pathname: a std::filesystem::path is built from a string and handed back as one, but knows about separators, extensions and portability that raw string work gets wrong -- go there before you split a path with find and substr."
+- slug: "string-streams"
+  note: "Building and parsing strings with the stream operators: an ostringstream assembles a string from mixed values with <<, and an istringstream splits one into typed fields -- go there for composing and tokenizing text in memory rather than by hand."
 - slug: "move-semantics"
   note: "std::string is the textbook move type: moving one hands over its heap buffer in O(1) while a copy allocates, and it is the object most of those examples use to show moved-from state."
 - slug: "vectors"

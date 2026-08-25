@@ -1,0 +1,11 @@
+title: "Splitting on a delimiter"
+standard: "C++11"
+difficulty: 2
+summary: "std::getline with a delimiter argument splits a string into fields: read up to each delimiter instead of each newline, keeping empty fields."
+notes: "The three-argument std::getline(stream, token, delim) reads up to the next occurrence of delim (a comma, a colon, a tab) instead of a newline, which makes it the simple way to split a delimited line into fields. Wrapping an istringstream around the line and looping while getline succeeds collects the fields in order, and -- unlike operator>>, which skips runs of whitespace -- it preserves EMPTY fields between two adjacent delimiters, which matters for CSV where a missing value is meaningful. Note that a trailing delimiter does not produce a final empty field (getline fails at end of stream). This is enough for simple, well-formed data; real CSV with quoted commas and escapes needs a proper parser. This example splits a comma-separated string that contains an empty field."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istringstream", url: "https://en.cppreference.com/w/cpp/io/basic_istringstream" }
+detailed_tags:
+  - { name: "std::getline", url: "https://en.cppreference.com/w/cpp/string/basic_string/getline" }

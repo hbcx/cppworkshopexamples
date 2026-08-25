@@ -1,0 +1,12 @@
+title: "Anti-pattern: a stringstream for one value"
+standard: "C++11"
+difficulty: 2
+summary: "Constructing a stringstream to convert a single number builds a locale and a buffer and runs the full formatting machinery -- more code and slower than to_string/stoi."
+notes: "Reaching for a stringstream to turn one int into text, or one string into an int, is a common habit and a poor trade. Constructing the stream imbues a locale, allocates a buffer and pulls in the whole formatting pipeline -- real cost for a single value, and more lines than the direct call. The standalone helpers do exactly one job: std::to_string(n) for number to text, std::stoi/std::stod for text to number (throwing on bad input), and in C++17 std::to_chars/std::from_chars for the fastest, allocation-free, locale-independent path. Keep the stringstream for when you are composing or parsing SEVERAL values, or genuinely need stream formatting. This example shows a stringstream conversion next to the one-liner that replaces it, both directions."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ostringstream", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream" }
+detailed_tags:
+  - { name: "std::to_string", url: "https://en.cppreference.com/w/cpp/string/basic_string/to_string" }
+  - { name: "std::stoi", url: "https://en.cppreference.com/w/cpp/string/basic_string/stol" }

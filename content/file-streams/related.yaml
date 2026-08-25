@@ -7,3 +7,5 @@
   note: "The modern way to build the text you write to a file: std::format composes a line from values with a type-checked format string, cleaner than a chain of << inserters. Go there for formatting the output you then stream to the file."
 - slug: "charconv"
   note: "The fast, non-throwing way to turn the text you read into numbers and back: from_chars parses a field with no locale and no allocation, where operator>> is slower and sets failbit on bad input. Go there for the conversion under each field on a hot path."
+- slug: "string-streams"
+  note: "The same iostream types with a string behind them instead of a file: build and parse text in memory with ostringstream/istringstream, using the very same <<, >> and getline. Go there when the data is already a std::string rather than on disk."

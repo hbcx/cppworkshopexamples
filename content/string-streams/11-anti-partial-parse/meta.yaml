@@ -1,0 +1,11 @@
+title: "Anti-pattern: accepting a partial parse"
+standard: "C++11"
+difficulty: 3
+summary: "operator>> reads as far as it can and stops, so 42abc extracts 42 and succeeds; validating input means checking the WHOLE string was consumed, not just that >> worked."
+notes: "A successful operator>> means it read SOMETHING, not that the whole input was a valid value. Extracting an int from 42abc reads 42 and leaves abc in the stream, so the read succeeds while the input was never a clean number -- if you only check the stream is good, you accept malformed input. To validate a complete parse, confirm two things: the extraction did not fail, AND nothing but trailing whitespace remains. The idiom is to extract, then skip whitespace and check the stream is at end of file: (in >> std::ws).eof(). This example shows the partial parse being wrongly accepted, then a parseFullInt helper that rejects 42abc while accepting a padded 7."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istringstream", url: "https://en.cppreference.com/w/cpp/io/basic_istringstream" }
+detailed_tags:
+  - { name: "std::ws", url: "https://en.cppreference.com/w/cpp/io/manip/ws" }

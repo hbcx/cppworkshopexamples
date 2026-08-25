@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "file-streams"
+  note: "The same iostream types with a file behind them instead of a string: ifstream/ofstream read and write the disk, and the getline loop, open modes and manipulators all carry over. Go there when the source or sink is a file, not memory."
+- slug: "strings"
+  note: "What you build and parse: a string stream produces and consumes std::string, so trimming, searching and splitting the text before or after is string work. Go there for the operations on the string itself."
+- slug: "format"
+  note: "The modern replacement for building strings with <<: std::format composes text from a type-checked format string, clearer than an ostringstream for a fixed template. Go there for the C++20 way, keeping the stream for conditional or piece-by-piece building."
+- slug: "charconv"
+  note: "The fast, locale-free single-value conversion the anti-patterns point you to: to_chars and from_chars convert one number with no allocation, no locale and no throw, where a stringstream carries a whole locale. Go there for the primitive under one field."

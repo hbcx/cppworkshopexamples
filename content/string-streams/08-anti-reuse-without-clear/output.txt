@@ -1,0 +1,3 @@
+without clear, read ok: 0
+y unchanged: 1
+after clear, read: 333

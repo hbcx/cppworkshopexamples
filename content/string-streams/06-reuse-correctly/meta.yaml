@@ -1,0 +1,12 @@
+title: "Reusing a stringstream"
+standard: "C++11"
+difficulty: 2
+summary: "To reuse a stringstream for new content do BOTH: str(s) to replace the string and clear() to reset the state bits a previous read-to-end left set."
+notes: "Reusing one stringstream across several inputs takes two steps, and forgetting either is a bug. str(newContent) swaps the buffer's contents, but it does NOT touch the stream state -- so if the previous pass read to the end, eofbit and failbit are still set and the next read fails immediately. clear() resets those bits. Do both, in either order, at the top of each pass. This is cheaper than constructing a fresh stringstream each time when you process many small inputs in a loop. The anti-pattern chapter shows what happens when you call str() but skip clear(). This example sums numbers from three separate strings through one reused istringstream."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istringstream", url: "https://en.cppreference.com/w/cpp/io/basic_istringstream" }
+detailed_tags:
+  - { name: "basic_ios::clear", url: "https://en.cppreference.com/w/cpp/io/basic_ios/clear" }
+  - { name: "istringstream::str", url: "https://en.cppreference.com/w/cpp/io/basic_istringstream/str" }

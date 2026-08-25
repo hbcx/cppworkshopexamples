@@ -1,0 +1,11 @@
+title: "Parsing values out of a string"
+standard: "C++11"
+difficulty: 1
+summary: "std::istringstream reads values from a string with >>, skipping whitespace between them -- the mirror image of building one."
+notes: "std::istringstream is an input stream whose source is a std::string you hand it. operator>> extracts formatted values -- a word, an int, a double -- skipping the whitespace between them, so a space-separated record parses in one expression. It is the in-memory counterpart of reading from a file, and the natural tool when you already have the text in a string (a line you read, a field from a message) and want typed values out of it. Check the stream afterwards to know the parse worked, and see the partial-parse anti-pattern for validating that the WHOLE string was consumed, not just a prefix. This example pulls a name, a year and a score out of one line."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istringstream", url: "https://en.cppreference.com/w/cpp/io/basic_istringstream" }
+detailed_tags:
+  - { name: "basic_istream::operator>>", url: "https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt" }

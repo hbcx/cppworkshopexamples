@@ -1,0 +1,5 @@
+read succeeded: 1 value: 42
+but junk remains (not at end): 1
+parse '42':    1 -> 42
+parse '42abc': 0
+parse '  7  ': 1 -> 7

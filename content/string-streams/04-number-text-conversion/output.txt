@@ -1,0 +1,4 @@
+parsed: 256
+formatted: 3.14159
+to_string: 42
+stoi:      200

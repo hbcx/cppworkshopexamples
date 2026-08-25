@@ -1,0 +1,14 @@
+title: "Formatting with manipulators"
+standard: "C++11"
+difficulty: 3
+summary: "An ostringstream plus manipulators builds a formatted string: setw/setfill for zero-padding, fixed/setprecision for decimals, hex for base -- all from <iomanip>."
+notes: "Because a stringstream is an ordinary stream, the iomanip manipulators work on it, so you can build a FORMATTED string rather than a raw one: setw and setfill zero-pad an id to a fixed width, fixed and setprecision pin the number of decimals for a price, and hex plus uppercase render a value in hexadecimal. This is the classic way to produce fixed-width columns, padded identifiers or a hex dump as a string. Note that some manipulators are sticky (they stay in effect until changed) and some apply only to the next value -- the dedicated formatting chapter covers that in depth, and in C++20 std::format offers the same results with a compact format string. This example builds three formatted fields."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ostringstream", url: "https://en.cppreference.com/w/cpp/io/basic_ostringstream" }
+detailed_tags:
+  - { name: "std::setw", url: "https://en.cppreference.com/w/cpp/io/manip/setw" }
+  - { name: "std::setfill", url: "https://en.cppreference.com/w/cpp/io/manip/setfill" }
+  - { name: "std::setprecision", url: "https://en.cppreference.com/w/cpp/io/manip/setprecision" }
+  - { name: "std::hex", url: "https://en.cppreference.com/w/cpp/io/manip/hex" }

@@ -1,0 +1,3 @@
+same result: 1
+same parse: 1
+prefer to_string/stoi for one value

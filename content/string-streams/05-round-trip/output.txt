@@ -1,0 +1,3 @@
+read back: 10 20 30
+sum: 60
+contents: 10 20 30

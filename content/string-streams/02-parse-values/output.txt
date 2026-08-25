@@ -1,0 +1,4 @@
+name:  Ada
+year:  1815
+score: 3.5
+all read ok: 1
