@@ -1,0 +1,11 @@
+title: "Reading a file"
+standard: "C++17"
+difficulty: 1
+summary: "std::ifstream opens a file for reading; check that it opened, extract values with operator>>, and let RAII close it at the end of scope."
+notes: "std::ifstream is the input file stream. Constructing one with a path opens the file; the stream converts to a bool that is false when it is not usable, so the first thing to do is check it opened -- a missing file is the common case and the anti-pattern chapter shows what happens when you skip the check. operator>> reads formatted values and skips the whitespace between them, so reading three ints from \"10 20 30\" just works. There is no need to call close(): the ifstream's destructor closes the file when the object goes out of scope, which is the RAII guarantee that makes leaks and forgotten handles a non-issue. (The examples use a std::filesystem sandbox under the temp directory so they leave nothing behind.)"
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ifstream", url: "https://en.cppreference.com/w/cpp/io/basic_ifstream" }
+detailed_tags:
+  - { name: "basic_ios::operator bool", url: "https://en.cppreference.com/w/cpp/io/basic_ios/operator_bool" }

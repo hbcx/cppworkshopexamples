@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "filesystem-operations"
+  note: "The layer around the open: check a file exists, make the parent directory, get its size or time, rename your finished output into place. Go there for acting on the path before and after you read or write its contents here."
+- slug: "strings"
+  note: "What getline fills and what you write out: file text is std::string, so building, splitting and trimming the lines you read is string work. Go there for the operations on the text once it is in memory."
+- slug: "format"
+  note: "The modern way to build the text you write to a file: std::format composes a line from values with a type-checked format string, cleaner than a chain of << inserters. Go there for formatting the output you then stream to the file."
+- slug: "charconv"
+  note: "The fast, non-throwing way to turn the text you read into numbers and back: from_chars parses a field with no locale and no allocation, where operator>> is slower and sets failbit on bad input. Go there for the conversion under each field on a hot path."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: text mode for binary data"
+standard: "C++17"
+difficulty: 3
+summary: "In text mode on Windows a newline byte is translated to two bytes on write and back on read, so binary data is corrupted and byte counts and seek offsets are wrong."
+notes: "The default open mode is text mode, and on Windows that means the library translates the newline byte 0x0A to the pair 0x0D 0x0A when writing and reverses it when reading. For text that is invisible, but for BINARY data it is corruption: any 0x0A byte in the middle of your data gains a stray 0x0D, the file size no longer matches the bytes you wrote, and seek offsets computed from sizes do not line up. On Linux and macOS text mode does nothing, so the bug hides until the code runs on Windows -- or, in this project, until g++ on Windows and clang++ on Cygwin disagree. The fix is to always pass std::ios::binary for non-text data, after which what you write is exactly what lands on disk everywhere. This example writes bytes including 0x0A in binary mode and confirms an exact, uncorrupted round trip; the text-mode damage is described rather than run, because its result differs by platform."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ios_base::binary", url: "https://en.cppreference.com/w/cpp/io/ios_base/openmode" }
+detailed_tags:
+  - { name: "basic_ostream::write", url: "https://en.cppreference.com/w/cpp/io/basic_ostream/write" }

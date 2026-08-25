@@ -1,0 +1,20 @@
+# Where to reach for file streams -- problem -> tool, with the alternative it beats.
+- problem: "A program reads a line-oriented text file: a config, a CSV export, a list of records, processing each line and stopping cleanly at the end."
+  why: "the while (std::getline(in, line)) loop reads each line including spaces and ends exactly at end of file, where a while (!eof()) loop or a bare operator>> reads one word at a time or runs an extra bogus pass, and C stdio's fgets makes you size a buffer and worry about long lines."
+  signal: "a read loop with eof() in the condition, or fixed char buffers filled by fgets/fscanf that a long line could overflow"
+
+- problem: "A service appends to a log or an audit file over its lifetime: each event is added at the end, never overwriting what is already there, and readers may tail it."
+  why: "std::ofstream opened with std::ios::app forces every write to the end of the file, where the default open mode truncates the file on open and silently discards the whole history the first time the service restarts."
+  signal: "a log file opened without app mode, or a restart that empties the previous log"
+
+- problem: "Code loads a smallish file whole into memory -- a shader source, an HTML or SQL template, a JSON blob -- to hand to a parser or compiler as one string."
+  why: "a pair of istreambuf_iterators (or ss << in.rdbuf()) copies the entire file in one pass, where a getchar loop or repeated small reads is slower and more code, and a fixed buffer caps the size you can load."
+  signal: "a character-at-a-time read loop building a string, or a hardcoded buffer size that assumes files stay small"
+
+- problem: "An application keeps a file of fixed-size records -- a cache, an index, a save file -- and needs random access to the Nth record without scanning the ones before it."
+  why: "trivially copyable records written in binary give a file whose size is exactly count times sizeof(record), so seekg to N * sizeof(record) jumps straight to one, where a text format has variable-length lines you must scan from the start to locate a given record."
+  signal: "a fixed-schema data file scanned linearly to find one entry, or record offsets that cannot be computed because the format is text"
+
+- problem: "A tool reads a stream of values, runs a standard algorithm over them (sort, filter, sum), and writes the result out -- a numbers pipeline, a token counter, a converter."
+  why: "istream_iterator makes the file an input range for the algorithms and ostream_iterator makes another stream the output sink, so the whole thing is read-transform-write with no hand-written I/O loop, where manual >> and << loops around the algorithm add boilerplate and off-by-one risk."
+  signal: "explicit while (in >> x) loops that only fill a container before an algorithm, or for loops that only print a range element by element"

@@ -1,0 +1,12 @@
+title: "Seeking and positions"
+standard: "C++17"
+difficulty: 3
+summary: "seekg/seekp move the read/write position and tellg/tellp report it; seeking to the end gives the file size, and seeking to an offset gives random access."
+notes: "A file stream keeps a position. seekg moves the read position and tellg reports it (seekp/tellp are the write-side pair); each seek takes an offset and a base -- std::ios::beg, cur or end. Two everyday uses: seek to the end and call tellg to get the file's size in bytes without a separate stat, and seek to a computed offset to jump straight to a record instead of reading past everything before it. Do this in binary mode: in text mode on Windows the byte-to-position mapping is not one-to-one (line endings translate), so offsets computed from sizes do not line up. tellg returns a std::streampos; cast it to std::streamoff (an integer) to print or do arithmetic. This example reads a slice from the middle of a file by seeking to it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "basic_istream::seekg", url: "https://en.cppreference.com/w/cpp/io/basic_istream/seekg" }
+detailed_tags:
+  - { name: "basic_istream::tellg", url: "https://en.cppreference.com/w/cpp/io/basic_istream/tellg" }
+  - { name: "std::streampos", url: "https://en.cppreference.com/w/cpp/io/fpos" }

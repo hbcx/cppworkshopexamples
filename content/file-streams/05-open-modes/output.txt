@@ -1,0 +1,5 @@
+after two default writes (truncate):
+  second
+after an append write:
+  second
+  third

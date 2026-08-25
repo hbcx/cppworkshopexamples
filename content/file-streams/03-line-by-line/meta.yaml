@@ -1,0 +1,11 @@
+title: "Reading line by line"
+standard: "C++17"
+difficulty: 1
+summary: "The correct read loop puts std::getline in the condition: while (std::getline(in, line)) reads each line and stops cleanly at end of file."
+notes: "Line-oriented reading is the everyday case -- config files, logs, CSV. The right idiom is while (std::getline(in, line)): getline reads up to and consumes the newline (which it does not store in the line), and returns the stream, whose bool value ends the loop the moment a read fails. This handles a last line with no trailing newline correctly, and it does NOT run an extra iteration at end of file -- which is exactly the mistake the eof() anti-pattern makes. std::getline reads a whole line including spaces, unlike operator>>, which stops at the first whitespace. This example numbers the lines it reads and reports the count."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::getline", url: "https://en.cppreference.com/w/cpp/string/basic_string/getline" }
+detailed_tags:
+  - { name: "std::ifstream", url: "https://en.cppreference.com/w/cpp/io/basic_ifstream" }

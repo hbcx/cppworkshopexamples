@@ -1,0 +1,11 @@
+title: "Anti-pattern: not checking that the file opened"
+standard: "C++17"
+difficulty: 2
+summary: "An ofstream to a path that cannot be created fails silently; every << after it is a no-op, so the program appears to succeed while writing nothing."
+notes: "Opening a file can fail -- a missing parent directory, no permission, a bad path -- and a stream does not throw about it by default. If you do not check, the failbit is set, every subsequent << is a no-op, and the program runs to completion having written nothing, so the bug surfaces later as a mysteriously empty or absent file. The fix is one line: test the stream right after opening (if (!out) ...) and handle the failure, or enable exceptions. The same applies to input: an unchecked ifstream to a missing file gives you an empty read, not an error. This example writes to a path whose parent does not exist, shows the stream went bad and no file appeared, then does it properly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ofstream", url: "https://en.cppreference.com/w/cpp/io/basic_ofstream" }
+detailed_tags:
+  - { name: "basic_ios::operator bool", url: "https://en.cppreference.com/w/cpp/io/basic_ios/operator_bool" }

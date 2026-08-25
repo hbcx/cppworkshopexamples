@@ -1,0 +1,11 @@
+title: "Anti-pattern: bit-blitting a pointer-owning type"
+standard: "C++17"
+difficulty: 3
+summary: "write(reinterpret_cast<char*>(&obj), sizeof obj) on a type that owns heap data like std::string writes the pointer, not the characters, so the read back is garbage."
+notes: "The raw write(reinterpret_cast<const char*>(&obj), sizeof obj) trick only works for trivially copyable types. A type that owns a resource -- a std::string, a std::vector, anything with a pointer inside -- stores a POINTER and a length in its own bytes; sizeof captures those raw bytes, not the characters they point at. The tell is that sizeof is CONSTANT no matter how long the string is: the data lives elsewhere on the heap. Write it that way and read it back in another run or process, and the stored pointer is meaningless -- garbage or a crash. The fix is to SERIALIZE: write each field explicitly, for a string the length followed by its bytes, and read it back the same way. Only bit-copy types where std::is_trivially_copyable is true. This example shows the constant sizeof that gives the bug away, then a correct length-prefixed round trip."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "basic_ostream::write", url: "https://en.cppreference.com/w/cpp/io/basic_ostream/write" }
+detailed_tags:
+  - { name: "std::is_trivially_copyable", url: "https://en.cppreference.com/w/cpp/types/is_trivially_copyable" }

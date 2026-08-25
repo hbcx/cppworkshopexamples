@@ -1,0 +1,4 @@
+bytes: 8
+abc
+def
+rdbuf bytes: 8

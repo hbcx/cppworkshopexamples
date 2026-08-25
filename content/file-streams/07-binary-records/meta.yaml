@@ -1,0 +1,12 @@
+title: "Binary records"
+standard: "C++17"
+difficulty: 3
+summary: "In binary mode, write() and read() move raw bytes: a trivially copyable struct can be bit-copied to disk with reinterpret_cast and sizeof, and read back the same way."
+notes: "For fixed-layout binary data, bypass formatting and move bytes directly. ostream::write takes a const char* and a byte count, so a trivially copyable struct (plain ints and doubles, no pointers) is written with write(reinterpret_cast<const char*>(&rec), sizeof rec); istream::read fills it back. Always open in binary mode so no line-ending translation corrupts the bytes, and use the read call itself as the loop condition -- it fails when there is nothing left. This only works for trivially copyable types: a struct that owns a pointer (a std::string member) writes the pointer, not the data, which is the binary anti-pattern later. The file size here is exactly the number of records times sizeof(Record), which is the property that makes fixed records seekable for random access."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "basic_ostream::write", url: "https://en.cppreference.com/w/cpp/io/basic_ostream/write" }
+detailed_tags:
+  - { name: "basic_istream::read", url: "https://en.cppreference.com/w/cpp/io/basic_istream/read" }
+  - { name: "std::ios_base::binary", url: "https://en.cppreference.com/w/cpp/io/ios_base/openmode" }

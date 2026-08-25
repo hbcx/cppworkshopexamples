@@ -1,0 +1,2 @@
+extracted with >>: Grace
+line: Grace Hopper  n: 42  leftover empty: 1

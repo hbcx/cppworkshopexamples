@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::endl in a loop"
+standard: "C++17"
+difficulty: 2
+summary: "std::endl writes a newline AND flushes the stream; using it on every line of a loop forces a physical write per line, which can be far slower than buffering."
+notes: "std::endl does two things: it writes '\\n' and then flushes the stream. The flush is the expensive part -- it pushes the buffer out to the operating system -- and doing it once per line in a loop that writes many lines can be orders of magnitude slower than letting the stream buffer and flush once. The habit of ending every line with endl is almost always a mistake: use '\\n' for the newline and let the stream flush when it is destroyed (or call flush() explicitly at the exact point you need the data on disk, such as before a long wait). The file content is identical either way; only the performance differs. This example writes the same thousand lines both ways and confirms they match -- the lesson is which to reach for by default."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::endl", url: "https://en.cppreference.com/w/cpp/io/manip/endl" }
+detailed_tags:
+  - { name: "std::flush", url: "https://en.cppreference.com/w/cpp/io/manip/flush" }

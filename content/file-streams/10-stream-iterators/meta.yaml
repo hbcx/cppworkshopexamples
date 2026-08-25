@@ -1,0 +1,11 @@
+title: "Stream iterators and algorithms"
+standard: "C++17"
+difficulty: 3
+summary: "istream_iterator turns a stream into an input range and ostream_iterator turns one into an output sink, so the standard algorithms read from and write to files directly."
+notes: "istream_iterator<T> reads successive T values from a stream with operator>>; a default-constructed one is the end-of-stream sentinel. That pair is a range, so you can build a container straight from a file -- std::vector<int> v{istream_iterator<int>(in), istream_iterator<int>()} -- and hand it to any algorithm. ostream_iterator<T> is the mirror image: each assignment writes a value (with an optional separator) to a stream, so std::copy(v.begin(), v.end(), ostream_iterator<int>(out, \" \")) prints a range with no explicit loop. This is the bridge between file I/O and the algorithms: read with one iterator, transform with an algorithm, write with the other. For raw bytes rather than formatted values, use istreambuf_iterator instead (see reading a whole file). This example reads numbers from a file, sorts them, and writes them out."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/istream_iterator" }
+detailed_tags:
+  - { name: "std::ostream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/ostream_iterator" }

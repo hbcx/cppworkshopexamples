@@ -1,0 +1,4 @@
+title: "File streams"
+description: "Reading and writing files with the classic iostream types -- std::ifstream, std::ofstream and std::fstream. Covers opening a file for reading and for writing, the getline line-by-line idiom, slurping a whole file into a string, the open modes (append, truncate, ate, binary, in|out), the stream state bits and how to recover from or throw on errors, writing and reading fixed binary records, seeking with seekg/tellg, updating a file in place, and bridging streams to the algorithms with istream_iterator and ostream_iterator -- alongside the traps: looping on eof(), not checking that a file opened, using text mode for binary data, reading with operator>> when you meant a whole line, std::endl flushing in a loop, and bit-blitting a pointer-owning type like std::string to disk. The file-stream API predates C++17; only the temp-directory sandbox in these examples uses <filesystem>."
+sort_order: 118
+category: "Files & I/O"

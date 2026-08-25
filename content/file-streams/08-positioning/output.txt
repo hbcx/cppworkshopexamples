@@ -1,0 +1,3 @@
+size via seek: 10
+bytes 4..6: EFG
+now at: 7

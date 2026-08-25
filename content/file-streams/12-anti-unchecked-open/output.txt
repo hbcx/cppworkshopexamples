@@ -1,0 +1,3 @@
+stream ok after write: 0
+file created: 0
+written: 1

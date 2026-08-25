@@ -1,0 +1,11 @@
+title: "Open modes"
+standard: "C++17"
+difficulty: 2
+summary: "The openmode flags decide behaviour: the default truncates, app appends at the end, ate opens at the end but lets you seek, binary skips line-ending translation, and in|out reads and writes."
+notes: "The second constructor argument is a bitmask of std::ios flags that you combine with |. The important ones: the default for ofstream is out|trunc, which empties an existing file -- app instead keeps the content and forces every write to the end (even after a seek); ate opens at the end but leaves you free to seek elsewhere; binary turns off the newline translation that text mode does on Windows, which matters for any non-text data; and in|out (on an fstream) opens a single stream for both reading and writing. This example shows truncate versus append by writing the same file twice, and reading back to prove which content survived. The read-and-write example uses in|out, and the binary examples use binary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ios_base::openmode", url: "https://en.cppreference.com/w/cpp/io/ios_base/openmode" }
+detailed_tags:
+  - { name: "std::ofstream", url: "https://en.cppreference.com/w/cpp/io/basic_ofstream" }

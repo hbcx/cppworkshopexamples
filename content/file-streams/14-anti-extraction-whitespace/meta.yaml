@@ -1,0 +1,12 @@
+title: "Anti-pattern: operator>> where you meant a line"
+standard: "C++17"
+difficulty: 3
+summary: "operator>> stops at the first whitespace, so it reads one word not a line, and mixing >> with getline leaves the dangling newline that makes the next getline return empty."
+notes: "operator>> is for tokens, not lines: it skips leading whitespace and stops at the next whitespace, so reading a full name with a space, or a whole line, gets you only the first word. The related trap is mixing >> and getline: after >> reads a value it leaves the newline sitting in the stream, so the very next std::getline returns an EMPTY line (it hits that leftover newline immediately). Both bugs come from the same fact -- >> does not consume the line boundary. The fixes are to use std::getline for line-oriented input, and after a >> to discard the rest of the line before the next getline, with in >> std::ws or in.ignore(numeric_limits<streamsize>::max(), '\\n'). This example shows the one-word read and the empty-line-after-number, then how to read the whole line instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::getline", url: "https://en.cppreference.com/w/cpp/string/basic_string/getline" }
+detailed_tags:
+  - { name: "std::ws", url: "https://en.cppreference.com/w/cpp/io/manip/ws" }
+  - { name: "basic_istream::ignore", url: "https://en.cppreference.com/w/cpp/io/basic_istream/ignore" }

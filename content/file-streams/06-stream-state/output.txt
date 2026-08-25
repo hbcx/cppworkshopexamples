@@ -1,0 +1,4 @@
+first read ok: 1 value 42
+second read ok: 0
+failbit: 1 value now: 0
+after clear, read as text: oops

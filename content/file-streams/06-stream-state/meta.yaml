@@ -1,0 +1,12 @@
+title: "Stream state and errors"
+standard: "C++17"
+difficulty: 2
+summary: "A stream carries good/eof/fail/bad bits; a failed read sets failbit, the bool test reports usable-or-not, clear() recovers, and exceptions() makes failures throw."
+notes: "Every stream tracks its condition in state bits: eofbit (a read reached end of file), failbit (a formatting or logical failure, such as reading an int where letters are), and badbit (a serious I/O loss). The bool conversion you test in a loop is true only when neither failbit nor badbit is set. Once a bit is set the stream stops working until you clear() it -- which is how you recover, for example to re-read a token as text after it failed to parse as a number. Since C++11 a failed numeric extraction also writes 0 into the target, so a botched read leaves a defined-but-wrong value, not the old one. If you prefer exceptions to bit-checking, exceptions(std::ios::failbit | std::ios::badbit) makes the stream throw on those conditions. This example drives a good read, a failing read, and a recovery."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::basic_ios", url: "https://en.cppreference.com/w/cpp/io/basic_ios" }
+detailed_tags:
+  - { name: "basic_ios::clear", url: "https://en.cppreference.com/w/cpp/io/basic_ios/clear" }
+  - { name: "basic_ios::exceptions", url: "https://en.cppreference.com/w/cpp/io/basic_ios/exceptions" }

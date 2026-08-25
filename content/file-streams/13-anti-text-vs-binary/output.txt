@@ -1,0 +1,3 @@
+binary file size: 5
+bytes read: 5
+byte 1 is 0x0A: 1

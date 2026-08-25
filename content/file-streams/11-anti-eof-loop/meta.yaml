@@ -1,0 +1,11 @@
+title: "Anti-pattern: looping on eof()"
+standard: "C++17"
+difficulty: 2
+summary: "while (!in.eof()) runs one time too many: eofbit is set only after a read fails, so the body executes on a failed read and processes a bogus extra value."
+notes: "The most common file-reading bug is while (!in.eof()). eofbit is not set when you are ON the last value -- it is set only after a read TRIES to go past the end and fails. So the loop tests eof (still false), enters the body, reads (which now fails and sets eofbit), and uses the result anyway. When the failure is hitting end of file while skipping whitespace, the target keeps its previous value, so the last number is processed a second time (a format failure would instead zero it -- either way you get one bogus iteration). The fix is to put the read itself in the condition -- while (in >> x) or while (std::getline(in, line)) -- so the loop ends the instant a read fails, from end of file or a format error alike. This example runs both loops over the same file so the extra iteration is visible."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "basic_ios::eof", url: "https://en.cppreference.com/w/cpp/io/basic_ios/eof" }
+detailed_tags:
+  - { name: "std::ifstream", url: "https://en.cppreference.com/w/cpp/io/basic_ifstream" }

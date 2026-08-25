@@ -1,0 +1,11 @@
+title: "Writing a file"
+standard: "C++17"
+difficulty: 1
+summary: "std::ofstream opens a file for writing, creating it or truncating it to empty; write with operator<<, and the destructor flushes and closes."
+notes: "std::ofstream is the output file stream. Opening one CREATES the file if it does not exist and TRUNCATES it to empty if it does -- the default is to start fresh, so if you meant to add to an existing file you need append mode (see open modes). Write with operator<< exactly as you would to std::cout. As with reading, check the stream opened before relying on the writes, and let RAII do the cleanup: when the ofstream is destroyed it flushes its buffer and closes the file. This example writes two lines and then reads them back to prove they landed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ofstream", url: "https://en.cppreference.com/w/cpp/io/basic_ofstream" }
+detailed_tags:
+  - { name: "std::getline", url: "https://en.cppreference.com/w/cpp/string/basic_string/getline" }

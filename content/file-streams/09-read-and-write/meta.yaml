@@ -1,0 +1,11 @@
+title: "Reading and writing one file"
+standard: "C++17"
+difficulty: 3
+summary: "std::fstream with in|out opens a single stream for both reading and writing, so you can seek to an offset and overwrite bytes in place without rewriting the whole file."
+notes: "std::fstream opened with std::ios::in | std::ios::out (plus binary for byte data) gives one handle you can both read from and write to. That enables an in-place update: seek the write position with seekp to a known offset, write a few bytes, and the rest of the file is untouched -- far cheaper than reading the whole file, editing a string, and writing it all back, which is what you would otherwise do. A caveat of a shared read/write stream is that after a write you should seek before you read (and vice versa) so the position is where you expect. Note that in|out does NOT truncate, but it also will not CREATE a missing file, so the file must already exist (create it first, as here). This example overwrites three bytes in the middle of a file and reads the result back."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fstream", url: "https://en.cppreference.com/w/cpp/io/basic_fstream" }
+detailed_tags:
+  - { name: "basic_ostream::seekp", url: "https://en.cppreference.com/w/cpp/io/basic_ostream/seekp" }

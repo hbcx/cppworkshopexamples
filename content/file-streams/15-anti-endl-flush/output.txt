@@ -1,0 +1,3 @@
+slow lines: 1000
+fast lines: 1000
+use '\n' in loops; reserve endl/flush for when you truly need a flush

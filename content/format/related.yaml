@@ -11,3 +11,5 @@
   note: "The read side of text work: regex matches and extracts, std::format composes and rewrites -- go there when you need to find or pull fields out rather than build a string from values."
 - slug: "charconv"
   note: "The bare primitive under a single number: when you do not need the format-spec mini-language, std::to_chars converts one value with no allocation and no locale, and from_chars reads it back -- go there for the fastest number-to-text and text-to-number on a hot path."
+- slug: "file-streams"
+  note: "Where formatted text often ends up: build a line with std::format, then write it to a file with ofstream -- go there for opening files, the getline read loop, and binary vs text output."

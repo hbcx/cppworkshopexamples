@@ -1,0 +1,11 @@
+title: "Reading a whole file at once"
+standard: "C++17"
+difficulty: 2
+summary: "Slurp an entire file into one std::string with a pair of istreambuf_iterators, or with ss << in.rdbuf() -- the usual way to load a shader, template or small config."
+notes: "Sometimes you want the whole file as one string rather than line by line. The compact idiom is to construct a std::string from a range of two std::istreambuf_iterator<char> -- the begin iterator over the stream buffer and a default-constructed end iterator -- which copies every byte in one pass. The equivalent with a stringstream is ss << in.rdbuf(); then ss.str(). Open in binary mode when you want the bytes exactly as they are on disk (text mode would translate line endings on Windows, changing the byte count -- see the text-versus-binary anti-pattern). Watch the classic most-vexing-parse: the first iterator argument needs an extra pair of parentheses so the compiler does not read the line as a function declaration. This suits files small enough to hold in memory; for huge files, stream them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istreambuf_iterator", url: "https://en.cppreference.com/w/cpp/iterator/istreambuf_iterator" }
+detailed_tags:
+  - { name: "basic_ios::rdbuf", url: "https://en.cppreference.com/w/cpp/io/basic_ios/rdbuf" }

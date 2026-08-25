@@ -1,0 +1,3 @@
+BadRecord trivially copyable: 0
+same sizeof for short and long name: 1
+round-tripped name: Ada Lovelace (len 12)
