@@ -5,3 +5,5 @@
   note: "The general sum type underneath: expected picks a value or error side; variant holds one of any fixed set of named alternatives, dispatched with visit."
 - slug: "interpreter"
   note: "A place expected earns its keep: an interpreter that evaluates external expressions can return expected<value, error> so an unknown variable or a division by zero is an unignorable result rather than a silent default -- go there for the invalid-input problem this type solves."
+- slug: "exceptions"
+  note: "The alternative you are weighing against: throwing instead of returning the error as a value. Go there for the throw/catch model and when a non-local jump -- and its cost -- is the right call rather than a returned expected."

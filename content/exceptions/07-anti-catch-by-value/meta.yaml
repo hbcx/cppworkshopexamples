@@ -1,0 +1,12 @@
+title: "Anti-pattern: catch by value slices"
+standard: "C++11"
+difficulty: 3
+summary: "Catching an exception by value copies it into a base variable, slicing off the derived part so a virtual what() no longer reaches the override; catch by const reference."
+notes: "A handler written catch (std::runtime_error e) copies the thrown object into a base-class variable. If the real exception was a derived type, that copy SLICES it -- only the base subobject survives, so a virtual what() dispatches to the base version and the derived message is lost. The output shows the same throw giving a generic message by value and the detailed one by reference. Always catch by const reference (const T&): no copy, no slicing, full dynamic type. g++ warns about this as -Wcatch-value (in -Wall), which is why this example turns -Werror off to demonstrate the mistake; treat that warning as a real bug."
+run: true
+sanitizers: []
+werror: false
+main_tags:
+  - { name: "try-catch", url: "https://en.cppreference.com/w/cpp/language/try_catch" }
+detailed_tags:
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 30}, {"file": "main.cpp", "line": 32}, {"file": "main.cpp", "line": 17}, {"file": "main.cpp", "line": 9, "out": "log: standard error: connection reset\nhandled: connection reset\n"}, {"file": "main.cpp", "line": 10, "out": "log: non-standard throw\nhandled: wrapped unknown error\n"}]}

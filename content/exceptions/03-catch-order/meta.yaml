@@ -1,0 +1,12 @@
+title: "Catch order: specific before general"
+standard: "C++11"
+difficulty: 2
+summary: "When a try has several handlers the first matching one wins, so list derived types before their base or the base catches everything first."
+notes: "Handlers are tried top to bottom and the FIRST whose type matches runs -- not the best match. Because a base reference matches every derived type, a catch of const std::exception& placed first would catch the whole family and the specific handlers below it would be dead code. So order them specific to general: the derived types first, the std::exception base last as the catch-all for the rest. Both g++ and clang warn when a handler is shadowed by an earlier one, which is your signal the order is wrong. Sibling types (out_of_range and invalid_argument here) are independent, so their order relative to each other does not matter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "try-catch", url: "https://en.cppreference.com/w/cpp/language/try_catch" }
+detailed_tags:
+  - { name: "std::out_of_range", url: "https://en.cppreference.com/w/cpp/error/out_of_range" }
+  - { name: "std::invalid_argument", url: "https://en.cppreference.com/w/cpp/error/invalid_argument" }

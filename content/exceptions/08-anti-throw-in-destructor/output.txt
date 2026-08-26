@@ -1,0 +1,2 @@
+destructor handled: cleanup failed
+caught: first

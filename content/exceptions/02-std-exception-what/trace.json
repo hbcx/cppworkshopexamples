@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 20}, {"file": "main.cpp", "line": 9}, {"file": "main.cpp", "line": 10, "out": "caught: disk write failed\n"}, {"file": "main.cpp", "line": 11, "out": "caught: row index 10 past end 3\n"}, {"file": "main.cpp", "line": 12, "out": "caught: expected a number\n"}]}

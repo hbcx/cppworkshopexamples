@@ -1,0 +1,11 @@
+title: "Stack unwinding and RAII"
+standard: "C++11"
+difficulty: 2
+summary: "As an exception propagates the stack unwinds, destroying every local object in reverse order, which is what makes RAII release resources on the error path."
+notes: "When a throw is not caught in the current function, the stack UNWINDS: every fully constructed local object between the throw and the catch is destroyed, in reverse order of construction, before the handler runs. That is the whole reason RAII is exception-safe -- a resource wrapped in a destructor (a file, a lock, a connection) is released automatically when control leaves through a throw, with no cleanup code on the error path and no way to forget it. The output shows B released before A, both before the catch prints. Without RAII you would need a catch just to free things, and every new early exit would risk a leak."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "exception safety", url: "https://en.cppreference.com/w/cpp/language/exceptions" }
+detailed_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }

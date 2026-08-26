@@ -1,0 +1,11 @@
+title: "Anti-pattern: throwing from a destructor"
+standard: "C++11"
+difficulty: 3
+summary: "If a destructor throws while another exception is unwinding the stack, two exceptions are in flight and std::terminate aborts the program; keep destructors non-throwing."
+notes: "A destructor often runs during stack unwinding, while an exception is already propagating. If it lets an exception escape then, there are two exceptions in flight at once, which the language resolves by calling std::terminate -- the program aborts and no catch runs. Since C++11 destructors are implicitly noexcept, so an escaping exception terminates even outside unwinding. The rule is simple: a destructor must not let an exception out. Do the cleanup, but catch and swallow or log any failure inside the destructor (shown here). This example does NOT run the throwing version -- it would abort -- it only describes it and runs the fix."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::terminate", url: "https://en.cppreference.com/w/cpp/error/terminate" }
+detailed_tags:
+  - { name: "exception safety", url: "https://en.cppreference.com/w/cpp/language/exceptions" }

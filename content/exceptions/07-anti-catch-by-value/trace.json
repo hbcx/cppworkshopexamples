@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 21}, {"file": "main.cpp", "line": 10, "out": "by value:     generic load failure\n"}, {"file": "main.cpp", "line": 30, "out": "by reference: detailed: widget 42 failed to load\n"}]}

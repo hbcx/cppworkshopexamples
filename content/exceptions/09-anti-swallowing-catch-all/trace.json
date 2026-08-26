@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 41, "out": "wrong: "}, {"file": "main.cpp", "line": 41}, {"file": "main.cpp", "line": 20}, {"file": "main.cpp", "line": 12, "out": "0\nlog: parse failed: empty input\nright: propagated: empty input\n"}]}

@@ -1,0 +1,4 @@
+title: "Exceptions"
+description: "How C++ reports and handles errors that must not be ignored: throwing an exception and catching it, so a failure jumps straight to the handler and cannot be quietly dropped the way an unchecked return code can. Covers the throw and catch mechanic, the std::exception base and its what() message, ordering handlers from specific to general, catch(...) with rethrow or translation at a boundary, stack unwinding and why it makes RAII exception-safe, and noexcept as a promise not to throw -- alongside the traps: catching by value and slicing the exception, throwing from a destructor, a catch(...) that swallows errors, and using exceptions for ordinary control flow. This is the foundation of the diagnostics library; the concrete exception types, error codes and cross-thread propagation build on it."
+sort_order: 123
+category: "Diagnostics"

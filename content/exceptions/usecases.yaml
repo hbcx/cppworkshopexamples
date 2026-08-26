@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A constructor validates its inputs -- a config object, a parsed request, a database row -- and a bad field means the object cannot be built at all. There is no valid value to hand back."
+  why: "A constructor cannot return an error code, and a thrown exception cannot be ignored the way a checked bool can. The alternative -- build a half-object plus an is_valid() flag -- puts the check on the caller, who will eventually forget it and use the broken object."
+  signal: "A type with a default constructor plus a separate init()/is_valid() step, where every user must remember to check the flag before touching the object."
+
+- problem: "An error is detected deep in a call stack, many frames below the code that can actually handle it -- a parser routine five levels under the request handler that owns the response."
+  why: "Threading an error code back up means every intermediate function returns it and every caller checks and forwards it, boilerplate that one missing check silently defeats. An exception skips the frames that have nothing to add and lands at the handler that does."
+  signal: "A chain of functions that each return an error/status code which the caller immediately forwards upward unchanged, adding nothing."
+
+- problem: "A function acquires several resources -- a file, a lock, a connection -- and has many early exits, each of which must release whatever was already taken."
+  why: "Exceptions plus RAII release everything during stack unwinding, in reverse order, with no cleanup code on any error path. The manual alternative is a goto-cleanup ladder or a duplicated release block before every early return, which drifts out of sync as the function grows."
+  signal: "Repeated cleanup blocks before each error return, or a goto fail; ladder, or raw new/open/lock with matching frees scattered across exit points."
+
+- problem: "A boundary must never leak internal exception types outward -- a plugin entry point, a C ABI callback, a thread's top-level function -- because the other side cannot carry a C++ exception."
+  why: "catch(...) at the boundary lets you log, translate the failure into a stable error code the other side understands, or stop the exception before it crosses where it cannot travel. Letting it escape a noexcept boundary or a C callback is undefined or calls terminate."
+  signal: "An exported function, callback, or thread-entry function whose whole body is not wrapped in a try/catch(...) even though the code it calls can throw."

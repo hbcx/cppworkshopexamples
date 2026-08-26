@@ -1,0 +1,3 @@
+caught: disk write failed
+caught: row index 10 past end 3
+caught: expected a number

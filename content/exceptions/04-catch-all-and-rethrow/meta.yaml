@@ -1,0 +1,11 @@
+title: "catch(...) and rethrow"
+standard: "C++11"
+difficulty: 2
+summary: "catch(...) catches anything, including non-exception throws; a bare throw; rethrows the current exception so a boundary can log it or translate it."
+notes: "catch(...) is the universal handler -- it catches every type, even a throw of something that is not derived from std::exception. Inside any handler a bare throw; RETHROWS the exception currently being handled, unchanged, so a boundary can log or add context and let it keep propagating. You can also translate: catch one type and throw a different one the caller expects. This is how you guard a boundary (a plugin, a C callback, a thread entry) that must not leak arbitrary types. Note a bare throw; with no active exception has nothing to rethrow and calls std::terminate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "try-catch", url: "https://en.cppreference.com/w/cpp/language/try_catch" }
+detailed_tags:
+  - { name: "throw expression", url: "https://en.cppreference.com/w/cpp/language/throw" }

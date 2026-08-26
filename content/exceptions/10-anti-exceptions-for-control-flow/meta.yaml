@@ -1,0 +1,11 @@
+title: "Anti-pattern: exceptions for control flow"
+standard: "C++17"
+difficulty: 3
+summary: "Throwing to signal an expected outcome like not-found turns every routine call into a try/catch and pays the exception cost on the common path; return a value or std::optional instead."
+notes: "Exceptions are for the exceptional -- the rare error path, not the normal one. A not-found from a search is an expected, everyday result, so signalling it with a throw forces the caller to wrap each lookup in try/catch and pays the (real) cost of throwing on the common path. Model the expected outcome in the return type: std::optional here, where an empty result means not-here. Keep throwing for the truly abnormal (a corrupt index, a lost connection). The rule of thumb: if the caller will handle the case every time, it is not an exception."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "throw expression", url: "https://en.cppreference.com/w/cpp/language/throw" }
+detailed_tags:
+  - { name: "std::optional", url: "https://en.cppreference.com/w/cpp/utility/optional" }

@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "expected"
+  note: "The value-based alternative: std::expected returns the error in the type system instead of throwing, which suits expected, high-volume failures where the cost and non-local jump of an exception are unwanted. Go there to decide throw versus return."
+- slug: "optional"
+  note: "The right return type when absence is a normal outcome rather than an error -- the fix in this section's control-flow anti-pattern. Go there for representing a missing value without throwing."
+- slug: "raii"
+  note: "Why stack unwinding matters: RAII wrappers release their resource in a destructor, so an exception leaves a function without leaking. Go there for the idiom that makes the error path clean up itself."

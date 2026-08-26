@@ -1,0 +1,4 @@
+log: standard error: connection reset
+handled: connection reset
+log: non-standard throw
+handled: wrapped unknown error

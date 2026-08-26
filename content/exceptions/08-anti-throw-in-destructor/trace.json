@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 37, "out": "destructor handled: cleanup failed\ncaught: first\n"}]}

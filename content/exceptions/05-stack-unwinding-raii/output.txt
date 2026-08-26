@@ -1,0 +1,5 @@
+acquire A
+acquire B
+release B
+release A
+caught: failure in inner

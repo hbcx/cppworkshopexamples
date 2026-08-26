@@ -1,0 +1,4 @@
+safe_add is noexcept:  true
+may_throw is noexcept: false
+Movable move is noexcept: true
+done

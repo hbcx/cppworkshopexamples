@@ -1,0 +1,2 @@
+by value:     generic load failure
+by reference: detailed: widget 42 failed to load

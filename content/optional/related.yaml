@@ -3,3 +3,5 @@
   note: "Carry a reason for the absence: expected<T, E> holds either the value or an error, for when the caller needs to know why, not just that."
 - slug: "variant"
   note: "The general sum type: optional is variant<T, nothing>; when there is more than one real alternative, variant holds one of several named types."
+- slug: "exceptions"
+  note: "When a missing value is really an error the caller must not ignore, throw instead of returning an empty optional. Go there for the throw/catch model and how to decide between returning absence and raising an error."

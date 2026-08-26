@@ -1,0 +1,12 @@
+title: "std::exception and what()"
+standard: "C++11"
+difficulty: 1
+summary: "Every standard exception derives from std::exception, so one catch of const std::exception& handles the whole family and what() returns the message."
+notes: "The standard exception types live in different headers and mean different things, but they all inherit from std::exception, which gives them a common base and a virtual what(). Catching const std::exception& therefore handles any of them in one place; what() returns the reason, set by whoever threw. The library throws these too -- std::vector::at throws std::out_of_range, std::stoi throws std::invalid_argument -- but their exact what() wording is set by the implementation, so this example throws its own messages to stay predictable. Reach for a specific handler only when you will treat that type differently."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exception", url: "https://en.cppreference.com/w/cpp/error/exception" }
+detailed_tags:
+  - { name: "std::exception::what", url: "https://en.cppreference.com/w/cpp/error/exception/what" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

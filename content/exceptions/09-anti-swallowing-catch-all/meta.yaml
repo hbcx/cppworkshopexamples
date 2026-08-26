@@ -1,0 +1,11 @@
+title: "Anti-pattern: swallowing catch(...)"
+standard: "C++11"
+difficulty: 3
+summary: "A catch(...) that silently discards every exception hides real failures behind a fake success; catch specific types you can handle, and at least log and rethrow the rest."
+notes: "An empty catch(...) makes code look robust while actually erasing errors: the operation returns a default, the caller trusts a result that was never produced, and the real reason vanishes with no message. That is one of the hardest bugs to find, because nothing reports it. Catch only the specific types you can genuinely handle; for anything else, log and rethrow (throw;) so the failure still surfaces and the caller decides. The output contrasts a swallowed failure that looks like a valid zero with a version that reports and propagates the error."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "try-catch", url: "https://en.cppreference.com/w/cpp/language/try_catch" }
+detailed_tags:
+  - { name: "std::exception", url: "https://en.cppreference.com/w/cpp/error/exception" }

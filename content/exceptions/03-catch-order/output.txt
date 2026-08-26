@@ -1,0 +1,3 @@
+out_of_range: index past end
+invalid_argument: bad argument
+other: something else

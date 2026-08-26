@@ -1,0 +1,12 @@
+title: "Throw and catch"
+standard: "C++11"
+difficulty: 1
+summary: "A function reports failure by throwing an exception; the caller wraps the call in try and handles it in catch, and the program keeps running."
+notes: "throw transfers control straight to the nearest matching catch, skipping every statement in between -- so the caller cannot forget to check the error the way it can ignore a returned code. Catch by const reference (const std::runtime_error&): it avoids a copy and still catches derived types. Here the throw happens deep inside parse_count yet it is handled two levels up in main; the code between the throw and the catch is simply skipped, and after the handler runs the program carries on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "try-catch", url: "https://en.cppreference.com/w/cpp/language/try_catch" }
+  - { name: "throw expression", url: "https://en.cppreference.com/w/cpp/language/throw" }
+detailed_tags:
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

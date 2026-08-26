@@ -1,0 +1,13 @@
+title: "noexcept: promising not to throw"
+standard: "C++11"
+difficulty: 3
+summary: "noexcept declares a function will not throw; the noexcept operator queries that at compile time, and containers move instead of copy only when the move is noexcept."
+notes: "The noexcept specifier is a promise the compiler and library can build on. The most visible payoff: std::vector moves its elements on reallocation only when their move constructor is noexcept -- otherwise it copies, to keep the strong guarantee -- so a missing noexcept on a move quietly costs performance. The noexcept OPERATOR (a compile-time query, it does not run the code) reports whether an expression can throw, and std::is_nothrow_move_constructible answers the same for a type. Mark a function noexcept only when it truly cannot throw: if a noexcept function throws anyway the runtime does not unwind or let you catch it -- std::terminate is called at once. See std::move_if_noexcept for the utility that encodes this choice."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "noexcept specifier", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }
+detailed_tags:
+  - { name: "noexcept operator", url: "https://en.cppreference.com/w/cpp/language/noexcept" }
+  - { name: "std::is_nothrow_move_constructible", url: "https://en.cppreference.com/w/cpp/types/is_move_constructible" }
+  - { name: "std::terminate", url: "https://en.cppreference.com/w/cpp/error/terminate" }
