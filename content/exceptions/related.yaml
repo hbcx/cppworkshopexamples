@@ -1,4 +1,6 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "standard-exceptions"
+  note: "The concrete types to throw: logic_error versus runtime_error and their children, which one to pick, and how to derive your own. Go there once you know the mechanics here and need to choose a type."
 - slug: "expected"
   note: "The value-based alternative: std::expected returns the error in the type system instead of throwing, which suits expected, high-volume failures where the cost and non-local jump of an exception are unwanted. Go there to decide throw versus return."
 - slug: "optional"

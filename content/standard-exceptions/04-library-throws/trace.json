@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 12}, {"file": "main.cpp", "line": 12}, {"file": "main.cpp", "line": 14, "out": "vector::at rejected index 10\nstoi rejected non-numeric text\nsubstr rejected position 10\n"}]}

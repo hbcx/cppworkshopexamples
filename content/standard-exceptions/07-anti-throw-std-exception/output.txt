@@ -1,0 +1,2 @@
+bare exception what(): std::exception
+specific what():       config file /etc/app.conf is missing

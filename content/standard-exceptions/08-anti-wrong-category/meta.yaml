@@ -1,0 +1,12 @@
+title: "Anti-pattern: throwing the wrong family"
+standard: "C++11"
+difficulty: 3
+summary: "Reporting a caller bug as a runtime_error (or a runtime condition as a logic_error) misleads every handler that reacts by family -- a bug gets retried, a transient failure gets logged as a bug."
+notes: "The logic_error vs runtime_error split only helps if it is honest. A common policy catches by family: retry or fall back on a runtime_error (an external, possibly transient condition), but fail fast and log on a logic_error (a bug that will fail again identically). Mislabel a precondition violation as a runtime_error and a retry loop hammers a call that can never succeed; mislabel a transient I/O failure as a logic_error and you crash on something you should have retried. The example shows a bad index -- a caller bug -- thrown once as runtime_error and once correctly as out_of_range, and how the same handler reacts oppositely. Choose the family by cause, not by convenience."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::logic_error", url: "https://en.cppreference.com/w/cpp/error/logic_error" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }
+detailed_tags:
+  - { name: "std::out_of_range", url: "https://en.cppreference.com/w/cpp/error/out_of_range" }

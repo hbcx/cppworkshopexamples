@@ -1,0 +1,2 @@
+wrong: transient, retry   -- bad index
+right: bug, fail fast     -- index 9 out of range

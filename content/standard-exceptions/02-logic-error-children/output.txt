@@ -1,0 +1,4 @@
+invalid_argument: color name not recognized
+domain_error:     sqrt of a negative number
+length_error:     string longer than max_size
+out_of_range:     row 10 of 3

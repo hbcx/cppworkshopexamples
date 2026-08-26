@@ -1,0 +1,4 @@
+title: "Standard exceptions"
+description: "The exception types the standard library gives you in <stdexcept>, and how to pick the right one. Covers the two families -- logic_error for a bug the caller could have prevented and runtime_error for a condition only knowable at run time -- their children (invalid_argument, domain_error, length_error, out_of_range; range_error, overflow_error, underflow_error), where the library throws them itself (vector::at, std::stoi, string::substr), deriving your own exception that fits the hierarchy and carries structured data, and how std::system_error slots in as a runtime_error -- alongside the traps: throwing bare std::exception with no message, picking the wrong family so handlers react wrongly, and a custom what() that returns a dangling pointer. Use this section to choose a type; the throw/catch mechanics are in the exceptions section."
+sort_order: 124
+category: "Diagnostics"

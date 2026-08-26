@@ -1,0 +1,11 @@
+title: "Anti-pattern: a dangling what()"
+standard: "C++11"
+difficulty: 3
+summary: "A custom what() that builds a string and returns its c_str() dangles -- the temporary dies when what() returns; keep the message alive in the base or a member."
+notes: "what() returns const char* and the pointer must stay valid after the call returns and until the exception is gone. The classic bug is composing the message inside what() -- return (prefix + detail).c_str() -- which points into a temporary std::string destroyed at the closing brace, so the caller reads freed memory (undefined behaviour; it often prints garbage or the right text by luck, which is worse). Two safe fixes: let std::runtime_error hold the message (it copies the string you pass, and its what() returns a pointer into that copy), or, if you must override what(), build the string ONCE in the constructor into a data member and return member.c_str(). This example does not run the broken version -- it is undefined -- it describes it and runs both fixes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exception::what", url: "https://en.cppreference.com/w/cpp/error/exception/what" }
+detailed_tags:
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

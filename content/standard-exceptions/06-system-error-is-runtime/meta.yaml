@@ -1,0 +1,11 @@
+title: "std::system_error in the hierarchy"
+standard: "C++11"
+difficulty: 3
+summary: "std::system_error derives from std::runtime_error and adds a machine-readable error_code, so a generic runtime_error handler catches it while the specific type exposes code()."
+notes: "std::system_error (from <system_error>) is the hierarchy's bridge to operating-system and library failures: it is a runtime_error that also carries an std::error_code describing the failure in a machine-readable way. The library throws it for you -- a failed std::thread start, some filesystem operations -- and a plain catch (const std::runtime_error&) still catches it, so it fits code that only knows the base. Catch std::system_error itself to inspect code() and its category(), or to compare against a portable std::errc value without depending on the message text. This example builds one by hand to show the shape; the system error section covers error_code in full."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::system_error", url: "https://en.cppreference.com/w/cpp/error/system_error" }
+detailed_tags:
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

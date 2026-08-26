@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 13, "out": "as runtime_error: caught a system failure\n"}, {"file": "main.cpp", "line": 22, "out": "category: generic\nis no_such_file: true\n"}]}

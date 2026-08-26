@@ -5,3 +5,5 @@
   note: "The owning conversions charconv replaces on hot paths: std::to_string, std::stoi and std::stod are the easy std::string-returning, throwing versions -- go there for owning and editing text, and reach for charconv when the allocation and the locale lookup cost too much."
 - slug: "string-view"
   note: "The type you usually parse: from_chars reads a number out of a [data, data + size) range, which is exactly a string_view's window into a field -- go there for slicing a buffer into the borrowed pieces you then hand to from_chars with no copy."
+- slug: "standard-exceptions"
+  note: "The exceptions the throwing parsers raise: std::stoi and std::stod throw std::invalid_argument and std::out_of_range from <stdexcept>, where from_chars just returns an error code. Go there for that type hierarchy and when catching an exception reads better than checking a code."

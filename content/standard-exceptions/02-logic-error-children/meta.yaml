@@ -1,0 +1,14 @@
+title: "The logic_error children"
+standard: "C++11"
+difficulty: 2
+summary: "logic_error has specific children -- invalid_argument, domain_error, length_error, out_of_range -- each naming a precise kind of precondition bug the library also throws."
+notes: "Reaching for the most specific type documents the failure and lets a handler catch just that case. invalid_argument means a value is not allowed; domain_error means input outside a function's mathematical domain; length_error means an object was asked to exceed its maximum size; out_of_range means an index or key outside the valid range. The standard library throws these itself -- std::vector::at and std::string::at throw out_of_range, std::stoi throws invalid_argument, a too-long std::string throws length_error -- so catching the right one handles both your throws and the library's. All four derive from logic_error, so a single catch of the base still groups them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::logic_error", url: "https://en.cppreference.com/w/cpp/error/logic_error" }
+detailed_tags:
+  - { name: "std::invalid_argument", url: "https://en.cppreference.com/w/cpp/error/invalid_argument" }
+  - { name: "std::domain_error", url: "https://en.cppreference.com/w/cpp/error/domain_error" }
+  - { name: "std::length_error", url: "https://en.cppreference.com/w/cpp/error/length_error" }
+  - { name: "std::out_of_range", url: "https://en.cppreference.com/w/cpp/error/out_of_range" }

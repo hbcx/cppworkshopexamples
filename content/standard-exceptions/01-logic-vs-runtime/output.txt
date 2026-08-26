@@ -1,0 +1,3 @@
+ok: withdrew 30
+bug (fix the caller): amount must be non-negative
+runtime (handle it):  insufficient funds

@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A library or service must let callers react to failures by policy -- retry a transient error, but fail fast on a caller bug -- without every caller parsing message strings."
+  why: "Throwing from the two standard families lets a caller's catch (const std::runtime_error&) and catch (const std::logic_error&) split the two cases directly. The alternative -- one exception type plus substring checks on what() -- breaks the moment a message is reworded."
+  signal: "Catch blocks that call what() and run .find(\"...\") or string compares on it to decide how to handle the error."
+
+- problem: "Wrapping a C library or OS API whose failures come back as integer error codes, so they fit the C++ error handling the rest of the code already uses."
+  why: "Deriving from std::runtime_error (or throwing std::system_error) puts the wrapped failures in the same hierarchy every existing catch (const std::exception&) already handles, so the boundary needs no special-case handlers. Bespoke exception types that do not derive from std::exception force a separate catch for each."
+  signal: "A translation layer that maps C return codes to exception classes with no std::exception base, caught by their own dedicated handlers."
+
+- problem: "A domain error must carry structured data beyond a message -- an HTTP status, a row id, a retry-after hint -- for the handler to act on programmatically."
+  why: "A class deriving from runtime_error keeps working with generic handlers while exposing typed accessors. Encoding the fields into the message text forces the handler to split them back out, and re-breaks whenever the format changes."
+  signal: "Exception messages that pack fields to be parsed later (\"status=503;url=/x\"), or handlers that substring-split what() to recover values."
+
+- problem: "Validating user or config input at a boundary, where a bad value is the user's fault and should be reported precisely, not as a generic failure."
+  why: "invalid_argument, out_of_range and domain_error name exactly what was wrong, so logs and handlers can separate an input problem from an internal bug. A single generic runtime_error for every bad input throws that distinction away."
+  signal: "One catch-all runtime_error (or a hand-rolled type) thrown for every kind of invalid input, with the real reason only in the message string."

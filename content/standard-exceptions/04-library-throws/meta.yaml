@@ -1,0 +1,11 @@
+title: "Where the library throws them"
+standard: "C++11"
+difficulty: 2
+summary: "You do not only throw these types -- the standard library throws them, so catching the right type is how you handle failures from vector::at, std::stoi and string::substr."
+notes: "Knowing the hierarchy pays off most when catching what the library throws. std::vector::at and std::string::at throw std::out_of_range on a bad index; std::stoi and friends throw std::invalid_argument on non-numeric text and std::out_of_range on a value too large; std::string::substr throws std::out_of_range when the position is past the end. Catch the specific type to handle exactly that failure. This example prints its own labels rather than each exception's what(): the message wording is chosen by the implementation, so relying on it in code or tests is brittle -- match on the TYPE, not the text."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::out_of_range", url: "https://en.cppreference.com/w/cpp/error/out_of_range" }
+detailed_tags:
+  - { name: "std::invalid_argument", url: "https://en.cppreference.com/w/cpp/error/invalid_argument" }

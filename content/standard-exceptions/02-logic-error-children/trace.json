@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 20, "out": "invalid_argument: color name not recognized\ndomain_error:     sqrt of a negative number\n"}, {"file": "main.cpp", "line": 26, "out": "length_error:     string longer than max_size\n"}, {"file": "main.cpp", "line": 29, "out": "out_of_range:     row 10 of 3\n"}]}

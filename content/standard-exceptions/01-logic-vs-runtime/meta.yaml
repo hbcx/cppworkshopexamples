@@ -1,0 +1,12 @@
+title: "logic_error vs runtime_error"
+standard: "C++11"
+difficulty: 1
+summary: "The standard exceptions split into two families by cause: logic_error is a bug the caller could have prevented, runtime_error is a condition only knowable at run time."
+notes: "This is the first choice when you throw: is the failure a BUG (a broken precondition the caller controls -- a bad index, a null where one was promised) or a RUNTIME condition (something outside the program -- disk full, network down, bad input data)? logic_error names the first, runtime_error the second, and both derive from std::exception. The distinction is not cosmetic: a caller can catch by the family base to fail fast and log on a bug, but retry or fall back on a runtime failure. Getting the family right is what lets handlers react by policy instead of parsing message text."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::logic_error", url: "https://en.cppreference.com/w/cpp/error/logic_error" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }
+detailed_tags:
+  - { name: "std::exception", url: "https://en.cppreference.com/w/cpp/error/exception" }

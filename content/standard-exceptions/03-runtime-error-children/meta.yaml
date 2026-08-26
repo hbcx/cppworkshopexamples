@@ -1,0 +1,12 @@
+title: "The runtime_error children"
+standard: "C++11"
+difficulty: 2
+summary: "runtime_error has children for numeric results a computation cannot represent: range_error, overflow_error and underflow_error, which you throw from your own arithmetic code."
+notes: "These name failures in producing a value at run time: range_error means a result falls outside the range of the type, overflow_error an arithmetic overflow, underflow_error a result too small to represent. Unlike the logic_error children, the standard library rarely throws these -- they are mostly for your own numeric code that checks a computation instead of letting it wrap silently. The example does a multiplication in a wider type and throws overflow_error when the result will not fit back in int, which is the common real use: guard an operation whose overflow would otherwise be undefined or silently wrong. All three derive from runtime_error."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }
+detailed_tags:
+  - { name: "std::overflow_error", url: "https://en.cppreference.com/w/cpp/error/overflow_error" }
+  - { name: "std::range_error", url: "https://en.cppreference.com/w/cpp/error/range_error" }

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 43}, {"file": "main.cpp", "line": 31}, {"file": "main.cpp", "line": 13}, {"file": "main.cpp", "line": 14, "out": "wrong: transient, retry   -- bad index\nright: bug, fail fast     -- index 9 out of range\n"}]}

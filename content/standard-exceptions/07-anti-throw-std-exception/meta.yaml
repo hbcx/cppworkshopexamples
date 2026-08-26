@@ -1,0 +1,11 @@
+title: "Anti-pattern: throwing bare std::exception"
+standard: "C++11"
+difficulty: 3
+summary: "std::exception itself takes no message, so its what() is a fixed generic string; a handler learns nothing -- throw a specific type constructed with a real message."
+notes: "std::exception is a base class, not a type to throw. Its constructor takes no arguments, so there is no way to attach a reason, and what() returns a fixed placeholder the implementation chose -- a handler and your logs get nothing to act on or record. Throw a specific type instead (runtime_error or logic_error, or a child), constructed with a message that says what failed and with which value. That message is the difference between a log line you can debug from and one that just says something went wrong. Same rule for throwing raw non-exception values (an int, a string): they carry no what() and force a catch(...) that cannot report."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exception", url: "https://en.cppreference.com/w/cpp/error/exception" }
+detailed_tags:
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

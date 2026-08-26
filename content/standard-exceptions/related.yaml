@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "exceptions"
+  note: "The mechanics these types plug into: throwing and catching, catching by const reference, handler order and stack unwinding. Go there for how the throw/catch machinery works, then come back to pick which type to throw."
+- slug: "expected"
+  note: "The value-based alternative to throwing one of these: std::expected<T, E> returns the error in the type system, better when the failure is expected and frequent. Go there to weigh returning an error against throwing it."
+- slug: "charconv"
+  note: "The non-throwing way to parse numbers: std::from_chars reports failure through a returned error code instead of throwing std::invalid_argument like std::stoi. Go there for parsing on a hot path where you do not want exceptions."

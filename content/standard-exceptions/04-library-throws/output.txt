@@ -1,0 +1,3 @@
+vector::at rejected index 10
+stoi rejected non-numeric text
+substr rejected position 10

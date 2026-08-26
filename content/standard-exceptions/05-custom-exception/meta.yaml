@@ -1,0 +1,11 @@
+title: "Deriving your own exception"
+standard: "C++11"
+difficulty: 2
+summary: "Derive a custom exception from std::runtime_error so existing catch handlers still catch it, while it carries extra structured data the handler can act on."
+notes: "The right way to add an application exception is to derive from std::runtime_error (or logic_error, per the family rule). Two payoffs: any existing catch (const std::exception&) or catch (const std::runtime_error&) still catches it, so you do not have to touch other handlers; and the derived type can carry typed fields -- a status code, a URL, a retry hint -- that a handler reads directly instead of parsing them out of the message. Build the message once and pass it to the base constructor, which stores a copy, so what() stays valid with no buffer to manage. Catch the specific type when you need the extra data, the base when you just need to report."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }
+detailed_tags:
+  - { name: "std::exception::what", url: "https://en.cppreference.com/w/cpp/error/exception/what" }
