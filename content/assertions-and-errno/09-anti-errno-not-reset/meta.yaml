@@ -1,0 +1,11 @@
+title: "Anti-pattern: reading errno without resetting"
+standard: "C++11"
+difficulty: 3
+summary: "errno is set on failure but not cleared on success, so a stale value from an earlier failed call makes a later successful call look like it failed; reset errno to 0 before every call."
+notes: "The rule people forget is that errno is sticky: a function sets it on failure and leaves it alone on success, so whatever the last failing call wrote is still there. Check errno after a call that actually succeeded, without clearing it first, and you read a leftover error that has nothing to do with this call. The fix is one line -- set errno = 0 immediately before the call -- so the value you read reflects THIS call and no other. The example causes an ERANGE with an overflowing std::strtol, then parses a valid number without resetting, and the good parse falsely looks like an overflow; resetting first fixes it. This is a big reason to prefer std::from_chars, which reports through a return value instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "errno", url: "https://en.cppreference.com/w/cpp/error/errno" }
+detailed_tags:
+  - { name: "std::strtol", url: "https://en.cppreference.com/w/cpp/string/byte/strtol" }

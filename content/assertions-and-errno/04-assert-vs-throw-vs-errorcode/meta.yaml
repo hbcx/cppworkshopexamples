@@ -1,0 +1,12 @@
+title: "assert vs throw vs error_code"
+standard: "C++11"
+difficulty: 2
+summary: "Three failures, three tools: assert for your own bugs (gone in release), an error_code for an expected failure the caller handles, an exception for one that must not be ignored."
+notes: "The three overlap in syntax but not in purpose. assert is for a BUG -- a precondition your own code must satisfy; it catches the mistake in debug and compiles out in release, so it must never guard anything the program relies on. A returned error_code (or optional/expected) is for an EXPECTED runtime failure the caller is right there to handle, with no throw cost. A thrown exception is for a failure that must not be silently ignored or has to travel far to a handler. One function often uses two: assert its internal assumptions, and report the caller-facing failure as a value or an exception. This parser returns an error_code for bad input and asserts an invariant that its own digit check guarantees."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "assert", url: "https://en.cppreference.com/w/cpp/error/assert" }
+detailed_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: side effects in assert"
+standard: "C++11"
+difficulty: 3
+summary: "assert compiles to nothing under NDEBUG, so any work done inside the expression vanishes in release; the program passes in debug and misbehaves in production."
+notes: "Because assert(expr) expands to nothing when NDEBUG is defined, expr is not evaluated in a release build -- so a side effect placed inside it silently disappears. Code that pops a container, advances an iterator, or increments a counter inside an assert works in debug and breaks in release, the worst kind of bug: it passes every test build and fails only where you cannot debug it. The rule is that an assert's expression must be a pure check with no effect. This example defines NDEBUG to make the trap visible: the increment inside the assert never runs, so the counter stays 0. The fix does the work as normal code and asserts only the result."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "assert", url: "https://en.cppreference.com/w/cpp/error/assert" }
+detailed_tags:
+  - { name: "NDEBUG", url: "https://en.cppreference.com/w/cpp/error/assert" }

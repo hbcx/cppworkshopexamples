@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A library with internal invariants -- a tree that must stay balanced, a state machine that must be in a valid state -- wants to catch its own bugs during testing without paying a cost in the shipped build."
+  why: "assert flags a broken invariant at the exact line in debug and test builds and compiles out in release, so there is no permanent runtime cost. Leaving the assumption unchecked lets a bug corrupt state quietly and surface far away; a permanent if-check pays on every call forever."
+  signal: "Internal helpers with comments like // count is always > 0 here and no actual check, or invariants only enforced by convention."
+
+- problem: "A serialization or binary-protocol layer depends on type sizes and layout that must never drift -- int32 is four bytes, a header is a fixed size -- across compilers and platforms."
+  why: "static_assert fails the BUILD the moment an assumption breaks, so corrupt bytes are impossible to ship. A runtime check would only fire after deployment, on the platform where the size was wrong, when it is already too late."
+  signal: "Hard-coded sizeof or offset numbers in read/write code with no compile-time guard, or a struct whose packing is assumed but never asserted."
+
+- problem: "Wrapping legacy C libraries -- POSIX calls, math functions, strtol-style parsers -- that report failure through errno, inside a modern C++ codebase."
+  why: "Resetting errno before the call and bridging it into a std::error_code turns fragile C conventions into a checkable code the rest of the code already handles. Leaving raw errno in place invites the stale-value and forgotten-reset bugs this section shows."
+  signal: "Calls to C functions followed by if (errno) with no preceding errno = 0, or bare errno ints passed around and compared against E* macros by hand."
+
+- problem: "Deciding, in API design or code review, whether a given failure should abort, return an error, or throw."
+  why: "The assert / error_code / exception split maps the KIND of failure -- a bug, an expected runtime condition, an error that must not be ignored -- to the mechanism, so the API communicates intent. Conflating them (asserting on user input, throwing on a programming mistake) misleads callers and drops checks in release."
+  signal: "assert() guarding arguments that come from outside the module, or exceptions thrown for conditions that are really programming bugs."

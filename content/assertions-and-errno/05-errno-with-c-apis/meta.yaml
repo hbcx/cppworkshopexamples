@@ -1,0 +1,11 @@
+title: "errno with C APIs"
+standard: "C++11"
+difficulty: 2
+summary: "errno is a thread-local integer some C functions set on failure; clear it to 0 before the call and check the function's own failure signal too, as std::strtol shows."
+notes: "errno, from <cerrno>, is how C library functions report why they failed. Two rules make it reliable. First, it is set on failure but NOT cleared on success, so reset it to 0 immediately before the call, or a stale value fools you. Second, many functions also signal failure another way, so check that first and use errno to learn the reason. std::strtol is the textbook case: on overflow it returns LONG_MAX or LONG_MIN and sets errno to ERANGE, while it reports nothing-parsed by leaving the end pointer equal to the start, not through errno. errno is thread-local, so each thread has its own -- but it is still easy to misuse, which is why C++ parsing (from_chars, stoi) is usually better."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "errno", url: "https://en.cppreference.com/w/cpp/error/errno" }
+detailed_tags:
+  - { name: "std::strtol", url: "https://en.cppreference.com/w/cpp/string/byte/strtol" }

@@ -1,0 +1,11 @@
+title: "assert basics"
+standard: "C++11"
+difficulty: 1
+summary: "assert(expr) checks a condition at run time and calls abort with a diagnostic if it is false; use it to state invariants that must hold when the code is correct."
+notes: "assert from <cassert> evaluates its expression and, if it is false, prints the file, line and expression text and calls std::abort; if true it does nothing. It is for facts that must hold when your code is correct -- preconditions, postconditions, invariants -- so a broken assumption stops the program right where it broke instead of corrupting data that surfaces as a confusing bug later. The && string idiom (assert(cond && \"message\")) tacks a human message onto the diagnostic. This example only runs asserts that PASS: a firing assert calls abort, which would stop the program, so the failing call is described, not run. Reserve assert for bugs; validate real input with error handling."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "assert", url: "https://en.cppreference.com/w/cpp/error/assert" }
+detailed_tags:
+  - { name: "std::abort", url: "https://en.cppreference.com/w/cpp/utility/program/abort" }

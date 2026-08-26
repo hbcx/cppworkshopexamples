@@ -1,0 +1,2 @@
+wrong: processed under NDEBUG = 0
+right: done = 1

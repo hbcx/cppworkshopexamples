@@ -1,0 +1,11 @@
+title: "Anti-pattern: assert for input validation"
+standard: "C++11"
+difficulty: 3
+summary: "Validating external input with assert leaves no check in release, where the assert is compiled out and the bad input flows through -- validate with real code, keep assert for internal bugs."
+notes: "assert is compiled out under NDEBUG, so using it to check external input -- user data, a file, a network field -- means the check is GONE in the release build people actually run, and the invalid input flows straight through to cause the corruption the assert seemed to prevent. Input validity is not a bug in your code; it is an expected runtime condition, and it must be checked in every build. Validate with real code (if plus an error_code or a thrown exception) and reserve assert for invariants your own code guarantees. This example defines NDEBUG to show the wrong version's guard has vanished, while the error_code version reports the bad index in any build. The wrong function is shown but never called -- under NDEBUG it would read out of range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "assert", url: "https://en.cppreference.com/w/cpp/error/assert" }
+detailed_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }

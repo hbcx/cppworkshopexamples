@@ -7,3 +7,5 @@
   note: "The other value-based error channel: std::expected<T, E> puts the value and the error in one return type, where error_code is a separate out-parameter or return alongside the result. Go there to compare the two ways of returning an error as a value."
 - slug: "filesystem-operations"
   note: "Where the library's error_code overloads earn their keep: every filesystem operation has a throwing form and an error_code form, so a missing file is a checked code rather than an exception. Go there for those overloads in real use."
+- slug: "assertions-and-errno"
+  note: "Where these codes often come from: wrapping a C function that reports through errno and turning it into an error_code with generic_category. Go there for the errno rules and the assert-vs-code-vs-throw choice."

@@ -1,0 +1,12 @@
+title: "Bridging errno to error_code"
+standard: "C++11"
+difficulty: 3
+summary: "Wrap an errno value as std::error_code(errno, std::generic_category()) so a C-style failure becomes a categorized code you can compare against errc, pass around, or throw."
+notes: "errno is a bare int with C conventions; std::error_code is the C++ currency. std::error_code(errno, std::generic_category()) converts one to the other, because the generic category's values ARE the errno numbers. Now the failure compares portably against std::errc (ERANGE matches errc::result_out_of_range), logs with a category, and can be escalated into a std::system_error -- instead of every caller re-testing E* macros. This example wraps std::strtol so callers get an error_code and never see errno: it distinguishes nothing-parsed and trailing junk (invalid_argument) from overflow (the bridged errno). See the system error section for error_code in full."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+  - { name: "std::generic_category", url: "https://en.cppreference.com/w/cpp/error/generic_category" }
+detailed_tags:
+  - { name: "errno", url: "https://en.cppreference.com/w/cpp/error/errno" }

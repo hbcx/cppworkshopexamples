@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "system-error"
+  note: "Where the bridged errno lands: std::error_code, testing it, and comparing against std::errc portably. Go there for the code type this section converts errno into, and for the non-throwing library overloads."
+- slug: "exceptions"
+  note: "The third option in the assert-vs-code-vs-throw choice: throwing and catching, for a failure that must not be ignored or has to travel far. Go there for the throw/catch mechanics this section weighs against a returned code."
+- slug: "charconv"
+  note: "The modern replacement for strtol and errno: std::from_chars parses without touching errno and reports through a return value, avoiding the reset-and-check dance. Go there for allocation-free, errno-free number parsing."
+- slug: "concepts"
+  note: "The modern successor to a hand-written static_assert on a template parameter: a concept states the requirement in the signature and gives a clearer error. Go there for constraining templates the C++20 way."

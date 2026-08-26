@@ -1,0 +1,2 @@
+wrong: parsed 42 but errno says overflow = true
+right: parsed 42 and errno clean = true

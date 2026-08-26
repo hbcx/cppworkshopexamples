@@ -1,0 +1,11 @@
+title: "static_assert at compile time"
+standard: "C++11"
+difficulty: 2
+summary: "static_assert checks a constant expression while compiling; a false one is a compilation error with your message, so a broken assumption stops the build instead of the program."
+notes: "static_assert is the compile-time cousin of assert. It takes a constant expression and, if it is false, the code does not compile and your message is the error -- the program never builds, so there is nothing to catch at run time. Use it for assumptions the compiler can check: a type meets a requirement (is_integral), a struct has an expected size for serialization, a configuration constant is in range. Inside a template the check runs at instantiation, which turns a would-be cryptic template error into a clear message. The two-argument form with a message is C++11; the message became optional in C++17. It never has a run-time cost."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static_assert", url: "https://en.cppreference.com/w/cpp/language/static_assert" }
+detailed_tags:
+  - { name: "std::is_integral", url: "https://en.cppreference.com/w/cpp/types/is_integral" }

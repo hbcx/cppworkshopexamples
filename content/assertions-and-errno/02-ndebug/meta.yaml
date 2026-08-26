@@ -1,0 +1,11 @@
+title: "NDEBUG turns asserts off"
+standard: "C++11"
+difficulty: 2
+summary: "Defining NDEBUG before <cassert> makes every assert expand to nothing, so the condition is not evaluated -- this is what release builds do, and why asserts are debug-only."
+notes: "assert is controlled by the NDEBUG macro. When NDEBUG is defined -- which release builds do, typically with -DNDEBUG -- assert(expr) expands to a no-op and expr is not evaluated at all. This example defines NDEBUG at the top to show the release behaviour: a false assert does not stop the program, and a side effect written inside an assert (the ++calls here) never happens. That is the whole reason asserts must not carry logic your program depends on. Any check that must ALWAYS run -- validating input, checking an I/O result -- has to be real code (if/throw or an error_code), not an assert."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "NDEBUG", url: "https://en.cppreference.com/w/cpp/error/assert" }
+detailed_tags:
+  - { name: "assert", url: "https://en.cppreference.com/w/cpp/error/assert" }

@@ -1,0 +1,4 @@
+overflow (ERANGE): true
+clamped to LONG_MAX: true
+parsed 42: true
+consumed all input: true

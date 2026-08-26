@@ -1,0 +1,4 @@
+title: "Assertions and errno"
+description: "The two oldest diagnostic tools C++ inherits from C, and where each still fits. Covers the assert macro from <cassert> for catching broken invariants in debug builds, NDEBUG which compiles asserts out in release, static_assert for the same idea at compile time, the decision between assert, a returned error_code and a thrown exception, and errno from <cerrno> for C library functions like std::strtol -- the reset-before-the-call rule and bridging an errno into a std::error_code -- alongside the traps: a side effect hidden inside an assert that vanishes in release, using assert to validate external input, and reading errno without clearing it first. The theme: assert is a debug-only check for your own bugs, not a substitute for real error handling."
+sort_order: 126
+category: "Diagnostics"

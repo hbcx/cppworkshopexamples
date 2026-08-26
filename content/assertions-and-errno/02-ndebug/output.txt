@@ -1,0 +1,2 @@
+reached code after a false assert (NDEBUG on)
+calls after assert under NDEBUG: 0

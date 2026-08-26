@@ -1,0 +1,3 @@
+wrong: the assert guard is compiled out under NDEBUG
+right: out_of_range = true
+right: s[1] = b, ok = true
