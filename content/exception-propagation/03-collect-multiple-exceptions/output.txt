@@ -1,0 +1,6 @@
+processed: one
+processed: two
+processed: three
+failures: 2
+  - empty item
+  - item 'bad' rejected

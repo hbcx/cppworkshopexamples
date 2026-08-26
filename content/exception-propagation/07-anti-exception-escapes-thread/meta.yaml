@@ -1,0 +1,12 @@
+title: "Anti-pattern: exception escapes a thread"
+standard: "C++11"
+difficulty: 3
+summary: "If a std::thread's function throws and does not catch it, the exception has nowhere to go and std::terminate aborts the whole program; catch inside the worker and hand it back."
+notes: "An exception can only propagate up its own stack. A std::thread runs its function on a separate stack with no caller to catch anything, so an exception that escapes the thread function calls std::terminate and takes the entire process down -- not just the thread. This surprises people who wrap the join in a try/catch and expect it to catch the worker's exception; by the time join runs, the program has already terminated. The fix is the pattern from earlier in this section: the worker wraps its body in catch(...), stores the exception in a std::exception_ptr, and the main thread rethrows it after join. This example does NOT run the throwing version -- it would abort -- it describes it and runs the safe one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+detailed_tags:
+  - { name: "std::terminate", url: "https://en.cppreference.com/w/cpp/error/terminate" }
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }

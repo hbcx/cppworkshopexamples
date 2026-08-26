@@ -1,0 +1,11 @@
+title: "Anti-pattern: nesting but never unwrapping"
+standard: "C++11"
+difficulty: 3
+summary: "Wrapping with throw_with_nested to add context, then printing only the outer exception, throws away the original cause the nesting was meant to preserve; walk the chain."
+notes: "throw_with_nested only pays off if someone reads the whole chain. A handler that catches the top exception and prints just its what() reports failed to load config but silently drops the nested disk read error underneath -- the actual reason, and exactly the information the nesting preserved. The result looks like a vague, causeless error in the logs. The fix costs a few lines: after printing an exception, call std::rethrow_if_nested and recurse into the cause, so every layer of the chain reaches the log. This example prints the same exception both ways: the outer-only version loses the cause, the chain-walking version keeps it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::rethrow_if_nested", url: "https://en.cppreference.com/w/cpp/error/rethrow_if_nested" }
+detailed_tags:
+  - { name: "std::throw_with_nested", url: "https://en.cppreference.com/w/cpp/error/throw_with_nested" }

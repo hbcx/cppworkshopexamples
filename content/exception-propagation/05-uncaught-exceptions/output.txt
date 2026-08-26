@@ -1,0 +1,5 @@
+work then return:
+  commit (normal exit)
+work then throw:
+  rollback (leaving via an exception)
+caught

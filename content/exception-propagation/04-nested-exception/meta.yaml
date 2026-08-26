@@ -1,0 +1,12 @@
+title: "Nesting exceptions for context"
+standard: "C++11"
+difficulty: 3
+summary: "std::throw_with_nested attaches the current exception as the cause of a new one, so each layer adds context without losing the original; rethrow_if_nested walks the chain back."
+notes: "As an error travels up through layers, each layer knows something the others do not -- which request, which file, which query. std::throw_with_nested lets a layer throw a new exception that CARRIES the one it caught as a nested cause, so you build a chain (request failed <- query failed <- connection refused) instead of either losing context or losing the original error. std::rethrow_if_nested rethrows the nested cause if there is one and does nothing otherwise, which is how you walk the chain: catch, print, rethrow_if_nested, recurse. The mechanism uses multiple inheritance from std::nested_exception under the hood; you only touch throw_with_nested and rethrow_if_nested."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::throw_with_nested", url: "https://en.cppreference.com/w/cpp/error/throw_with_nested" }
+  - { name: "std::nested_exception", url: "https://en.cppreference.com/w/cpp/error/nested_exception" }
+detailed_tags:
+  - { name: "std::rethrow_if_nested", url: "https://en.cppreference.com/w/cpp/error/rethrow_if_nested" }

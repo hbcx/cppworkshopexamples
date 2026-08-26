@@ -1,0 +1,12 @@
+title: "Moving an exception across a thread"
+standard: "C++11"
+difficulty: 3
+summary: "An exception cannot cross a thread boundary on its own; the worker catches it, stores it in a std::exception_ptr the main thread reads after join, and rethrows it there."
+notes: "If a std::thread's function lets an exception escape, the program calls std::terminate -- an exception has no way to jump from one stack to another. std::exception_ptr is the bridge: the worker wraps its body in catch(...), stores std::current_exception() in a slot the main thread can see, and after join() (which synchronizes memory) the main thread rethrows and handles it. This is exactly what std::async and std::promise::set_exception do for you -- a std::future rethrows the task's exception when you call get() -- so prefer them for real code; this example shows the mechanism they are built on. The join is what makes reading the slot race-free."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+detailed_tags:
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }

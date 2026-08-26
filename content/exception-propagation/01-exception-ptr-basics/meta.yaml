@@ -1,0 +1,12 @@
+title: "exception_ptr basics"
+standard: "C++11"
+difficulty: 2
+summary: "std::exception_ptr turns the current exception into a value you can store and move; current_exception captures it and rethrow_exception throws it again later."
+notes: "An exception normally lives only for the duration of its catch. std::exception_ptr makes it a first-class value: std::current_exception(), called inside a catch, returns a shared pointer to the exception being handled, and std::rethrow_exception() throws it again -- possibly in a different scope, function or thread. This decouples WHERE an exception is caught from WHERE it is handled, which is the foundation for the rest of this section. An exception_ptr is copyable and null when empty, so you can test it with if. The captured exception stays alive as long as any exception_ptr refers to it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
+detailed_tags:
+  - { name: "std::rethrow_exception", url: "https://en.cppreference.com/w/cpp/error/rethrow_exception" }

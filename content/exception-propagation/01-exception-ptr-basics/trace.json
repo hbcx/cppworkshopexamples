@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 10}, {"file": "main.cpp", "line": 14, "out": "captured, will handle later\n"}, {"file": "main.cpp", "line": 22}, {"file": "main.cpp", "line": 24, "out": "handled: primary task failed\n"}, {"file": "main.cpp", "line": 30}, {"file": "main.cpp", "line": 31}]}

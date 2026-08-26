@@ -13,3 +13,5 @@
   note: "Cancellation running the other direction: a future carries a result from worker to caller, while a stop_token carries a stop request from caller to worker -- go there for jthread's auto-join and cooperative cancellation, and combine the two when a cancellable job also has to return a value."
 - slug: "semaphore"
   note: "The lighter signal when the hand-off carries NO value: a future delivers one result (or exception) and blocks until it is ready, while a binary_semaphore just flips a permit to wake another thread -- go there for cross-thread signals, capping concurrency to N, and bounded producer/consumer buffers."
+- slug: "exception-propagation"
+  note: "The machinery behind a future's exceptions: async and promise store a failed task's exception in a std::exception_ptr, which get() rethrows on your thread. Go there to move an exception across threads by hand, collect many, or nest them for context."

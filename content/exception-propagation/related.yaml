@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "exceptions"
+  note: "The foundation this section builds on: throwing and catching, catching by const reference, and stack unwinding. Go there first if the basic try/catch model is not yet solid; come back here for moving and storing exceptions."
+- slug: "future"
+  note: "The library that does this for you: std::async and std::promise capture a task's exception in an exception_ptr and std::future::get rethrows it on the calling thread. Go there for the high-level way to get an exception back from a worker."
+- slug: "thread"
+  note: "Where the escape trap lives: a std::thread whose function throws calls std::terminate, so you must catch inside the worker and hand the exception back. Go there for launching and joining threads, and why jthread helps."

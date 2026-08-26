@@ -1,0 +1,12 @@
+title: "The terminate handler"
+standard: "C++11"
+difficulty: 3
+summary: "std::terminate is the runtime's last resort for an unhandled situation; std::set_terminate installs a handler to log or flush before the program ends -- it must not return."
+notes: "std::terminate is called when there is no other option: an uncaught exception, an exception escaping a noexcept function, or a second exception thrown during unwinding. By default it aborts. std::set_terminate installs your own handler so you can write a crash log, flush buffers, or print a marker before the process dies -- it returns the previous handler so you can chain or restore it. A terminate handler must NOT return: if it does, std::abort is called anyway. This example installs a handler that prints and then calls std::exit(0) so the demo ends cleanly instead of aborting; a real one would record diagnostics and then let the process die. Use this as a safety net, not as normal error handling."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::set_terminate", url: "https://en.cppreference.com/w/cpp/error/set_terminate" }
+  - { name: "std::terminate", url: "https://en.cppreference.com/w/cpp/error/terminate" }
+detailed_tags:
+  - { name: "std::terminate_handler", url: "https://en.cppreference.com/w/cpp/error/terminate_handler" }

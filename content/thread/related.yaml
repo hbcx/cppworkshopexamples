@@ -17,3 +17,5 @@
   note: "The ownership idea std::jthread is built on: a destructor that cleans up automatically is exactly what turns the forgot-to-join crash into a non-issue -- go there for RAII in general, then see why jthread is just RAII applied to a thread."
 - slug: "atomic-ref"
   note: "How these threads update shared PLAIN data without racing: std::atomic_ref overlays atomic operations onto an ordinary int, array element, or struct field, so worker threads can tally into a shared buffer with no lock and no change to its type -- go there for atomic access to objects you did not declare atomic."
+- slug: "exception-propagation"
+  note: "How to get an exception OUT of a std::thread safely: a worker that throws calls std::terminate, so catch inside it and hand the exception back through a std::exception_ptr. Go there for moving, storing and nesting exceptions across a boundary."

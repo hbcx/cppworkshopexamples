@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A thread pool or task runner must report a task's failure back to the code that submitted it, which is running on a different thread."
+  why: "std::exception_ptr with current_exception moves the real exception -- type and message intact -- across the thread boundary, which is exactly how std::async and std::future do it. A raw thread that throws calls std::terminate; a bool or error flag handed back loses the exception's type and any structured data."
+  signal: "Worker threads that set an error flag, log-and-swallow, or store an error string instead of propagating the actual exception to the submitter."
+
+- problem: "A bulk operation must attempt every item and report all failures at the end -- importing a file of records, validating a form with many fields -- not stop at the first error."
+  why: "Capturing each failure as an exception_ptr lets the loop finish and aggregate the errors, then rethrow each to recover its type for a combined report. Handling inline loses the ability to rethrow with full type later, and letting the first exception propagate abandons the rest of the batch."
+  signal: "A processing loop that breaks or returns on the first thrown exception even though the requirement is to process everything and collect the errors."
+
+- problem: "A layered system -- service over repository over driver -- wants each layer to add context to a failure without discarding the original cause."
+  why: "throw_with_nested keeps the whole chain, so the top handler can log request failed, caused by query failed, caused by connection refused. Catching and throwing a NEW exception whose message merely embeds the caught one's text flattens the chain and loses the original type and data."
+  signal: "catch blocks that throw a fresh exception whose message string concatenates the caught exception's what(), instead of nesting it."
+
+- problem: "A scope guard must behave differently on the success path and the exception path -- commit versus roll back -- without the surrounding code telling it which happened."
+  why: "std::uncaught_exceptions() lets the destructor detect that it is unwinding, so one guard type handles both cases. The alternative is a manual committed flag the caller must remember to set before returning, which is exactly what gets forgotten on an early return."
+  signal: "RAII guards with an explicit commit() or dismiss() the caller must remember to call, or destructors that commit even when the scope is left by an exception."

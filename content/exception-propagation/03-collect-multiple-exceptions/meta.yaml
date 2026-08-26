@@ -1,0 +1,12 @@
+title: "Collecting many exceptions"
+standard: "C++11"
+difficulty: 3
+summary: "Because an exception_ptr is a value, a batch job can capture each failure, keep going, and report them all at the end instead of stopping at the first throw."
+notes: "Some work must attempt every item even if some fail -- importing a file of records, validating a form with many fields, running a suite of checks. A single try/catch that handles inline cannot rethrow the original later, and letting the first exception propagate abandons the rest of the batch. Storing each failure as a std::exception_ptr solves both: the loop continues, the errors accumulate in a container, and at the end each one can be rethrown to recover its real type and message for a combined report. This is the manual version of what a parallel algorithm or task group does when it gathers exceptions from many tasks."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+detailed_tags:
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
+  - { name: "std::rethrow_exception", url: "https://en.cppreference.com/w/cpp/error/rethrow_exception" }

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 17}, {"file": "main.cpp", "line": 20, "out": "about to call std::terminate\n"}, {"file": "main.cpp", "line": 21, "out": "custom terminate handler: last-resort cleanup\n"}]}

@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 37}, {"file": "main.cpp", "line": 17}, {"file": "main.cpp", "line": 11, "out": "error chain:\n- failed to load config\n  - disk read error\n"}]}

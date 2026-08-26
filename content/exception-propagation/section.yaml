@@ -1,0 +1,4 @@
+title: "Exception propagation"
+description: "The <exception> tools for moving, storing and adding context to exceptions beyond a single try/catch. Covers std::exception_ptr with current_exception and rethrow_exception to capture an exception as a value, moving one across a thread boundary where it cannot travel on its own, collecting many failures from a batch, std::nested_exception with throw_with_nested and rethrow_if_nested to add context while keeping the original cause, std::uncaught_exceptions for a scope guard that tells a normal exit from an unwinding one, and std::set_terminate for the last-resort handler -- alongside the traps: letting an exception escape a std::thread and abort the program, and wrapping with throw_with_nested but never unwrapping the chain. This is the advanced layer over the exceptions section; std::async and std::future use this same machinery."
+sort_order: 127
+category: "Diagnostics"

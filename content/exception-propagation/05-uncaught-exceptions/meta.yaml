@@ -1,0 +1,11 @@
+title: "uncaught_exceptions in a scope guard"
+standard: "C++17"
+difficulty: 3
+summary: "std::uncaught_exceptions returns how many exceptions are in flight; a scope guard compares the count at entry and exit to tell a normal exit from an unwinding one."
+notes: "A destructor that runs during stack unwinding needs to know it is unwinding -- a transaction guard should commit on a normal exit but roll back when the scope is left by an exception. std::uncaught_exceptions() (C++17, plural) returns the number of exceptions currently being propagated. The guard records the count in its constructor and checks it again in its destructor: if it has grown, an exception is in flight, so it rolls back; otherwise it commits. This is the correct, reusable pattern behind scope-fail and scope-success guards, and it does not need the caller to signal success. The older singular uncaught_exception() only returned a bool and was removed in C++20; always use the plural."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uncaught_exceptions", url: "https://en.cppreference.com/w/cpp/error/uncaught_exception" }
+detailed_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
