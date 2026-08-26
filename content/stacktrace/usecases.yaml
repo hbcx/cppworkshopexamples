@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A long-running service must produce a useful diagnostic when an unexpected error or crash happens in production, where no debugger is attached and the failure may not reproduce."
+  why: "Attaching a std::stacktrace to the error, or dumping one from a terminate handler, records the exact call path in the log, so an on-call engineer sees where it came from without reproducing it. A bare exception message rarely says enough to locate the bug."
+  signal: "Error logs and crash reports that carry only a message and no call context, or a codebase shelling out to platform-specific tools for the same thing."
+
+- problem: "A library wants a precondition or assertion failure to point at the CALLER's code that triggered it, not just report that something was wrong deep inside the library."
+  why: "Capturing a stacktrace at the failure and including it shows the user which of their calls led there. A plain invalid argument message leaves them guessing which call site to fix."
+  signal: "Precondition checks that throw or abort with a message but give no indication of the call site that violated them."
+
+- problem: "Diagnosing intermittent failures that are hard to reproduce -- a rare branch taken only for specific data or timing."
+  why: "Capturing the stack on the rare error path -- cheap precisely because it is rare -- records the exact route for that one occurrence, turning a happens-sometimes bug into a located one. Without it the only evidence is a message with no path."
+  signal: "Bugs triaged as not reproducible where the sole evidence is a log line with no call context."
+
+- problem: "Replacing per-platform stack-walking -- glibc backtrace, Windows CaptureStackBackTrace or DbgHelp -- with one portable API across the codebase."
+  why: "std::stacktrace is standard and behaves the same on every conforming toolchain, so one piece of diagnostic code compiles everywhere instead of separate per-platform implementations behind ifdefs."
+  signal: "ifdef _WIN32 / __linux__ branches wrapping hand-rolled stack-capture code that each do the same job differently."

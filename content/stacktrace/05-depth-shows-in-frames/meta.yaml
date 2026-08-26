@@ -1,0 +1,12 @@
+title: "Call depth shows up as frames"
+standard: "C++23"
+difficulty: 2
+summary: "A snapshot taken deeper in the call chain has more frames than one taken higher up; that is why a trace pinpoints the path taken, each nested call adding a frame."
+notes: "A stacktrace mirrors the real call stack, so where you capture it matters: a snapshot from two calls deep has two more frames than one taken in main. This is the whole reason a trace pinpoints how execution reached a point -- every function on the path contributes a frame. The example compares the sizes of a shallow and a deep capture rather than printing them, because the absolute frame count depends on the runtime's own startup frames and the platform. Note that optimization can undercut this: an inlined call leaves no frame, so an optimized build may show fewer frames than the source suggests -- another reason to treat a trace as best-effort. Needs linking stdc++exp."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::stacktrace::current", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace/current" }
+detailed_tags:
+  - { name: "std::stacktrace", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace" }

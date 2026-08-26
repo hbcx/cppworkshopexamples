@@ -1,0 +1,13 @@
+title: "Capturing the current stack"
+standard: "C++23"
+difficulty: 1
+summary: "std::stacktrace::current() snapshots the chain of calls that led here -- the same stack a debugger shows -- as a range of stacktrace_entry, newest frame first."
+notes: "std::stacktrace (C++23, from <stacktrace>) turns the call stack into a value you can capture, store and print from inside the program, with no debugger attached. std::stacktrace::current() takes the snapshot; the result is a range of std::stacktrace_entry, one per frame, ordered from the current function outward. In a running program it is never empty. This first example prints only INVARIANTS -- that a trace was captured and has frames -- because the actual frame text (function names, files, lines) depends on the compiler, build flags and platform, and is covered in the next examples. On this libstdc++ toolchain the header needs linking stdc++exp (the libs field)."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::stacktrace", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace" }
+  - { name: "std::stacktrace::current", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace/current" }
+detailed_tags:
+  - { name: "std::stacktrace_entry", url: "https://en.cppreference.com/w/cpp/utility/stacktrace_entry" }

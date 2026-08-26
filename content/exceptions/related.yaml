@@ -9,3 +9,5 @@
   note: "Why stack unwinding matters: RAII wrappers release their resource in a destructor, so an exception leaves a function without leaking. Go there for the idiom that makes the error path clean up itself."
 - slug: "exception-propagation"
   note: "The advanced layer over this one: capturing an exception as a value with std::exception_ptr, moving it across a thread, nesting causes with throw_with_nested, and the terminate handler. Go there once the basic throw/catch model here is solid."
+- slug: "stacktrace"
+  note: "Record WHERE an exception was thrown, not just what: capture a std::stacktrace in a custom exception's constructor so the handler can log the call path. Go there for capturing and printing the stack (C++23)."

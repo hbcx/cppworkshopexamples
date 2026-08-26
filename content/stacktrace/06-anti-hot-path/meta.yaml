@@ -1,0 +1,12 @@
+title: "Anti-pattern: a trace on the hot path"
+standard: "C++23"
+difficulty: 3
+summary: "std::stacktrace::current() is expensive -- it walks the stack and resolves symbols; capturing one on every call or element turns a fast loop slow. Capture only on the error path."
+notes: "Taking a stacktrace is not free: current() unwinds the stack and resolves symbols and debug info, which can cost microseconds to milliseconds -- orders of magnitude more than the work in a typical loop iteration. Capturing one on every call, or for every element processed, makes it the dominant cost and can slow a routine by a huge factor. The fix is to capture a trace only when you actually need it, which is almost always the rare failure path, not the common success path. The example contrasts a version that snapshots the stack for every element with one that snapshots only when an item fails; it prints a boolean (the correct version captured on the error only), since the point is the cost, not the output. Needs linking stdc++exp."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::stacktrace::current", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace/current" }
+detailed_tags:
+  - { name: "std::stacktrace", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace" }

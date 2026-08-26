@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "exceptions"
+  note: "Where a trace earns its keep: attach std::stacktrace to a custom exception at the throw site, so a handler learns not just what failed but the path that got there. Go there for throwing, catching, and deriving your own exception type."
+- slug: "exception-propagation"
+  note: "The natural home for a last-resort dump: a std::set_terminate handler is where you write the stack before the process dies, and a captured trace can travel with an exception_ptr. Go there for terminate handlers and moving exceptions around."
+- slug: "format"
+  note: "How to render a trace into a log line: C++23 gives std::format a formatter for std::stacktrace and its entries, so you can lay it out alongside your other fields. Go there for the format-spec mini-language and formatting your own types."

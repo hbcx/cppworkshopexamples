@@ -1,0 +1,12 @@
+title: "Anti-pattern: assuming frame details"
+standard: "C++23"
+difficulty: 3
+summary: "description(), source_file() and source_line() depend on debug info and optimization -- a stripped build gives empty files and line 0, and inlining removes frames; never build logic on them."
+notes: "A stacktrace is a best-effort diagnostic, not a stable data source. Whether a frame carries a file and line depends on the build: an optimized or stripped release commonly leaves source_line() at 0 and source_file() empty, and inlining removes frames entirely, so the stack you see differs from the source you wrote. Code that assumes a location is always present, or that parses description() text to make decisions, breaks the moment it runs on a release build or another platform. Read the fields defensively -- check for 0 and empty -- and use the trace only to show or log for a human. The example builds a location label without assuming the fields exist and prints booleans that hold on any build. Needs linking stdc++exp."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::stacktrace_entry", url: "https://en.cppreference.com/w/cpp/utility/stacktrace_entry" }
+detailed_tags:
+  - { name: "stacktrace_entry::source_file", url: "https://en.cppreference.com/w/cpp/utility/stacktrace_entry/source_file" }

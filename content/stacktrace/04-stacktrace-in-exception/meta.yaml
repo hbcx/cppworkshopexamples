@@ -1,0 +1,13 @@
+title: "Attaching a trace to an exception"
+standard: "C++23"
+difficulty: 3
+summary: "Capture std::stacktrace::current() in a custom exception's constructor so it records the throw site; a distant handler can then log exactly how the program got there."
+notes: "This is the pattern that makes stacktraces worth having. A normal exception tells you WHAT went wrong; capturing a std::stacktrace in the exception's constructor -- which runs at the throw site -- also records WHERE it came from, the full call path, so a handler far up the stack can write it to the crash log. Derive from std::runtime_error so existing catch (const std::exception&) handlers still work, add a std::stacktrace member initialized from current(), and expose it with an accessor. The example prints only that the trace was captured (a boolean), since the trace text itself is environment-specific; in real code the handler would log e.where(). Needs linking stdc++exp."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::stacktrace", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace" }
+detailed_tags:
+  - { name: "std::stacktrace::current", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace/current" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

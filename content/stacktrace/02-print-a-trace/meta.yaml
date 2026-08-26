@@ -1,0 +1,12 @@
+title: "Printing a trace"
+standard: "C++23"
+difficulty: 1
+summary: "A stacktrace streams to an ostream and converts with std::to_string, giving the multi-line dump you put in a crash log; the exact text is environment-specific."
+notes: "A captured trace is meant to be read. std::stacktrace has an operator<< and a std::to_string overload that both render a multi-line dump -- frame index, function description, and file:line where debug info is present -- which is exactly what belongs in a crash log or an unexpected-error report. The text depends on the compiler, the build flags (an optimized or stripped build shows less) and the platform, so it is a diagnostic for a human to read, never a string to parse for program logic. This example has no captured output file because the dump differs between toolchains; run it yourself to see your stack. Needs linking stdc++exp."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::stacktrace", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace" }
+detailed_tags:
+  - { name: "std::stacktrace::current", url: "https://en.cppreference.com/w/cpp/utility/basic_stacktrace/current" }

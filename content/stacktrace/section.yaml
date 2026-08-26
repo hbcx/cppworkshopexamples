@@ -1,0 +1,4 @@
+title: "Stack traces"
+description: "Capturing the call stack from inside a running program with C++23 <stacktrace>. Covers std::stacktrace::current() to take a snapshot, printing a trace for a crash log, the std::stacktrace_entry accessors for a frame's function, file and line, the key pattern of attaching a trace to an exception at the throw site so a distant handler knows where the error came from, and how call depth shows up as frames -- alongside the traps: capturing a trace on a hot path where its cost dominates, and assuming a frame's file and line are always present when debug info and optimization decide that. Frame text is compiler-, build- and platform-specific, so a stack trace is a best-effort diagnostic for humans, never data to parse. On this libstdc++ toolchain the header needs linking stdc++exp."
+sort_order: 128
+category: "Diagnostics"

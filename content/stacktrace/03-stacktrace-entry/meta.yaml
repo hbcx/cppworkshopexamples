@@ -1,0 +1,13 @@
+title: "Reading a frame"
+standard: "C++23"
+difficulty: 2
+summary: "Each frame is a std::stacktrace_entry with description(), source_file() and source_line(); iterate the trace like any range, but read the fields defensively."
+notes: "A std::stacktrace is a range of std::stacktrace_entry, so you iterate it with a range-for. Each entry offers description() (the function), source_file() and source_line(). How much is filled depends on available debug info: in an optimized or stripped build source_line() can be 0 and source_file() empty, so read them defensively rather than assume they are present. This example prints the top few frames, so it has no captured output file -- the text is specific to your compiler and build. When you only need the whole dump, prefer streaming the trace (previous example); reach for the per-entry accessors when you want to filter or reformat frames yourself. Needs linking stdc++exp."
+run: true
+sanitizers: []
+libs: ["stdc++exp"]
+main_tags:
+  - { name: "std::stacktrace_entry", url: "https://en.cppreference.com/w/cpp/utility/stacktrace_entry" }
+detailed_tags:
+  - { name: "stacktrace_entry::description", url: "https://en.cppreference.com/w/cpp/utility/stacktrace_entry/description" }
+  - { name: "stacktrace_entry::source_file", url: "https://en.cppreference.com/w/cpp/utility/stacktrace_entry/source_file" }
