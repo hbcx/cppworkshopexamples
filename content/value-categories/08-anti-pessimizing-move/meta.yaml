@@ -1,0 +1,12 @@
+title: "Anti-pattern: std::move on a return value"
+standard: "C++11"
+difficulty: 3
+summary: "return std::move(local) blocks copy elision: a plain return local lets the result be built directly in the caller with no copy and no move, while std::move forces a move."
+notes: "return std::move(local) looks like an optimization and is the opposite. A plain return local is eligible for copy elision (NRVO): the compiler can construct the return value directly in the caller's storage, so there is no copy AND no move at all, and if it cannot elide, the local is treated as an rvalue and moved anyway. Wrapping it in std::move turns the return expression into an xvalue that is not a name, which disqualifies elision, so you force a move where you could have had nothing. The rule is simple: return the local by its name and let the compiler do better than you can. This example uses a copy/move-reporting type; the plain return typically prints nothing, the std::move one prints a move. Both g++ and clang flag the mistake as -Wpessimizing-move, which is why this example turns -Werror off to demonstrate it; treat that warning as a real defect."
+run: true
+sanitizers: []
+werror: false
+main_tags:
+  - { name: "copy elision", url: "https://en.cppreference.com/w/cpp/language/copy_elision" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: returning a reference to a local"
+standard: "C++11"
+difficulty: 3
+summary: "A local is destroyed when the function returns, so a reference or pointer to it dangles; return by value, where move and copy elision make it cheap."
+notes: "A function's local objects live only until it returns, so a reference or pointer to one points at destroyed memory the moment the caller uses it -- undefined behaviour that often appears to work until it does not. The same trap hides in decltype(auto) returning (local), in an auto&& that binds a local, and in returning a member of a local. The fix is to return by VALUE: the language elides the copy where it can (constructing the result directly in the caller) and moves it otherwise, so returning a big object by value is not the cost it looks like. This example describes the dangling version and runs only the safe one -- reading a dangling reference is undefined and cannot be shown reliably."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "reference declaration", url: "https://en.cppreference.com/w/cpp/language/reference" }
+detailed_tags:
+  - { name: "copy elision", url: "https://en.cppreference.com/w/cpp/language/copy_elision" }

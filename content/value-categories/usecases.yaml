@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "Designing a constructor or setter that stores the argument it receives, and choosing between taking it by value, by const reference, or with a const-ref/rvalue-ref overload pair."
+  why: "Value categories tell you what each choice costs: const T& binds everything but always copies into the member; a by-value sink plus std::move copies an lvalue once but moves an rvalue; a const&/&& overload pair is fastest but doubles the API. Without the model you cannot see which is cheaper for which caller."
+  signal: "A constructor or setter taking const T& that then copies into a member, where callers routinely pass temporaries that could have been moved."
+
+- problem: "Explaining a surprising overload-resolution result -- the compiler chose a copy where you expected a move, or picked an overload you did not intend."
+  why: "The reference-binding rules ARE the overload-resolution rules for these cases. Value categories turn an apparently arbitrary choice into a mechanical one you can predict and fix, rather than guessing with casts until it works."
+  signal: "A move that profiles as a copy, or an overload set of const T& and T&& where calls resolve to the wrong one."
+
+- problem: "Writing generic forwarding code -- a wrapper, a factory, an emplace-style function -- that must pass arguments on without adding copies."
+  why: "Perfect forwarding is built directly on value categories: a forwarding reference deduces lvalue versus rvalue, and std::forward restores that category so each argument is copied or moved as the caller intended. You cannot write it correctly without the model."
+  signal: "A variadic wrapper taking Args&&... that then passes the arguments plainly, or by std::move, instead of std::forward<Args>(args)."
+
+- problem: "Chasing a crash or corruption from a dangling reference or a use-after-move."
+  why: "Knowing where temporaries die, when a const reference extends one and when it does not, and that a moved-from object is valid-but-unspecified, is what locates these bugs -- they are almost always a reference outliving its object or a read after a move."
+  signal: "Functions returning const T& or T* to a local, or code that reads a variable after passing it to std::move."

@@ -1,5 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "value-categories"
+  note: "The language model underneath these mechanics: what makes an expression an lvalue or an rvalue, how references bind, and why std::move is just a cast. Go there to understand WHY the move constructor is chosen only for temporaries."
 - slug: "vectors"
   note: "Where moves pay off most: a vector reallocation moves its elements instead of copying them, but only when the move constructor is noexcept."
 - slug: "lists"

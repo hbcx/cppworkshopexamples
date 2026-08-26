@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "move-semantics"
+  note: "What these categories were invented for: the move constructor and move assignment that run only for rvalues, std::move in practice, and the rule of five. Go there to turn the value-category model into real resource-stealing types."
+- slug: "decltype-declval"
+  note: "The type-deduction side of the same coin: decltype((expr)) reflects the value category, and std::declval produces an rvalue of a type in an unevaluated context. Go there for deducing types from expressions without evaluating them."
+- slug: "type-traits"
+  note: "The traits that inspect this at compile time: is_lvalue_reference, is_rvalue_reference and the reference add/remove transformations the classifier here relies on. Go there for the full compile-time type toolkit."

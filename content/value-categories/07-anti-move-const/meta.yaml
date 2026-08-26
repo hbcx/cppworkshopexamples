@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::move on a const object"
+standard: "C++11"
+difficulty: 3
+summary: "std::move only casts to an rvalue, it does not remove const; a const rvalue cannot bind to T&&, so overload resolution silently falls back to the copy constructor."
+notes: "std::move on a const object is a no-op you will not notice. std::move casts to an rvalue but keeps the const, producing a const rvalue. The move constructor takes a non-const T&&, which a const rvalue cannot bind to, so overload resolution falls back to the copy constructor, which takes const T& and binds fine. The move you asked for silently becomes a copy -- no error, no warning, just the cost you were trying to avoid. The lesson: do not declare something const if you intend to move out of it, and remember that member variables of a const object, and const-qualified locals, cannot be moved from. This example uses a type that reports copy versus move to show the fallback."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+detailed_tags:
+  - { name: "reference declaration", url: "https://en.cppreference.com/w/cpp/language/reference" }

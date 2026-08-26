@@ -1,0 +1,12 @@
+title: "How references bind"
+standard: "C++11"
+difficulty: 2
+summary: "T& binds only a modifiable lvalue, const T& binds anything, and T&& binds only an rvalue; with all three overloads the compiler picks the most specific."
+notes: "The binding rules are the mechanism behind everything else. A non-const lvalue reference T& binds only to a modifiable lvalue. A const lvalue reference const T& binds to almost anything -- a modifiable lvalue, a const lvalue, or a temporary -- which is why it is the universal read-only parameter and why pre-C++11 everything was passed by const&. An rvalue reference T&& binds only to an rvalue: a temporary or the result of std::move. With all three overloads available, a modifiable lvalue goes to T&, a const lvalue to const T&, and an rvalue to T&&. That last split is what lets a move constructor run only for values that are safe to gut."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "reference declaration", url: "https://en.cppreference.com/w/cpp/language/reference" }
+detailed_tags:
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

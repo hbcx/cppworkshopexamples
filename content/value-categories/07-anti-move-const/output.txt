@@ -1,0 +1,4 @@
+from a non-const source:
+  moved
+from a const source:
+  copied

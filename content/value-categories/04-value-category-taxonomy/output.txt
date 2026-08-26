@@ -1,0 +1,5 @@
+x         -> lvalue
+arr[1]    -> lvalue
+x + 1     -> prvalue
+42        -> prvalue
+move(x)   -> xvalue

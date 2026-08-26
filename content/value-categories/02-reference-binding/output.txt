@@ -1,0 +1,4 @@
+T&        (modifiable lvalue)
+const T&  (const or fallback)
+T&&       (rvalue)
+T&&       (rvalue)

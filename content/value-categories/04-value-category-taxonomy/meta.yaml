@@ -1,0 +1,12 @@
+title: "glvalue, prvalue, xvalue"
+standard: "C++17"
+difficulty: 3
+summary: "The three primary categories -- lvalue, prvalue, xvalue -- and the composites glvalue and rvalue; decltype((expr)) reveals which one an expression is."
+notes: "The full taxonomy has three primary categories. An lvalue names an object with identity (a variable, a[i], *p). A prvalue is a pure temporary being computed (a literal, a + b, a function returning by value). An xvalue is an expiring object -- an lvalue turned into an rvalue, the result of std::move. The composites group them: a glvalue is an lvalue or an xvalue (it has identity), and an rvalue is a prvalue or an xvalue (it may be moved from). A useful trick: decltype((expr)) with the extra parentheses encodes the category -- T& for an lvalue, T&& for an xvalue, and plain T for a prvalue -- which this example turns into a small classifier. Since C++17 a prvalue is only materialized into a temporary object when something needs one (guaranteed copy elision)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }
+detailed_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

@@ -1,0 +1,11 @@
+title: "decltype(x) vs decltype((x))"
+standard: "C++11"
+difficulty: 2
+summary: "decltype(name) gives the declared type; decltype((expr)), with extra parentheses, gives a type that encodes the value category -- T& for an lvalue."
+notes: "decltype has two behaviours and the difference is one pair of parentheses. decltype(name) applied to a plain entity gives its DECLARED type -- for an int variable, int. decltype((expr)) applied to any other expression gives a type that reflects the value category: an lvalue expression yields T&, an xvalue yields T&&, and a prvalue yields plain T; const is carried through. So decltype(x) is int but decltype((x)) is int&. This is not trivia: with decltype(auto) return types it decides whether you return by value or by reference, and `return (local);` under decltype(auto) returns a reference to a local -- a dangling one. Reach for decltype((x)) when you deliberately want the category, and plain decltype(x) for the declared type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "decltype", url: "https://en.cppreference.com/w/cpp/language/decltype" }
+detailed_tags:
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }

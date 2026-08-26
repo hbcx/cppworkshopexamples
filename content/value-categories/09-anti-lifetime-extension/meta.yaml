@@ -1,0 +1,11 @@
+title: "Anti-pattern: misreading lifetime extension"
+standard: "C++11"
+difficulty: 3
+summary: "Binding a temporary to a local const reference extends its life to that reference's scope, but the rule is local -- it never reaches through a function that returns a reference."
+notes: "Binding a temporary directly to a local const (or rvalue) reference extends the temporary's lifetime to the reference's scope -- a genuine and useful rule. The trap is assuming it applies more widely than it does. It is a LOCAL rule about the immediate binding: it does not reach across a function boundary, so a function that returns a reference to a temporary created inside it still dangles, no matter that a const reference is involved. It also does not save a temporary bound through an extra function call or stored in a reference member. When in doubt, bind to a VALUE (auto x = make();) rather than a reference -- copy elision makes it free and the lifetime question disappears. This example runs the working local-binding case and describes the returning case that dangles."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "reference declaration", url: "https://en.cppreference.com/w/cpp/language/reference" }
+detailed_tags:
+  - { name: "lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

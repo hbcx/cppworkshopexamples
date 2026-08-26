@@ -1,0 +1,4 @@
+title: "Value categories and references"
+description: "What it means that every expression is an lvalue or an rvalue, and how that decides which reference binds and which overload is chosen -- the language rules underneath move semantics and perfect forwarding. Covers lvalue versus rvalue and how they select overloads, the binding rules for T&, const T& and T&&, std::move as a cast to an xvalue rather than an operation, the full glvalue/prvalue/xvalue taxonomy, and the decltype(x) versus decltype((x)) distinction -- alongside the traps: returning a reference to a local, std::move on a const object silently copying, std::move on a return value defeating copy elision, and misreading const-reference lifetime extension. This is the model that makes move semantics, overload resolution and forwarding make sense."
+sort_order: 2
+category: "Language & object model"

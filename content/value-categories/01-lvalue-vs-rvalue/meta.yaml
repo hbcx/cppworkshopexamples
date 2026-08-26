@@ -1,0 +1,11 @@
+title: "lvalue vs rvalue"
+standard: "C++11"
+difficulty: 1
+summary: "An lvalue has a name and an address you can take; an rvalue is a temporary with no lasting identity, and the two can select different overloads."
+notes: "The first distinction: an lvalue names an object you can refer to again -- a variable, a[i], *p -- and you can take its address. An rvalue is a temporary being computed and then gone -- a literal, a + b, a function returning by value. It is not about the type but about the EXPRESSION: the same std::string is an lvalue as a named variable and an rvalue as make(). This matters because overload resolution can send an lvalue and an rvalue to different functions, which is exactly how a move constructor is chosen only for temporaries. Here an overload set of const T& and T&& reports which category each argument is."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }
+detailed_tags:
+  - { name: "reference declaration", url: "https://en.cppreference.com/w/cpp/language/reference" }

@@ -1,0 +1,11 @@
+title: "std::move is a cast"
+standard: "C++11"
+difficulty: 2
+summary: "std::move moves nothing; it casts its argument to an xvalue so overload resolution picks the T&& overload, where the actual stealing happens."
+notes: "The name misleads: std::move does not move anything. It is a cast that turns its argument into an xvalue (a kind of rvalue), so overload resolution selects the T&& overload -- a move constructor or move assignment -- and THAT function does the work of stealing the resources. So std::move(x) on its own, with nothing consuming the result, leaves x completely untouched; only passing the xvalue to something that takes a T&& transfers anything. After a real move the source is left in a valid but unspecified state: you may assign to it or destroy it, but you must not assume its contents. Knowing move is just a cast explains why moving a const object silently copies (a later anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
+detailed_tags:
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }

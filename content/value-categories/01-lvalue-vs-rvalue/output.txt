@@ -1,0 +1,4 @@
+lvalue (or const)
+rvalue (temporary)
+rvalue (temporary)
+rvalue (temporary)

@@ -1,0 +1,2 @@
+local const& extends the temporary: "computed value"
+binding to a value is always safe:  "computed value"
