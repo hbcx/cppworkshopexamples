@@ -1,0 +1,4 @@
+no_such_file: true
+permission:   false
+condition category: generic
+condition is enoent: true

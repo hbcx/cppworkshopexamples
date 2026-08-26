@@ -1,0 +1,4 @@
+title: "System error"
+description: "The <system_error> facility for reporting errors as values instead of exceptions: std::error_code, a lightweight numeric code plus a category that gives the number meaning. Covers what an error_code is and its bool test, comparing against std::errc so the check stays portable across categories, the built-in generic and system categories, the non-throwing standard-library overloads that report through an error_code out-parameter, defining your own error category and enum with make_error_code and is_error_code_enum, and escalating a code into a std::system_error exception -- alongside the traps: comparing by raw value() across categories, ignoring a returned error_code, and matching on the platform-specific message() text. Use this when a failure is expected and you would rather branch on a value than throw."
+sort_order: 125
+category: "Diagnostics"

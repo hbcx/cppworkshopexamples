@@ -1,0 +1,12 @@
+title: "generic vs system category"
+standard: "C++11"
+difficulty: 2
+summary: "The two built-in categories: generic_category for portable errc conditions, system_category for native OS error numbers; categories have identity by address."
+notes: "generic_category holds the portable error conditions -- the errc enumerators, POSIX-style names -- and is what you use for errors you raise yourself. system_category holds the operating system's own error numbers (errno on POSIX, GetLastError on Windows), and the library uses it for OS call failures. Their value() numbers and message() text are platform-specific, so never hard-code a number or match the text; compare against errc, which bridges the two. Each category() function returns a reference to a single global instance, so categories are compared by identity (address) -- generic_category() is never equal to system_category()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::generic_category", url: "https://en.cppreference.com/w/cpp/error/generic_category" }
+  - { name: "std::system_category", url: "https://en.cppreference.com/w/cpp/error/system_category" }
+detailed_tags:
+  - { name: "std::error_category", url: "https://en.cppreference.com/w/cpp/error/error_category" }

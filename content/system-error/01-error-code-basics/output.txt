@@ -1,0 +1,4 @@
+default is error: false
+ec is error: true
+category: generic
+is permission_denied: true

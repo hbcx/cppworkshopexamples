@@ -1,0 +1,4 @@
+same raw value: true
+actually equal: false
+posix is enoent:  true
+device is enoent: false

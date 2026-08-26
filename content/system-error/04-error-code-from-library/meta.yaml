@@ -1,0 +1,11 @@
+title: "error_code from the library"
+standard: "C++17"
+difficulty: 2
+summary: "Standard-library calls have non-throwing overloads that report through an error_code out-parameter: filesystem operations set it instead of throwing, so you branch on a value."
+notes: "Many standard functions come in two forms: one that throws and one that takes a std::error_code& and sets it. The <filesystem> operations are the clearest example -- fs::file_size, fs::remove, fs::create_directory all have an error_code overload -- and they let you handle an expected failure (a file that is not there) by checking a code, with no try/catch on the routine path. On failure the function returns a documented sentinel (file_size returns static_cast<uintmax_t>(-1)) AND sets the code, so you check the code, not the return value. The comparison against errc stays portable even though the underlying failure is an OS-specific code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

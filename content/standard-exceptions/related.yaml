@@ -5,3 +5,5 @@
   note: "The value-based alternative to throwing one of these: std::expected<T, E> returns the error in the type system, better when the failure is expected and frequent. Go there to weigh returning an error against throwing it."
 - slug: "charconv"
   note: "The non-throwing way to parse numbers: std::from_chars reports failure through a returned error code instead of throwing std::invalid_argument like std::stoi. Go there for parsing on a hot path where you do not want exceptions."
+- slug: "system-error"
+  note: "The value-based error channel std::system_error wraps: error_code and error_condition, and comparing them portably against std::errc. Go there for reporting a failure as a checkable code instead of throwing one of these types."

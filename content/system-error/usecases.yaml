@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A cross-platform library wrapping OS calls -- sockets, files, processes -- must report failures so callers on Linux and Windows write one handling path, not two."
+  why: "error_code plus errc lets a caller compare against a portable condition (ec == std::errc::timed_out) whatever the native number was, because the category maps it. Exposing the raw errno or GetLastError value forces an #ifdef branch in every caller."
+  signal: "Caller code with per-OS branches comparing an int against ETIMEDOUT on one platform and WSAETIMEDOUT on another to recognize the same failure."
+
+- problem: "A hot path -- a parser, a packet loop, a scan over many files -- where failures are frequent and expected, and throwing on each one is too costly."
+  why: "The error_code overload reports without the cost and non-local jump of an exception, so you branch on a value in the loop. The throwing overload pays stack unwinding on the common failure, which is exactly the wrong place for it."
+  signal: "A tight loop wrapped in try/catch whose handler runs on most iterations, or a profile that shows exception machinery on an expected-failure path."
+
+- problem: "A library with its own error taxonomy -- parser errors, protocol codes -- wants them to interoperate with std::error_code so callers use one mechanism and can mix them with standard errors."
+  why: "A custom category plus an is_error_code_enum specialization makes the library's enum convert to error_code and compare portably, so a caller's existing error_code handling covers the library's errors too. A stand-alone enum forces callers to handle a second, separate error system."
+  signal: "A public API returning a library-specific enum from some layers and std::error_code from others, making callers translate between two error systems."
+
+- problem: "Bridging a C library that reports through errno into C++ error handling without losing the ability to compare portably."
+  why: "std::error_code(errno, std::generic_category()) turns an errno into a categorized, comparable code you can pass around, log, or escalate into a std::system_error. Threading the bare int loses the category and every caller re-hardcodes the E* macros."
+  signal: "Raw errno ints passed through function signatures and compared against E* macros by hand at each call site."

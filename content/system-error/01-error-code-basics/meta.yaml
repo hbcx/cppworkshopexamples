@@ -1,0 +1,11 @@
+title: "error_code basics"
+standard: "C++11"
+difficulty: 1
+summary: "std::error_code is a numeric value plus a category that gives it meaning; a default one means no error, and its bool conversion tells success from failure."
+notes: "std::error_code is a lightweight, non-throwing way to report an error: an int value and a reference to a CATEGORY that says what the int means. A default-constructed error_code holds 0 and tests false (no error), so if (ec) reads as if a failure occurred. std::make_error_code turns a portable std::errc enumerator into an error_code in the generic category. Two things to avoid printing or trusting in isolation: value(), whose meaning depends on the category, and message(), whose wording is platform- and locale-specific -- compare against a std::errc instead, shown next. Here we print only the category name and the portable comparison, which are the same everywhere."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

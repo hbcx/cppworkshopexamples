@@ -7,3 +7,5 @@
   note: "The modern successor to the error_code overloads used here: instead of a code you must remember to check, an operation returns a value-or-error the type system forces you to handle. Go there for the C++23 way to carry a failure back to the caller."
 - slug: "file-streams"
   note: "The other thing you do with a path: once these functions confirm a file is there and make its directory, open it and read or write the CONTENTS with ifstream/ofstream. Go there for reading and writing the bytes, not just the metadata around them."
+- slug: "system-error"
+  note: "What the error_code out-parameter here actually is: the std::error_code type, how to test it, and how to compare it against std::errc portably instead of by raw number. Go there to understand the code these overloads hand back."

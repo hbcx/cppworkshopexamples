@@ -1,0 +1,12 @@
+title: "A custom error category"
+standard: "C++11"
+difficulty: 3
+summary: "Make your own error enum act like a standard error_code with four pieces: the enum, a category, a make_error_code overload, and an is_error_code_enum specialization."
+notes: "This is how a library exposes its own errors through the same std::error_code mechanism callers already use, instead of a bespoke enum they must special-case. Four parts: (1) an enum of error values; (2) a class deriving std::error_category that gives the category a name and maps each value to a message (your own text, so it is stable); (3) a single global instance of that category, whose address is its identity; (4) a make_error_code(YourEnum) overload found by argument-dependent lookup, plus a specialization of std::is_error_code_enum for the enum so the implicit conversion to error_code is enabled. After that, error_code ec = YourEnum::x just works, and ec == YourEnum::x compares correctly. The is_error_code_enum specialization must live in namespace std."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::error_category", url: "https://en.cppreference.com/w/cpp/error/error_category" }
+detailed_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+  - { name: "std::is_error_code_enum", url: "https://en.cppreference.com/w/cpp/error/error_code/is_error_code_enum" }

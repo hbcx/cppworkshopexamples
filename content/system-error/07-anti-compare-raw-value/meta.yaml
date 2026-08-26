@@ -1,0 +1,11 @@
+title: "Anti-pattern: comparing by raw value"
+standard: "C++11"
+difficulty: 3
+summary: "An error_code's value() only has meaning together with its category; comparing raw numbers matches unrelated errors and breaks across platforms -- compare against std::errc."
+notes: "A value() by itself is just an integer -- the same number means different things in different categories, and a platform-specific category uses different numbers for the same condition. So comparing value() to a literal, or comparing two codes' value() fields, is wrong: it can report two unrelated errors as equal and it silently breaks when the code comes from another category or another OS. The example builds one code in the generic category and one in a custom category with the SAME number, shows their value()s are equal while the codes are not, and shows the portable fix: compare against std::errc, which matches by meaning through category equivalence."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

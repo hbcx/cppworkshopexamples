@@ -1,0 +1,11 @@
+title: "Portable comparison with errc"
+standard: "C++11"
+difficulty: 2
+summary: "Comparing an error_code to a std::errc is portable: operator== asks the categories whether the two are equivalent, so it works even for a platform-specific code."
+notes: "This is the rule that makes error_code usable across systems. When you write ec == std::errc::no_such_file_or_directory, the == operator does not compare raw numbers -- it consults the categories through error_condition equivalence, so a code that came back in a platform-specific category still matches the right portable condition. std::error_condition is the portable sibling of error_code: default_error_condition() maps a code to the generic condition it corresponds to, which is exactly what the errc comparison uses underneath. Compare against named errc values; never compare value() to a literal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }
+detailed_tags:
+  - { name: "std::error_condition", url: "https://en.cppreference.com/w/cpp/error/error_condition" }

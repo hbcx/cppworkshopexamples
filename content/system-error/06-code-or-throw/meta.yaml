@@ -1,0 +1,11 @@
+title: "Return a code or throw it"
+standard: "C++11"
+difficulty: 2
+summary: "error_code and exceptions carry the same information two ways: a function can return a code for the caller to check, or the caller can escalate it into a std::system_error."
+notes: "The same failure can travel as a returned value or as a thrown exception, and std::system_error is the bridge: it is an exception that carries an error_code, so code().category() and a portable code() == errc check still work in the handler. Return a code when the failure is expected and the caller is right there to handle it; throw when the failure must not be ignored or has to cross many stack frames to a distant handler. Because system_error derives from runtime_error, a generic catch still catches it. This lets a low-level layer report with codes and a boundary decide whether to escalate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::system_error", url: "https://en.cppreference.com/w/cpp/error/system_error" }
+detailed_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }

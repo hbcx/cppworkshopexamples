@@ -1,0 +1,4 @@
+category: config
+message:  value has the wrong format
+is bad_value:   true
+is missing_key: false

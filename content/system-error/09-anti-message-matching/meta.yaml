@@ -1,0 +1,11 @@
+title: "Anti-pattern: matching on message text"
+standard: "C++11"
+difficulty: 3
+summary: "Deciding what to do by substring-matching error_code::message() breaks across locales and platforms; the text is for humans -- compare the code against std::errc."
+notes: "message() returns a human-readable string that is locale-dependent and platform-specific: the same error reads No such file or directory, a translated phrase, or a Windows wording. Branching on that text -- searching it for a keyword to decide whether to retry -- passes on your machine and fails on a server in another locale or a different OS. The rule mirrors the exceptions section's what()-parsing trap: the string is for logs and people, the errc value is for code. The example decides retry the wrong way (searching the message) and the right way (comparing against errc conditions like resource_unavailable_try_again and timed_out); it never prints the message, because that text is exactly what is not portable."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: ignoring the error_code"
+standard: "C++11"
+difficulty: 3
+summary: "The error_code overload does not throw, so nothing stops you from using the result after a failure; skip the check and you compute on a sentinel or a stale value."
+notes: "Choosing the non-throwing, error_code-reporting overload is a promise to check the code yourself -- there is no exception to stop you. On failure these functions return a sentinel or leave their out-parameter unspecified, so ignoring the code and using the result means acting on garbage: a size that is really the -1 sentinel, an output variable that was never written. The example shows a parse in the error_code style whose out-parameter is untouched on failure; the wrong path prints the stale value, the right path checks the code first and only trusts the result on success. If you do not want to check codes, use the throwing overload instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::error_code", url: "https://en.cppreference.com/w/cpp/error/error_code" }
+detailed_tags:
+  - { name: "std::errc", url: "https://en.cppreference.com/w/cpp/error/errc" }

@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "standard-exceptions"
+  note: "The throwing side of the same information: std::system_error is a runtime_error that wraps an error_code, and the rest of the standard exception hierarchy lives there. Go there to pick an exception type once you decide to throw instead of return."
+- slug: "exceptions"
+  note: "The mechanics of the alternative: throwing and catching, when a non-local jump is worth its cost versus checking a returned code. Go there for the throw/catch model this section lets you avoid on expected failures."
+- slug: "expected"
+  note: "The other value-based error channel: std::expected<T, E> puts the value and the error in one return type, where error_code is a separate out-parameter or return alongside the result. Go there to compare the two ways of returning an error as a value."
+- slug: "filesystem-operations"
+  note: "Where the library's error_code overloads earn their keep: every filesystem operation has a throwing form and an error_code form, so a missing file is a checked code rather than an exception. Go there for those overloads in real use."
