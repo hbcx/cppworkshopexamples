@@ -1,0 +1,11 @@
+title: "std::forward preserves the category"
+standard: "C++11"
+difficulty: 2
+summary: "Inside a forwarding function the parameter is always an lvalue, so std::forward<T>(x) casts it back to the caller's original category -- a copy for an lvalue, a move for an rvalue."
+notes: "There is a subtlety that makes std::forward necessary. A forwarding-reference parameter has a name, so INSIDE the function it is an lvalue, whatever the caller passed -- if you just handed it on, every argument would arrive as an lvalue and always be copied. std::forward<T>(x) fixes this: it is a conditional cast that uses the deduced T to restore the original category -- yields an lvalue when the caller passed one (so a copy is made downstream) and an rvalue when the caller passed one (so a move happens). Contrast with std::move, which casts to rvalue unconditionally. The example relays into a by-value sink and shows an lvalue producing a copy and an rvalue producing a move."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+detailed_tags:
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }

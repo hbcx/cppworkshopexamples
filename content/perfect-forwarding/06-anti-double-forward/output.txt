@@ -1,0 +1,6 @@
+two_right with an rvalue (forward once, on the last use):
+  use got length 5
+  use got length 5
+two_wrong with an lvalue (safe: forward yields an lvalue):
+  use got length 4
+  use got length 4

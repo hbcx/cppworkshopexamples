@@ -1,0 +1,3 @@
+bound an lvalue (T = U&)
+bound an rvalue (T = U)
+bound an rvalue (T = U)

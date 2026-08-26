@@ -1,0 +1,3 @@
+forwarding ref: bound (lvalue or rvalue)
+forwarding ref: bound (lvalue or rvalue)
+plain rvalue ref: rvalue only

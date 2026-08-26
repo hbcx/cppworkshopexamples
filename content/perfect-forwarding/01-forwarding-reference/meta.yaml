@@ -1,0 +1,11 @@
+title: "The forwarding reference"
+standard: "C++17"
+difficulty: 2
+summary: "T&& where T is a deduced template parameter is a forwarding reference: it binds both lvalues and rvalues, deducing T as U& for an lvalue and U for an rvalue."
+notes: "A forwarding reference (also called a universal reference) is written T&& where T is a template parameter DEDUCED from the argument -- and only then. Unlike a plain rvalue reference, it binds to both lvalues and rvalues: for an lvalue argument T deduces to U& and T&& collapses to U&, so the parameter is an lvalue reference; for an rvalue T deduces to U and T&& stays U&&. One template therefore handles both, and by inspecting T you can tell which category arrived. This is the parameter type behind every perfect-forwarding wrapper. Watch the deduced-context requirement: the very same T&& in a non-deduced position is just an rvalue reference (a later anti-pattern). Note that a string literal is an lvalue, so it deduces to a reference too."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }
+detailed_tags:
+  - { name: "reference collapsing", url: "https://en.cppreference.com/w/cpp/language/reference" }

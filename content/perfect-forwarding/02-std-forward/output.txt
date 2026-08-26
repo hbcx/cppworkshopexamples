@@ -1,0 +1,4 @@
+relay(lvalue):
+  copy
+relay(rvalue):
+  move

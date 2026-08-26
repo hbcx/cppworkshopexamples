@@ -2,6 +2,8 @@
 # Each entry: the slug of another section + a one-line note on why to go there.
 - slug: "value-categories"
   note: "The language model underneath these mechanics: what makes an expression an lvalue or an rvalue, how references bind, and why std::move is just a cast. Go there to understand WHY the move constructor is chosen only for temporaries."
+- slug: "perfect-forwarding"
+  note: "The generic counterpart to std::move: a forwarding reference plus std::forward passes an argument on while keeping its category, so a wrapper adds no copies. Go there for forwarding references, reference collapsing, and forward vs move."
 - slug: "vectors"
   note: "Where moves pay off most: a vector reallocation moves its elements instead of copying them, but only when the move constructor is noexcept."
 - slug: "lists"

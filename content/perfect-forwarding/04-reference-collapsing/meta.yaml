@@ -1,0 +1,11 @@
+title: "Reference collapsing"
+standard: "C++17"
+difficulty: 3
+summary: "When references stack up through templates or typedefs they collapse by one rule -- rvalue only if BOTH are rvalue -- which is exactly what makes a forwarding reference bind lvalues."
+notes: "Forwarding references work because of reference collapsing. You cannot write a reference to a reference directly, but templates and typedefs can form one, and the language collapses it by a single rule: the result is an rvalue reference only when BOTH parts are rvalue references, otherwise it is an lvalue reference. So T& & , T& && and T&& & all collapse to T&, and only T&& && stays T&&. This is why a forwarding reference T&& binds an lvalue: T deduces to U&, the parameter becomes U& && which collapses to U&. The example forms all four combinations through typedefs and checks which reference kind each collapses to."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "reference collapsing", url: "https://en.cppreference.com/w/cpp/language/reference" }
+detailed_tags:
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }

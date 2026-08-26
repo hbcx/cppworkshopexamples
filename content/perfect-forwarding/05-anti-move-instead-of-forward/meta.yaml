@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::move instead of std::forward"
+standard: "C++11"
+difficulty: 3
+summary: "std::move on a forwarding-reference parameter casts to rvalue unconditionally, so it moves from an lvalue the caller still owns; use std::forward, which moves only a real rvalue."
+notes: "A forwarding reference binds lvalues too, so std::move on it is unconditional: it casts to rvalue even when the caller passed an lvalue it intends to keep using. The downstream sink then moves from that object, gutting it behind the caller's back -- a silent use-after-move waiting to happen at the call site. std::forward is the correct tool: it casts to rvalue only when the argument really was one, leaving an lvalue as an lvalue (a copy). The rule of thumb: std::move a plain rvalue reference or a value you own; std::forward a forwarding reference. The example relays an lvalue two ways and shows std::move forcing a move where std::forward keeps a copy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

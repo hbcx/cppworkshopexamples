@@ -1,0 +1,11 @@
+title: "Anti-pattern: not a forwarding reference"
+standard: "C++11"
+difficulty: 3
+summary: "T&& is a forwarding reference only when T is deduced directly from that argument; std::vector<T>&&, const T&& and a class template's own T&& are plain rvalue references that reject lvalues."
+notes: "The forwarding reference has a strict shape: a template parameter T, deduced from THAT argument, written exactly T&&. Several look-alikes are not forwarding references and quietly reject lvalues. std::vector<T>&& deduces T but the parameter is not plain T&&, so it is an ordinary rvalue reference. const T&& is disqualified by the const. And a member function of a class template that takes the CLASS's parameter as T&& is using an already-fixed type, not deducing one, so again it is a plain rvalue reference. The practical consequence: only a true forwarding reference needs std::forward and accepts lvalues; the look-alikes are guaranteed rvalues, so std::move is appropriate and an lvalue argument is a compile error. The example contrasts a real forwarding reference with a std::vector<T>&& parameter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }
+detailed_tags:
+  - { name: "reference collapsing", url: "https://en.cppreference.com/w/cpp/language/reference" }

@@ -1,0 +1,4 @@
+title: "Perfect forwarding"
+description: "Passing arguments through a generic wrapper without adding a copy or a move and without changing their value category -- the technique behind factory functions like std::make_unique and container emplace. Covers the forwarding reference (T&& in a deduced context) that binds both lvalues and rvalues, std::forward as the conditional cast that restores the original category, forwarding a whole parameter pack, and the reference-collapsing rules that make it all work -- alongside the traps: std::move where std::forward was meant (gutting an lvalue the caller still owns), forwarding the same argument twice, and mistaking a plain rvalue reference for a forwarding reference. It builds directly on the value-categories section: forwarding is just preserving lvalue-ness and rvalue-ness on the way through."
+sort_order: 129
+category: "Language & object model"

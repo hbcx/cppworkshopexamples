@@ -1,5 +1,7 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 # Each entry: the slug of another section + a one-line note on why to go there.
+- slug: "perfect-forwarding"
+  note: "The single-argument version of what a variadic factory does: forwarding references, std::forward vs std::move, reference collapsing, and the forwarding traps -- go there for perfect forwarding before generalising it to a pack with Args&&... ."
 - slug: "move-semantics"
   note: "The forwarding a variadic factory rests on: a forwarding-reference pack plus std::forward is single-argument perfect forwarding generalised to any number -- go there for value categories, std::forward vs std::move, and why moves must be noexcept."
 - slug: "type-traits"

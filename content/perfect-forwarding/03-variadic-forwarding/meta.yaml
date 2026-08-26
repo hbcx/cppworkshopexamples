@@ -1,0 +1,12 @@
+title: "Forwarding a parameter pack"
+standard: "C++11"
+difficulty: 3
+summary: "Args&&... args deduces each argument's category independently and std::forward<Args>(args)... passes the whole list on unchanged -- the mechanism behind make_unique and emplace_back."
+notes: "Perfect forwarding scales to any number of arguments with a parameter pack. Args&&... args is a pack of forwarding references, so each argument's category is deduced on its own, and the pattern std::forward<Args>(args)... expands to forward every one of them with its own category preserved. This is exactly how factory and in-place functions work: std::make_unique, std::make_shared, vector::emplace_back and map::emplace all take Args&&... and forward them straight into the constructor, so an object is built in place with no argument copied or moved more than the caller's own value category requires. The example is a tiny make-style factory that forwards a mixed lvalue/rvalue argument list into a constructor."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+detailed_tags:
+  - { name: "parameter pack", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }
+  - { name: "forwarding reference", url: "https://en.cppreference.com/w/cpp/language/reference" }

@@ -1,6 +1,8 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 - slug: "move-semantics"
   note: "What these categories were invented for: the move constructor and move assignment that run only for rvalues, std::move in practice, and the rule of five. Go there to turn the value-category model into real resource-stealing types."
+- slug: "perfect-forwarding"
+  note: "The direct application: a forwarding reference plus std::forward passes an argument on while preserving its lvalue-ness or rvalue-ness. Go there for forwarding references, reference collapsing, and writing wrappers that add no copies."
 - slug: "decltype-declval"
   note: "The type-deduction side of the same coin: decltype((expr)) reflects the value category, and std::declval produces an rvalue of a type in an unevaluated context. Go there for deducing types from expressions without evaluating them."
 - slug: "type-traits"

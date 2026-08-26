@@ -1,0 +1,4 @@
+int&  &   collapses to lvalue ref: true
+int&  &&  collapses to lvalue ref: true
+int&& &   collapses to lvalue ref: true
+int&& &&  stays     rvalue ref:    true

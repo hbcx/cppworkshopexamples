@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "Writing a factory or wrapper -- a make-style creator, a logging or timing decorator, a thread-pool submit -- that must build or call something with the caller's arguments and add no overhead of its own."
+  why: "Forwarding references plus std::forward pass each argument in its own category, so an rvalue is moved and an lvalue copied exactly as if the caller had called through directly. Taking the arguments by value or by const reference either adds a copy or forbids the move the caller intended."
+  signal: "A wrapper taking const T& (or by value) and passing the arguments on, forcing an extra copy for movable arguments the caller passed as temporaries."
+
+- problem: "In-place construction of a container element (emplace) where you want to build the element from constructor arguments without a temporary."
+  why: "Args&&... plus std::forward builds the object directly in the container's storage. The alternative -- construct a temporary and then move or copy it in -- does an extra construction that emplace avoids entirely."
+  signal: "Code that builds a temporary and then push_back(std::move(tmp)) where emplace_back(args...) would construct it in place."
+
+- problem: "A wrapper class with a setter or relay that stores or passes on whatever it is given, movable or not, without duplicating the function for lvalues and rvalues."
+  why: "One forwarding-reference overload replaces the const T& and T&& overload pair, so you write a single function instead of two -- and instead of 2^N overloads for N parameters that each need both forms."
+  signal: "A class with parallel const T& and T&& overloads of the same setter that differ only by a std::move on the argument."
+
+- problem: "Chasing a bug where a caller's object mysteriously becomes empty or invalid after passing it to a function."
+  why: "It is almost always std::move used where std::forward was meant, or the same argument forwarded twice. Understanding forwarding pinpoints which, and the fix is mechanical once you see it."
+  signal: "A forwarding-reference function that calls std::move on its parameter, or forwards the same parameter more than once."

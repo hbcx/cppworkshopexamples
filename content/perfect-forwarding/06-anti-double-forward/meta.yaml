@@ -1,0 +1,11 @@
+title: "Anti-pattern: forwarding twice"
+standard: "C++11"
+difficulty: 3
+summary: "Forwarding the same argument more than once can move from it twice: after the first forward passes an rvalue to a sink that moves, the second forward reads a moved-from object."
+notes: "A forwarding-reference argument should be forwarded exactly once, on its LAST use. If you forward the same argument to two sinks, and the caller passed an rvalue, the first forward lets a sink move from it, and the second forward then moves from an already-gutted object -- the second sink sees an empty or unspecified value. It is not undefined behaviour (a moved-from object is valid), but it is a real bug that only shows for rvalue callers. The fix: for any use before the last, read through a plain reference or a named copy that does not consume, and forward only on the final use. The example runs the correct version with an rvalue and instantiates the wrong one with an lvalue (where forward makes no move) so it compiles without the double-move."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward", url: "https://en.cppreference.com/w/cpp/utility/forward" }
+detailed_tags:
+  - { name: "value category", url: "https://en.cppreference.com/w/cpp/language/value_category" }

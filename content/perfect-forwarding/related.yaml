@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "value-categories"
+  note: "The foundation this section stands on: what lvalue and rvalue mean, how references bind, and why std::move is a cast. Forwarding is just preserving those categories on the way through, so read that first if it is not yet solid."
+- slug: "move-semantics"
+  note: "The other half of the pair: std::move unconditionally casts to rvalue for a value you own, where std::forward casts conditionally for a forwarding reference. Go there for move constructors, the rule of five, and when to reach for move rather than forward."
+- slug: "variadic-templates"
+  note: "Where a forwarded pack lives: parameter packs, expansion, and fold expressions are the machinery behind Args&&... and std::forward<Args>(args)... . Go there for writing variadic templates in full."

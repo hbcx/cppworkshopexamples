@@ -1,0 +1,4 @@
+relay_wrong(lvalue): std::move steals unconditionally
+  move (caller's object gutted!)
+relay_right(lvalue): std::forward keeps it a copy
+  copy (caller's object safe)
