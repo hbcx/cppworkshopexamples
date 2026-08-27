@@ -3,3 +3,5 @@
   note: "The same idea past two values: N heterogeneous elements indexed by position, plus tuple_cat and std::apply."
 - slug: "maps"
   note: "pair in daily use: a map's element type is pair<const Key, Value>, and insert returns pair<iterator, bool>."
+- slug: "structured-bindings"
+  note: "The clean way to read a pair's two parts: auto [a, b] = p names .first and .second at once, and if-init unpacks an insert's { iterator, bool } in one statement -- go there for the binding forms and when a name is a copy or a reference."

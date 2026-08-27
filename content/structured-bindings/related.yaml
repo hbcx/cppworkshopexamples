@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "maps"
+  note: "The container these bindings shine on: iterating with for (const auto& [key, value] : m), and where insert/emplace return the { iterator, bool } that if-init unpacks. Go there for map operations, lookup, and insertion."
+- slug: "tuple"
+  note: "The multi-value return a binding unpacks: how to build and return a std::tuple, get<N> and std::tie, and when a named struct is the better choice. Go there for tuple construction, access, and comparison."
+- slug: "pair"
+  note: "The two-element case: std::pair is what a map element and many results are, and [a, b] is how you name its .first and .second. Go there for pair construction, comparison, and when to prefer a struct."
+- slug: "initialization"
+  note: "The other side of aggregates: a binding reads a struct's members out, and aggregate initialization writes them in. Go there for the forms of initialization, designated initializers, and value initialization."

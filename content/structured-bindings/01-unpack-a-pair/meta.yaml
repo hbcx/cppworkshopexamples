@@ -1,0 +1,11 @@
+title: "Unpacking a pair"
+standard: "C++17"
+difficulty: 1
+summary: "auto [a, b] gives each element of a pair or tuple its own name, so you drop .first and .second."
+notes: "A structured binding declares several names at once from one object. For a std::pair or std::tuple each name binds to one element, in order. With plain auto the names are copies of the elements, so writing to them does not touch the source."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "std::pair", url: "https://en.cppreference.com/w/cpp/utility/pair" }
+run: true
+sanitizers: []

@@ -1,0 +1,11 @@
+title: "Anti-pattern: binding only some members"
+standard: "C++17"
+difficulty: 3
+summary: "A binding must name every element; there is no skip, and std::ignore does not work here."
+notes: "A structured binding must introduce exactly as many names as the object has elements -- too few or too many is a compile error, and std::ignore (which works with std::tie) is not accepted as a binding name. If you genuinely need to discard some elements, use std::tie with std::ignore instead."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "std::tie", url: "https://en.cppreference.com/w/cpp/utility/tuple/tie" }
+run: true
+sanitizers: []

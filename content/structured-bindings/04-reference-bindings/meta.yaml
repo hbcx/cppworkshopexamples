@@ -1,0 +1,11 @@
+title: "Value, reference and const bindings"
+standard: "C++17"
+difficulty: 2
+summary: "auto [..] copies; auto& [..] binds to the original; const auto& [..] is a read-only view with no copy."
+notes: "The qualifier on the binding works like any auto declaration. Plain auto copies the source object and binds to the copy. auto& binds to the original, so you modify it in place. const auto& gives a read-only view and avoids the copy -- the right default for reading big objects."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "reference", url: "https://en.cppreference.com/w/cpp/language/reference" }
+run: true
+sanitizers: []

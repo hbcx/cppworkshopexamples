@@ -1,0 +1,11 @@
+title: "Anti-pattern: binding by value in a loop"
+standard: "C++17"
+difficulty: 3
+summary: "auto [a, b] copies the source, so writes are lost and big elements are copied each iteration."
+notes: "auto [..] copies the whole object first and binds to the copy, so modifying the names in a range-for changes the copy, not the element, and every iteration pays for a copy. Use auto& to modify the real elements, or const auto& to read big ones without copying. This is the structured-binding form of the same trap as auto value in a range-for."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "range-based for loop", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+run: true
+sanitizers: []

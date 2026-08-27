@@ -1,0 +1,8 @@
+scores:
+  alice = 90
+  bob = 75
+  carol = 88
+after +5:
+  alice = 95
+  bob = 80
+  carol = 93

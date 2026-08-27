@@ -1,0 +1,11 @@
+title: "Anti-pattern: capturing a binding in a lambda"
+standard: "C++17"
+difficulty: 3
+summary: "C++17 forbids capturing a structured binding in a lambda; copy it into a normal local first."
+notes: "A binding name is not an ordinary variable -- it names part of a hidden object -- and C++17 does not allow capturing it in a lambda (C++20 relaxed this). The fix is to copy the value into a normal local and capture that, or use an init-capture that creates a real variable."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+run: true
+sanitizers: []

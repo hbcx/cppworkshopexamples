@@ -1,0 +1,3 @@
+item is now bolts (M6) x15
+read-only view: bolts (M6) x15
+after value-copy write, item.count still 15

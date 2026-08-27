@@ -1,0 +1,11 @@
+title: "Bindings with if-init"
+standard: "C++17"
+difficulty: 2
+summary: "if (auto [it, ok] = m.insert(...); ok) unpacks a result and tests it in one scoped statement."
+notes: "C++17 lets an if or switch carry an initializer, and a structured binding fits it perfectly: unpack a function's result and test part of it in one place, with the names scoped to the if. map::insert and emplace return { iterator, bool }, which is the classic case."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "if statement with initializer", url: "https://en.cppreference.com/w/cpp/language/if" }
+run: true
+sanitizers: []

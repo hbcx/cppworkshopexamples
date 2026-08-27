@@ -1,0 +1,2 @@
+in scope: first, second
+kept safely: first (second)

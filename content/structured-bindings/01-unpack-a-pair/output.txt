@@ -1,0 +1,3 @@
+name = alice, id = 42
+point = (3, 4)
+x after += 10: 13, point.first still 3

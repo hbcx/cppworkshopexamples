@@ -1,0 +1,2 @@
+widget x7 @ 9.99
+via tie (qty ignored): widget @ 9.99

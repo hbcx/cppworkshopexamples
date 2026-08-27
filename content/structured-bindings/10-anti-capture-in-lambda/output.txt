@@ -1,0 +1,2 @@
+sum via captured locals = 30
+product via init-capture = 200

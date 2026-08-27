@@ -1,0 +1,2 @@
+added banana = 5
+banana already present, keeping 5

@@ -5,3 +5,5 @@
   note: "The homogeneous fixed-size cousin: the same tuple interface (get, tuple_size, structured bindings) when every element shares one type."
 - slug: "variadic-templates"
   note: "Where the elements come from and go back to: a variadic template collects a parameter pack into a tuple to store it, and std::apply unpacks a tuple into a call -- go there for parameter packs, expansion, fold expressions, and apply/invoke."
+- slug: "structured-bindings"
+  note: "How to unpack a returned tuple into named variables: auto [lo, hi, mean] = stats(v) instead of get<0>/get<1> at every use -- go there for the binding declaration, the value/reference choice, and the tuple protocol that makes a type bindable."

@@ -1,0 +1,11 @@
+title: "Binding to a struct"
+standard: "C++17"
+difficulty: 1
+summary: "Unpack a plain struct's members into names, in declaration order; you must name every one."
+notes: "Structured bindings work on any aggregate: each name binds to one public data member, in declaration order. You choose the local names, but they map positionally, not by member name, and you must bind every member -- no more, no fewer."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "aggregate initialization", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }
+run: true
+sanitizers: []

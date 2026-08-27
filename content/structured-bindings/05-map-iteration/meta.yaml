@@ -1,0 +1,11 @@
+title: "Iterating a map as [key, value]"
+standard: "C++17"
+difficulty: 2
+summary: "for (const auto& [key, value] : m) reads far better than it->first and it->second."
+notes: "The most common use of structured bindings. Each map element is a pair<const Key, Value>, so [key, value] names the two parts directly. Use const auto& to read without copying each pair, or auto& to modify the values in place -- the key stays const because map keys never change."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "range-based for loop", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+run: true
+sanitizers: []

@@ -1,0 +1,4 @@
+title: "Structured bindings"
+description: "The C++17 declaration that gives several names to the parts of one object, so you unpack a pair, tuple, struct or array in a single line instead of reaching for .first, get<0> or a member at a time. Covers unpacking a pair or tuple, binding to a struct's members and to an array, the value/reference/const-reference choice, iterating a map as [key, value], combining a binding with C++17 if-init, and making your own type bindable through the tuple protocol -- alongside the traps: binding by value when you meant a reference, having to name every member, a binding that a C++17 lambda cannot capture, and a reference binding that dangles. It is a readability feature with real rules underneath: what the hidden object is, and when a name is a copy versus a reference."
+sort_order: 132
+category: "Language & object model"

@@ -1,0 +1,12 @@
+title: "Making your own type bindable"
+standard: "C++17"
+difficulty: 3
+summary: "Implement tuple_size, tuple_element and get so a structured binding works on your class."
+notes: "A type need not be a pair, tuple, array or aggregate to support bindings. The tuple protocol makes any class bindable: specialize std::tuple_size (how many elements) and std::tuple_element (each element's type), and provide a get<I> found by argument-dependent lookup. This is exactly how pair, tuple and array become bindable."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "std::tuple_size", url: "https://en.cppreference.com/w/cpp/utility/tuple_size" }
+  - { name: "std::tuple_element", url: "https://en.cppreference.com/w/cpp/utility/tuple/tuple_element" }
+run: true
+sanitizers: []

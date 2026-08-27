@@ -1,0 +1,3 @@
+after value-binding loop, records[0].value = 1
+after reference loop, records[0].value = 101
+total = 306

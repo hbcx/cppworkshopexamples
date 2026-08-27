@@ -1,0 +1,11 @@
+title: "Binding to an array"
+standard: "C++17"
+difficulty: 2
+summary: "Unpack a built-in array into one name per element; the count must match exactly."
+notes: "A structured binding can unpack a C array too, one name per element, and the number of names must equal the array length. With plain auto each name is a copy; add & to share the array's storage and modify it in place."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "array", url: "https://en.cppreference.com/w/cpp/language/array" }
+run: true
+sanitizers: []

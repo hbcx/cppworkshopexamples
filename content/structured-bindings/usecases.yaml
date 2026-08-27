@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "Walking an associative container -- a map of settings, an index of counts -- where every loop body needs both the key and the mapped value."
+  why: "for (const auto& [key, value] : m) names both parts at once, so the body reads in domain terms instead of it->first and it->second. The iterator form works but hides which half is which, and copying into locals by hand is the boilerplate the binding removes; const auto& also skips a copy of each pair."
+  signal: "A range-for or iterator loop over a map or unordered_map that repeatedly writes it->first and it->second, or copies them into named locals at the top of the body."
+
+- problem: "A function that naturally produces two or three results -- a value and a status, a min and a max, a quotient and a remainder -- consumed right where it is called."
+  why: "Returning a pair, tuple or small struct and unpacking it with auto [lo, hi] gives each result a name at the call site with no out-parameters and no get<0>. Out-parameters force the caller to declare the variables first and read the call inside-out; a bare tuple without a binding pushes get<N> into every use."
+  signal: "A function taking non-const reference out-parameters to return extra values, or call sites that keep a returned pair and then read .first and .second separately."
+
+- problem: "Handling the result of an operation that reports both a position and whether it happened -- map or set insert and emplace, from_chars, find-or-insert helpers."
+  why: "if (auto [it, ok] = m.insert(...); ok) unpacks the { iterator, bool } result and branches on it in one statement, with the names scoped to the if. Splitting it into a declaration then an if leaves the iterator and flag visible after the branch, where a stale iterator is easy to misuse."
+  signal: "Code that stores the result of insert or emplace in a named pair, tests .second on the next line, and leaves both names in scope afterwards."
+
+- problem: "Pulling a record apart for a short calculation -- a row from a parser, a config struct, a point or colour -- where the whole object is only needed as its parts."
+  why: "auto [x, y, z] = record names the members for the few lines that use them, clearer than repeating record.x, record.y, record.z. It reads as one unpack instead of several member accesses, and const auto& avoids copying a large record. Reach for a reference binding when the parts must be written back."
+  signal: "A block that accesses several members of one struct by name repeatedly, or copies each member into a separate local before using it."

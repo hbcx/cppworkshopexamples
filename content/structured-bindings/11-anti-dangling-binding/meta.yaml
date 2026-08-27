@@ -1,0 +1,11 @@
+title: "Anti-pattern: a binding that dangles"
+standard: "C++17"
+difficulty: 3
+summary: "A reference binding follows the hidden object's lifetime; returning a reference to it dangles."
+notes: "auto&& [..] binds to the hidden object and extends a temporary's lifetime for as long as the binding lives -- but only that long. Returning a reference to a binding name, or keeping a pointer to it past the enclosing scope, dangles like any reference to a local. If a name must outlive the scope, bind by value and keep the copy."
+main_tags:
+  - { name: "structured bindings", url: "https://en.cppreference.com/w/cpp/language/structured_binding" }
+detailed_tags:
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+run: true
+sanitizers: []
