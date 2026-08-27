@@ -1,0 +1,11 @@
+title: "Default vs value initialization"
+standard: "C++11"
+difficulty: 2
+summary: "Value init with {} zeroes a built-in; default init of a local built-in leaves it indeterminate."
+notes: "The trap is a local built-in: int x; is a garbage value, while int x{}, int() and int{} are 0. Members with their own constructor (like std::string) are always fine. Prefer {} for built-ins so the value is always defined. We never read the indeterminate value here -- that would be undefined behaviour."
+main_tags:
+  - { name: "value initialization", url: "https://en.cppreference.com/w/cpp/language/value_initialization" }
+detailed_tags:
+  - { name: "default initialization", url: "https://en.cppreference.com/w/cpp/language/default_initialization" }
+run: true
+sanitizers: []

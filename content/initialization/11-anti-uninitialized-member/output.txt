@@ -1,0 +1,4 @@
+bad.owner   = alice  (the string member is fine)
+good.owner  = bob
+good.balance= 0
+good.active = no

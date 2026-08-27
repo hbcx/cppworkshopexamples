@@ -1,0 +1,11 @@
+title: "Anti-pattern: vector{n} is not n elements"
+standard: "C++11"
+difficulty: 3
+summary: "vector<int>{3} is one element equal to 3; vector<int>(3) is three zeros."
+notes: "Because {} prefers the initializer_list constructor, braces on a container treat the numbers as elements, not a size. Use () when the numbers are a size or a (count, value) fill, and {} when they are the actual elements. Types without an initializer_list ctor make the two forms agree, which is why this one surprises people."
+main_tags:
+  - { name: "std::initializer_list", url: "https://en.cppreference.com/w/cpp/utility/initializer_list" }
+detailed_tags:
+  - { name: "std::vector constructor", url: "https://en.cppreference.com/w/cpp/container/vector/vector" }
+run: true
+sanitizers: []

@@ -1,0 +1,3 @@
+t.tick() = 1
+u.tick() = 1
+v.tick() = 1

@@ -1,0 +1,4 @@
+auto a{5}        is int? 1
+auto b = {5}     is initializer_list? 1
+auto c = {1,2,3} size = 3
+auto plain = 5   is int? 1

@@ -1,0 +1,12 @@
+title: "The forms of initialization"
+standard: "C++11"
+difficulty: 1
+summary: "The five ways to give an object its first value: default, copy, direct, list, and copy-list."
+notes: "These are the names the rest of the section uses. Default init has no initializer; copy init is = value; direct init is (args); list init is {args} and is the modern default; copy-list init is = {args}. For a built-in, {} value-initializes to zero."
+main_tags:
+  - { name: "initialization", url: "https://en.cppreference.com/w/cpp/language/initialization" }
+detailed_tags:
+  - { name: "list initialization", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+  - { name: "value initialization", url: "https://en.cppreference.com/w/cpp/language/value_initialization" }
+run: true
+sanitizers: []

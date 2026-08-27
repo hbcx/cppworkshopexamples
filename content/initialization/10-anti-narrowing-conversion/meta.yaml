@@ -1,0 +1,11 @@
+title: "Anti-pattern: silent narrowing through = and ()"
+standard: "C++11"
+difficulty: 3
+summary: "= and () quietly narrow across numeric types; braces would have caught it at compile time."
+notes: "std::uint8_t out = 300 keeps only the low 8 bits (44), and int r = 4.9 drops the fraction (4) -- both silent. Brace init makes each of those lines a compile error, forcing an explicit cast where the loss is intended. For values that genuinely fit, braces stay silent and safe."
+main_tags:
+  - { name: "narrowing conversion", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+detailed_tags:
+  - { name: "list initialization", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+run: true
+sanitizers: []

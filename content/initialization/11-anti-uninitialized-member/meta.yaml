@@ -1,0 +1,11 @@
+title: "Anti-pattern: a constructor that forgets a member"
+standard: "C++11"
+difficulty: 3
+summary: "A built-in member left out of the constructor holds a garbage value; reading it is undefined behaviour."
+notes: "Class members with their own constructor (std::string) are fine, but a raw int/bool/pointer the constructor forgets is indeterminate, and the bug hides until that path runs. A default member initializer (int balance{0};) fixes it once, so even a constructor that forgets the member gets a defined value. We never read the indeterminate member here."
+main_tags:
+  - { name: "default initialization", url: "https://en.cppreference.com/w/cpp/language/default_initialization" }
+detailed_tags:
+  - { name: "default member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members" }
+run: true
+sanitizers: []

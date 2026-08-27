@@ -1,0 +1,4 @@
+byte from 300 (silent): 44
+int = 4.9 (silent):     4
+int{(int)(4.9+0.5)}:    5
+byte{200}:              200

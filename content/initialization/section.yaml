@@ -1,0 +1,4 @@
+title: "Initialization"
+description: "How an object gets its first value, and why C++ has so many ways to do it. Covers the forms of initialization -- default, copy, direct, and brace -- the difference between default and value initialization, why brace init forbids narrowing conversions, aggregate initialization for plain structs and the C++20 designated initializers that name each field, the initializer_list constructor and how braces prefer it, and default member initializers with declaration order -- alongside the traps: the most vexing parse, vector{n} versus vector(n), a silent narrowing through = or (), a constructor that forgets a built-in member, and the auto x{...} deduction surprise. This is the layer that decides what value an object starts life with."
+sort_order: 130
+category: "Language & object model"

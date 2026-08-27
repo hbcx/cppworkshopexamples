@@ -1,0 +1,4 @@
+vector<int>{3}   -> size 1, front 3
+vector<int>(3)   -> size 3, front 0
+vector<int>{3, 0} -> size 2
+vector<int>(3, 0) -> size 3

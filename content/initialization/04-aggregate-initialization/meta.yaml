@@ -1,0 +1,12 @@
+title: "Aggregate initialization"
+standard: "C++17"
+difficulty: 2
+summary: "Brace the members of a plain struct directly -- no constructor needed."
+notes: "An aggregate has no user-declared constructors, no private or protected data members, no virtual functions, and public bases. You list its members in order; missing trailing ones are value-initialized; {} zeroes everything. Since C++17 an aggregate may have public base classes, whose members come first in the braces. Leaving a field out draws a -Wmissing-field-initializers warning, so this example turns -Werror off to show it."
+werror: false
+main_tags:
+  - { name: "aggregate initialization", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }
+detailed_tags:
+  - { name: "value initialization", url: "https://en.cppreference.com/w/cpp/language/value_initialization" }
+run: true
+sanitizers: []

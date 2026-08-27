@@ -1,0 +1,5 @@
+Point: 3, 4
+Segment diagonal: (0,0) -> (3,4)
+Point half:   5, 0
+Point origin: 0, 0
+Labeled corner: 1, 2

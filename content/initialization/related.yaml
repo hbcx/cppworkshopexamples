@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "value-categories"
+  note: "The neighbouring foundation: what makes an expression an lvalue or rvalue and how references bind. Go there to see which constructor an initializer actually selects, and why a temporary binds to const& but not to T&."
+- slug: "vectors"
+  note: "Where the initializer_list versus size trap lives for real: vector<int>{n} is one element, vector<int>(n) is n of them, and the same rule shapes every standard container's constructors."
+- slug: "move-semantics"
+  note: "The next step once an object exists: constructing one FROM another by stealing its resources instead of copying, and the rule of five that decides which special members you must write."
+- slug: "lambdas"
+  note: "Initialization inside a closure: init-capture ([n = value], [p = std::move(ptr)]) creates and initializes a member of the closure object, using the same brace and copy rules this section covers."

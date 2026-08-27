@@ -1,0 +1,6 @@
+value-init count: 0
+value-init label: ""
+int():    0
+int{}:    0
+double{}: 0
+always-defined int{}: 0

@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "Setting a house style for a codebase that moves values between numeric types -- reading config as int and storing it in fixed-width fields, or porting between builds where a wider type is squeezed into a narrower one."
+  why: "Brace initialization turns a narrowing conversion into a compile error, so a lossy assignment is caught by the build instead of surfacing as a truncated value in production. Plain = and () accept the same conversion silently, which leaves a code review as the only thing between you and the bug."
+  signal: "Initializations across integer widths or from floating point to integer written with = or (), especially in configuration parsing and serialization code."
+
+- problem: "Writing a template that must produce a zero or default value for its type parameter -- an accumulator's starting value, a cleared slot in a buffer, a default returned when a lookup misses."
+  why: "T{} value-initializes for every type: 0 for built-ins, the default constructor for classes, every member zeroed for aggregates. T() mostly works too, but a bare T x; leaves a built-in indeterminate, and hard-coding 0 fails to compile for class types. The braced form is the one spelling that covers both."
+  signal: "A template that special-cases built-in versus class types to get a default, or one that writes T x; without an initializer and later reads it."
+
+- problem: "Modeling plain data -- a config record, a parsed row, a small bundle of values returned from a function -- where the type is just fields with no invariant to enforce."
+  why: "An aggregate needs no constructor: you brace the members directly, and adding a field updates call sites naturally while the type stays a trivial, copyable record. Writing a constructor whose whole body copies each argument into the matching member is boilerplate that buys nothing and can even block aggregate features."
+  signal: "A small struct whose constructor only assigns each argument to the matching member, one parameter per field, with no validation."
+
+- problem: "Reviewing or debugging code that builds a container with a size, where the length comes out wrong -- a buffer that should hold N slots holds one, or a fill that should repeat a value instead stored the count."
+  why: "Braces prefer the initializer_list constructor, so vector<int>(n) and vector<int>{n} mean different things: n zeros versus a single element n. Knowing the rule turns a baffling off-by-everything bug into a one-character fix, and tells you which form to reach for on purpose."
+  signal: "A container built with {} whose braced values were meant as a size or a (count, value) fill, or a length that is 1 where the code expected many."

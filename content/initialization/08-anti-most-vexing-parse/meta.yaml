@@ -1,0 +1,11 @@
+title: "Anti-pattern: the most vexing parse"
+standard: "C++11"
+difficulty: 3
+summary: "Timer t(Clock()); declares a function, not an object; braces fix it."
+notes: "When a variable-with-constructor-call could also be read as a parameter list, C++ parses the whole line as a function declaration. Timer t(Clock()) declares a function t, and even Timer u() declares a function. Braces cannot be a declaration, so {} is the fix and the habit to build. The trap lines are shown in comments -- they compile as declarations but t/u are not objects."
+main_tags:
+  - { name: "most vexing parse", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+detailed_tags:
+  - { name: "list initialization", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+run: true
+sanitizers: []

@@ -1,0 +1,12 @@
+title: "Anti-pattern: auto x{...} is not what you think"
+standard: "C++17"
+difficulty: 3
+summary: "With auto, a single braced value is that type, but = {list} is a std::initializer_list."
+notes: "auto follows a special brace rule (settled in C++17): auto a{5} is int, but auto b = {5} and auto c = {1,2,3} are std::initializer_list<int>, and auto d{1,2} is ill-formed. Before C++17 even auto a{5} was an initializer_list. Prefer auto x = value; use auto x{value} only for a single value whose type you actually want."
+main_tags:
+  - { name: "auto", url: "https://en.cppreference.com/w/cpp/language/auto" }
+detailed_tags:
+  - { name: "std::initializer_list", url: "https://en.cppreference.com/w/cpp/utility/initializer_list" }
+  - { name: "list initialization", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+run: true
+sanitizers: []

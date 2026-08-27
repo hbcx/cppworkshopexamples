@@ -1,4 +1,4 @@
 title: "Lambdas"
 description: "Lambda expressions from the ground up: a closure is an object with an anonymous type and a call operator, and its power is in how it captures the surrounding scope. Covers the basics, capture by value and by reference, default and mixed captures, mutable, init-capture including capture by move, capturing this and *this, generic and template and variadic lambdas, return-type deduction, storing lambdas in auto / a template parameter / std::function, the captureless-to-function-pointer conversion, constexpr and consteval lambdas, the immediately-invoked lambda, and recursion with deducing this -- alongside the anti-patterns: a dangling reference capture, capturing a loop variable by reference, [=] capturing this rather than members by value, reaching for std::function by default, and misreading what mutable does."
-sort_order: 130
+sort_order: 131
 category: "Language & object model"

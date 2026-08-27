@@ -1,0 +1,11 @@
+title: "Default member initializers"
+standard: "C++11"
+difficulty: 2
+summary: "Give a data member a value in the class body; a constructor that sets it overrides the default."
+notes: "A default member initializer keeps constructors small: every constructor that does not touch the member uses the in-class value. Members are initialized in DECLARATION order, not in the order the constructor's init list writes them -- if one member is built from another, declare the source first."
+main_tags:
+  - { name: "default member initializer", url: "https://en.cppreference.com/w/cpp/language/data_members" }
+detailed_tags:
+  - { name: "member initializer list", url: "https://en.cppreference.com/w/cpp/language/constructor" }
+run: true
+sanitizers: []

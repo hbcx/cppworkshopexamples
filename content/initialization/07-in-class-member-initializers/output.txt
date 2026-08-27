@@ -1,0 +1,3 @@
+localhost:8080 retries=3 secure=no
+localhost:9000 retries=3 secure=no
+first=10 second=11

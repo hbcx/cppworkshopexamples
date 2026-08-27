@@ -1,0 +1,11 @@
+title: "The initializer_list constructor"
+standard: "C++11"
+difficulty: 2
+summary: "A std::initializer_list constructor lets a type be built from a braced list -- and {} prefers it."
+notes: "When you use {}, the compiler strongly prefers an initializer_list constructor if the braced values fit, even over another constructor that would also match. So {3, 0} is a two-element list, while (3, 0) picks the (count, value) constructor. This same rule drives the standard containers."
+main_tags:
+  - { name: "std::initializer_list", url: "https://en.cppreference.com/w/cpp/utility/initializer_list" }
+detailed_tags:
+  - { name: "list initialization", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+run: true
+sanitizers: []

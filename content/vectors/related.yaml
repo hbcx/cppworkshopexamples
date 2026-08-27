@@ -26,3 +26,5 @@
   note: "Setting a vector's contents: fill and generate write values into it, and the fill constructor v(n, value) or resize(n, value) beats construct-then-fill -- go there for initializing, building with generate_n, and iota sequences."
 - slug: "swap-ranges"
   note: "The O(1) member swap and the swap-with-empty capacity trick: a vector swaps by exchanging its buffer pointer, and clear() keeps capacity where swap-with-empty releases it -- go there for swap, iter_swap, and swap_ranges."
+- slug: "initialization"
+  note: "Why vector<int>{n} and vector<int>(n) build different vectors: braces prefer the initializer_list constructor, so {n} is one element and (n) is a size -- go there for the forms of initialization and the brace-versus-paren rule behind this trap."

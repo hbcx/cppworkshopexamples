@@ -1,0 +1,12 @@
+title: "Designated initializers"
+standard: "C++20"
+difficulty: 2
+summary: "Name the members you initialize -- Config{.host = h, .port = p} -- a C++20 aggregate feature, not assignment."
+notes: "The .x = 5 looks like assignment but it is initialization: the member is built with that value as the object is created, never assigned afterwards. C++ is stricter than C: designators must be in declaration order, you cannot mix designated and plain initializers, and it works only for aggregates. Skipped members are value-initialized (both compilers warn -Wmissing-field-initializers, so this example turns -Werror off), and narrowing is still rejected."
+werror: false
+main_tags:
+  - { name: "aggregate initialization", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }
+detailed_tags:
+  - { name: "designated initializers", url: "https://en.cppreference.com/w/cpp/language/aggregate_initialization" }
+run: true
+sanitizers: []

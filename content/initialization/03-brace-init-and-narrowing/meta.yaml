@@ -1,0 +1,11 @@
+title: "Brace init forbids narrowing"
+standard: "C++11"
+difficulty: 2
+summary: "Braces reject conversions that can lose data; () and = accept them silently."
+notes: "This is the main practical reason to prefer {}. int(2.5) and int = 2.5 silently truncate to 2; int{2.5} is a compile error. A value that fits is allowed, so braces are safe, not restrictive. The rejected lines are shown in comments -- they would not compile."
+main_tags:
+  - { name: "list initialization", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+detailed_tags:
+  - { name: "narrowing conversion", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+run: true
+sanitizers: []

@@ -1,0 +1,5 @@
+int(pi)  = 3
+int = pi = 3
+int{(int)pi} = 3
+int{7}          = 7
+char{65} as int = 65

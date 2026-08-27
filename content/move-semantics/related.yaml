@@ -4,6 +4,8 @@
   note: "The language model underneath these mechanics: what makes an expression an lvalue or an rvalue, how references bind, and why std::move is just a cast. Go there to understand WHY the move constructor is chosen only for temporaries."
 - slug: "perfect-forwarding"
   note: "The generic counterpart to std::move: a forwarding reference plus std::forward passes an argument on while keeping its category, so a wrapper adds no copies. Go there for forwarding references, reference collapsing, and forward vs move."
+- slug: "initialization"
+  note: "How an object gets its first value before it is ever moved: the forms of initialization, value vs default init, aggregates, and why brace init forbids narrowing. Go there for the initializer rules underneath every constructor these moves add to."
 - slug: "vectors"
   note: "Where moves pay off most: a vector reallocation moves its elements instead of copying them, but only when the move constructor is noexcept."
 - slug: "lists"

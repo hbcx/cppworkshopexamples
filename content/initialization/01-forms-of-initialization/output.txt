@@ -1,0 +1,6 @@
+default (empty):  ""
+copy:             copy
+direct (5, '*'):  *****
+list:             list
+copy-list:        copy-list
+ints: 42 7 3 0
