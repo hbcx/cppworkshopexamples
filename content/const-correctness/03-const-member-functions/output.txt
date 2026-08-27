@@ -1,0 +1,3 @@
+balance 500
+balance -300 (overdrawn)
+frozen balance = 1000

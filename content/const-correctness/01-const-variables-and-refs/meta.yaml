@@ -1,0 +1,11 @@
+title: "const objects and const& parameters"
+standard: "C++11"
+difficulty: 1
+summary: "const means cannot be modified through this name; const T& is the default read-only parameter."
+notes: "A const T& parameter binds to an lvalue OR a temporary and copies nothing, so it is the go-to way to pass something you only read. A const reference is a read-only view of an existing object. Top-level const (the object is const) differs from low-level const (refers or points to const)."
+main_tags:
+  - { name: "const", url: "https://en.cppreference.com/w/cpp/language/cv" }
+detailed_tags:
+  - { name: "reference", url: "https://en.cppreference.com/w/cpp/language/reference" }
+run: true
+sanitizers: []

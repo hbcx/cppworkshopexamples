@@ -5,6 +5,8 @@
   note: "The direct application: a forwarding reference plus std::forward passes an argument on while preserving its lvalue-ness or rvalue-ness. Go there for forwarding references, reference collapsing, and writing wrappers that add no copies."
 - slug: "initialization"
   note: "The syntax that triggers these binding rules: the forms of initialization and which constructor each one selects, brace vs paren, aggregates, and why {} prefers an initializer_list. Go there to connect an expression's category to the initializer that consumes it."
+- slug: "const-correctness"
+  note: "Where the binding rules become an API convention: const T& is the read-only parameter that takes both lvalues and temporaries with no copy, and const methods make a type usable through it. Go there for const objects, const member functions, and mutable."
 - slug: "decltype-declval"
   note: "The type-deduction side of the same coin: decltype((expr)) reflects the value category, and std::declval produces an rvalue of a type in an unevaluated context. Go there for deducing types from expressions without evaluating them."
 - slug: "type-traits"

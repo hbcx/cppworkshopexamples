@@ -1,0 +1,11 @@
+title: "Anti-pattern: returning a const value by value"
+standard: "C++11"
+difficulty: 3
+summary: "const T by value disables moves on the result, so callers copy where they would have moved."
+notes: "Returning const T (not const T&) was once suggested to stop writes to a temporary, but since C++11 it backfires: a const prvalue cannot bind to T&&, so it is copied instead of moved. You lose move semantics for no real gain. Return a plain value; use const only on references and members."
+main_tags:
+  - { name: "const", url: "https://en.cppreference.com/w/cpp/language/cv" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+run: true
+sanitizers: []

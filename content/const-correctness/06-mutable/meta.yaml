@@ -1,0 +1,11 @@
+title: "mutable members and logical const"
+standard: "C++11"
+difficulty: 2
+summary: "A mutable member can change inside a const method -- for a cache, a computed-once value, or a lock."
+notes: "mutable is for state that is not part of the object's observable value: a cache, a lazily computed result, a mutex. The object stays logically const -- its value does not change -- even though a hidden field does. Do not use it to sneak real state changes past const."
+main_tags:
+  - { name: "mutable", url: "https://en.cppreference.com/w/cpp/language/cv" }
+detailed_tags:
+  - { name: "const member function", url: "https://en.cppreference.com/w/cpp/language/member_functions" }
+run: true
+sanitizers: []

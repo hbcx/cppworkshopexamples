@@ -1,0 +1,5 @@
+push_back(makeConst()):
+  COPY const-return
+push_back(makePlain()):
+  MOVE plain-return
+stored: const-return, plain-return

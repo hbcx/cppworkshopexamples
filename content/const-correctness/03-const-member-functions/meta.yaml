@@ -1,0 +1,11 @@
+title: "const member functions"
+standard: "C++11"
+difficulty: 2
+summary: "A const method promises not to modify the object; only const methods run on a const object."
+notes: "Inside a const member function, this is a pointer to const, so it may read members but not write them. A const object or a const reference can call only const methods -- so marking your read-only methods const is exactly what makes your type usable in const contexts, such as behind a const& parameter."
+main_tags:
+  - { name: "const member function", url: "https://en.cppreference.com/w/cpp/language/member_functions" }
+detailed_tags:
+  - { name: "this pointer", url: "https://en.cppreference.com/w/cpp/language/this" }
+run: true
+sanitizers: []

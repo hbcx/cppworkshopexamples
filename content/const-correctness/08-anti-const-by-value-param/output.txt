@@ -1,0 +1,3 @@
+doubled(21) = 42
+v unchanged = 21
+lengthOf    = 5

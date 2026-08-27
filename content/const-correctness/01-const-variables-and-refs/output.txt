@@ -1,0 +1,5 @@
+limit = 100
+length of lvalue:    11
+length of temporary: 5
+view = hello world (aliases owned, read-only)
+half = 5

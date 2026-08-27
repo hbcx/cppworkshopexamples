@@ -1,0 +1,11 @@
+title: "Anti-pattern: const_cast to write to a const object"
+standard: "C++11"
+difficulty: 3
+summary: "Stripping const with const_cast and then writing is undefined behaviour if the object is truly const."
+notes: "const_cast has exactly one safe use: calling a function that is not const-correct on an object that is NOT actually const. Casting away const to modify a genuinely const object is undefined behaviour, even though it compiles -- the compiler may keep the object in read-only memory or fold its value into callers. The real fix is to make the API const-correct."
+main_tags:
+  - { name: "const_cast", url: "https://en.cppreference.com/w/cpp/language/const_cast" }
+detailed_tags:
+  - { name: "const", url: "https://en.cppreference.com/w/cpp/language/cv" }
+run: true
+sanitizers: []

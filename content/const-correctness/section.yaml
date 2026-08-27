@@ -1,0 +1,4 @@
+title: "Const correctness"
+description: "Using const to say what your code will not change, and letting the compiler enforce it. Covers const objects and read-only const& parameters, the two independent consts on a pointer, const member functions and why they are what makes a type usable through a const reference, const/non-const overload pairs like operator[], the const data members that are fixed for an object's whole life and the assignment they cost, the mutable members that hold a cache or lock without breaking logical const, and std::as_const and cbegin for forcing the const path -- alongside the traps: a meaningless top-level const on a by-value parameter, a const method that mutates through a pointer member, const_cast used to write to a truly const object, and a const return value that quietly disables moves. Const correctness is a compile-time contract about who may change what."
+sort_order: 131
+category: "Language & object model"

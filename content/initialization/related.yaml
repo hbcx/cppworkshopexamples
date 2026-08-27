@@ -7,3 +7,5 @@
   note: "The next step once an object exists: constructing one FROM another by stealing its resources instead of copying, and the rule of five that decides which special members you must write."
 - slug: "lambdas"
   note: "Initialization inside a closure: init-capture ([n = value], [p = std::move(ptr)]) creates and initializes a member of the closure object, using the same brace and copy rules this section covers."
+- slug: "const-correctness"
+  note: "The other qualifier you attach at initialization: a const object must be given its value here and never again, and const members are set in the constructor's init list. Go there for const objects, const methods, and mutable."

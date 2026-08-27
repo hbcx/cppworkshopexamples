@@ -6,6 +6,8 @@
   note: "The generic counterpart to std::move: a forwarding reference plus std::forward passes an argument on while keeping its category, so a wrapper adds no copies. Go there for forwarding references, reference collapsing, and forward vs move."
 - slug: "initialization"
   note: "How an object gets its first value before it is ever moved: the forms of initialization, value vs default init, aggregates, and why brace init forbids narrowing. Go there for the initializer rules underneath every constructor these moves add to."
+- slug: "const-correctness"
+  note: "Why const and moving pull against each other: a move needs a non-const source, so a const object or a const-returned value is quietly copied instead. Go there for const objects, const methods, and the const-return anti-pattern that defeats moves."
 - slug: "vectors"
   note: "Where moves pay off most: a vector reallocation moves its elements instead of copying them, but only when the move constructor is noexcept."
 - slug: "lists"

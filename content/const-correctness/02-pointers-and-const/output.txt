@@ -1,0 +1,4 @@
+pointer-to-const now reads: 2
+const-pointer wrote a = 9
+const-pointer-to-const reads: 2
+reference-to-const reads a = 9

@@ -1,0 +1,11 @@
+title: "const and non-const overloads"
+standard: "C++11"
+difficulty: 2
+summary: "Two versions of a method differing only in const: writable on a mutable object, read-only on a const one."
+notes: "The const overload is chosen on a const object and returns a read-only reference; the non-const overload is chosen on a mutable object and returns a writable reference. This is exactly how the standard containers' operator[] and at() work."
+main_tags:
+  - { name: "const member function", url: "https://en.cppreference.com/w/cpp/language/member_functions" }
+detailed_tags:
+  - { name: "operator[]", url: "https://en.cppreference.com/w/cpp/language/operators" }
+run: true
+sanitizers: []

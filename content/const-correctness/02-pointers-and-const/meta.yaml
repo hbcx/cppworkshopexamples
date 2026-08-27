@@ -1,0 +1,11 @@
+title: "The two consts on a pointer"
+standard: "C++11"
+difficulty: 2
+summary: "const T* freezes the pointee; T* const freezes the pointer; read right to left."
+notes: "A pointer has two independent things you can make const: what it points at (const T*, cannot write through it) and where it points (T* const, cannot repoint it). Read the declaration right to left. A reference to const is the pointer-to-const case, and references can never be repointed anyway."
+main_tags:
+  - { name: "const", url: "https://en.cppreference.com/w/cpp/language/cv" }
+detailed_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+run: true
+sanitizers: []

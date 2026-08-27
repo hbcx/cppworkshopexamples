@@ -1,0 +1,11 @@
+title: "const data members"
+standard: "C++11"
+difficulty: 2
+summary: "A const member is set once in the constructor's init list -- and it makes the class non-assignable."
+notes: "A const data member gets its value in the constructor's member initializer list, never in the body, and never changes again. The consequence people miss: a class with a const member cannot be ASSIGNED, because there is no way to reassign the const member -- copy and move construction still work, but copy and move assignment are implicitly deleted. A reference member behaves the same way. Reach for a const member only when you truly never reassign the object."
+main_tags:
+  - { name: "const", url: "https://en.cppreference.com/w/cpp/language/cv" }
+detailed_tags:
+  - { name: "member initializer list", url: "https://en.cppreference.com/w/cpp/language/constructor" }
+run: true
+sanitizers: []

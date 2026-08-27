@@ -1,0 +1,11 @@
+title: "Anti-pattern: top-level const on a by-value parameter"
+standard: "C++11"
+difficulty: 3
+summary: "void f(const int) is the same function as void f(int); the const only affects the body."
+notes: "In a function's type, a top-level const on a by-value parameter is ignored, so f(int) and f(const int) are one function, not an overload pair, and you cannot declare both. The const affects only the function's own local copy, never the caller. A const on a pointer or reference parameter is low-level and real: it protects what the caller passed."
+main_tags:
+  - { name: "const", url: "https://en.cppreference.com/w/cpp/language/cv" }
+detailed_tags:
+  - { name: "overload resolution", url: "https://en.cppreference.com/w/cpp/language/overload_resolution" }
+run: true
+sanitizers: []

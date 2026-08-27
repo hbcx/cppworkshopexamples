@@ -1,0 +1,11 @@
+title: "std::as_const and cbegin"
+standard: "C++17"
+difficulty: 2
+summary: "Force the const path on a mutable object: cbegin gives a const_iterator, std::as_const a const view."
+notes: "Sometimes you have a mutable object but want the const behaviour: pick a const overload, get a const_iterator, or make sure code you hand it to cannot modify it. std::as_const (C++17) gives a const view of an lvalue with no copy; cbegin/cend hand out const_iterators. The object itself stays mutable."
+main_tags:
+  - { name: "std::as_const", url: "https://en.cppreference.com/w/cpp/utility/as_const" }
+detailed_tags:
+  - { name: "const_iterator", url: "https://en.cppreference.com/w/cpp/container/vector/begin" }
+run: true
+sanitizers: []

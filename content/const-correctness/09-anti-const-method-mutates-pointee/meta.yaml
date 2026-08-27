@@ -1,0 +1,11 @@
+title: "Anti-pattern: a const method that mutates through a pointer"
+standard: "C++11"
+difficulty: 3
+summary: "const does not reach a pointer member's pointee, so a const method can silently change the data."
+notes: "const applies to the members themselves, not to what a pointer member points at. A const method may not repoint the pointer, but it can freely write through it -- the object looks const while its data changes. Fix by storing the data by value, marking the pointee const, or using std::experimental::propagate_const."
+main_tags:
+  - { name: "const member function", url: "https://en.cppreference.com/w/cpp/language/member_functions" }
+detailed_tags:
+  - { name: "const", url: "https://en.cppreference.com/w/cpp/language/cv" }
+run: true
+sanitizers: []

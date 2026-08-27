@@ -1,0 +1,4 @@
+via cbegin: 1 2 3 
+as_const size  = 3
+as_const front = 1
+after v[0]=99, view front = 99

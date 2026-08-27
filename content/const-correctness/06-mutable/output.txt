@@ -1,0 +1,4 @@
+lines =   (computed line count)
+3
+lines =   (served from cache)
+3

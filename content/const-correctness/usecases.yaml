@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "Deciding how a function should take an argument it only reads -- a lookup key, a message to parse, a config to inspect -- without copying it and without letting the function change it."
+  why: "const T& binds to both an lvalue and a temporary and copies nothing, while promising the caller their object is untouched. Taking it by value copies; taking it by plain T& forbids passing a temporary and hints the function will modify it. const& is the one form that says read-only and costs nothing."
+  signal: "A parameter taken by value that is only read inside the function, or a T& parameter the body never writes to."
+
+- problem: "Building a type whose objects will be passed around and stored behind const references -- shared state read by many callers, a value handed to a function as const T&."
+  why: "Only const member functions can be called through a const reference, so a query left non-const makes the whole object unusable in const contexts and forces callers to take a mutable reference they do not need. Marking every read-only method const is what lets the type flow through const-correct code."
+  signal: "A getter or query method that is not marked const, or callers forced to hold a non-const reference just to call read-only methods."
+
+- problem: "A read-only method that is expensive the first time -- a parsed size, a hash, a formatted string -- or one that must take a lock, on an object that is otherwise logically const."
+  why: "A mutable member lets the cache, the computed-once value, or the mutex change inside a const method while the object's observable value stays fixed. Dropping const instead would spread mutability to every caller; caching outside the object duplicates the bookkeeping the object should own."
+  signal: "A const method that recomputes the same result every call, or a class that abandons const on a method only to cache a value or lock a mutex."
+
+- problem: "Working in a large codebase where a function must not modify data it borrows -- a callback handed shared state, a routine touching a buffer other threads read."
+  why: "const on the parameter and the methods turns an accidental write into a compile error at the exact call, instead of a bug found in production. Comments and code review are the only alternative, and they do not fail the build. Const correctness is a contract the compiler checks."
+  signal: "Shared or borrowed data passed as a non-const reference or pointer, where nothing documents or enforces that the callee leaves it unchanged."

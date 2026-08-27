@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "value-categories"
+  note: "The binding rules underneath const& parameters: why a temporary binds to const T& but not to T&, and how value category decides which reference and overload win. Go there for lvalue vs rvalue and the reference-binding table."
+- slug: "move-semantics"
+  note: "Where const and moves collide: a move needs a non-const source, so a const object or a const-returned value is copied instead of moved. Go there for move constructors, std::move, and the rule of five."
+- slug: "initialization"
+  note: "How a const object gets its one and only value: it must be initialized at declaration, and const members are set in the constructor's init list. Go there for the forms of initialization and default member initializers."
+- slug: "lambdas"
+  note: "The other face of mutable: a lambda is const-by-default and mutable lets its body change captured-by-value members -- the same keyword, the closure version of the cache trick here. Go there for captures and how a closure stores what it holds."

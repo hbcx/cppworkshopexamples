@@ -1,0 +1,2 @@
+before: storage[0] = 7
+after:  storage[0] = 42
