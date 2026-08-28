@@ -1,0 +1,12 @@
+title: "Anti-pattern: a signature typo that fails to override"
+standard: "C++11"
+difficulty: 3
+summary: "A derived function whose signature does not exactly match the base virtual -- a missing const, a wrong parameter type -- silently becomes a new function instead of an override."
+notes: "Overriding requires an exact signature match, including const. Get it slightly wrong and you have not overridden anything: you have added an unrelated function, the base virtual is still what runs through a base handle, and under a typical -Wall build nothing warns you. Here a derived describe() forgets the const, so a call through const Base& runs the base version and the derived text never appears. The extra warning -Woverloaded-virtual does flag this shape (and fires in this example, which is why it opts out of -Werror), but it is off by default; the reliable guard is to write override on every intended override, which turns the mismatch into a compile error that names the problem."
+main_tags:
+  - { name: "override specifier", url: "https://en.cppreference.com/w/cpp/language/override" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+run: true
+sanitizers: []
+werror: false

@@ -1,0 +1,2 @@
+bad stack size after outside clear(): 0
+good stack popped: 2, size now 1

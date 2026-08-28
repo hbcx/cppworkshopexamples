@@ -1,0 +1,11 @@
+title: "A base class and a derived class"
+standard: "C++11"
+difficulty: 1
+summary: "Public inheritance models an is-a relationship: the derived object contains a base subobject, reuses its members, and passes arguments up to the base constructor."
+notes: "A Dog is-an Animal, so Dog inherits from Animal publicly. The derived object holds a base subobject, which its constructor initializes first, by name, in the member-initializer list (: Animal(name)). protected members are visible to the derived class but not to outside code, which is how a base shares state with its children without making it public. Public inheritance says every Dog can be used where an Animal is expected."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "derived class", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+run: true
+sanitizers: []

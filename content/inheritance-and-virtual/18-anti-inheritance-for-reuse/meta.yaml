@@ -1,0 +1,11 @@
+title: "Anti-pattern: inheriting for reuse, not is-a"
+standard: "C++11"
+difficulty: 3
+summary: "Publicly inheriting a class just to reuse its code exposes its whole interface, so callers can bypass the invariants the derived class was meant to enforce."
+notes: "Public inheritance means is-a and hands the derived class's users every base operation. Derive a Stack from std::vector to reuse the storage and callers can also call insert, operator[], and clear, none of which respect last-in-first-out -- the invariant is unenforceable. Ask whether every base operation should be a valid operation on the derived type; if not, it is not an is-a relationship. The fix is composition: hold the container as a private member and expose only the operations that keep the invariant."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+run: true
+sanitizers: []

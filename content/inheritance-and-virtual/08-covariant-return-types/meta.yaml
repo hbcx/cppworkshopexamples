@@ -1,0 +1,11 @@
+title: "Covariant return types for clone"
+standard: "C++11"
+difficulty: 2
+summary: "An override may return a pointer or reference to a more derived type than the base declares -- so a base Animal* clone() can be overridden by Dog* clone()."
+notes: "Normally an override must match the base signature, but the return type is allowed to be covariant: if the base returns Base*, the override may return Derived* (a pointer to a class derived from the base return type). This is what makes a virtual clone() -- the standard way to copy a polymorphic object through a base handle -- return the right static type when called on the derived class, so no cast is needed. Note the covariance works for raw pointers and references, not for smart pointers, so clone() returns a raw pointer that the caller wraps in a smart pointer to own."
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "covariant return type", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+run: true
+sanitizers: []

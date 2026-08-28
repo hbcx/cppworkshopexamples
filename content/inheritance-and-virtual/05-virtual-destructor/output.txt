@@ -1,0 +1,5 @@
+Base()
+Derived()
+-- destroying through Base* --
+~Derived()  (frees the resource)
+~Base()

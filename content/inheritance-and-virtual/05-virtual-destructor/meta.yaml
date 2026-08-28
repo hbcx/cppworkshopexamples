@@ -1,0 +1,11 @@
+title: "Why a base needs a virtual destructor"
+standard: "C++11"
+difficulty: 2
+summary: "If you delete a derived object through a base pointer, the base destructor must be virtual, or only the base part is destroyed and the derived cleanup is skipped."
+notes: "When a class is used polymorphically -- held and deleted through a base pointer -- deleting it runs only the base destructor unless that destructor is virtual. A virtual destructor makes delete follow the same dynamic dispatch as any other virtual, so the derived destructor runs first, then the base. Without it, a derived class that owns a resource leaks it, and the standard calls the whole thing undefined behavior. Rule: a class with any virtual function should have a virtual (or protected) destructor. The non-virtual case is the first anti-pattern in this section."
+main_tags:
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+run: true
+sanitizers: []

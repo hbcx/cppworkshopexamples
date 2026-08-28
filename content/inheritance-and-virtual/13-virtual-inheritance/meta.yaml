@@ -1,0 +1,11 @@
+title: "Virtual inheritance solves the diamond"
+standard: "C++11"
+difficulty: 3
+summary: "When two bases share a common base and a class inherits both, virtual inheritance makes that common base a single shared subobject instead of two."
+notes: "A diamond -- Copier inherits Scanner and Printer, both of which inherit Device -- normally gives Copier two Device subobjects. Declaring the inheritance virtual (Scanner : virtual Device) collapses them into one shared Device, so copier.id is unambiguous and there is a single state. One special rule comes with it: the most-derived class initializes the virtual base directly, and the intermediate classes' initializers for it are bypassed -- here Copier's Device(42) wins, and Scanner's and Printer's Device(...) are ignored when they are part of a Copier."
+main_tags:
+  - { name: "virtual inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+run: true
+sanitizers: []

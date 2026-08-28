@@ -1,0 +1,11 @@
+title: "Abstract base classes and pure virtuals"
+standard: "C++11"
+difficulty: 2
+summary: "A pure virtual function (= 0) makes a class abstract: it cannot be instantiated, and every concrete derived class must provide the implementation."
+notes: "An abstract base class is how C++ writes an interface. Declaring a function = 0 means the base has no useful implementation of it and leaves it to derived classes; the class then cannot be created on its own, only referred to through a pointer or reference. Any derived class that does not implement every pure virtual stays abstract too. This is the contract at the center of most runtime polymorphism: callers depend on the interface, implementations are swapped behind it."
+main_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+run: true
+sanitizers: []

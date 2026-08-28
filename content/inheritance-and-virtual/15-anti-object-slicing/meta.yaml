@@ -1,0 +1,11 @@
+title: "Anti-pattern: slicing a derived into a base"
+standard: "C++11"
+difficulty: 3
+summary: "Copying a derived object into a base value keeps only the base part -- the derived data and the virtual behavior are sliced off."
+notes: "A Base variable holds a Base, exactly base-sized. Assign a Derived to it and only the base subobject is copied; the derived members are gone and virtual calls now run the base version, because the object really is a Base. This bites when a function takes Base by value, or a container is vector<Base> filled with derived objects. The fix is to refer to the object rather than copy it: take const Base&, or store pointers (vector<unique_ptr<Base>>), so the real type and its overrides survive."
+main_tags:
+  - { name: "object slicing", url: "https://en.cppreference.com/w/cpp/language/object" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+run: true
+sanitizers: []

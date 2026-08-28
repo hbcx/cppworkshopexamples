@@ -1,0 +1,11 @@
+title: "Anti-pattern: a virtual call in a constructor"
+standard: "C++11"
+difficulty: 3
+summary: "During a base constructor the object is still a base, so a virtual call runs the base version, not the derived override you expected."
+notes: "Construction runs base first, derived second, and the object's dynamic type changes as it goes -- while the base constructor runs, the derived part does not exist yet, so virtual dispatch resolves to the base. A base constructor that calls a virtual to initialize something therefore never reaches the override, which reads like the override was ignored. The same is true in destructors, in reverse. The fix is to not call virtuals during construction: initialize with passed-in values, or use a separate init step called after the object is fully built."
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "constructor", url: "https://en.cppreference.com/w/cpp/language/constructor" }
+run: true
+sanitizers: []

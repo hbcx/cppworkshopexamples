@@ -1,0 +1,11 @@
+title: "Calling the base version from an override"
+standard: "C++11"
+difficulty: 1
+summary: "An override can reuse the base implementation by qualifying the call with the base name -- Base::f() -- then add its own behavior on top."
+notes: "Sometimes an override should extend the base, not replace it. Writing Base::method() inside the override calls the base version explicitly, bypassing virtual dispatch for that one call, so the derived function can run the shared work and then add its part. The classic case is a print or serialize that outputs the base fields first, then the derived ones. Qualify with the direct base's name; without the qualifier a plain call would dispatch virtually and recurse into the same override forever."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+run: true
+sanitizers: []

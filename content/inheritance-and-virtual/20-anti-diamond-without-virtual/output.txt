@@ -1,0 +1,2 @@
+bad: Scanner::id = 100, Printer::id = 200
+good: id = 42

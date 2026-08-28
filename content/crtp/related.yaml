@@ -18,3 +18,5 @@
   note: "The foundation CRTP is a pattern of: a class template whose parameter is its own derived type -- go there for function and class templates, specialization, and the deduction and dependent-name rules every template idiom rests on."
 - slug: "strong-types"
   note: "CRTP in real use as a mixin: a strong type keeps a bare wrapper and inherits only the operators it needs from small CRTP bases -- go there for the opt-in Addable/Printable/Comparable design and how it avoids handing every wrapper every operator."
+- slug: "inheritance-and-virtual"
+  note: "The run-time polymorphism CRTP is the compile-time answer to: virtual functions, abstract bases, and the vtable dispatch CRTP avoids. Go there for dynamic dispatch and when its run-time flexibility is worth the cost."

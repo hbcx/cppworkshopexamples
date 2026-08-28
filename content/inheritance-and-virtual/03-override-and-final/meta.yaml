@@ -1,0 +1,11 @@
+title: "The override and final specifiers"
+standard: "C++11"
+difficulty: 1
+summary: "override makes the compiler check that a function really overrides a base virtual, and final stops a virtual from being overridden further or a class from being derived from."
+notes: "Always write override on an intended override: if the signature does not match a base virtual -- a wrong parameter type, a missing const -- the compiler rejects it instead of silently creating a new function (the trap the forgot-override anti-pattern shows). final is the opposite brake: on a virtual it forbids further overriding, on a class it forbids inheriting at all, which documents a sealed design and can help the optimizer devirtualize. Both are zero-cost C++11 annotations that turn intent into compiler-checked rules."
+main_tags:
+  - { name: "override specifier", url: "https://en.cppreference.com/w/cpp/language/override" }
+detailed_tags:
+  - { name: "final specifier", url: "https://en.cppreference.com/w/cpp/language/final" }
+run: true
+sanitizers: []

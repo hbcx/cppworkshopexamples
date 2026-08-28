@@ -1,0 +1,11 @@
+title: "Multiple inheritance of interfaces"
+standard: "C++11"
+difficulty: 2
+summary: "A class can inherit from more than one base; the clean use is combining several abstract interfaces, so one object can be used through each of them."
+notes: "C++ allows multiple base classes. The safe, common form is inheriting several pure-interface bases -- each an abstract class with only virtual functions and no data -- so a type can play several roles and be passed to code that wants any one of them. A Widget that is both Drawable and Serializable can go to a renderer as a Drawable and to a saver as a Serializable. Multiple inheritance of concrete, state-carrying bases is where trouble starts: two copies of a shared base, which the diamond and virtual-inheritance examples address."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "abstract class", url: "https://en.cppreference.com/w/cpp/language/abstract_class" }
+run: true
+sanitizers: []

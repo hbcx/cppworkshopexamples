@@ -1,0 +1,2 @@
+good: live resources after delete = 0
+bad destroyed by real type: live resources = 0

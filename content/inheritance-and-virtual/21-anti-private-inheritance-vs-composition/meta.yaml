@@ -1,0 +1,11 @@
+title: "Anti-pattern: private inheritance over composition"
+standard: "C++11"
+difficulty: 3
+summary: "Using private inheritance just to reuse a class ties you to a single base subobject; composition is clearer and lets you hold several collaborators, even of the same type."
+notes: "Private inheritance and a private member both mean uses-a, but inheritance binds the class to exactly one base instance and pulls its protected members and virtuals into your type. A pipe that needs an input buffer and an output buffer cannot be built by inheriting one buffer -- the class can only BE one. Composition holds two named members and reads plainly at every call site. Prefer composition; keep private inheritance for the narrow cases that need it -- overriding a base virtual, or the empty-base optimization."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "private inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+run: true
+sanitizers: []

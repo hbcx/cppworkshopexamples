@@ -1,0 +1,11 @@
+title: "Virtual functions and dynamic dispatch"
+standard: "C++11"
+difficulty: 1
+summary: "A virtual function called through a base pointer or reference runs the derived class's override, chosen at run time from the object's real type."
+notes: "This is the heart of runtime polymorphism. Mark a member virtual in the base and override it in each derived class; then a Shape& bound to a Circle calls Circle::area, and the same reference bound to a Rectangle calls Rectangle::area. The decision is made at run time from the actual object, not from the type of the pointer -- which is what lets one piece of code work for every current and future shape."
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "override specifier", url: "https://en.cppreference.com/w/cpp/language/override" }
+run: true
+sanitizers: []

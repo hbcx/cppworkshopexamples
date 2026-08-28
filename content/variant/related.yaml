@@ -9,3 +9,5 @@
   note: "The design pattern std::visit embodies: dispatching a variant over an overload set is the Visitor pattern for a closed type set -- go there for double dispatch, the class-based form, and the expression-problem trade-off behind choosing a variant over a class hierarchy."
 - slug: "enums"
   note: "The simpler tool when a state only needs a NAME, not a value: a scoped enum is a closed set of tags with a switch for exhaustiveness, and a variant is what you reach for once each tag must also carry data. Go there for enum class, switching, and type-safe flags."
+- slug: "inheritance-and-virtual"
+  note: "The open-set counterpart: a class hierarchy with virtual functions handles a growing set of types where a variant handles a fixed one, and the two are the standard alternatives for run-time dispatch. Go there for abstract bases, overrides, and virtual destructors."

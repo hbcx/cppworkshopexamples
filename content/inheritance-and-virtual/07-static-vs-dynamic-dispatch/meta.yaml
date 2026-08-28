@@ -1,0 +1,11 @@
+title: "Static versus dynamic dispatch"
+standard: "C++11"
+difficulty: 2
+summary: "A non-virtual call is resolved at compile time from the static type of the expression; a virtual call is resolved at run time from the object's real type."
+notes: "The same base reference can answer the same-looking calls differently. A non-virtual member is picked by the declared type of the reference -- Base& means Base's version, whatever object is behind it. A virtual member is picked by the actual object. Seeing the two side by side is the clearest way to understand what virtual buys: only virtual gives you the derived behavior through a base handle. This is also why hiding a non-virtual base function in a derived class does not override it."
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+run: true
+sanitizers: []

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a derived name hides base overloads"
+standard: "C++11"
+difficulty: 3
+summary: "Declaring a function in a derived class hides every base function of the same name, not just the matching overload, so other base overloads stop being callable."
+notes: "Name lookup stops at the first scope that has the name. Declare print(int) in a derived class and the compiler finds only that one; the base's print(const char*) is hidden, and derived.print(\"text\") fails to compile even though the base clearly has it. This is name hiding, and it is easy to mistake for a missing function. The fix is a using-declaration -- using Base::print; -- in the derived class, which pulls all of the base overloads back into scope alongside the new one."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "using declaration", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }
+run: true
+sanitizers: []

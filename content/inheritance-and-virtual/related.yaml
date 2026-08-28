@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "liskov-substitution"
+  note: "The rule that decides when public inheritance is correct: a derived object must be usable everywhere its base is, or the is-a claim is false -- the principle behind the inheriting-for-reuse trap here. Go there for substitutability and the contracts a subclass must keep."
+- slug: "crtp"
+  note: "The compile-time alternative to virtual dispatch: the curiously recurring template pattern gives static polymorphism with no vtable and no runtime cost, when the type is known at compile time. Go there for static polymorphism and when to prefer it over virtual."
+- slug: "variant"
+  note: "The closed-set counterpart to a class hierarchy: when the set of types is fixed and known, std::variant plus std::visit gives type-safe dispatch with no base class or heap, where virtual functions fit an open, growing set. Go there for sum types and visitation."
+- slug: "nvi"
+  note: "A discipline for designing the virtuals themselves: the non-virtual interface idiom makes the public method non-virtual and the customization points private virtuals, so the base keeps control of the algorithm. Go there for the template-method-style separation of interface and hook."

@@ -1,0 +1,11 @@
+title: "A heterogeneous collection of base pointers"
+standard: "C++11"
+difficulty: 2
+summary: "Store different derived types together as pointers to the base, then process them uniformly through virtual calls -- the everyday use of polymorphism."
+notes: "A vector<unique_ptr<Base>> holds any mix of derived objects and owns them. Iterating it and calling a virtual dispatches to each object's real type, so one loop handles every kind without a type switch. This is why runtime polymorphism exists: the collection and the loop are written once against the base, and adding a new derived type needs no change to either. Note the elements are pointers -- storing the base by value would slice, which the slicing anti-pattern covers."
+main_tags:
+  - { name: "virtual function", url: "https://en.cppreference.com/w/cpp/language/virtual" }
+detailed_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+run: true
+sanitizers: []

@@ -1,0 +1,3 @@
+bad int 10
+good int 10
+base str hello

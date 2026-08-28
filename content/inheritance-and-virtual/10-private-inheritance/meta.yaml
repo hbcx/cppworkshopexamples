@@ -1,0 +1,11 @@
+title: "Private inheritance: implemented in terms of"
+standard: "C++11"
+difficulty: 3
+summary: "Private inheritance means implemented-in-terms-of, not is-a: the base interface becomes private, so outsiders cannot use it or convert to the base."
+notes: "With class Car : private Engine, the base's public members become private in Car, there is no outside Car-to-Engine conversion, and Car reuses Engine internally without claiming to be one. You can re-expose selected members with a using-declaration. It is a rare tool: composition (holding an Engine member) says the same thing more clearly, and is preferred unless you specifically need to override a base virtual or want the empty-base optimization. Reach for private inheritance only for those reasons -- the private-versus-composition anti-pattern shows the usual case where a member is the better choice."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "private inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+run: true
+sanitizers: []

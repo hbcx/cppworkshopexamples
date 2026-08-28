@@ -1,0 +1,24 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A component with several interchangeable implementations chosen at run time -- a renderer backend, an audio codec, a payment gateway, a storage driver -- where new implementations arrive over time."
+  why: "An abstract base declares the interface once and each implementation overrides it, so the calling code depends only on the base and never changes as backends are added. The obvious alternative, a switch over a type tag, must be edited in every place it appears each time a case is added, and the compiler cannot tell you when you missed one."
+  signal: "A switch or if-chain on a kind enum that reappears in several functions, each branch doing the same job a different way, growing a case whenever a new kind is added."
+
+- problem: "A framework that runs a fixed overall procedure but lets each user plug in the specific steps -- a request pipeline, a game loop, a test harness with setup and teardown."
+  why: "A base holds the non-virtual skeleton and calls virtual hook steps that subclasses fill in, so the framework controls the order and the user controls the details. Passing function pointers for every step is looser and scatters the contract; the virtual hooks put it in one class the compiler checks."
+  signal: "A base class with a public non-virtual method that calls several protected virtual steps, or a would-be framework that instead takes a bag of callbacks for each phase."
+
+- problem: "Holding and processing a mix of related objects together -- shapes in a drawing, nodes in a scene graph, widgets in a UI, events in a queue."
+  why: "A vector of base pointers stores any mix of derived types and a single loop drives them through virtual calls, so the collection code is written once and never enumerates the types. A variant or a tagged union is the better fit only when the set of types is closed and known; for an open, growing set, virtual dispatch avoids touching the loop for each new type."
+  signal: "Parallel arrays or a struct with a type tag and a union of fields, walked by code that switches on the tag to decide what to do with each element."
+
+- problem: "Owning objects polymorphically -- a factory returns a base pointer to a concrete object the caller keeps and later destroys."
+  why: "A virtual destructor makes deleting through the base pointer run the real object's cleanup, so a factory can return unique_ptr<Base> and the caller never knows or cares about the concrete type. Without it the derived cleanup is skipped and the deletion is undefined behavior -- the single most common inheritance bug."
+  signal: "A factory or registry returning base pointers, or a container of base pointers that owns its elements, where the base's destructor is not virtual."
+
+- problem: "Copying an object whose real type is only known through a base handle -- duplicating a selected shape, snapshotting a document node, cloning a prototype."
+  why: "A virtual clone() with a covariant return type copies the actual derived object through the base interface and hands back the right type, which a plain copy constructor cannot do through a base reference (it would slice). This is the prototype pattern's mechanism, and the covariant return removes the cast at the derived call site."
+  signal: "Copy code that checks the concrete type with a cast before duplicating, or a base copy that silently slices because the real type was reached through a reference."
+
+- problem: "Replacing a hard-coded dependency with a seam for testing or configuration -- a clock, a network client, a logger the rest of the code talks to through an interface."
+  why: "An abstract base lets production code use the real implementation and tests substitute a fake, with no change to the code under test, because it only ever sees the interface. Hard-coding the concrete class instead forces tests to hit the real clock or network, which is slow and flaky."
+  signal: "A class that constructs its own concrete collaborator internally (a real socket, system clock, or file writer), leaving no way to substitute a stand-in in a test."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a non-virtual destructor"
+standard: "C++11"
+difficulty: 3
+summary: "Deleting a derived object through a base pointer whose destructor is not virtual runs only the base destructor, skips the derived cleanup, and is undefined behavior."
+notes: "A base meant to be used polymorphically must have a virtual destructor. Without it, delete basePtr dispatches statically to the base destructor alone, so a derived class that owns memory, a file, or a lock never gets to release it -- and the standard calls the deletion undefined behavior, not merely a leak. The fix is one word: make the base destructor virtual (this example runs the fixed version and only describes the broken delete, since running real undefined behavior is not safe). If a class has any virtual function, give it a virtual destructor."
+main_tags:
+  - { name: "virtual destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+detailed_tags:
+  - { name: "object slicing", url: "https://en.cppreference.com/w/cpp/language/object" }
+run: true
+sanitizers: []

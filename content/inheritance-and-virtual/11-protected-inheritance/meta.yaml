@@ -1,0 +1,11 @@
+title: "Protected inheritance"
+standard: "C++11"
+difficulty: 3
+summary: "Protected inheritance is like private, but the base interface stays reachable by further-derived classes -- so a grandchild can use it while outside code cannot."
+notes: "With class Mid : protected Base, the base's public members become protected in Mid: hidden from outside code, but still available to classes that derive from Mid. That is the one difference from private inheritance, where even the further-derived classes are locked out. It is the rarest of the three access forms; you want it only when a layered hierarchy needs to pass an implementation base down to its own subclasses without exposing it publicly. In almost all other cases, private inheritance or composition is the right call."
+main_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "protected inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+run: true
+sanitizers: []

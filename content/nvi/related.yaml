@@ -8,3 +8,5 @@
   note: "The composition alternative: instead of a subclass overriding a private virtual, inject the varying step as an object the base calls -- go there for behaviour-as-object and when to prefer it over inheritance for the customization point."
 - slug: "liskov-substitution"
   note: "The contract NVI helps enforce: the base wrapper is where a pre- or post-condition that every subclass must honour actually lives, so overrides cannot weaken it -- go there for substitutability stated as a rule and how strengthening a precondition breaks it."
+- slug: "inheritance-and-virtual"
+  note: "The base mechanics NVI is a discipline over: virtual functions, overriding, and abstract bases, with the public-non-virtual/private-virtual split as the refinement. Go there for how virtual dispatch works before shaping it with NVI."

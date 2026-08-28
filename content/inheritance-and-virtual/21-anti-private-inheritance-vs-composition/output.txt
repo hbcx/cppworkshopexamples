@@ -1,0 +1,2 @@
+bad pipe (one stream only): 2
+good pipe: in = 1, out = 2

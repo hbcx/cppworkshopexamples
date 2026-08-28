@@ -1,0 +1,11 @@
+title: "Anti-pattern: a non-virtual diamond"
+standard: "C++11"
+difficulty: 3
+summary: "When two bases share a common base without virtual inheritance, the joined class gets two copies of it -- duplicated state, and an ambiguous plain access."
+notes: "Scanner and Printer each inherit Device non-virtually, so a Copier that inherits both contains two separate Device subobjects. Plain copier.id does not compile -- the compiler cannot tell which Device you mean -- and forcing it with Scanner::id versus Printer::id reveals two independent values that drift apart. That is almost never what a shared identity should be. The fix is virtual inheritance: declare Scanner : virtual Device and Printer : virtual Device so the Device is shared, single, and unambiguous."
+main_tags:
+  - { name: "virtual inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+detailed_tags:
+  - { name: "inheritance", url: "https://en.cppreference.com/w/cpp/language/derived_class" }
+run: true
+sanitizers: []
