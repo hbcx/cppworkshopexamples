@@ -1,0 +1,3 @@
+naiveMax = nan (expected 5)
+safeMax  = 5
+nan == nan? 0

@@ -10,3 +10,5 @@
   note: "The built-in distinct type for a fixed set: an enum class makes a separate type from a small set of integer constants for free, where a strong type wraps an arbitrary value like a UserId -- go there for scoped enums, the underlying type, and type-safe flags."
 - slug: "operator-overloading"
   note: "The mechanics the opt-in operators here are built from: how to write ==, <, +, and the rest correctly, member versus free, and the traps. Go there for the ground rules a strong-type library applies through its mixins."
+- slug: "three-way-comparison"
+  note: "How a strong type gets its comparisons for almost nothing: a defaulted <=> forwards to the single wrapped value, giving all six operators and ordering in a line. Go there for the spaceship operator and the strong/weak/partial categories."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: assuming a total order with NaN"
+standard: "C++20"
+difficulty: 3
+summary: "Code that assumes every two values are ordered breaks on floating point, where a NaN is unordered and even x == x is false."
+notes: "partial_ordering is a warning that the order has a hole. A running-maximum that only tests best < x silently keeps a NaN it started with, because best < x is false when best is NaN, so nothing ever replaces it. And a NaN is not even equal to itself, so equality-based lookups miss it. Worse, feeding NaN to std::sort or std::set is undefined behavior, since it violates the strict-weak-ordering those require. The fix is to exclude or handle NaN explicitly -- test x == x, or std::isnan -- before relying on an order."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::partial_ordering", url: "https://en.cppreference.com/w/cpp/utility/compare/partial_ordering" }
+run: true
+sanitizers: []

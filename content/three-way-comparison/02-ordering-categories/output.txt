@@ -1,0 +1,4 @@
+int  1 <=> 2 is less?    1
+dbl  1.0 <=> NaN unordered? 1
+  and 1.0 < NaN?  0   1.0 == NaN? 0
+(weak_ordering: see the case-insensitive example)

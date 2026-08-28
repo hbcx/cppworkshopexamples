@@ -1,0 +1,12 @@
+title: "Defaulting the spaceship operator"
+standard: "C++20"
+difficulty: 1
+summary: "One line -- auto operator<=>(const T&) const = default; -- gives a type all six comparison operators and == as well, by comparing members in declaration order."
+notes: "This is the whole reason <=> exists: before C++20 you wrote ==, !=, <, >, <=, >= (or derived them) by hand; now a defaulted <=> generates the ordering ones, and it also causes == to be defaulted, so equality comes too. The comparison is memberwise and lexicographic in declaration order -- first member decides, ties fall through to the next. Order your members so that the most significant one comes first."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+  - { name: "default comparisons", url: "https://en.cppreference.com/w/cpp/language/default_comparisons" }
+detailed_tags:
+  - { name: "defaulted operator<=>", url: "https://en.cppreference.com/w/cpp/language/default_comparisons" }
+run: true
+sanitizers: []

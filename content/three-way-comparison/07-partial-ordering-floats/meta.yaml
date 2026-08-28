@@ -1,0 +1,11 @@
+title: "Partial ordering and NaN"
+standard: "C++20"
+difficulty: 2
+summary: "A type whose members are floating point gets partial_ordering, because NaN is unordered: compared with anything, the result is neither less, equal, nor greater."
+notes: "Floating point is not totally ordered -- NaN sits outside the order entirely. So a defaulted <=> over double members returns partial_ordering, and comparing with a NaN yields std::partial_ordering::unordered, for which <, ==, and > are all false at once. This is correct, not a defect: the category is telling you the order has a hole. Code that assumes every two values are ordered (a plain sort, a min-search that only tests <) is what breaks -- see the anti-pattern on assuming a total order."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::partial_ordering", url: "https://en.cppreference.com/w/cpp/utility/compare/partial_ordering" }
+run: true
+sanitizers: []

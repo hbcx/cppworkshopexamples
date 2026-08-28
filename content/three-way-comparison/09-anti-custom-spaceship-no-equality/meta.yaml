@@ -1,0 +1,11 @@
+title: "Anti-pattern: a custom <=> with no =="
+standard: "C++20"
+difficulty: 3
+summary: "Writing <=> by hand gives the relational operators but not ==, so a == b stops compiling and it is easy to think equality is broken."
+notes: "Only a defaulted <=> synthesizes ==. Provide your own <=> and the compiler declares <, >, <=, >= but never == or !=, so a == b is an error even though a < b works. The surprise is that ordering works and equality does not. The fix is to add == alongside -- default it if plain memberwise equality is right, or write it to match your custom order -- so that both halves of comparison exist and agree."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "defaulted operator==", url: "https://en.cppreference.com/w/cpp/language/default_comparisons" }
+run: true
+sanitizers: []

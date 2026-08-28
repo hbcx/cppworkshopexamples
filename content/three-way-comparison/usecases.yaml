@@ -1,0 +1,24 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A value or record type -- a version, a date, a money amount, a coordinate -- that needs all six comparisons and to sort, and today carries a hand-written block of ==, !=, <, >, <=, >=."
+  why: "A defaulted <=> replaces that whole block with one line and cannot drift out of sync the way six separate operators can. The old approach is not just longer; it is where a copy-paste bug hides, with > and < quietly disagreeing after someone edits one and not the others."
+  signal: "A class with a run of comparison operators that all forward to the same members in the same order, or a partial set (just == and <) that callers work around."
+
+- problem: "Making a type usable as a std::set or std::map key, or sortable with std::sort, without writing a comparator."
+  why: "Those containers and algorithms need only < and ==, both of which a defaulted <=> supplies, so the type drops in with no extra code. A standalone comparator functor or lambda is one more thing to keep consistent with the type's own equality, and a common source of ordering bugs when it is not."
+  signal: "A struct passed to std::set/std::map with a bespoke comparator, or sorted with a lambda that just compares the same fields the type already has."
+
+- problem: "A domain type whose order is defined by only some of its data -- an employee ordered by id, a record ordered by timestamp -- while other fields ride along."
+  why: "A hand-written <=> forwards to exactly the fields that define the order and ignores the rest, in one function that also fixes the category. Deriving the six operators by hand for a subset of fields is far more code and easy to get subtly wrong between operators."
+  signal: "A type where sorting or lookup should key on one field but the equality and ordering currently compare everything, or disagree about which fields matter."
+
+- problem: "A comparison that must treat different values as equal -- case-insensitive names, normalized identifiers, rounded measurements -- rather than byte-for-byte."
+  why: "Returning weak_ordering from a custom <=> states in the type system that equal means equivalent, not identical, and keeps == consistent with it. A plain default would compare raw representation and split values the domain considers the same, which is how duplicate accounts and missed lookups happen."
+  signal: "Equality or lookup code that lowercases, trims, or rounds before comparing, scattered across call sites instead of living in the type's own comparison."
+
+- problem: "Ordering measurements or computed floating-point results where a NaN can appear, and the code must not pretend the order is total."
+  why: "Modeling the comparison as partial_ordering makes the unordered case explicit, so a NaN is handled rather than silently mis-sorted -- and it flags that feeding such values to a plain sort is undefined. Treating floats as strongly ordered is the assumption that quietly corrupts a sort or a min-search the first time a NaN slips in."
+  signal: "Floating-point values compared or sorted with no NaN guard, or a min/max loop that tests only < and assumes every pair is ordered."
+
+- problem: "Migrating a pre-C++20 codebase full of hand-rolled comparison operators toward <=>, deciding what to replace and what to keep."
+  why: "Most types collapse to a defaulted <=>, but the ones with a fast == (a size check before comparing contents) keep a dedicated == while gaining <=> for ordering, and leftover hand-written relational operators must be removed so they cannot disagree with the new <=>. Knowing which case a type is in is the whole migration."
+  signal: "Types with large comparison sections, especially ones mixing a cheap equality check with a costlier ordering, or ones where a stray operator< survives next to a newly added <=>."

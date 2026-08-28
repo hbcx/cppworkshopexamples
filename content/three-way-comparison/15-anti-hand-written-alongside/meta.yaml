@@ -1,0 +1,11 @@
+title: "Anti-pattern: old operators left beside <=>"
+standard: "C++20"
+difficulty: 3
+summary: "Keeping a hand-written operator< next to a <=> lets the two disagree: a < b uses the old operator, while b > a is rewritten from <=>, so they can contradict."
+notes: "When a real operator< exists, a < b calls it directly; but a > b has no hand-written operator, so it is rewritten to (a <=> b) > 0. If the leftover operator< and the <=> order by different fields, a < b and b > a -- which must always agree -- give opposite answers, and which one runs depends on which operator the reader wrote. The fix is to delete the hand-written relational operators when you adopt <=>, leaving <=> (and ==) as the single source of the order."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "rewritten expressions", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+run: true
+sanitizers: []

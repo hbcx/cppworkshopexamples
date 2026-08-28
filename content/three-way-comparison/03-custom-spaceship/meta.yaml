@@ -1,0 +1,11 @@
+title: "Writing <=> by hand"
+standard: "C++20"
+difficulty: 2
+summary: "When the order is not a plain memberwise one, write <=> yourself: return the comparison of just the fields that define the order, and pick the category."
+notes: "A defaulted <=> compares every member; often the order is defined by only some of them -- an employee is ordered by id, not by name or salary. Then you write the operator, forward to the members that matter (id <=> other.id), and choose the return category. Because a user-written <=> does not generate ==, you provide == too, and keep it consistent with the order -- here, equal ids mean equal employees."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::strong_ordering", url: "https://en.cppreference.com/w/cpp/utility/compare/strong_ordering" }
+run: true
+sanitizers: []

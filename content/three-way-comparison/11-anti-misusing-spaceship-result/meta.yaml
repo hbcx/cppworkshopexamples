@@ -1,0 +1,11 @@
+title: "Anti-pattern: misreading the <=> result"
+standard: "C++20"
+difficulty: 3
+summary: "The value <=> returns is an ordering object, not a bool and not an int: you compare it to the literal 0, or use std::is_lt and friends, never to another result or to 1."
+notes: "a <=> b yields a strong/weak/partial_ordering. It does not convert to bool, so if (a <=> b) does not compile; it compares only to the literal 0, so (a <=> b) == 1 does not compile; and two results are not comparable to each other, so (a <=> b) < (c <=> d) does not compile either. The correct reads are (a <=> b) < 0 for less, == 0 for equal, > 0 for greater, or the named helpers std::is_lt, std::is_eq, std::is_gt. Reach for <=> only when you need the ordering itself; for a single test, a < b is clearer."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::is_lt", url: "https://en.cppreference.com/w/cpp/utility/compare/named_comparison_functions" }
+run: true
+sanitizers: []

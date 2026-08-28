@@ -1,0 +1,11 @@
+title: "Weak ordering for case-insensitive text"
+standard: "C++20"
+difficulty: 2
+summary: "A case-insensitive comparison returns weak_ordering: two names order as equivalent when they differ only in case, even though the stored strings are not identical."
+notes: "weak_ordering is the right category whenever equal really means equivalent. Here two names are equivalent if they match ignoring case, so Hello and hello compare equal for ordering and for ==, yet they still hold different characters -- exactly what weak means and strong does not allow. Return std::weak_ordering from the hand-written <=>, and make == agree by testing (a <=> b) == 0."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::weak_ordering", url: "https://en.cppreference.com/w/cpp/utility/compare/weak_ordering" }
+run: true
+sanitizers: []

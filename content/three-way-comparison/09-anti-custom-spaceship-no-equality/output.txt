@@ -1,0 +1,4 @@
+Broken: b1 < b2? 1
+Fixed:  f1 == f2? 1
+Fixed:  f1 != f3? 1
+Fixed:  f1 <  f3? 1

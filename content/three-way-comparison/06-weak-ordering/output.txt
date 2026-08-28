@@ -1,0 +1,4 @@
+Hello == hello? 1
+Hello <  hello? 0
+but stored values differ? 1
+apple < Banana? 1

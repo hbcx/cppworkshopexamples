@@ -7,3 +7,5 @@
   note: "Operator overloading put to work: a custom iterator is mostly *, ++, -> and == so it plugs into range-for and the algorithms. Go there for the full iterator idiom and the category tags the library expects."
 - slug: "const-correctness"
   note: "Why several operators come in const and non-const pairs, and must be const to be useful: a const object needs a const operator[] and a const == to be read or compared. Go there for const member functions and the const-overload pattern."
+- slug: "three-way-comparison"
+  note: "The C++20 successor to the comparison operators here: one <=> replaces the whole ==, <, > block, and a defaulted one is a single line. Go there for the spaceship operator, the ordering categories, and why == stays separate."

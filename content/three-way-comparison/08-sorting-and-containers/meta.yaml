@@ -1,0 +1,12 @@
+title: "One <=> plugs into sort and set"
+standard: "C++20"
+difficulty: 1
+summary: "A type with a defaulted <=> works directly with std::sort, std::set, and ordered map keys, because those need only < and ==, which <=> provides."
+notes: "std::sort compares with <, and std::set and std::map order their keys with <; a defaulted <=> supplies both < and ==, so the type drops in with no comparator and no extra operators. This is the everyday payoff: the same one line that gives you a == b also makes std::sort(v.begin(), v.end()) and std::set<T> just work. Before C++20 this meant writing operator< (and usually ==) by hand for every such type."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }
+run: true
+sanitizers: []

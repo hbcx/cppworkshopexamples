@@ -1,0 +1,2 @@
+bad:  a < b = 0, b > a = 1  (should match)
+good: c < d = 1, d > c = 1

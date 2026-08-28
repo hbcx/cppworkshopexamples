@@ -1,0 +1,11 @@
+title: "Anti-pattern: defaulting <=> over a pointer member"
+standard: "C++20"
+difficulty: 3
+summary: "A defaulted <=> compares every member as-is, so a raw pointer member is compared by address, not by what it points to -- giving a meaningless order and wrong equality."
+notes: "= default is memberwise, and for a pointer that means comparing the address value. Two objects holding equal data through different pointers then compare unequal, and the order reflects where memory happens to sit, not the data. The same trap hits any member that should not take part -- a cache, an id that is really an identity, a mutable helper. The fix is a hand-written <=> (and ==) that compares what actually matters, here the pointed-to value; or hold the value directly instead of a pointer."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "defaulted operator<=>", url: "https://en.cppreference.com/w/cpp/language/default_comparisons" }
+run: true
+sanitizers: []

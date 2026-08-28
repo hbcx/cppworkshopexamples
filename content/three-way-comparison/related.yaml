@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "operator-overloading"
+  note: "The pre-C++20 way this section replaces, and the ground rules it still rests on: how to write ==, <, and the rest by hand, member versus free, and the traps. Go there for the classic comparison operators and everything <=> is sugar for."
+- slug: "strong-types"
+  note: "Where a defaulted <=> pays off immediately: a strong type wraps one value and wants exactly the comparisons of its underlying type, which = default provides in a line. Go there for distinct id and unit types built on this."
+- slug: "sort"
+  note: "The algorithm a <=> most often feeds: std::sort orders with <, which a defaulted <=> supplies, and it needs a strict weak ordering -- the reason NaN and partial_ordering matter. Go there for sorting, comparators, and stability."

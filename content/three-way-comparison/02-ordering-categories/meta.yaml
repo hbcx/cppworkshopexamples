@@ -1,0 +1,12 @@
+title: "Strong, weak, and partial ordering"
+standard: "C++20"
+difficulty: 2
+summary: "The <=> result is one of three category types: strong_ordering, weak_ordering, or partial_ordering, and they say how complete and how strict the order is."
+notes: "strong_ordering is a total order where equal means interchangeable -- if a == b, nothing can tell them apart (integers). weak_ordering is a total order where equal means equivalent but not identical -- a == b under the order, yet they may still differ (case-insensitive text). partial_ordering allows an unordered result, where none of <, ==, > holds -- floating point, because NaN compares to nothing. The category is deduced for a defaulted <=>; you name it when you write <=> by hand."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::strong_ordering", url: "https://en.cppreference.com/w/cpp/utility/compare/strong_ordering" }
+  - { name: "std::partial_ordering", url: "https://en.cppreference.com/w/cpp/utility/compare/partial_ordering" }
+run: true
+sanitizers: []

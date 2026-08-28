@@ -1,0 +1,11 @@
+title: "Anti-pattern: auto return over mixed categories"
+standard: "C++20"
+difficulty: 3
+summary: "A hand-written <=> that returns auto but hands back different ordering categories from different branches fails to compile, because auto cannot deduce one type from two."
+notes: "Return auto and every branch must yield the same type. Compare an int member (strong_ordering) in one branch and a double member (partial_ordering) in another, and auto sees two types and gives up. The fix is to name the return type as the common category -- here partial_ordering, into which strong_ordering converts -- so every branch agrees. A defaulted <=> does this deduction for you: over an int and a double it returns partial_ordering automatically. When you write it by hand, state that category yourself."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::common_comparison_category", url: "https://en.cppreference.com/w/cpp/utility/compare/common_comparison_category" }
+run: true
+sanitizers: []

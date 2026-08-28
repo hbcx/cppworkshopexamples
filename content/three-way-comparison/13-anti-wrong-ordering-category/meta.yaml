@@ -1,0 +1,11 @@
+title: "Anti-pattern: defaulting when the meaning is weak"
+standard: "C++20"
+difficulty: 3
+summary: "Reaching for = default gives a strong, byte-for-byte comparison, which is wrong when two values should count as equal despite differing -- like usernames that ignore case."
+notes: "A defaulted <=> compares members exactly, which is a strong ordering: equal means identical. When the domain says otherwise -- a username where Admin and admin are the same account -- that byte comparison treats equivalent values as different, here letting two accounts exist for one name. The fix is a hand-written <=> returning weak_ordering that compares by the real rule (case-insensitively), with a matching ==. Choose the category from the meaning, not from what = default happens to give."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "std::weak_ordering", url: "https://en.cppreference.com/w/cpp/utility/compare/weak_ordering" }
+run: true
+sanitizers: []

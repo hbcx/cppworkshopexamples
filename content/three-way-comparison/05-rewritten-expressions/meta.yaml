@@ -1,0 +1,11 @@
+summary: "The compiler rewrites a < b as (a <=> b) < 0 and can reverse the operands, so one <=> gives every relational operator and works with a converted value on either side."
+title: "How the compiler rewrites comparisons"
+standard: "C++20"
+difficulty: 2
+notes: "You write one <=>; the compiler builds the rest. a < b becomes (a <=> b) < 0, a > b becomes (a <=> b) > 0, and so on for <= and >=. It also adds reversed candidates: if only t <=> 42 exists and 42 converts, then 42 < t is evaluated as the reversed 0 < (t <=> 42). The upshot is that a single member <=> makes comparisons work symmetrically and with implicit conversions on the left operand -- something a pre-C++20 member operator< could not do."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "rewritten expressions", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+run: true
+sanitizers: []

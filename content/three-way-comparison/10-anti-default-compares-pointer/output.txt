@@ -1,0 +1,2 @@
+bad:  same text, equal? 0
+good: same text, equal? 1

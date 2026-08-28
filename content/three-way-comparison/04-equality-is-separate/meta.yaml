@@ -1,0 +1,11 @@
+title: "Equality is separate from ordering"
+standard: "C++20"
+difficulty: 2
+summary: "A defaulted <=> also defaults ==, but a hand-written <=> does not -- you must supply == yourself, which is also where a faster equality can live."
+notes: "The compiler only synthesizes == from <=> when the <=> is defaulted. Write <=> by hand and == is not declared, so a == b will not compile until you add it. This split is deliberate: equality can often be decided faster than order. Two strings of different length are unequal after one size check, with no character comparison, so a dedicated == short-circuits where routing through <=> would compare content. Provide both, and let == take the shortcut."
+main_tags:
+  - { name: "operator<=>", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+detailed_tags:
+  - { name: "defaulted operator==", url: "https://en.cppreference.com/w/cpp/language/default_comparisons" }
+run: true
+sanitizers: []

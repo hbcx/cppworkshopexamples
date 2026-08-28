@@ -1,0 +1,2 @@
+bad:  Admin == admin? 0
+good: Admin == admin? 1
