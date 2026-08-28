@@ -1,0 +1,11 @@
+title: "The canonical arithmetic pair"
+standard: "C++11"
+difficulty: 1
+summary: "Write operator+= as a member that mutates and returns *this, then build operator+ on top of it as a free function returning by value."
+notes: "The pattern that makes a value type read like a built-in: += changes the object and hands it back so a += b += c chains; + does not touch its operands, so it takes them by value (or const&) and returns a fresh result. Writing + as a free function keeps 1 + x and x + 1 symmetric, because a member operator+ only binds when the left side is your type."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "arithmetic operators", url: "https://en.cppreference.com/w/cpp/language/operator_arithmetic" }
+run: true
+sanitizers: []

@@ -1,0 +1,11 @@
+title: "The const and non-const subscript pair"
+standard: "C++11"
+difficulty: 2
+summary: "operator[] usually comes as two overloads: one non-const returning a mutable reference, one const returning a const reference or value."
+notes: "The compiler picks by whether the object is const: grid[i] on a non-const object gives a writable reference, on a const object gives a read-only one. Without the const overload you cannot index a const object at all. operator[] must be a member -- it cannot be a free function. Returning a reference is what lets grid[i] = v work on the left of an assignment."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "operator[]", url: "https://en.cppreference.com/w/cpp/language/operators" }
+run: true
+sanitizers: []

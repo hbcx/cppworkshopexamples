@@ -1,0 +1,11 @@
+title: "The call operator makes a function object"
+standard: "C++11"
+difficulty: 2
+summary: "Defining operator() lets an object be called like a function, and unlike a plain function it can carry state between calls."
+notes: "An object with operator() is a functor. It is what a lambda compiles to, and what std::sort or std::count_if take as a predicate. The advantage over a function pointer is the state held in members: a threshold, a running count, a captured configuration. operator() can take any arguments and be overloaded like any other member."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "operator()", url: "https://en.cppreference.com/w/cpp/utility/functional" }
+run: true
+sanitizers: []

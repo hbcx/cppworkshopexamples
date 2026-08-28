@@ -1,0 +1,11 @@
+title: "Conversion operators, and why explicit"
+standard: "C++11"
+difficulty: 2
+summary: "A conversion operator lets a type turn into another type; marking it explicit stops it from firing in surprising places while still allowing the conversions you want."
+notes: "operator bool() answers is-this-valid so the object works in an if; operator double() might expose a measured value. Without explicit (C++11) these convert silently, and the compiler will use them to make unrelated code compile -- if(x) is fine, but x + 1 or x == y through bool is nonsense that suddenly builds. explicit keeps the direct uses (if, while, static_cast) and blocks the accidental ones. See the anti-pattern on a non-explicit operator bool for the failure in full."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "conversion operator", url: "https://en.cppreference.com/w/cpp/language/cast_operator" }
+run: true
+sanitizers: []

@@ -1,0 +1,11 @@
+title: "Dereference and arrow for a pointer-like type"
+standard: "C++11"
+difficulty: 2
+summary: "operator* returns a reference to the pointed-to object; operator-> returns a pointer, and the compiler re-applies -> to whatever it returns."
+notes: "This is how smart pointers and iterators expose the thing they wrap. operator* gives you the object; operator-> is special -- you return a raw pointer (or another arrow-capable object) and the language automatically follows it, so wrapper->member reaches the member. Providing both makes your handle behave like a real pointer at the call site, which is the whole point of a wrapper."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "member access operators", url: "https://en.cppreference.com/w/cpp/language/operator_member_access" }
+run: true
+sanitizers: []

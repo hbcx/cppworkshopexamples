@@ -1,0 +1,11 @@
+title: "Member or free: which to choose"
+standard: "C++11"
+difficulty: 2
+summary: "Some operators must be members, some are best as free functions; the deciding question is whether the left operand has to be your type."
+notes: "Rule of thumb: operators that change the object or that need the left operand to be your type -- = [] () -> and the compound assignments like += -- are members. Binary operators that should treat both sides alike -- + - == < and friends -- are best free (often built on the member compound form), so a conversion on the LEFT operand works too. operator<< is free because the left operand is the stream. This example shows the symmetry payoff: a free operator+ lets 2 + m work, a member one would not."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "canonical operator forms", url: "https://en.cppreference.com/w/cpp/language/operators" }
+run: true
+sanitizers: []

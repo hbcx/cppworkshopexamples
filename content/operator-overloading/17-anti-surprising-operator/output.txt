@@ -1,0 +1,2 @@
+2 ^ 1 + 2 gave 8 (reader expected 4)
+power(2, 1) + 2 = 4

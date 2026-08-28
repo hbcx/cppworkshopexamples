@@ -1,0 +1,3 @@
+a + b + c = 875 cents
+a still = 500 cents
+after d += a += b: a = 750, d = 750

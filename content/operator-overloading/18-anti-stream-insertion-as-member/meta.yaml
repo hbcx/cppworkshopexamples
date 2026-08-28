@@ -1,0 +1,11 @@
+title: "Anti-pattern: operator<< as a member"
+standard: "C++11"
+difficulty: 3
+summary: "Writing operator<< as a member of your type makes your object the left operand, so you must write obj << std::cout, and the natural std::cout << obj no longer compiles."
+notes: "A member operator puts your type on the left, but for stream insertion the left operand is the stream. So a member operator<< reads backwards -- object << stream -- and does not fit std::cout << x, nor chain in std::cout << a << b. The fix is the standard shape: a free (usually friend) function taking std::ostream& on the left and returning it, so ordinary stream syntax and chaining both work. This is the same member-versus-free rule, in the one case where the left operand can never be your type."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "std::ostream::operator<<", url: "https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt" }
+run: true
+sanitizers: []

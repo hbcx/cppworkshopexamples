@@ -1,0 +1,11 @@
+title: "Anti-pattern: overloading && and ||"
+standard: "C++11"
+difficulty: 3
+summary: "A user-defined operator&& or operator|| is an ordinary function call, so it loses the short-circuit evaluation the built-in versions guarantee."
+notes: "For the built-in && and ||, the right side is not evaluated when the left already decides the result -- code relies on this to guard against null or skip expensive work. Overload them and both operands become function arguments, evaluated before the call every time, so the guard silently stops working. The fix is to not overload them: give the type an explicit operator bool and let the built-in && and || combine the bools, keeping short-circuit."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "logical operators", url: "https://en.cppreference.com/w/cpp/language/operator_logical" }
+run: true
+sanitizers: []

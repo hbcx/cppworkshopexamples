@@ -8,3 +8,5 @@
   note: "The tool that turns rule of five into rule of zero: hold a resource in a unique_ptr (with a custom deleter for C handles) and you declare no special members at all -- go there for ownership, custom deleters, and make_unique."
 - slug: "pimpl"
   note: "A worked rule-of-five case: a pimpl class is move-only unless you add a deep copy, with every special member declared in the header and defined where the hidden Impl is complete -- go there for the out-of-line special members and why the destructor cannot be defaulted in the header."
+- slug: "operator-overloading"
+  note: "The wider family the assignment operators belong to: how to write copy and move operator= to return *this and guard self-assignment, next to +, ==, [] and the others. Go there for the full set and the canonical forms."

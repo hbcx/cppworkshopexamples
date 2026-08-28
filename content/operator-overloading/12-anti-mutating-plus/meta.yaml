@@ -1,0 +1,11 @@
+title: "Anti-pattern: operator+ that changes its operand"
+standard: "C++11"
+difficulty: 3
+summary: "Writing operator+ as a member that does += on *this and returns a reference makes a + b silently modify a, breaking the expectation that + is non-destructive."
+notes: "Users expect a + b to leave a and b untouched and hand back a new value -- that is what makes + usable in a larger expression. A member operator+ that mutates *this turns a + b into an in-place change of a, so any later use of a is wrong, and the value returned is really a itself. Returning a reference to a local instead would dangle. The fix is the canonical form: += is the member that mutates, + is a non-mutating function (ideally free) that works on a copy and returns by value."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "arithmetic operators", url: "https://en.cppreference.com/w/cpp/language/operator_arithmetic" }
+run: true
+sanitizers: []

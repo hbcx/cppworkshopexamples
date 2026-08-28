@@ -1,0 +1,11 @@
+title: "Anti-pattern: a non-const or member-only =="
+standard: "C++11"
+difficulty: 3
+summary: "A comparison written as a non-const member cannot compare const objects, and as any member it is asymmetric -- obj == 5 compiles but 5 == obj does not."
+notes: "Two faults come from the same habit of making == a member. If it is not const, a const object (or a const reference) cannot be compared at all, which spreads as soon as anything holds the type by const&. And even a const member fixes the left operand to be your type, so with an implicit conversion obj == 5 works while 5 == obj fails -- the comparison is not symmetric. Writing == as a free (often friend) function taking two const& operands cures both: it is callable on const objects and both sides convert alike."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "comparison operators", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+run: true
+sanitizers: []

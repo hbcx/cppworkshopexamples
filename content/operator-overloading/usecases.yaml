@@ -1,0 +1,24 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "A domain number type -- money, a physical quantity, a 2D or 3D vector, a matrix -- where the code does real arithmetic on it and readability of the formulas matters."
+  why: "Overloaded +, -, *, and the comparisons let the formula read like the math it implements (a + b * c), instead of add(a, mul(b, c)) that hides the structure. The alternative, named methods, is fine for one operation but turns any real expression into nested calls no one can scan."
+  signal: "A class wrapping one or a few numbers whose public interface is a pile of add/sub/scale/equals methods, called in nested form to build up expressions."
+
+- problem: "Writing your own iterator -- over a custom container, a chunked file, a generated sequence -- so it works with range-for and the standard algorithms."
+  why: "The standard library reaches an iterator only through *it, ++it, and it == end. Providing those operators is what lets your type drop into for (auto x : c) and std::find without adapters; a get()/next()/done() interface cannot, and forces every caller into a hand-written loop."
+  signal: "A cursor or reader class with next()/hasNext()/current() methods that callers loop over by hand, never usable with a standard algorithm."
+
+- problem: "A predicate or comparator that carries configuration -- sort by a chosen field, filter above a runtime threshold, count matches -- passed to std::sort, std::map, or a count/find algorithm."
+  why: "operator() makes an object callable while it holds state a plain function cannot, and unlike a std::function it stays inlinable, so the comparator in a hot sort costs nothing extra. A function pointer has no state; a global variable to carry the threshold is exactly the shared-state mess the functor avoids."
+  signal: "A free comparator function that reads a global or static for its configuration, or a std::function used purely to smuggle a captured value into an algorithm."
+
+- problem: "A handle or smart wrapper -- a checked pointer, a lazy-loading proxy, a reference-counted holder -- that should behave like a pointer at the call site."
+  why: "operator* and operator-> let handle->field and *handle read exactly like a raw pointer, so the wrapper is a drop-in that adds checking or lifetime management without changing call sites. Named get() methods leak the wrapper everywhere and defeat the point of making it transparent."
+  signal: "A wrapper class whose users call .get()->field or .value() on every access, re-implementing pointer syntax by hand around it."
+
+- problem: "Making a type printable for logging, debugging, or text output, so it flows through std::cout, a log stream, or a std::ostringstream."
+  why: "A free operator<< plugs the type into every ostream at once -- console, file, string stream, a logging library that takes an ostream -- and chains with everything else being printed. A print() method that hard-codes std::cout cannot target a different stream and cannot join a << chain."
+  signal: "A toString() or print() method that writes straight to std::cout, called separately from the rest of a log line instead of composing into it."
+
+- problem: "A strong identifier or unit type -- a UserId, an OrderId, a Meters -- that must support only the operations that make sense for it and reject the ones that do not."
+  why: "Overloading exactly the operators that are meaningful (== and < for an id, + and scaling for a unit) while leaving the rest undefined makes nonsense like userId + orderId a compile error, which a bare int or a typedef allows. Selective overloading is how the type enforces its own rules."
+  signal: "An id or measurement passed around as a raw int or a typedef, where unrelated ones can be added, compared, or mixed with no complaint from the compiler."

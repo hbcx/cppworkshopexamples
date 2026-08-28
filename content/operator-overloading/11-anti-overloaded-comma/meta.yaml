@@ -1,0 +1,11 @@
+title: "Anti-pattern: overloading the comma operator"
+standard: "C++11"
+difficulty: 3
+summary: "Overloading operator, replaces the built-in comma, whose job is to evaluate left then right and yield the right -- generic code that relies on that quietly gets a different result."
+notes: "The built-in comma has two guarantees: it evaluates the left operand fully before the right, and the whole expression yields the right operand. Overload it and it becomes a normal function call: it can yield whatever you decide (here, the wrong operand), and it loses the left-before-right sequencing (function arguments are not ordered before C++17). Any template or macro that uses a comma on your type can now misbehave. The fix is to never overload comma -- if you meant to build a list or a chain, give it a named method."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "comma operator", url: "https://en.cppreference.com/w/cpp/language/operator_other" }
+run: true
+sanitizers: []

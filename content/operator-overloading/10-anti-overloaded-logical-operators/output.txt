@@ -1,0 +1,2 @@
+overloaded &&: result=0, rhs evaluated 1 time(s)
+built-in   &&: result=0, rhs evaluated 0 time(s)

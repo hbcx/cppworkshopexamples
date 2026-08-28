@@ -1,0 +1,11 @@
+title: "Comparison operators the classic way"
+standard: "C++11"
+difficulty: 1
+summary: "Before C++20 you write operator== and operator< by hand, then define the other four in terms of them so they stay consistent."
+notes: "== and < are the two primitives; != is just !(a==b), and >, <=, >= all fall out of <. Writing them this way means one place to change and no chance of > and < disagreeing. C++20 replaces the whole block with a single operator<=> -- see the three-way-comparison section -- but this hand-written form is what you read in any pre-C++20 codebase and what <=> is sugar for."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "comparison operators", url: "https://en.cppreference.com/w/cpp/language/operator_comparison" }
+run: true
+sanitizers: []

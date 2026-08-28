@@ -8,3 +8,5 @@
   note: "A strong-typed unit system already in the standard library: std::chrono::duration is meters-over-seconds for time, with typed hours, seconds and milliseconds that will not silently mix -- go there for the production-grade version of the unit-safety example."
 - slug: "enums"
   note: "The built-in distinct type for a fixed set: an enum class makes a separate type from a small set of integer constants for free, where a strong type wraps an arbitrary value like a UserId -- go there for scoped enums, the underlying type, and type-safe flags."
+- slug: "operator-overloading"
+  note: "The mechanics the opt-in operators here are built from: how to write ==, <, +, and the rest correctly, member versus free, and the traps. Go there for the ground rules a strong-type library applies through its mixins."

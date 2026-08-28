@@ -1,0 +1,11 @@
+title: "Anti-pattern: a careless copy assignment"
+standard: "C++11"
+difficulty: 3
+summary: "A hand-written operator= that skips the self-assignment guard can wipe its own data, and one that returns void breaks assignment chaining."
+notes: "Two habits make operator= behave like the built-in. First, guard self-assignment: a version that clears its storage before copying from the source destroys the data when the source IS the target (x = x), and if it frees a raw buffer first it is undefined behavior rather than just wrong. Second, return *this by reference, so a = b = c chains; return void and that line does not even compile. Best of all, follow the rule of zero and let the compiler generate operator= -- write it by hand only when the type manages a resource, and then prefer copy-and-swap."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }
+run: true
+sanitizers: []

@@ -1,0 +1,11 @@
+title: "Stream insertion with operator<<"
+standard: "C++11"
+difficulty: 1
+summary: "Make a type printable by writing operator<< as a free function that takes the stream by reference, writes to it, and returns it."
+notes: "It has to be a free function, not a member: the left operand is the stream, not your type, so a member would read obj << std::cout. Take std::ostream& and return it so calls chain: cout << a << b. Declaring it friend lets it reach private data without a public getter; that is the one common reason to use friend here."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "std::ostream::operator<<", url: "https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt" }
+run: true
+sanitizers: []

@@ -1,0 +1,12 @@
+title: "Anti-pattern: giving an operator a surprising meaning"
+standard: "C++11"
+difficulty: 3
+summary: "Repurposing an operator for something it does not normally mean -- like operator^ as power -- reads wrong and inherits the operator's built-in precedence, which is usually not what you want."
+notes: "An overloaded operator keeps the syntax, the precedence, and the associativity of the built-in one; only the meaning changes. Make ^ mean power and 2 ^ 1 + 2 still parses as 2 ^ (1 + 2), because + binds tighter than ^ -- so it computes 2 to the 3, not (2 to the 1) plus 2. The reader has no way to see this from the call -- though the compiler does warn, with -Wparentheses, that the grouping is probably not what you meant. The fix is to reach for a named function, pow(base, exp), whenever the meaning is not the operator's ordinary one; overload only to match the built-in intent."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "operator precedence", url: "https://en.cppreference.com/w/cpp/language/operator_precedence" }
+run: true
+sanitizers: []
+werror: false

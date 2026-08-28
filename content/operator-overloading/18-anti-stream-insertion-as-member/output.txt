@@ -1,0 +1,2 @@
+(1, 2)  <- had to write 'bad << std::cout'
+points: (1, 2) and (3, 4)

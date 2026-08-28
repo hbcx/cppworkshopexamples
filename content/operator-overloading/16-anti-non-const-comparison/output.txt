@@ -1,0 +1,4 @@
+bad  p == q: 1
+good cp == r:  1
+good r == 250: 1
+good 250 == r: 1

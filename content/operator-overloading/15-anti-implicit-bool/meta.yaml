@@ -1,0 +1,11 @@
+title: "Anti-pattern: a non-explicit operator bool"
+standard: "C++11"
+difficulty: 3
+summary: "An implicit operator bool lets the object turn into bool anywhere, so arithmetic and comparisons on it compile as nonsense instead of being rejected."
+notes: "You add operator bool so the object works in an if. Without explicit, the compiler will also use it to make unrelated code build: flag + 1, flag * 10, and flag_a == flag_b all convert to bool first and quietly produce a number or a wrong comparison. Marking it explicit (C++11) keeps the intended uses -- if, while, static_cast, the negation ! -- and turns the accidental ones into compile errors. This is the safe-bool idiom, built in since C++11."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "conversion operator", url: "https://en.cppreference.com/w/cpp/language/cast_operator" }
+run: true
+sanitizers: []

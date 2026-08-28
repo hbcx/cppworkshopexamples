@@ -1,0 +1,11 @@
+title: "Anti-pattern: wrong return from ++"
+standard: "C++11"
+difficulty: 3
+summary: "Postfix x++ must return the value from before the increment; returning *this after incrementing makes x++ hand back the new value, like ++x."
+notes: "The built-in x++ yields the old value and then advances; ++x advances and yields the new value. A postfix operator that increments first and returns *this collapses the two -- x++ now reads as the new value, and any code written around read-then-advance breaks. The fix is the standard shape: postfix saves a copy of the old state, increments, and returns the old copy by value; prefix increments and returns *this by reference (returning by value there loses the lvalue and copies for nothing)."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "increment operators", url: "https://en.cppreference.com/w/cpp/language/operator_incdec" }
+run: true
+sanitizers: []

@@ -1,0 +1,3 @@
+naive after x = x: size 0
+safe after a = b = c: sizes 1 1 1
+safe after x = x: size 4

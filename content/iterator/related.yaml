@@ -8,3 +8,5 @@
   note: "How generic code uses the iterator categories this chapter defines: std::advance and std::distance dispatch on input, forward, bidirectional and random-access tags to pick an O(1) or O(n) path -- go there for the compile-time technique that turns those categories into a fast implementation."
 - slug: "ranges"
   note: "The modern generalisation of iterators: ranges wraps a begin and a sentinel into one object, keeps the same traversal categories, and adds lazy composable views over them -- go there for range algorithms, views, and the pipe operator."
+- slug: "operator-overloading"
+  note: "The operators a custom iterator is made of, done properly: prefix versus postfix ++, * and ->, and symmetric ==. Go there for the return categories and member-versus-free rules the iterator idiom depends on."

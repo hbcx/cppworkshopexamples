@@ -1,0 +1,5 @@
+a + b   = 1
+a * 10  = 10
+a == b  = 0
+safe flag is set
+as bool: 1

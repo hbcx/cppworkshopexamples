@@ -1,0 +1,2 @@
+bad  b++ returned 6, b is now 6
+good g++ returned 5, g is now 6

@@ -1,0 +1,11 @@
+title: "Prefix and postfix increment"
+standard: "C++11"
+difficulty: 2
+summary: "Prefix ++x returns a reference to the changed object; postfix x++ takes a dummy int parameter, saves the old value, increments, and returns the old value by copy."
+notes: "The unused int parameter is the only thing that tells the two apart -- the language uses it as a marker, you never pass it. Prefix is cheaper: it just increments and returns *this. Postfix must copy the object first to return its previous state, which is why ++it is preferred over it++ in loops. Getting the return categories right is what makes ++ behave like the built-in."
+main_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+detailed_tags:
+  - { name: "increment operators", url: "https://en.cppreference.com/w/cpp/language/operator_incdec" }
+run: true
+sanitizers: []
