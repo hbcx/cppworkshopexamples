@@ -1,0 +1,2 @@
+C-style cast compiled, pointer non-null? 1  (using it would be undefined behavior)
+widget id is still just 7

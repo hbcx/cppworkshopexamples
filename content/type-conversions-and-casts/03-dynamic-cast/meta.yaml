@@ -1,0 +1,11 @@
+title: "dynamic_cast: the checked downcast"
+standard: "C++11"
+difficulty: 2
+summary: "dynamic_cast safely converts a base pointer or reference down to a derived type, checking at run time: it yields nullptr for a pointer or throws std::bad_cast for a reference when the object is not that type."
+notes: "When you hold a Base* and need to know whether it really points at a specific Derived, dynamic_cast asks at run time. On a pointer it returns the derived pointer on success and nullptr on failure, so you branch on the result; on a reference, where there is no null, it throws std::bad_cast instead. It requires a polymorphic type (the base must have a virtual function) because it reads the run-time type information. This is the safe alternative to a static_cast downcast, which does no check at all -- the first anti-pattern in this section."
+main_tags:
+  - { name: "dynamic_cast", url: "https://en.cppreference.com/w/cpp/language/dynamic_cast" }
+detailed_tags:
+  - { name: "std::bad_cast", url: "https://en.cppreference.com/w/cpp/types/bad_cast" }
+run: true
+sanitizers: []

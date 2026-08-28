@@ -1,0 +1,3 @@
+static_cast gave a non-null pointer? 1  (but using it is undefined behavior)
+dynamic_cast<Dog*> on a Cat: nullptr (correctly rejected)
+real Dog has 4 legs

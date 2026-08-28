@@ -1,0 +1,3 @@
+int -> double: 7
+36.6 C = 97.88 F
+bool -> int: 1

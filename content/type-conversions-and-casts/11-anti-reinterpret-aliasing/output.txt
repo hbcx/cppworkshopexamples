@@ -1,0 +1,1 @@
+bits of 1.0f via memcpy = 0x3f800000

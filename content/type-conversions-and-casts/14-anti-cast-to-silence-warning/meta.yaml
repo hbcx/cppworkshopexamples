@@ -1,0 +1,11 @@
+title: "Anti-pattern: a cast that only silences a warning"
+standard: "C++11"
+difficulty: 3
+summary: "Adding a static_cast to make a narrowing or sign-conversion warning disappear does not fix the problem -- it hides the data loss the warning was reporting."
+notes: "A conversion warning is the compiler telling you a value may not survive the conversion. A cast that just repeats the conversion silences the message but keeps the bug: casting a 300 into an unsigned char still wraps it to 44, now without complaint. The cast is only correct when you have first made sure the value fits -- by checking its range, or by choosing a type wide enough to hold it. Treat a warning as a question to answer, not noise to cast away; reach for the cast after the range is guaranteed, not instead of guaranteeing it."
+main_tags:
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }
+detailed_tags:
+  - { name: "narrowing conversion", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+run: true
+sanitizers: []

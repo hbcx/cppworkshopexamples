@@ -1,0 +1,3 @@
+(int)3.9 = 3
+(char*) stripped const, non-null? 1
+static_cast<int>(3.9) = 3

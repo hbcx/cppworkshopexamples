@@ -1,0 +1,11 @@
+title: "Anti-pattern: an unchecked static_cast downcast"
+standard: "C++11"
+difficulty: 3
+summary: "static_cast down a hierarchy does no run-time check, so casting a base pointer to the wrong derived type compiles and gives a pointer that is undefined behavior to use."
+notes: "static_cast trusts you: a Base* to Derived* cast assumes the object really is that Derived, and if it is not, the resulting pointer is invalid and dereferencing it is undefined behavior -- with no crash guaranteed to warn you. Use static_cast to go DOWN a hierarchy only when you already know the type for certain. When you do not, dynamic_cast asks at run time and returns nullptr for a wrong guess, which you can check. This example runs the safe dynamic_cast and only describes the unchecked static_cast, since using the bad pointer is undefined behavior."
+main_tags:
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }
+detailed_tags:
+  - { name: "dynamic_cast", url: "https://en.cppreference.com/w/cpp/language/dynamic_cast" }
+run: true
+sanitizers: []

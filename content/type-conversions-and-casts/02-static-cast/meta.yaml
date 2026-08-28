@@ -1,0 +1,11 @@
+title: "static_cast: the everyday cast"
+standard: "C++11"
+difficulty: 1
+summary: "static_cast performs sensible, compile-time-checked conversions: between numeric types, between an enum and its integer, up a class hierarchy, and back from void*."
+notes: "static_cast is the one you reach for most. It does the conversions the language considers meaningful and checks them at compile time -- narrowing a double to an int (making the truncation explicit), converting an enum to its underlying integer, casting a Derived* up to a Base* (always safe), or turning a void* back into the right pointer type. What it will not do is cast away const or reinterpret unrelated pointers, which is exactly why it is safer than a C-style cast: those need their own named casts, so the intent is visible."
+main_tags:
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }
+detailed_tags:
+  - { name: "narrowing conversion", url: "https://en.cppreference.com/w/cpp/language/list_initialization" }
+run: true
+sanitizers: []

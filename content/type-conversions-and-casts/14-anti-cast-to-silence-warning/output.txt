@@ -1,0 +1,3 @@
+toByte(300) = 44  (data lost -- 300 wrapped)
+checked: 300 does not fit in a byte -- rejected
+checked: stored 200

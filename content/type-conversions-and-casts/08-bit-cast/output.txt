@@ -1,0 +1,2 @@
+bits of 1.0f = 0x3f800000
+round-trips back to 1.0f? 1

@@ -1,0 +1,11 @@
+title: "Controlling conversions with explicit"
+standard: "C++11"
+difficulty: 2
+summary: "Marking a one-argument constructor or a conversion operator explicit keeps it from firing implicitly, so the conversion only happens when you ask for it by name."
+notes: "Implicit conversions are convenient until they fire where you did not intend. explicit is the switch: an explicit constructor still builds the object with a direct T{x} or a static_cast, but it will not be chosen silently to convert an argument; an explicit conversion operator still works in a boolean context or a named cast but not in surprising arithmetic. This is the same tool the strong-types and operator-overloading sections use to make a type refuse conversions that would weaken its safety. Default to explicit on single-argument constructors unless you specifically want the implicit conversion."
+main_tags:
+  - { name: "explicit specifier", url: "https://en.cppreference.com/w/cpp/language/explicit" }
+detailed_tags:
+  - { name: "converting constructor", url: "https://en.cppreference.com/w/cpp/language/converting_constructor" }
+run: true
+sanitizers: []

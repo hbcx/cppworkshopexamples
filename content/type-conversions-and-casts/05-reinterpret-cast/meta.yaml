@@ -1,0 +1,11 @@
+title: "reinterpret_cast: low-level reinterpretation"
+standard: "C++11"
+difficulty: 3
+summary: "reinterpret_cast reads the same bits as a different type -- converting a pointer to an integer and back, or viewing an object's bytes through a char pointer."
+notes: "This is the low-level cast, and the least portable. Its defined, useful cases are narrow: turning a pointer into an integer of type uintptr_t and back to the same pointer, and inspecting any object's raw bytes through an unsigned char* or std::byte*, which the aliasing rules specifically permit. What it must NOT do is reinterpret an object as an unrelated type -- reading a float through an int* -- which breaks strict aliasing and is undefined behavior; the reinterpret-aliasing anti-pattern shows the safe replacement. Treat reinterpret_cast as a flag that you are doing something platform-specific."
+main_tags:
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }
+detailed_tags:
+  - { name: "std::uintptr_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+run: true
+sanitizers: []

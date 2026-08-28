@@ -1,0 +1,11 @@
+title: "Anti-pattern: reinterpret_cast that breaks aliasing"
+standard: "C++11"
+difficulty: 3
+summary: "Reading an object as an unrelated type through a reinterpret_cast pointer -- a float as a uint32_t* -- violates strict aliasing and is undefined behavior; copy the bytes instead."
+notes: "The compiler assumes a float and a uint32_t never name the same memory, so dereferencing a uint32_t* that you got by reinterpret_cast from a float* is undefined behavior -- and optimizers really do exploit that assumption, producing wrong results, not just in theory. The defined way to reinterpret a value's bits is to COPY them: std::memcpy into an object of the target type, or in C++20 the one-line std::bit_cast. Both are safe because they read through bytes, which is allowed. reinterpret_cast is only for the byte-view and pointer-integer cases, not for punning through a typed pointer."
+main_tags:
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }
+detailed_tags:
+  - { name: "std::memcpy", url: "https://en.cppreference.com/w/cpp/string/byte/memcpy" }
+run: true
+sanitizers: []

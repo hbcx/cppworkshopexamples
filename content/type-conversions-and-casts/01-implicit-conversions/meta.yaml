@@ -1,0 +1,11 @@
+title: "Implicit conversions"
+standard: "C++11"
+difficulty: 1
+summary: "The compiler converts between types on its own in many places -- widening a number, a derived pointer to a base, and through a converting constructor or a conversion operator you define."
+notes: "Two kinds happen without a cast. Standard conversions are built in: int to double, a smaller integer to a larger one, a Derived* to a Base*, an array to a pointer. User-defined conversions are ones you opt into: a non-explicit constructor taking one argument makes that argument type convert to yours, and a conversion operator makes your type convert to another. Implicit conversions are convenient but are also where surprises hide, which is why the next examples add named casts and explicit to make conversions visible and to switch the unwanted ones off."
+main_tags:
+  - { name: "implicit conversion", url: "https://en.cppreference.com/w/cpp/language/implicit_conversion" }
+detailed_tags:
+  - { name: "conversion operator", url: "https://en.cppreference.com/w/cpp/language/cast_operator" }
+run: true
+sanitizers: []

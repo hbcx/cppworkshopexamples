@@ -1,0 +1,11 @@
+title: "Anti-pattern: using a dynamic_cast without checking"
+standard: "C++11"
+difficulty: 3
+summary: "The pointer form of dynamic_cast returns nullptr when the type does not match, so using the result without checking dereferences null on a wrong guess."
+notes: "dynamic_cast is only safe if you act on what it returns. On a pointer, a failed cast is nullptr, not an exception -- so code that immediately calls a method on the result works while the guess happens to be right and crashes the moment it is wrong. Always branch on the pointer, ideally in the if-statement that does the cast (if (auto* d = dynamic_cast<Dog*>(a))). If a miss should be an error rather than a branch, use the reference form, which throws std::bad_cast instead of handing back something to forget to check. And remember dynamic_cast needs a polymorphic type; on a class with no virtual function it will not compile."
+main_tags:
+  - { name: "dynamic_cast", url: "https://en.cppreference.com/w/cpp/language/dynamic_cast" }
+detailed_tags:
+  - { name: "std::bad_cast", url: "https://en.cppreference.com/w/cpp/types/bad_cast" }
+run: true
+sanitizers: []

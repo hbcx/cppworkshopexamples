@@ -1,0 +1,11 @@
+title: "The C-style cast, and why to avoid it"
+standard: "C++11"
+difficulty: 2
+summary: "A C-style (T)x cast tries a sequence of the named casts -- static, then const, then reinterpret -- so one syntax can do very different things, and the reader cannot tell which."
+notes: "(T)x is not a single operation. The compiler tries static_cast, then const_cast, then a combination with reinterpret_cast, and uses the first that works -- so the same-looking cast might be a harmless numeric conversion in one place and a dangerous reinterpretation in another. The named casts split those apart: static_cast for meaningful conversions, const_cast for constness, reinterpret_cast for bit reinterpretation. Writing the named cast states the intent and lets the compiler reject a conversion you did not mean -- a static_cast between unrelated pointers is an error, where the C-style cast silently reinterprets. Prefer the named casts in C++."
+main_tags:
+  - { name: "explicit cast", url: "https://en.cppreference.com/w/cpp/language/explicit_cast" }
+detailed_tags:
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }
+run: true
+sanitizers: []

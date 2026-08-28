@@ -1,0 +1,11 @@
+title: "Anti-pattern: a C-style cast that hides a reinterpret"
+standard: "C++11"
+difficulty: 3
+summary: "A C-style cast between unrelated pointer types silently falls back to reinterpret_cast, compiling a dangerous conversion that a named static_cast would reject."
+notes: "Because (T*)p tries reinterpret_cast when nothing safer fits, casting between unrelated types with a C-style cast always compiles -- and then dereferencing the result is undefined behavior. The named cast is the guard: static_cast<B*>(&a) between unrelated types is a compile error that stops you, so you either rethink the code or write reinterpret_cast deliberately and take responsibility for it. This is the core reason to prefer named casts: the C-style cast hides which conversion happened and suppresses the error that would have caught the mistake. This example does not use the bad pointer, since that would be undefined behavior."
+main_tags:
+  - { name: "explicit cast", url: "https://en.cppreference.com/w/cpp/language/explicit_cast" }
+detailed_tags:
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }
+run: true
+sanitizers: []

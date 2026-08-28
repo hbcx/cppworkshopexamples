@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 6}, {"file": "main.cpp", "line": 16}, {"file": "main.cpp", "line": 18, "out": "bits of 1.0f via memcpy = 0x3f800000\n"}, {"file": "main.cpp", "line": 21}, {"file": "main.cpp", "line": 22}]}

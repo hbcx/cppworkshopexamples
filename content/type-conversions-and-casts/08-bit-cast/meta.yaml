@@ -1,0 +1,11 @@
+title: "std::bit_cast for safe type punning"
+standard: "C++20"
+difficulty: 2
+summary: "std::bit_cast reinterprets the bits of one trivially copyable type as another of the same size, without the undefined behavior of a reinterpret_cast through a pointer."
+notes: "Type punning -- reading a float's bits as an integer, say for hashing or serialization -- was traditionally done with reinterpret_cast, which breaks strict aliasing, or with std::memcpy, which is correct but wordy. C++20's std::bit_cast does it in one expression: it copies the bit pattern into a fresh object of the target type, defined behavior as long as both types are trivially copyable and the same size. It is also constexpr where the memcpy version is not. Use it wherever you need the raw bits of a value as another type."
+main_tags:
+  - { name: "std::bit_cast", url: "https://en.cppreference.com/w/cpp/numeric/bit_cast" }
+detailed_tags:
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }
+run: true
+sanitizers: []

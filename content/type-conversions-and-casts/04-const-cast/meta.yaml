@@ -1,0 +1,11 @@
+title: "const_cast: adding and removing const"
+standard: "C++11"
+difficulty: 2
+summary: "const_cast is the only cast that changes const (or volatile); its one legitimate use is calling a const-incorrect API with data you know it will not modify."
+notes: "const_cast adds or strips const on a pointer or reference. It does not change the object, only your access to it -- so it is safe exactly when the object underneath is not actually const and the code you hand it to does not write through it. The classic case is an older or C API that takes char* but only reads. Removing const to actually modify a genuinely const object is undefined behavior, which the const_cast anti-pattern covers. Reach for it rarely, and treat needing it as a hint that an interface should have been const in the first place."
+main_tags:
+  - { name: "const_cast", url: "https://en.cppreference.com/w/cpp/language/const_cast" }
+detailed_tags:
+  - { name: "cv qualifiers", url: "https://en.cppreference.com/w/cpp/language/cv" }
+run: true
+sanitizers: []

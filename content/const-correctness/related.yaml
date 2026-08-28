@@ -9,3 +9,5 @@
   note: "The other face of mutable: a lambda is const-by-default and mutable lets its body change captured-by-value members -- the same keyword, the closure version of the cache trick here. Go there for captures and how a closure stores what it holds."
 - slug: "operator-overloading"
   note: "Where const overloading earns its keep: operator[] and the comparisons come in const and non-const pairs so a const object can still be read and compared. Go there for writing those operators and the member-versus-free choice."
+- slug: "type-conversions-and-casts"
+  note: "The escape hatch from const, and its dangers: const_cast adds or removes const, is sound only for a non-const object behind a const view, and is undefined behavior if you write to truly const data. Go there for the four named casts."

@@ -9,3 +9,5 @@
   note: "Why several operators come in const and non-const pairs, and must be const to be useful: a const object needs a const operator[] and a const == to be read or compared. Go there for const member functions and the const-overload pattern."
 - slug: "three-way-comparison"
   note: "The C++20 successor to the comparison operators here: one <=> replaces the whole ==, <, > block, and a defaulted one is a single line. Go there for the spaceship operator, the ordering categories, and why == stays separate."
+- slug: "type-conversions-and-casts"
+  note: "Where the conversion operators here fit the bigger picture: implicit conversions, the four named casts, and explicit to switch unwanted conversions off. Go there for static_cast, dynamic_cast, const_cast, reinterpret_cast, and bit_cast."

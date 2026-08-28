@@ -1,0 +1,2 @@
+pointer round-trips? 1
+rebuilt from its own bytes matches? 1

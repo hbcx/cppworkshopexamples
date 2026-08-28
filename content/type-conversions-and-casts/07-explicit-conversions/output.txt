@@ -1,0 +1,4 @@
+distance: 100 m
+distance: 250 m
+distance: 3 m
+d is non-zero

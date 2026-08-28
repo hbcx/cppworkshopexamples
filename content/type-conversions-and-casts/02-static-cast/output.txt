@@ -1,0 +1,4 @@
+double -> int: 3
+enum -> int: 4
+void* -> int*: 42
+int8 -> int64: 100

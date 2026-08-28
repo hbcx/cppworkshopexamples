@@ -1,0 +1,24 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "Recovering a concrete type from a base-class handle -- a plugin returned as a base interface, a scene node you must treat specially if it is a particular subclass, a message you handle only when it is a certain kind."
+  why: "dynamic_cast asks the object at run time and returns nullptr on a miss, so the branch is safe and self-documenting. A static_cast down the hierarchy does no check and is undefined behavior on a wrong guess; a hand-rolled type tag re-implements, less safely, what the language already tracks for a polymorphic type."
+  signal: "A base pointer followed by a manual type-tag check, or a static_cast to a derived type guarded only by a comment claiming the type is right."
+
+- problem: "Converting between numeric types at a boundary -- a size_t index into an int API, a double measurement into an integer count, an enum into the wire value it stands for."
+  why: "static_cast makes the conversion visible and intentional, so a reviewer sees exactly where a value changes type and can check the range, and the compiler still rejects the conversions that make no sense. An implicit conversion does the same thing silently, which is how a narrowing loss slips in unreviewed."
+  signal: "Mixed-type arithmetic or assignments that compile with a narrowing warning, or a value passed to an API whose parameter type differs from the caller's."
+
+- problem: "Calling an older or C API that takes a non-const pointer but only reads, from code that correctly holds the data as const."
+  why: "const_cast bridges the const-incorrect signature in the one spot it is needed, with the cast marking exactly where the guarantee is being relied on. The alternative -- making your own data non-const so it fits -- spreads the looseness through your code instead of containing it at the call."
+  signal: "A const object that will not compile against a third-party function taking T*, where the function's documentation or source shows it does not modify the argument."
+
+- problem: "Reading or writing raw bytes at a hardware, file-format, or network boundary -- parsing a packet header, walking a binary layout, hashing an object's representation."
+  why: "Viewing an object as bytes through unsigned char* is the defined use of reinterpret_cast, and copying bytes with memcpy or std::bit_cast reinterprets a value's bits without breaking aliasing. Reinterpreting through a typed pointer instead is undefined behavior that optimizers actively exploit, so the byte-based tools are not pedantry -- they are the versions that keep working under optimization."
+  signal: "Serialization or protocol code that casts a struct pointer to a byte pointer, or type-punning done by dereferencing a reinterpret_cast between unrelated typed pointers."
+
+- problem: "Type punning a value's bit pattern -- reading a float's bits for a fast hash or a bit-exact serialization, or building a value from known bits."
+  why: "std::bit_cast (C++20) reinterprets the bits of one trivially copyable type as another in a single constexpr expression, with a compile-time size check and no undefined behavior. The old reinterpret_cast-through-a-pointer form is undefined, and the memcpy form is correct but verbose and not constexpr."
+  signal: "A memcpy between a float and an integer of the same size, or a reinterpret_cast used to read one arithmetic type's bits as another."
+
+- problem: "Designing a value type that should not silently convert -- a UserId that must not act like an int, a Meters that must not mix with a bare number, a handle that should not slip into arithmetic."
+  why: "Marking the constructor and any conversion operator explicit turns the unwanted implicit conversions into compile errors while keeping the deliberate ones (a named construction or static_cast) available. Leaving them implicit is what lets an id be added to an int or a distance compared to a count by accident."
+  signal: "A single-argument constructor or a conversion operator with no explicit, on a type whose whole point is to be distinct from its underlying representation."

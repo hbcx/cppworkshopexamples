@@ -1,0 +1,11 @@
+title: "Anti-pattern: const_cast to write to a const object"
+standard: "C++11"
+difficulty: 3
+summary: "Casting away const and then modifying is defined only if the object was not really const; writing to a genuinely const object through const_cast is undefined behavior."
+notes: "const_cast changes your access, not the object. If the object underneath is not const -- a non-const variable reached through a const pointer -- stripping const and writing is legal. But if the object was declared const, the compiler may have put it in read-only memory or assumed it never changes, so writing through a const_cast is undefined behavior, and it can appear to work until an optimization exposes it. The fix is to not modify const data: make the object non-const if it must change, or keep it const and copy. This example writes only through a cast whose real object is non-const, and describes the undefined case."
+main_tags:
+  - { name: "const_cast", url: "https://en.cppreference.com/w/cpp/language/const_cast" }
+detailed_tags:
+  - { name: "cv qualifiers", url: "https://en.cppreference.com/w/cpp/language/cv" }
+run: true
+sanitizers: []

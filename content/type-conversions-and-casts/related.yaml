@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "inheritance-and-virtual"
+  note: "Where the hierarchy casts belong: dynamic_cast recovers a derived type from a base handle, and static_cast up or down a hierarchy is the unchecked version. Go there for virtual functions, abstract bases, and the polymorphism these casts navigate."
+- slug: "const-correctness"
+  note: "The property const_cast manipulates: const on variables, parameters, pointers, and member functions, and why casting it away is a last resort. Go there for writing const-correct code so the cast is rarely needed."
+- slug: "operator-overloading"
+  note: "Where user-defined conversions are written: the converting constructor and the conversion operator that make your type convert implicitly, and the explicit that switches that off. Go there for defining conversions as part of a type's interface."
+- slug: "enums"
+  note: "A common static_cast pair: a scoped enum does not convert to its integer on its own, so static_cast moves between an enum and its underlying value. Go there for enum class, the underlying type, and type-safe flags."
