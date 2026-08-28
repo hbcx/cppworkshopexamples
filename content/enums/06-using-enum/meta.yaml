@@ -1,0 +1,11 @@
+title: "using enum (C++20)"
+standard: "C++20"
+difficulty: 2
+summary: "using enum brings a scoped enum's enumerators into scope, so switch labels drop the repeated enum name."
+notes: "C++20 using enum makes a scoped enum's enumerators usable unqualified in the current scope. It is most useful inside a switch, where every label would otherwise repeat the enum name, and it can also appear in a block. It keeps the safety of a scoped enum while cutting the repetition."
+main_tags:
+  - { name: "using enum", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+run: true
+sanitizers: []

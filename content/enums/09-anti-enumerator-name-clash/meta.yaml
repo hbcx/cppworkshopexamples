@@ -1,0 +1,11 @@
+title: "Anti-pattern: enumerator names that clash"
+standard: "C++11"
+difficulty: 3
+summary: "Unscoped enumerators leak into the enclosing scope, so two enums sharing a name collide."
+notes: "Because a plain enum's names leak into the surrounding scope, two enums with a shared enumerator (both defining Active) fail to compile as a redefinition. The usual workaround is ugly prefixes on every enumerator. enum class keeps the names inside the type, so both enums can have Active with no conflict and no prefixes."
+main_tags:
+  - { name: "enum", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+run: true
+sanitizers: []

@@ -1,0 +1,11 @@
+title: "Naming the underlying type"
+standard: "C++11"
+difficulty: 2
+summary: "enum class E : uint8_t pins the integer type -- controlling size and enabling forward declaration."
+notes: "Every enum has an underlying integer type. Naming it explicitly controls the size (for a wire protocol or a compact field) and fixes the value range. std::underlying_type reports it. A scoped enum defaults to int; once the type is pinned the enum can also be forward-declared, since its size is then known."
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }
+run: true
+sanitizers: []

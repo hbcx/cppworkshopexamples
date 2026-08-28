@@ -1,0 +1,11 @@
+title: "Anti-pattern: a default that hides a missing case"
+standard: "C++11"
+difficulty: 3
+summary: "A catch-all default silences -Wswitch, so a new enumerator is quietly routed to default instead of failing the build."
+notes: "The compiler warns (-Wswitch) when a switch over a scoped enum misses an enumerator -- but only if there is no default. Adding a default to look tidy turns that help off, so a new enumerator silently falls into default instead of drawing a build warning. Prefer no default and list every case; keep a fall-off return only for values cast in from outside the enum."
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "switch statement", url: "https://en.cppreference.com/w/cpp/language/switch" }
+run: true
+sanitizers: []

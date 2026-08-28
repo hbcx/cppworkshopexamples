@@ -1,0 +1,11 @@
+title: "Anti-pattern: a plain enum silently becomes an int"
+standard: "C++11"
+difficulty: 3
+summary: "An unscoped enum decays to int, so assigning, comparing or adding it to a plain int compiles silently."
+notes: "The plain enum's implicit conversion to int lets it mix with any integer: int n = color, color == 1, and color + 10 all compile with no warning, even though the number has lost its meaning. (Comparing two different enums is now caught by -Wenum-compare, but the enum-to-int leak is not.) enum class fixes it -- a scoped enum does not convert to int, so these mixings stop compiling."
+main_tags:
+  - { name: "enum", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+run: true
+sanitizers: []

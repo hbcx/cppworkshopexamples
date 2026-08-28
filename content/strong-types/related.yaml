@@ -6,3 +6,5 @@
   note: "The compile-time toolkit a general strong-type library is built from: traits and enable_if decide which operators a wrapper exposes and constrain its constructors -- go there for the introspection and transformation templates that make an opt-in design like this one generic."
 - slug: "chrono"
   note: "A strong-typed unit system already in the standard library: std::chrono::duration is meters-over-seconds for time, with typed hours, seconds and milliseconds that will not silently mix -- go there for the production-grade version of the unit-safety example."
+- slug: "enums"
+  note: "The built-in distinct type for a fixed set: an enum class makes a separate type from a small set of integer constants for free, where a strong type wraps an arbitrary value like a UserId -- go there for scoped enums, the underlying type, and type-safe flags."

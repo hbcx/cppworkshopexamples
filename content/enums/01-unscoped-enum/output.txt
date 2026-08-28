@@ -1,0 +1,4 @@
+Green as value: 1
+Blue = 2
+Low=1 Medium=5 High=10
+table[Blue] = 300

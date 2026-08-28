@@ -1,0 +1,16 @@
+# Where to use it -- rendered at the bottom of the section page.
+- problem: "Modeling a fixed set of states or kinds -- a connection state, a log level, a message type -- that today is an int, a set of #defines, or bare string constants."
+  why: "An enum class gives the set a real type, so a function that takes a State cannot be handed a random int or a value from a different enum, and the mistake is a compile error rather than a runtime surprise. int and #define carry no type at all; string constants cost comparisons and typos the compiler never catches."
+  signal: "A group of related integer constants (or #defines, or magic strings) passed around as int, where nothing stops an unrelated value being used in their place."
+
+- problem: "Defining a value that crosses a boundary with a fixed layout -- a byte in a network packet, a field in a binary file, an opcode -- where the exact size and representation matter."
+  why: "enum class E : uint8_t pins the underlying type, so the value is exactly one byte with a known range, and the type still documents what the number means. A plain int is four bytes and says nothing; a bare integer constant gives size control but throws away the meaning the enum keeps."
+  signal: "Serialization or protocol code casting integers of a specific width to and from named constants, or a struct field whose size is chosen by hand to match a wire format."
+
+- problem: "Representing a set of independent on/off options -- permissions, render or parser flags, capability bits -- that combine and are tested together."
+  why: "Power-of-two enumerators with defined operator| and operator& give combinable flags that still cannot be mixed with an unrelated number, so Read | Write is meaningful and Permission | 7 does not compile. A plain int of bit flags loses that check, and separate bool fields do not pack or pass as one value."
+  signal: "A set of bool parameters or members that are always passed together, or an int treated as a bitfield with hand-written 1 << n constants and no type behind them."
+
+- problem: "A function that must react to every case of a fixed set -- a state machine step, a command dispatcher -- where forgetting a new case is a real risk as the set grows."
+  why: "A switch over a scoped enum with no default lets -Wswitch fail the build the moment a new enumerator is not handled, turning exhaustiveness into a compile-time checklist. An if/else chain on an int, or a switch with a catch-all default, silently accepts the un-handled case instead."
+  signal: "A switch or if-chain over a set of kinds where a newly added kind could slip through unhandled, especially one that already leans on a default branch."

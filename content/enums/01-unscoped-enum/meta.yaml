@@ -1,0 +1,11 @@
+title: "The unscoped enum"
+standard: "C++11"
+difficulty: 1
+summary: "A plain enum is named integer constants that convert freely to int -- convenient, and the root of its problems."
+notes: "An unscoped enum's values start at 0 and increment unless you assign them; gaps are allowed. It converts implicitly to int, so it works in arithmetic and as an array index. Its enumerator names also leak into the enclosing scope. Both of those are shown here and become the anti-patterns later."
+main_tags:
+  - { name: "enum", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "enumerator", url: "https://en.cppreference.com/w/cpp/language/enum" }
+run: true
+sanitizers: []

@@ -1,0 +1,3 @@
+status 99 -> <unknown status>
+as number  -> 99
+is 99 a valid Status? 0

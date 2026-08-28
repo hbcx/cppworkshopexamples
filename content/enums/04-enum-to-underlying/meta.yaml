@@ -1,0 +1,12 @@
+title: "Converting to and from the number"
+standard: "C++11"
+difficulty: 2
+summary: "static_cast<int>(e) gets the value out; static_cast<Enum>(n) puts it back; C++23 adds std::to_underlying."
+notes: "A scoped enum does not convert to its number on its own, so you cast explicitly. static_cast<int>(e) or static_cast<underlying_type>(e) reads the value out; static_cast<Enum>(n) turns a number into an enum, and you are responsible for the number being valid. Since C++23 std::to_underlying(e) is the clearer spelling of the read-out direction."
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }
+run: true
+sanitizers: []

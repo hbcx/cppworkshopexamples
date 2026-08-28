@@ -1,0 +1,11 @@
+title: "Anti-pattern: casting a number that names no enumerator"
+standard: "C++11"
+difficulty: 3
+summary: "static_cast<Enum>(n) accepts any in-range number, producing an enum value no case matches."
+notes: "A cast into an enum is allowed for any value in the underlying type's range, so a number from a file, socket or bad computation becomes an enum that matches none of your enumerators, and a switch silently falls through. The fix is to validate the number against the known enumerators before trusting the cast, and always handle the unknown path."
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }
+run: true
+sanitizers: []

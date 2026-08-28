@@ -1,0 +1,4 @@
+Green as number: 1
+Square as number: 1
+c == Color::Green? 1
+(mixing Color with int or Shape is a compile error)

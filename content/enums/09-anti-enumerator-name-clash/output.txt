@@ -1,0 +1,2 @@
+prefixed unscoped: Conn_Active=1 Job_Active=1
+scoped, no clash:  ConnState2::Active=1 Job2::Active=1

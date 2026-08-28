@@ -14,3 +14,5 @@
   note: "The specialization traits are made of: the standard traits are primary templates plus partial specializations -- go there for the class-template specialization mechanism, plus function and class templates, deduction and dependent names."
 - slug: "sfinae"
   note: "Where traits become a switch: enable_if turns a trait into an on/off condition on an overload, and void_t turns a decltype probe into a has-member trait -- go there for using these traits to select and constrain templates the pre-concepts way."
+- slug: "enums"
+  note: "A trait put to everyday work: std::underlying_type reports a scoped enum's integer type, which is how you convert an enum to its number and build type-safe bit flags -- go there for enum class, the underlying type, and switching."

@@ -1,0 +1,11 @@
+title: "Switching over an enum"
+standard: "C++11"
+difficulty: 2
+summary: "A switch with no default lets -Wswitch flag the day a new enumerator is not handled."
+notes: "A switch over an enum handles each case cleanly, and with -Wall the compiler warns (-Wswitch) when a scoped enum's switch misses an enumerator and has no default. That turns exhaustiveness into a build check -- as long as you do not add a catch-all default, which is exactly the anti-pattern later."
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "switch statement", url: "https://en.cppreference.com/w/cpp/language/switch" }
+run: true
+sanitizers: []

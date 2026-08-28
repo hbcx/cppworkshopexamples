@@ -1,0 +1,4 @@
+title: "Enumerations"
+description: "Named integer constants, and why the scoped enum class is the modern default over the plain enum. Covers the unscoped enum and its free conversion to int, the scoped enum class with strong typing and scoped names, naming the underlying integer type to control size, converting between an enum and its number, switching over an enum with the compiler's exhaustiveness check, the C++20 using enum, and building type-safe bit flags with your own operators -- alongside the traps: a plain enum silently comparing to an unrelated enum, enumerator names clashing in the enclosing scope, casting a number that names no enumerator, and a default case that hides a missing one. Reach for enum class by default; the plain enum's convenience is mostly its danger."
+sort_order: 133
+category: "Language & object model"

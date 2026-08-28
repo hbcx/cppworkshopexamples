@@ -1,0 +1,4 @@
+sizeof(Opcode) = 1 byte
+sizeof(BigId)  = 8 bytes
+Opcode underlying is 1-byte unsigned? 1
+Halt = 255

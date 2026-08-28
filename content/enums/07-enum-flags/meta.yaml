@@ -1,0 +1,11 @@
+title: "Type-safe bit flags"
+standard: "C++11"
+difficulty: 3
+summary: "A scoped enum makes clean bit flags, but you must define the bitwise operators yourself."
+notes: "Power-of-two enumerators plus your own operator| and operator& give combinable flags with real type safety: you cannot OR a Permission with an unrelated number. The pattern is always cast to the underlying type, do the bit work, cast back. That boilerplate is the price for the enum class not converting to int."
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }
+run: true
+sanitizers: []

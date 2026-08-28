@@ -1,0 +1,7 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "variant"
+  note: "The next step when each state must CARRY data, not just name it: std::variant is a type-safe tagged union where the discriminant is often an enum, and std::visit gives the same exhaustiveness a switch does. Go there for sum types that hold a value per alternative."
+- slug: "type-traits"
+  note: "The trait behind the conversions here: std::underlying_type reports an enum's integer type, and it belongs to the wider compile-time toolkit. Go there for the full set of type predicates and transformations."
+- slug: "strong-types"
+  note: "The same goal past enumerations: an enum class is the lightweight way to make a distinct type from an integer set, and a strong-type wrapper is how you do it for an arbitrary value like a UserId or a Meters. Go there for hand-rolled distinct types over any underlying value."

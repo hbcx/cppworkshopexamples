@@ -1,0 +1,3 @@
+Warning as number: 2
+via helper:        2
+3 as Level == Error? 1

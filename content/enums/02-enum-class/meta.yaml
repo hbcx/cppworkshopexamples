@@ -1,0 +1,11 @@
+title: "The scoped enum (enum class)"
+standard: "C++11"
+difficulty: 1
+summary: "enum class gives scoped names and strong typing: no implicit conversion to int, no mixing with other enums."
+notes: "The modern default. Enumerators live inside the enum's name (Color::Red), and the type does not implicitly convert to int, so comparing a Color to an int or to a different enum is a compile error. You opt into a number with an explicit static_cast. Two scoped enums can share an enumerator name with no clash."
+main_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+detailed_tags:
+  - { name: "enum", url: "https://en.cppreference.com/w/cpp/language/enum" }
+run: true
+sanitizers: []
