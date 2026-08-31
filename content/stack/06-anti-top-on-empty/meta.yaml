@@ -1,0 +1,11 @@
+title: "Anti-pattern: top() or pop() on an empty stack"
+standard: "C++11"
+difficulty: 3
+summary: "Calling top() or pop() on an empty stack is undefined behaviour -- there is no element to read or remove -- so every access must be guarded by an empty() check."
+notes: "stack does no bounds checking: top() on an empty stack reads a non-existent element and pop() removes one that is not there, both undefined. It often returns a plausible-looking value in a quick test and then crashes under real input, which hides the bug. The fix is a habit: check empty() before every top() or pop(), or drain the stack with a while (!s.empty()) loop that checks first. The unguarded access is described; the guarded version is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+detailed_tags:
+  - { name: "std::stack::top", url: "https://en.cppreference.com/w/cpp/container/stack/top" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: leaving the default deque backing on a hot stack"
+standard: "C++11"
+difficulty: 3
+summary: "A stack only ever pushes and pops at one end, so the default deque backing spreads elements across chunks for no benefit -- a vector backing keeps them contiguous and cache-friendly."
+notes: "deque is the default because it never invalidates on growth, but a stack does not use the front, so that guarantee buys nothing while its chunked storage costs cache locality. For a stack on a hot path, std::stack<T, std::vector<T>> keeps the elements in one contiguous block, which iterates and pushes faster in practice. The default is fine for a cold stack; the mistake is not reconsidering it where performance matters. Same interface, same result -- only the backing changes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }

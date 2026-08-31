@@ -1,0 +1,3 @@
+deque-backed sum:  5050
+vector-backed sum: 5050
+same result; the vector backing is contiguous and cache-friendly

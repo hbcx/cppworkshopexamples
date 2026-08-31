@@ -1,0 +1,12 @@
+title: "Evaluating a postfix expression"
+standard: "C++11"
+difficulty: 3
+summary: "A reverse Polish notation evaluator is a stack loop: push each number, and on each operator pop the two operands, apply it, and push the result back."
+notes: "Postfix (reverse Polish) needs no parentheses and no precedence rules, which is why calculators and virtual machines use it: the order of the tokens already encodes the grouping, and a single stack evaluates it in one pass. Numbers go on the stack; an operator takes the top two, applies itself, and pushes the answer. Watch the operand order -- the first popped is the right-hand side. At the end the stack holds exactly the result. The same push-operands, pop-on-operator loop is the core of a bytecode interpreter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+detailed_tags:
+  - { name: "std::stack::top", url: "https://en.cppreference.com/w/cpp/container/stack/top" }
+  - { name: "std::stack::pop", url: "https://en.cppreference.com/w/cpp/container/stack/pop" }

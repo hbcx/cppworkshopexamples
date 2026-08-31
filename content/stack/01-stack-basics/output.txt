@@ -1,0 +1,3 @@
+size: 3, top: 3
+popping (LIFO): 3 2 1
+empty now? true

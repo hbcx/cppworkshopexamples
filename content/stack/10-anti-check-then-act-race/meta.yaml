@@ -1,0 +1,12 @@
+title: "Anti-pattern: check-then-act on a shared stack"
+standard: "C++11"
+difficulty: 3
+summary: "On a stack shared between threads, testing empty() and then calling top()/pop() is two steps, and another thread can empty the stack in the gap -- so the pop hits an empty stack."
+notes: "empty() plus top() plus pop() is not atomic. Two threads can both see the stack non-empty, and both then pop, so one of them pops an element that is already gone -- undefined. The container guarantees nothing across separate calls under concurrency. The fix is to hold one lock around the whole check-and-take so it is a single critical section, usually wrapped in a small tryPop helper that returns whether it got a value. The race is described; the locked tryPop is shown running single-threaded so it stays deterministic."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+  - { name: "std::mutex", url: "https://en.cppreference.com/w/cpp/thread/mutex" }
+detailed_tags:
+  - { name: "std::lock_guard", url: "https://en.cppreference.com/w/cpp/thread/lock_guard" }

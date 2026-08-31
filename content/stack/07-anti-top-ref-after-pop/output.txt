@@ -1,0 +1,2 @@
+took: payload
+stack now holds 0 elements

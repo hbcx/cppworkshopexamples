@@ -1,0 +1,23 @@
+- problem: "A traversal walks a deep graph or tree -- a dependency graph, a filesystem, a scene tree -- and recursion risks blowing the real call stack on a long path."
+  why: "An explicit std::stack moves the pending work off the call stack onto the heap, so depth is bounded by memory, not by the thread's stack size. A queue would give breadth-first order instead of depth-first, which is a different traversal, so it is not a substitute."
+  signal: "An iterative traversal with a worklist that pushes a node's children and pops the most recently added, or a recursive walk being rewritten to avoid deep recursion."
+
+- problem: "An editor or design tool offers undo (and redo), where the most recent action is the first one reversed."
+  why: "Undo is last-in-first-out by definition, which is exactly a stack; redo is a second stack that receives what undo pops. A vector with a running index can model it but adds manual bookkeeping the two stacks make unnecessary."
+  signal: "An action history where the newest change is undone first, typically paired with a second stack for redo."
+
+- problem: "A calculator, spreadsheet engine, or bytecode interpreter evaluates arithmetic or logical expressions."
+  why: "Postfix evaluation and the shunting-yard conversion are stack algorithms: operands wait on a stack and each operator consumes the top few. The stack IS the method, so an ad-hoc approach just reimplements it worse and usually mishandles precedence or operand order."
+  signal: "Code that evaluates or parses expressions, pushing operands and applying an operator to the top items when one arrives."
+
+- problem: "A validator checks that nested delimiters are balanced -- brackets in code, tags in HTML or XML, open and close markers in a config format."
+  why: "The rule is inherently LIFO: the most recently opened delimiter must close first, and the closer must match the opener's KIND. A counter cannot tell ( from [, so it wrongly accepts ([)]. A stack remembers the exact opener and catches the mismatch."
+  signal: "Nested open/close markers that must match by kind and nesting, being checked with a counter or ad-hoc logic instead of a stack."
+
+- problem: "A backtracking search -- a maze solver, a constraint solver, a game move generator -- tries a choice, and on failure must return to the exact previous state and try the next option."
+  why: "Pushing the state (or the delta) before each choice and popping to restore on failure gives O(1) save and restore in LIFO order, which is how backtracking unwinds. Copying the whole state at each step instead is far more expensive and easy to get wrong."
+  signal: "A search that saves state before trying an option and restores it on backtrack, exploring the most recent choice first."
+
+- problem: "A virtual machine or interpreter runs nested function calls and needs its own call stack of frames -- locals, the return address, the operand stack per frame."
+  why: "Using the host language's recursion ties the guest's call depth to the host thread's stack and hides the frames you need to inspect, save, or unwind. An explicit frame stack makes the call state first-class, which is required for coroutines, exceptions, or a debugger in the VM."
+  signal: "A bytecode VM or interpreter pushing a frame on call and popping it on return, with the frame holding locals and a return point."

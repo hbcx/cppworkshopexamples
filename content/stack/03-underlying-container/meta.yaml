@@ -1,0 +1,13 @@
+title: "Choosing the underlying container"
+standard: "C++11"
+difficulty: 2
+summary: "std::stack defaults to std::deque, but since it only ever touches one end, a std::vector backing is usually faster -- contiguous storage and better cache behaviour."
+notes: "The second template argument is the container the stack adapts, and it must support back(), push_back() and pop_back() -- which deque, vector and list all do. deque is the default because it never has to reallocate, but a stack only pushes and pops at the back, so vector's contiguous storage wins on cache locality and is the common choice for a hot stack. list works too but has no reason to be picked here. The behaviour is identical across all three; only the performance and memory layout differ."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+  - { name: "container adaptor", url: "https://en.cppreference.com/w/cpp/container" }
+detailed_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

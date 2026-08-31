@@ -7,3 +7,5 @@
   note: "What deque is most often used through: std::queue and std::stack are adaptors that default to deque for their end operations. Go there for the FIFO and LIFO wrappers and how to pick their backing container."
 - slug: "span"
   note: "Why a deque cannot back a std::span: a span needs one contiguous run of elements, which deque's chunked storage does not provide -- copy into a vector first. Go there for the non-owning contiguous view and what can feed it."
+- slug: "stack"
+  note: "One of the two adaptors deque backs by default: std::stack exposes a LIFO push/top/pop over a container, with deque as its default. Go there for the stack interface, its algorithms, and why a vector backing is often the better pick."

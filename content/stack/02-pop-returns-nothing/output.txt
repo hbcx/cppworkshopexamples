@@ -1,0 +1,3 @@
+took: second
+took (moved): first
+remaining: 0

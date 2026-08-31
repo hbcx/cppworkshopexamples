@@ -1,0 +1,12 @@
+title: "Matching nested brackets"
+standard: "C++11"
+difficulty: 2
+summary: "Push each opening bracket and, on every closing bracket, pop the top and check it is the matching kind -- the textbook job a stack was made for."
+notes: "Balancing nested delimiters is the classic stack algorithm because the rule is inherently last-in-first-out: the most recently opened bracket must be the first one closed. A plain counter cannot do it, since it does not track WHICH bracket is open, so a counter accepts the mismatched ([)]. The stack remembers the exact opener, so a wrong closer or a leftover opener is caught. This same shape validates HTML or XML tags, code blocks, and nested scopes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+detailed_tags:
+  - { name: "std::stack::push", url: "https://en.cppreference.com/w/cpp/container/stack/push" }
+  - { name: "std::stack::pop", url: "https://en.cppreference.com/w/cpp/container/stack/pop" }

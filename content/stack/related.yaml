@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "queues"
+  note: "The FIFO sibling and the rest of the adaptor family: std::queue hands back the oldest element and std::priority_queue the largest, where stack hands back the newest -- the same push/pop shape, three different orders. Go there for the comparison and where each one changes the algorithm."
+- slug: "deque"
+  note: "The default container behind a stack, and why: std::deque supplies the cheap back operations the adaptor needs. Go there for the double-ended container itself and the reference-stability and non-contiguity rules that make it the default."
+- slug: "vectors"
+  note: "The backing you usually want instead, and the container to use directly when you need to see the elements: a vector is push_back/back/pop_back plus iteration and indexing. Go there for the growable array behind a fast stack."
+- slug: "adapter"
+  note: "The design pattern std::stack is a built-in case of: the Adapter presents one interface over another object, which is exactly what a stack does over its container. Go there for the pattern in general and when to write your own adapter."

@@ -1,0 +1,13 @@
+title: "Last in, first out: the whole interface"
+standard: "C++11"
+difficulty: 1
+summary: "A std::stack hands back the most recently pushed element: push adds to the top, top reads it, pop removes it, and that narrow interface is the whole point."
+notes: "stack is an adaptor, not a container: it wraps another container and exposes only push, top, pop, size and empty, so you cannot reach past the top. That restriction is the feature -- it makes the LIFO discipline impossible to break by accident. There is no iteration and no random access; if you need those, a stack is the wrong tool. Everything else in the section builds on this push/top/pop core."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
+detailed_tags:
+  - { name: "std::stack::push", url: "https://en.cppreference.com/w/cpp/container/stack/push" }
+  - { name: "std::stack::top", url: "https://en.cppreference.com/w/cpp/container/stack/top" }
+  - { name: "std::stack::pop", url: "https://en.cppreference.com/w/cpp/container/stack/pop" }

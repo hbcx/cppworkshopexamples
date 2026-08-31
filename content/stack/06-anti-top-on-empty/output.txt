@@ -1,0 +1,2 @@
+stack empty, nothing to take
+draining: 30 20 10

@@ -1,0 +1,4 @@
+default backing is std::deque? true
+deque-backed top:  3
+vector-backed top: 3
+same LIFO behaviour, vector backing is often faster

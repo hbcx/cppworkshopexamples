@@ -1,0 +1,12 @@
+title: "Anti-pattern: a reference from top() used after pop()"
+standard: "C++11"
+difficulty: 3
+summary: "top() returns a reference into the stack, and pop() destroys that element, so a reference or pointer kept from top() dangles the moment you pop."
+notes: "The safe idiom reads top() into a variable and then pops, but it is easy to bind a reference instead -- const auto& x = s.top(); s.pop(); -- and then use x, which now refers to a destroyed element. It often still prints the old value because the memory has not been reused yet, which is exactly what makes it a lurking bug. Copy (or move) the value out of top() before pop(), then the local is yours. The dangling use is described; the copy-first fix is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack::top", url: "https://en.cppreference.com/w/cpp/container/stack/top" }
+  - { name: "std::stack::pop", url: "https://en.cppreference.com/w/cpp/container/stack/pop" }
+detailed_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }

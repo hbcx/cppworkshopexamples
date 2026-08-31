@@ -10,3 +10,5 @@
   note: "What std::priority_queue is made of: make_heap, push_heap and pop_heap are the binary-heap operations the adaptor runs internally, exposed so you can keep a heap over storage you also index or iterate -- go there for building and maintaining a heap by hand, and heapsort."
 - slug: "deque"
   note: "The default container both adaptors sit on: std::deque supplies the O(1) front and back operations queue and stack need, and using it directly lets you also index and iterate the elements a queue hides. Go there for the double-ended container behind the adaptors."
+- slug: "stack"
+  note: "The LIFO sibling with its own chapter: std::stack hands back the newest element where a queue hands back the oldest, and it gets its own algorithms -- bracket matching, postfix evaluation, iterative DFS. Go there for the full stack section rather than the comparison here."

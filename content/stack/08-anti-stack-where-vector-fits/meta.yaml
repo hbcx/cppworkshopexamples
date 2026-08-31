@@ -1,0 +1,11 @@
+title: "Anti-pattern: a stack where a vector-as-stack fits"
+standard: "C++11"
+difficulty: 3
+summary: "std::stack deliberately blocks iteration and indexing, so if you also need to scan or index the elements, a std::vector used as a stack is the better tool."
+notes: "A vector does everything a stack does -- push_back is push, back is top, pop_back is pop -- and also lets you iterate, index, and reserve. std::stack is the right choice when you WANT to forbid non-stack access, because the restriction documents intent and prevents mistakes. But when the same code needs to inspect the whole contents, print them, or index into them, wrapping a vector in a stack just hides the access you need. Pick stack for the discipline, vector for the reach. Both give the same LIFO result here."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }

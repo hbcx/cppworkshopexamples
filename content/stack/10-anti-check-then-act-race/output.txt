@@ -1,0 +1,3 @@
+popped 2
+popped 1
+tryPop returned false on the empty stack -- no undefined pop

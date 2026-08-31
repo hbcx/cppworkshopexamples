@@ -1,0 +1,12 @@
+title: "Why pop() returns nothing"
+standard: "C++11"
+difficulty: 2
+summary: "stack::pop returns void, so you read the value with top() and then remove it with pop() -- two steps on purpose, because a value-returning pop could not be exception-safe."
+notes: "A pop that both removed the top and returned it by value would have to copy the element out after erasing it, and if that copy threw, the element would be gone and the value lost -- an unrecoverable state. Splitting the job into top() (read, can be retried) and pop() (remove, cannot throw) keeps the operation safe. So the idiom is always the same: read top() into a variable, then pop(). In C++11 you can move out of top() before popping when a copy is expensive."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::stack::pop", url: "https://en.cppreference.com/w/cpp/container/stack/pop" }
+  - { name: "std::stack::top", url: "https://en.cppreference.com/w/cpp/container/stack/top" }
+detailed_tags:
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }
