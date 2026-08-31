@@ -1,0 +1,11 @@
+title: "Padding and member order"
+standard: "C++11"
+difficulty: 2
+summary: "The compiler inserts padding between members so each one lands on its own boundary, so the order you declare fields in changes the size of the struct."
+notes: "A member must sit at an offset that is a multiple of its alignment, so a char before a double leaves 7 bytes of padding. Sorting members from largest alignment to smallest packs the padding out: the same three fields shrink from 24 bytes to 16 here. offsetof shows exactly where the gaps land. This is free size to reclaim in any struct you allocate a lot of."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+detailed_tags:
+  - { name: "offsetof", url: "https://en.cppreference.com/w/cpp/types/offsetof" }

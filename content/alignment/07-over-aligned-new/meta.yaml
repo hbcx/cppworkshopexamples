@@ -1,0 +1,12 @@
+title: "Over-aligned new (C++17)"
+standard: "C++17"
+difficulty: 3
+summary: "Since C++17 a plain new of an over-aligned type honors the request: the compiler routes it through the aligned operator new, so the object lands on its stricter boundary."
+notes: "Before C++17 new only promised max_align_t alignment, so newing an alignas(32) type could hand back a 16-aligned, under-aligned object. C++17 fixed this: when a type is over-aligned, new and new[] call the operator new overload that takes std::align_val_t. The check here passes for both a single object and an array. This is the heap counterpart to putting alignas on a stack variable."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+detailed_tags:
+  - { name: "std::align_val_t", url: "https://en.cppreference.com/w/cpp/memory/new/align_val_t" }

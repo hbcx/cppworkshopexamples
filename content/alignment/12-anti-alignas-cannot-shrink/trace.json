@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 31, "out": "alignof(Raised) = 8  (alignas raised it)\n"}, {"file": "main.cpp", "line": 32, "out": "sizeof(Normal)  = 8  (padded)\n"}, {"file": "main.cpp", "line": 33, "out": "sizeof(Packed)  = 5  (pragma pack, no padding)\n"}, {"file": "main.cpp", "line": 34}]}

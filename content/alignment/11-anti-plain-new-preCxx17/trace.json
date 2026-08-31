@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 22}, {"file": "main.cpp", "line": 23}, {"file": "main.cpp", "line": 25}, {"file": "main.cpp", "line": 27, "out": "explicit aligned allocation on a 32-byte boundary? yes\n"}, {"file": "main.cpp", "line": 30}, {"file": "main.cpp", "line": 31}]}

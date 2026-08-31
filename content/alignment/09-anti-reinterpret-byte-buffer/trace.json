@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 19}, {"file": "main.cpp", "line": 21}, {"file": "main.cpp", "line": 29}, {"file": "main.cpp", "line": 31, "out": "parsed.id  = 0xdeadbeef\n"}, {"file": "main.cpp", "line": 32, "out": "parsed.len = 42\n"}, {"file": "main.cpp", "line": 36, "out": "&parsed aligned for Header? yes\n"}, {"file": "main.cpp", "line": 37}]}

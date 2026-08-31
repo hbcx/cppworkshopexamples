@@ -1,0 +1,11 @@
+title: "Anti-pattern: reinterpret_cast a byte buffer to a struct"
+standard: "C++11"
+difficulty: 3
+summary: "Casting a byte pointer at some offset in a receive buffer straight to a struct pointer breaks alignment and aliasing rules -- it faults on ARM and is undefined everywhere."
+notes: "A record sitting at offset 1 in a wire buffer is almost never on the struct's boundary, and even aligned, the bytes are not an object of that type, so reading through the cast pointer is undefined. The portable fix is to memcpy the bytes into a real, properly aligned object of the type -- the copy handles both alignment and the type change. Fast, correct, and what serialization libraries actually do. The bad cast is described; the memcpy is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::memcpy", url: "https://en.cppreference.com/w/cpp/string/byte/memcpy" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }

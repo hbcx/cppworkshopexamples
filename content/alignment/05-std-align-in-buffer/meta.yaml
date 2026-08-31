@@ -1,0 +1,11 @@
+title: "Fit an aligned block in a buffer with std::align"
+standard: "C++11"
+difficulty: 2
+summary: "std::align walks a pointer forward to the next boundary inside a raw buffer, adjusting the pointer and remaining space, or returns null when the block will not fit."
+notes: "This is the run-time counterpart to alignas: given a chunk of bytes you already own, std::align hands back a suitably aligned sub-pointer and tells you how much room is left. It is exactly what a bump allocator does to place an aligned object in its pool. Here the buffer base is 16-aligned and the start is one byte in, so std::align advances by 15 to the next boundary -- a deterministic, observable step."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::align", url: "https://en.cppreference.com/w/cpp/memory/align" }
+detailed_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }

@@ -1,0 +1,4 @@
+title: "Alignment"
+description: "Why every type has an address it must sit on, and the tools that query and control it. Covers alignof to read a type's requirement, alignas to raise it, the padding the compiler inserts to keep members aligned (and how member order changes sizeof), std::max_align_t as the alignment plain new and malloc guarantee, std::align to fit an aligned block inside a raw buffer at run time, cache-line separation with alignas(64) to avoid false sharing, and C++17 over-aligned new -- alongside the anti-patterns: assuming a char buffer is aligned enough, reinterpret_cast of a byte buffer to a struct, a pool allocator that ignores alignment, expecting plain new to over-align on a pre-C++17 toolchain, alignas weaker than the natural alignment, and over-aligning array elements until the array balloons."
+sort_order: 141
+category: "Memory management"

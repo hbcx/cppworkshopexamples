@@ -1,0 +1,11 @@
+title: "Query a type's alignment with alignof"
+standard: "C++11"
+difficulty: 1
+summary: "alignof reports the byte boundary a type must sit on -- 1 for char, 4 for int, 8 for double -- and a struct takes the largest alignment of its members."
+notes: "Alignment is a hardware fact: a double is read fastest (or at all) only from an address that is a multiple of 8. alignof exposes that requirement so you can reason about it. A struct's alignment is the maximum over its members, because the strictest member must land on its boundary wherever the struct is placed. The exact numbers depend on the target, but the rule -- struct alignment is the biggest member's alignment -- always holds."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+detailed_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }

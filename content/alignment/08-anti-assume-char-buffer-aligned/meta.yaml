@@ -1,0 +1,12 @@
+title: "Anti-pattern: assuming a char buffer is aligned"
+standard: "C++11"
+difficulty: 3
+summary: "A plain char array is only 1-byte aligned, so placing a double or any wider type in it through a cast gives a misaligned object -- a fault on strict CPUs, a slow path on x86."
+notes: "char buf[sizeof(double)] has alignment 1; a double needs 8. Reading or writing a double through a pointer into that buffer is a misaligned access, which is undefined behaviour. The fix is one keyword: give the buffer alignas matching the type it will hold, then construct the object in it. The misaligned write is described, not run; the aligned version is built and read back."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

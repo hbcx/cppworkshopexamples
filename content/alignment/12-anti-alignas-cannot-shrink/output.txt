@@ -1,0 +1,3 @@
+alignof(Raised) = 8  (alignas raised it)
+sizeof(Normal)  = 8  (padded)
+sizeof(Packed)  = 5  (pragma pack, no padding)

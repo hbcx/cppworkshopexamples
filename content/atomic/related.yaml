@@ -23,3 +23,5 @@
   note: "The atomic specialization for a shared_ptr handle: the same load/store/exchange/compare_exchange/wait, but swapping a whole shared_ptr atomically so threads can publish and read it without racing -- go there for the read-mostly config hot-swap and lock-free structures with safe reclamation."
 - slug: "memory-order"
   note: "The full model behind the order argument these operations take: seq_cst vs relaxed vs release/acquire, happens-before, fences, and the anti-patterns that make lock-free code subtly wrong -- go there when you need to choose or reason about the memory_order, not just use the default."
+- slug: "alignment"
+  note: "Why two correct atomics can still crawl: if they share a 64-byte cache line, each core's write invalidates the other's copy and the line ping-pongs -- false sharing. Go there for alignas(64) and how to separate hot fields onto their own cache lines."

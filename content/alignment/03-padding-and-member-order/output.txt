@@ -1,0 +1,5 @@
+sizeof(Bad)  = 24
+sizeof(Good) = 16
+Bad::b  at offset 8
+Good::a at offset 8
+same fields, 8 bytes saved by reordering

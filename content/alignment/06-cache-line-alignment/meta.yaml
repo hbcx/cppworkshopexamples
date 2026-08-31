@@ -1,0 +1,11 @@
+title: "Separate hot data onto cache lines"
+standard: "C++11"
+difficulty: 3
+summary: "alignas(64) puts two fields on their own cache lines so that two cores writing them do not fight over one line -- the fix for false sharing."
+notes: "A CPU moves memory in cache-line units, usually 64 bytes. If two counters share a line and two threads write them, every write invalidates the other core's copy and the line ping-pongs between cores -- false sharing, a silent throughput killer. Giving each field alignas(64) forces it onto its own line. This example proves the layout without threads: the fields land 64 bytes apart, so the struct grows to 128 bytes. In C++17 the magic number 64 has a name: std::hardware_destructive_interference_size."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+detailed_tags:
+  - { name: "offsetof", url: "https://en.cppreference.com/w/cpp/types/offsetof" }

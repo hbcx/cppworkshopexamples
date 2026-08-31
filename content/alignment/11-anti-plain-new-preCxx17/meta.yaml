@@ -1,0 +1,13 @@
+title: "Anti-pattern: expecting plain new to over-align before C++17"
+standard: "C++17"
+difficulty: 3
+summary: "On a pre-C++17 toolchain, new of an over-aligned type silently gives only max_align_t alignment, so the object is under-aligned even though the code compiles."
+notes: "This is a version-drift trap: the same source is correct under C++17 and wrong under C++14, with no diagnostic. If you must support older standards, do not trust plain new for an over-aligned type -- allocate through the explicit operator new that takes std::align_val_t and construct with placement new, which is exactly what C++17 new now calls for you. The example runs the explicit path and checks the boundary; the pre-C++17 failure is described."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::align_val_t", url: "https://en.cppreference.com/w/cpp/memory/new/align_val_t" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }

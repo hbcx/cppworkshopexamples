@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "operator-new-delete"
+  note: "Where over-aligned allocation actually happens: the operator new overload that takes std::align_val_t, and how C++17 new routes an over-aligned type through it. Go there for the allocation functions behind aligned new."
+- slug: "uninitialized-memory"
+  note: "The next step after you have aligned raw storage: construct objects into it a range at a time with the uninitialized_* algorithms and tear them down with destroy. Go there once the bytes are aligned and you need to fill them."
+- slug: "atomic"
+  note: "Where cache-line alignment pays off: separating hot atomics with alignas(64) removes the false sharing that quietly caps a lock-free counter's throughput. Go there for atomic operations and the memory ordering behind safe sharing."
+- slug: "object-pool"
+  note: "A real allocator that must round every slot up to a usable boundary: the pool hands out fixed-size blocks that have to be aligned for the type they hold. Go there for the pooling pattern that leans on the alignment rules here."

@@ -1,0 +1,4 @@
+sizeof(Packed)    = 16
+sizeof(Separated) = 128
+a and b are 64 bytes apart
+on different 64-byte lines? yes

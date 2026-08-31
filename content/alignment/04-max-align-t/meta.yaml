@@ -1,0 +1,12 @@
+title: "What plain new and malloc guarantee: max_align_t"
+standard: "C++11"
+difficulty: 2
+summary: "std::max_align_t names the strictest alignment that plain new and malloc promise, so memory from them fits any normal type -- but not an over-aligned one."
+notes: "A default allocation is aligned for the worst-case standard type, which alignof(std::max_align_t) reports (16 on a typical 64-bit target). That is why you can new any ordinary struct without thinking about alignment. It is also the ceiling: a type asking for more than max_align_t (say alignas(64)) is over-aligned, and before C++17 plain new did not honor it. The check here shows a fresh allocation meeting the max_align_t boundary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::max_align_t", url: "https://en.cppreference.com/w/cpp/types/max_align_t" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

@@ -1,0 +1,2 @@
+buffer aligned for double? yes
+value read back: 3.14

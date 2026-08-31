@@ -1,0 +1,23 @@
+- problem: "A number-crunching loop feeds arrays of float or double to SIMD intrinsics (SSE, AVX). The aligned load and store instructions require the data to sit on a 16- or 32-byte boundary, and the hot loop runs millions of times."
+  why: "Feeding unaligned data means either the slower unaligned load instructions or, with an aligned load, a hardware fault. alignas(32) on the buffer lets the fast aligned path run safely, which is the whole reason to hand-vectorize in the first place."
+  signal: "float or double arrays passed to _mm_load_* / _mm256_* intrinsics, or a vectorized inner loop, with the storage declared as a plain array and no alignas."
+
+- problem: "A concurrent counter or queue keeps several hot fields (head, tail, a per-thread total) in one struct, and different threads write different fields. Throughput is far below what the algorithm should give and gets worse as cores are added."
+  why: "The fields share a 64-byte cache line, so every write on one core invalidates the line on the others -- false sharing. Packing them tightly, the obvious layout, is exactly what causes it; alignas(64) per field puts each on its own line and the ping-pong stops."
+  signal: "A struct of several std::atomic or hot-written fields, written by different threads, with no padding between them."
+
+- problem: "A custom allocator -- an arena, a bump allocator, a slab -- carves objects of mixed sizes out of one big block. It must return a pointer each caller can safely place any type at, without knowing the type in advance."
+  why: "Returning base plus a running offset hands back misaligned pointers as soon as an odd-sized allocation shifts the cursor. Rounding the offset up to the requested alignment (via std::align or a mask) is what makes the allocator correct for every type it serves."
+  signal: "A bump or arena allocator computing its return pointer as base + used with no round-up to alignof before handing it out."
+
+- problem: "A protocol or file parser reads records out of a byte buffer that came off a socket or a mapped file. Records start at arbitrary offsets that depend on earlier fields, so a record is rarely on its type's boundary."
+  why: "reinterpret_cast of the byte pointer to a struct pointer is misaligned and breaks aliasing -- it faults on ARM and is undefined on x86 too. memcpy of the bytes into a properly aligned object of the type is portable, correct, and optimizes to the same load when it is safe."
+  signal: "reinterpret_cast<SomeStruct*>(buffer + offset) over a received or mapped byte buffer, then reading fields through that pointer."
+
+- problem: "Code talks to hardware: a DMA engine, a memory-mapped device, or a buffer handed to the kernel via mmap or a driver ioctl. The device demands a specific boundary -- a page (4096 bytes), or a device-specific DMA alignment."
+  why: "A normally allocated buffer meets max_align_t at best and the device rejects it or corrupts neighbouring memory. alignas on static storage, or an aligned allocation for the heap, is the only way to hand the hardware the boundary it requires."
+  signal: "Buffers passed to a driver, ioctl, DMA setup, or mmap where a fixed boundary (page size, a device constant) is required but the allocation is a plain new or malloc."
+
+- problem: "A variant-, optional-, or small-buffer-optimized type stores its payload inline in raw bytes and constructs the object there on demand, to avoid a heap allocation for small values."
+  why: "A plain char buffer is 1-byte aligned, so an object placement-new'd into it is misaligned unless you say otherwise. alignas(T) (or alignas matching the widest alternative) on the storage is what makes the inline construction defined."
+  signal: "An aligned_storage or char/byte buffer that holds a constructed object via placement new, declared without an alignas that matches the stored type."

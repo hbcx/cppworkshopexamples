@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 17, "out": "alignof(Plain) = 4\n"}, {"file": "main.cpp", "line": 18, "out": "alignof(Vec4)  = 16\n"}, {"file": "main.cpp", "line": 20}, {"file": "main.cpp", "line": 21}, {"file": "main.cpp", "line": 23, "out": "Vec4 object on a 16-byte boundary? yes\n"}, {"file": "main.cpp", "line": 24}]}

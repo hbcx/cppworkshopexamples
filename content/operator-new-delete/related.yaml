@@ -9,3 +9,5 @@
   note: "Once a type owns raw memory it needs the right destructor, copy, and move. Go there for which special members a resource-owning type must declare, and how a unique_ptr member removes the need."
 - slug: "uninitialized-memory"
   note: "The range-at-a-time layer on top of placement new: construct or move a whole range into raw storage with a rollback on a throw, and tear it down with destroy. Go there once one object at a time is not enough and you are filling a buffer."
+- slug: "alignment"
+  note: "What the aligned operator new overload is really for: an over-aligned type needs storage on a stricter boundary than max_align_t, and std::align_val_t is how new asks for it. Go there for alignof/alignas, over-aligned new, and why plain storage is not always aligned enough."

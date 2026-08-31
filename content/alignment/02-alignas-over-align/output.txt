@@ -1,0 +1,3 @@
+alignof(Plain) = 4
+alignof(Vec4)  = 16
+Vec4 object on a 16-byte boundary? yes

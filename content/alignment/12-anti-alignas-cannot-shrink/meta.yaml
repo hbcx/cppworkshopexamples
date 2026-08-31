@@ -1,0 +1,11 @@
+title: "Anti-pattern: using alignas to pack a struct"
+standard: "C++11"
+difficulty: 3
+summary: "alignas only ever raises alignment, so reaching for alignas(1) to remove padding does nothing useful -- asking for less than the natural alignment is ill-formed, not a way to pack."
+notes: "People try alignas(1) on a member to squeeze out padding, but alignas cannot go below a type's natural requirement; that request is rejected by the compiler. Packing -- laying fields out with no padding -- is a different tool: a compiler pragma or attribute. The example raises alignment with alignas (which works), then packs with a portable pragma pack that both g++ and clang accept, and shows the struct shrink to the sum of its fields. The ill-formed alignas(1) is described, not compiled."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }

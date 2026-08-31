@@ -1,0 +1,4 @@
+alignof(char)   = 1
+alignof(int)    = 4
+alignof(double) = 8
+alignof(Mixed)  = 8  (largest member wins)

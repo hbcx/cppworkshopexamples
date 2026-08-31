@@ -1,0 +1,4 @@
+alignof(std::max_align_t) = 16
+new double meets the max_align_t boundary? yes
+so any type needing <= 16-byte alignment is safe with plain new;
+a type needing more is over-aligned (see over-aligned new)

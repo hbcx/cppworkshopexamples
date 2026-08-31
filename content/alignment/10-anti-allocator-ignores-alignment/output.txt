@@ -1,0 +1,2 @@
+bad_alloc: double at offset 1, 8-aligned? no
+good_alloc: double at offset 8, 8-aligned? yes

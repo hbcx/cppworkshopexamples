@@ -1,0 +1,11 @@
+title: "Raise alignment with alignas"
+standard: "C++11"
+difficulty: 1
+summary: "alignas forces a variable or type onto a stricter boundary than its natural one -- the way you demand 16-byte storage for a SIMD vector that would otherwise only need 4."
+notes: "alignas can only strengthen alignment, never weaken it. Put it on a type and every object of that type honors the boundary; put it on a single variable and just that object does. The address check here always passes: the object really does land on the boundary you asked for. This is the tool behind SIMD data, cache-line separation, and any storage that must meet a hardware rule."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }

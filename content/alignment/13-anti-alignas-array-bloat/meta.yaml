@@ -1,0 +1,11 @@
+title: "Anti-pattern: over-aligning array elements"
+standard: "C++11"
+difficulty: 3
+summary: "Putting alignas(64) on a small struct pads its sizeof up to 64 so arrays stay aligned, so an array of them wastes most of its memory on padding."
+notes: "sizeof must be a multiple of alignof, otherwise element i+1 in an array would fall off the boundary. So alignas(64) on a 4-byte struct makes each element 64 bytes -- a 16x blow-up, all padding. Over-align the one hot object that needs it (a lock, a per-thread counter), not the element type of a big array. If you truly need aligned array storage, align the whole block once and keep the elements small. The example shows the per-element and whole-array cost."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }

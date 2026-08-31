@@ -1,0 +1,12 @@
+title: "Anti-pattern: a bump allocator that ignores alignment"
+standard: "C++11"
+difficulty: 3
+summary: "A bump allocator that just returns base plus a running offset hands back misaligned pointers as soon as a small allocation leaves the next one off its boundary."
+notes: "Carve a 1-byte char out of the pool and the offset is now odd; the next 8-byte double lands on an odd address. The allocator must round the offset up to the requested alignment first -- std::align does exactly that, or a mask (offset + a - 1) and (~(a - 1)) for power-of-two alignments. The example measures the returned offset both ways, without dereferencing the bad pointer as a double."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::align", url: "https://en.cppreference.com/w/cpp/memory/align" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+  - { name: "std::max_align_t", url: "https://en.cppreference.com/w/cpp/types/max_align_t" }

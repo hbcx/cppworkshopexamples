@@ -1,0 +1,5 @@
+sizeof(Small)  = 4
+sizeof(Padded) = 64  (padded up to 64)
+10 Small  = 40 bytes
+10 Padded = 640 bytes for the same 10 ints
+wasted: 600 bytes of padding
