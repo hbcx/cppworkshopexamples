@@ -1,0 +1,12 @@
+title: "Anti-pattern: freeing raw storage without destroying"
+standard: "C++17"
+difficulty: 3
+summary: "Constructing objects in raw storage and then calling operator delete without destroying them first skips every destructor, so anything the objects own leaks."
+notes: "operator delete only releases the bytes; it does not run destructors -- that is the whole point of splitting allocation from construction. So a buffer of strings freed without a destroy pass leaks each string's heap buffer. The live-object counter here shows the leak directly: the count stays above zero. Always destroy the constructed range before releasing its storage."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::destroy", url: "https://en.cppreference.com/w/cpp/memory/destroy" }
+detailed_tags:
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

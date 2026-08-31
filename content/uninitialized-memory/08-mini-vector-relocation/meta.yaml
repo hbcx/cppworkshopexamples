@@ -1,0 +1,13 @@
+title: "A mini vector: allocate, construct, relocate, destroy"
+standard: "C++17"
+difficulty: 3
+summary: "A tiny growable buffer that ties the toolkit together: operator new for raw capacity, placement new to append one element, uninitialized_move to relocate on a grow, and destroy to tear the range down."
+notes: "This is a stripped-down std::vector and shows why the algorithms exist. Capacity is separate from size, so most of the buffer is raw at any moment. push_back constructs one object in the next raw slot; a grow allocates a bigger block, moves the live objects across with uninitialized_move, destroys the old range, and frees the old block. The destructor destroys the live prefix, then frees. Compare with the operator-new-delete section for the allocation half."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_move", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_move" }
+  - { name: "std::destroy", url: "https://en.cppreference.com/w/cpp/memory/destroy" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

@@ -1,0 +1,3 @@
+source objects: alive = 5
+caught: copy failed on id 3
+after the throw: alive = 5 (partial copies rolled back)

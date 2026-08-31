@@ -28,3 +28,5 @@
   note: "The O(1) member swap and the swap-with-empty capacity trick: a vector swaps by exchanging its buffer pointer, and clear() keeps capacity where swap-with-empty releases it -- go there for swap, iter_swap, and swap_ranges."
 - slug: "initialization"
   note: "Why vector<int>{n} and vector<int>(n) build different vectors: braces prefer the initializer_list constructor, so {n} is one element and (n) is a size -- go there for the forms of initialization and the brace-versus-paren rule behind this trap."
+- slug: "uninitialized-memory"
+  note: "How a vector works underneath: capacity larger than size means the tail of the buffer is raw, filled with uninitialized_* on a grow and torn down with destroy, with a rollback if an element move throws -- go there for the construction algorithms behind reserve and reallocation."

@@ -1,0 +1,3 @@
+after first fill:  alive = 3
+after second fill: alive = 6 (3 old objects leaked)
+after cleanup:     alive = 3 (the leaked 3 are unreachable)

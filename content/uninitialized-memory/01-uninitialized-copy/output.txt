@@ -1,0 +1,4 @@
+constructed 3 strings in raw storage
+  alpha
+  beta
+  gamma

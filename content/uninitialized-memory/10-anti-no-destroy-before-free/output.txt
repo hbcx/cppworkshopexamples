@@ -1,0 +1,2 @@
+bad  (skipped destroy): alive = 3 (leaked)
+good (destroyed first): alive = 0

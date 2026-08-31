@@ -1,0 +1,12 @@
+title: "Anti-pattern: a construct loop with no rollback"
+standard: "C++17"
+difficulty: 3
+summary: "Hand-rolling the fill as a placement-new loop leaks every object already built if a later element throws, because a plain loop has no cleanup on the throw path -- the reason uninitialized_copy exists."
+notes: "The manual loop and uninitialized_copy do the same work on the happy path, so the loop looks fine until a constructor throws midway. The loop unwinds out with its prefix still constructed and now unreachable; uninitialized_copy destroys that prefix before rethrowing. The counter compares the two: the manual path leaves orphaned objects behind, the algorithm leaves none. Do not re-implement this loop -- the correct version is already in the standard library."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_copy", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_copy" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

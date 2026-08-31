@@ -7,3 +7,5 @@
   note: "The applied form of a class operator new: a free-list that recycles fixed-size blocks instead of hitting the global allocator each time. Go there for the full pooling pattern this section's per-class allocator sketches."
 - slug: "rule-of-0-3-5"
   note: "Once a type owns raw memory it needs the right destructor, copy, and move. Go there for which special members a resource-owning type must declare, and how a unique_ptr member removes the need."
+- slug: "uninitialized-memory"
+  note: "The range-at-a-time layer on top of placement new: construct or move a whole range into raw storage with a rollback on a throw, and tear it down with destroy. Go there once one object at a time is not enough and you are filling a buffer."

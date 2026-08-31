@@ -1,0 +1,6 @@
+copied 3, filled 2 -> live region holds 5 strings:
+  log-1
+  log-2
+  log-3
+  ----
+  ----

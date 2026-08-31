@@ -1,0 +1,12 @@
+title: "The strong guarantee: rollback on a throw"
+standard: "C++11"
+difficulty: 3
+summary: "If a constructor throws partway through, uninitialized_copy destroys every object it already built before letting the exception out -- so a failed fill leaves no half-constructed range behind."
+notes: "This is why containers lean on these algorithms instead of a plain loop. The copy constructor here throws on one element; the live-object counter proves that after the exception only the source objects remain -- the partial copies were rolled back automatically. Getting this right by hand means a try/catch that destroys the prefix on every throw path, which is exactly what the algorithm already does."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_copy", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_copy" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }

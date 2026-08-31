@@ -1,0 +1,12 @@
+title: "Anti-pattern: destroy on storage that holds no object"
+standard: "C++17"
+difficulty: 3
+summary: "Calling destroy or destroy_at on raw storage that was never constructed -- or destroying the same range twice -- runs a destructor on a non-object, which is undefined."
+notes: "destroy_at(p) is p->~T(); it assumes p points at a live object. Point it at raw bytes and the destructor reads members that do not exist; run it twice on the same object and the second call works on already-dead storage. The count you destroy must equal the count you constructed, exactly once. The UB cases are described; the run builds a range, destroys it once, and frees. This is the mirror of the missing-destroy mistake: too few destructors leaks, too many is undefined."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::destroy_n", url: "https://en.cppreference.com/w/cpp/memory/destroy_n" }
+detailed_tags:
+  - { name: "std::destroy_at", url: "https://en.cppreference.com/w/cpp/memory/destroy_at" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

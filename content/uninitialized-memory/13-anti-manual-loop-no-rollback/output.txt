@@ -1,0 +1,4 @@
+manual loop threw: copy failed on id 3
+after manual loop: alive = 8 (source 5 + 3 orphaned)
+uninitialized_copy threw: copy failed on id 3
+after algorithm:   alive = 5 (source 5, copies rolled back)

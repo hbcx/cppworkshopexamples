@@ -12,3 +12,5 @@
   note: "What the shared-pool-without-a-lock anti-pattern actually needs: a pool handed out across threads must guard its free-list with an atomic or a lock, or the checkout races -- go there for atomic operations, compare_exchange, and the memory ordering behind safe sharing."
 - slug: "operator-new-delete"
   note: "The language hook a pool plugs into: a class operator new/delete lets `new T` draw from your free-list, and placement new builds objects in the slab you reserved. Go there for the allocation functions this pattern is built on."
+- slug: "uninitialized-memory"
+  note: "How a pool builds and tears down objects in the raw slots it hands out: construct on checkout with placement new or the uninitialized_* algorithms, destroy on return with destroy_at. Go there for the construction and teardown half of the slots a pool reserves."

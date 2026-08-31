@@ -1,0 +1,6 @@
+default_construct on a class type:
+  Loud() ran
+  Loud() ran
+  Loud() ran
+value_construct on ints gave: 0 0 0
+(default_construct would leave ints indeterminate)

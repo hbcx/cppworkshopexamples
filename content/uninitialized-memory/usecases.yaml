@@ -1,0 +1,19 @@
+- problem: "You are writing a vector-like container and need capacity to be larger than size, so push_back is amortized O(1) instead of reallocating on every insert. The extra capacity must exist as storage without holding constructed objects."
+  why: "std::vector<T>(cap) constructs cap objects you did not ask for, forcing T to be default-constructible and paying a constructor per unused slot. Separating operator new for the bytes from uninitialized_* for the live prefix lets capacity be raw and size be the constructed part."
+  signal: "A class with a raw T* buffer plus separate size and capacity fields, where the region between size and capacity must stay unconstructed."
+
+- problem: "A variant- or optional-like type keeps its payload inline (small-buffer optimization) rather than on the heap, and the slot may be empty. The storage has to exist before any object does, and construct only when a value is assigned."
+  why: "Holding a live default-constructed T instead requires T to be default-constructible and pays for an object you may immediately overwrite. Raw aligned storage plus placement new / uninitialized_* constructs exactly when engaged, and destroy_at clears it, so an empty slot costs nothing."
+  signal: "An aligned byte buffer or aligned_storage member next to a bool engaged flag, with construction gated on that flag."
+
+- problem: "A container reallocates to a bigger block and must move its elements across, but a copy or move constructor mid-way can throw, and the container must be left unchanged if it does (the strong exception guarantee)."
+  why: "A hand-written placement-new loop leaks the objects it already moved when a later one throws. uninitialized_copy and uninitialized_move destroy their partial output before rethrowing, so the old block is still intact and can be kept -- the guarantee comes for free."
+  signal: "A grow() or reserve() that placement-news elements into a new block in a bare loop with no try/catch and no cleanup on the throw path."
+
+- problem: "A network or database layer receives records into a preallocated slab: capacity is reserved up front to avoid per-record allocation, and records are constructed in place as bytes arrive off the wire."
+  why: "Constructing the whole slab eagerly wastes work when only part fills, and needs a default state for T. uninitialized_copy_n / value_construct build exactly the arrived count into the front of the slab, and the returned end pointer marks the live region to destroy later."
+  signal: "A reserve-then-emplace pattern over a single large buffer, where only the first N slots are ever live and N grows as data arrives."
+
+- problem: "An arena or pool allocator hands out raw memory blocks and must not run constructors or destructors itself, because it does not know the element type. The caller owns object lifetime inside the block it borrowed."
+  why: "new/delete per object defeats the point of the pool -- one allocation up front, many objects inside it. The pool returns void*; the caller constructs with placement new or uninitialized_*, and destroy_at ends each object before the block goes back, keeping the pool type-agnostic."
+  signal: "A free-list or bump allocator that returns void* or std::byte*, with construction and destruction left to the caller rather than done by the allocator."

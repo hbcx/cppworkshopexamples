@@ -1,0 +1,14 @@
+title: "Run destructors with destroy / destroy_n / destroy_at"
+standard: "C++17"
+difficulty: 2
+summary: "The teardown half of the toolkit: destroy_at ends one object, destroy_n ends a counted run, and destroy ends a whole range -- each runs the destructor without freeing the raw storage."
+notes: "These three only call destructors; releasing the bytes is a separate operator delete. destroy_at(p) is exactly p->~T() with a name; destroy and destroy_n loop it over a range or a count. They are the matching bookend to the uninitialized_* construction algorithms, and the live-object counter here shows each call ending exactly the objects you name."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::destroy", url: "https://en.cppreference.com/w/cpp/memory/destroy" }
+  - { name: "std::destroy_n", url: "https://en.cppreference.com/w/cpp/memory/destroy_n" }
+  - { name: "std::destroy_at", url: "https://en.cppreference.com/w/cpp/memory/destroy_at" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

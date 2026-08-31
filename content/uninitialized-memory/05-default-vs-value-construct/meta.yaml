@@ -1,0 +1,13 @@
+title: "default_construct vs value_construct"
+standard: "C++17"
+difficulty: 2
+summary: "Two ways to build objects in raw storage that differ only for trivial types: default_construct leaves an int indeterminate, value_construct zero-initializes it."
+notes: "For a class with a user-written default constructor both algorithms call it, so they behave the same. The split shows up only for trivial types (int, plain structs): value_construct zeroes them, default_construct does not touch the bytes and leaves whatever junk was there. Reach for value_construct when you rely on a clean zero start, default_construct when you will overwrite every slot anyway and want to skip the zeroing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_default_construct", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_default_construct" }
+  - { name: "std::uninitialized_value_construct", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_value_construct" }
+detailed_tags:
+  - { name: "std::destroy", url: "https://en.cppreference.com/w/cpp/memory/destroy" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

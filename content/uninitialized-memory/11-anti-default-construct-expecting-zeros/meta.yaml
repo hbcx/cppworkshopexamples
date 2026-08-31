@@ -1,0 +1,12 @@
+title: "Anti-pattern: default_construct expecting zeros"
+standard: "C++17"
+difficulty: 3
+summary: "Running uninitialized_default_construct over trivial types and then reading them as if they were zero is a bug: default_construct does not touch the bytes, so the values stay indeterminate."
+notes: "The name suggests it initializes, but for a trivial type default-initialization is a no-op -- the ints keep whatever junk the raw bytes held, and reading an indeterminate value is itself undefined. If you rely on a zero start, call uninitialized_value_construct instead. Reach for default_construct only when you will write every slot before reading it. The indeterminate read is described, not run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_value_construct", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_value_construct" }
+detailed_tags:
+  - { name: "std::uninitialized_default_construct", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_default_construct" }
+  - { name: "std::destroy", url: "https://en.cppreference.com/w/cpp/memory/destroy" }

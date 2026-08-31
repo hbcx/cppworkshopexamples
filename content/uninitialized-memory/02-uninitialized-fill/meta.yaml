@@ -1,0 +1,12 @@
+title: "Fill raw storage with copies of one value"
+standard: "C++11"
+difficulty: 1
+summary: "uninitialized_fill copy-constructs the same value into every slot of a raw range, the way a container fills newly grown capacity with a default element."
+notes: "Same idea as uninitialized_copy but from one value instead of a source range: each slot gets its own copy-constructed object, so a fill of N strings makes N independent strings, not N views of one. You still destroy the range yourself before freeing the bytes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_fill", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_fill" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

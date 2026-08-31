@@ -1,0 +1,4 @@
+uninitialized_copy built 3 strings:
+  north
+  south
+  east

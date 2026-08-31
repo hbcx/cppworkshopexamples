@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "operator-new-delete"
+  note: "The other half of the split these algorithms assume: operator new hands you raw bytes and placement new builds one object; this section is the range-at-a-time construction and teardown on top of it. Go there for the allocation functions and single-object placement new."
+- slug: "vectors"
+  note: "The container this toolkit implements under the hood: capacity larger than size means most of the buffer is raw, filled with uninitialized_* on a grow and torn down with destroy. Go there for how size, capacity and reallocation behave from the outside."
+- slug: "object-pool"
+  note: "Where raw slots and manual construct/destroy show up in a real component: a pool reserves storage once and constructs objects in it on checkout, destroying them on return. Go there for the free-list that hands out the slots this section fills."
+- slug: "raii"
+  note: "The teardown half framed as an idiom: destroy is the release step, and wrapping raw storage in an owning type means the destructor runs it on every exit path. Go there for the acquire-in-constructor, release-in-destructor pattern these manual buffers are missing."

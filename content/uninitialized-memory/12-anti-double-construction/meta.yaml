@@ -1,0 +1,12 @@
+title: "Anti-pattern: constructing over live objects"
+standard: "C++17"
+difficulty: 3
+summary: "Running an uninitialized_* construction over slots that already hold live objects builds new objects on top of the old ones without destroying them, so whatever the old objects owned leaks."
+notes: "The uninitialized_* algorithms assume the destination is raw. Point one at storage that already holds constructed objects and it happily constructs again in place: the old objects lifetimes end when the storage is reused, but their destructors never run, so their resources leak. The live-object counter shows the count doubling. To refill live storage, destroy the range first, or assign into it instead of constructing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_fill", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_fill" }
+detailed_tags:
+  - { name: "std::destroy", url: "https://en.cppreference.com/w/cpp/memory/destroy" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

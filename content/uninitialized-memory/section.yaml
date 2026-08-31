@@ -1,0 +1,4 @@
+title: "Uninitialized memory"
+description: "The <memory> algorithms that build and tear down objects in raw storage -- the toolkit you reach for once operator new hands you bytes that hold no objects yet. Covers copy-constructing a range into raw slots (uninitialized_copy and the _n form), filling them with one value (uninitialized_fill / _fill_n), move-relocating on a container grow (uninitialized_move), the default- vs value-construct split (one leaves trivial types indeterminate, the other zero-initializes), running destructors on a range with destroy / destroy_n / destroy_at, and the strong exception guarantee these algorithms give -- alongside the anti-patterns: std::copy or assignment into raw memory, freeing storage without destroying, default_construct expecting zeros, constructing over live objects, a hand-rolled loop with no rollback, and destroy on storage that was never constructed."
+sort_order: 140
+category: "Memory management"

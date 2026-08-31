@@ -1,0 +1,13 @@
+title: "Count-based fill: the _n variants"
+standard: "C++11"
+difficulty: 2
+summary: "uninitialized_copy_n and uninitialized_fill_n take a count instead of an end iterator and return the new end of the destination -- the shape a container uses when it constructs into part of a larger buffer."
+notes: "The _n forms fit raw storage well: you have a buffer of some capacity and construct only the first size slots. Each call returns one past the last object it built, so you chain them -- copy the first few, then fill the rest -- and the returned pointer tells you exactly how far the constructed region reaches, which is also the exact range you must destroy later."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_copy_n", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_copy_n" }
+  - { name: "std::uninitialized_fill_n", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_fill_n" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

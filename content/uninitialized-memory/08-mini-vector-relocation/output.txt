@@ -1,0 +1,6 @@
+pushed one -> size 1, capacity 1
+pushed two -> size 2, capacity 2
+pushed three -> size 3, capacity 4
+pushed four -> size 4, capacity 4
+pushed five -> size 5, capacity 8
+contents: one two three four five

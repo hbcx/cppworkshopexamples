@@ -1,0 +1,12 @@
+title: "Move a range into raw storage on a grow"
+standard: "C++17"
+difficulty: 2
+summary: "uninitialized_move move-constructs a range into raw storage -- the relocation step a container runs when it outgrows its buffer and must shift live objects into a bigger one."
+notes: "Moving beats copying here: relocating N strings into the new block steals their buffers instead of duplicating them. The source elements are left in the moved-from state but still alive, so you must still destroy the old range before freeing the old block. New in C++17, together with the destroy family it pairs with."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_move", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_move" }
+detailed_tags:
+  - { name: "std::destroy", url: "https://en.cppreference.com/w/cpp/memory/destroy" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

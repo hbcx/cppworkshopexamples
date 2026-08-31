@@ -1,0 +1,4 @@
+after construct: alive = 4
+after destroy_at:  alive = 3
+after destroy_n:   alive = 1
+after destroy:     alive = 0

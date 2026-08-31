@@ -1,0 +1,12 @@
+title: "Anti-pattern: std::copy into raw memory"
+standard: "C++11"
+difficulty: 3
+summary: "Using std::copy or assignment to put objects into freshly allocated raw storage assigns into slots that hold no object -- undefined, because operator= reads a destination that was never constructed."
+notes: "The trap is that std::copy and uninitialized_copy look interchangeable but are not: std::copy does dest = src, which for a std::string reads the destination's pointer and length to free the old buffer -- but there is no old buffer, just garbage bytes. Use std::copy only over a range of live objects; use uninitialized_copy to turn raw storage into live objects. The UB line is described, not run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uninitialized_copy", url: "https://en.cppreference.com/w/cpp/memory/uninitialized_copy" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
