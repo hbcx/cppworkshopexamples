@@ -1,0 +1,12 @@
+title: "The largest element first"
+standard: "C++11"
+difficulty: 1
+summary: "std::priority_queue hands back the greatest element with top(), whatever order you pushed in -- a max-heap behind a push/top/pop interface."
+notes: "Like queue and stack, priority_queue is an adaptor: push adds, top reads the most important element, pop removes it, and there is no iteration. The default order is a max-heap, so top() is the largest by the element's < operator. push and pop are O(log n) and top is O(1), which is what makes it the tool for always needing the current extreme without keeping the whole set sorted. Everything else in the section changes what most important means or what the elements are."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+detailed_tags:
+  - { name: "std::priority_queue::push", url: "https://en.cppreference.com/w/cpp/container/priority_queue/push" }
+  - { name: "std::priority_queue::top", url: "https://en.cppreference.com/w/cpp/container/priority_queue/top" }

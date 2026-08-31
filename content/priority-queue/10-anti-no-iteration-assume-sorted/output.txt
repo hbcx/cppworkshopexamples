@@ -1,0 +1,2 @@
+all elements in priority order: 9 5 4 3 2 1 1
+original still has 7 elements, top 9

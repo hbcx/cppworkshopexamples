@@ -1,0 +1,5 @@
+priority then FIFO among equals:
+  [9] nine
+  [5] five-a
+  [5] five-b
+  [5] five-c

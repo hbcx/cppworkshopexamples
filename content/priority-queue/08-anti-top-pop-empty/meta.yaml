@@ -1,0 +1,12 @@
+title: "Anti-pattern: top() or pop() on an empty queue"
+standard: "C++11"
+difficulty: 3
+summary: "top() and pop() on an empty priority_queue are undefined -- there is no element to read or remove -- so a drain loop must check empty() before each access."
+notes: "Like the other adaptors, priority_queue does no checking: top() on an empty queue reads a non-existent element and pop() removes one that is not there. The safe drain is while (!empty()) with the check first, and any single top()/pop() outside a loop needs its own guard. The bug hides because an empty queue often reads a leftover value once before it bites. The unguarded access is described; the guarded drain is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+detailed_tags:
+  - { name: "std::priority_queue::top", url: "https://en.cppreference.com/w/cpp/container/priority_queue/top" }
+  - { name: "std::priority_queue::pop", url: "https://en.cppreference.com/w/cpp/container/priority_queue/pop" }

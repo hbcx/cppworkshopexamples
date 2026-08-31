@@ -1,0 +1,23 @@
+- problem: "A discrete-event simulation -- a network model, a factory line, a game -- processes events in timestamp order, and handling one event schedules new events at later times."
+  why: "You cannot sort the events once, because new ones appear while you process the queue. A priority_queue keyed on time always hands back the earliest pending event and takes the new ones in O(log n), which repeated sorting or a linear scan for the minimum cannot match."
+  signal: "A loop that pulls the earliest-time item and, while handling it, pushes new items with later times."
+
+- problem: "A shortest-path or best-first search -- Dijkstra, A*, a routing engine -- must repeatedly expand the closest or most promising frontier node, and the frontier changes as edges are relaxed."
+  why: "Scanning the frontier for the minimum each step is O(V) per step, the classic slow Dijkstra. A priority_queue keyed on distance gives the next node in O(log V), which is what turns the algorithm from quadratic into near-linear on sparse graphs."
+  signal: "A shortest-path or search loop that linearly scans a set of candidates for the smallest distance or cost instead of using a heap."
+
+- problem: "A scheduler runs ready jobs in priority order -- an OS run queue, a task executor, a print spooler -- with new jobs arriving while others run."
+  why: "Re-sorting a list on every insert is O(n log n) each time, and a std::multimap carries node overhead you do not need. A priority_queue keeps the highest-priority ready job at top() and absorbs arrivals in O(log n), which is the exact shape of the problem."
+  signal: "Jobs or tasks pulled by priority with new ones added over time, currently sorted or scanned on each pick."
+
+- problem: "You need the k largest (or smallest) items of a huge or streaming dataset -- top-N search results, the biggest outliers, the nearest neighbours -- without room to hold or sort all of it."
+  why: "Sorting everything is O(n log n) and needs the whole dataset in memory. A bounded heap of size k keeps only the current best k in O(k) memory and O(log k) per item, so it works on a stream that never fully fits."
+  signal: "Code that sorts an entire collection only to take the first few, or a streaming top-N kept by re-sorting."
+
+- problem: "Several already-sorted sequences must be merged into one sorted output -- an external sort's merge phase, combining sorted log files, a k-way merge in a database."
+  why: "Concatenating and re-sorting throws away the fact that each input is already ordered and costs O(n log n). A priority_queue holding the current head of each sequence yields the global next element in O(log k), giving an O(n log k) merge that streams without loading everything."
+  signal: "Merging multiple sorted inputs by concatenating and sorting, or by repeatedly scanning the heads for the smallest."
+
+- problem: "A system manages many timers or deadlines -- connection timeouts, scheduled retries, TTL expiry -- and repeatedly needs the one that fires soonest."
+  why: "Scanning every timer to find the nearest deadline is O(n) per tick. A priority_queue keyed on fire time keeps the soonest at top(), so checking and firing due timers is O(log n) per event, which a linear scan over thousands of timers cannot match."
+  signal: "A timer or deadline set scanned in full to find the earliest expiry, rather than kept in a heap by fire time."

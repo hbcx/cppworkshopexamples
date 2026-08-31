@@ -1,0 +1,12 @@
+title: "Ordering structs by a field"
+standard: "C++11"
+difficulty: 2
+summary: "Give priority_queue a comparator that ranks your struct by one field, and it becomes a scheduler that always returns the highest-priority item -- the everyday priority_queue shape."
+notes: "The comparator is a callable returning whether its first argument ranks BELOW the second, so a scheduler that wants the highest priority on top compares a.priority < b.priority. A small struct with operator() is the usual form; a lambda works too but has to be named in the type. This example uses distinct priorities so the order is fully defined; what happens when two items share a priority is the tie-break question covered later. This is the pattern behind task schedulers, event loops, and job queues."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }
+detailed_tags:
+  - { name: "std::priority_queue::top", url: "https://en.cppreference.com/w/cpp/container/priority_queue/top" }

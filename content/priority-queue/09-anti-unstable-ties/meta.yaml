@@ -1,0 +1,12 @@
+title: "Anti-pattern: relying on the order of equal priorities"
+standard: "C++11"
+difficulty: 3
+summary: "Elements that compare equal come out of a priority_queue in an unspecified order, so code that expects equal-priority items to keep their arrival (FIFO) order is relying on behaviour the standard does not promise."
+notes: "A heap is not stable: among items of the same priority, which one top() returns is unspecified and can differ between library versions or compilers. Assuming the first pushed comes out first is a latent bug that a library upgrade can expose. If the order among equals matters, make it part of the key: add a sequence number that increases on every push and break ties by it. Then no two elements compare equal and the order is fully defined. The example uses a sequence tie-break to get FIFO among equal priorities."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }
+detailed_tags:
+  - { name: "std::priority_queue::push", url: "https://en.cppreference.com/w/cpp/container/priority_queue/push" }

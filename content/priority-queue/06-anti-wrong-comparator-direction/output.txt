@@ -1,0 +1,2 @@
+default (std::less) top:  9  (largest -- not what we wanted)
+std::greater top:         1  (smallest -- correct min-heap)

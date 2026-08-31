@@ -1,0 +1,12 @@
+title: "Anti-pattern: iterating or assuming the queue is sorted"
+standard: "C++11"
+difficulty: 3
+summary: "A priority_queue has no iterators and is not sorted -- only top() is the extreme, the rest is heap order -- so the only way to read every element in order is to drain it, which empties the queue."
+notes: "There is no begin() or end(), so a range-for or an algorithm over a priority_queue does not compile, and there is no peeking past the top. The elements are in heap order, not sorted order, so you cannot assume anything about the second element. To read them all in priority order you pop them one by one, which destroys the queue -- so copy it first if you still need it. If you need to see the whole thing sorted repeatedly, a priority_queue is the wrong container; a sorted structure fits better. The non-compiling iteration is described; the copy-then-drain pattern is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+detailed_tags:
+  - { name: "std::priority_queue::top", url: "https://en.cppreference.com/w/cpp/container/priority_queue/top" }
+  - { name: "std::priority_queue::pop", url: "https://en.cppreference.com/w/cpp/container/priority_queue/pop" }

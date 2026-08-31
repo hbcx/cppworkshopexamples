@@ -1,0 +1,12 @@
+title: "Building from a range in O(n)"
+standard: "C++11"
+difficulty: 2
+summary: "Constructing a priority_queue from an existing range heapifies it in one O(n) pass, which beats pushing the same elements one at a time for O(n log n)."
+notes: "priority_queue has a constructor taking a pair of iterators; it copies the range into its container and runs make_heap, which is linear. Pushing n elements instead calls push n times, each O(log n), for O(n log n) overall. When you already have all the data, hand it to the range constructor rather than looping push -- same result, less work. The gap matters for large inputs; for a handful of elements either is fine. Both build the same heap, which the example confirms by draining them identically."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::priority_queue::push", url: "https://en.cppreference.com/w/cpp/container/priority_queue/push" }

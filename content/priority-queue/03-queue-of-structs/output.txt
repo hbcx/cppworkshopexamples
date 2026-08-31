@@ -1,0 +1,6 @@
+running by priority:
+  [5] fire-alert
+  [4] run-backup
+  [3] make-report
+  [2] send-email
+  [1] write-log

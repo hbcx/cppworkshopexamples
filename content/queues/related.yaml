@@ -12,3 +12,5 @@
   note: "The default container both adaptors sit on: std::deque supplies the O(1) front and back operations queue and stack need, and using it directly lets you also index and iterate the elements a queue hides. Go there for the double-ended container behind the adaptors."
 - slug: "stack"
   note: "The LIFO sibling with its own chapter: std::stack hands back the newest element where a queue hands back the oldest, and it gets its own algorithms -- bracket matching, postfix evaluation, iterative DFS. Go there for the full stack section rather than the comparison here."
+- slug: "priority-queue"
+  note: "The by-priority sibling with its own chapter: std::priority_queue hands back the most important element rather than the oldest, on a heap. Go there for min-heaps and custom comparators, the O(n) range build, top-k, and the comparator-direction traps."

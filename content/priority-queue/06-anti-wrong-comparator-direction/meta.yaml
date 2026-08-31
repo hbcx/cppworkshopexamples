@@ -1,0 +1,12 @@
+title: "Anti-pattern: the comparator points the wrong way"
+standard: "C++11"
+difficulty: 3
+summary: "priority_queue puts the GREATEST element by the comparator on top, so a comparator that ranks smaller as less gives a max-heap -- the opposite of the min-heap people often expect from it."
+notes: "The rule reads backwards at first: the comparator says which element is less, and the LESS one sinks while the greater rises to top(). So the default std::less, and any comparator returning a < b, is a max-heap. Wanting the smallest on top and writing the natural a < b gives exactly the wrong end. Use std::greater, or a comparator returning a > b, for a min-heap. The example shows the default producing a max-heap when a min-heap was intended, and std::greater fixing it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }
+detailed_tags:
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }

@@ -1,0 +1,2 @@
+size: 7, top (largest): 9
+draining largest-first: 9 5 4 3 2 1 1

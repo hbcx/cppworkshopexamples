@@ -1,0 +1,12 @@
+title: "A min-heap, and the three template parameters"
+standard: "C++11"
+difficulty: 2
+summary: "To get the smallest on top, pass std::greater as the comparator -- but it is the third template argument, so you must also name the container (usually std::vector) to reach it."
+notes: "priority_queue<T, Container, Compare> takes the element type, then the underlying container, then the comparator. Compare being last is the awkward part: to change it you have to spell out the default container too, giving priority_queue<int, std::vector<int>, std::greater<int>> for a min-heap. std::greater flips the order so top() is the smallest. This declaration is worth memorising because it is the most common non-default priority_queue you will write."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

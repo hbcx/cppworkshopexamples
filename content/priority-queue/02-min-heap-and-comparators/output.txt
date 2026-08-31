@@ -1,0 +1,3 @@
+max-heap top (largest):  5
+min-heap top (smallest): 1
+min-heap drains ascending: 1 1 3 4 5

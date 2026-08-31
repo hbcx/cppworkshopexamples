@@ -1,0 +1,4 @@
+title: "std::priority_queue"
+description: "The heap-backed adaptor that always hands back the most important element: push, top and pop, with the top being the largest by default. Covers the default max-heap, building a min-heap with std::greater or a custom comparator and the awkward three-parameter declaration, ordering structs by a field, the O(n) range constructor versus pushing one at a time, and a bounded min-heap for top-k -- alongside the anti-patterns: a comparator pointing the wrong way, a comparator that is not a strict weak ordering, top() or pop() on an empty queue, relying on the order of equal-priority elements, and iterating or assuming the queue is sorted. The heap machinery lives in the Heap algorithms chapter and reprioritising is covered by std::queue's chapter; this section is the adaptor's own interface and use."
+sort_order: 148
+category: "Containers"

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a comparator that is not a strict weak ordering"
+standard: "C++11"
+difficulty: 3
+summary: "The comparator must be a strict weak ordering, so it has to return false when its two arguments are equal -- a comparator using <= reports an element as less than itself and makes the heap operations undefined."
+notes: "Strict means comp(a, a) is always false; a comparator written with <= or >= breaks that, and the heap code then does out-of-range moves that are undefined. It usually seems to work on small inputs and corrupts the heap on larger ones, which is the worst failure mode. Always compare with a strict < (or >), never <=. The example describes the <= comparator and runs the correct strict one, whose output is a well-formed heap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "custom comparator", url: "https://en.cppreference.com/w/cpp/named_req/Compare" }
+detailed_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }

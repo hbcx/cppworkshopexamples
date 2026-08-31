@@ -1,0 +1,12 @@
+title: "Top-k with a bounded min-heap"
+standard: "C++11"
+difficulty: 3
+summary: "To keep the k largest values of a big or endless stream, hold a min-heap of size k: push each value, and whenever the heap grows past k, pop the smallest."
+notes: "The trick is counter-intuitive: to track the LARGEST elements you use a MIN-heap, because its top is the smallest of the ones you kept -- exactly the one to drop when a bigger value arrives. The heap never holds more than k elements, so memory is O(k) no matter how long the stream is, and each element costs O(log k). Sorting the whole input instead is O(n log n) and needs all of it in memory at once. When it ends, the heap holds the k largest and its top is the k-th largest."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::priority_queue", url: "https://en.cppreference.com/w/cpp/container/priority_queue" }
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }
+detailed_tags:
+  - { name: "std::priority_queue::pop", url: "https://en.cppreference.com/w/cpp/container/priority_queue/pop" }

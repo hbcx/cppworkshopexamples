@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "queues"
+  note: "The rest of the adaptor family and the side-by-side comparison: std::queue is FIFO and std::stack is LIFO, where this one is by priority -- same push/pop shape, different order. Go there for the family overview and the reprioritising-in-place trap this container cannot handle."
+- slug: "heap-algorithms"
+  note: "The machinery inside a priority_queue, exposed: make_heap, push_heap and pop_heap run a binary heap over your own storage, so you can index or iterate it -- which priority_queue forbids. Go there when you need heap behaviour plus access to the elements."
+- slug: "sets"
+  note: "The reprioritisable alternative: when you must change or remove a queued element's priority, a std::set of (priority, id) keeps everything reachable and ordered, which a heap cannot. Go there for the ordered structure to use when a priority_queue's fixed arrangement gets in the way."
+- slug: "vectors"
+  note: "The default container a priority_queue heaps over: std::vector gives the contiguous storage the heap operations want. Go there for the growable array underneath, and its capacity and reallocation behaviour."
