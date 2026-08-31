@@ -1,0 +1,13 @@
+title: "Setting, flipping and testing bits"
+standard: "C++11"
+difficulty: 1
+summary: "A std::bitset<N> is N bits you turn on with set, off with reset, invert with flip, and read with test or operator[] -- one bit at a time or all at once."
+notes: "set, reset and flip take an index to change one bit, or no argument to change every bit. test(i) and b[i] read a bit; the difference between them (bounds checking) comes later. Printing a bitset with operator<< shows the highest-index bit on the LEFT, so bit 0 is the rightmost character -- the same order you write a binary number. This is the whole single-bit interface the rest of the section builds on."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+detailed_tags:
+  - { name: "std::bitset::set", url: "https://en.cppreference.com/w/cpp/utility/bitset/set" }
+  - { name: "std::bitset::flip", url: "https://en.cppreference.com/w/cpp/utility/bitset/flip" }
+  - { name: "std::bitset::test", url: "https://en.cppreference.com/w/cpp/utility/bitset/test" }

@@ -1,0 +1,6 @@
+bits:  101100101000
+count: 5 set out of 12
+any set?  true
+all set?  false
+none set? false
+empty.none()? true

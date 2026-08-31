@@ -1,0 +1,2 @@
+vector<bool> of size 5: 01010
+set bits: 2

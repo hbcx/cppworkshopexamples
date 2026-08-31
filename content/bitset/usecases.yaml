@@ -1,0 +1,23 @@
+- problem: "A subsystem has a fixed set of related boolean options -- feature toggles, permission bits, a record's status flags -- that are read and combined together all the time."
+  why: "A pile of separate bool members scatters the state and offers no bulk operation, and raw int masks with hand-written shifts are error-prone and unreadable. A bitset<N> with an enum for the bit positions gives named flags, set/test per flag, and count/any over all of them in one place."
+  signal: "Several related boolean flags packed into an int with manual &, | and shift masks, or a cluster of separate bool fields always used together."
+
+- problem: "An algorithm needs one boolean per element over a fixed compile-time range -- a sieve, a visited set for nodes 0..N-1, presence bits for a fixed table."
+  why: "A bool array spends a whole byte per flag, eight times the memory, which pushes a large table out of cache; std::vector<bool> packs but is dynamic and slower to index. A bitset packs eight bits per byte with the size fixed, so the table stays small and cache-resident."
+  signal: "A bool[] over a fixed compile-time range used as a membership or visited set, especially a large one."
+
+- problem: "Code repeatedly intersects, unions, or diffs subsets of a small fixed universe -- which of 64 capabilities two configs share, which permissions a role grants beyond another."
+  why: "Looping element by element, or using std::set with its heap nodes and pointer chasing, is far slower than the machine doing it a word at a time. Mapping the universe to bit positions turns each set operation into one &, | or ^ over whole words."
+  signal: "Set-algebra over a small fixed integer universe done with element-by-element loops or std::set instead of bitwise operators."
+
+- problem: "A pass needs fast membership over dense small-integer keys -- have I already seen id in 0..N-1, is slot k taken -- with the key range known and bounded."
+  why: "std::unordered_set pays hashing and node allocation on every insert and lookup, overkill when the keys are dense small integers. A bitset is a direct-addressed presence set: set(k) to add, test(k) to check, both a single bit operation with no hashing."
+  signal: "An unordered_set or set of small dense integers used only to record and test membership."
+
+- problem: "You build or parse a fixed-width field of flags for a hardware register, a protocol header, or a file format, then send it as an integer."
+  why: "Hand-written shift-and-mask code to place each flag is hard to read and easy to get wrong by one bit. A bitset with named positions makes each flag a set/test, and to_ulong converts the whole field to the integer to write out -- readable at the call site, exact on the wire."
+  signal: "Manual bit shifting and masking to assemble or read a fixed-width flag field before converting it to or from an integer."
+
+- problem: "A probabilistic membership structure -- a Bloom filter -- needs a bit array indexed by several hash values, sized to the expected number of elements."
+  why: "The bit array is the whole data structure, and when the size is a fixed design parameter a bitset is faster and lighter than std::vector<bool>, with no dynamic allocation. set the hashed positions on insert, test them all on query."
+  signal: "A bit array indexed by hash outputs for approximate membership, with a size fixed at design time."

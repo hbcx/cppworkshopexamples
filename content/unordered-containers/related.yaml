@@ -8,3 +8,5 @@
   note: "The ordered counterpart of unordered_set: range queries and the set-algebra algorithms a hash set cannot offer."
 - slug: "strings"
   note: "The default key type: how a std::string stores, compares and hashes, and why key length -- not just element count -- drives lookup cost."
+- slug: "bitset"
+  note: "The direct-addressed membership set for dense small integer keys: where unordered_set hashes and allocates per key, a std::bitset sets and tests a bit with no hashing -- go there when the keys are small integers in a fixed range and you only need presence."

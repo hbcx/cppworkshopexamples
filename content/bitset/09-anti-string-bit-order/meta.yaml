@@ -1,0 +1,11 @@
+title: "Anti-pattern: misreading the string constructor's bit order"
+standard: "C++11"
+difficulty: 3
+summary: "In bitset(string), the leftmost character is the HIGHEST-index bit and the rightmost is bit 0 -- the same order as a written binary number, not left-to-right index 0 upward."
+notes: "It reads naturally as position 0 on the left, but the string constructor treats the text like a number: the last character is bit 0, the second-last is bit 1, and so on. So bitset(1000) sets bit 3, not bit 0. This bites when you build a bitset from a string you assembled index-first, and every bit ends up mirrored. Either write the string in number order (bit 0 last), or set the bits by index with set(). The example shows both the surprise and the two correct ways."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+detailed_tags:
+  - { name: "std::bitset::set", url: "https://en.cppreference.com/w/cpp/utility/bitset/set" }

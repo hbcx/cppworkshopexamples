@@ -1,0 +1,12 @@
+title: "Counting and querying the bits"
+standard: "C++11"
+difficulty: 1
+summary: "count() returns how many bits are set, size() how many there are, and any/all/none answer the common yes/no questions in one call each."
+notes: "count() is a population count -- the number of one bits -- which the hardware often does in a single instruction, so it beats a hand-written loop. size() is the fixed template length N. any() is true if at least one bit is set, none() if none are, all() if every bit is set; they are the readable way to ask instead of comparing count() to 0 or size(). These queries are what make a bitset a fast flag set."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+  - { name: "std::bitset::count", url: "https://en.cppreference.com/w/cpp/utility/bitset/count" }
+detailed_tags:
+  - { name: "std::bitset::test", url: "https://en.cppreference.com/w/cpp/utility/bitset/test" }

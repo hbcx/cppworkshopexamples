@@ -1,0 +1,12 @@
+title: "Anti-pattern: assuming to_ulong() truncates"
+standard: "C++11"
+difficulty: 3
+summary: "When a bitset holds a set bit wider than the target integer, to_ulong and to_ullong throw std::overflow_error rather than returning the low bits -- there is no silent truncation."
+notes: "People expect to_ulong to behave like a narrowing cast and hand back the bottom bits, but it refuses: if any set bit lies beyond the integer's width, it throws. A wide bitset used as a bit array (a Bloom filter, a large flag set) will trip this the moment a high bit is set. If you only want the low word, mask first (bs & bitset(0xFFFFFFFF)) or take a fixed sub-bitset; if you want the whole value, use to_string. The throwing conversion is caught; to_string is shown working."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset::to_ulong", url: "https://en.cppreference.com/w/cpp/utility/bitset/to_ulong" }
+detailed_tags:
+  - { name: "std::bitset::to_string", url: "https://en.cppreference.com/w/cpp/utility/bitset/to_string" }
+  - { name: "std::overflow_error", url: "https://en.cppreference.com/w/cpp/error/overflow_error" }

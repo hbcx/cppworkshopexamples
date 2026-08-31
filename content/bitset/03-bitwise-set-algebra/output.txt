@@ -1,0 +1,8 @@
+A            = 00110101
+B            = 01011100
+A & B (both) = 00010100
+A | B (either)= 01111101
+A ^ B (one)  = 01101001
+~A (complement)= 11001010
+A << 1 (shift up)= 01101010
+elements in both: 2

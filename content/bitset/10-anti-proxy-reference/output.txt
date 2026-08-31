@@ -1,0 +1,2 @@
+proxy after reset:    false  (followed the bit)
+bool copy after reset: true  (a stable snapshot)

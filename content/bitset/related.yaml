@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "vectors"
+  note: "The dynamic-size cousin: std::vector<bool> packs bits like a bitset but sizes at run time, with the same proxy-reference gotcha and without the bitwise operators. Go there for the growable bit array to reach for when the length is not a compile-time constant."
+- slug: "arrays"
+  note: "The other fixed-size container: std::array<bool, N> is also compile-time sized but spends a byte per element and has no bitwise ops, where bitset packs to bits. Go there for the fixed array when you need real bool elements and iteration rather than packed bits."
+- slug: "unordered-containers"
+  note: "The general membership set a bitset replaces for dense small integer keys: std::unordered_set hashes any key type but pays allocation and hashing, where a bitset is a direct-addressed presence set with no hashing. Go there when the keys are not small dense integers."
+- slug: "enums"
+  note: "Where the named bit positions come from: a scoped enum gives readable names to a bitset's indices instead of magic numbers, and static_cast turns an enumerator into its index. Go there for enum class, the underlying type, and type-safe flag names."

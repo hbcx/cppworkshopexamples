@@ -1,0 +1,11 @@
+title: "Anti-pattern: wanting a runtime-sized bitset"
+standard: "C++11"
+difficulty: 3
+summary: "The size N of a std::bitset is a template parameter, so it must be a compile-time constant -- you cannot make a bitset whose length comes from a variable."
+notes: "bitset<n> where n is a run-time value does not compile, because N is baked into the type. When the size is only known at run time, the standard answer is std::vector<bool>, which packs bits like a bitset but sizes at run time; for the bitwise-and-count operations bitset gives, boost::dynamic_bitset is the closer match. The trade-off is real: bitset is faster and has the bitwise operators, vector<bool> is flexible. Pick by whether the length is a constant. The non-compiling line is described; the vector<bool> fix is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector<bool>", url: "https://en.cppreference.com/w/cpp/container/vector_bool" }
+detailed_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }

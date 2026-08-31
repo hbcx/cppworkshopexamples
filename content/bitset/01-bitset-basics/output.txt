@@ -1,0 +1,5 @@
+bits: 10001011
+bit 3 set? true
+after reset(0): 10001010
+all set:   11111111
+all reset: 00000000

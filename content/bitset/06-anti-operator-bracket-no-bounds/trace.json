@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 11}, {"file": "main.cpp", "line": 12}, {"file": "main.cpp", "line": 19, "out": "test(8) threw out_of_range (checked access)\nb.test(3) = true\n"}, {"file": "main.cpp", "line": 27, "out": "b[3]      = true\n"}, {"file": "main.cpp", "line": 28}]}

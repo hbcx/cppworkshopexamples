@@ -1,0 +1,12 @@
+title: "Anti-pattern: operator[] does not check bounds"
+standard: "C++11"
+difficulty: 3
+summary: "bitset::operator[] performs no bounds check, so an out-of-range index is undefined behaviour -- test() is the checked accessor that throws std::out_of_range instead."
+notes: "Like a raw array, b[i] trusts the index; with i past the last bit it reads or writes memory it should not, undefined and often silent. test(i) does the same read but validates i first and throws out_of_range when it is too big. Use operator[] only when the index is already known to be in range (a loop bounded by size()), and test() when the index comes from outside and could be wrong. The out-of-range operator[] is described; the throwing test() is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset::test", url: "https://en.cppreference.com/w/cpp/utility/bitset/test" }
+detailed_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+  - { name: "std::out_of_range", url: "https://en.cppreference.com/w/cpp/error/out_of_range" }

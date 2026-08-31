@@ -1,0 +1,11 @@
+title: "Anti-pattern: taking auto from operator[]"
+standard: "C++11"
+difficulty: 3
+summary: "operator[] on a non-const bitset returns a proxy object that refers back to the bit, so auto b = bs[i] captures the proxy, not a bool, and it keeps tracking the live bit."
+notes: "A single bit has no address, so bitset cannot return a bool&; instead operator[] hands back a std::bitset::reference proxy that reads and writes the bit through the bitset. auto deduces that proxy type, so the variable is not an independent bool -- it mirrors later changes to the bit, and taking its address is meaningless. The fix is to say bool explicitly: bool b = bs[i] makes a real snapshot. The example shows the proxy following a later reset while the bool copy does not."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+detailed_tags:
+  - { name: "std::vector<bool>", url: "https://en.cppreference.com/w/cpp/container/vector_bool" }

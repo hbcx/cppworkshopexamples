@@ -1,0 +1,3 @@
+set bit positions: 1 4 5 7
+count(): 4
+to_string(): 10110010

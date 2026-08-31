@@ -1,0 +1,6 @@
+from int 42: 00101010
+equal to the string one? true
+back to number: 42
+as string:      00101010
+to_ullong threw overflow_error (no silent truncation)
+to_string still works, length 80

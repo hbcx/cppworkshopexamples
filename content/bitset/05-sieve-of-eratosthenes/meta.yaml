@@ -1,0 +1,12 @@
+title: "A compact sieve of Eratosthenes"
+standard: "C++11"
+difficulty: 3
+summary: "A bitset is the natural store for a sieve: one bit per number marks composite, so the whole table of primes up to N fits in N/8 bytes and each mark is a single bit write."
+notes: "The sieve needs one boolean per candidate, and a bitset packs those eight to a byte instead of the one byte each a bool array spends -- a table for a million numbers is 125 KB, not a megabyte, which keeps it in cache. The size N is a compile-time constant, exactly what a bitset requires. The algorithm walks each prime and sets the bits of its multiples; the unset bits that remain are the primes. This is the textbook case for a fixed-size bit array."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+detailed_tags:
+  - { name: "std::bitset::set", url: "https://en.cppreference.com/w/cpp/utility/bitset/set" }
+  - { name: "std::bitset::count", url: "https://en.cppreference.com/w/cpp/utility/bitset/count" }

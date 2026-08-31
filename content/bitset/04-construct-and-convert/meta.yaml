@@ -1,0 +1,13 @@
+title: "Constructing and converting"
+standard: "C++11"
+difficulty: 2
+summary: "A bitset builds from an unsigned integer or from a string of 0s and 1s, and converts back with to_ulong, to_ullong or to_string -- with to_ulong throwing if the value does not fit."
+notes: "The integer constructor takes the low bits of the value; the string constructor reads 1 and 0 characters. Going back, to_ulong and to_ullong return the value as an unsigned long or unsigned long long, but throw std::overflow_error when a set bit lies beyond that integer's width -- they never silently truncate. to_string gives you the text form and always works, whatever the size. Match the conversion to the width: to_ullong for up to 64 bits, to_string beyond that."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+  - { name: "std::bitset::to_ulong", url: "https://en.cppreference.com/w/cpp/utility/bitset/to_ulong" }
+detailed_tags:
+  - { name: "std::bitset::to_string", url: "https://en.cppreference.com/w/cpp/utility/bitset/to_string" }
+  - { name: "std::overflow_error", url: "https://en.cppreference.com/w/cpp/error/overflow_error" }

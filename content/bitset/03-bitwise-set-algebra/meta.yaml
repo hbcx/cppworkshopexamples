@@ -1,0 +1,11 @@
+title: "Bitwise operators as set algebra"
+standard: "C++11"
+difficulty: 2
+summary: "Read a bitset as a set of small integers and the bitwise operators become set operations: AND is intersection, OR is union, XOR is symmetric difference, NOT is complement."
+notes: "When bit i means the element i is present, & keeps only elements in both sets, | keeps elements in either, ^ keeps elements in exactly one, and ~ flips membership for the whole fixed universe. These run on whole machine words at once, so a set operation over dozens of elements is a couple of instructions -- far faster than looping a std::set. The shifts move every element up or down by a fixed offset. This is why a bitset is the tool for small, fixed universes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+detailed_tags:
+  - { name: "std::bitset::count", url: "https://en.cppreference.com/w/cpp/utility/bitset/count" }

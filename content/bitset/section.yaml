@@ -1,0 +1,4 @@
+title: "std::bitset"
+description: "A fixed-size, tightly packed sequence of bits with a compile-time length, and the operations that make it a compact set of flags or small integers. Covers setting, resetting, flipping and testing single bits or all of them, counting and querying with count/any/all/none, the bitwise operators used as set algebra, constructing from an integer or a string and converting back, and a compact sieve of Eratosthenes -- alongside the anti-patterns: operator[] not checking bounds, assuming to_ulong() truncates, wanting a runtime size, misreading the string constructor's bit order, taking auto or a reference from operator[], and treating a bitset as an iterable container."
+sort_order: 147
+category: "Containers"

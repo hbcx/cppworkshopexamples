@@ -38,3 +38,5 @@
   note: "The double-ended sibling: std::deque adds O(1) push_front and keeps references valid across growth, trading away the contiguous block, data() and reserve -- go there when you need front operations or stable references, not one flat array."
 - slug: "stack"
   note: "A vector is the container behind a fast stack, and often the better stack itself: push_back/back/pop_back is the whole LIFO interface, plus iteration -- go there for std::stack, when to prefer a vector backing, and the classic stack algorithms."
+- slug: "bitset"
+  note: "The fixed-size relative of std::vector<bool>: when the bit count is a compile-time constant, std::bitset<N> packs the same bits but adds the bitwise operators and count and drops the dynamic sizing -- go there for the fixed bit array and set-algebra operations."

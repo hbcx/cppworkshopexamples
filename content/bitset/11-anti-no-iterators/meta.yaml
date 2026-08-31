@@ -1,0 +1,11 @@
+title: "Anti-pattern: treating a bitset as an iterable container"
+standard: "C++11"
+difficulty: 3
+summary: "std::bitset has no begin() or end(), so a range-for loop or a standard algorithm over it does not compile -- you walk it by index instead."
+notes: "Despite living among the containers, bitset is not a range: there are no iterators, so for (bool bit : bs) and std::count(bs.begin(), ...) both fail to compile. Access is by index with operator[] or test() inside a loop bounded by size(), and the common jobs already have members -- count() for how many are set, to_string() for the text, any/none/all for the quick questions. Reach for those before writing a manual loop. The non-compiling range-for is described; the index loop and the member shortcuts are run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+detailed_tags:
+  - { name: "std::bitset::count", url: "https://en.cppreference.com/w/cpp/utility/bitset/count" }
