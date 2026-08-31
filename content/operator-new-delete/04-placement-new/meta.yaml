@@ -1,0 +1,12 @@
+title: "Placement new"
+standard: "C++11"
+difficulty: 2
+summary: "Placement new constructs an object in memory you already own, and you are responsible for calling the destructor by hand."
+notes: "This is the mechanism under optional, variant, and small-buffer optimization: one aligned buffer, an object built into it, an explicit destructor call to end its life."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+detailed_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

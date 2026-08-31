@@ -1,0 +1,11 @@
+title: "Anti-pattern: placement new with no destructor call"
+standard: "C++11"
+difficulty: 3
+summary: "Placement new has no matching delete, so if you never call the destructor by hand the object's cleanup is silently skipped."
+notes: "The object's storage may be automatic, but its owned resources (heap buffers, file handles) are not freed until the destructor runs. Every placement new needs a paired explicit destructor call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+detailed_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }

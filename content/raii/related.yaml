@@ -12,3 +12,5 @@
   note: "RAII applied to a thread: std::jthread joins itself in its destructor, turning the forgot-to-join crash into a non-issue the same way an owning handle turns a leak into a non-issue -- go there for launching threads and why jthread is the RAII way to own one."
 - slug: "exceptions"
   note: "Why RAII exists: a thrown exception unwinds the stack and runs your destructors, so a resource wrapped in one is released on the error path with no cleanup code. Go there for throwing, catching, and stack unwinding."
+- slug: "operator-new-delete"
+  note: "The raw new/delete RAII exists to hide: the allocation functions the compiler calls, why manual new/delete leaks on the exception path, and placement new for building objects in storage you own. Go there for the low level under the idiom."

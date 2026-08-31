@@ -1,0 +1,12 @@
+title: "Class-scoped operator new"
+standard: "C++11"
+difficulty: 2
+summary: "A class can define its own operator new/delete, so new/delete for that type routes to a per-type allocator while other types are unaffected."
+notes: "Member operator new/delete are implicitly static. This is the hook a per-class memory pool plugs into -- allocation policy attached to one type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+detailed_tags:
+  - { name: "new expression", url: "https://en.cppreference.com/w/cpp/language/new" }

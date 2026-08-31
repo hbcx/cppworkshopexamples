@@ -1,0 +1,13 @@
+title: "Array new and delete"
+standard: "C++11"
+difficulty: 2
+summary: "new[] calls operator new[] once then constructs each element; delete[] destroys each element then calls operator delete[] -- a separate pairing from new/delete."
+notes: "The array forms are their own functions. new[] pairs only with delete[]; the compiler may store an element-count cookie in the block so delete[] knows how many destructors to run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+detailed_tags:
+  - { name: "new expression", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "delete expression", url: "https://en.cppreference.com/w/cpp/language/delete" }

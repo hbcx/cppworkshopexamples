@@ -1,0 +1,12 @@
+title: "Anti-pattern: mixing new/delete with the array forms"
+standard: "C++11"
+difficulty: 3
+summary: "Freeing a new[] allocation with plain delete (or a new allocation with delete[]) is undefined behavior -- the array and scalar forms are separate pairings."
+notes: "Plain delete runs at most one destructor and frees with the wrong function, so array elements leak and the heap can corrupt. Match the forms: new with delete, new[] with delete[]."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "delete expression", url: "https://en.cppreference.com/w/cpp/language/delete" }
+detailed_tags:
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+  - { name: "new expression", url: "https://en.cppreference.com/w/cpp/language/new" }

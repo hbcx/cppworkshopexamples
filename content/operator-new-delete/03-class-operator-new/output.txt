@@ -1,0 +1,4 @@
+Node::operator new(4)
+value = 10
+Node::operator delete
+plain int = 5

@@ -1,0 +1,2 @@
+in a stack buffer
+destroyed via destructor; buffer released with its scope

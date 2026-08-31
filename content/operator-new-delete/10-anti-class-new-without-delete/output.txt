@@ -1,0 +1,2 @@
+Bad::liveFromPool  after new+delete: 1 (should be 0)
+Good::liveFromPool after new+delete: 0 (should be 0)

@@ -1,0 +1,12 @@
+title: "Anti-pattern: delete on a pointer not from new"
+standard: "C++11"
+difficulty: 3
+summary: "delete may only be applied to a pointer returned by a matching new; calling it on a placement-new object or a buffer interior is undefined behavior."
+notes: "A placement-new object lives in storage you already own -- end its life with an explicit destructor call, never delete. delete both destroys and frees, and it frees memory the allocator never handed out."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "delete expression", url: "https://en.cppreference.com/w/cpp/language/delete" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }

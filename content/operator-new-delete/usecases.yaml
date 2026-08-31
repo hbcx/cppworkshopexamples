@@ -1,0 +1,23 @@
+- problem: "A physics or particle system allocates and frees thousands of small same-type objects every frame; general-purpose new/delete (malloc) becomes a bottleneck and fragments the heap over a long session."
+  why: "A class operator new backed by a free-list pool hands out a fixed-size slot in a few instructions and never fragments, which a general allocator cannot promise. Calling malloc per object instead pays lock and search cost on every one of those frames."
+  signal: "a hot type that is new-ed and delete-d in large numbers per frame or per request, always at the same size."
+
+- problem: "A test must assert that a function does no heap allocation, or a debug build must find which subsystem is leaking, without changing every call site."
+  why: "Replacing the global operator new/delete counts every allocation in the process with zero changes at the call sites, catching the ones buried inside library and third-party code too. An external profiler is heavier and cannot be asserted inside a unit test."
+  signal: "a test that wants to prove an allocation budget, or a leak that must be attributed without reaching for a full profiler."
+
+- problem: "A variant- or optional-like type must hold one of several object types inline, with no separate heap block, and switch which one is alive at runtime."
+  why: "Placement new constructs the chosen type inside an aligned byte buffer that is part of the object, so there is one allocation instead of two and no pointer chase. A heap pointer per alternative adds both an indirection and the allocation the inline buffer avoids."
+  signal: "a byte buffer sized and aligned for the largest of a set of types, with a tag saying which one currently lives there."
+
+- problem: "A network service reads a packet into a fixed receive buffer and must treat the bytes as a message object without copying them somewhere else first."
+  why: "Placement new builds the message object directly in the buffer, starting its lifetime properly, so parsing costs no allocation and no copy. Allocating a message and memcpy-ing the payload in doubles the memory traffic on the hot path, and reinterpret_casting the raw bytes is undefined behavior placement new avoids."
+  signal: "a receive or mapped buffer whose bytes are turned into a typed object each time data arrives."
+
+- problem: "An embedded or safety-critical system forbids heap allocation after startup, yet still needs C++ objects created and destroyed during init and shutdown."
+  why: "A statically reserved slab plus placement new gives object construction with deterministic, bounded memory and no runtime heap, and a global operator new that traps enforces the rule. Ordinary new reintroduces exactly the nondeterministic heap the system is not allowed to use."
+  signal: "a fixed-size static buffer that objects are constructed into, next to a coding standard banning dynamic allocation after init."
+
+- problem: "A library must build with exceptions turned off, or an allocation on a specific path must degrade gracefully when memory runs out rather than terminating."
+  why: "new (std::nothrow) returns a null pointer the caller can test, which is the only option when there is no exception machinery to carry a bad_alloc. Ordinary new calls std::terminate when it cannot throw, turning an out-of-memory into a crash."
+  signal: "a codebase built with -fno-exceptions, or an allocation whose failure must be handled right at the call site."

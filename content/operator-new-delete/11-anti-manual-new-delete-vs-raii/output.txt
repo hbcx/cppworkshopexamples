@@ -1,0 +1,2 @@
+after manual(): alive = 1 (leaked)
+after raii():   alive = 0 (clean)

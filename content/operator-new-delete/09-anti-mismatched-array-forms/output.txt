@@ -1,0 +1,2 @@
+after new[]:    alive = 3
+after delete[]: alive = 0

@@ -1,0 +1,12 @@
+title: "nothrow new"
+standard: "C++11"
+difficulty: 2
+summary: "new (std::nothrow) returns a null pointer on failure instead of throwing std::bad_alloc, so failure can be handled inline."
+notes: "Handy when exceptions are turned off or an out-of-memory must degrade gracefully. A nothrow-allocated object is released with ordinary delete."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::nothrow", url: "https://en.cppreference.com/w/cpp/memory/new/nothrow" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "std::bad_alloc", url: "https://en.cppreference.com/w/cpp/memory/new/bad_alloc" }

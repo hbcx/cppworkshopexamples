@@ -1,0 +1,12 @@
+title: "Sized delete"
+standard: "C++14"
+difficulty: 3
+summary: "C++14 added operator delete(void*, size_t): the compiler passes the object size at deallocation, so the allocator need not store it."
+notes: "When a class provides both the plain and the sized operator delete, the sized one is preferred. Pool allocators use the size to pick the right free-list without a per-block header."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "delete expression", url: "https://en.cppreference.com/w/cpp/language/delete" }

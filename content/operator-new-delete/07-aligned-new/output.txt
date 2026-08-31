@@ -1,0 +1,3 @@
+alignof(CacheLine) = 64
+pointer is 64-byte aligned: true
+manual aligned allocation ok

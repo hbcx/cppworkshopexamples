@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "raii"
+  note: "Where the raw-new/delete anti-pattern's fix lives: wrap the allocation in an object whose destructor releases it, so cleanup happens on every exit path. Go there for the idiom these allocation functions are almost always hidden behind."
+- slug: "unique-ptr"
+  note: "The everyday owner built on new/delete: it calls delete for you and takes a custom deleter when the allocation is custom. Go there for the RAII pointer you reach for instead of a manual delete."
+- slug: "object-pool"
+  note: "The applied form of a class operator new: a free-list that recycles fixed-size blocks instead of hitting the global allocator each time. Go there for the full pooling pattern this section's per-class allocator sketches."
+- slug: "rule-of-0-3-5"
+  note: "Once a type owns raw memory it needs the right destructor, copy, and move. Go there for which special members a resource-owning type must declare, and how a unique_ptr member removes the need."

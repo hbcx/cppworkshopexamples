@@ -1,0 +1,3 @@
+Vec8 needs alignment 32
+alignas buffer aligned: true
+aligned operator new aligned: true

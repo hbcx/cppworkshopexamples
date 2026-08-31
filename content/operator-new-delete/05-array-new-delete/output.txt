@@ -1,0 +1,8 @@
+operator new[] called
+Item()
+Item()
+Item()
+~Item()
+~Item()
+~Item()
+operator delete[]

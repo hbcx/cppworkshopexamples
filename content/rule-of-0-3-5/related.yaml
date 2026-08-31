@@ -10,3 +10,5 @@
   note: "A worked rule-of-five case: a pimpl class is move-only unless you add a deep copy, with every special member declared in the header and defined where the hidden Impl is complete -- go there for the out-of-line special members and why the destructor cannot be defaulted in the header."
 - slug: "operator-overloading"
   note: "The wider family the assignment operators belong to: how to write copy and move operator= to return *this and guard self-assignment, next to +, ==, [] and the others. Go there for the full set and the canonical forms."
+- slug: "operator-new-delete"
+  note: "The raw resource that forces rule of three or five in the first place: new/delete, why manual pairing leaks on a throw, and placement new. Go there for the allocation a resource-owning type must manage, then let a unique_ptr member manage it for you."

@@ -1,0 +1,3 @@
+after single new: fromPool = 1
+after array new:  fromPool = 1 (array bypassed the pool)
+after cleanup:    fromPool = 0

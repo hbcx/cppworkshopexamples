@@ -1,0 +1,14 @@
+title: "new expression vs operator new"
+standard: "C++11"
+difficulty: 1
+summary: "A new expression is two steps -- allocate with operator new, then construct -- and delete is destroy then deallocate."
+notes: "Doing the two steps by hand with ::operator new plus placement new makes the split visible. The normal new/delete forms just fuse them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+detailed_tags:
+  - { name: "new expression", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "delete expression", url: "https://en.cppreference.com/w/cpp/language/delete" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

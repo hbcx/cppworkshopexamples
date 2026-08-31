@@ -1,0 +1,2 @@
+allocations in this block: 2
+frees in this block: 2

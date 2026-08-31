@@ -1,0 +1,2 @@
+after placement new, no destroy: open = 1
+after explicit destructor:       open = 0

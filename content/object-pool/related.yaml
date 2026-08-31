@@ -10,3 +10,5 @@
   note: "The sharing cousin: where an Object Pool recycles mutable objects one owner at a time, Flyweight shares immutable objects concurrently across many owners -- go there when duplication, not creation, is the cost you are fighting."
 - slug: "atomic"
   note: "What the shared-pool-without-a-lock anti-pattern actually needs: a pool handed out across threads must guard its free-list with an atomic or a lock, or the checkout races -- go there for atomic operations, compare_exchange, and the memory ordering behind safe sharing."
+- slug: "operator-new-delete"
+  note: "The language hook a pool plugs into: a class operator new/delete lets `new T` draw from your free-list, and placement new builds objects in the slab you reserved. Go there for the allocation functions this pattern is built on."

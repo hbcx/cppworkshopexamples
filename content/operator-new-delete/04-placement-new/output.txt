@@ -1,0 +1,2 @@
+built in place (size 14)
+string destroyed, buffer still ours

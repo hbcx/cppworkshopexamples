@@ -1,0 +1,4 @@
+title: "operator new / delete"
+description: "The allocation functions the compiler calls around object lifetime, and how they differ from the new/delete expressions you write. Covers how a new expression splits into operator new plus construction (and delete into destruction plus operator delete), replacing the global operator new/delete, class-scoped allocators, placement new into storage you already own, the array and nothrow and C++17 aligned forms, and C++14 sized delete -- alongside the anti-patterns: mixing new/delete with the array forms, a class operator new with no matching operator delete, raw new/delete where RAII belongs, placement new with no destructor call, deleting a pointer that never came from new, assuming plain new over-aligns, and a class allocator that array new silently bypasses."
+sort_order: 139
+category: "Memory management"

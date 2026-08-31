@@ -1,0 +1,13 @@
+title: "Aligned new (align_val_t)"
+standard: "C++17"
+difficulty: 3
+summary: "Since C++17 a new expression for an over-aligned type calls the alignment-aware operator new(size, align_val_t) automatically."
+notes: "Before C++17 plain operator new only promised alignment up to max_align_t, so over-aligned types (SIMD, cache lines) needed manual work. Now the language handles it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::align_val_t", url: "https://en.cppreference.com/w/cpp/memory/new/align_val_t" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+detailed_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }

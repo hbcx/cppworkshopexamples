@@ -1,0 +1,13 @@
+title: "Anti-pattern: assuming plain new over-aligns"
+standard: "C++17"
+difficulty: 3
+summary: "A char buffer, malloc, or the plain operator new(size) do not promise extended alignment, so placing an over-aligned type there is undefined behavior."
+notes: "Plain allocation only guarantees alignment up to max_align_t. For an over-aligned type use alignas storage or the alignment-aware operator new -- checking the address is not enough, since it may be aligned by luck one run and not the next."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "std::align_val_t", url: "https://en.cppreference.com/w/cpp/memory/new/align_val_t" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

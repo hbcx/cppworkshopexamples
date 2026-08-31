@@ -1,0 +1,12 @@
+title: "Replacing the global operator new"
+standard: "C++11"
+difficulty: 2
+summary: "Define your own global operator new/delete and every allocation in the program routes through it -- useful for counting or tracking."
+notes: "Replacing the global forms affects the whole process, so measure a delta around your own allocations rather than the absolute count, which includes library internals."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+detailed_tags:
+  - { name: "std::bad_alloc", url: "https://en.cppreference.com/w/cpp/memory/new/bad_alloc" }

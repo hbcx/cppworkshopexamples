@@ -1,0 +1,7 @@
+raw memory allocated
+Widget(manual, 1) constructed
+using manual #1
+~Widget(manual)
+raw memory released
+Widget(normal, 2) constructed
+~Widget(normal)

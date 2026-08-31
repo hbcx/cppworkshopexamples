@@ -1,0 +1,12 @@
+title: "Anti-pattern: array new bypasses a class allocator"
+standard: "C++11"
+difficulty: 3
+summary: "A class that defines operator new but not operator new[] silently sends array allocations to the global allocator, skipping its own pool."
+notes: "new C[n] looks up operator new[], and finding none on the class it uses the global one -- the per-class allocator is bypassed. To pool arrays too, define operator new[]/delete[] as well, or forbid array new."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+detailed_tags:
+  - { name: "new expression", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }

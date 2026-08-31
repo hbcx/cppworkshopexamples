@@ -24,3 +24,5 @@
   note: "A classic use of unique_ptr as the owning member of a value type: a type-erased wrapper owns its hidden Model through unique_ptr<Concept> and deletes it through a virtual base -- go there for the idiom and why that base destructor must be virtual."
 - slug: "rule-of-0-3-5"
   note: "Why a unique_ptr member is the shortcut to rule of zero: hold your resource in one and you declare none of the five special members yourself -- go there for the special-member decision and what you would have to write without it."
+- slug: "operator-new-delete"
+  note: "What unique_ptr calls for you and what it is protecting you from: how new/delete really work, why raw new/delete leaks when something throws, and the custom allocation a custom deleter pairs with. Go there for the allocation layer underneath."

@@ -1,0 +1,12 @@
+title: "Anti-pattern: raw new/delete instead of RAII"
+standard: "C++14"
+difficulty: 3
+summary: "A raw new followed by a later delete leaks whenever anything between them throws, because the delete is skipped during stack unwinding."
+notes: "The fix is not more try/catch -- it is to let an owning object (unique_ptr) call delete in its destructor, which runs on every exit path including the exception path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }
+detailed_tags:
+  - { name: "std::make_unique", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique" }
+  - { name: "new expression", url: "https://en.cppreference.com/w/cpp/language/new" }

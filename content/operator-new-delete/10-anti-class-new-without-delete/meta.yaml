@@ -1,0 +1,13 @@
+title: "Anti-pattern: class operator new without operator delete"
+standard: "C++11"
+difficulty: 3
+summary: "Defining a class operator new but no matching operator delete sends deallocation to the global function, so a custom allocator is never told the object is gone."
+notes: "The two are a pair. If operator new hands out from a pool, the missing operator delete means delete bypasses the pool -- its accounting drifts, and with a real pool the memory is freed to the wrong allocator. g++ flags this exact shape with -Wmismatched-new-delete."
+run: true
+sanitizers: []
+werror: false
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+detailed_tags:
+  - { name: "delete expression", url: "https://en.cppreference.com/w/cpp/language/delete" }
