@@ -1,0 +1,3 @@
+deque sum:  30
+vector sum: 30
+same result, vector is the better fit here: true

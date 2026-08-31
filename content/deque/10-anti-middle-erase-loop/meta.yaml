@@ -1,0 +1,12 @@
+title: "Anti-pattern: erasing from the middle in a loop"
+standard: "C++11"
+difficulty: 3
+summary: "Erasing a deque element from the middle is O(n) and invalidates every iterator, so a loop that erases matching elements one at a time is O(n squared) and often uses an invalidated iterator."
+notes: "deque is fast at its ends, not its middle: a middle erase shifts elements and invalidates all iterators and references. Calling erase inside a hand-written loop both scales as O(n squared) and steps a stale iterator after each erase. The fix is the erase-remove idiom -- std::remove packs the survivors to the front in one pass, then a single erase drops the tail -- which is O(n) and touches iterators once. The naive loop is described; the erase-remove version is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+detailed_tags:
+  - { name: "std::deque::erase", url: "https://en.cppreference.com/w/cpp/container/deque/erase" }
+  - { name: "std::remove_if", url: "https://en.cppreference.com/w/cpp/algorithm/remove" }

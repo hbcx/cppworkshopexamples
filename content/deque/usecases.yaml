@@ -1,0 +1,23 @@
+- problem: "A service holds a work queue: producers append tasks at the back, a worker takes them from the front, and an admin endpoint occasionally needs to list what is still pending."
+  why: "std::queue gives the FIFO push and pop but hides the elements, so it cannot be iterated for the listing. A vector makes pop_front O(n). A raw deque gives O(1) at both ends and full iteration, so it serves the queue and the inspection at once."
+  signal: "A push_back plus pop_front usage, or a std::queue that some other code also needs to scan or count."
+
+- problem: "A metric or signal processor keeps a rolling window of the last N samples -- a moving average, a rolling max, the last N log lines -- gaining a new sample and dropping the oldest each step."
+  why: "A vector pays O(n) for each erase(begin()) to drop the oldest, and a hand-written ring buffer is extra wrap-around code to get right. deque does push_back plus a pop_front in O(1) with no bookkeeping, which is exactly the window's shape."
+  signal: "A fixed-size buffer that push_backs a new value and pop_fronts once it passes a size limit."
+
+- problem: "An editor or tool keeps a bounded history that can grow and shrink at both ends -- add the newest action at one end, drop the oldest when the history is full, and undo from the recent end."
+  why: "Two stacks or a vector with front erasure both cost more: the vector shifts on every front removal, and two stacks duplicate the state. A deque adds and removes at either end in O(1), matching a double-ended history directly."
+  signal: "A history or buffer with insertions and removals happening at both the front and the back."
+
+- problem: "Code holds pointers or references to elements of a growing collection -- observers registered by address, cached element pointers -- and must keep appending without those handles going stale."
+  why: "A vector reallocation moves every element and invalidates all such pointers. deque never moves existing elements on a push at either end, so references and pointers stay valid across growth, which vector cannot promise and a list gives up random access to provide."
+  signal: "Long-lived pointers or references into a container that still receives push_back or push_front."
+
+- problem: "A very large sequence is built up incrementally -- millions of records accumulated over a run -- where one giant contiguous allocation is a problem for fragmentation or peak memory."
+  why: "A vector needs one block that keeps doubling, and each growth copies everything into a new, larger allocation. deque adds fixed-size chunks and never copies the existing elements, avoiding both the single huge block and the reallocation copies, at the cost of contiguity you do not need here."
+  signal: "A large, append-heavy sequence where a single contiguous buffer or the reallocation copies are the pressure, and random-access contiguity is not required."
+
+- problem: "You are building a stack or queue adaptor and need to choose its underlying container, weighing cache behaviour against the end operations the adaptor performs."
+  why: "The default is deque because it serves both push and pop ends well, but a stack only ever works one end, so backing it with a vector gives better cache locality and contiguous storage. Knowing deque is the default lets you make that swap deliberately instead of accepting it blindly."
+  signal: "A std::stack or std::queue whose performance matters, still using the default deque backing without having considered a vector."

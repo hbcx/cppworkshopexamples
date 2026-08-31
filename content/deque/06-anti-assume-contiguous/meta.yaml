@@ -1,0 +1,11 @@
+title: "Anti-pattern: treating deque storage as contiguous"
+standard: "C++11"
+difficulty: 3
+summary: "A deque is a set of separate chunks, not one array, so taking the address of the first element and walking it as a flat buffer runs off the end of that chunk into unrelated memory."
+notes: "vector guarantees one contiguous block, so &v[0] is a valid pointer to the whole thing; deque guarantees no such thing, which is why it has no data() member. Pointer arithmetic like &d[0] + i is only valid inside a single chunk, and the chunk boundary is invisible in the code. To hand a deque's contents to a C API or anything wanting a T* array, copy it into a vector first. The out-of-chunk read is described; the copy-to-vector fix is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+detailed_tags:
+  - { name: "std::vector::data", url: "https://en.cppreference.com/w/cpp/container/vector/data" }

@@ -7,3 +7,5 @@
   note: "The fixed-size contiguous container: a std::array<T, N> pairs naturally with a static-extent std::span<T, N>, size known at compile time on both sides -- go there for the stack-allocated fixed array a span so often views."
 - slug: "ranges"
   note: "The wider world of views: a span is a contiguous view, and the ranges library is the general framework of lazy views and range algorithms that compose over any range -- go there for transform, filter, and the pipe syntax that a span slots into as a range."
+- slug: "deque"
+  note: "A container a span CANNOT view: std::deque stores its elements in separate chunks, so there is no contiguous run to borrow -- copy it into a vector first. Go there for the double-ended container and why its storage is not contiguous."

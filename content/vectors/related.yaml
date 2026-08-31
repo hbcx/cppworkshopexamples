@@ -34,3 +34,5 @@
   note: "Where a vector gets its memory, and how to change it: the second template parameter is an Allocator, so you can back a vector with an arena, a pool, or a counting allocator -- go there for the allocator interface and stateful allocators."
 - slug: "pmr"
   note: "Change a vector's memory strategy at run time instead of in the type: std::pmr::vector picks a memory_resource by pointer, so one type can allocate from the heap, a stack buffer, or a pool -- go there for polymorphic_allocator and the standard resources."
+- slug: "deque"
+  note: "The double-ended sibling: std::deque adds O(1) push_front and keeps references valid across growth, trading away the contiguous block, data() and reserve -- go there when you need front operations or stable references, not one flat array."

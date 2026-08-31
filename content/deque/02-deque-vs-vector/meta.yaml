@@ -1,0 +1,12 @@
+title: "deque vs vector: what you trade"
+standard: "C++11"
+difficulty: 2
+summary: "A deque gives you front insertion and references that survive growth, but gives up the contiguous block a vector guarantees -- so there is no data(), no capacity() and no reserve()."
+notes: "The two containers answer different needs. vector is one contiguous array: cache-friendly iteration, a data() pointer for C APIs, and reserve to pre-size. deque is a set of fixed-size chunks: cheap growth at both ends and references that stay valid, but you cannot hand its elements to anything expecting a flat T* array. When you need contiguous storage from a deque, copy it into a vector. Reach for vector by default and deque when you truly need the front operations or the reference stability."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector::data", url: "https://en.cppreference.com/w/cpp/container/vector/data" }

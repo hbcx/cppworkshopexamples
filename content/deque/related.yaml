@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "vectors"
+  note: "The default contiguous container deque is weighed against: one block with data(), reserve and capacity, cheap growth only at the back, and references that a reallocation invalidates. Go there for the container to reach for first, and switch to deque only for the front operations or reference stability."
+- slug: "lists"
+  note: "The other both-ends container, node-based: std::list also inserts at the front in O(1) and keeps references valid, but gives up random access entirely and stores each element in its own node. Go there when you need stable references AND splicing but not indexing."
+- slug: "queues"
+  note: "What deque is most often used through: std::queue and std::stack are adaptors that default to deque for their end operations. Go there for the FIFO and LIFO wrappers and how to pick their backing container."
+- slug: "span"
+  note: "Why a deque cannot back a std::span: a span needs one contiguous run of elements, which deque's chunked storage does not provide -- copy into a vector first. Go there for the non-owning contiguous view and what can feed it."

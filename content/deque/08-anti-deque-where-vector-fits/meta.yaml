@@ -1,0 +1,11 @@
+title: "Anti-pattern: a deque used like a vector"
+standard: "C++11"
+difficulty: 3
+summary: "A deque whose only operations are push_back and index access pays for chunked storage -- slower iteration, no contiguity, no data() -- and gets none of the front-end benefit that would justify it."
+notes: "deque earns its keep when you push or pop at the front, or need references that survive growth. Used only from the back with random reads, it is a vector with worse cache behaviour and a missing data(). The fix is a one-word type change to vector, which iterates faster over one contiguous block and hands out a pointer when a C API needs one. The two produce the same result here; the point is the container choice, so both are run and shown equal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }

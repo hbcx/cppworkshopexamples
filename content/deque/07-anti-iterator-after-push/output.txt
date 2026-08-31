@@ -1,0 +1,3 @@
+kept reference still reads: 10
+re-fetched begin() reads: 10
+size is now 4

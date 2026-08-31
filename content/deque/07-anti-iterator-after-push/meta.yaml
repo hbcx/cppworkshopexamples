@@ -1,0 +1,11 @@
+title: "Anti-pattern: using an iterator after a push at either end"
+standard: "C++11"
+difficulty: 3
+summary: "push_back and push_front invalidate every iterator into a deque, so an iterator saved before the push and used after it is undefined -- even though references to elements stay valid."
+notes: "This is the trap hiding in deque's split guarantee: references survive an end insertion, so people assume iterators do too, but they do not. A saved begin or a cached position is stale the moment you push. It often still points at something plausible, which hides the bug until the layout shifts. Re-fetch the iterator after any insertion, or track a position by index or by reference instead. The stale-iterator use is described; re-fetching and a surviving reference are run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+detailed_tags:
+  - { name: "std::deque::push_back", url: "https://en.cppreference.com/w/cpp/container/deque/push_back" }

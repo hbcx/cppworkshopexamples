@@ -8,3 +8,5 @@
   note: "The general pattern behind std::stack and std::queue: the Adapter design pattern presents one interface over another, of which these container adapters are the standard library's built-in case."
 - slug: "heap-algorithms"
   note: "What std::priority_queue is made of: make_heap, push_heap and pop_heap are the binary-heap operations the adaptor runs internally, exposed so you can keep a heap over storage you also index or iterate -- go there for building and maintaining a heap by hand, and heapsort."
+- slug: "deque"
+  note: "The default container both adaptors sit on: std::deque supplies the O(1) front and back operations queue and stack need, and using it directly lets you also index and iterate the elements a queue hides. Go there for the double-ended container behind the adaptors."

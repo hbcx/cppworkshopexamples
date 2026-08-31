@@ -1,0 +1,12 @@
+title: "Anti-pattern: expecting reserve or capacity on a deque"
+standard: "C++11"
+difficulty: 3
+summary: "A deque has no reserve or capacity, because it grows by adding fixed-size chunks rather than reallocating one block -- reaching for them assumes a vector-style model deque does not have."
+notes: "vector::reserve pre-allocates to avoid reallocations while growing; deque never reallocates its elements, so there is nothing to reserve and neither member exists. The mistake is to pre-size a deque the way you would a vector. If you actually want N elements up front, resize creates them, but that constructs N objects -- it is not the reserve-style empty pre-allocation. The non-existent reserve call is described; resize is run to show what it really does."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+detailed_tags:
+  - { name: "std::deque::resize", url: "https://en.cppreference.com/w/cpp/container/deque/resize" }
+  - { name: "std::vector::reserve", url: "https://en.cppreference.com/w/cpp/container/vector/reserve" }

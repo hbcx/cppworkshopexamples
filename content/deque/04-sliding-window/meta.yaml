@@ -1,0 +1,12 @@
+title: "A sliding window of the last N values"
+standard: "C++11"
+difficulty: 3
+summary: "push_back the newest value and pop_front the oldest once the window is full -- a fixed-size recent-history buffer that a deque handles in O(1) at both ends."
+notes: "A moving average, the last N log lines, a rolling maximum -- all want a window that gains at one end and loses at the other. deque is the natural fit: push_back plus a pop_front when the size passes the limit, both constant time. A vector would pay O(n) for each erase(begin()), and a hand-written ring buffer is more code to get the wrap-around right. Here the window tracks the last three values of a stream and reports the average each step."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+detailed_tags:
+  - { name: "std::deque::push_back", url: "https://en.cppreference.com/w/cpp/container/deque/push_back" }
+  - { name: "std::deque::pop_front", url: "https://en.cppreference.com/w/cpp/container/deque/pop_front" }

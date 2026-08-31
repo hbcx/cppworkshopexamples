@@ -1,0 +1,11 @@
+title: "The default behind queue and stack"
+standard: "C++11"
+difficulty: 2
+summary: "std::queue and std::stack are adaptors, not containers, and both use std::deque as their default underlying storage -- deque supplies exactly the end operations they need."
+notes: "An adaptor wraps a container and exposes a narrow interface: queue offers push, front and pop; stack offers push, top and pop. Both need cheap insert and remove at an end, which is deque's strength, so deque is the default. The container_type typedef confirms it. You can pick another backing container -- a stack on a vector is often faster for cache locality -- but the default is deque because it serves both adaptors well."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+  - { name: "std::queue", url: "https://en.cppreference.com/w/cpp/container/queue" }
+  - { name: "std::stack", url: "https://en.cppreference.com/w/cpp/container/stack" }

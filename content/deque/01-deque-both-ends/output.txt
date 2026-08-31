@@ -1,0 +1,5 @@
+contents: 0 1 2 3
+d[2]      = 2
+d.front() = 0
+d.back()  = 3
+after popping both ends: 1 2

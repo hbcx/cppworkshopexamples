@@ -1,0 +1,12 @@
+title: "Grow at both ends"
+standard: "C++11"
+difficulty: 1
+summary: "A std::deque adds and removes at the front and the back in constant time, and still lets you index any element -- the double-ended container a vector is not."
+notes: "push_back and push_front are both O(1) amortized, which is the whole point: a vector only grows cheaply at the back. You still get random access with operator[] and at, so a deque reads like a vector while accepting work at either end. The trade-off, covered next, is that the storage is not one contiguous block."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+detailed_tags:
+  - { name: "std::deque::push_front", url: "https://en.cppreference.com/w/cpp/container/deque/push_front" }
+  - { name: "std::deque::push_back", url: "https://en.cppreference.com/w/cpp/container/deque/push_back" }

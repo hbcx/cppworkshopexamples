@@ -1,0 +1,4 @@
+std::queue<int> is backed by std::deque<int>? true
+std::stack<int> is backed by std::deque<int>? true
+queue pops (FIFO): 1 2 3
+stack pops (LIFO): 3 2 1

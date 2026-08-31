@@ -1,0 +1,12 @@
+title: "References survive a push, iterators do not"
+standard: "C++11"
+difficulty: 2
+summary: "Inserting at either end of a deque keeps every reference and pointer to existing elements valid, but invalidates all iterators -- a split that surprises people coming from vector."
+notes: "This is deque's most useful and most confusing guarantee. A push_back or push_front never moves the existing elements, so a reference or pointer you hold keeps pointing at the same object -- unlike vector, where a reallocation moves everything. But the same push still invalidates every iterator, because the iterator has to track deque's chunk layout. So keep references or pointers across end insertions, never iterators. Note that push_front shifts every index up by one even though the objects do not move."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+detailed_tags:
+  - { name: "std::deque::push_front", url: "https://en.cppreference.com/w/cpp/container/deque/push_front" }
+  - { name: "std::deque::push_back", url: "https://en.cppreference.com/w/cpp/container/deque/push_back" }

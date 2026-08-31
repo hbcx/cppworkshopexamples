@@ -1,0 +1,2 @@
+sum via deque iterators: 15
+sum via vector data(): 15

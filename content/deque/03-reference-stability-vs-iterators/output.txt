@@ -1,0 +1,3 @@
+reference still reads 20? true
+same object, now at index 2? true
+re-fetched begin() reads 5
