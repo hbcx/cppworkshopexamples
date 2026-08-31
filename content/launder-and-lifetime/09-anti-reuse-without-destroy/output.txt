@@ -1,0 +1,2 @@
+bad  (no destroy first): alive = 1 (object 1 leaked)
+good (destroy first):    alive = 0 (nothing leaked)

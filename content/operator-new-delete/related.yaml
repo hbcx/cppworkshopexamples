@@ -13,3 +13,5 @@
   note: "What the aligned operator new overload is really for: an over-aligned type needs storage on a stricter boundary than max_align_t, and std::align_val_t is how new asks for it. Go there for alignof/alignas, over-aligned new, and why plain storage is not always aligned enough."
 - slug: "allocators"
   note: "How these allocation functions get packaged for containers: an Allocator wraps allocate/deallocate (usually forwarding to operator new/delete) behind the interface a std::vector or std::list expects. Go there for the Allocator concept, allocator_traits, and stateful allocators."
+- slug: "launder-and-lifetime"
+  note: "What placement new actually does to storage: it begins an object's lifetime, and reusing the same bytes for a new object is where std::launder and the lifetime rules come in. Go there for object lifetime, storage reuse, and laundering a stale pointer."

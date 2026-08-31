@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 17}, {"file": "main.cpp", "line": 11}, {"file": "main.cpp", "line": 18, "out": "first: id = 1\n"}, {"file": "main.cpp", "line": 22}, {"file": "main.cpp", "line": 11}, {"file": "main.cpp", "line": 29}, {"file": "main.cpp", "line": 30, "out": "after launder: id = 2\n"}, {"file": "main.cpp", "line": 33}]}

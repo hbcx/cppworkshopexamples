@@ -1,0 +1,12 @@
+title: "One storage slot reused across a state machine"
+standard: "C++17"
+difficulty: 3
+summary: "A fixed storage slot that holds a different message each step ties the whole section together: destroy the old object, placement-new the next, and reach it through a laundered pointer."
+notes: "This is how an inline holder -- a small variant, a reused message slot, an inplace container element -- manages one piece of storage over time. Because the message owns a std::string, the old object must be destroyed before reusing the bytes, or its buffer leaks. Because it also has a const kind field, a pointer kept across the reuse must be laundered before use. Put together, the slot cycles through objects with no heap churn and no undefined behaviour. The alive counter confirms every construction is matched by a destruction."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::launder", url: "https://en.cppreference.com/w/cpp/utility/launder" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+detailed_tags:
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

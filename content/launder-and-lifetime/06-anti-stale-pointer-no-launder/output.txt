@@ -1,0 +1,3 @@
+first binding: 10
+via returned pointer:  20
+via laundered pointer: 20

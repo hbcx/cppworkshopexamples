@@ -1,0 +1,12 @@
+title: "Anti-pattern: type-punning through an inactive union member"
+standard: "C++17"
+difficulty: 3
+summary: "Writing one union member and reading a different one is undefined in C++, because only the member you last wrote is alive -- the other never began its lifetime."
+notes: "Reading an inactive union member is a C habit that is undefined in C++: the union holds one live member at a time, and the others are just storage. It usually gives the bytes you expected and then surprises you under optimization or on another compiler. To reinterpret the bytes of a value, memcpy them into the target type, or use std::bit_cast in C++20, both of which are defined. The example reads a float's bit pattern the wrong way in a comment and the right way with memcpy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::memcpy", url: "https://en.cppreference.com/w/cpp/string/byte/memcpy" }
+detailed_tags:
+  - { name: "std::bit_cast", url: "https://en.cppreference.com/w/cpp/numeric/bit_cast" }
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

@@ -1,0 +1,4 @@
+title: "Object lifetime and std::launder"
+description: "The rules for when a C++ object actually exists, and the tool for pointing at a new object built in old storage. Covers where lifetime begins and ends, reusing the same bytes with placement new, why a pointer you already hold can go stale after that reuse and how std::launder fixes it, reading raw bytes as a trivially copyable object with memcpy (and the C++23 start_lifetime_as), and managing one storage slot that holds different types over time -- alongside the anti-patterns: reading through a stale pointer without launder, reinterpret_cast of bytes into an object that was never created, touching an object after its storage was reused, reusing storage without destroying the old object, and type-punning through an inactive union member."
+sort_order: 144
+category: "Memory management"

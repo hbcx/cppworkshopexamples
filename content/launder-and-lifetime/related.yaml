@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "uninitialized-memory"
+  note: "The operations that begin and end the lifetimes this section reasons about: uninitialized_* construct objects in raw storage and destroy ends them, a range at a time. Go there for the construction and teardown algorithms that drive the lifetime rules here."
+- slug: "operator-new-delete"
+  note: "Where placement new comes from, and the allocation the storage came from first: a new-expression splits into allocation and construction, and placement new is the construction half you run over storage you already own. Go there for the allocation functions beneath object lifetime."
+- slug: "alignment"
+  note: "A requirement the storage must meet before any object lives in it: an object placement-new'd into an under-aligned buffer is misaligned before lifetime even matters. Go there for alignof/alignas and why a plain char buffer is not aligned enough."
+- slug: "type-conversions-and-casts"
+  note: "The casts these anti-patterns misuse: reinterpret_cast does not create an object and reading through it is undefined, which is exactly what memcpy and start_lifetime_as fix. Go there for the cast family and what each one is actually allowed to do."

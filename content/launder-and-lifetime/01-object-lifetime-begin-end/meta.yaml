@@ -1,0 +1,11 @@
+title: "When an object's lifetime begins and ends"
+standard: "C++11"
+difficulty: 1
+summary: "An object exists only from the moment its constructor finishes to the moment its destructor starts -- storage can exist before and after, but there is no object to touch outside that window."
+notes: "Raw storage and an object are not the same thing. The bytes may sit there the whole time, but the object's lifetime is the span between construction and destruction, and reading or writing through a pointer outside that span is undefined even though the memory is valid. This example makes the window explicit with placement new and a manual destructor call, watching a flag flip as the object comes and goes. Everything else in this section builds on this begins-at-construction, ends-at-destruction rule."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

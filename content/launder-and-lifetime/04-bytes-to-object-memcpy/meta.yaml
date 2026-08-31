@@ -1,0 +1,12 @@
+title: "Reading bytes as an object with memcpy"
+standard: "C++17"
+difficulty: 2
+summary: "memcpy of raw bytes into a trivially copyable object begins that object's lifetime and fills it in one step -- the portable, defined way to turn a byte buffer into a struct."
+notes: "You cannot just point a struct pointer at a byte buffer and read it: no object of that type ever started its lifetime there. memcpy into a real object of the type both starts its lifetime and copies the bytes, and for a trivially copyable type that is fully defined and compiles to the same load a cast would. This is how you read a record off the wire without undefined behaviour. In C++23 std::start_lifetime_as does the same without the copy, treating the existing bytes as a live object in place; before that, memcpy is the portable tool."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::memcpy", url: "https://en.cppreference.com/w/cpp/string/byte/memcpy" }
+detailed_tags:
+  - { name: "std::start_lifetime_as", url: "https://en.cppreference.com/w/cpp/memory/start_lifetime_as" }
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

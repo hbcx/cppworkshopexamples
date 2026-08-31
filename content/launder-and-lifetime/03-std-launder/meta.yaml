@@ -1,0 +1,12 @@
+title: "std::launder after storage reuse"
+standard: "C++17"
+difficulty: 3
+summary: "When a type has a const or reference member, a pointer you held before reusing the storage may still refer to the old object -- std::launder gives you a pointer that refers to the new one."
+notes: "The compiler is allowed to assume a const member never changes, so after you placement-new a new object over the old storage, reading the const member through the old pointer can return the stale value. std::launder(p) produces a pointer to whatever object now lives at that address, blocking that assumption. You only need it when you cannot use the new-expression's return value and the type has const or reference members or a vtable; a plain type does not need it. Reading through the un-laundered pointer is undefined, so it is described, not run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::launder", url: "https://en.cppreference.com/w/cpp/utility/launder" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

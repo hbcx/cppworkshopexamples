@@ -1,0 +1,1 @@
+bit pattern of 1.5f = 0x3fc00000

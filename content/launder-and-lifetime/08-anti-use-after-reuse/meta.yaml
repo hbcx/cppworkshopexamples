@@ -1,0 +1,12 @@
+title: "Anti-pattern: using an object after its storage was reused"
+standard: "C++17"
+difficulty: 3
+summary: "Once storage is reused for a new object, the old object is gone for good -- a cached pointer or reference to it is meaningless, and std::launder does not bring it back."
+notes: "launder fixes reaching the NEW object through an old pointer; nothing reaches the OLD one, because its lifetime has ended. Code that cached a pointer or reference to an object and then let its storage be reused is holding a handle to something that no longer exists, and the bytes now belong to a different object. The rule is to re-fetch after any reuse, or not reuse storage a cached handle still points into. The alive counter shows only the new object exists; the stale access to the old one is described, not run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "std::launder", url: "https://en.cppreference.com/w/cpp/utility/launder" }
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

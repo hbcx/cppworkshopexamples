@@ -1,0 +1,3 @@
+first object:  id = 1
+second object: id = 2
+same storage, two objects over time

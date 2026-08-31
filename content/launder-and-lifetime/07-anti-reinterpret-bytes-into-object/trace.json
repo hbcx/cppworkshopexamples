@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 20}, {"file": "main.cpp", "line": 28}, {"file": "main.cpp", "line": 30, "out": "magic = 0xcafebabe\n"}, {"file": "main.cpp", "line": 31, "out": "size  = 256\n"}, {"file": "main.cpp", "line": 32}]}

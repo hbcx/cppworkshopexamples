@@ -1,0 +1,11 @@
+title: "Anti-pattern: reusing storage without destroying the old object"
+standard: "C++17"
+difficulty: 3
+summary: "Placement-newing a new object over one that still owns a resource ends the old object's lifetime without running its destructor, so whatever it held leaks."
+notes: "Reusing storage ends the old object's lifetime, but it does not run its destructor for you -- that is your job before the reuse. Skip it on a type that owns memory, a handle, or a lock, and that resource is lost with no way to reclaim it. For a trivial type there is nothing to run and reuse is harmless, which is why this bug hides until a non-trivial member is added. The live-object counter shows the leak: constructing over a live object without destroying it leaves the count too high."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }

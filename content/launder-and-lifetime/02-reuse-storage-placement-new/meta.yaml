@@ -1,0 +1,11 @@
+title: "Reusing the same storage with placement new"
+standard: "C++11"
+difficulty: 2
+summary: "After you destroy an object you can build a new one in the same bytes, and the pointer that placement new returns is always a safe way to reach the new object."
+notes: "Reusing storage is destroy the old object, then placement-new a new one into the same memory. The clean rule is to use the pointer the new-expression hands back: it always refers to the object just built, no questions asked. A pointer you kept from before the reuse is a different matter -- for some types it goes stale, which is what std::launder is for in the next example. Here the type is simple, so the returned pointer is all you need."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+detailed_tags:
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

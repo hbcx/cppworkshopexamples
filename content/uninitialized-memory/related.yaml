@@ -11,3 +11,5 @@
   note: "The requirement the raw storage must meet before you construct in it: an object placement-new'd into an under-aligned buffer is misaligned. Go there for alignof/alignas, std::align, and why a plain char buffer is not aligned enough."
 - slug: "allocators"
   note: "Where these construct/destroy steps get packaged for containers: allocator_traits::construct and destroy are the one-object form of what you do here by hand, and an allocator is how a container gets the raw storage first. Go there for the Allocator interface and allocator_traits."
+- slug: "launder-and-lifetime"
+  note: "The lifetime rules behind construct and destroy: when an object actually begins and ends, why reusing storage can leave a pointer stale, and how std::launder fixes it. Go there for object lifetime, storage reuse, and launder."

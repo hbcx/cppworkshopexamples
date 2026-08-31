@@ -1,0 +1,12 @@
+title: "Anti-pattern: reinterpret_cast bytes into an object"
+standard: "C++17"
+difficulty: 3
+summary: "Pointing a struct pointer at a byte buffer and reading through it is undefined: no object of that type ever began its lifetime there, whatever the bytes happen to hold."
+notes: "This is the lifetime side of the reinterpret_cast trap. Even with the alignment correct, the cast does not create an object -- reading its members touches a type that never started living at that address. The defined tools are memcpy into a real object of the type, or C++23 start_lifetime_as to begin the lifetime in place. Both cost nothing for a trivially copyable type at optimization. The cast read is described; the memcpy fix is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::memcpy", url: "https://en.cppreference.com/w/cpp/string/byte/memcpy" }
+detailed_tags:
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

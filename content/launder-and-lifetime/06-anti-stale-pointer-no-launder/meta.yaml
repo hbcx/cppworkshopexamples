@@ -1,0 +1,12 @@
+title: "Anti-pattern: reusing the old pointer after storage reuse"
+standard: "C++17"
+difficulty: 3
+summary: "A type with a reference member is stored in place, the storage is reused for a new one, and the old pointer is read again -- which is undefined even though it compiles and often prints the right value."
+notes: "Like a const member, a reference member is fixed for an object's life, so the compiler may keep using what it knew about the old object when you read through the old pointer after reuse. It usually prints correctly at low optimization and then breaks once the optimizer trusts that assumption, which is the worst kind of bug. Two fixes: use the pointer the new-expression returned, or std::launder the old one. The example runs both fixes and only describes the stale read."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::launder", url: "https://en.cppreference.com/w/cpp/utility/launder" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "object lifetime", url: "https://en.cppreference.com/w/cpp/language/lifetime" }

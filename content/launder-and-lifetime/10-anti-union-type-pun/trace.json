@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 24}, {"file": "main.cpp", "line": 25}, {"file": "main.cpp", "line": 26}, {"file": "main.cpp", "line": 28, "out": "bit pattern of 1.5f = 0x3fc00000\n"}, {"file": "main.cpp", "line": 30}]}

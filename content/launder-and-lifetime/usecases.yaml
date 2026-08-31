@@ -1,0 +1,19 @@
+- problem: "You are implementing a variant, an optional, or a small-buffer type that keeps its payload inline and swaps which object lives in that storage over time."
+  why: "Each re-emplace ends one object's lifetime and begins another in the same bytes, and a pointer kept across that switch goes stale when the payload has a const or reference member. Getting the destroy-then-construct order and the launder right is what makes the inline storage correct, which a naive placement-new loop gets subtly wrong."
+  signal: "An aligned_storage or byte buffer holding a payload built by placement new, re-emplaced in place, with a pointer or reference kept across the reuse."
+
+- problem: "A parser reads trivially copyable records -- headers, fixed-layout messages -- out of a byte buffer that arrived off a socket or a file."
+  why: "reinterpret_cast of the buffer to the record type is undefined: no object of that type ever started its lifetime there. memcpy into a real object of the type both begins its lifetime and fills it, is portable, and compiles to the same load, which the cast only appears to do."
+  signal: "reinterpret_cast<Record*>(buffer) followed by reading fields, over data read from I/O."
+
+- problem: "A high-throughput system maps a large file or a network buffer and wants to walk it as an array of fixed-layout records with zero copying, in the hot path."
+  why: "reinterpret_cast is undefined and memcpy would copy every record. C++23 std::start_lifetime_as begins the objects' lifetimes in the existing bytes with no copy and no undefined behaviour, which neither of the older options can do together."
+  signal: "A memory-mapped or received buffer walked as structs in a performance-critical loop where copying each record is too expensive."
+
+- problem: "A state machine or object pool cycles one fixed storage slot through different states or message types instead of allocating a fresh object each time."
+  why: "Reallocating per state defeats the point of the fixed slot, but reusing it means managing lifetimes by hand: destroy before reuse, and launder any cached pointer when the type has a const or reference member. That is the price of avoiding the allocation, and skipping either step is undefined."
+  signal: "A reused storage slot whose contents change type or state over time, with a cached pointer or reference into it."
+
+- problem: "You are writing a container that stores elements in an inline buffer -- a small_vector, an inplace flat map -- and constructs and destroys them by hand."
+  why: "The container owns its elements' lifetimes: it must destroy before overwriting a slot, launder pointers into reused storage, and never touch a slot outside its element's lifetime. std::vector hides all of this; a hand-rolled inline container has to get it right itself."
+  signal: "A container with an inline element buffer doing its own placement new and explicit destructor calls on element storage."
