@@ -1,0 +1,2 @@
+reserved 16 ints within the 128-byte budget
+over-budget request threw bad_alloc, no heap fallback

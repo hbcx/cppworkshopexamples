@@ -1,0 +1,12 @@
+title: "Anti-pattern: sharing an unsynchronized resource across threads"
+standard: "C++17"
+difficulty: 3
+summary: "unsynchronized_pool_resource and monotonic_buffer_resource do no locking, so two threads allocating from one shared instance race and corrupt the resource's internal state."
+notes: "The unsynchronized in the name is the warning: these resources trade thread safety for speed, so one instance must stay on one thread. Two threads sharing it race on the free lists, which compiles and often works in a light test, then corrupts under load. The fix is either a synchronized_pool_resource, which locks internally, or a separate resource per thread. The cross-thread race is described, not run; the example uses a synchronized_pool_resource, the drop-in that is safe to share."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::synchronized_pool_resource", url: "https://en.cppreference.com/w/cpp/memory/synchronized_pool_resource" }
+detailed_tags:
+  - { name: "std::pmr::unsynchronized_pool_resource", url: "https://en.cppreference.com/w/cpp/memory/unsynchronized_pool_resource" }
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

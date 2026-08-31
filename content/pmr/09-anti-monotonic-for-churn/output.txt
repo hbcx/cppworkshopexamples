@@ -1,0 +1,2 @@
+monotonic finished all 1000 iterations? false  (ran out early: true)
+pool finished all 1000 iterations? true

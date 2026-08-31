@@ -1,0 +1,3 @@
+always-true resource: two separate instances equal? true  (they cannot free each other)
+identity resource:    two separate instances equal? false
+identity equality keeps each resource freeing only its own memory

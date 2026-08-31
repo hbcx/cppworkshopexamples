@@ -1,0 +1,11 @@
+title: "Anti-pattern: a custom resource with a wrong do_is_equal"
+standard: "C++17"
+difficulty: 3
+summary: "do_is_equal must answer can this resource free memory that one allocated, so returning true for two independent resources lets a container free a block through the wrong one."
+notes: "Two pmr allocators compare equal only when their resources are equal, and that comparison decides whether a container may move a buffer between them or must copy element by element. A resource whose do_is_equal always returns true claims any two instances are interchangeable, so a move can hand one resource a pointer another owns -- undefined. Unless a resource genuinely shares one pool across instances, do_is_equal should be identity: this == &other. The example shows the always-true version wrongly equating two separate resources and the identity version telling them apart; the cross-resource free is described."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::memory_resource", url: "https://en.cppreference.com/w/cpp/memory/memory_resource" }
+detailed_tags:
+  - { name: "std::pmr::new_delete_resource", url: "https://en.cppreference.com/w/cpp/memory/new_delete_resource" }

@@ -1,0 +1,2 @@
+plain copy uses the stack buffer? false  (it fell back to the heap)
+explicit-resource copy uses the stack buffer? true

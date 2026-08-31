@@ -1,0 +1,11 @@
+title: "Anti-pattern: treating pmr::vector as std::vector"
+standard: "C++17"
+difficulty: 3
+summary: "std::pmr::vector and std::vector are different types, so one does not pass where the other is expected, and moving between them copies every element rather than stealing the buffer."
+notes: "The two differ in their allocator: std::vector uses std::allocator, std::pmr::vector uses polymorphic_allocator. That makes them separate types, so a function taking std::vector<int>& will not accept a std::pmr::vector<int>, and there is no free move between them -- crossing the boundary copies the elements. Decide at the interface which one your code speaks, and convert deliberately by copying when you must bridge. The example shows the types differ and does the explicit element copy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

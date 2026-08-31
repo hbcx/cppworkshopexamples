@@ -1,0 +1,2 @@
+synchronized_pool_resource is safe to share across threads
+vector built on it holds 8 elements

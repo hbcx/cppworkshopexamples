@@ -1,0 +1,3 @@
+same type: true
+onStack allocates in the buffer: true
+onHeap  allocates in the buffer: false

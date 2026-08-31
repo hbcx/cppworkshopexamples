@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "allocators"
+  note: "The classic allocator model pmr is the run-time-polymorphic answer to: there the strategy is a template parameter and each one is a new type, here it is a memory_resource pointer and the container type stays fixed. Go there for the Allocator concept, allocator_traits, and stateful allocators."
+- slug: "object-pool"
+  note: "The hand-rolled version of what unsynchronized_pool_resource does: recycle fixed-size blocks from a free list. Go there for the pooling pattern, RAII handles, and the thread-safety questions a pool raises."
+- slug: "operator-new-delete"
+  note: "What new_delete_resource forwards to, and the layer under every resource: operator new and delete are the raw allocation functions a memory_resource ultimately calls. Go there for the allocation primitives beneath pmr."
+- slug: "alignment"
+  note: "The alignment argument every do_allocate takes: a resource must return storage aligned for the request, and an over-aligned element makes that argument matter. Go there for alignof/alignas, std::align, and over-aligned allocation."

@@ -1,0 +1,12 @@
+title: "One type, swappable resource"
+standard: "C++17"
+difficulty: 2
+summary: "Because polymorphic_allocator carries the resource as a run-time pointer, two std::pmr::vector<int> with completely different memory strategies are still the same type."
+notes: "This is the whole point of pmr and the difference from classic allocators: a std::vector with a custom allocator is a new type per strategy, but every std::pmr::vector<int> is one type, choosing its resource at run time. So a function can take a std::pmr::vector<int>& and the caller decides -- heap, stack buffer, pool -- without templates or recompiling. The example builds two vectors of the same type, one on a stack buffer and one on the default heap resource, and confirms they are the same type but allocate in different places."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::polymorphic_allocator", url: "https://en.cppreference.com/w/cpp/memory/polymorphic_allocator" }
+detailed_tags:
+  - { name: "std::pmr::monotonic_buffer_resource", url: "https://en.cppreference.com/w/cpp/memory/monotonic_buffer_resource" }
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

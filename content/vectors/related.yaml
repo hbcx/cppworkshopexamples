@@ -32,3 +32,5 @@
   note: "How a vector works underneath: capacity larger than size means the tail of the buffer is raw, filled with uninitialized_* on a grow and torn down with destroy, with a rollback if an element move throws -- go there for the construction algorithms behind reserve and reallocation."
 - slug: "allocators"
   note: "Where a vector gets its memory, and how to change it: the second template parameter is an Allocator, so you can back a vector with an arena, a pool, or a counting allocator -- go there for the allocator interface and stateful allocators."
+- slug: "pmr"
+  note: "Change a vector's memory strategy at run time instead of in the type: std::pmr::vector picks a memory_resource by pointer, so one type can allocate from the heap, a stack buffer, or a pool -- go there for polymorphic_allocator and the standard resources."

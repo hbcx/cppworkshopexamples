@@ -7,3 +7,5 @@
   note: "The rule an allocate must honor: the storage it returns has to be aligned for the value_type, and an over-aligned element needs an aligned allocation. Go there for alignof/alignas, std::align, and over-aligned new."
 - slug: "object-pool"
   note: "A concrete stateful allocator taken further: a pool recycles fixed-size blocks and hands them out through the same acquire/release shape a container allocator uses. Go there for the pooling pattern behind an arena or free-list allocator."
+- slug: "pmr"
+  note: "The same idea moved from compile time to run time: pmr makes the allocation strategy a memory_resource pointer, so std::pmr::vector is one type whatever the backend. Go there for polymorphic_allocator, monotonic and pool resources, and the copy-does-not-propagate gotcha."

@@ -1,0 +1,23 @@
+- problem: "A server or game loop builds many temporary containers per request or per frame -- parsed fields, scratch vectors, small maps -- that all die together at the end of the request or frame."
+  why: "Classic custom allocators would make each of those a different container type, so the plumbing spreads through every signature. pmr keeps one container type: a single monotonic_buffer_resource feeds them all and is reset or dropped at the boundary, turning thousands of frees into none."
+  signal: "Many std::pmr containers created together and destroyed together at a request or frame boundary, sharing one monotonic resource."
+
+- problem: "A latency-critical path -- an audio callback, a trading hot loop -- must not call the system allocator, whose lock or page fault can blow the deadline."
+  why: "std::allocator goes to malloc, with unbounded worst-case latency. A fixed stack or static buffer behind a monotonic resource serves allocations in constant time, and a null upstream turns overflow into a caught bad_alloc instead of a silent heap call."
+  signal: "pmr containers on a real-time path built on a fixed buffer, ideally with null_memory_resource upstream so the no-heap rule is enforced."
+
+- problem: "A workload does huge numbers of small, same-size allocations -- a graph of nodes, a big pmr::map or pmr::list -- and the per-node malloc cost and heap fragmentation dominate."
+  why: "One malloc per node is slow and fragments the heap. An unsynchronized_pool_resource carves nodes from large chunks and recycles freed ones, so the real allocator is touched rarely and the nodes stay packed, which per-node new cannot do."
+  signal: "A node-based pmr container with heavy insert and erase, where allocation shows up in the profile."
+
+- problem: "You want to try different allocation strategies on the same container-heavy code -- heap now, an arena or pool later -- to benchmark or to tune per deployment, without rewriting the code."
+  why: "With classic allocators each strategy is a distinct type, so switching means changing signatures and recompiling call sites. Because every std::pmr::vector<int> is one type, you swap the memory_resource behind the same code and measure, which template allocators make painful."
+  signal: "Container-heavy code where the allocation strategy is still being decided, or an A/B benchmark of allocators over identical logic."
+
+- problem: "You need to trace or cap allocations for one subsystem -- how much it allocates, or a hard ceiling -- without touching the rest of the program."
+  why: "Overriding global operator new is all-or-nothing and catches every allocation in the process. A custom memory_resource, or set_default_resource within that subsystem's scope, instruments or bounds just that code, which a global hook cannot target."
+  signal: "A wish to count, log, or limit allocations for one module while leaving the rest of the program on the normal allocator."
+
+- problem: "An embedded or safety-critical component has a fixed memory budget it must not exceed, and exceeding it must fail loudly rather than degrade the whole device."
+  why: "Hoping usage stays under budget is not a guarantee. A fixed buffer with null_memory_resource upstream makes the budget a hard wall: allocations that fit succeed, the first that does not throws bad_alloc, so the overrun is caught at its source instead of starving something else later."
+  signal: "A component with a stated memory budget that must be enforced in code, not just assumed to hold."

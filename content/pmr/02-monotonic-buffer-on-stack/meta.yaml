@@ -1,0 +1,12 @@
+title: "A monotonic buffer on the stack"
+standard: "C++17"
+difficulty: 2
+summary: "A monotonic_buffer_resource sitting on a stack array lets a std::pmr::vector allocate without ever touching the heap -- it just bumps a pointer through the buffer."
+notes: "monotonic_buffer_resource is a bump allocator: each allocation moves a cursor forward, and deallocate does nothing. Point it at a plain byte array on the stack and a pmr container fills that array instead of calling new. When the resource is destroyed the whole buffer is reclaimed at once. This is the fastest allocation there is -- no free list, no bookkeeping -- and the example checks the vector's storage really sits inside the stack buffer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::monotonic_buffer_resource", url: "https://en.cppreference.com/w/cpp/memory/monotonic_buffer_resource" }
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::pmr::polymorphic_allocator", url: "https://en.cppreference.com/w/cpp/memory/polymorphic_allocator" }

@@ -1,0 +1,2 @@
+list holds 100 nodes
+upstream allocations for 100 nodes: fewer than 100? true

@@ -1,0 +1,12 @@
+title: "Anti-pattern: expecting the resource to travel with a copy"
+standard: "C++17"
+difficulty: 3
+summary: "Copying a pmr container does not carry its memory_resource: the copy uses the default resource, so a vector built on a stack buffer quietly starts allocating from the heap once you copy it."
+notes: "polymorphic_allocator does not propagate on copy construction -- by design, because the source resource may be tied to a scope the copy outlives. So auto b = a gives b the default resource, not a's. If you want the copy on the same resource you must pass it: the constructor takes the source and a resource pointer. The example shows a copy silently landing on the default resource, then the fix that keeps it on the buffer. This is the single most common pmr surprise."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::polymorphic_allocator", url: "https://en.cppreference.com/w/cpp/memory/polymorphic_allocator" }
+detailed_tags:
+  - { name: "std::pmr::monotonic_buffer_resource", url: "https://en.cppreference.com/w/cpp/memory/monotonic_buffer_resource" }
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

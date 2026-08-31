@@ -1,0 +1,2 @@
+vector size: 16
+storage inside the stack buffer (no heap)? true

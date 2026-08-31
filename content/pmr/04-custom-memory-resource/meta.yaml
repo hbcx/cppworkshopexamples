@@ -1,0 +1,12 @@
+title: "Writing a custom memory_resource"
+standard: "C++17"
+difficulty: 3
+summary: "Deriving from std::pmr::memory_resource and overriding do_allocate, do_deallocate and do_is_equal gives a resource you can plug into any pmr container -- here one that counts what it hands out."
+notes: "A memory_resource has just three virtual functions: do_allocate (size and alignment in, pointer out), do_deallocate, and do_is_equal (can this resource free that one's memory). Forward the first two to an upstream resource and add your own logic around them -- counting, logging, tagging. Because the container talks to the resource through a base-class pointer, one small class works for every pmr container. The example counts a pmr::vector's single reserved allocation."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::memory_resource", url: "https://en.cppreference.com/w/cpp/memory/memory_resource" }
+detailed_tags:
+  - { name: "std::pmr::new_delete_resource", url: "https://en.cppreference.com/w/cpp/memory/new_delete_resource" }
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

@@ -1,0 +1,12 @@
+title: "A hard budget cap with null_memory_resource"
+standard: "C++17"
+difficulty: 3
+summary: "Set a monotonic buffer's upstream to null_memory_resource and the moment it runs out of its fixed buffer it throws bad_alloc instead of quietly falling back to the heap."
+notes: "null_memory_resource() is a resource whose allocate always throws bad_alloc. Used as the upstream of a fixed-size resource, it turns the buffer into a hard ceiling: allocations that fit are served, and the first one that does not fails loudly rather than spilling to new. That is exactly what an embedded or safety-critical subsystem wants -- a memory budget that is enforced, not hoped for. The example fills within budget, then asks for more than the buffer holds and catches the bad_alloc."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::null_memory_resource", url: "https://en.cppreference.com/w/cpp/memory/null_memory_resource" }
+  - { name: "std::pmr::monotonic_buffer_resource", url: "https://en.cppreference.com/w/cpp/memory/monotonic_buffer_resource" }
+detailed_tags:
+  - { name: "std::bad_alloc", url: "https://en.cppreference.com/w/cpp/memory/new/bad_alloc" }

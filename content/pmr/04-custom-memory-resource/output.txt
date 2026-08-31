@@ -1,0 +1,3 @@
+allocations counted: 1
+bytes counted:       400
+vector size:         10

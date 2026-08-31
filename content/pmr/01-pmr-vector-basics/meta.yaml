@@ -1,0 +1,12 @@
+title: "std::pmr::vector and the default resource"
+standard: "C++17"
+difficulty: 1
+summary: "A std::pmr::vector is a vector whose allocator holds a memory_resource pointer, so where it gets memory is a run-time choice -- and with no argument it uses the default resource, plain new and delete."
+notes: "std::pmr::vector<int> is really std::vector<int, std::pmr::polymorphic_allocator<int>>: one concrete type whatever the memory strategy. Construct it with no resource and it calls get_default_resource(), which is new_delete_resource() -- so it behaves exactly like std::vector until you hand it something else. This example shows the vector working normally and confirms its resource is the new/delete one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::pmr::polymorphic_allocator", url: "https://en.cppreference.com/w/cpp/memory/polymorphic_allocator" }
+detailed_tags:
+  - { name: "std::pmr::new_delete_resource", url: "https://en.cppreference.com/w/cpp/memory/new_delete_resource" }

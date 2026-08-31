@@ -1,0 +1,11 @@
+title: "Anti-pattern: the resource dies before the container"
+standard: "C++17"
+difficulty: 3
+summary: "A pmr container only holds a pointer to its memory_resource, so if the resource (or its backing buffer) is destroyed while the container still lives, every later allocation and the final cleanup are undefined."
+notes: "The classic form is returning a pmr::vector that was built on a monotonic buffer local to the function: the buffer dies at the return, the vector dangles. The rule is simple -- the resource must outlive every container that uses it -- which means declaring the resource before the container so it is destroyed after, and never letting a container escape the resource's scope. The dangling return is described; the run shows the correct ordering where the resource clearly outlives the container."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::monotonic_buffer_resource", url: "https://en.cppreference.com/w/cpp/memory/monotonic_buffer_resource" }
+detailed_tags:
+  - { name: "std::pmr::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

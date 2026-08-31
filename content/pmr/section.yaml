@@ -1,0 +1,4 @@
+title: "Polymorphic memory resources (pmr)"
+description: "The C++17 way to give a container a custom allocation strategy without turning it into a new type. Covers std::pmr::vector and the pmr container aliases, polymorphic_allocator (one allocator type holding a memory_resource pointer, chosen at run time), monotonic_buffer_resource on a stack buffer for heap-free allocation, writing a custom memory_resource, unsynchronized_pool_resource for many small allocations, and null_memory_resource as a hard budget cap -- alongside the anti-patterns: a pmr allocator that does not propagate on copy, a resource destroyed before the container using it, a monotonic resource used for long-lived churn, sharing an unsynchronized resource across threads, a wrong do_is_equal, and treating std::pmr::vector as the same type as std::vector."
+sort_order: 143
+category: "Memory management"

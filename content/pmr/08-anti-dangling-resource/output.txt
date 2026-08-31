@@ -1,0 +1,2 @@
+vector on a caller-owned resource: 0 3 6 9 12
+resource outlives the container, so cleanup is safe

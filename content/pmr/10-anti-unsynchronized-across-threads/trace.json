@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 22}, {"file": "main.cpp", "line": 24}, {"file": "main.cpp", "line": 25}, {"file": "main.cpp", "line": 27, "out": "synchronized_pool_resource is safe to share across threads\n"}, {"file": "main.cpp", "line": 28, "out": "vector built on it holds 8 elements\n"}, {"file": "main.cpp", "line": 29}]}

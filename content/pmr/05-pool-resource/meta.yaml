@@ -1,0 +1,11 @@
+title: "A pool resource for many small allocations"
+standard: "C++17"
+difficulty: 3
+summary: "unsynchronized_pool_resource groups same-size allocations into big blocks it gets from an upstream resource, so a node container of many elements hits the real allocator only a handful of times."
+notes: "A node container like pmr::list allocates one small node per element, which is death by a thousand mallocs. A pool resource carves those nodes out of large chunks it requests from its upstream, so the upstream sees a few big requests instead of one per node. The example counts upstream allocations with a custom resource underneath the pool and shows that number is far below the element count. deallocated nodes go back to the pool for reuse, unlike a monotonic resource."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::unsynchronized_pool_resource", url: "https://en.cppreference.com/w/cpp/memory/unsynchronized_pool_resource" }
+detailed_tags:
+  - { name: "std::pmr::memory_resource", url: "https://en.cppreference.com/w/cpp/memory/memory_resource" }

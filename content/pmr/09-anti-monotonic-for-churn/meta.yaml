@@ -1,0 +1,12 @@
+title: "Anti-pattern: a monotonic resource for long-lived churn"
+standard: "C++17"
+difficulty: 3
+summary: "A monotonic_buffer_resource never reclaims on deallocate, so a long-running loop that keeps allocating and freeing exhausts the buffer even though only one block is ever live at a time."
+notes: "monotonic is built for allocate-a-lot-then-throw-it-all-away, not for steady insert and erase. Its deallocate does nothing, so repeated allocate then free walks the cursor to the end and never comes back -- the buffer runs out despite the live size staying tiny. When memory is freed and reused over a long life, a pool resource is the right choice: it puts freed blocks back for reuse. The example runs the same churn loop on both, showing the monotonic one exhaust and the pool one finish."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::pmr::monotonic_buffer_resource", url: "https://en.cppreference.com/w/cpp/memory/monotonic_buffer_resource" }
+detailed_tags:
+  - { name: "std::pmr::unsynchronized_pool_resource", url: "https://en.cppreference.com/w/cpp/memory/unsynchronized_pool_resource" }
+  - { name: "std::bad_alloc", url: "https://en.cppreference.com/w/cpp/memory/new/bad_alloc" }
