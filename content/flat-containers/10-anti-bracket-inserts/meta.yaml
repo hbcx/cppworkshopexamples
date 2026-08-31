@@ -1,0 +1,11 @@
+title: "Anti-pattern: operator[] to read silently inserts"
+standard: "C++23"
+difficulty: 3
+summary: "Like std::map, flat_map::operator[] inserts a default-constructed value when the key is missing -- but here that insert is O(n), so a read-through-[] on an absent key both changes the map and shifts the vector."
+notes: "operator[] is a lookup-or-insert, not a plain read: on a missing key it adds an entry, which for a flat_map means shifting the vector to keep it sorted, an O(n) write hidden inside what looked like a query. Using [] to test or read a possibly-absent key silently grows the map and moves elements, worse than the same mistake on a std::map because that insert is O(n) not O(log n). To read without inserting, use contains, find, or at (which throws on a missing key). The accidental insert is shown by the size changing; the read-only fix is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }

@@ -12,3 +12,5 @@
   note: "Set math on sorted ranges: set_union, set_intersection and set_difference compute the relations between two sets in O(n+m), and a set's own sorted iterators feed them directly -- go there for combining sorted ranges."
 - slug: "priority-queue"
   note: "The heap that gives up reachability for speed: a std::priority_queue pops the extreme in O(log n) but cannot find or reprioritise a middle element, which a std::set of (priority, id) can -- go there for the always-take-the-top structure, and come back here when you must change or remove a queued item."
+- slug: "flat-containers"
+  note: "The C++23 sorted-vector version of a set: std::flat_set keeps the same ordered, unique interface but stores elements contiguously, trading O(log n) insert and stable iterators for cache-friendly lookup -- go there when the set is built once and mostly read."

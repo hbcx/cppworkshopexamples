@@ -1,0 +1,11 @@
+title: "flat_set: a sorted set in a vector"
+standard: "C++23"
+difficulty: 1
+summary: "std::flat_set holds unique keys sorted in a contiguous vector, so it offers the std::set interface -- contains, insert with dedup, ordered iteration -- over packed storage."
+notes: "Like flat_map, flat_set (C++23) is a sorted container backed by a vector rather than a tree. Construction from a list sorts and removes duplicates, insert keeps the order and rejects an existing key, and iteration is in ascending order. The pay-off is contiguous storage for fast lookup and low memory; the cost, covered later, is O(n) insertion and no stable references. Unlike flat_map, its elements are plain values, so iterating with a reference is fine here."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_set", url: "https://en.cppreference.com/w/cpp/container/flat_set" }
+detailed_tags:
+  - { name: "std::set", url: "https://en.cppreference.com/w/cpp/container/set" }

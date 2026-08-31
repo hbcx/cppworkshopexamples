@@ -1,0 +1,11 @@
+title: "Anti-pattern: auto& in a flat_map range-for"
+standard: "C++23"
+difficulty: 3
+summary: "Iterating a flat_map with for (auto& [k, v] : fm) does not compile, because the iterator hands back a temporary proxy pair of references, not a real element reference you can bind to."
+notes: "Because a flat_map stores keys and values in separate vectors, there is no pair<const K, V> object to reference; the iterator builds a proxy pair<const K&, V&> on the fly, which is a temporary. A non-const auto& cannot bind a temporary, so the loop fails to compile -- a surprise for anyone used to auto& over a std::map. Write auto to copy the cheap proxy (its members are still references into the map), or const auto& to bind the temporary. The non-compiling auto& is described; the two working forms are run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }

@@ -1,0 +1,11 @@
+title: "The split keys() and values() columns"
+standard: "C++23"
+difficulty: 2
+summary: "A flat_map stores its keys and its values in two SEPARATE sorted vectors, and keys() and values() hand you each column -- so the keys are a contiguous sorted array you can binary-search or pass to a C API."
+notes: "Unlike std::map, which stores each key-value pair together in a node, flat_map keeps a struct-of-arrays layout: one vector of keys sorted ascending, one parallel vector of values. keys() returns the key column and values() the value column, both contiguous. That means there is no single array of pairs, but the keys alone are a real sorted array -- ideal for std::lower_bound, a binary search, or handing a length and pointer to C code. The columns stay in step: values()[i] is the value for keys()[i]."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

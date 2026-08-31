@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "maps"
+  note: "The node-based sibling flat_map is weighed against: std::map keeps references stable and inserts in O(log n) but chases pointers on every lookup. Go there for the tree-based map, its stability guarantees, and when frequent mutation makes it the better pick."
+- slug: "sets"
+  note: "The node-based counterpart of flat_set: std::set is a sorted tree with stable iterators and O(log n) insert, where flat_set trades those away for contiguous storage. Go there for the ordered set and the set-algebra algorithms its iterators feed."
+- slug: "unordered-containers"
+  note: "The other way to beat a tree map: std::unordered_map gives O(1) average lookup by hashing, where flat_map gives cache-friendly O(log n) with sorted order kept. Go there for the hash-table option and when order does not matter."
+- slug: "associative-containers"
+  note: "The head-to-head benchmark: it pits std::map against std::unordered_map and a hand-rolled sorted vector across sizes -- and a flat_map IS that sorted vector, packaged. Go there for the numbers behind choosing one container over another."

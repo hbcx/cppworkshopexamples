@@ -1,0 +1,12 @@
+title: "Anti-pattern: a reference or iterator kept across a mutation"
+standard: "C++23"
+difficulty: 3
+summary: "A flat container invalidates every reference, pointer and iterator on an insert or erase, just like a vector -- so a handle you kept from before the change dangles, unlike with std::map."
+notes: "People moving from std::map expect element references to survive other inserts, because a tree never moves its nodes. A flat container is a vector underneath, so any insert or erase can shift or reallocate the storage and invalidate all outstanding references and iterators. Using one afterwards is undefined and often still prints the old value, which hides the bug. Do not cache a reference or iterator across a mutation: look the key up again after the change, or finish all mutations before taking references. The stale use is described; the re-fetch is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }

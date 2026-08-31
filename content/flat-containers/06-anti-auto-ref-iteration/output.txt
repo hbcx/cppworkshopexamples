@@ -1,0 +1,4 @@
+scores:
+  ann -> 3
+  bob -> 5
+after x10: 30 50

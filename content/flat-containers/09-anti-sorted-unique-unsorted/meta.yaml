@@ -1,0 +1,11 @@
+title: "Anti-pattern: sorted_unique with unsorted or duplicate data"
+standard: "C++23"
+difficulty: 3
+summary: "The sorted_unique tag tells the constructor to trust that the input is already sorted and has no duplicates and to skip both the sort and the dedup -- if that promise is false, the container is left broken and lookups are undefined."
+notes: "sorted_unique is a performance promise, not a request: the constructor does no checking, so it copies your data in as-is. Give it unsorted or duplicated input and the container's sorted invariant is violated, so binary-search lookups probe the wrong places and find or contains can miss present keys -- undefined behaviour with no diagnostic. Only use the tag when the source is genuinely ordered and unique (a query with ORDER BY and DISTINCT, a file you produced sorted). Otherwise use the plain range constructor, which sorts and de-duplicates for you. The misuse is described; both correct paths are run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sorted_unique", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::flat_set", url: "https://en.cppreference.com/w/cpp/container/flat_set" }

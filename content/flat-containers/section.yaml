@@ -1,0 +1,4 @@
+title: "std::flat_map and std::flat_set"
+description: "The C++23 sorted associative containers that store their elements in a sorted vector instead of a tree, trading fast mutation for cache-friendly lookup and low memory. Covers the flat_map and flat_set interfaces, the trade-off against node-based std::map (contiguous storage and cheap lookup versus O(n) insert and no reference stability), the split keys() and values() columns behind a flat_map, and building efficiently from a range or with the sorted_unique tag -- alongside the anti-patterns: auto& in a range-for, using a flat container for mutation-heavy data, keeping a reference across an insert or erase, misusing the sorted_unique tag, operator[] that silently inserts, and expecting a contiguous array of pairs."
+sort_order: 149
+category: "Containers"

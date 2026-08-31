@@ -8,3 +8,5 @@
   note: "The sorted-vector contender from the benchmark on this page, and why contiguous storage beats a tree at small sizes."
 - slug: "iterator"
   note: "Why find() returning end() means 'not found' and must be checked before dereferencing: the Iterator pattern chapter covers the end-sentinel convention, the bidirectional category these containers offer, and writing iterators of your own."
+- slug: "flat-containers"
+  note: "The sorted vector from this benchmark, packaged as a standard container: std::flat_map and std::flat_set (C++23) give the map/set interface over contiguous storage, so you get the sorted-vector performance without hand-rolling it -- go there for the ready-made version."

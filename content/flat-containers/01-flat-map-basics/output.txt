@@ -1,0 +1,8 @@
+in key order:
+  apple -> 5
+  banana -> 3
+  cherry -> 1
+at("apple") = 5
+contains("cherry")? true
+find("kiwi") == end()? true
+size = 3

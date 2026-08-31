@@ -1,0 +1,11 @@
+title: "flat_map: a sorted map in a vector"
+standard: "C++23"
+difficulty: 1
+summary: "std::flat_map is a sorted key-to-value container that keeps its elements in a contiguous vector, so it reads like std::map -- at, find, contains, ordered iteration -- but stores them packed."
+notes: "The interface is the familiar sorted-map one: operator[] and at for access, find and contains for lookup, and iteration in key order. The difference is under the hood -- the elements live in a vector, sorted by key, not in tree nodes -- which is what makes lookups cache-friendly. One thing to watch from the start: iterating gives a proxy pair of references, so write for (auto [k, v] : fm), not auto&, which the anti-patterns explain. This example shows it behaving like a map."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }

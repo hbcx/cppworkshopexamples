@@ -1,0 +1,5 @@
+both iterate in key order:
+  flat 1 -> a
+  flat 2 -> b
+map reference after insert: a (still valid)
+flat_map re-fetched after insert: a

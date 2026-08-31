@@ -1,0 +1,19 @@
+- problem: "A lookup table is filled once at startup and then only read for the rest of the run -- a status-code-to-message map, an enum-to-name table, a config key map, an interned-string index."
+  why: "std::map pays for node allocation and pointer-chasing on every one of those many lookups, and reference stability it never uses. A flat_map is a sorted vector, so the one-time build is fine and each later lookup is a cache-friendly binary search over contiguous memory."
+  signal: "A std::map (or std::set) filled once, often in a constructor or an init function, and thereafter only queried, never inserted into or erased from."
+
+- problem: "A small associative container is looked up over and over in a hot loop -- a per-frame or per-request table of a few dozen entries in a game, renderer, or request handler."
+  why: "At small sizes a std::map's tree nodes scatter across memory and each lookup chases pointers, and unordered_map pays hashing and has its own cache misses. A flat_map keeps the handful of entries in one cache line or two, so a binary search stays in cache and beats both."
+  signal: "A small std::map or std::unordered_map, dozens of entries at most, looked up repeatedly inside a tight or per-frame loop."
+
+- problem: "Code runs in a memory-constrained setting -- embedded, or a system with millions of tiny maps -- where per-element overhead matters."
+  why: "A node-based map spends two or three pointers plus an allocation header on every element, and fragments the heap. A flat_map is just two vectors, so its overhead is close to the data itself and it makes a handful of allocations total instead of one per element."
+  signal: "A std::map or std::set in a memory-tight context, or many small maps whose per-node overhead and allocation count add up."
+
+- problem: "You need a map's keys as a sorted contiguous array -- to hand a pointer and length to a C API, memcpy them, run a set algorithm, or binary_search them directly."
+  why: "Getting a sorted key array out of a std::map means copying every key into a separate std::vector first. A flat_map already stores its keys that way, so keys() hands back the contiguous sorted array with no copy, and values() gives the matching column."
+  signal: "Code that copies a map's keys into a std::vector to get contiguous or sorted access, or that needs a sorted key array to feed C code or a range algorithm."
+
+- problem: "A scan needs both sorted iteration order and vector-speed traversal -- walking entries in key order while touching every element, in a report, a merge, or a range query."
+  why: "std::set and std::map iterate in order but chase a pointer per element, so a full scan thrashes the cache. unordered containers scan fast but not in order. A flat_set or flat_map gives sorted order AND a contiguous sweep, which neither of the others offers together."
+  signal: "A performance-sensitive in-order scan over a std::set or std::map, where the ordering is required but the pointer-chasing traversal is the cost."

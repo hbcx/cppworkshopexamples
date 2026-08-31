@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting a contiguous array of pairs"
+standard: "C++23"
+difficulty: 3
+summary: "A flat_map does not store pairs contiguously -- keys and values live in two separate vectors -- so there is no pair<K, V> array to point at, and &fm.begin()->first is not the start of one."
+notes: "The name suggests one flat array of pairs, but flat_map is struct-of-arrays: a key vector and a parallel value vector. So you cannot take the address of the first element and walk it as pair<K, V>[], and there is no data() returning such an array. The two contiguous arrays you do have are keys() and values(); use those to feed a C API, memcpy, or a bulk scan, remembering keys()[i] pairs with values()[i]. The wrong pointer walk is described; the keys()/values() access is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

@@ -1,0 +1,4 @@
+after build (sorted, unique): 1 3 4 5
+insert(2) then insert(3) added? false
+contains(4)? true
+final: 1 2 3 4 5

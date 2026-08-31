@@ -1,0 +1,6 @@
+range-built (sorted for us):
+  1 -> alpha
+  2 -> beta
+  3 -> gamma
+sorted_unique-built (no sort): size 3, first 1
+both equal? true

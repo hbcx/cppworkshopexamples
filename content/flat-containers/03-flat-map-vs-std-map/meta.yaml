@@ -1,0 +1,12 @@
+title: "flat_map vs std::map: the trade-off"
+standard: "C++23"
+difficulty: 2
+summary: "flat_map and std::map share the sorted interface but sit at opposite ends of a trade-off: contiguous storage gives flat_map fast lookups and low memory, at the cost of O(n) insert and no reference stability."
+notes: "std::map is a balanced tree: O(log n) insert and erase, and every reference and iterator stays valid across other operations, but each element is a separately allocated node that lookups chase through pointers. flat_map is a sorted vector: a lookup is a binary search over contiguous memory, which the cache loves, but an insert or erase shifts elements (O(n)) and invalidates all references and iterators, exactly like a vector. So flat_map wins for build-once, read-many, and std::map wins when you mutate often or must hold references. The example shows a map reference surviving an insert -- which a flat_map cannot promise."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

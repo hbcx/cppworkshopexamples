@@ -12,3 +12,5 @@
   note: "The same O(log n) lookup on a sorted vector instead of a tree: binary_search, lower_bound and equal_range give a map's access pattern over contiguous storage, the read-mostly alternative to a map -- go there for searching sorted ranges."
 - slug: "structured-bindings"
   note: "The C++17 way to iterate a map: for (const auto& [key, value] : m) instead of it->first and it->second, and if-init to unpack what insert returns -- go there for the binding declaration and the value/reference choice."
+- slug: "flat-containers"
+  note: "The C++23 sorted-vector version of a map: std::flat_map keeps the same ordered interface but stores keys and values in contiguous vectors, trading O(log n) insert and stable references for cache-friendly lookup -- go there when the map is built once and read many times."

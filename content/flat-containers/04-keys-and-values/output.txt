@@ -1,0 +1,6 @@
+keys:  200 404 500 
+values in step:
+  keys[0]=200 values[0]=OK
+  keys[1]=404 values[1]=Not Found
+  keys[2]=500 values[2]=Server Error
+binary_search on keys() for 404: true

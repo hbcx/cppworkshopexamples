@@ -10,3 +10,5 @@
   note: "The default key type: how a std::string stores, compares and hashes, and why key length -- not just element count -- drives lookup cost."
 - slug: "bitset"
   note: "The direct-addressed membership set for dense small integer keys: where unordered_set hashes and allocates per key, a std::bitset sets and tests a bit with no hashing -- go there when the keys are small integers in a fixed range and you only need presence."
+- slug: "flat-containers"
+  note: "The ordered, cache-friendly alternative: std::flat_map and std::flat_set (C++23) keep keys sorted in a vector, so lookups stay cache-friendly and iteration is in order -- go there when you want contiguous storage and sorted output rather than the hash table's O(1) but unordered access."

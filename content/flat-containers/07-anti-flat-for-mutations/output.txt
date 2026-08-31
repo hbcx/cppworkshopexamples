@@ -1,0 +1,5 @@
+same contents, different cost to build:
+  slow (n inserts, O(n^2)): size 5
+  fast (one range build):   size 5
+  equal? true
+for scattered inserts and erases over time, use std::map instead

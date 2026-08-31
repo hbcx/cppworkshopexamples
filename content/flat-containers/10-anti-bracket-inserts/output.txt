@@ -1,0 +1,3 @@
+size before: 2
+counts["zzz"] returned 0, size now 3 (inserted!)
+yyy absent; not inserted, size still 3

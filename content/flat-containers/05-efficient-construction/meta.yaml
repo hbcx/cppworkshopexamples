@@ -1,0 +1,12 @@
+title: "Building efficiently"
+standard: "C++23"
+difficulty: 2
+summary: "Building a flat container from a whole range sorts it once in O(n log n); if the input is already sorted and unique, the sorted_unique tag skips the sort for an O(n) build."
+notes: "Inserting elements one at a time is O(n) each, so building that way is O(n squared) -- the range constructor is the right tool, sorting the copied elements a single time. When you already have the data sorted and without duplicates (from a database query with ORDER BY, or a file you know is ordered), pass std::sorted_unique so the constructor trusts the order and skips sorting, dropping the build to linear. The tag is a promise you must keep: unsorted or duplicate data with it breaks the container, which the anti-patterns cover. You can also swap the underlying container type through the template parameters."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+  - { name: "std::sorted_unique", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

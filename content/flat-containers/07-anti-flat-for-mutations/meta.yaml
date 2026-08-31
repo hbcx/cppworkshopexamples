@@ -1,0 +1,12 @@
+title: "Anti-pattern: a flat container you keep mutating"
+standard: "C++23"
+difficulty: 3
+summary: "Each insert or erase in a flat container shifts the vector to keep it sorted, so building one by repeated single inserts is O(n squared) and a mutation-heavy workload is slow."
+notes: "A flat container earns its keep on lookups, not changes: an insert has to move every element after the insertion point, which is O(n), so n one-at-a-time inserts cost O(n squared). If you are filling it, build from a whole range instead, which sorts once in O(n log n). If the container is genuinely mutation-heavy -- frequent scattered inserts and erases mixed with lookups -- a node-based std::map or a hashed std::unordered_map is the right structure, because their inserts do not move other elements. The example builds the same data by repeated insert and by one range construction, and notes which to prefer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::flat_map", url: "https://en.cppreference.com/w/cpp/container/flat_map" }
+detailed_tags:
+  - { name: "std::map", url: "https://en.cppreference.com/w/cpp/container/map" }
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
