@@ -1,0 +1,23 @@
+- problem: "You need to know exactly how much a data structure allocates and how often -- a std::map that felt heavy, a vector that reallocates more than expected -- without the noise of a whole-process profiler."
+  why: "An external profiler reports the whole program; it cannot tell you that this one container did 14 allocations totalling 9 KB. A counting allocator plugged into just that container answers precisely, because it sees every allocate and deallocate the container makes."
+  signal: "A question about how much or how often a specific container allocates, or a container on a hot path whose allocation behaviour you want to pin down."
+
+- problem: "A web or RPC server handles a request by building many short-lived containers -- parsed fields, temporary maps, scratch vectors -- all of which die when the request finishes."
+  why: "Per-object new/delete for all of that is pure churn, and freeing each one at the end is wasted work. An arena allocator hands every container storage from one block and drops the whole block at request end, turning thousands of frees into one."
+  signal: "Many containers created and destroyed together within one request or frame, all with the same lifetime, each doing its own heap allocations."
+
+- problem: "A game frame, an audio callback, or a trading path must not touch the global heap: a malloc can block on a lock or the OS, and an unbounded pause blows the deadline."
+  why: "std::allocator calls malloc, whose latency is not bounded. A fixed pool or arena allocator serves the container from pre-reserved memory with deterministic, bounded time, so the hot path never calls into the system allocator."
+  signal: "A latency-critical loop with a no-allocation-in-the-hot-path rule, where containers still need to grow or be filled during that loop."
+
+- problem: "Objects must live in shared memory or a memory-mapped file so several processes -- or a process and its restart -- can see the same data structure."
+  why: "A raw pointer stored in shared memory is meaningless to another process mapped at a different address. An allocator with an offset-based pointer type (as boost::interprocess uses) lets a standard container live in the shared region and stay valid across processes."
+  signal: "A container placed in a shared-memory segment or mmap region, needing a pointer type that is an offset rather than a raw address."
+
+- problem: "A performance-critical buffer must sit on a particular NUMA node, or in huge pages, so the cores that hammer it get local bandwidth instead of cross-socket traffic."
+  why: "A default allocation lands wherever the system puts it, which may be the wrong node. A custom allocator that calls the NUMA or hugepage placement API pins the container's memory where the workload needs it, which the default allocator gives no way to express."
+  signal: "A container backing a bandwidth-bound kernel where memory placement (a NUMA node, hugepages) has to be controlled explicitly."
+
+- problem: "You want to test that your code stays correct when an allocation fails -- that a half-built container is cleaned up and the strong guarantee holds -- but real out-of-memory almost never happens in a test."
+  why: "Waiting for real OOM makes the failure path untested. An allocator that throws std::bad_alloc on the Nth request forces the failure exactly where you want it, so exception-safety paths run under CI instead of only in production."
+  signal: "Exception-safety tests around container operations that have no way to trigger an allocation failure on demand."

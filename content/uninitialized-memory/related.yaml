@@ -9,3 +9,5 @@
   note: "The teardown half framed as an idiom: destroy is the release step, and wrapping raw storage in an owning type means the destructor runs it on every exit path. Go there for the acquire-in-constructor, release-in-destructor pattern these manual buffers are missing."
 - slug: "alignment"
   note: "The requirement the raw storage must meet before you construct in it: an object placement-new'd into an under-aligned buffer is misaligned. Go there for alignof/alignas, std::align, and why a plain char buffer is not aligned enough."
+- slug: "allocators"
+  note: "Where these construct/destroy steps get packaged for containers: allocator_traits::construct and destroy are the one-object form of what you do here by hand, and an allocator is how a container gets the raw storage first. Go there for the Allocator interface and allocator_traits."

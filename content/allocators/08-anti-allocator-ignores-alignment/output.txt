@@ -1,0 +1,2 @@
+alignof(Avx) = 32
+vector buffer on a 32-byte boundary? true

@@ -1,0 +1,12 @@
+title: "Rebind: allocating nodes, not elements"
+standard: "C++11"
+difficulty: 3
+summary: "A node-based container never allocates your element type -- it allocates internal nodes, so it rebinds your allocator<T> into an allocator<Node> through allocator_traits."
+notes: "You hand std::list an allocator<int>, but the list stores each int inside a node that also holds two pointers, so it needs an allocator for that node type. allocator_traits::rebind_alloc<U> produces it from your allocator<T>, which is why every allocator must be a template usable for any type. The example proves both halves: rebind_alloc<Other> really is your template for Other, and a list of three ints makes exactly three node allocations through the rebound allocator."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

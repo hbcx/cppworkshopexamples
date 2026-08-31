@@ -1,0 +1,3 @@
+traits::pointer is int*: true
+traits::rebind_alloc<double> is Minimal<double>: true
+vector with the minimal allocator holds 5 elements

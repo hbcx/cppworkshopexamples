@@ -1,0 +1,11 @@
+title: "Anti-pattern: assuming allocate zeroes memory"
+standard: "C++11"
+difficulty: 3
+summary: "An allocator's allocate returns raw, uninitialized bytes, so reading a freshly allocated slot as if it held zero is a bug -- and reading an indeterminate value is undefined."
+notes: "allocate is not calloc: it gives storage, not a clean slate. The values are whatever was in the memory, and using them before construct is undefined. If you want a defined zero start, construct the objects -- value-construction (the {} form through allocator_traits) zero-initializes trivial types. The unconstructed read is described; the run value-constructs the ints and prints the guaranteed zeros."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+detailed_tags:
+  - { name: "std::allocator", url: "https://en.cppreference.com/w/cpp/memory/allocator" }

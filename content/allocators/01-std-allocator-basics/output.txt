@@ -1,0 +1,4 @@
+  alpha
+  beta
+  gamma
+allocate + construct + destroy + deallocate: done

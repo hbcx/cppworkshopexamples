@@ -1,0 +1,2 @@
+constructed: 10 20 30 40
+traits report the pointer type is int*: true

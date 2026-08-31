@@ -1,0 +1,11 @@
+title: "Anti-pattern: a stateful allocator with a wrong operator=="
+standard: "C++11"
+difficulty: 3
+summary: "Hardcoding operator== to always return true on a stateful allocator tells the container that any two instances can free each other's memory, so a move or swap can deallocate from the wrong arena."
+notes: "For a stateless allocator, always-equal is correct -- any instance can free any allocation. For a stateful one it is a lie: two allocators backed by different arenas cannot free each other's memory, and claiming they can lets a container steal a buffer it must not touch. operator== must reflect can free each other's memory, which for an arena allocator means same arena. The example shows the always-true version claiming two different arenas are interchangeable, then the correct version telling them apart; the actual cross-arena free is described, not run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

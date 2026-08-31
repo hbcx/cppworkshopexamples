@@ -1,0 +1,12 @@
+title: "Anti-pattern: hand-writing C++03 allocator boilerplate"
+standard: "C++11"
+difficulty: 3
+summary: "Spelling out pointer, const_pointer, reference, rebind, construct, destroy and max_size by hand is the pre-C++11 allocator: since C++11 allocator_traits derives all of them from value_type, allocate and deallocate."
+notes: "The old allocator interface was a dozen typedefs and members, every one a chance to get a signature subtly wrong. allocator_traits replaced it with defaults, so a modern allocator provides three things and inherits the rest. The example defines a three-member allocator and shows allocator_traits handing back pointer as T*, a working rebind, and max_size -- none of which the allocator declared. Write the minimal form; let the traits fill in the rest."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

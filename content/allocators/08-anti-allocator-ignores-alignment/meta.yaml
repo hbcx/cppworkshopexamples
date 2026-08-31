@@ -1,0 +1,13 @@
+title: "Anti-pattern: an allocator that ignores alignment"
+standard: "C++17"
+difficulty: 3
+summary: "A custom allocate that calls plain operator new only guarantees max_align_t alignment, so an over-aligned element type comes back under-aligned even though the container looks correct."
+notes: "An allocator must return storage aligned for its value_type, but plain operator new promises only max_align_t (16 on a typical target). Give a container an over-aligned element (an alignas(32) SIMD type) and a naive allocator hands it a 16-aligned buffer -- a latent bug that faults on strict CPUs. The fix is to allocate through the operator new overload that takes std::align_val_t with the type's alignment. The example plugs the aligned allocator into a vector and checks the data really is on the 32-byte boundary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::align_val_t", url: "https://en.cppreference.com/w/cpp/memory/new/align_val_t" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

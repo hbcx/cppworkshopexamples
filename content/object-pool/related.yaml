@@ -14,3 +14,5 @@
   note: "The language hook a pool plugs into: a class operator new/delete lets `new T` draw from your free-list, and placement new builds objects in the slab you reserved. Go there for the allocation functions this pattern is built on."
 - slug: "uninitialized-memory"
   note: "How a pool builds and tears down objects in the raw slots it hands out: construct on checkout with placement new or the uninitialized_* algorithms, destroy on return with destroy_at. Go there for the construction and teardown half of the slots a pool reserves."
+- slug: "allocators"
+  note: "The same pooling idea wired into the standard containers: package the free-list as an Allocator and a std::vector or std::list draws its storage from it. Go there for the allocator interface, allocator_traits, and stateful arena allocators."

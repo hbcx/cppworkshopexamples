@@ -1,0 +1,4 @@
+propagate_on_container_swap: true
+pool 1 == pool 1? true
+pool 1 == pool 2? false
+after swap: a.size()=1 b.size()=3

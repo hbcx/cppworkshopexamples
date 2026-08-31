@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "operator-new-delete"
+  note: "What an allocate call usually forwards to, and how to replace it: operator new / delete are the raw allocation functions under most allocators, including the aligned and class-scoped forms. Go there for the allocation primitives an allocator is built on."
+- slug: "uninitialized-memory"
+  note: "The construct/destroy half of an allocator, done a range at a time: allocator_traits::construct is one object, the uninitialized_* algorithms fill a whole range with a rollback on a throw. Go there for range construction and teardown in the storage an allocator hands out."
+- slug: "alignment"
+  note: "The rule an allocate must honor: the storage it returns has to be aligned for the value_type, and an over-aligned element needs an aligned allocation. Go there for alignof/alignas, std::align, and over-aligned new."
+- slug: "object-pool"
+  note: "A concrete stateful allocator taken further: a pool recycles fixed-size blocks and hands them out through the same acquire/release shape a container allocator uses. Go there for the pooling pattern behind an arena or free-list allocator."

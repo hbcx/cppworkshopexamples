@@ -1,0 +1,12 @@
+title: "Anti-pattern: allocate without construct"
+standard: "C++11"
+difficulty: 3
+summary: "An allocator's allocate returns raw bytes, not objects, so using the storage before construct -- or deallocating without destroy -- treats memory that holds no object as if it did."
+notes: "allocate and deallocate only move bytes; construct and destroy run the lifetime, and they are separate on purpose. Reading an allocated-but-not-constructed slot is undefined, and freeing without destroy skips the destructors so anything the elements own leaks. The fix is to pair every allocate with construct and every destroy with deallocate, which allocator_traits makes one call each. The unconstructed read is described; the correct four-step sequence is run."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+detailed_tags:
+  - { name: "std::allocator", url: "https://en.cppreference.com/w/cpp/memory/allocator" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

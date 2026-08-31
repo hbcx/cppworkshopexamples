@@ -1,0 +1,3 @@
+original arena id: 7
+copy arena id:     7
+copy shares the original's arena (default behaviour)? true

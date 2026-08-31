@@ -1,0 +1,3 @@
+wrong operator==   says arenas 1 and 2 are equal: true
+correct operator== says arenas 1 and 2 are equal: false
+correct == tells them apart, so no cross-arena free happens

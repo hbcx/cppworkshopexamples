@@ -7,3 +7,5 @@
   note: "Where cache-line alignment pays off: separating hot atomics with alignas(64) removes the false sharing that quietly caps a lock-free counter's throughput. Go there for atomic operations and the memory ordering behind safe sharing."
 - slug: "object-pool"
   note: "A real allocator that must round every slot up to a usable boundary: the pool hands out fixed-size blocks that have to be aligned for the type they hold. Go there for the pooling pattern that leans on the alignment rules here."
+- slug: "allocators"
+  note: "Where the align-for-the-type rule becomes a contract: a container's allocator must return storage aligned for its value_type, so an over-aligned element forces an aligned allocate. Go there for the Allocator interface and allocator_traits."

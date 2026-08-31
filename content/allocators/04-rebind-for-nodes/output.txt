@@ -1,0 +1,2 @@
+rebind_alloc<double> is NodeAlloc<double>: true
+node allocations for 3 elements: 3

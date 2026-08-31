@@ -1,0 +1,4 @@
+title: "Allocators"
+description: "The customization point that decides where a standard container gets its memory. Covers std::allocator and its allocate/construct/destroy/deallocate steps, std::allocator_traits as the uniform interface containers actually call through (and the defaults it fills in), writing a minimal C++11 allocator from just value_type plus allocate and deallocate, rebind for node-based containers, a stateful arena allocator backing a vector, and allocator equality with the propagation traits that govern copy, move and swap -- alongside the anti-patterns: allocate without construct, an allocator that ignores alignment, a wrong operator==, hand-written C++03 boilerplate, forgetting select_on_container_copy_construction, and assuming allocate zeroes memory."
+sort_order: 142
+category: "Memory management"

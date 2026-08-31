@@ -1,0 +1,12 @@
+title: "The four steps of std::allocator"
+standard: "C++11"
+difficulty: 1
+summary: "An allocator splits object creation into two independent pairs: allocate and deallocate move raw bytes, construct and destroy run the lifetime -- the split every container is built on."
+notes: "std::allocator::allocate hands back uninitialized storage for n objects; you turn bytes into objects with placement new and end them with a destructor call, then deallocate frees the bytes. This is exactly what a vector does internally, which is why capacity can exceed size: the storage is allocated but not all of it is constructed. Here the construct and destroy steps are done by hand to make the two pairs visible; the next example hands them to allocator_traits."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator", url: "https://en.cppreference.com/w/cpp/memory/allocator" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

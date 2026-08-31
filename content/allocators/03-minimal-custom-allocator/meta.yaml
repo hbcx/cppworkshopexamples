@@ -1,0 +1,12 @@
+title: "A minimal custom allocator in a vector"
+standard: "C++11"
+difficulty: 2
+summary: "The smallest allocator that works with a standard container is just value_type, allocate and deallocate -- here one that counts bytes as a std::vector pulls its storage from it."
+notes: "Since C++11, allocator_traits fills in every other member, so a usable allocator is three lines of interface plus operator== and operator!=. This one forwards to operator new but tallies the requests, so plugging it into a vector and reserving capacity shows exactly one allocation of the size you asked for. A counting allocator like this is the simplest memory profiler you can attach to a single container. reserve is used so the allocation count does not depend on the vector's growth strategy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

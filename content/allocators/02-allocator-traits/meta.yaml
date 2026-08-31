@@ -1,0 +1,11 @@
+title: "The uniform interface: allocator_traits"
+standard: "C++11"
+difficulty: 2
+summary: "Containers never call an allocator directly -- they go through std::allocator_traits, which forwards allocate and deallocate and supplies construct, destroy, max_size and more when the allocator does not define them."
+notes: "allocator_traits is the reason a modern allocator can be tiny: it only has to provide value_type, allocate and deallocate, and the traits fill in every other operation with a sensible default. Calling Traits::construct and Traits::destroy instead of the allocator's own members is also what keeps code working across C++ versions, since allocator::construct and destroy were removed in C++20. Same four steps as before, now routed the way a container routes them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+detailed_tags:
+  - { name: "std::allocator", url: "https://en.cppreference.com/w/cpp/memory/allocator" }

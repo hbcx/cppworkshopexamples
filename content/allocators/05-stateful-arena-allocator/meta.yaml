@@ -1,0 +1,13 @@
+title: "A stateful arena allocator"
+standard: "C++11"
+difficulty: 3
+summary: "An allocator can carry state -- here a pointer to an arena -- so a std::vector draws its storage from a fixed buffer you own instead of the global heap."
+notes: "The allocator holds a pointer to an Arena and hands out slices of its buffer, rounding each request up to the type's alignment. deallocate does nothing: the arena frees everything at once when it dies, which is the whole point of arena allocation -- no per-object bookkeeping. A stateful allocator must carry its state through the converting constructor (so a rebind keeps the same arena) and compare equal only to allocators backed by the same arena. The example shows the vector's elements really live inside the arena buffer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::allocator_traits", url: "https://en.cppreference.com/w/cpp/memory/allocator_traits" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }
+detailed_tags:
+  - { name: "std::align", url: "https://en.cppreference.com/w/cpp/memory/align" }
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
