@@ -1,4 +1,4 @@
 title: "std::stack"
 description: "The LIFO container adaptor: a narrow push/top/pop interface over another container, where the last element in is the first out. Covers the whole interface, why pop() returns nothing and the top-then-pop idiom, choosing the underlying container (deque by default, but a vector is usually the better backing), and two classic stack algorithms -- matching nested brackets and evaluating a postfix expression -- alongside the anti-patterns: top() or pop() on an empty stack, a reference from top() used after pop(), a std::stack where a vector-as-stack fits better, leaving the default deque backing for a hot stack, and check-then-act on a stack shared across threads."
-sort_order: 146
+sort_order: 7
 category: "Containers"

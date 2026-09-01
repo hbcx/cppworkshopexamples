@@ -1,4 +1,4 @@
 title: "std::deque"
 description: "The double-ended queue: O(1) push and pop at BOTH ends plus random access, at the cost of the contiguous storage a vector gives. Covers growth at both ends, index access, how deque differs from vector (front operations and stable references, but no data(), capacity() or reserve()), the reference-stays-valid-but-iterators-do-not rule on end insertion, a sliding window built from push_back and pop_front, and deque as the default container behind std::queue and std::stack -- alongside the anti-patterns: treating deque storage as contiguous, using an iterator after a push, reaching for a deque where a vector fits, expecting reserve or capacity, and erasing from the middle in a loop."
-sort_order: 145
+sort_order: 5
 category: "Containers"
