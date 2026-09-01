@@ -1,0 +1,13 @@
+title: "Power-of-two helpers"
+standard: "C++20"
+difficulty: 2
+summary: "has_single_bit tests for a power of two, bit_width gives the number of significant bits (floor(log2)+1), and bit_ceil / bit_floor round to the nearest power of two."
+notes: "These answer the power-of-two questions that come up when sizing hash tables, ring buffers and allocators. has_single_bit(v) is true when exactly one bit is set. bit_width(v) is how many bits it takes to hold v, i.e. floor(log2(v)) + 1, with bit_width(0) == 0. bit_ceil rounds UP to the next power of two, bit_floor rounds DOWN. A power-of-two capacity lets you replace a modulo with a cheap AND mask (index & (cap - 1))."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::has_single_bit", url: "https://en.cppreference.com/w/cpp/numeric/has_single_bit" }
+  - { name: "std::bit_ceil", url: "https://en.cppreference.com/w/cpp/numeric/bit_ceil" }
+detailed_tags:
+  - { name: "std::bit_width", url: "https://en.cppreference.com/w/cpp/numeric/bit_width" }
+  - { name: "std::bit_floor", url: "https://en.cppreference.com/w/cpp/numeric/bit_floor" }

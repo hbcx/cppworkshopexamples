@@ -1,0 +1,12 @@
+title: "Counting leading and trailing zeros"
+standard: "C++20"
+difficulty: 2
+summary: "countr_zero and countl_zero count zeros from the low and high ends; with a single-bit value they give its index, and they are the fast path to highest/lowest set bit and integer log2."
+notes: "countr_zero counts zeros from the least-significant end -- for a value with one bit set, that is the bit's index. countl_zero counts from the most-significant end; for a 32-bit type, 31 - countl_zero(x) is the index of the highest set bit, the same information as bit_width. countr_one and countl_one count runs of set bits instead. countl_zero(0) is the full type width. These map to single CPU instructions (bsr/bsf/lzcnt/tzcnt)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::countr_zero", url: "https://en.cppreference.com/w/cpp/numeric/countr_zero" }
+  - { name: "std::countl_zero", url: "https://en.cppreference.com/w/cpp/numeric/countl_zero" }
+detailed_tags:
+  - { name: "std::countr_one", url: "https://en.cppreference.com/w/cpp/numeric/countr_one" }

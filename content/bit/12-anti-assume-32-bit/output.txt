@@ -1,0 +1,4 @@
+countl_zero(uint8_t 1)  = 7  (width 8)
+countl_zero(uint32_t 1) = 31  (width 32)
+bit_width(small) = 1, bit_width(big) = 1
+rotl(uint8_t 0x81, 1) = 3

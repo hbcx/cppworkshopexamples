@@ -1,0 +1,5 @@
+title: "Bit manipulation (<bit>)"
+standard: "C++20"
+description: "The C++20 <bit> header: type-safe, portable bit operations that used to be hand-rolled or compiler intrinsics. Covers std::bit_cast for reinterpreting an object's bits without breaking strict aliasing, popcount for counting set bits, the count-leading/trailing-zero and -one family for finding the highest or lowest set bit, rotl and rotr for correct bit rotation, the power-of-two helpers has_single_bit / bit_width / bit_ceil / bit_floor, std::endian for compile-time byte order, and std::byteswap (C++23) for reversing bytes -- alongside the traps: type punning through reinterpret_cast or a union, the hand-rolled rotate that is undefined at a zero count, reinventing popcount with a loop, bit_ceil overflow and the unsigned-only requirement, and assuming a 32-bit width when these functions follow the operand's actual type."
+sort_order: 152
+category: "Numerics"

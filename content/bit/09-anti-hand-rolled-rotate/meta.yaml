@@ -1,0 +1,12 @@
+title: "Anti-pattern: a hand-rolled rotate"
+standard: "C++20"
+difficulty: 3
+summary: "The textbook (x << n) | (x >> (W - n)) is undefined when n == 0, because it then shifts by the full width W. std::rotl / std::rotr are defined for every count."
+notes: "A shift by an amount greater than or equal to the operand's width is undefined behaviour. The classic hand-rolled rotate hits exactly that at n == 0: the second term shifts by W, so the whole expression is UB (it may return 0, x, or anything). It also bakes in a fixed width, so it is silently wrong on a different-sized type. std::rotl and std::rotr are defined for a count of 0, for counts at or beyond the width (they wrap), and they follow the operand's real width. We describe the UB case and run only the library calls."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::rotl", url: "https://en.cppreference.com/w/cpp/numeric/rotl" }
+  - { name: "std::rotr", url: "https://en.cppreference.com/w/cpp/numeric/rotr" }
+detailed_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }

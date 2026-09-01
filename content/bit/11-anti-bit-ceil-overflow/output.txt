@@ -1,0 +1,3 @@
+bit_ceil(0) = 1  (not 0)
+largest safe bit_ceil input is 2^31 = 2147483648
+bit_ceil(2^31) = 2147483648

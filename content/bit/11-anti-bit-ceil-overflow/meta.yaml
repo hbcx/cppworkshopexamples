@@ -1,0 +1,12 @@
+title: "Anti-pattern: bit_ceil overflow and signed types"
+standard: "C++20"
+difficulty: 3
+summary: "The <bit> functions require an unsigned type (signed is a compile error), bit_ceil(0) is 1, and bit_ceil is undefined when the next power of two does not fit in the type."
+notes: "Two edges bite here. First, all the <bit> functions are constrained to unsigned integer types, so a signed argument fails to compile -- a helpful guard, not a silent bug. Second, bit_ceil has a domain: bit_ceil(0) returns 1 (not 0), and if the next power of two is not representable -- for a 32-bit value, any input above 2^31 -- the call is undefined behaviour. Keep inputs within range, and remember the result is always at least 1. We describe the overflow case and run only valid inputs."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bit_ceil", url: "https://en.cppreference.com/w/cpp/numeric/bit_ceil" }
+detailed_tags:
+  - { name: "std::has_single_bit", url: "https://en.cppreference.com/w/cpp/numeric/has_single_bit" }
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }

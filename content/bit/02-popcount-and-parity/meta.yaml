@@ -1,0 +1,11 @@
+title: "popcount: counting set bits"
+standard: "C++20"
+difficulty: 1
+summary: "std::popcount counts the set bits in an unsigned integer -- one instruction on most CPUs, and the basis for parity and Hamming distance."
+notes: "popcount is the population count: how many 1 bits. Parity (odd or even number of set bits) is popcount masked with 1. The Hamming distance between two values -- how many bit positions differ -- is the popcount of their XOR, used in error-correcting codes and similarity measures. All the <bit> functions take an unsigned integer type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::popcount", url: "https://en.cppreference.com/w/cpp/numeric/popcount" }
+detailed_tags:
+  - { name: "<bit>", url: "https://en.cppreference.com/w/cpp/header/bit" }

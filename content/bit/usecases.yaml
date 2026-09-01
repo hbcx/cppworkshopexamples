@@ -1,0 +1,19 @@
+- problem: "A hash table, ring buffer or arena sizes its capacity to a power of two so it can map a key or index to a slot with a cheap AND mask instead of a modulo, and must round a requested size up to the next power of two."
+  why: "bit_ceil rounds up in one call, has_single_bit asserts the invariant, and index & (cap - 1) replaces index % cap. The hand-written alternative is a shift-until-bigger loop that is easy to get wrong at 0 and at the top of the range, and a modulo is several times slower than the mask a power-of-two size enables."
+  signal: "A capacity forced to a power of two by a while (n < wanted) n <<= 1 loop, or index arithmetic using % on a size that is always a power of two."
+
+- problem: "A binary protocol or file format stores integers and floats in a fixed byte order, and the code must read and write them correctly on any machine without invoking undefined behaviour."
+  why: "std::endian decides at compile time whether a swap is needed, std::byteswap does it, and std::bit_cast reads a float or struct out of the raw bytes without breaking strict aliasing. The usual reinterpret_cast-through-a-pointer approach is undefined behaviour, and a scatter of ntohl/htons macros hides the endianness decision the code actually depends on."
+  signal: "Serialization code using reinterpret_cast to read a scalar from a byte buffer, htonl/ntohl macro soup, or byte-by-byte shift-and-mask reassembly of integers."
+
+- problem: "Performance-critical code represents a set as the bits of an integer -- a chess bitboard, a scheduler's ready mask, a set of feature flags -- and must count members and iterate the set bits quickly."
+  why: "std::popcount counts members in one instruction, and countr_zero gives the index of the lowest set bit so you can walk the set with x &= x - 1 to clear it. Hand-rolled loops over 64 positions are far slower and are a classic source of off-by-one and signedness bugs."
+  signal: "A loop over every bit position testing (mask >> i) & 1 to count or enumerate members of an integer-encoded set."
+
+- problem: "Numeric or systems code needs an integer base-2 logarithm, an alignment size, or a parity/error-detection value, and wants exact integer answers rather than floating-point ones."
+  why: "bit_width gives floor(log2)+1 exactly, bit_floor and bit_ceil give power-of-two alignment sizes, and popcount of a XOR gives Hamming distance and parity. Reaching for std::log2 on an integer is slower and can return a value just below the true integer due to rounding, breaking the size or index computed from it."
+  signal: "Integer log2 computed as (int)std::log2(x), or alignment rounded with floating-point math, where an exact bit-width answer is required."
+
+- problem: "A hash function or lightweight PRNG mixes bits with rotations -- the pattern at the core of xxHash, SipHash and many state mixers -- and needs the rotation to be correct and fast."
+  why: "std::rotl expresses the rotation directly, is defined for every count including 0, and lowers to a single rotate instruction. The hand-rolled (x << r) | (x >> (W - r)) is undefined at r == 0 and bakes in a width, so a mixer built on it has a latent bug and is not portable across integer sizes."
+  signal: "A mixing or hashing routine containing (x << r) | (x >> (32 - r)) or a macro of the same shape."

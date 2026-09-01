@@ -1,0 +1,12 @@
+title: "Anti-pattern: type punning via reinterpret_cast or union"
+standard: "C++20"
+difficulty: 3
+summary: "Reading a float's bits through an unrelated pointer breaks strict aliasing (UB), and the union trick is UB in C++ too. bit_cast (or memcpy before C++20) is the defined way."
+notes: "Reinterpreting bytes by casting a pointer to a different type and dereferencing it violates the strict-aliasing rule -- undefined behaviour, even though it usually appears to work until the optimizer assumes the two pointers cannot alias. The C union trick (write one member, read another) is also UB in C++, though it is allowed in C. The defined replacements: std::bit_cast in C++20, or std::memcpy into the target type in any version. We describe the UB forms in comments and run only the defined ones."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bit_cast", url: "https://en.cppreference.com/w/cpp/numeric/bit_cast" }
+detailed_tags:
+  - { name: "std::memcpy", url: "https://en.cppreference.com/w/cpp/string/byte/memcpy" }
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }

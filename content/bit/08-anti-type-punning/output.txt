@@ -1,0 +1,2 @@
+bit_cast bits = 0x4048f5c3
+memcpy   bits = 0x4048f5c3  (same value, both defined)

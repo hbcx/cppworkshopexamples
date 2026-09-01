@@ -1,0 +1,3 @@
+this platform is little-endian
+little == big? 0
+big-endian wire data needs a swap here: 1

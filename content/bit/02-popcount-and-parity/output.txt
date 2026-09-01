@@ -1,0 +1,4 @@
+popcount(0b10110100) = 4
+odd number of 1s? 0
+Hamming distance(1100, 1010) = 2
+popcount(0) = 0, popcount(0xFFFFFFFF) = 32

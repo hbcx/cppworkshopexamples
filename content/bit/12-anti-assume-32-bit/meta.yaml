@@ -1,0 +1,12 @@
+title: "Anti-pattern: assuming a 32-bit width"
+standard: "C++20"
+difficulty: 2
+summary: "countl_zero, bit_width and friends work on the actual width of the argument's type. The same value in a uint8_t and a uint32_t gives different leading-zero counts."
+notes: "These functions follow the operand's type, not a fixed 32 bits. countl_zero of the value 1 is 7 in a uint8_t and 31 in a uint32_t, so an expression like 31 - countl_zero(x) as a highest-bit index is only correct for a 32-bit type. The width-independent way to get the highest set bit is bit_width, which needs no magic number. Watch integer promotion too: a small unsigned type fed to a raw shift promotes to int and loses its width, while the <bit> functions keep the operand's type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::countl_zero", url: "https://en.cppreference.com/w/cpp/numeric/countl_zero" }
+detailed_tags:
+  - { name: "std::bit_width", url: "https://en.cppreference.com/w/cpp/numeric/bit_width" }
+  - { name: "std::rotl", url: "https://en.cppreference.com/w/cpp/numeric/rotl" }

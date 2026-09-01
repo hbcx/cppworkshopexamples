@@ -1,0 +1,12 @@
+title: "rotl and rotr: bit rotation done right"
+standard: "C++20"
+difficulty: 2
+summary: "std::rotl and std::rotr rotate bits, re-entering at the other end instead of dropping them, and are defined for every count -- including 0 and counts at or beyond the width."
+notes: "A rotation moves bits shifted out of one end back in at the other; nothing is lost, unlike a plain shift. The count wraps modulo the type's width, and a count of 0 or a full-width count is well defined (it returns the value unchanged). This is exactly what the hand-rolled (x << n) | (x >> (W - n)) gets wrong at n == 0 -- see the trap. Rotation is a building block of hash functions and ciphers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::rotl", url: "https://en.cppreference.com/w/cpp/numeric/rotl" }
+  - { name: "std::rotr", url: "https://en.cppreference.com/w/cpp/numeric/rotr" }
+detailed_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }

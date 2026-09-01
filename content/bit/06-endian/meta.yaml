@@ -1,0 +1,11 @@
+title: "endian: byte order at compile time"
+standard: "C++20"
+difficulty: 1
+summary: "std::endian reports the platform's byte order as a compile-time constant, so you can branch on it with if constexpr and decide whether wire data needs a byte swap."
+notes: "std::endian::native equals std::endian::little or std::endian::big (or neither, on rare mixed-endian hardware). Because it is known at compile time, a branch on it with if constexpr costs nothing at run time and the dead branch is discarded. The typical use is serialization: network protocols are usually big-endian, so you compare native to big to decide whether to swap. Pair it with std::byteswap to do the swap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::endian", url: "https://en.cppreference.com/w/cpp/types/endian" }
+detailed_tags:
+  - { name: "if constexpr", url: "https://en.cppreference.com/w/cpp/language/if" }

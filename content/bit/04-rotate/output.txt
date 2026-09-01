@@ -1,0 +1,6 @@
+x       = 10000001
+rotl 1  = 00000011
+rotr 1  = 11000000
+rotl 0  = 10000001  (unchanged)
+rotl 8  = 10000001  (full turn)
+rotl 9  = 00000011  (same as rotl 1)

@@ -1,0 +1,10 @@
+1 is a power of two
+2 is a power of two
+3 is not a power of two
+8 is a power of two
+15 is not a power of two
+16 is a power of two
+bit_width: 1->1 16->5 17->5
+bit_ceil(17)=32 bit_floor(17)=16
+bit_ceil(16)=16  (already a power of two)
+capacity for 50 items = 64, index 130 maps to slot 2

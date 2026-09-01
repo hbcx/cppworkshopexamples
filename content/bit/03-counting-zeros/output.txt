@@ -1,0 +1,5 @@
+countr_zero(0b1000) = 3
+countl_zero(0b1000) = 28
+highest set bit index = 3
+countr_one(0b111111) = 6
+countl_zero(0) = 32

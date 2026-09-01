@@ -1,0 +1,4 @@
+- slug: "bitset"
+  note: "The container view of bits: std::bitset<N> holds a whole array of bits with member set/test/count and the bitwise operators, where <bit> gives free functions for tricks on a single integer -- go there for a named, sized bit array."
+- slug: "alignment"
+  note: "Where the power-of-two helpers get used: alignment sizes are powers of two, and bit_ceil/bit_floor compute them -- go there for alignof, alignas, std::align and over-aligned allocation."

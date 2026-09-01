@@ -1,0 +1,2 @@
+manual popcount = 4, std::popcount = 4
+manual bit_width = 8, std::bit_width = 8

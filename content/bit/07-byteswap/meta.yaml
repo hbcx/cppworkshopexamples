@@ -1,0 +1,11 @@
+title: "byteswap: reversing byte order"
+standard: "C++23"
+difficulty: 2
+summary: "std::byteswap (C++23) reverses the bytes of an integer -- the operation that converts a value between little- and big-endian representations."
+notes: "byteswap reverses the byte order of an integer: 0x12345678 becomes 0x78563412. It is the tool for converting to and from network byte order and for reading integers from a binary format with a different endianness. Pair it with std::endian to swap only when the host order differs from the wire order, so the code is correct on both little- and big-endian machines. New in C++23; before it, this was a hand-written shift-and-mask or a compiler intrinsic."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::byteswap", url: "https://en.cppreference.com/w/cpp/numeric/byteswap" }
+detailed_tags:
+  - { name: "std::endian", url: "https://en.cppreference.com/w/cpp/types/endian" }

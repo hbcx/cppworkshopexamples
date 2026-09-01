@@ -1,0 +1,12 @@
+title: "Anti-pattern: reinventing popcount with a loop"
+standard: "C++20"
+difficulty: 2
+summary: "A hand-written loop to count or measure bits works, but it is slower (popcount is often one instruction) and easy to get wrong on width or signedness."
+notes: "Counting set bits or finding the significant-bit count by shifting in a loop is the old way. It runs in time proportional to the number of bits and is a common home for off-by-one and signedness bugs (a signed value shifted right can keep its sign bit and loop forever). std::popcount and std::bit_width say exactly what is meant, are correct by construction, and compile to dedicated instructions. We show the loop agrees with the library so you can retire it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::popcount", url: "https://en.cppreference.com/w/cpp/numeric/popcount" }
+  - { name: "std::bit_width", url: "https://en.cppreference.com/w/cpp/numeric/bit_width" }
+detailed_tags:
+  - { name: "<bit>", url: "https://en.cppreference.com/w/cpp/header/bit" }

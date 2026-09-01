@@ -1,0 +1,11 @@
+title: "bit_cast: reinterpret bits without UB"
+standard: "C++20"
+difficulty: 2
+summary: "std::bit_cast reinterprets an object's bits as another type of the same size -- the defined replacement for the strict-aliasing-breaking reinterpret_cast and union tricks."
+notes: "bit_cast copies the bit pattern into the target type. It needs both types to be trivially copyable and the same size, and it is constexpr. Here we look at the IEEE-754 layout of a float and convert back bit-for-bit. This is the correct way to read the raw representation of a value -- see the type-punning anti-pattern for why reinterpret_cast and unions are not."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bit_cast", url: "https://en.cppreference.com/w/cpp/numeric/bit_cast" }
+detailed_tags:
+  - { name: "<bit>", url: "https://en.cppreference.com/w/cpp/header/bit" }
