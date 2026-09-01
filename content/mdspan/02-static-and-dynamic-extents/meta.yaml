@@ -1,0 +1,13 @@
+title: "Static, dynamic and mixed extents"
+standard: "C++23"
+difficulty: 2
+summary: "Describe a 3x4 shape three ways -- all runtime (dextents), all compile-time (static extents), or a mix with dynamic_extent -- and see what each costs in storage."
+notes: "The extents type carries the shape. A static extent is baked into the type and stored nowhere, so sizeof an all-static view is just the pointer; a dynamic extent is a runtime value the object stores. Mix them when some dimensions are fixed by the interface and others vary. std::dextents<T, N> is the all-dynamic shorthand; std::dynamic_extent marks a single runtime slot inside std::extents."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::extents", url: "https://en.cppreference.com/w/cpp/container/mdspan/extents" }
+  - { name: "std::dextents", url: "https://en.cppreference.com/w/cpp/container/mdspan/extents" }
+  - { name: "std::dynamic_extent", url: "https://en.cppreference.com/w/cpp/container/span/dynamic_extent" }

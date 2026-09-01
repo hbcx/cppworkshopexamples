@@ -1,0 +1,19 @@
+- problem: "An image or video pipeline decodes a frame into one contiguous byte buffer, then runs per-pixel work: a filter, a color transform, a resize. The code needs to address pixels by row, column and channel."
+  why: "An mdspan views the existing buffer as height x width x channels with img[y, x, ch] and zero copies. The obvious alternative, a vector of vector of pixels, adds an allocation per row, scatters the data across the heap, and kills the contiguity the decoder and the GPU upload both rely on."
+  signal: "A flat pixel buffer indexed by hand-written y * width * channels + x * channels + ch arithmetic, or a nested vector<vector<>> built only to get [y][x] syntax."
+
+- problem: "Numeric code multiplies and factors matrices and hands the same memory to BLAS or LAPACK, which are column-major. The buffers must be indexed naturally in C++ while staying in the layout the Fortran routines expect."
+  why: "An mdspan with layout_left indexes column-major storage as m[row, col] without transposing or copying, so the identical buffer passes straight to the library. Rolling the index math by hand as row + col * rows spreads the column-major assumption across every loop, where one slip transposes a result silently."
+  signal: "Calls into dgemm/dgetrf and friends next to manual row + col * lda offset expressions, or a copy step that transposes a matrix purely to change storage order."
+
+- problem: "A simulation or game stores a grid -- heightmap, cells, a voxel volume -- flat for cache locality and fast bulk updates, but the update and neighbor-lookup code is written in 2D or 3D terms."
+  why: "An mdspan gives the flat buffer grid[x, y] or vol[x, y, z] addressing while the memory stays one contiguous block the stepper can sweep linearly. A 2D array-of-arrays would restore the nested syntax but give up the single contiguous block the performance depends on."
+  signal: "A single vector sized width * height (* depth) with neighbor lookups done through repeated index arithmetic, especially where a bug in that arithmetic would read the wrong cell."
+
+- problem: "A machine-learning or signal-processing step receives a tensor -- a batch of N images as N x C x H x W -- and must view it under different shapes (per-channel, per-image) without reshaping or reallocating the data."
+  why: "One flat buffer can back several mdspans of different extents, each a free reinterpretation of the same memory. Reshaping through a container that owns its data would copy the whole tensor every time the view changes."
+  signal: "A big flat activation or feature buffer accompanied by separate stride or shape variables passed around to reinterpret it, or explicit reshape calls that copy."
+
+- problem: "A library exposes a numeric routine -- sum, normalize, convolve -- that should accept a 2D block from any caller, whether the data sits in a std::vector, a std::array or a C array from a legacy API."
+  why: "An mdspan parameter accepts all of them by value, as one overload, the way std::span does for 1D ranges. Templating the function on the container type instead multiplies instantiations and still refuses a plain pointer-and-shape from a C boundary."
+  signal: "Overloaded or heavily templated 2D routines that differ only by the storage type of the argument, or a function that takes a raw pointer plus width and height as separate parameters."

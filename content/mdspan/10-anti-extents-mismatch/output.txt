@@ -1,0 +1,2 @@
+bad claims size 12 over a buffer of 10 -- no check happened
+good[1,4] = 9

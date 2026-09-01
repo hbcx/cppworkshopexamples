@@ -1,0 +1,2 @@
+grid[1, 2] = 6
+row 1 as a 1D view: 4 5 6

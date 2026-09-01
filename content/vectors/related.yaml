@@ -40,3 +40,5 @@
   note: "A vector is the container behind a fast stack, and often the better stack itself: push_back/back/pop_back is the whole LIFO interface, plus iteration -- go there for std::stack, when to prefer a vector backing, and the classic stack algorithms."
 - slug: "bitset"
   note: "The fixed-size relative of std::vector<bool>: when the bit count is a compile-time constant, std::bitset<N> packs the same bits but adds the bitwise operators and count and drops the dynamic sizing -- go there for the fixed bit array and set-algebra operations."
+- slug: "mdspan"
+  note: "View a flat vector as a matrix or tensor: std::mdspan (C++23) lays a 2D or 3D grid over the vector's contiguous buffer with m[i, j] and no copy -- go there when you store a grid flat for cache locality but want multidimensional indexing."

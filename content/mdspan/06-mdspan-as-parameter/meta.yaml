@@ -1,0 +1,12 @@
+title: "One function parameter for any contiguous 2D storage"
+standard: "C++23"
+difficulty: 2
+summary: "A function that takes an mdspan of const int works unchanged over a std::vector, a std::array and a C array -- the span idea, extended to N dimensions."
+notes: "Just as std::span lets one function accept any contiguous 1D range, an mdspan parameter accepts any contiguous buffer viewed with a given shape. Take it by value (it is a pointer plus a small shape) and by const element type when you only read. The caller decides the storage; the function only sees rows and columns."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::dextents", url: "https://en.cppreference.com/w/cpp/container/mdspan/extents" }
+  - { name: "std::mdspan::extent", url: "https://en.cppreference.com/w/cpp/container/mdspan/extent" }

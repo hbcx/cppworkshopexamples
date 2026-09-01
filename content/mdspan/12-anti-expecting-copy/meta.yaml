@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting the view to own or copy"
+standard: "C++23"
+difficulty: 2
+summary: "Copying an mdspan copies the handle, not the data. The copy is a second view over the same buffer, so a write through one is seen through the other."
+notes: "An mdspan value is a pointer plus a shape; copying it duplicates those, not the elements. Two views then alias the same storage, and passing an mdspan into a function that writes will edit the caller's buffer. That is the point of a view, but it surprises anyone treating it like a container. When you need an independent value, copy the underlying DATA into your own storage and view that."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::mdspan::operator[]", url: "https://en.cppreference.com/w/cpp/container/mdspan/operator_at" }

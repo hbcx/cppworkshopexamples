@@ -1,0 +1,12 @@
+title: "A strided sub-block with layout_stride"
+standard: "C++23"
+difficulty: 3
+summary: "Carve a 2x2 inner block out of a 4x4 matrix without copying, by giving layout_stride the row and column strides of the parent buffer."
+notes: "C++23 has no std::submdspan yet (it lands in C++26), but layout_stride already expresses a sub-view: it stores an explicit stride per dimension instead of assuming contiguity. For a block inside a 4-wide matrix the row stride is the full width (4) and the column stride is 1, and the data handle points at the block top-left. Writing through the sub-view edits the parent in place, since nothing was copied."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::layout_stride", url: "https://en.cppreference.com/w/cpp/container/mdspan/layout_stride" }
+  - { name: "std::extents", url: "https://en.cppreference.com/w/cpp/container/mdspan/extents" }

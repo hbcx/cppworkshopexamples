@@ -9,3 +9,5 @@
   note: "The wider world of views: a span is a contiguous view, and the ranges library is the general framework of lazy views and range algorithms that compose over any range -- go there for transform, filter, and the pipe syntax that a span slots into as a range."
 - slug: "deque"
   note: "A container a span CANNOT view: std::deque stores its elements in separate chunks, so there is no contiguous run to borrow -- copy it into a vector first. Go there for the double-ended container and why its storage is not contiguous."
+- slug: "mdspan"
+  note: "The multidimensional version of this view: std::mdspan borrows the same kind of contiguous buffer but presents it as a 2D, 3D or higher grid with m[i, j] -- go there when the thing you are viewing is a matrix or tensor, not a flat 1D range."

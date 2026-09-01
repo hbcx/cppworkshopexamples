@@ -1,0 +1,11 @@
+title: "A custom accessor that transforms on read"
+standard: "C++23"
+difficulty: 3
+summary: "Swap the default_accessor for a small custom one so that reading an element returns a transformed value, without touching the stored data."
+notes: "An mdspan has three policies: extents (the shape), a layout (index to offset), and an accessor (how an offset becomes an element). The default_accessor just returns a reference to the stored element. A custom accessor can return something computed instead -- here twice the stored value -- which is how you build read-only scaled, checked, or unit-converting views over the same buffer. An accessor defines element_type, reference, data_handle_type, offset_policy, and the access/offset members."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::default_accessor", url: "https://en.cppreference.com/w/cpp/container/mdspan/default_accessor" }

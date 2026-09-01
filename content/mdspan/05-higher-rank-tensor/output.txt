@@ -1,0 +1,5 @@
+rank = 3
+green channel:
+1 4 7 
+10 13 16 
+pixels[2] after brighten -> 102

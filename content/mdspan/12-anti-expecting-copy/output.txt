@@ -1,0 +1,3 @@
+wrote via b; a[0,0] = 777
+and v[0]           = 777
+after editing the copy: v[0] = 777, owned[0] = -1

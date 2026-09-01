@@ -1,0 +1,11 @@
+title: "Anti-pattern: reaching for m[i][j]"
+standard: "C++23"
+difficulty: 2
+summary: "mdspan has no chained subscript: m[i][j] does not compile. The C++23 way is one subscript with the whole index list, m[i, j]."
+notes: "People coming from int a[2][3] or vector<vector<int>> expect m[i] to hand back a row they can index again. mdspan does not work that way -- operator[] takes the full index pack at once and returns the element, so m[i] on a rank-2 view is ill-formed and m[i][j] never compiles. Use the multidimensional subscript m[i, j]. If you genuinely want a row as a standalone 1D view, build one from the row pointer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::mdspan::operator[]", url: "https://en.cppreference.com/w/cpp/container/mdspan/operator_at" }

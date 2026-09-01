@@ -1,0 +1,12 @@
+title: "Row-major vs column-major: layout_right and layout_left"
+standard: "C++23"
+difficulty: 2
+summary: "View the same six values in memory as row-major with layout_right (the default) and as column-major with layout_left, and watch the same indices land on different elements."
+notes: "The layout policy decides how an index list maps to a flat offset. layout_right (default) makes the last index vary fastest -- rows are contiguous, the C and C++ convention. layout_left makes the first index vary fastest -- columns are contiguous, the Fortran and BLAS/LAPACK convention. Pick the layout that matches how the buffer was written, and use layout_left at the boundary with column-major numeric libraries."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::layout_right", url: "https://en.cppreference.com/w/cpp/container/mdspan/layout_right" }
+  - { name: "std::layout_left", url: "https://en.cppreference.com/w/cpp/container/mdspan/layout_left" }

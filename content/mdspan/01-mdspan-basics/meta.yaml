@@ -1,0 +1,13 @@
+title: "A flat buffer as a 2D grid"
+standard: "C++23"
+difficulty: 1
+summary: "Wrap a flat std::vector as a 2-by-3 view and index it with the C++23 multidimensional subscript m[r, c]."
+notes: "mdspan does not own or copy the data -- it is a pointer plus the shape, so it is cheap to make and pass. extent(0) and extent(1) give the two sizes, rank() the number of dimensions, size() the element count. Writing through the view edits the underlying buffer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::mdspan::operator[]", url: "https://en.cppreference.com/w/cpp/container/mdspan/operator_at" }
+  - { name: "std::mdspan::extent", url: "https://en.cppreference.com/w/cpp/container/mdspan/extent" }
+  - { name: "std::mdspan::size", url: "https://en.cppreference.com/w/cpp/container/mdspan/size" }

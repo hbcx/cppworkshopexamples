@@ -1,0 +1,3 @@
+plain [1,2] = 6
+scaled[1,2] = 12
+buffer is untouched: buf[5] = 6

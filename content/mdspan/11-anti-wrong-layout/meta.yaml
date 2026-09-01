@@ -1,0 +1,12 @@
+title: "Anti-pattern: reading data through the wrong layout"
+standard: "C++23"
+difficulty: 3
+summary: "Row-major data viewed with layout_left reads valid but wrong elements -- no crash, no UB, just silently transposed values."
+notes: "This trap is nastier than a dangling view because nothing is undefined: every access is in range and returns a real element -- just not the one you meant. Data written row-major but read column-major (or the reverse) is effectively transposed, so the bug shows up as wrong numbers deep in a computation, not as a crash. The layout must match how the buffer was actually filled. Row-major data needs layout_right (the default); reserve layout_left for genuinely column-major buffers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::layout_left", url: "https://en.cppreference.com/w/cpp/container/mdspan/layout_left" }
+  - { name: "std::layout_right", url: "https://en.cppreference.com/w/cpp/container/mdspan/layout_right" }

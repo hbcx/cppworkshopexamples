@@ -1,0 +1,3 @@
+before growth: grid[0,0] = 1
+after growth:  fixed[0,0] = 1
+(rebuild the mdspan whenever the buffer may have moved)

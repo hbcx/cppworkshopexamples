@@ -1,0 +1,12 @@
+title: "A rank-3 view: an image as height x width x channels"
+standard: "C++23"
+difficulty: 2
+summary: "View a flat, pixel-interleaved image buffer as a 3D height-by-width-by-channel grid and address a single channel of a single pixel with three indices."
+notes: "mdspan is not limited to two dimensions -- the rank is however many extents you give it. A decoded image is one contiguous buffer laid out as rows of pixels, each pixel a run of channels; a rank-3 view turns that into img[y, x, channel] with no copy and no index arithmetic in your loops. std::dextents<size_t, 3> is the all-runtime shape for it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::dextents", url: "https://en.cppreference.com/w/cpp/container/mdspan/extents" }
+  - { name: "std::mdspan::operator[]", url: "https://en.cppreference.com/w/cpp/container/mdspan/operator_at" }

@@ -1,0 +1,5 @@
+a[2,3] = 11
+b[2,3] = 11
+c[2,3] = 11
+sizeof all-static  view = 8
+sizeof all-dynamic view = 24

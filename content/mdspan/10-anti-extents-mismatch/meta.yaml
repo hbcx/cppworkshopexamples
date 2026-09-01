@@ -1,0 +1,11 @@
+title: "Anti-pattern: extents that do not match the buffer"
+standard: "C++23"
+difficulty: 3
+summary: "mdspan does no size or bounds checking. Claim a 3x4 grid over a 10-element buffer and the out-of-range indices are accepted silently."
+notes: "The constructor never compares the product of the extents against the real buffer size, and operator[] never range-checks. A 3x4 view over ten elements is built without complaint, and reading the last cells walks past the end -- undefined behaviour. The shape is a promise you make; nothing verifies it. Size the extents to the buffer (or the buffer to the extents), and if you need checking, do it yourself before indexing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::mdspan::size", url: "https://en.cppreference.com/w/cpp/container/mdspan/size" }

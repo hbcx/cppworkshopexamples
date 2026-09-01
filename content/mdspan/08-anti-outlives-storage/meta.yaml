@@ -1,0 +1,11 @@
+title: "Anti-pattern: a view that outlives its storage"
+standard: "C++23"
+difficulty: 3
+summary: "An mdspan keeps the buffer pointer it was built from; grow the vector and it reallocates, leaving the view dangling over freed memory."
+notes: "mdspan is non-owning, exactly like a raw pointer or std::span: it never learns that the vector moved. push_back past capacity reallocates, frees the old block, and every earlier view is now dangling -- reading through it is undefined behaviour. This is the mdspan version of iterator and span invalidation. Rebuild the view from the current data() after any operation that may move the storage, or keep the storage fixed for the view's lifetime."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mdspan", url: "https://en.cppreference.com/w/cpp/container/mdspan" }
+detailed_tags:
+  - { name: "std::vector::push_back", url: "https://en.cppreference.com/w/cpp/container/vector/push_back" }

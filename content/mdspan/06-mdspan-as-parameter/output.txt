@@ -1,0 +1,3 @@
+sum(vector)  = 21
+sum(array)   = 210
+sum(C array) = 2100

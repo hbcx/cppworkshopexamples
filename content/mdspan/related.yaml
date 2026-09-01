@@ -1,0 +1,4 @@
+- slug: "span"
+  note: "The 1D non-owning view. mdspan is its multidimensional generalization: the same pointer-plus-shape, no-copy idea, extended to rows, columns and deeper ranks."
+- slug: "vectors"
+  note: "The usual owning storage an mdspan views: a flat std::vector holds the contiguous elements while the mdspan supplies the grid shape over them."

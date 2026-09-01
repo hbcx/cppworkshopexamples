@@ -1,0 +1,4 @@
+title: "std::mdspan"
+description: "The non-owning multidimensional view over a contiguous sequence (C++23): a pointer plus a shape that views a flat std::vector, std::array or C array as a 2D, 3D or higher grid without copying or owning it. Covers building a view and the C++23 multidimensional subscript m[i, j], static versus dynamic extents and what they cost, the row-major layout_right versus the column-major layout_left, layout_stride to carve a strided sub-block without a copy, higher-rank tensors, one function parameter that accepts any contiguous storage, and a custom accessor -- alongside the traps: a view left dangling over storage that moved, reaching for chained m[i][j], extents that do not match the buffer with no bounds check, reading row-major data through the wrong layout, and expecting the view to own or copy its data."
+sort_order: 150
+category: "Containers"
