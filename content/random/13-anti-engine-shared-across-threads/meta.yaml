@@ -1,0 +1,12 @@
+title: "Anti-pattern: one engine shared across threads"
+standard: "C++11"
+difficulty: 3
+summary: "An engine is stateful and none of the standard engines are thread-safe. Two threads drawing from the same engine race on its internal state. Give each thread its own."
+notes: "Every call to an engine mutates its internal state, so two threads calling one shared engine concurrently are a data race -- undefined behaviour, and it also corrupts the sequence. The racy version is described in the code but not run (a race is UB and non-deterministic). The fix, which we do run under ThreadSanitizer, gives each thread its OWN engine seeded distinctly: no shared state, no race, and each stream is independent and reproducible. Results are summed per thread and printed after join, so the output is deterministic despite the threads."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+detailed_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }

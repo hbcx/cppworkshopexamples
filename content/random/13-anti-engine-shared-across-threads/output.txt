@@ -1,0 +1,2 @@
+thread 1 sum (seed 111) = 50027686
+thread 2 sum (seed 222) = 50073869

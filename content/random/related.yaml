@@ -1,0 +1,4 @@
+- slug: "sample-shuffle"
+  note: "The algorithm-side view of std::shuffle and std::sample: this section shows them driven by a <random> engine, that one covers the algorithms themselves and their guarantees."
+- slug: "thread"
+  note: "Why the shared-engine trap is a data race: the threading model and how to give each thread its own state instead of sharing one mutable object."

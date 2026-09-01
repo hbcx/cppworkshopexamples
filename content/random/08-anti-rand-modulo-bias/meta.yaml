@@ -1,0 +1,12 @@
+title: "Anti-pattern: rand() % n and its modulo bias"
+standard: "C++11"
+difficulty: 3
+summary: "Folding a generator's output into n buckets with % n gives some outcomes one extra chance when the range is not a multiple of n -- a bias toward the low values."
+notes: "rand() % n (or engine() % n) is the classic C way and it is doubly wrong: rand() is low quality with global, non-thread-safe state, and the % introduces a bias whenever the generator's range is not an exact multiple of n. We show the bias with pure arithmetic -- folding 0..99 into 6 buckets leaves the first four with one extra value each. std::uniform_int_distribution removes it by rejecting the few leftover values, and it carries no global state and takes the engine explicitly. We avoid calling rand() at all -- its sequence is not even the same across libraries."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }
+detailed_tags:
+  - { name: "std::rand", url: "https://en.cppreference.com/w/cpp/numeric/random/rand" }
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }

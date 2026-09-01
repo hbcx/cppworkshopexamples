@@ -1,0 +1,3 @@
+run seed = 20240501  (log this to replay)
+rolls: 13 46 74 75 91
+replay: 13 46 74 75 91

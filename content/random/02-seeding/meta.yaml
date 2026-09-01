@@ -1,0 +1,12 @@
+title: "Seeding: reproducible runs and seed_seq"
+standard: "C++11"
+difficulty: 2
+summary: "A fixed seed makes the whole sequence reproducible; two engines with the same seed give the same numbers; seed_seq spreads several values across the engine's large state."
+notes: "The seed is the starting point of the sequence. A fixed seed is what lets you replay a run exactly -- vital for tests, debugging and simulations. Two engines seeded the same way produce identical streams. mt19937 has a huge internal state that a single 32-bit seed only partly fills, so std::seed_seq is the better choice when you have several numbers of seed material. In real code you seed once at startup from std::random_device (the OS), then reuse the engine -- we do not print that here because it differs every run, which is exactly the point."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+  - { name: "std::seed_seq", url: "https://en.cppreference.com/w/cpp/numeric/random/seed_seq" }
+detailed_tags:
+  - { name: "std::random_device", url: "https://en.cppreference.com/w/cpp/numeric/random/random_device" }

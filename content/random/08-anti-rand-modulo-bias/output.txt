@@ -1,0 +1,2 @@
+folding 0..99 with % 6 (uneven counts = bias): 17 17 17 17 16 16
+uniform_int_distribution over 60000 draws (even): 10007 9894 10050 10085 9968 9996

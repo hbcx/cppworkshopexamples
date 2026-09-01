@@ -1,0 +1,5 @@
+minstd_rand (tiny, fast, low quality): 494308042
+mt19937     (usual default, big state): 1598559961
+mt19937_64  (64-bit Mersenne Twister):  9708555024968193062
+ranlux24    (slow, very high quality):  8239637
+state sizes: mt19937=2504 bytes, minstd_rand=4 bytes

@@ -1,0 +1,2 @@
+bad dist max index over 1000 draws = 4  (size is 4, so index 4 is out of range)
+valid picks: 10 40 30 30 40

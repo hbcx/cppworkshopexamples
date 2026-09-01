@@ -1,0 +1,2 @@
+random_device.entropy() = 0
+seeded an mt19937 from random_device (values vary per run)

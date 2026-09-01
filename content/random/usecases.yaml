@@ -1,0 +1,19 @@
+- problem: "A Monte Carlo simulation or a numerical experiment must be reproducible: a colleague, a CI run, or a bug report needs to replay the exact same sequence to get the exact same result and compare across code changes."
+  why: "A <random> engine seeded with a logged fixed value reproduces its stream byte for byte, and mt19937 has the statistical quality the result depends on. rand() gives neither -- its quality is poor and its sequence is not even the same across platforms or library versions, so a run cannot be replayed elsewhere."
+  signal: "Simulation or numerical code calling rand()/srand(), or an engine seeded from the clock with the seed never recorded, so a run can never be reproduced."
+
+- problem: "A game or procedural-generation system must regenerate the same world, level or map from a short seed, and wants several independent random streams (terrain, loot, enemies) that do not interfere."
+  why: "One engine per subsystem, each seeded from the world seed, gives independent reproducible streams -- the same seed rebuilds the identical world. A single global rand() has one shared state, so interleaving draws from different systems makes any of them unreproducible."
+  signal: "A shared global generator drawn from by several unrelated systems, or a world seed that only feeds one rand() and cannot produce separate reproducible streams."
+
+- problem: "A load generator, fuzzer or randomized test needs varied inputs shaped like production: request sizes clustered around a mean, arrivals spread over time, occasional outliers -- and must replay a failing case."
+  why: "The distributions do the shaping directly -- normal for sizes, poisson/exponential for arrivals -- while a logged seed replays the exact failing input. Rolling these shapes by hand on top of rand() % n is both biased and unreproducible."
+  signal: "Test-input generation using rand() % n and hand-built ad hoc distributions, with no seed captured to reproduce a failure."
+
+- problem: "Code needs to shuffle a collection (a deck, a playlist, a work order) or draw a random sample of k items from a larger set, fairly."
+  why: "std::shuffle and std::sample are unbiased and take the engine explicitly. The common hand-rolled Fisher-Yates using rand() % n is subtly biased, and the old std::random_shuffle was removed in C++17 precisely because it depended on rand()."
+  signal: "A hand-written shuffle loop with rand() % (i + 1) index picks, or any remaining use of std::random_shuffle."
+
+- problem: "A service must issue values that an attacker must not be able to predict -- session tokens, password-reset links, API keys."
+  why: "This is where <random> is the WRONG tool: mt19937 is fully predictable from a little output, and even random_device is not guaranteed to be cryptographic. The right answer is the operating system's cryptographic RNG (getrandom, BCryptGenRandom, /dev/urandom). Naming the boundary is the point -- reach for a CSPRNG, not this library."
+  signal: "Tokens, keys or nonces generated from mt19937 or from random_device, anywhere unpredictability is a security requirement rather than just statistical spread."

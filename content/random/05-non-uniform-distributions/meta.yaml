@@ -1,0 +1,12 @@
+title: "Non-uniform distributions"
+standard: "C++11"
+difficulty: 2
+summary: "Beyond uniform: normal_distribution (bell curve), bernoulli_distribution (weighted coin) and discrete_distribution (weighted choice by index)."
+notes: "The value of <random> is that the SHAPE is a separate, swappable piece. normal_distribution(mean, stddev) draws a bell curve -- heights, measurement noise, latencies. bernoulli_distribution(p) is a coin that is true with probability p. discrete_distribution takes a list of weights and returns an index chosen in proportion to them -- the tool for weighted random choice (loot tables, weighted A/B, sampling by frequency). poisson_distribution and exponential_distribution model counts and waiting times. Same engine, any shape."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::normal_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/normal_distribution" }
+  - { name: "std::discrete_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/discrete_distribution" }
+detailed_tags:
+  - { name: "std::bernoulli_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/bernoulli_distribution" }

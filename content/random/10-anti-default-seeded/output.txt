@@ -1,0 +1,2 @@
+default-seeded (identical on every run): 82 14 91 84 13
+explicitly seeded: 20 50 63 82 44

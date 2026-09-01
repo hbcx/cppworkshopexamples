@@ -1,0 +1,2 @@
+reseeding every call (all identical): 38 38 38 38 38
+one reused engine (advances): 38 80 96 19 74

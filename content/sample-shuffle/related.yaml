@@ -7,3 +7,5 @@
   note: "The deterministic counterpart to a random order: next_permutation walks the arrangements of a range in a defined sequence, where shuffle jumps to one at random -- go there for enumerating every ordering instead of sampling one."
 - slug: "swap-ranges"
   note: "The primitive shuffle is built on: it swaps elements through iter_swap to move them into a random order, needing no extra storage -- go there for swap, iter_swap, and swap_ranges."
+- slug: "random"
+  note: "Where the engine these algorithms need comes from: the <random> library builds the URBG you pass to shuffle and sample, and explains seeding, distributions, and why rand() is the wrong source -- go there for the generator side."

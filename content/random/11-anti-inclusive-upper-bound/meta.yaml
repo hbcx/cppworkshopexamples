@@ -1,0 +1,11 @@
+title: "Anti-pattern: the inclusive upper bound off-by-one"
+standard: "C++11"
+difficulty: 2
+summary: "uniform_int_distribution(0, size) can return size itself -- one past the last valid index -- because the integer range is closed. Indexing with it walks off the end."
+notes: "The integer distribution INCLUDES its upper bound, unlike almost every other range in C++. So to pick a valid index into a container of n elements the range is (0, n - 1), not (0, n): the latter can return n, and container[n] is out of bounds. We prove the distribution returns the out-of-range value by tracking the maximum draw, without ever dereferencing it. The fix is simply size - 1 as the upper bound."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }
+detailed_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }

@@ -1,0 +1,4 @@
+same seed -> same sequence:
+  929 890 316 130 183
+  929 890 316 130 183
+seed_seq-seeded: 489 724 726 403 464

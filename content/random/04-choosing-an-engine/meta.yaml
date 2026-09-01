@@ -1,0 +1,12 @@
+title: "Choosing an engine"
+standard: "C++11"
+difficulty: 2
+summary: "The standard offers several engines that trade quality, speed and state size: minstd_rand, mt19937, mt19937_64, ranlux24. Seed them the same and compare."
+notes: "mt19937 (the Mersenne Twister) is the sensible default for general use: good statistical quality, fast enough, but a large state (about 2.5 KB). minstd_rand is a tiny, fast linear congruential engine with low quality -- fine for throwaway randomness. mt19937_64 is the 64-bit variant. ranlux24 is much slower but very high quality. Rule of thumb: mt19937 unless you have a specific reason, minstd for cheap noise, a ranlux-class engine only when quality genuinely matters -- and none of them for cryptography, since all are predictable."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+detailed_tags:
+  - { name: "std::linear_congruential_engine", url: "https://en.cppreference.com/w/cpp/numeric/random/linear_congruential_engine" }
+  - { name: "std::subtract_with_carry_engine", url: "https://en.cppreference.com/w/cpp/numeric/random/subtract_with_carry_engine" }

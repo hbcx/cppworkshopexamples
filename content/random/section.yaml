@@ -1,0 +1,4 @@
+title: "Random numbers"
+description: "The C++11 <random> library: a proper replacement for rand(), built from two parts -- an engine (a seeded source of pseudo-random bits) and a distribution (which shapes those bits into the numbers you want). Covers the engine-plus-distribution model and a first die roll, seeding for reproducibility with a fixed seed and seed_seq, the closed integer range versus the half-open real range, choosing among the standard engines, the non-uniform distributions (normal, bernoulli, weighted discrete, poisson), unbiased shuffle and sample, and a small reproducible generator wrapped for a simulation -- alongside the traps: rand() % n and its modulo bias, reseeding the engine on every call, a default-seeded engine that repeats every run, the inclusive upper bound that indexes one past the end, assuming random_device is truly random, and one stateful engine shared across threads."
+sort_order: 151
+category: "Numerics"

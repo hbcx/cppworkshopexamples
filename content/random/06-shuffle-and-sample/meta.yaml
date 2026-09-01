@@ -1,0 +1,13 @@
+title: "Shuffle and sample with an engine"
+standard: "C++17"
+difficulty: 2
+summary: "std::shuffle reorders a range using the engine (an unbiased Fisher-Yates); std::sample draws k items without replacement. Both take the URBG explicitly."
+notes: "std::shuffle(first, last, gen) is the correct, unbiased shuffle -- never hand-roll one with rand() % n, which biases the result. std::sample(first, last, out, k, gen) (C++17) picks k distinct items, writing them through an output iterator; it is the ready-made reservoir-style sampler. Both take the engine as an argument, so the same engine drives your distributions and your algorithm shuffling. The old std::random_shuffle was removed in C++17 because it relied on rand()."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shuffle", url: "https://en.cppreference.com/w/cpp/algorithm/random_shuffle" }
+  - { name: "std::sample", url: "https://en.cppreference.com/w/cpp/algorithm/sample" }
+detailed_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

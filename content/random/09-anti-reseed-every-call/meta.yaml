@@ -1,0 +1,11 @@
+title: "Anti-pattern: reseeding the engine on every call"
+standard: "C++11"
+difficulty: 3
+summary: "Building a fresh engine inside a function called repeatedly restarts the same sequence each time, so you get the same number over and over -- and it is slow."
+notes: "A very common mistake: create the engine (and often seed it from the clock) inside the function that draws a number, so every call constructs and reseeds it. Each call then returns the START of the sequence -- the same value -- and with a clock seed all calls within the same second collide too. Constructing mt19937 is also far from free. The fix is to create the engine ONCE (a local static, a member, or a passed-in reference) and reuse it so the sequence advances. We seed with a fixed value here to make the repeated output obvious."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+detailed_tags:
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }

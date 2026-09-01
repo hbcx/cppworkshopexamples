@@ -1,0 +1,12 @@
+title: "A reproducible generator wrapped for a system"
+standard: "C++11"
+difficulty: 3
+summary: "A small class owns the engine, remembers the seed it was built with, and exposes shaped draws -- so one run can be logged by its seed and replayed exactly."
+notes: "In a simulation or game you want ONE reproducible stream you can control: build it from a seed, log that seed, and a later run rebuilt from the same seed reproduces the identical sequence. Wrapping the engine keeps the seed and the draws in one place instead of scattering engine and distribution objects across the code. Rebuilding with the same seed gives the same stream -- the property that makes bugs reproducible and simulations comparable across changes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mt19937", url: "https://en.cppreference.com/w/cpp/numeric/random/mersenne_twister_engine" }
+detailed_tags:
+  - { name: "std::uniform_int_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution" }
+  - { name: "std::uniform_real_distribution", url: "https://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution" }
