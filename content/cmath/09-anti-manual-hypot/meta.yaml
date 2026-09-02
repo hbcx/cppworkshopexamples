@@ -1,0 +1,11 @@
+title: "Anti-pattern: a hand-rolled hypot that overflows"
+standard: "C++11"
+difficulty: 2
+summary: "sqrt(x*x + y*y) overflows to infinity when x is large (x*x leaves double's range) and underflows to zero when x is tiny, even though the true length is representable -- std::hypot scales the inputs and stays correct."
+notes: "The Euclidean length sqrt(x*x + y*y) is the textbook formula, and it is numerically wrong at the extremes. double tops out around 1.8e308, so for x = 1e200 the intermediate x*x = 1e400 overflows to infinity and the whole expression returns inf, even though the real length 1.41e200 fits comfortably. At the other end, squaring 1e-200 underflows to 0 and the formula reports a length of zero. std::hypot avoids both by factoring out the larger magnitude before squaring, so the intermediate stays in range; it is also more accurate in the ordinary case. The cost is that hypot is somewhat slower than the raw formula, so in a hot loop where you know the inputs are well-scaled the manual version can be justified -- but the default, and anything touching user or sensor data of unknown magnitude, should use hypot. The same reasoning gives the 3-argument hypot(x, y, z) for 3D distance in C++17."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hypot", url: "https://en.cppreference.com/w/cpp/numeric/math/hypot" }
+detailed_tags:
+  - { name: "std::sqrt", url: "https://en.cppreference.com/w/cpp/numeric/math/sqrt" }

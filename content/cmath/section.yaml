@@ -1,0 +1,4 @@
+title: "Math functions (<cmath>)"
+description: "The C++ interface to the C math library: the everyday floating-point functions and the accuracy and domain traps around them. Covers powers and roots (sqrt, cbrt, pow) and why hypot avoids the overflow of sqrt(x*x+y*y), the exponential and logarithm family with the near-zero-accurate expm1 and log1p, the rounding functions (floor, ceil, round, trunc, nearbyint) and how they differ, fmod versus IEEE remainder, the floating-point classification toolkit (isnan, isinf, isfinite, fpclassify, signbit, copysign), the fused multiply-add fma for one-rounding accuracy, and the trig functions with atan2 for the correct-quadrant angle -- alongside the traps: casting to int instead of rounding, a hand-rolled hypot that overflows, pow for a cube root that comes out as 2.999..., the integer abs that truncates a double, and a domain error that returns NaN silently instead of throwing."
+sort_order: 155
+category: "Numerics"

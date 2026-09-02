@@ -1,0 +1,5 @@
+naive  a*b + c = 0   (the +1 was rounded away)
+fma(a, b, c)   = 1   (full product kept)
+
+Both compute a*b + c, but the naive form rounds the product
+to a double before adding c, losing the low bit; fma rounds once.

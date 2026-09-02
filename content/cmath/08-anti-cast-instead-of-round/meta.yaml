@@ -1,0 +1,11 @@
+title: "Anti-pattern: casting to int instead of rounding"
+standard: "C++11"
+difficulty: 2
+summary: "static_cast<int>(x) truncates toward zero, so 2.9 becomes 2 -- when you want the nearest integer use std::lround/llround (integer result) or std::round (double result), not a cast."
+notes: "A cast from floating to integer is defined to truncate toward zero: it discards the fractional part. That is correct for trunc-style flooring of a positive magnitude, but it is the wrong tool when you mean to round to the nearest integer, and the bug is easy to miss because it only shows on the fractional cases. static_cast<int>(2.9) is 2, static_cast<int>(-2.9) is -2, so a column of rounded prices or counts drifts systematically toward zero. Use lround or llround to get the nearest integer as a long / long long in one step (ties go away from zero), or round when you want to keep a double. There is a second, sneakier version of this trap: adding 0.5 and casting -- int(x + 0.5) -- which is wrong for negatives and mis-rounds values near the halfway point because x + 0.5 is itself rounded. Prefer the standard rounding functions; they are correct and say what they mean. Also mind overflow: converting a value outside int's range is undefined, so range-check first if the magnitude is not bounded."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::lround", url: "https://en.cppreference.com/w/cpp/numeric/math/round" }
+detailed_tags:
+  - { name: "std::round", url: "https://en.cppreference.com/w/cpp/numeric/math/round" }

@@ -1,0 +1,11 @@
+title: "Anti-pattern: integer abs on a double"
+standard: "C++11"
+difficulty: 3
+summary: "The C abs(int) from <cstdlib> converts a double argument to int first, so abs(-3.7) truncates to -3 and returns 3, dropping the fraction -- use std::abs (which has a floating overload) or std::fabs."
+notes: "C has separate absolute-value functions per type: abs for int, labs / llabs for long, and fabs for double, all as plain names. In C++ this becomes a hazard because if the integer abs is the overload in scope -- you included <cstdlib> and called a bare abs, or wrote ::abs -- then passing a double triggers an implicit conversion to int before the call, truncating the value. abs(-3.7) computes abs(int(-3.7)) = abs(-3) = 3, and the fraction is gone with no warning at the language level. The fixes are std::abs, which in <cmath> has overloads for float, double and long double, or std::fabs, whose name makes the floating intent explicit. Because this is a common and silent bug, both major compilers warn about it (clang's -Wabsolute-value; GCC flags the suspicious conversion too), and under -Werror the mistaken call will not compile -- which is why this example shows the wrong call only in a comment and runs the correct forms. Prefer the std:: names and let the overload set pick the right function."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fabs", url: "https://en.cppreference.com/w/cpp/numeric/math/fabs" }
+detailed_tags:
+  - { name: "std::abs", url: "https://en.cppreference.com/w/cpp/numeric/math/fabs" }

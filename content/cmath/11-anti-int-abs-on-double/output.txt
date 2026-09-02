@@ -1,0 +1,5 @@
+std::abs(-3.7)  = 3.70
+std::fabs(-3.7) = 3.70
+
+FIX: use std::abs (has a double overload) or std::fabs on
+floating values; the bare/integer abs would truncate to 3.

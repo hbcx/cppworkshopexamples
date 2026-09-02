@@ -1,0 +1,12 @@
+title: "fmod versus remainder"
+standard: "C++11"
+difficulty: 2
+summary: "fmod gives the remainder with the sign of the dividend (like integer %), while remainder rounds the quotient to nearest and returns the value closest to zero, which can be negative even for two positive inputs."
+notes: "Both compute a floating-point remainder of a/b but round the implied quotient differently, and picking the wrong one is a subtle bug. fmod(a, b) truncates the quotient toward zero, so the result has the same sign as a and lies in the open interval between -|b| and |b| -- this is the floating-point analogue of the integer % operator, and what you usually want for wrapping a value into a range. remainder(a, b) rounds the quotient to the NEAREST integer (ties to even, the IEEE 754 operation), so it returns the residue closest to zero, in [-|b|/2, |b|/2]; it is often negative even when a and b are positive, because a may be nearer to the next multiple of b than to the previous one. Use fmod for range reduction where the sign should follow the dividend (wrapping an angle into [0, 360) after adding the modulus back if negative), and remainder when you need the mathematically smallest-magnitude residue, as in high-quality argument reduction for trig. remquo additionally returns low bits of the quotient."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fmod", url: "https://en.cppreference.com/w/cpp/numeric/math/fmod" }
+  - { name: "std::remainder", url: "https://en.cppreference.com/w/cpp/numeric/math/remainder" }
+detailed_tags:
+  - { name: "std::remquo", url: "https://en.cppreference.com/w/cpp/numeric/math/remquo" }

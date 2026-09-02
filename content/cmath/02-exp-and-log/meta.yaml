@@ -1,0 +1,14 @@
+title: "Exponentials and logarithms"
+standard: "C++11"
+difficulty: 2
+summary: "exp, log, log2 and log10 are the exponential and logarithm functions; expm1 and log1p are the accurate versions of exp(x)-1 and log(1+x) for tiny x, where the naive form loses its leading digits to cancellation."
+notes: "log is the NATURAL logarithm (base e), not base 10 -- a frequent surprise for people coming from a calculator. log2 and log10 give the base-2 and base-10 logs directly and more accurately than dividing logs. exp is the inverse of log. The pair worth knowing is expm1 and log1p. exp(x) for a tiny x is a number just above 1, so exp(x)-1 subtracts two nearly equal values and cancels away the significant digits, leaving a result dominated by rounding error; expm1(x) computes the same quantity accurately. log1p(x) is the same story for log(1+x). These matter in finance (continuous compounding and log-returns on small rates), statistics (log-likelihoods), and any code that accumulates many small increments. The example forces the inputs through a volatile so the compiler evaluates them at run time rather than folding the constants, which keeps the low-order digits meaningful."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exp", url: "https://en.cppreference.com/w/cpp/numeric/math/exp" }
+  - { name: "std::log", url: "https://en.cppreference.com/w/cpp/numeric/math/log" }
+detailed_tags:
+  - { name: "std::expm1", url: "https://en.cppreference.com/w/cpp/numeric/math/expm1" }
+  - { name: "std::log1p", url: "https://en.cppreference.com/w/cpp/numeric/math/log1p" }
+  - { name: "std::log10", url: "https://en.cppreference.com/w/cpp/numeric/math/log10" }

@@ -7,3 +7,5 @@
   note: "How to turn a value-level max into a running one: partial_sum with std::max as its operation produces a running maximum (a cumulative high-water mark) across a range -- go there for prefix sums, running extremes, and difference encoding."
 - slug: "numeric-helpers"
   note: "The other value-level numeric helpers: gcd and lcm reduce fractions and find common periods, and midpoint averages two values without the overflow of (a + b) / 2 -- the same scalar, two-argument shape as min/max/clamp -- go there for gcd, lcm, and safe midpoints."
+- slug: "cmath"
+  note: "Why a NaN slips past min/max: these compare with <, which is false in both directions for NaN, so a stray NaN gives a wrong extreme -- go there for isnan/isfinite to screen inputs first, plus the wider floating-point function toolkit."

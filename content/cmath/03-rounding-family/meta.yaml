@@ -1,0 +1,14 @@
+title: "The rounding family: floor, ceil, round, trunc, nearbyint"
+standard: "C++11"
+difficulty: 1
+summary: "floor rounds down, ceil up, trunc toward zero, round to nearest with ties going away from zero, and nearbyint to nearest with ties to even -- five different answers for a value like 2.5, so the choice matters."
+notes: "These five all turn a floating value into an integral value (still typed double) but round in different directions, and mixing them up is a real bug. floor always goes down (2.7 to 2, -2.3 to -3), ceil always up, trunc always toward zero (so it just drops the fraction, matching what a cast to int does). round goes to the nearest integer and breaks ties by going AWAY from zero, so 2.5 to 3 and -2.5 to -3 -- the rule most people mean by rounding. nearbyint (and rint) also go to the nearest but break ties to the nearest EVEN value under the default rounding mode, so 2.5 to 2 and 3.5 to 4; this banker's rounding avoids a systematic upward bias when you round many values. round returns a double; lround and llround return an integer type directly and are what you want when the destination is an int. Note none of these change the type -- to store the result in an int you still convert, which is where the cast-instead-of-round anti-pattern hides."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::round", url: "https://en.cppreference.com/w/cpp/numeric/math/round" }
+  - { name: "std::floor", url: "https://en.cppreference.com/w/cpp/numeric/math/floor" }
+detailed_tags:
+  - { name: "std::ceil", url: "https://en.cppreference.com/w/cpp/numeric/math/ceil" }
+  - { name: "std::trunc", url: "https://en.cppreference.com/w/cpp/numeric/math/trunc" }
+  - { name: "std::nearbyint", url: "https://en.cppreference.com/w/cpp/numeric/math/nearbyint" }

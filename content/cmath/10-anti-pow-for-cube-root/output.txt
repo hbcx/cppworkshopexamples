@@ -1,0 +1,8 @@
+pow(1000, 1.0/3.0) = 9.9999999999999982
+cbrt(1000)         = 10
+pow gives exactly 10 : false
+cbrt gives exactly 10: true
+
+Also for simple powers: prefer x*x over pow(x, 2) -- it is
+exact and far cheaper. Reserve pow for genuinely non-integer,
+non-root exponents.

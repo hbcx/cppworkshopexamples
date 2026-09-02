@@ -1,0 +1,9 @@
+sqrt(2)     = 1.41421
+cbrt(27)    = 3
+pow(2, 10)  = 1024
+pow(9, 0.5) = 3   (a square root)
+hypot(3, 4) = 5
+
+for a large input (1e200):
+sqrt(big*big + big*big) = inf
+hypot(big, big)         = 1.41421e+200

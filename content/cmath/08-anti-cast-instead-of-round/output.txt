@@ -1,0 +1,10 @@
+value   (int)cast   lround
+  2.4        2          2
+  2.5        2          3
+  2.9        2          3
+  -2.4        -2          -2
+  -2.9        -2          -3
+
+static_cast<int>(2.9) is 2, not 3: the cast truncates.
+FIX: std::lround / std::llround give the nearest integer type
+directly; std::round keeps it as a double.

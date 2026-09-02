@@ -1,0 +1,12 @@
+sin(pi/6) = 0.5   (0.5)
+cos(pi/3) = 0.5   (0.5)
+tan(pi/4) = 1   (1.0)
+
+angle of a 2D vector (radians):
+atan2( 1,  1) = 0.785398   ( 45 deg)
+atan2( 1, -1) = 2.35619   (135 deg)
+atan2(-1, -1) = -2.35619   (-135 deg)
+
+atan cannot tell the quadrants apart:
+atan( 1 /  1) = 0.785398
+atan(-1 / -1) = 0.785398   (same value!)

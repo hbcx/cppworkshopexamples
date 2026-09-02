@@ -1,0 +1,14 @@
+title: "Trigonometry and atan2 for the right quadrant"
+standard: "C++11"
+difficulty: 2
+summary: "sin, cos and tan take radians; atan2(y, x) recovers the angle of a 2D vector across the full circle by using the signs of both arguments, which the single-argument atan(y/x) cannot do."
+notes: "The trig functions work in RADIANS, not degrees -- multiply degrees by pi/180 first, and get pi portably as acos(-1.0) rather than hard-coding digits. The important lesson is atan2. To find the direction of a vector (x, y) you need the angle in the full range (-pi, pi], and that requires knowing which quadrant the point is in. atan(y/x) is given only the ratio y/x, so it has already lost the individual signs: (1, 1) and (-1, -1) produce the same ratio and the same wrong answer, and it can never return an angle outside (-pi/2, pi/2). atan2(y, x) takes the two components separately, reads both signs, and returns the correct angle in every quadrant -- note the argument order is y then x. Reach for atan2 for headings, the angle between vectors, converting to polar coordinates, and anything involving the direction of motion. asin and acos also exist but have restricted domains (see the silent-NaN anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::atan2", url: "https://en.cppreference.com/w/cpp/numeric/math/atan2" }
+  - { name: "std::sin", url: "https://en.cppreference.com/w/cpp/numeric/math/sin" }
+detailed_tags:
+  - { name: "std::cos", url: "https://en.cppreference.com/w/cpp/numeric/math/cos" }
+  - { name: "std::tan", url: "https://en.cppreference.com/w/cpp/numeric/math/tan" }
+  - { name: "std::atan", url: "https://en.cppreference.com/w/cpp/numeric/math/atan" }

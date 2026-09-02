@@ -4,3 +4,5 @@
   note: "The range side of the same coin: numeric_limits reports the min, max and digit count of each fixed-width type, so you can range-check before narrowing into one -- go there for querying a type's bounds."
 - slug: "type-conversions-and-casts"
   note: "Storing a pointer in uintptr_t goes through reinterpret_cast, and squeezing a value into a smaller fixed-width type is a narrowing conversion -- go there for the cast rules and when a static_cast is the honest choice."
+- slug: "cmath"
+  note: "The floating-point half of Numerics: where these are the exact-size integers, <cmath> is the function toolkit for doubles -- sqrt, log, rounding, and the isnan/isinf classification -- go there for the math functions and their accuracy traps."

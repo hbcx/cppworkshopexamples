@@ -1,0 +1,15 @@
+isnan(nan)    = true
+isinf(inf)    = true
+isfinite(1.0) = true
+isnormal(sub) = false   (subnormal is not normal)
+
+fpclassify:
+  1.0   -> normal
+  inf   -> infinite
+  nan   -> nan
+  small -> subnormal
+
+signed zero:
+  (-0.0 == 0.0)      = true
+  signbit(-0.0)      = true
+  copysign(3, -1)    = -3

@@ -1,0 +1,12 @@
+title: "Anti-pattern: ignoring the domain, silent NaN"
+standard: "C++11"
+difficulty: 3
+summary: "sqrt of a negative, log of zero or negative, and acos past +/-1 do not throw -- they return NaN or -inf and set errno, and the NaN then spreads silently through every later calculation."
+notes: "The C math functions report domain errors the C way: no exception, just a NaN (or an infinity) as the result plus an errno / FP-exception flag most code never inspects. sqrt(-1) is NaN, log(0) is -inf and log(-1) is NaN, acos and asin of anything outside [-1, 1] are NaN. The danger is that NaN is contagious -- every arithmetic operation touching it produces NaN -- so one out-of-domain input silently turns a distant final result into nan, with no stack trace pointing back to the cause. The realistic example uses the law of cosines: feed it three lengths that cannot form a triangle and the argument to acos leaves [-1, 1], so the returned angle is NaN. The fix is to guard the domain: validate inputs before the call (a valid triangle, a non-negative radicand), or check the result with isnan / isfinite before trusting it, and turn the bad case into an explicit error the caller can see. Printing the raw NaN is avoided here because its textual form and sign are not portable; the checks are what matter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::isnan", url: "https://en.cppreference.com/w/cpp/numeric/math/isnan" }
+detailed_tags:
+  - { name: "std::acos", url: "https://en.cppreference.com/w/cpp/numeric/math/acos" }
+  - { name: "std::sqrt", url: "https://en.cppreference.com/w/cpp/numeric/math/sqrt" }

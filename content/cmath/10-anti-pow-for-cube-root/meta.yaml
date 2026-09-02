@@ -1,0 +1,11 @@
+title: "Anti-pattern: pow for a root or a small power"
+standard: "C++11"
+difficulty: 3
+summary: "pow(x, 1.0/3.0) computes a cube root through exp/log with an already-inexact exponent, so cbrt(1000) via pow comes out as 9.999... not 10 -- use std::cbrt for roots and x*x for squares."
+notes: "pow is a general power function implemented roughly as exp(y * log(x)), which means two things. First, it is not exact for cases that have a dedicated function: the exponent 1.0/3.0 cannot be represented exactly, and the exp/log path adds rounding, so pow(1000, 1.0/3.0) lands just below 10 rather than on it -- fine for display, but wrong if you compare the result or feed it into integer logic. std::cbrt(1000) returns exactly 10 and std::sqrt is similarly exact and faster than pow(x, 0.5). Second, pow is comparatively expensive; for small integer powers x*x and x*x*x beat pow(x, 2) and pow(x, 3) on both speed and accuracy. The rule: use sqrt and cbrt for square and cube roots, multiply for small integer powers, and reserve pow for genuinely arbitrary real exponents where no specialized function exists. The example forces a run-time call through volatile so the comparison is the library's pow, not a compile-time fold that could differ between compilers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cbrt", url: "https://en.cppreference.com/w/cpp/numeric/math/cbrt" }
+detailed_tags:
+  - { name: "std::pow", url: "https://en.cppreference.com/w/cpp/numeric/math/pow" }

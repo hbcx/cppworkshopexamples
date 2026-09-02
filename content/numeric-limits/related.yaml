@@ -4,3 +4,5 @@
   note: "The neighbouring low-level numeric section: <bit> inspects the bit representation (popcount, bit_width, bit_cast) where numeric_limits reports the type's value range and precision -- go there for bit-level operations."
 - slug: "cstdint"
   note: "The fixed-width types whose limits you often query: numeric_limits<int32_t>::max() and friends give the exact bounds of int32_t/uint64_t -- go there for choosing a fixed-width type in the first place."
+- slug: "cmath"
+  note: "The functions that consume and produce these special values: <cmath>'s isnan/isinf detect the NaN and infinity numeric_limits hands out, and its accuracy traps turn on epsilon -- go there for the math-function toolkit."

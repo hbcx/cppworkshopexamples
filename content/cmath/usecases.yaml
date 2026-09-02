@@ -1,0 +1,19 @@
+- problem: "Geometry and graphics code needs distances, angles and rotations: the length of a vector, the heading from one point to another, placing objects around a circle, or converting between Cartesian and polar coordinates."
+  why: "hypot gives the length without the overflow of a hand-written sqrt(x*x+y*y), atan2 gives the angle in the correct quadrant across the whole circle (which atan(y/x) cannot), and sin/cos drive rotations. Rolling these by hand reintroduces the exact overflow and quadrant bugs these functions were written to avoid."
+  signal: "sqrt(dx*dx + dy*dy) for a distance, atan(y/x) or manual quadrant if/else for an angle, or hard-coded 3.14159 instead of acos(-1.0)."
+
+- problem: "Audio, signal-processing or scientific code works on a logarithmic scale: decibels, pH, the Richter scale, or plotting data that spans many orders of magnitude."
+  why: "log10 and log2 map ratios to a scale where multiplication becomes addition, and exp/pow invert it; the dedicated log2/log10 are more accurate than dividing natural logs. A decibel is literally 20*log10(amplitude ratio), so the function IS the definition."
+  signal: "log(x)/log(10) or log(x)/log(2) instead of log10 / log2, or amplitude and power ratios converted with ad-hoc constants."
+
+- problem: "Financial or statistical code compounds interest continuously, works with log-returns, or evaluates log-likelihoods, where the per-step rate is a very small number and many steps accumulate."
+  why: "expm1 and log1p compute exp(x)-1 and log(1+x) accurately for tiny x, where the naive form cancels away its significant digits; over thousands of steps that rounding error compounds into a visible drift. This is the standard fix in quantitative libraries."
+  signal: "exp(x) - 1 or log(1 + x) written out where x is a small rate, especially inside a loop that accumulates the result."
+
+- problem: "A numeric pipeline ingests external data -- sensor readings, a CSV import, results from another service -- and must not let a bad value (a divide-by-zero, an out-of-range measurement) silently poison every downstream computation."
+  why: "isnan, isinf and isfinite detect the special values that arithmetic produces and propagates without any exception, so a validation gate can reject or repair the input at the boundary. Testing with == does not work: NaN compares unequal to everything, so x == x fails to catch it."
+  signal: "A float result compared with == to detect NaN, an x == x self-test, or a pipeline with no finiteness check on values that came from outside the program."
+
+- problem: "A calculation accumulates many products -- a dot product, a matrix multiply, or a polynomial evaluated with Horner's rule -- and the accumulated rounding error is large enough to matter, as in solvers, geometry predicates, or DSP filters."
+  why: "fma(a, b, c) forms a*b+c with a single rounding, keeping the full product, so a running sum of products loses far fewer bits than repeated a*b then +. On CPUs with a hardware FMA it is also a single fast instruction, so the accuracy is essentially free."
+  signal: "acc = acc + a*b or acc += x[i]*y[i] in a tight loop where the result feeds a comparison or a convergence test, and small errors change the outcome."

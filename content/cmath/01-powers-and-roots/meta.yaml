@@ -1,0 +1,13 @@
+title: "Powers and roots: sqrt, cbrt, pow, hypot"
+standard: "C++11"
+difficulty: 1
+summary: "sqrt, cbrt and pow cover square roots, cube roots and general powers; hypot computes sqrt(x*x+y*y) without the intermediate squares that overflow, so it is the right tool for a 2D length."
+notes: "sqrt and cbrt are the dedicated square- and cube-root functions and are both faster and more accurate than the general pow for those cases. pow(base, exp) raises to an arbitrary real power, so pow(9, 0.5) is a square root and pow(2, 10) a power of two, but it goes through an exp/log computation and is not the first choice when a specific root function exists (see the cube-root anti-pattern). hypot(x, y) deserves special mention: mathematically it is just sqrt(x*x + y*y), the Euclidean distance, but it is written to avoid overflow and underflow in the squares. For x = 1e200, x*x is 1e400 which is beyond double's range and becomes infinity, so the hand-written formula returns inf while hypot returns the correct ~1.41e200. Use hypot for vector lengths and distances, especially when the inputs can be large or very small. The three-argument hypot(x, y, z) for 3D distance is C++17."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::sqrt", url: "https://en.cppreference.com/w/cpp/numeric/math/sqrt" }
+  - { name: "std::hypot", url: "https://en.cppreference.com/w/cpp/numeric/math/hypot" }
+detailed_tags:
+  - { name: "std::cbrt", url: "https://en.cppreference.com/w/cpp/numeric/math/cbrt" }
+  - { name: "std::pow", url: "https://en.cppreference.com/w/cpp/numeric/math/pow" }

@@ -1,0 +1,10 @@
+exp(1)      = 2.71828   (e)
+log(e)      = 1   (natural log)
+log2(8)     = 3
+log10(1000) = 3
+
+near zero (x = 1e-10):
+exp(x) - 1 = 1.000000082740371e-10
+expm1(x)   = 1.00000000005e-10   (accurate)
+log(1 + x) = 1.000000082690371e-10
+log1p(x)   = 9.9999999995000007e-11   (accurate)

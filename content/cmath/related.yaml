@@ -1,0 +1,6 @@
+- slug: "numeric-limits"
+  note: "Where the special values come from: numeric_limits produces the infinity, quiet_NaN and epsilon that <cmath>'s isnan/isinf detect and that its accuracy traps revolve around -- go there for a type's range, precision and the epsilon-scaled comparison."
+- slug: "clamp-minmax"
+  note: "The other place NaN bites: min/max/clamp give unhelpful answers when an argument is NaN, so a finiteness check often belongs before them -- go there for clamp, min, max and their NaN caveats."
+- slug: "cstdint"
+  note: "The neighbouring Numerics section on integers: fixed-width types for exact sizes and bit layouts, where <cmath> is the floating-point toolkit -- go there for int32_t/uint64_t and portable integer widths."

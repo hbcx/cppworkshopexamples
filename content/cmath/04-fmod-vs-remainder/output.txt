@@ -1,0 +1,9 @@
+   a      b    fmod   remainder
+ 5.30   2.00   1.30   -0.70
+-5.30   2.00  -1.30    0.70
+ 5.30  -2.00   1.30   -0.70
+ 7.00   3.00   1.00    1.00
+
+fmod keeps the sign of the dividend; remainder returns the
+value nearest zero, so remainder(7, 3) is 1 but remainder(5.3, 2)
+is negative because 5.3 is closer to 3*2 than to 2*2.

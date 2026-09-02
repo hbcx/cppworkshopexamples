@@ -1,0 +1,7 @@
+sqrt(x*x + y*y) = inf   (overflowed to inf)
+hypot(x, y)     = 1.41421e+200   (correct)
+
+sqrt(tiny^2 + tiny^2) = 0   (underflowed to 0)
+hypot(tiny, tiny)     = 1.41421e-200   (correct)
+
+FIX: use std::hypot for any distance or vector length.

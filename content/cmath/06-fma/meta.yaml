@@ -1,0 +1,11 @@
+title: "fma: fused multiply-add"
+standard: "C++11"
+difficulty: 3
+summary: "std::fma(a, b, c) computes a*b + c with a single rounding at the end, keeping the full-precision product, so it is more accurate than writing a*b + c and is the building block for correct dot products and Horner polynomial evaluation."
+notes: "A plain a*b + c rounds twice: once when the product a*b is stored in a double, and again after adding c. If the exact product has more significant bits than a double can hold, the first rounding throws some away before c is even added. fma(a, b, c) forms the exact product a*b in extra internal precision and rounds only once, after adding c, so those bits survive. The example uses a = b = 1e8 + 1: the exact product 10000000200000001 sits just above 1e16 where a double's step is 2, so the trailing +1 is lost and a*b rounds down; adding c = -(1e16 + 2e8) then gives 0, while fma keeps the full product and returns 1. Where this matters: summing products (dot products, matrix multiply), evaluating polynomials with Horner's rule, and any error-compensation scheme. On CPUs with a hardware FMA instruction it is also a single, fast operation, so accuracy comes for free. One caution: because fma changes the rounding, a*b + c and fma(a, b, c) can differ in the last bits, so do not mix them when you need bit-for-bit reproducibility. The example forces run-time evaluation with volatile so the compiler does not fold the constants."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::fma", url: "https://en.cppreference.com/w/cpp/numeric/math/fma" }
+detailed_tags:
+  - { name: "std::pow", url: "https://en.cppreference.com/w/cpp/numeric/math/pow" }

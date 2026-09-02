@@ -1,0 +1,15 @@
+title: "Classifying a float: isnan, isinf, fpclassify, signbit"
+standard: "C++11"
+difficulty: 2
+summary: "isnan, isinf, isfinite and isnormal answer yes/no questions about a floating value, fpclassify names its category in one call, and signbit reads the sign bit -- the only way to tell -0.0 from +0.0."
+notes: "Floating-point values have special states -- infinities, NaN, subnormals, signed zeros -- and these functions are the correct, portable way to detect them. isnan is essential because NaN compares unequal to everything including itself, so x == x and x != NaN both fail as tests; isnan(x) is the answer. isinf catches overflow-to-infinity, isfinite is the combined not-nan-and-not-inf guard for validating inputs, and isnormal is false for zero, subnormals, infinities and NaN. fpclassify returns one of FP_NORMAL, FP_SUBNORMAL, FP_ZERO, FP_INFINITE, FP_NAN in a single call, handy in a switch. signbit reads the sign bit directly, so it distinguishes -0.0 from +0.0 (which == treats as equal) and reports the sign of a NaN; copysign(mag, sgn) builds a value with a given magnitude and sign. Reach for these at the boundaries of a numeric pipeline -- validate incoming data with isfinite, and never test for NaN with ==. This is the operational companion to the numeric-limits section, which produces these special values."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::isnan", url: "https://en.cppreference.com/w/cpp/numeric/math/isnan" }
+  - { name: "std::fpclassify", url: "https://en.cppreference.com/w/cpp/numeric/math/fpclassify" }
+detailed_tags:
+  - { name: "std::isinf", url: "https://en.cppreference.com/w/cpp/numeric/math/isinf" }
+  - { name: "std::isfinite", url: "https://en.cppreference.com/w/cpp/numeric/math/isfinite" }
+  - { name: "std::signbit", url: "https://en.cppreference.com/w/cpp/numeric/math/signbit" }
+  - { name: "std::copysign", url: "https://en.cppreference.com/w/cpp/numeric/math/copysign" }
