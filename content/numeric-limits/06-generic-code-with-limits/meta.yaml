@@ -1,0 +1,12 @@
+title: "Using the limits in generic code"
+standard: "C++11"
+difficulty: 2
+summary: "numeric_limits<T> lets templates ask a type for its own bounds: seed a running maximum with lowest(), and check whether a value fits in a narrower type with min()/max()."
+notes: "Because the members are constexpr and defined for every arithmetic type, numeric_limits is the way generic code gets a type's properties without special cases. A max-finder seeds its accumulator with lowest() so any real element beats it (min() would be wrong for floating types). A range check asks numeric_limits<To> for the target's bounds before a narrowing conversion, instead of a hard-coded constant that breaks when the type changes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }
+detailed_tags:
+  - { name: "std::numeric_limits::lowest", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/lowest" }
+  - { name: "std::numeric_limits::max", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/max" }

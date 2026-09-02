@@ -1,0 +1,11 @@
+title: "Anti-pattern: float equality and NaN"
+standard: "C++11"
+difficulty: 2
+summary: "Computed floats rarely satisfy ==, and NaN compares unequal to everything -- including another NaN -- so an == check to detect NaN silently fails. Use std::isnan and a tolerance."
+notes: "Two separate traps. First, == on computed floating-point results almost never holds because the results are rounded, so equality tests give surprising falses. Second, NaN is unordered: every comparison with a NaN is false except !=, so nan == nan is false and testing x == x to spot a NaN does not work. Detect NaN with std::isnan, and compare finite values with a scaled tolerance rather than ==."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits::quiet_NaN", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/quiet_NaN" }
+detailed_tags:
+  - { name: "std::isnan", url: "https://en.cppreference.com/w/cpp/numeric/math/isnan" }

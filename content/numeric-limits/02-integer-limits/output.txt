@@ -1,0 +1,4 @@
+unsigned char: max=255 digits=8 is_signed=false
+int:   max=2147483647 digits=31 is_signed=true
+int64: max=9223372036854775807 digits=63
+unsigned is_modulo=true, int is_modulo=false

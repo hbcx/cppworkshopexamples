@@ -9,3 +9,5 @@
   note: "A common static_cast pair: a scoped enum does not convert to its integer on its own, so static_cast moves between an enum and its underlying value. Go there for enum class, the underlying type, and type-safe flags."
 - slug: "launder-and-lifetime"
   note: "Why a reinterpret_cast of a byte buffer to a struct is undefined: the cast never creates an object, so no lifetime began there. Go there for object lifetime, the memcpy and start_lifetime_as fixes, and std::launder after storage reuse."
+- slug: "numeric-limits"
+  note: "How to know a value fits before a narrowing cast: numeric_limits gives the target type's min and max, so you can range-check instead of truncating silently -- go there for the arithmetic-type bounds behind a safe conversion."

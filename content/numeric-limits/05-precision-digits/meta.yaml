@@ -1,0 +1,12 @@
+title: "digits, digits10 and max_digits10"
+standard: "C++11"
+difficulty: 3
+summary: "Three easily-confused precision counts: digits is mantissa bits, digits10 is decimal digits that always survive a round-trip to text, max_digits10 is the digits needed to round-trip a value back exactly."
+notes: "digits is the radix-2 precision (53 for double). digits10 (15 for double) is how many decimal digits you can store as text and always read back unchanged. max_digits10 (17 for double) is how many decimal digits you must PRINT so that reading the text back gives the identical value. The difference bites in serialization: printing with digits10 can lose the exact value, while max_digits10 guarantees an exact round-trip -- the right setting for saving floats to a config file or JSON."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits::max_digits10", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/max_digits10" }
+detailed_tags:
+  - { name: "std::numeric_limits::digits10", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/digits10" }
+  - { name: "std::numeric_limits::digits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/digits" }

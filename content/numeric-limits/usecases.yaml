@@ -1,0 +1,19 @@
+- problem: "A generic algorithm -- a max/min reduction, a clamp, a saturating accumulator -- must seed an accumulator or a bound for a type it only knows as a template parameter T, and stay correct for both integer and floating T."
+  why: "numeric_limits<T>::lowest() and ::max() give the type its own bounds as constexpr values, so the seed is right for every arithmetic type. A hard-coded constant assumes a width, and min() (instead of lowest()) is quietly wrong for floating types, where it is the smallest positive value rather than the most negative."
+  signal: "A templated reduction seeded with a literal like 0, INT_MIN or -1e300, or with numeric_limits<T>::min() used as a most-negative bound."
+
+- problem: "Code narrows a value into a smaller type -- an index into a fixed buffer, a field in a wire format, a size passed to a C API -- and must reject or clamp values that would not fit rather than silently truncating them."
+  why: "Comparing against numeric_limits<Target>::min() and ::max() before the cast detects the out-of-range case exactly and portably, on any target type. A raw static_cast truncates silently, and a hard-coded bound breaks when the target type changes."
+  signal: "A narrowing static_cast with no prior range check, or a bound written as a literal such as 65535 or 0x7FFFFFFF next to the conversion."
+
+- problem: "Numerical, geometric or physics code compares floating-point results -- did this length equal that one, did the solver converge -- where exact equality is meaningless and NaN or infinity can appear in intermediate results."
+  why: "epsilon() scaled by the magnitude gives a meaningful tolerance, and std::isnan / isinf (with the has_quiet_NaN and infinity queries) handle the special values. A bare == fails on rounded results, and an == check for NaN never fires because NaN compares unequal to everything."
+  signal: "Floating-point results compared with ==, or a NaN check written as x == x or x != x instead of std::isnan."
+
+- problem: "A program serializes floating-point numbers to text -- a config file, JSON, a CSV export -- and must read them back as the exact same values, not approximations that drift on every save-and-load cycle."
+  why: "Printing with max_digits10 guarantees the text round-trips back to the identical double; digits10 is fewer digits and can lose the low bits. Getting this wrong makes values wander slightly every time a file is rewritten."
+  signal: "Float-to-text output using a fixed precision like 6 or the default, or setprecision(digits10), where an exact round-trip is required."
+
+- problem: "An algorithm needs a sentinel meaning 'no value yet' or 'unreachable' -- an initial distance in a shortest-path search, an unset threshold, an empty-range bound -- distinct from any real datum."
+  why: "numeric_limits<T>::max() (or infinity() for floating types) is the natural 'plus infinity' sentinel, and lowest()/-infinity() the 'minus infinity' one, so relaxation and comparison logic just works. The catch worth naming: the sentinel is a real representable value, so guard against it colliding with genuine data or overflowing when you add to it."
+  signal: "A shortest-path or optimization loop initializing distances to a big literal like 1e9 or 0x3f3f3f3f as a stand-in for infinity."

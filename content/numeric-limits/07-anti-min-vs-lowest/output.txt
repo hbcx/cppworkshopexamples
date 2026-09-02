@@ -1,0 +1,2 @@
+seeded with min()    -> 2.22507e-308  (wrong: not from the data)
+seeded with lowest() -> -1  (correct: -1)

@@ -1,0 +1,4 @@
+double: digits=53 digits10=15 max_digits10=17
+with digits10:     0.3
+with max_digits10: 0.30000000000000004
+max_digits10 round-trips exactly? true

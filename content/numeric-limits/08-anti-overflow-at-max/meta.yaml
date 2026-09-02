@@ -1,0 +1,11 @@
+title: "Anti-pattern: overflowing past max()"
+standard: "C++11"
+difficulty: 3
+summary: "Adding to the maximum of a signed integer is undefined behaviour, not a wrap to the minimum. Check against numeric_limits BEFORE the operation, or compute in a wider type."
+notes: "It is tempting to assume signed integers wrap like unsigned ones -- max() + 1 giving min(). They do not: signed overflow is undefined behaviour, and the optimizer is allowed to assume it never happens. The safe patterns are to test against numeric_limits<T>::max() before adding (so the overflowing operation never runs), or to do the arithmetic in a wider type where the result fits. Unsigned types DO wrap in a defined way, but that is a different type with different semantics."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits::max", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/max" }
+detailed_tags:
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }

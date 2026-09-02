@@ -1,0 +1,13 @@
+title: "Floating-point special values"
+standard: "C++11"
+difficulty: 2
+summary: "The floating-point specials from numeric_limits: infinity(), quiet_NaN(), epsilon() and denorm_min(), plus the has_infinity / has_quiet_NaN capability flags."
+notes: "Floating types can represent values integers cannot. infinity() is the result of overflow or division by zero; quiet_NaN() is not-a-number, from operations like 0.0/0.0. epsilon() is the gap between 1.0 and the next representable value -- the unit of relative precision. denorm_min() is the smallest positive value at all (a subnormal), far below min(), which is the smallest NORMAL value. The has_* flags tell you whether a type supports these at all, which matters in generic code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }
+detailed_tags:
+  - { name: "std::numeric_limits::infinity", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/infinity" }
+  - { name: "std::numeric_limits::quiet_NaN", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/quiet_NaN" }
+  - { name: "std::numeric_limits::epsilon", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon" }

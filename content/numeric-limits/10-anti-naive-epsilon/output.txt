@@ -1,0 +1,3 @@
+gap between adjacent doubles at 1e8 = 1.49e-08
+naive |a-b| < epsilon ? false  (wrong: adjacent values called unequal)
+relative |a-b| <= epsilon*scale*4 ? true  (correct)

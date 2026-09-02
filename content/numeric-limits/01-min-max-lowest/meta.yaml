@@ -1,0 +1,12 @@
+title: "min, max and lowest"
+standard: "C++11"
+difficulty: 2
+summary: "For integers min() is the most negative value, but for floating types min() is the smallest POSITIVE normal value -- lowest() is the name that means most-negative-finite for both."
+notes: "This is the single most useful and most misread part of numeric_limits. For an integer type, min() and lowest() are the same (the most negative value). For a floating type, min() is the smallest positive normal value (about 2.2e-308 for double), NOT the most negative -- that is lowest() == -max(). lowest() was added in C++11 precisely so generic code can say most-negative-finite without a special case. Initialize a running maximum with lowest(), never min() (see the trap)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }
+detailed_tags:
+  - { name: "std::numeric_limits::lowest", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/lowest" }
+  - { name: "std::numeric_limits::min", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/min" }

@@ -1,0 +1,4 @@
+max_of(ints)    = 8
+max_of(doubles) = -0.3
+300 fits in unsigned char? false
+200 fits in unsigned char? true

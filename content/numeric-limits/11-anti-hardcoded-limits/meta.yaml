@@ -1,0 +1,11 @@
+title: "Anti-pattern: hard-coded magic limits"
+standard: "C++11"
+difficulty: 2
+summary: "Writing 2147483647 or 0x7FFFFFFF instead of numeric_limits<T>::max() is correct for 32-bit int but silently wrong the moment the type is wider or a template parameter."
+notes: "A literal maximum baked into code carries a hidden assumption about the type's width. It works for a 32-bit int and then breaks quietly when the value is a std::int64_t, a size_t, or a template parameter T -- the clamp ceiling or overflow check sits far below the type's real maximum, corrupting results without any error. numeric_limits<T>::max() asks the type for its own limit, so the code stays correct as the type changes. The same applies to hard-coded minimums and to INT_MAX-style macros used on the wrong type."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits::max", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/max" }
+detailed_tags:
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }

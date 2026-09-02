@@ -1,0 +1,11 @@
+title: "Anti-pattern: min() instead of lowest() for floats"
+standard: "C++11"
+difficulty: 3
+summary: "Seeding a running maximum with numeric_limits<double>::min() looks right but is wrong: min() is the smallest POSITIVE value, so every negative element loses to it."
+notes: "The classic bug. For floating types min() is not the most negative value -- it is the smallest positive normal value (~2.2e-308). Initialize a max-finder with it and, over all-negative data, no element ever exceeds the seed, so the result is a tiny positive number that is not even in the input. The fix is lowest(), which is the most negative finite value for both integer and floating types. The same mistake with an integer type happens to work (min == lowest there), which is why it slips through until someone uses it with doubles."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits::lowest", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/lowest" }
+detailed_tags:
+  - { name: "std::numeric_limits::min", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/min" }

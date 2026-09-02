@@ -1,0 +1,5 @@
+has_infinity=true has_quiet_NaN=true
+infinity() = inf, 1.0/infinity() = 0
+quiet_NaN() = nan
+epsilon() = 2.22045e-16
+min() = 2.22507e-308, denorm_min() = 4.94066e-324

@@ -1,0 +1,12 @@
+title: "Comparing floats with a scaled tolerance"
+standard: "C++11"
+difficulty: 2
+summary: "0.1 + 0.2 is not exactly 0.3, so == fails on computed floats. Compare with a tolerance built from epsilon scaled by the magnitude, plus an absolute floor near zero."
+notes: "Binary floating point cannot represent most decimal fractions exactly, so arithmetic results are rounded and == almost never holds. The fix is a near-equality test: take the absolute difference and compare it to a tolerance that scales with the size of the values (epsilon times the larger magnitude), with an absolute floor so values near zero still compare. epsilon is the relative step at 1.0, so a bare absolute epsilon is wrong away from 1.0 -- see the naive-epsilon trap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits::epsilon", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon" }
+detailed_tags:
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }
+  - { name: "std::fabs", url: "https://en.cppreference.com/w/cpp/numeric/math/fabs" }

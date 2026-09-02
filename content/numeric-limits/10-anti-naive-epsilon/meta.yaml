@@ -1,0 +1,11 @@
+title: "Anti-pattern: a fixed absolute epsilon"
+standard: "C++11"
+difficulty: 3
+summary: "Comparing |a - b| < epsilon works near 1.0 but fails for large values: epsilon is the step at 1.0, and around 1e8 even adjacent doubles differ by far more than epsilon."
+notes: "epsilon() is the gap between 1.0 and the next double -- a RELATIVE unit, correct only near magnitude 1. Around 1e8 the gap between adjacent representable doubles is about 1.5e-8, hugely larger than epsilon (2.2e-16), so a bare |a - b| < epsilon test calls even the two closest possible values unequal. The fix is a tolerance that scales with the magnitude of the operands (a relative comparison), with an absolute floor for values near zero."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits::epsilon", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon" }
+detailed_tags:
+  - { name: "std::nextafter", url: "https://en.cppreference.com/w/cpp/numeric/math/nextafter" }

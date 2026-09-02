@@ -1,0 +1,4 @@
+title: "std::numeric_limits"
+description: "The compile-time query interface for the properties of arithmetic types: the smallest and largest values, precision, and the special floating-point values, all as constexpr members of std::numeric_limits<T>. Covers min/max/lowest and why lowest exists, the integer ranges and properties, the floating-point specials (infinity, quiet_NaN, epsilon, denorm_min), machine epsilon and how to compare floats with a scaled tolerance, the digits/digits10/max_digits10 precision counts and round-tripping a float through text, and using the limits to write type-generic code -- alongside the traps: min versus lowest for floating types, signed overflow at max, comparing floats with == and the NaN self-comparison, a fixed absolute epsilon that fails at large magnitudes, and hard-coded magic limits that break when the type changes."
+sort_order: 153
+category: "Numerics"

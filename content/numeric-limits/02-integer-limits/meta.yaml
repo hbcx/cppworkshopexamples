@@ -1,0 +1,12 @@
+title: "Integer type limits and properties"
+standard: "C++11"
+difficulty: 1
+summary: "Query the range and properties of integer types instead of hard-coding them: max(), digits (value bits), is_signed, and is_modulo for the defined wraparound of unsigned arithmetic."
+notes: "numeric_limits works for every arithmetic type. For integers, digits is the number of value bits (excluding the sign bit, so 31 for a 32-bit int, 8 for unsigned char). is_signed says whether the type is signed. is_modulo is true for unsigned types, whose arithmetic wraps around in a well-defined way; it is false for signed types, where overflow is undefined behaviour. Reading these from numeric_limits keeps generic code correct as the type changes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::numeric_limits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits" }
+detailed_tags:
+  - { name: "std::numeric_limits::digits", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/digits" }
+  - { name: "std::numeric_limits::is_signed", url: "https://en.cppreference.com/w/cpp/types/numeric_limits/is_signed" }
