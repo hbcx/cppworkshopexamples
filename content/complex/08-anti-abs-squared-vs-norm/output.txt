@@ -1,0 +1,5 @@
+abs(z)*abs(z) = 2.0000000000000004   (sqrt then square: rounding creeps in)
+norm(z)       = 2   (exact)
+
+FIX: use std::norm for a squared magnitude. To COMPARE two
+magnitudes, compare their norms -- same ordering, and no sqrt at all.

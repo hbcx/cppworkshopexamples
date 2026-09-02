@@ -1,0 +1,12 @@
+title: "The polar form: std::polar"
+standard: "C++11"
+difficulty: 2
+summary: "std::polar(r, theta) builds a complex from a magnitude and an angle -- r * (cos theta + i sin theta) -- the inverse of reading abs and arg, and the clean way to express e^{i theta}."
+notes: "Many problems are stated in polar terms: a phasor with an amplitude and a phase, a rotation by an angle, a point on a circle of some radius. std::polar(r, theta) constructs the matching complex directly as r*cos(theta) + r*sin(theta)*i, so you never write the trig by hand (which is the manual-polar anti-pattern). It is the exact inverse of the magnitude/phase pair: abs(polar(r, theta)) is r and arg(polar(r, theta)) is theta (reduced to (-pi, pi]). polar(1, theta) is the unit complex e^{i theta}, the building block of rotations -- multiplying any complex by it rotates it by theta without changing its length. Angles are in radians. Because cos(pi/2) is a rounded near-zero rather than exact zero, polar(1, pi/2) comes out as a value very close to i with a tiny real part, which is normal floating-point behaviour, not a bug. The example forces a run-time evaluation with volatile so the printed low-order digits are the library's, identical on both compilers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::polar", url: "https://en.cppreference.com/w/cpp/numeric/complex/polar" }
+detailed_tags:
+  - { name: "std::abs (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/abs" }
+  - { name: "std::arg", url: "https://en.cppreference.com/w/cpp/numeric/complex/arg" }

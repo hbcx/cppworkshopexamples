@@ -1,0 +1,3 @@
+polar(2, pi/4) = (1.41421,1.41421)
+abs = 2, arg = 0.785398
+polar(1, pi/2) = (6.12323e-17,1)   (~ i, tiny real part is rounding)

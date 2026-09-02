@@ -1,0 +1,12 @@
+title: "Anti-pattern: building the polar form by hand"
+standard: "C++11"
+difficulty: 3
+summary: "Writing r*cos(theta) + r*sin(theta)*i by hand invites swapping cos and sin, dropping the r, or a sign slip; std::polar(r, theta) does the same construction correctly and states the intent."
+notes: "Constructing a complex from a magnitude and an angle is a one-liner people reflexively write out: real part r*cos(theta), imaginary part r*sin(theta). Nothing is wrong with the math, but the hand-written form has several easy mistakes -- putting sin on the real part, forgetting the r on one component, or negating the wrong term -- and none of them is caught by the compiler, so the bug shows up as a rotation in the wrong direction or a wrong magnitude far downstream. std::polar(r, theta) is the library function for exactly this; it is clearer, cannot get the cos/sin order wrong, and produces the identical value (the example confirms the two match). The readability also compounds: polar(amplitude, phase) at a call site immediately reads as a phasor, where the trig spelled out inline does not. Keep the manual form only if you genuinely need one of cos/sin on its own for another purpose."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::polar", url: "https://en.cppreference.com/w/cpp/numeric/complex/polar" }
+detailed_tags:
+  - { name: "std::cos", url: "https://en.cppreference.com/w/cpp/numeric/math/cos" }
+  - { name: "std::sin", url: "https://en.cppreference.com/w/cpp/numeric/math/sin" }

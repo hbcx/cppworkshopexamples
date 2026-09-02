@@ -1,0 +1,11 @@
+title: "Anti-pattern: abs(z) squared instead of norm(z)"
+standard: "C++11"
+difficulty: 3
+summary: "abs(z)*abs(z) takes a sqrt and then squares it away -- wasteful and slightly inaccurate -- when std::norm(z) computes the squared magnitude |z|^2 as re*re + im*im with no sqrt at all."
+notes: "The squared magnitude of a complex number comes up constantly: comparing which of two values is larger, summing energy or power, checking a convergence radius. The natural-looking abs(z)*abs(z) is the wrong way to get it. abs pays for a sqrt (via hypot), and squaring the result throws that sqrt straight back away, so you have done extra work for nothing -- and the sqrt introduces a rounding step, so for z = 1+i the abs-squared route gives 2.0000000000000004 while norm returns exactly 2. std::norm(z) is re^2 + im^2 directly: no sqrt, faster, and exact when the component products are exact. There is a second, bigger win: to compare magnitudes you do not need the actual magnitudes at all -- comparing norm(a) with norm(b) gives the same ordering as comparing abs(a) with abs(b), with no sqrt on either side. Reserve abs for when you truly need the magnitude value itself."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::norm", url: "https://en.cppreference.com/w/cpp/numeric/complex/norm" }
+detailed_tags:
+  - { name: "std::abs (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/abs" }

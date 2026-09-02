@@ -1,0 +1,6 @@
+- slug: "cmath"
+  note: "The real-valued half: <complex>'s abs, arg, exp and sqrt are the complex overloads of the same-named <cmath> functions, and arg is built on atan2 -- go there for the floating-point functions on plain doubles and their accuracy traps."
+- slug: "numeric-limits"
+  note: "The representation underneath: a complex is two doubles, so its precision, epsilon and special values (the tiny imaginary part in Euler's identity) come straight from numeric_limits<double> -- go there for a type's range, epsilon and NaN/infinity."
+- slug: "cstdint"
+  note: "The neighbouring Numerics section on integers: fixed-width types for exact sizes and bit layouts, the integer counterpart to this floating-point, complex-valued material -- go there for int32_t/uint64_t and portable widths."

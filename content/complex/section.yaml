@@ -1,0 +1,4 @@
+title: "Complex numbers (<complex>)"
+description: "std::complex, the standard type for complex arithmetic. Covers building a complex value and reading its real and imaginary parts, the arithmetic operators and mixing with real scalars, the magnitude/phase toolkit (abs, arg, norm, conj), the polar form via std::polar, the complex versions of exp/log/sqrt/pow including Euler's identity, the C++14 imaginary-number literals (1i, 1if), and a worked AC-circuit impedance calculation -- alongside the traps: squaring abs instead of calling norm, mixing complex<float> with complex<double> in one expression, hand-building the polar form instead of std::polar, and testing a complex result for exact equality after transcendental arithmetic."
+sort_order: 156
+category: "Numerics"

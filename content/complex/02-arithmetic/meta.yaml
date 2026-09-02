@@ -1,0 +1,11 @@
+title: "Complex arithmetic and mixing with reals"
+standard: "C++11"
+difficulty: 1
+summary: "The +, -, *, / operators work on complex values with the usual rules (multiplication cross-multiplies, division multiplies by the conjugate), and a real scalar mixes in freely as if it had a zero imaginary part."
+notes: "std::complex overloads the four arithmetic operators, so complex code reads like ordinary math. Addition and subtraction are componentwise. Multiplication follows (a+bi)(c+di) = (ac - bd) + (ad + bc)i, which is why 1+2i times 3+4i is -5+10i. Division multiplies numerator and denominator by the conjugate of the denominator, giving (a+bi)/(c+di) = ((ac+bd) + (bc-ad)i) / (c^2 + d^2). The operators are also defined between a complex and a real scalar of the same underlying type: 2.0 * a scales both parts, a + 1.0 adds to the real part only -- the scalar is treated as (s, 0). This mixing works only when the scalar matches the complex's value type (a double with a complex<double>); a literal of a different type triggers the mixing-types trap covered in the anti-patterns. Compound forms (+=, *=) exist too."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::complex", url: "https://en.cppreference.com/w/cpp/numeric/complex" }
+detailed_tags:
+  - { name: "operator+ (std::complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/operator_arith3" }

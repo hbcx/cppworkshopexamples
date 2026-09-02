@@ -4,3 +4,5 @@
   note: "The other place NaN bites: min/max/clamp give unhelpful answers when an argument is NaN, so a finiteness check often belongs before them -- go there for clamp, min, max and their NaN caveats."
 - slug: "cstdint"
   note: "The neighbouring Numerics section on integers: fixed-width types for exact sizes and bit layouts, where <cmath> is the floating-point toolkit -- go there for int32_t/uint64_t and portable integer widths."
+- slug: "complex"
+  note: "The same functions extended to the complex plane: sqrt, exp, log and abs have std::complex overloads where sqrt(-1) is i instead of a domain NaN -- go there for complex numbers, magnitude/phase, and the polar form."

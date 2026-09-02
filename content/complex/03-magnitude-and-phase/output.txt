@@ -1,0 +1,8 @@
+z       = (3,4)
+abs(z)  = 5   (modulus = sqrt(3^2 + 4^2))
+norm(z) = 25   (|z|^2 = 25, no sqrt)
+arg(z)  = 0.927295   (phase angle in radians)
+conj(z) = (3,-4)   (mirror across the real axis)
+
+abs and arg together are the polar form; norm is the cheap
+squared magnitude, and conj flips the sign of the imaginary part.

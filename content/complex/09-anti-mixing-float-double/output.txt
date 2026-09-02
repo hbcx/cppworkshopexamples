@@ -1,0 +1,5 @@
+promoted + d = (4,6)
+
+FIX: convert to a common value type before combining. And
+prefer complex<double> by default -- complex<float> carries the
+same precision loss as a bare float, compounded by every op.

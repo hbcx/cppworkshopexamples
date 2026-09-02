@@ -1,0 +1,11 @@
+title: "Imaginary literals: 1i, 1if, 1il"
+standard: "C++14"
+difficulty: 2
+summary: "C++14 adds the i / if / il suffixes (in std::complex_literals) that turn a number into an imaginary complex, so you can write 1.0 + 2.0i instead of the two-argument constructor."
+notes: "C++14 introduced user-defined literals for imaginary numbers, living in the inline namespace std::literals::complex_literals. After a using-directive for std::complex_literals, the suffix i makes a std::complex<double> whose imaginary part is the value (2.0i is (0,2)), if makes a complex<float>, and il a complex<long double>. This lets complex expressions read the way they are written in math: 1.0 + 2.0i instead of std::complex<double>(1.0, 2.0). The suffix produces a PURE imaginary number, which you then add a real part to. You must bring the literals into scope -- a plain using namespace std does not enable them; use using namespace std::complex_literals (or the broader std::literals). Mind the collision risk: the i suffix is a common name, so scope the using-directive to a function or block rather than a header's global scope. Purely cosmetic but a real readability win in signal-processing and math-heavy code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "complex_literals (operator i)", url: "https://en.cppreference.com/w/cpp/numeric/complex/operator%22%22i" }
+detailed_tags:
+  - { name: "std::complex", url: "https://en.cppreference.com/w/cpp/numeric/complex" }

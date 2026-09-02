@@ -1,0 +1,13 @@
+title: "Magnitude and phase: abs, arg, norm, conj"
+standard: "C++11"
+difficulty: 2
+summary: "abs gives the modulus |z|, arg the phase angle (via atan2), norm the squared magnitude |z|^2 without a sqrt, and conj the complex conjugate -- the core toolkit for working in polar terms."
+notes: "A complex number has a Cartesian form (real, imag) and a polar form (magnitude, angle); these functions move between them and are the everyday operations. abs(z) is the modulus sqrt(real^2 + imag^2), computed with the overflow-safe hypot. arg(z) is the phase, the angle to the positive real axis, computed with atan2 so it covers the full circle and picks the right quadrant. norm(z) is the SQUARED magnitude real^2 + imag^2 -- note the name: this is not a normalized value but |z|^2, and it skips the sqrt that abs pays for, which matters when you only need to compare or sum magnitudes (see the abs-squared anti-pattern). conj(z) negates the imaginary part, the reflection across the real axis, and is the key to complex division and to computing magnitudes as z * conj(z). Together abs and arg give you the polar coordinates that std::polar turns back into a complex."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::abs (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/abs" }
+  - { name: "std::arg", url: "https://en.cppreference.com/w/cpp/numeric/complex/arg" }
+detailed_tags:
+  - { name: "std::norm", url: "https://en.cppreference.com/w/cpp/numeric/complex/norm" }
+  - { name: "std::conj", url: "https://en.cppreference.com/w/cpp/numeric/complex/conj" }

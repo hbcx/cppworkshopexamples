@@ -1,0 +1,11 @@
+title: "Anti-pattern: exact equality after complex arithmetic"
+standard: "C++11"
+difficulty: 3
+summary: "exp(i*pi) is mathematically -1 but floating point leaves a tiny nonzero imaginary part, so the == test fails; compare the magnitude of the difference against a tolerance instead."
+notes: "This is the complex-number version of the never-compare-floats-with-== rule, with an extra edge: BOTH components carry rounding error, so an equality test can fail on either one. Euler's identity gives exp(i*pi) = -1, but the computed imaginary part is a tiny value near 1e-16 rather than an exact zero, and the real part is only close to -1, so result == expected is false even though the answer is right. The clean fix for complex values is to compare the distance between them: abs(result - expected) is the magnitude of the difference vector and folds both components into one number, which you then test against a tolerance suited to the scale of the problem. This is better than checking the real and imaginary parts separately with two tolerances. For values that span very different magnitudes, scale the tolerance relative to abs(expected) rather than using a fixed epsilon. The volatile input keeps the run-time result identical on both compilers so the comparison is meaningful."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::abs (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/abs" }
+detailed_tags:
+  - { name: "std::exp (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/exp" }

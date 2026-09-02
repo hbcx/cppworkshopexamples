@@ -1,0 +1,11 @@
+title: "Anti-pattern: mixing complex<float> and complex<double>"
+standard: "C++11"
+difficulty: 3
+summary: "std::complex arithmetic operators require both sides to share the value type T, so complex<float> + complex<double> does not compile -- convert one side with the widening constructor first."
+notes: "Unlike the built-in numeric types, which promote freely (a float plus a double gives a double), std::complex does not mix value types. The operators are declared for a single T, so there is no operator+ taking a complex<float> and a complex<double>, and an attempt to add them is a compile error, not a silent conversion. This surprises people who expect the usual arithmetic promotions. The fix is explicit: build a complex<double> from the complex<float> using the converting constructor (std::complex<double> d(f), a widening that loses nothing) and then combine. The same care applies to scalars -- a complex<double> mixes with a double, not with a float or an int literal without the matching type. The deeper advice is to pick one value type, almost always double, and stay in it. complex<float> saves memory but carries a float's limited precision in both components, and complex arithmetic multiplies and divides those components, so the error compounds faster than in real code; reach for it only under real memory pressure, as in large FFT buffers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::complex", url: "https://en.cppreference.com/w/cpp/numeric/complex" }
+detailed_tags:
+  - { name: "std::complex constructor", url: "https://en.cppreference.com/w/cpp/numeric/complex/complex" }

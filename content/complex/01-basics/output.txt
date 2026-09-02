@@ -1,0 +1,7 @@
+z        = (3,4)   (printed as (real,imag))
+real(z)  = 3
+imag(z)  = 4
+a == b   = true
+a == c   = false
+r        = (5,0)
+after setters = (7,1)

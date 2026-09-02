@@ -1,0 +1,6 @@
+by hand     = (1,1.73205)
+std::polar  = (1,1.73205)
+same result = true
+
+FIX: std::polar(r, theta) says what it means and cannot get the
+cos/sin order or a sign wrong. Reach for it given a magnitude and angle.

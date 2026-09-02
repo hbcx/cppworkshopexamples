@@ -1,0 +1,7 @@
+sqrt(-1+0i) = (0,1)
+exp(i*pi)   = (-1,1.22465e-16)
+log(e+0i)   = (1,0)
+(1+i)^2     = (1.22465e-16,2)
+
+These are the complex overloads of the <cmath> functions: they
+follow the branch cuts of the mathematical definitions.

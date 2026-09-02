@@ -1,0 +1,4 @@
+exp(i*pi)           = (-1,1.2246467991473532e-16)
+result == -1        = false
+abs(result - (-1))  = 1.2246467991473532e-16
+close enough (<1e-12) = true

@@ -1,0 +1,13 @@
+title: "Complex exp, log, sqrt and pow"
+standard: "C++11"
+difficulty: 2
+summary: "<complex> provides complex overloads of exp, log, sqrt and pow, so sqrt(-1) is i and exp(i*pi) is -1 (Euler's identity) -- the transcendental functions extended to the whole complex plane."
+notes: "The same names as the real <cmath> functions are overloaded for std::complex and implement their mathematical definitions over the complex plane. sqrt of a negative real is no longer a domain error but an imaginary number: sqrt(-1) is i. exp of an imaginary argument traces the unit circle, giving Euler's formula e^{i*theta} = cos(theta) + i*sin(theta), so exp(i*pi) is -1 up to a rounding in the imaginary part. log is the inverse of exp and pow(z, w) is defined as exp(w * log(z)), which raises a complex to a complex power. Two cautions come with the territory. First, these are multi-valued functions in mathematics, so the library picks a principal branch with specific branch cuts (log and sqrt cut along the negative real axis); results jump across those cuts. Second, everything is floating point, so identities hold only up to rounding -- do not test the results for exact equality (see the equality anti-pattern). The example uses volatile to keep the run-time results identical across compilers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exp (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/exp" }
+  - { name: "std::sqrt (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/sqrt" }
+detailed_tags:
+  - { name: "std::log (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/log" }
+  - { name: "std::pow (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/pow" }

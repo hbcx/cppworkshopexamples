@@ -1,0 +1,12 @@
+title: "A worked example: AC circuit impedance"
+standard: "C++11"
+difficulty: 3
+summary: "A series RLC circuit in AC analysis: each component is a complex impedance, so Ohm's law I = V/Z becomes complex division and a single value carries both the current's amplitude and its phase shift."
+notes: "This is why complex numbers earn their place in engineering code. In steady-state AC analysis a resistor, inductor and capacitor each have a complex impedance -- R is real, the inductor is +j*omega*L, the capacitor is -j/(omega*C) -- and combining them in series is just addition. Ohm's law then reads I = V/Z with complex division, and the result is a phasor: its magnitude is the current amplitude and its argument is the phase relative to the driving voltage. Computing this with real numbers would mean tracking amplitude and phase as two separate quantities and re-deriving the trig for every combination; the complex form does it in one line and composes cleanly across a whole network. The same phasor idea underlies filters, control systems (transfer functions with poles and zeros on the complex plane) and signal processing. The numbers here (a 60 Hz source, a mildly inductive load) give a current that lags the voltage, shown by the negative phase."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::complex", url: "https://en.cppreference.com/w/cpp/numeric/complex" }
+detailed_tags:
+  - { name: "std::abs (complex)", url: "https://en.cppreference.com/w/cpp/numeric/complex/abs" }
+  - { name: "std::arg", url: "https://en.cppreference.com/w/cpp/numeric/complex/arg" }

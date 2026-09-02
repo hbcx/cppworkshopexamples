@@ -1,0 +1,6 @@
+impedance Z = (50.000,11.175) ohms
+|Z|         = 51.234 ohms
+phase(Z)    = 0.220 rad
+
+current |I|   = 2.342 A
+current phase = -0.220 rad  (negative: current lags voltage)

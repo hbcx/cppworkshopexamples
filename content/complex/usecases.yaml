@@ -1,0 +1,19 @@
+- problem: "Electrical or electronics code analyzes an AC circuit or a network of impedances: it needs the current, voltage or power given components driven at some frequency, where each quantity has both a magnitude and a phase."
+  why: "A complex impedance carries the amplitude ratio and the phase shift in one value, so Ohm's law and series/parallel combinations become ordinary complex arithmetic. Tracking magnitude and phase as two separate reals means re-deriving the trig for every combination and is where sign and quadrant bugs breed."
+  signal: "Pairs of variables like amp/phase or mag/angle threaded through a calculation, or manual a*cos + b*sin bookkeeping that reconstructs a phasor by hand."
+
+- problem: "Signal-processing code implements an FFT, a digital filter, or works with an analytic (I/Q) signal, where each sample is a complex number and the spectrum is complex-valued."
+  why: "The transforms and filter math are defined over complex numbers, and std::complex<double> maps onto them directly; because a complex<T> is laid out like T[2], a buffer of them also feeds C DSP and FFT libraries that expect interleaved real/imag data with no repacking."
+  signal: "Two parallel real arrays named re[] and im[], or a struct { double re, im; } with hand-written multiply/add helpers, where std::complex would carry the operators for free."
+
+- problem: "Control or systems code reasons about stability and response through a transfer function, whose poles and zeros are complex numbers on the s- or z-plane and whose frequency response is evaluated at complex points."
+  why: "Poles, zeros and the frequency response are inherently complex, and abs/arg give the gain and phase of the response at a point directly. Splitting the evaluation into real and imaginary bookkeeping loses the clarity and reintroduces arithmetic that the complex operators already handle."
+  signal: "Frequency-response or root-locus code that computes gain and phase from separate real expressions, or polynomial evaluation over real parts only where the roots are known to be complex."
+
+- problem: "2D geometry or graphics code rotates and scales points, and wants a compact way to compose those transforms without a full matrix library."
+  why: "A 2D point maps to a complex number, and multiplying by r*e^{i*theta} scales by r and rotates by theta in a single operation that composes by further multiplication. std::polar builds the rotor and complex multiply applies it, which is lighter than a 2x2 matrix for the rotate-and-scale case."
+  signal: "Point rotation written as x' = x*cos - y*sin, y' = x*sin + y*cos inline, especially when several such rotations are chained."
+
+- problem: "Numerical code finds polynomial roots or iterates a map on the complex plane -- a Newton solver that can leave the real axis, or a fractal like the Mandelbrot set."
+  why: "The values are complex by nature: a real polynomial has complex roots, and the iteration z = z^2 + c lives in the complex plane. std::complex gives the arithmetic and norm for the escape test directly, so the loop reads like the definition."
+  signal: "An iteration or root-finder that carries a real and imaginary part as two doubles and open-codes the complex multiply, or an escape test written as x*x + y*y instead of norm(z)."

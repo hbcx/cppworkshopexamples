@@ -1,0 +1,12 @@
+title: "Building a complex and reading its parts"
+standard: "C++11"
+difficulty: 1
+summary: "std::complex<double> holds a real and an imaginary part; construct it from the two components, read or set them with real() and imag(), and note that a stream prints it as (real,imag)."
+notes: "std::complex<T> is the standard type for complex arithmetic, almost always used as complex<double> (complex<float> and complex<long double> also exist). The constructor takes the real part then the imaginary part, so complex<double>(3, 4) is 3 + 4i; a single argument leaves the imaginary part zero, so a real value is just a complex on the real axis. real() and imag() read the parts and, since C++11, also set them (z.real(7)). Equality compares both components. The stream inserter writes the pair as (real,imag) with parentheses and a comma -- worth knowing because it is not the a+bi form people write by hand. One guarantee that matters for interop: a complex<T> is laid out exactly like an array T[2] with the real part first, so an array of complex can be passed straight to C math or FFT libraries that expect interleaved real/imag doubles."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::complex", url: "https://en.cppreference.com/w/cpp/numeric/complex" }
+detailed_tags:
+  - { name: "std::complex::real", url: "https://en.cppreference.com/w/cpp/numeric/complex/real" }
+  - { name: "std::complex::imag", url: "https://en.cppreference.com/w/cpp/numeric/complex/imag" }
