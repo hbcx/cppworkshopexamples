@@ -1,0 +1,4 @@
+record alpha starts at byte 0
+record beta starts at byte 14
+record gamma starts at byte 38
+record delta starts at byte 47

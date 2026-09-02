@@ -1,0 +1,12 @@
+title: "transform_exclusive_scan: offsets from sizes"
+standard: "C++17"
+difficulty: 2
+summary: "transform_exclusive_scan maps each element and exclusive-scans, so each output is the running total of everything BEFORE it -- exactly the shape of a byte-offset or start-index table built from per-item sizes."
+notes: "The exclusive companion to transform_inclusive_scan, and the natural tool when out[i] must describe the state BEFORE element i: the byte offset of record i is the total size of records 0..i-1, the starting index of group i is the count of everything before it. It maps each element with a unary op and produces a shifted prefix sum. Watch the signature, which is the real trap: transform_exclusive_scan(first, last, out, init, binary_op, unary_op) puts the INIT first, then binary, then unary -- the opposite order to transform_inclusive_scan, which has no leading init and takes binary then unary. An exclusive scan always needs an init because out[0] is that init (nothing precedes the first element). As with the other scans the operation may be reordered for a parallel policy, so keep binary_op associative. This one-pass map-and-scan avoids materializing a separate sizes array just to feed a prefix sum."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform_exclusive_scan", url: "https://en.cppreference.com/w/cpp/algorithm/transform_exclusive_scan" }
+detailed_tags:
+  - { name: "std::exclusive_scan", url: "https://en.cppreference.com/w/cpp/algorithm/exclusive_scan" }
+  - { name: "std::plus", url: "https://en.cppreference.com/w/cpp/utility/functional/plus" }

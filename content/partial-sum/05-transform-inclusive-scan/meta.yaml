@@ -1,0 +1,12 @@
+title: "transform_inclusive_scan: map then running sum"
+standard: "C++17"
+difficulty: 2
+summary: "transform_inclusive_scan applies a unary transform to each element and inclusive-scans the results in one pass -- running sums of squares, of string lengths, of mapped values -- without building an intermediate transformed range."
+notes: "This is inclusive_scan with a per-element map fused in, so you do not first build a transformed vector and then scan it. The signature is transform_inclusive_scan(first, last, out, binary_op, unary_op) with an optional trailing init. Read the argument order carefully: the BINARY combine operation comes before the UNARY transform, which is the reverse of how you say it in English (map then combine). unary_op runs on each input element, and binary_op combines the mapped values into the running total that INCLUDES the current element -- so for x*x over 1 2 3 4 5 you get 1 5 14 30 55. Because it is an inclusive scan the operation may be reordered, so binary_op should be associative if you later add a parallel execution policy. Reach for it whenever a prefix sum is really a prefix sum of some derived quantity: cumulative squared error, running total of item weights, a rolling byte count of encoded records."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::transform_inclusive_scan", url: "https://en.cppreference.com/w/cpp/algorithm/transform_inclusive_scan" }
+detailed_tags:
+  - { name: "std::inclusive_scan", url: "https://en.cppreference.com/w/cpp/algorithm/inclusive_scan" }
+  - { name: "std::plus", url: "https://en.cppreference.com/w/cpp/utility/functional/plus" }

@@ -1,0 +1,2 @@
+running sum of squares : 1 5 14 30 55 
+same, but started at 100: 101 105 114 130 155 
