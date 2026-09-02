@@ -1,0 +1,7 @@
+wire bytes (hex): 0 1 0 ff 0 0 10 0
+version = 1
+flags   = 255
+length  = 4096
+
+every field has a fixed size, so the format is stable:
+version(2) + flags(2) + length(4) = 8 bytes on the wire

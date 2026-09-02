@@ -1,0 +1,8 @@
+original (uintptr_t)  : 0x123456780000abcd
+forced into 32 bits   : 0xabcd   <- high half is gone
+round-trips to the same value : 0   (0 = corrupted)
+
+why it does not fit:
+sizeof(void*) = 8, sizeof(long) = 4
+
+FIX: hold an address in uintptr_t / intptr_t, never int or long.

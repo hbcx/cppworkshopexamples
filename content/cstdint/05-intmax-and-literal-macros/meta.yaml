@@ -1,0 +1,12 @@
+title: "intmax_t and the INTn_C / INTn_MAX macros"
+standard: "C++11"
+difficulty: 2
+summary: "intmax_t and uintmax_t are the widest integers available; the INTn_C/UINTn_C macros build a literal of the right width, and INTn_MAX/UINTn_MAX are the fixed-width limits as constant expressions."
+notes: "intmax_t and uintmax_t name the largest signed and unsigned integer types the implementation provides -- handy as a catch-all when you must accept any integer value, for example in a generic number parser or a variadic helper. The macro companions solve a subtle literal problem: a constant like 9000000000 might not fit in int, and its type depends on the value and platform. INTMAX_C(x) and the width-specific INT32_C / UINT64_C wrap the token so it has the matching (u)int_leastN_t type, which matters before a shift or a bitwise operation that would otherwise happen at int width. INTn_MAX / UINTn_MAX (and INTn_MIN) give the exact-width bounds as constant expressions usable in the preprocessor and in constexpr code; numeric_limits gives the same values at the type level. Reach for these macros in headers and in code that must be valid C as well as C++."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::intmax_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "INTMAX_C", url: "https://en.cppreference.com/w/cpp/types/integer" }
+  - { name: "INT32_MAX", url: "https://en.cppreference.com/w/cpp/types/integer" }

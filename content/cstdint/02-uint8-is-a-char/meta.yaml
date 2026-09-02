@@ -1,0 +1,11 @@
+title: "uint8_t and int8_t are really chars"
+standard: "C++11"
+difficulty: 1
+summary: "int8_t and uint8_t are typedefs for signed/unsigned char, so streaming one with cout prints a character, not a number -- promote with unary + or cast to int to see the value."
+notes: "The one-byte fixed-width types are almost universally aliases for the char family, and that leaks through everywhere the char type is treated specially. std::cout << myUint8 runs the char overload and prints the glyph whose code point is the value (65 shows as A). std::cin >> myUint8 reads a single character, not digits. std::to_string, std::format and comparisons behave as expected because they go through the integer path, but streams do not. The fix is to promote the value to int before streaming it: unary + does exactly that (+x turns a uint8_t into an int), or use static_cast<int>. Keep this in mind for byte buffers stored as uint8_t: printing them shows text, which is occasionally what you want and often a bug."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uint8_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::int8_t", url: "https://en.cppreference.com/w/cpp/types/integer" }

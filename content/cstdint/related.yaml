@@ -1,0 +1,6 @@
+- slug: "bit"
+  note: "Once your integers have a known width, <bit> gives the portable operations on them: popcount, rotate, bit_width, and bit_cast for reinterpreting the bytes -- the natural next step for the checksum and register code here."
+- slug: "numeric-limits"
+  note: "The range side of the same coin: numeric_limits reports the min, max and digit count of each fixed-width type, so you can range-check before narrowing into one -- go there for querying a type's bounds."
+- slug: "type-conversions-and-casts"
+  note: "Storing a pointer in uintptr_t goes through reinterpret_cast, and squeezing a value into a smaller fixed-width type is a narrowing conversion -- go there for the cast rules and when a static_cast is the honest choice."

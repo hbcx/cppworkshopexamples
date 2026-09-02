@@ -1,0 +1,11 @@
+title: "Anti-pattern: assuming int is 32-bit and long is 64-bit"
+standard: "C++11"
+difficulty: 3
+summary: "The built-in integer widths are only lower-bounded by the standard and differ between platforms -- long is 32-bit on Windows and 64-bit on Linux/macOS -- so a binary layout built from int/long silently changes size."
+notes: "Everyone knows a rule of thumb for integer sizes, and it is wrong somewhere. The standard guarantees only minimums: char >= 8 bits, short and int >= 16, long >= 32, long long >= 64. Real platforms differ: 64-bit Windows is LLP64 (int 32, long 32, long long 64, pointer 64) while 64-bit Linux and macOS are LP64 (int 32, long 64, pointer 64). So a struct field, a file offset, or a serialized value declared as long is 4 bytes on one and 8 on the other, and code that reads the format on the wrong platform mis-parses every field after it. The fix is to use the exact-width types for anything whose size is part of a contract: int32_t, int64_t, uint32_t. Keep int/long for local arithmetic where only a minimum range matters and the size is nobody's business."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::int64_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::int32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }

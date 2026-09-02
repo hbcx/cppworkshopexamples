@@ -11,3 +11,5 @@
   note: "Why a reinterpret_cast of a byte buffer to a struct is undefined: the cast never creates an object, so no lifetime began there. Go there for object lifetime, the memcpy and start_lifetime_as fixes, and std::launder after storage reuse."
 - slug: "numeric-limits"
   note: "How to know a value fits before a narrowing cast: numeric_limits gives the target type's min and max, so you can range-check instead of truncating silently -- go there for the arithmetic-type bounds behind a safe conversion."
+- slug: "cstdint"
+  note: "The fixed-width targets these casts often aim at: reinterpret_cast to uintptr_t to hold a pointer, and static_cast narrowing into an int32_t/uint8_t -- go there for the exact-width integer types and their portability rules."

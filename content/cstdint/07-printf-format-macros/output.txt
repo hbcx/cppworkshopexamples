@@ -1,0 +1,4 @@
+int64_t  via PRId64 : 9000000000
+uint32_t via PRIu32 : 4000000000
+int32_t  via PRId32 : -12345
+uint32_t via PRIx32 : ee6b2800

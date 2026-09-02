@@ -1,0 +1,11 @@
+title: "Anti-pattern: printf with the wrong length specifier"
+standard: "C++11"
+difficulty: 3
+summary: "printf(\"%d\", int64Value) tells printf to read a 32-bit int off a 64-bit argument -- undefined behaviour that also corrupts every following argument; use the PRId64-style macros from <cinttypes>."
+notes: "printf trusts the format string completely and reads raw bytes from the variadic argument area to match it. A specifier that is narrower than the value (\"%d\" for an int64_t) makes printf consume the wrong number of bytes, so it prints garbage AND misaligns every argument after it. There is no portable literal specifier for the fixed-width types because their underlying type differs by platform, which is the whole reason <cinttypes> exists: PRId64, PRIu32, PRIx64 and the rest expand to the right modifier everywhere. Two things make this trap milder than it sounds in a modern build: -Wformat catches most cases and turns into a hard error under -Werror, and C++ code can sidestep printf entirely with iostreams or std::format. But format strings that come from translations or config dodge the compiler check, so fixed-width printf still needs the macros. This example shows the wrong calls only as comments and runs the correct PRI* forms."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "PRId64", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "<cinttypes>", url: "https://en.cppreference.com/w/cpp/header/cinttypes" }

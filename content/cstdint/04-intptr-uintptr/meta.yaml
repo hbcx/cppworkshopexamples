@@ -1,0 +1,12 @@
+title: "intptr_t and uintptr_t: an address as a number"
+standard: "C++11"
+difficulty: 2
+summary: "uintptr_t and intptr_t are integers guaranteed wide enough to hold a void* and convert back unchanged -- the right tools when you must store or bit-manipulate an address as a number."
+notes: "Most code should keep pointers as pointers, but some patterns genuinely need the address as an integer: a tagged pointer that packs a few flag bits into the always-zero low bits of an aligned address, a hash table keyed by object identity, an alignment or offset calculation, a debug print of an address. uintptr_t (unsigned) and intptr_t (signed) are the only integer types the standard promises can hold a void* and round-trip back to the identical pointer. Plain int or long cannot -- see the pointer-truncation anti-pattern. These types are themselves optional (a platform with no integer wide enough may omit them), but on every mainstream system they are the pointer's width. Note the conversion is reinterpret_cast, and doing arithmetic on the integer then converting back to a pointer only has defined behaviour if you land back on a real object's address."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uintptr_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::intptr_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }

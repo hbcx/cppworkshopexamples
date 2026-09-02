@@ -1,0 +1,10 @@
+intmax_t  value  = 9000000000
+uintmax_t value  = 18000000000
+sizeof(intmax_t) = 8 bytes
+
+fixed-width limit macros:
+INT32_MAX  = 2147483647
+UINT32_MAX = 4294967295
+INT64_MAX  = 9223372036854775807
+
+UINT64_C(1) << 40 = 1099511627776

@@ -1,0 +1,9 @@
+want at least 32 bits of range:
+int32_t        : sizeof 4, 31 value bits
+int_least32_t  : sizeof 4, 31 value bits
+int_fast32_t   : sizeof 4, 31 value bits
+
+rule of thumb:
+  exact layout on disk / wire -> intN_t
+  just need the range         -> int_leastN_t
+  hot loop counter            -> int_fastN_t

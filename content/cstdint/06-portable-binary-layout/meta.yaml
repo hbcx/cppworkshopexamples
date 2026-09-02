@@ -1,0 +1,12 @@
+title: "A portable binary layout"
+standard: "C++11"
+difficulty: 3
+summary: "A packet header built from uint16_t/uint32_t fields and serialized byte by byte with explicit big-endian shifts is the same on every platform -- fixed widths pin the size, manual shifts pin the byte order."
+notes: "This is the payoff use of <cstdint>. Two programs that exchange bytes -- across a socket, a file, or shared memory -- must agree on the exact layout. Two things break that agreement if you are careless: field size (int and long change width between platforms) and byte order (a little-endian and a big-endian host lay the same integer out in opposite directions). Fixed-width types solve the first. Serializing each field explicitly with shifts and masks solves the second, and is why this code does NOT memcpy the struct: a struct also carries padding the compiler is free to insert, which would appear as junk bytes in the format. The read path reverses the same shifts. For a real protocol you would add bounds checks and probably a helper per field, but the shape here is exactly what production wire codecs use."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uint32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::uint16_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+  - { name: "std::array", url: "https://en.cppreference.com/w/cpp/container/array" }

@@ -1,0 +1,13 @@
+title: "The fixed-width integer types"
+standard: "C++11"
+difficulty: 1
+summary: "int8_t, int16_t, int32_t, int64_t and their unsigned twins have a size that is the same on every platform, unlike int and long whose width the standard only bounds from below."
+notes: "The built-in integers only promise a minimum width: int is at least 16 bits, long at least 32, and the real size changes between compilers and operating systems. The <cstdint> exact-width types (intN_t / uintN_t) pin the size to exactly N bits, so a variable, a struct field, or an array element occupies the same space everywhere. That is what you want the moment the size is part of a contract -- a file format, a network packet, a hardware register. sizeof is fixed, and so is the value range. The exact-width types are technically optional (see the least/fast families), but every mainstream platform provides them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "Fixed width integer types", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::int32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+  - { name: "std::uint32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+  - { name: "std::int64_t", url: "https://en.cppreference.com/w/cpp/types/integer" }

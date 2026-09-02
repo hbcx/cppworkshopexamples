@@ -1,0 +1,12 @@
+title: "Anti-pattern: exact width where least would do"
+standard: "C++11"
+difficulty: 3
+summary: "The exact-width intN_t types are optional and can be absent on unusual hardware; when the code only needs a minimum range, int_leastN_t (always provided) is the portable choice and intN_t is reserved for fixed layouts."
+notes: "This is the mirror image of the assume-int-is-32-bit trap: not wrong on any normal machine, but a habit that quietly ties portable code to an optional feature. The standard requires int_leastN_t and int_fastN_t to exist, but makes intN_t optional -- it is guaranteed only where the platform has a two's-complement integer of exactly N bits with no padding. Every mainstream desktop, server and phone qualifies, so int32_t is there in practice. The place it disappears is exotic hardware: DSPs with 24-bit or 9-bit words, historical machines, some deeply embedded targets. Code that reaches for int32_t as a generic counter simply fails to compile there, whereas int_least32_t always works. The rule: intN_t is a statement about an EXACT external size (a file, a wire format, a register); when you only need a range, say int_least32_t or int_fast32_t and let the platform pick. Not a bug to rush to fix, but the right default for library code that must build anywhere."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::int_least32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::int32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+  - { name: "std::int_fast32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }

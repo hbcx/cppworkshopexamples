@@ -1,0 +1,12 @@
+title: "Exact, least, and fast widths"
+standard: "C++11"
+difficulty: 2
+summary: "Besides the exact-width intN_t, <cstdint> has int_leastN_t (smallest type with at least N bits) and int_fastN_t (fastest with at least N bits) -- pick exact for layout, least for portable range, fast for speed."
+notes: "The exact-width intN_t is only one of three families, and it is the one with the most requirements: it must be exactly N bits, so it is optional. int_leastN_t is the smallest type holding at least N bits and is always provided; int_fastN_t is the type the implementation treats as fastest for at least N bits, which may be wider than N to match the register size. Choose by intent. A field written to a file or a socket needs an EXACT size, so intN_t. A value that just needs a range -- an id, a count that fits in a billion -- is fine with int_leastN_t and stays portable to unusual hardware. A hot loop counter benefits from int_fastN_t, which trades a few bytes for the machine's native word. When in doubt on a normal platform, the plain intN_t types are the pragmatic default."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::int_least32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::int_fast32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+  - { name: "std::int32_t", url: "https://en.cppreference.com/w/cpp/types/integer" }

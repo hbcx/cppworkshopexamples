@@ -1,0 +1,9 @@
+sizeof(int)  = 4 bytes
+sizeof(long) = 4 bytes  <- 4 on Windows, 8 on Linux/macOS
+
+same header, two field types:
+BadHeader  (long)    = 8 bytes  (moves with the platform)
+GoodHeader (int64_t) = 16 bytes  (fixed everywhere)
+
+FIX: use int32_t / int64_t for any field whose size is part
+of the contract -- files, sockets, shared memory, registers.

@@ -1,0 +1,9 @@
+int_least32_t : always available, at least 31 value bits
+int32_t       : optional, exactly 32 bits where it exists
+
+choose by intent:
+  need a range, portable code     -> int_leastN_t / int_fastN_t
+  need an exact on-disk/wire size  -> intN_t
+
+(on this platform int32_t exists, so both compile fine --
+ the difference bites only on unusual hardware.)

@@ -2,3 +2,5 @@
   note: "Where the range checks are used: before a narrowing conversion, numeric_limits gives the target type's min and max so you can reject or clamp out-of-range values -- go there for static_cast, narrowing, and the conversion rules."
 - slug: "bit"
   note: "The neighbouring low-level numeric section: <bit> inspects the bit representation (popcount, bit_width, bit_cast) where numeric_limits reports the type's value range and precision -- go there for bit-level operations."
+- slug: "cstdint"
+  note: "The fixed-width types whose limits you often query: numeric_limits<int32_t>::max() and friends give the exact bounds of int32_t/uint64_t -- go there for choosing a fixed-width type in the first place."

@@ -1,0 +1,19 @@
+- problem: "A service reads and writes a binary format -- a network protocol, an on-disk record, a shared-memory block -- that another program (often in another language, on another OS) also parses. Every field sits at a byte offset both ends must agree on."
+  why: "Fixed-width types make the size part of the type, so the layout does not shift when the code is compiled with a different toolchain or on a different OS. Declaring the same fields with int/long ties the format to one platform's widths, and the two ends silently disagree the moment they differ. int/long only promise a minimum size; a wire format needs an exact one."
+  signal: "A struct that is memcpy'd to a socket or a file, or a serializer, whose fields are int, long or unsigned rather than intN_t/uintN_t; a #pragma pack around such a struct."
+
+- problem: "Embedded or systems code talks to memory-mapped hardware: a 32-bit control register, a 16-bit status word, a packed device descriptor. The width is dictated by the silicon, not by the program."
+  why: "uint32_t / uint16_t name exactly the register width, so a read or write moves the right number of bits and the bitfields line up with the datasheet. int is not guaranteed to be 32 bits, and long is 32 on Windows and 64 on Linux -- either can be the wrong size for a register and corrupt neighbouring ones."
+  signal: "Volatile pointers to device memory typed as int/unsigned, or bit masks applied to a plain int register value; datasheet widths (8/16/32) in comments next to non-fixed-width variables."
+
+- problem: "A checksum, hash, or crypto routine (CRC32, FNV-1a, SHA-256, a PRNG) is specified in terms of exact machine words -- 'multiply two 32-bit words and keep the low 32 bits'. The result must match a reference implementation bit for bit."
+  why: "uint32_t / uint64_t give the exact wrap-around arithmetic the algorithm is defined on; the modulo-2^N overflow of an unsigned fixed-width type IS the specification. Using int risks a different width and signed-overflow undefined behaviour, so the output would not match the reference vectors."
+  signal: "Bit-mixing code with hex constants and shifts written over int/unsigned, or a hash whose test vectors fail on one platform but pass on another."
+
+- problem: "A runtime needs to treat an object's address as a value: a hash table keyed by pointer identity, a tagged pointer that packs flags into the spare low bits, an allocator tracking alignment, or a handle passed through a C API as an integer."
+  why: "uintptr_t is the one integer type guaranteed to hold a void* and convert back to the same pointer, so the address survives the round-trip. int or long may be narrower than a pointer (they are on 64-bit Windows) and truncate it, producing a wrong address on conversion back."
+  signal: "reinterpret_cast<long>(ptr) or (size_t)ptr used as a map key or for bit tricks, especially in code that must run on 64-bit Windows where long is 32 bits."
+
+- problem: "Code must interoperate with a C library or a foreign-function interface whose headers specify fixed-width parameters -- a uint64_t timestamp, an int32_t error code, a uint8_t buffer."
+  why: "Matching the exact-width type the API declares makes the call ABI-correct regardless of how int and long happen to be sized on each side. Substituting int or long risks a width or signedness mismatch that passes the wrong bytes across the boundary."
+  signal: "FFI or C-API call sites that pass int/long where the header (or the other language's binding) states a uintN_t/intN_t, or casts inserted to silence the resulting type mismatch."

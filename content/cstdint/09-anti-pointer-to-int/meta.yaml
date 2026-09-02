@@ -1,0 +1,11 @@
+title: "Anti-pattern: casting a pointer to int or long"
+standard: "C++11"
+difficulty: 3
+summary: "A pointer is 64-bit on a 64-bit system, but int is 32-bit and long is 32-bit on Windows, so casting an address through them truncates the high half and the pointer no longer round-trips."
+notes: "This one bites in old code that predates uintptr_t and in code ported from a 32-bit world where int happened to be pointer-sized. On a 64-bit target an address needs 64 bits; forcing it through a 32-bit integer keeps only the low half, so converting back yields a wrong pointer -- and dereferencing that is undefined behaviour, often a crash or silent memory corruption. On Windows (LLP64) long is 32 bits, so even long is not safe; only long long happens to be wide enough there, and relying on that is exactly the portability trap. The demonstration truncates a made-up value instead of a real address, so it stays deterministic and never dereferences the bad pointer. The fix is the type that exists for this: uintptr_t (or intptr_t), guaranteed to hold a void* and convert back unchanged."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::uintptr_t", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "std::intptr_t", url: "https://en.cppreference.com/w/cpp/types/integer" }

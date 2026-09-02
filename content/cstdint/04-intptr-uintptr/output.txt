@@ -1,0 +1,9 @@
+round-trip gives back the same pointer : 1
+and it still points at the value       : 1
+
+uintptr_t is exactly as wide as a pointer:
+sizeof(void*)     = 8
+sizeof(uintptr_t) = 8
+same width        = 1
+
+address is int-aligned : 1

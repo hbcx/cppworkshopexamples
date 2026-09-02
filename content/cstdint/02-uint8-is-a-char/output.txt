@@ -1,0 +1,9 @@
+printed directly : A
+with unary plus  : 65
+cast to int      : 65
+
+int8_t behaves the same way:
+printed directly : B
+with unary plus  : 66
+
+rule: to see the NUMBER, promote with +x or cast to int.

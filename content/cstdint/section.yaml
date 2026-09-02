@@ -1,0 +1,4 @@
+title: "Fixed-width integers (<cstdint>)"
+description: "The C++11 <cstdint> header: integer types with a guaranteed bit width, so a value's size no longer depends on the compiler or the operating system. Covers the exact-width types (int32_t, uint64_t) and why they are the right choice for binary layouts, the int8_t/uint8_t char-alias surprise on iostreams, the exact vs least vs fast families and when to pick each, intptr_t/uintptr_t for holding an address as a number, intmax_t and the INTn_C / INTn_MAX literal and limit macros, a portable packet/header serialization, and the <cinttypes> printf format macros (PRId64 and friends) -- alongside the traps: assuming int is 32-bit and long is 64-bit, squeezing a pointer into int or long, printf with the wrong length specifier, and reaching for an exact-width type where a least-width one is what the code actually needs."
+sort_order: 154
+category: "Numerics"

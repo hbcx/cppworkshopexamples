@@ -1,0 +1,12 @@
+title: "printf format macros (PRId64 and friends)"
+standard: "C++11"
+difficulty: 2
+summary: "There is no portable printf specifier for int64_t, so <cinttypes> provides PRId64, PRIu32 and the rest -- macros that expand to the right length modifier for each fixed-width type."
+notes: "printf reads its arguments blind, guided only by the format string, and the length modifier for a fixed-width type is not portable: int64_t is long on LP64 systems (use %ld) but long long on Windows (use %lld). Hard-coding either is wrong somewhere. <cinttypes> defines a macro per type and conversion -- PRId64, PRIi64, PRIu32, PRIx64, and so on -- that expands to the correct modifier on the current platform. You concatenate it into the format string: printf(\"%\" PRId64 \"\\n\", x). There are matching SCNd64-style macros for scanf. The whole problem disappears with C++ iostreams or std::format, which know the argument type, so prefer those in new C++ code; the PRI macros are for printf-based logging and for code shared with C."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "PRId64", url: "https://en.cppreference.com/w/cpp/types/integer" }
+detailed_tags:
+  - { name: "<cinttypes>", url: "https://en.cppreference.com/w/cpp/header/cinttypes" }
+  - { name: "std::printf", url: "https://en.cppreference.com/w/cpp/io/c/fprintf" }
