@@ -1,0 +1,11 @@
+title: "Wrapping a member function"
+standard: "C++11"
+difficulty: 2
+summary: "A member function needs an object to call on; store it in a std::function either as a lambda that captures the object, or as a pointer-to-member whose signature takes the object as the first argument."
+notes: "Member functions are callables too, but they need an object as their implicit first argument, so wrapping one takes a small choice. The clearest option is a lambda that captures the target object (by pointer or reference) and calls the member: std::function<void(long)> f = [&acc](long a){ acc.deposit(a); }. This reads naturally and lets you bind the object once. Alternatively, std::function can hold a pointer-to-member function directly -- &Account::deposit -- but then the wrapper's signature must include the object as an explicit leading parameter: std::function<void(Account&, long)>, called as f(acc, 25). This form leaves the object un-bound, so the same wrapper works on any Account. std::mem_fn produces the same object-first callable more readably, and std::bind or std::invoke can bind or call it; those are the subject of the next section. Mind lifetime: a lambda capturing the object by reference must not outlive it -- the same trap as any stored callback."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "pointer to member function", url: "https://en.cppreference.com/w/cpp/language/pointer" }

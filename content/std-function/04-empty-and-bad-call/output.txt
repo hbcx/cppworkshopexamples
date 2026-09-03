@@ -1,0 +1,5 @@
+empty f, bool(f) = false
+assigned, bool(f) = true
+cleared, bool(f) = false
+calling empty threw: bad_function_call
+no callback set, skipped

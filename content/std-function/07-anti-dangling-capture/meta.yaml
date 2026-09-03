@@ -1,0 +1,12 @@
+title: "Anti-pattern: a dangling reference in a stored std::function"
+standard: "C++11"
+difficulty: 3
+summary: "A std::function outlives the call that built it, so a lambda that captured a local by reference dangles once that scope ends -- capture the state by value, or share ownership through a shared_ptr."
+notes: "The whole point of std::function is to store a callable and run it later, which is exactly what makes a by-reference capture of a local dangerous here. When a factory returns a lambda that captured a local variable by reference, that variable is destroyed as the factory returns, and every later call reads a dangling reference -- undefined behaviour that may crash, return garbage, or appear to work until it does not. This differs from the lambdas chapter's immediate-use dangling case: here the danger comes precisely from the storage and delayed call. The example shows the bad capture only in a comment (running it would be UB and nondeterministic) and runs two safe fixes. Fix one: capture by value, so the closure owns its own copy of the state (add mutable if it needs to change). Fix two, when the state must be shared and outlive the scope: put it behind a std::shared_ptr and capture the shared_ptr, so the state lives as long as any copy of the function. The same rule applies to a lambda capturing this: the stored function must not outlive the object."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "lambda capture", url: "https://en.cppreference.com/w/cpp/language/lambda" }
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }

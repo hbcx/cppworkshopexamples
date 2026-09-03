@@ -1,0 +1,11 @@
+title: "Anti-pattern: calling a possibly-empty std::function"
+standard: "C++11"
+difficulty: 2
+summary: "An optional callback that was never set is an empty std::function, and calling it throws std::bad_function_call -- guard every optional callback with if (f) before invoking, or guarantee it is set at construction."
+notes: "A std::function member used as an optional hook -- a progress callback, an on-error handler, a logging sink -- starts out empty if the caller never installs one. Invoking it then throws std::bad_function_call, so code that looks like a harmless notification becomes an exception the first time it runs without a callback, often on a path that testing missed. The fix is cheap and local: guard optional callbacks with if (f) f(args). If the callback is not really optional, make that explicit instead of hoping -- require it in the constructor, or default the member to a do-nothing lambda ([](int){}) so it is always safe to call and no guard is needed. That default-to-no-op trick is often the cleanest, because it removes the branch at every call site. The bug is easy to miss because the happy path (a callback was set) works fine; only the unset path throws, which is exactly the path most likely to be untested."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bad_function_call", url: "https://en.cppreference.com/w/cpp/utility/functional/bad_function_call" }
+detailed_tags:
+  - { name: "std::function::operator bool", url: "https://en.cppreference.com/w/cpp/utility/functional/function/operator_bool" }

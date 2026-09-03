@@ -1,0 +1,15 @@
+- problem: "A component needs to let unrelated code react to events -- a UI widget firing click handlers, a download reporting progress, a parser calling back on each record -- and the reactions come from callers the component knows nothing about."
+  why: "std::function stores each callback as a data member of one fixed type regardless of what the caller passed (a lambda, a free function, a bound method), so the component can hold them and call them later. A template parameter cannot: it fixes the type at the call site and cannot be a member of unknown type, so it cannot store a heterogeneous list of handlers."
+  signal: "A class that wants to keep a caller-supplied callback as a member, or a std::vector of callbacks from different call sites, where a template parameter cannot express the stored, type-erased handler."
+
+- problem: "A system maps names or codes to actions at run time -- a command dispatcher, a menu, a scripting or REPL binding, a state machine's per-state behaviour -- where the set of actions is assembled while the program runs, not fixed at compile time."
+  why: "A std::map or table from key to std::function lets actions be registered, replaced and looked up dynamically, each stored uniformly. Encoding the same thing as a switch over an enum hard-codes the actions at compile time and cannot be extended by a plugin or a config file."
+  signal: "A large switch dispatching on a command enum or string, or a desire to register handlers from separate modules, where a key-to-callable table would let the actions be added at run time."
+
+- problem: "A thread pool or task queue accepts units of work from many places and runs them on worker threads later; the work items have nothing in common except that they are callables to run."
+  why: "std::function<void()> is the natural task type: any lambda or bound call packs into it, the queue holds a homogeneous container of them, and a worker just pops and invokes. Templating the queue on the task type is impossible because the tasks are heterogeneous and enqueued at run time."
+  signal: "A producer/consumer queue whose elements are 'work to do', a std::queue<std::function<void()>>, or ad-hoc task structs with a single virtual run() method that std::function would replace."
+
+- problem: "A library exposes customization points -- a comparator, an allocator hook, an error handler, a retry policy -- that most callers leave at a default but some override, and the override must be stored on a long-lived object."
+  why: "A std::function member with a sensible default (often a no-op or a standard policy) lets callers replace the behaviour without subclassing, and the object keeps the chosen policy for its lifetime. A virtual method would force inheritance; a template parameter would leak into the object's type and prevent storing different policies in one container."
+  signal: "A policy or strategy currently expressed as a virtual method the caller must subclass to change, where an injectable std::function member would decouple the behaviour from the type."

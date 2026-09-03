@@ -1,0 +1,11 @@
+title: "Storing callbacks: a member and a container"
+standard: "C++11"
+difficulty: 2
+summary: "A class that stores std::function handlers -- one per registered callback in a vector -- can accept any callable of the right signature and fire them later, the classic event/callback pattern that a template parameter cannot express."
+notes: "This is the realistic reason std::function exists. A widget, an event source, or a signal wants to let unrelated code register callbacks and run them later. The callbacks come from different places and have different concrete types, and they must be stored as data members and outlive the call that registered them -- so a template parameter (which fixes one type at the call site and cannot be a member of unknown type) does not work here, but std::function does. The pattern is a std::vector<std::function<Sig>> that the class appends to in a register method and iterates in a fire method. Take the handler by value and std::move it into the container to avoid an extra copy. This same shape underlies the Observer and Command design patterns and every callback-based API. Watch the lifetime of anything a handler captures by reference -- it must outlive the stored handler, which is the subject of the dangling-reference anti-pattern in this section."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }

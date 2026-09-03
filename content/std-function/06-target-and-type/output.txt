@@ -1,0 +1,4 @@
+holds Doubler? false
+holds freeFn?  true
+recovered pointer, (*p)(41) = 42
+after reassigning, holds Doubler? true

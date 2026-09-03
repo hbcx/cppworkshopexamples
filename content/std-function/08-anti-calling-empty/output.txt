@@ -1,0 +1,2 @@
+unguarded call threw bad_function_call
+guarded run: completed with no callback set

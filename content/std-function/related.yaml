@@ -1,0 +1,6 @@
+- slug: "lambdas"
+  note: "The other side of the storage question: when you hold ONE known callable, auto or a template parameter takes a lambda with zero overhead, where std::function erases the type at a cost -- go there for storing lambdas, the type-erasure tradeoff, and captures."
+- slug: "command"
+  note: "std::function as a design pattern: the Command pattern packages an action as a callable to run, queue or undo later, which is exactly a std::function member -- go there for command objects, queues, and undo/redo."
+- slug: "observer"
+  note: "Where the subscription-token idea comes from: an observer list of std::function handlers hands out tokens to unregister by (since the functions cannot be compared) -- go there for subjects, observers, and safe unsubscription."

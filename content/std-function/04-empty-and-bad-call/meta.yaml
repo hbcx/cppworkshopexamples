@@ -1,0 +1,11 @@
+title: "The empty state and bad_function_call"
+standard: "C++11"
+difficulty: 2
+summary: "A default-constructed or nullptr-assigned std::function is empty; converting it to bool tests whether it holds a callable, and calling an empty one throws std::bad_function_call rather than doing nothing."
+notes: "std::function has a null-like empty state, and forgetting it is a common bug. A default-constructed std::function holds no target, and assigning nullptr clears an existing one. The contextual conversion to bool reports whether a target is present, so if (f) is the test. The important part: calling an empty std::function does NOT silently no-op -- it throws std::bad_function_call. That makes an unset optional callback a latent exception waiting for the first call. The fix is to guard optional callbacks with if (f) f(args) before invoking, or to guarantee at construction that the function is always set. Note the empty state is unrelated to a function that legitimately returns nothing: a std::function<void()> can be non-empty and simply do work with no return value. When a callback is genuinely optional, the bool guard is the idiom; when it must always be present, check once at the boundary where it is installed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bad_function_call", url: "https://en.cppreference.com/w/cpp/utility/functional/bad_function_call" }
+detailed_tags:
+  - { name: "std::function::operator bool", url: "https://en.cppreference.com/w/cpp/utility/functional/function/operator_bool" }

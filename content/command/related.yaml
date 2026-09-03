@@ -14,3 +14,5 @@
   note: "The other way to build undo: Command stores reversible operations that each know their inverse, where Memento stores whole state snapshots and restores them -- go there for snapshot-based undo/redo and when saving state beats inverting every action."
 - slug: "visitor"
   note: "The sibling that packages an OPERATION rather than a request: a Visitor packages an operation to run over a whole structure of element types (double dispatch), where Command packages one request to trigger or undo -- go there for operations-as-objects over an object structure."
+- slug: "std-function"
+  note: "The lightweight way to package a command: a std::function<void()> holds an action to run, queue or store without a Command class hierarchy -- go there for the callable wrapper itself, its empty/bad_function_call state, and the storage tradeoffs behind the function-based Command form."

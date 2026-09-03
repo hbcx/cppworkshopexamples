@@ -1,0 +1,11 @@
+title: "Recovering the stored target"
+standard: "C++11"
+difficulty: 3
+summary: "target_type() returns the typeid of the stored callable and target<T>() returns a T* when the stored callable is exactly a T (else nullptr) -- the rarely-needed escape hatch back out of type erasure."
+notes: "std::function erases the callable's type, but it does not forget it: two member functions let you ask what is inside. target_type() returns the std::type_info of the stored callable, and target<T>() returns a pointer to it if -- and only if -- the stored callable's type is exactly T, otherwise nullptr. So f.target<int(*)(int)>() recovers a plain function pointer when that is what was stored, and returns null when a lambda or functor is stored instead. This is genuinely rarely needed; most code just calls the std::function and never inspects it. It matters when you must special-case a known callable (for example detect that a handler is a specific function and skip the indirection, or compare identity in a framework). Note the type must match exactly, cv- and signature-wise, which is why the function-pointer type is spelled int(*)(int). Every lambda has a distinct unnameable type, so you cannot target<> a lambda by name -- another reason this is an advanced, occasional tool rather than everyday code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function::target", url: "https://en.cppreference.com/w/cpp/utility/functional/function/target" }
+detailed_tags:
+  - { name: "std::function::target_type", url: "https://en.cppreference.com/w/cpp/utility/functional/function/target_type" }

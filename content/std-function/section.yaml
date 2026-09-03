@@ -1,0 +1,4 @@
+title: "std::function"
+description: "std::function, the type-erased wrapper that holds any callable with a given signature -- a free function, a lambda (capturing or not), a functor, or a bound member function -- behind one concrete type. Covers building and calling one, how a single std::function type stores many different callable kinds, storing callbacks as a class member and in a container, the empty state and the std::bad_function_call thrown by calling it, wrapping member functions, and recovering the stored target -- alongside the traps: a dangling reference captured in a std::function that outlives it, calling a possibly-empty one without a guard, and expecting two std::functions to compare equal. For the template-vs-erasure storage tradeoff see the lambdas chapter; this section is about std::function itself."
+sort_order: 157
+category: "Function objects & utilities"

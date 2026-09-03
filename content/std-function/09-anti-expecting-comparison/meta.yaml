@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting std::function to compare equal"
+standard: "C++11"
+difficulty: 3
+summary: "std::function has no equality against another std::function -- only against nullptr -- so you cannot find or remove a stored handler by comparing it; hand out a token when registering and remove by that token."
+notes: "A natural-looking way to unregister a callback is to keep a copy and later erase the one that compares equal. It does not work: std::function defines equality only against nullptr (the empty test), not against another std::function, so find or erase using a handler value fails to compile. This is not an oversight -- there is no sound way to compare two arbitrary callables for equality; two lambdas with identical bodies are different objects, and captured state has no general comparison. The standard fix is a subscription token: the register method returns an opaque id, the caller keeps it, and the unregister method removes the slot with that id. This is exactly how well-designed signal/slot and observer systems work (see the Observer chapter's subscription tokens), and it also handles the case of two identical-looking handlers cleanly, since each still has a distinct token. If you only need to clear the single stored callback, comparing against nullptr or assigning nullptr is fine; it is comparing two live callables that is impossible."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::function::operator bool", url: "https://en.cppreference.com/w/cpp/utility/functional/function/operator_bool" }

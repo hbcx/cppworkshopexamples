@@ -1,0 +1,11 @@
+title: "One type, any callable: type erasure"
+standard: "C++11"
+difficulty: 1
+summary: "A single std::function<int(int)> can hold a free function, a captureless lambda, a capturing lambda, or a functor -- all stored uniformly behind the signature, which is what lets them share a variable or a container."
+notes: "This is the property that makes std::function worth its cost: it erases the concrete type of the callable. A free function, each lambda (every lambda has its own unique unnameable type), and a functor object are all completely different types, so you cannot put them in the same variable or the same std::vector directly. Wrapping them in std::function<int(int)> gives them one common type -- the signature -- so a std::vector<std::function<int(int)>> holds all of them side by side and calls each the same way. That is exactly what a list of event handlers, a table of command objects, or a set of plugins needs. The tradeoff is that the wrapper stores the callable behind an indirection (and allocates when the callable is too big to fit inline), so when you only ever hold ONE known lambda, auto or a template parameter is cheaper -- see the lambdas chapter. Reach for std::function when the heterogeneity here is the point."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

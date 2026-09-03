@@ -1,0 +1,5 @@
+by-value counter : 1 2 3
+shared counter   : 1 2 3
+
+Rule: a stored std::function must not capture a local by
+reference -- capture by value, or share ownership of the state.

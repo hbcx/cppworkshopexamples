@@ -1,0 +1,11 @@
+title: "Wrapping and calling a std::function"
+standard: "C++11"
+difficulty: 1
+summary: "std::function<R(Args...)> is a value that holds any callable with the signature R(Args...); assign a function or a lambda into it, call it with the ordinary f(args) syntax, and copy or reassign it like any other value."
+notes: "std::function is a general-purpose wrapper for callables. Its template argument is a function signature -- std::function<int(int)> means anything you can call with an int that returns an int. You assign a free function, a lambda, or a functor into it and then invoke it with the normal call syntax f(x); the wrapper forwards to whatever it holds. Crucially it is a regular value type: you can copy it, reassign it to a different callable of the same signature, store it in a variable or a container, pass it to a function, and return it. That is what makes it useful as a callback or a stored strategy. The cost of this flexibility -- it erases the concrete callable type, which usually means a heap allocation and an indirect call -- is covered in the lambdas chapter; this section focuses on what std::function does and how to use it well."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "std::function::operator()", url: "https://en.cppreference.com/w/cpp/utility/functional/function/operator()" }
