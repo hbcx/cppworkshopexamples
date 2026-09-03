@@ -1,0 +1,5 @@
+triple(14) = 42
+half(9.0)  = 4.5
+applyTenOff(200) = 180
+value=42
+put(7, 300) = cache: 7 -> 300

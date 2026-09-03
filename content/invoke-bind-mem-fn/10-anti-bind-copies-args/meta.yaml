@@ -1,0 +1,11 @@
+title: "Anti-pattern: bind copies its bound arguments"
+standard: "C++11"
+difficulty: 3
+summary: "std::bind stores a copy of every bound argument, not a reference. Bind a large object and you pay a silent copy; expect the bound call to see later changes and it will not. Wrap the argument in std::ref to bind a reference instead."
+notes: "A frequent surprise: std::bind decay-copies each bound argument into the callable it returns, so the bound object is a snapshot taken at bind time. Two consequences bite. Performance: binding a big object copies it, quietly, once per bind. Correctness: mutating the original afterwards has no effect on what the bound call sees, because it holds its own copy -- a bug that looks like the call is ignoring your update. The example makes the copy countable (with no undefined behaviour) to prove it happens. The fix is std::ref(obj) (a std::reference_wrapper), which binds a reference so the call acts on the live object -- valid only while that object outlives the bound callable, or you have a dangling reference. A lambda makes the choice explicit instead: [&obj] captures by reference, [obj] by value. std::thread shares this exact copy-by-default rule, which is why std::ref shows up there too."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+detailed_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }

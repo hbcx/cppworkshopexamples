@@ -1,0 +1,6 @@
+after ref calls, clicks = 2
+after ptr call, clicks  = 3
+after ref_wrap, clicks  = 4
+label() = OK
+name    = OK
+w.clicks stays 4, copy.clicks = 5

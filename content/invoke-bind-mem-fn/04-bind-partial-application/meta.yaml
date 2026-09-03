@@ -1,0 +1,11 @@
+title: "std::bind: partial application"
+standard: "C++11"
+difficulty: 1
+summary: "std::bind(f, args...) builds a new callable from f with some arguments fixed now and the rest left as placeholders (_1, _2, ...) filled in at call time. Fixing every argument gives a zero-argument thunk."
+notes: "std::bind is the C++11 way to do partial application: take a callable, pin some of its arguments, and get back a smaller callable. Arguments you supply are bound immediately; a placeholder from std::placeholders marks a slot to be filled when the bound object is called. The placeholder's number says which call argument fills it (covered next). bind predates lambdas as the general tool for this and still appears widely, but a lambda usually says the same thing more clearly -- [](int x){ return add(10, x); } instead of std::bind(add, 10, _1). Learn bind to read existing code and for the occasional terse case; reach for a lambda by default. The type bind returns is unspecified, so store it in auto or a std::function."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+detailed_tags:
+  - { name: "std::placeholders", url: "https://en.cppreference.com/w/cpp/utility/functional/placeholders" }

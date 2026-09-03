@@ -1,0 +1,13 @@
+title: "std::mem_fn: a member as a functor"
+standard: "C++11"
+difficulty: 2
+summary: "std::mem_fn(&T::member) wraps a pointer-to-member (data or function) into a callable object that takes the T as its argument, so you can pass it where an algorithm expects a functor -- to project a field, or as a predicate over a member function."
+notes: "std::mem_fn solves one small problem: an algorithm wants something it can call as f(elem), but &T::member is not directly callable that way. mem_fn adapts it, applying the same INVOKE rule as std::invoke -- object as first argument, value/reference/pointer all accepted. For a fixed, named member a lambda ([](const T& e){ return e.field; }) is just as short and reads more plainly, so mem_fn is not the everyday choice. Its real use is when the member is not fixed in the source: a pointer-to-member passed in as a parameter, or chosen at run time, that you then need to call like an ordinary functor. Since C++17 std::invoke covers the direct-call case; mem_fn stays useful when you need a reusable callable OBJECT rather than a one-off call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::mem_fn", url: "https://en.cppreference.com/w/cpp/utility/functional/mem_fn" }
+detailed_tags:
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
+  - { name: "std::count_if", url: "https://en.cppreference.com/w/cpp/algorithm/count" }
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

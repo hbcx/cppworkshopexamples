@@ -1,0 +1,3 @@
+bind:   42
+lambda: 42
+label:  id=7

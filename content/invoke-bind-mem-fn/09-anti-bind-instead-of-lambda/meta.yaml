@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::bind where a lambda is clearer"
+standard: "C++11"
+difficulty: 3
+summary: "Using std::bind for everyday partial application when a lambda reads better: the _1/_2 placeholders hide the wiring, need the placeholders namespace, and read backwards. A lambda states the call directly, inlines, and is the modern default."
+notes: "std::bind was the C++11 tool for partial application, but lambdas (also C++11) do the same job more transparently, and since then the guidance -- Effective Modern C++, the C++ Core Guidelines -- has been to prefer the lambda. The reasons compound: bind's placeholders are read at a distance and their numbers select call arguments, not positions; bound arguments are copied unless wrapped in std::ref; the returned type is unspecified and opaque to the optimizer and the reader. A lambda puts the parameters, the captures and the exact call in one place, and the compiler inlines it. bind is not wrong, and reading it is a real skill for older code, but new code should reach for a lambda first and keep bind for the rare case where it is genuinely shorter and clear."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+detailed_tags:
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }

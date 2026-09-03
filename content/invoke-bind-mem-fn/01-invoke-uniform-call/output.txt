@@ -1,0 +1,5 @@
+free function : 42
+lambda        : 42
+functor       : 42
+member func   : 42
+data member x : 40

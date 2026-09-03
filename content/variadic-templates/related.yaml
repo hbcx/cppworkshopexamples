@@ -14,3 +14,5 @@
   note: "The single-parameter templates a pack generalises: function and class templates, deduction, specialization and dependent names -- go there for the fixed-arity foundations before adding a parameter pack."
 - slug: "lambdas"
   note: "Packs and folds inside a closure: a variadic lambda takes auto... and folds it, and C++20 can capture the pack by move into the closure -- go there for closures, captures, and the lambda-shaped form of this machinery."
+- slug: "invoke-bind-mem-fn"
+  note: "The other half of std::apply: apply unpacks a tuple into a call, and std::invoke is the uniform-call rule it uses to reach any callable, including a pointer-to-member -- go there for invoke, mem_fn, and bind."

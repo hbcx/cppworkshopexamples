@@ -1,0 +1,12 @@
+title: "std::invoke: one rule for every callable"
+standard: "C++17"
+difficulty: 1
+summary: "std::invoke(f, args...) calls f the right way whatever f is: a free function, a lambda, a functor, a pointer-to-member-function (object first), or a pointer-to-data-member. Generic code needs it because plain f(args...) cannot call a pointer-to-member."
+notes: "The point of std::invoke is uniformity. There are really two call syntaxes in C++: p(args) for ordinary callables and obj.*pm / (ptr->*pm) for pointers-to-members. A function template that only writes f(args...) silently rejects the member-pointer forms, so any generic facility that accepts a caller-supplied callable -- std::thread, std::async, std::function, std::bind, the standard algorithms' projections in C++20 -- is specified in terms of INVOKE. std::invoke is that rule made a callable: one argument means a data member is read; a pointer-to-member function takes the object as its first argument, in value, reference or pointer form; everything else is an ordinary call. Reach for it whenever you write a wrapper that forwards to an unknown callable; use it directly and you get member pointers for free."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::invoke", url: "https://en.cppreference.com/w/cpp/utility/functional/invoke" }
+detailed_tags:
+  - { name: "pointer to member", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+  - { name: "Callable", url: "https://en.cppreference.com/w/cpp/named_req/Callable" }

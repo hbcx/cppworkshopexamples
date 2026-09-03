@@ -1,0 +1,11 @@
+title: "Anti-pattern: bind silently drops call arguments"
+standard: "C++11"
+difficulty: 3
+summary: "A std::bind object accepts more call arguments than its placeholders use and quietly discards the extras -- no error. A wrong or missing placeholder number then compiles and returns the wrong value. A lambda's fixed parameter list catches the mistake at compile time."
+notes: "std::bind does not check that the number of arguments you pass matches the placeholders. Any call argument whose number no placeholder references is still evaluated (for its side effects) and then thrown away. That tolerance hides two mistakes: calling a bound object with the wrong arity (the extra arguments vanish instead of being flagged), and writing the wrong placeholder -- _2 where you meant _1 -- which compiles and silently forwards a different argument. Neither is a diagnostic; both change behaviour. A lambda closes the hole because its parameter list is fixed: pass too many or too few arguments and it does not compile. This is a concrete case of the general lesson that a lambda's explicit signature is safer than bind's flexible one."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+detailed_tags:
+  - { name: "std::placeholders", url: "https://en.cppreference.com/w/cpp/utility/functional/placeholders" }

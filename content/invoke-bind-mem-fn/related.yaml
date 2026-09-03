@@ -1,0 +1,6 @@
+- slug: "std-function"
+  note: "Where you store the result: bind and bind_front return an unspecified callable type, and std::function is the fixed type that holds it as a callback member or in a container -- go there for type-erased storage and the empty state."
+- slug: "lambdas"
+  note: "The tool that replaced most of bind: a lambda spells out its captures and the exact call, inlines, and checks its argument list -- go there for closures, captures, and the type-erasure tradeoff."
+- slug: "variadic-templates"
+  note: "The tuple and pack side of std::invoke: std::apply unpacks a tuple into a call, and invoke is the uniform-call rule used to build such forwarding wrappers -- go there for parameter packs, apply, and forwarding."

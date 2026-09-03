@@ -1,0 +1,11 @@
+title: "Placeholders select call arguments"
+standard: "C++11"
+difficulty: 2
+summary: "A placeholder _N stands for the Nth argument passed when the bound object is called, independent of where _N sits in the bind. That lets you reorder arguments (_2, _1), repeat one (_1, _1), or drop one by not naming it."
+notes: "The placeholder mechanics are the part of std::bind that surprises people. _1 does not mean the first bound slot -- it means the first argument at CALL time; _2 the second, and so on. So std::bind(f, _2, _1) swaps the caller's two arguments before f sees them, std::bind(f, _1, _1) feeds the first call argument into two parameters, and any call argument whose number no placeholder mentions is evaluated and discarded. This numbering is expressive but easy to misread, and it is exactly why lambdas are usually clearer: a lambda's parameter list and body show the wiring directly. The placeholders live in namespace std::placeholders -- a using-directive (or a using-declaration for each) keeps the calls readable."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::placeholders", url: "https://en.cppreference.com/w/cpp/utility/functional/placeholders" }
+detailed_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }

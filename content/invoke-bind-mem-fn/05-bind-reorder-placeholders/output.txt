@@ -1,0 +1,4 @@
+sub(10, 3)     = 7
+swapped(10, 3) = -7
+twice(9)       = 0
+reordered      = C-MID-A

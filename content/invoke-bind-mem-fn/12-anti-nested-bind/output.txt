@@ -1,0 +1,2 @@
+composed(6) = 37
+clear(6)    = 37

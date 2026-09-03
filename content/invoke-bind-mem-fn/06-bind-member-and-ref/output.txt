@@ -1,0 +1,9 @@
+[log] hi
+[log] hi
+count after member bind: 2
+[copy] x
+original byVal.count: 0
+[ref] y
+original byRef.count: 1
+[log] tick
+[log] tick

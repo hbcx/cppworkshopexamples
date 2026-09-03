@@ -1,0 +1,5 @@
+copies after bind: 1
+use id=7
+original id is now 99
+copies with std::ref: 0
+use id=42

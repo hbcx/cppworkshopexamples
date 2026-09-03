@@ -1,0 +1,13 @@
+title: "Binding a function template and a class"
+standard: "C++11"
+difficulty: 2
+summary: "std::bind cannot deduce a template argument, so you bind a named instantiation (transform<int>, or &Cache<int>::put<long> for a class template's member template); binding then fixes those types and the object, so the resulting callable takes only the runtime arguments and no template arguments appear at the call."
+notes: "A function template is not itself a callable -- it is a recipe -- so you cannot hand a bare template name to std::bind; the compiler has nothing to deduce from. You name a concrete instantiation instead (transform<int>, transform<double>), and from then on that choice is baked in: callers pass only the free argument and never spell the type again. The same works for a member function template (&Printer::show<int>), and for the fullest case, a member function template OF a class template, where you name both template arguments at once -- &Cache<int>::put<long> pins the class type and the method type together. Bind the object as well (pass &obj so bind holds a pointer) and you get a callable that has the class instantiation, the method instantiation and the receiver all fixed, leaving only the runtime arguments at the call. The alternative is a lambda, which deduces the instantiation for you ([](int v){ return transform(3, v); }) and is usually clearer -- so this pattern is worth knowing mainly to read bind-based code and to see why a bare template name will not compile with bind."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }
+  - { name: "pointer to member function", url: "https://en.cppreference.com/w/cpp/language/pointer" }

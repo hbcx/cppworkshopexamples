@@ -1,0 +1,12 @@
+title: "Member pointers: the object argument forms"
+standard: "C++17"
+difficulty: 2
+summary: "For a pointer-to-member, std::invoke takes the object as its first argument and accepts it as a reference, a pointer, or a std::reference_wrapper, dereferencing correctly each time. Pass the object by value and a copy is used; pass a reference or pointer to act on the original."
+notes: "This is the detail that makes std::invoke worth knowing. A pointer-to-member function needs an object to be called on, and invoke lets you supply that object however you hold it: an lvalue (obj.*pm), a pointer (ptr->*pm), or a std::reference_wrapper (unwrapped to a reference). A pointer-to-data-member with one object argument reads the field. The trap mirrors an ordinary function call: passing the object by value copies it, so mutations land on the copy, not your variable -- pass a reference or pointer when you mean to change the original. std::reference_wrapper (std::ref) is how you carry a reference through a value interface; it has its own chapter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::invoke", url: "https://en.cppreference.com/w/cpp/utility/functional/invoke" }
+detailed_tags:
+  - { name: "pointer to member function", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }

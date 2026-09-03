@@ -1,0 +1,11 @@
+title: "Anti-pattern: nested std::bind"
+standard: "C++11"
+difficulty: 3
+summary: "Composing functions by nesting one std::bind inside another relies on bind's special handling of a nested bind expression -- it is re-invoked with the outer arguments -- which is subtle and order-sensitive. A lambda states the composition directly."
+notes: "std::bind treats a bound argument that is itself a bind expression specially: instead of passing it along as a value, it invokes that inner bind with the outer call's arguments and forwards the result. That is how people compose functions with bind -- std::bind(add, std::bind(mul, _1, _1), 1) means add(mul(x, x), 1). It works, but it is hard to read: the inner placeholders draw from the OUTER call, and whether a nested object gets invoked or passed through depends on its type (a bind expression versus a plain callable stored in a variable), so small edits change the meaning. As the nesting deepens the intent gets buried. A lambda makes function composition explicit -- the calls and their order are written out, and nothing is re-invoked behind your back -- which is why it is the better tool for anything past a single bind."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+detailed_tags:
+  - { name: "std::is_bind_expression", url: "https://en.cppreference.com/w/cpp/utility/functional/is_bind_expression" }

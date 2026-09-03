@@ -1,0 +1,3 @@
+add5(10, 20) = 35
+irc.example/general: hello
+irc.example/general: second line

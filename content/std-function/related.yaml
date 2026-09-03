@@ -4,3 +4,5 @@
   note: "std::function as a design pattern: the Command pattern packages an action as a callable to run, queue or undo later, which is exactly a std::function member -- go there for command objects, queues, and undo/redo."
 - slug: "observer"
   note: "Where the subscription-token idea comes from: an observer list of std::function handlers hands out tokens to unregister by (since the functions cannot be compared) -- go there for subjects, observers, and safe unsubscription."
+- slug: "invoke-bind-mem-fn"
+  note: "What produces the callable you store: std::bind and std::bind_front build a callback by pinning arguments, and std::invoke/std::mem_fn adapt a member function into one -- go there for partial application and the uniform-call rule."

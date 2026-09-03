@@ -1,0 +1,11 @@
+title: "std::bind_front: the modern replacement"
+standard: "C++20"
+difficulty: 2
+summary: "std::bind_front(f, front...) fixes the leading arguments and appends the call arguments after them -- no placeholders. It is the clean C++20 way to pin an object and method into a callback; std::bind_back (C++23) fixes the trailing arguments instead."
+notes: "std::bind_front removes the two worst parts of std::bind for the common case: the _1/_2 placeholders and their surprising numbering. It simply pins the first arguments and passes everything else straight through in order, which is what partial application almost always means in practice. The headline use is std::bind_front(&T::method, objectPtr): a member callback with none of the placeholder ceremony. Because it can only append, it cannot reorder or drop arguments, so the silent bugs bind allows do not arise. A lambda can always express the same thing, and for anything with logic it is clearer; bind_front wins when you are purely fixing leading arguments and want the shortest correct spelling. std::bind_back (C++23) is the trailing-argument mirror for the rarer case where the free argument comes first."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind_front", url: "https://en.cppreference.com/w/cpp/utility/functional/bind_front" }
+detailed_tags:
+  - { name: "std::bind_back", url: "https://en.cppreference.com/w/cpp/utility/functional/bind_front" }

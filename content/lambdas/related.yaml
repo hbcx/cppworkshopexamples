@@ -11,3 +11,5 @@
   note: "Where the lambdas you write become predicates: all_of / any_of / none_of take a lambda that tests one element, often capturing a threshold, and answer a yes-or-no question about a whole range -- go there for the quantifier algorithms."
 - slug: "std-function"
   note: "The wrapper that stores a lambda as a callback: std::function holds any lambda of a given signature so it can live in a class member or a container and fire later, where auto and templates hold one lambda inline -- go there for the empty state, wrapping member functions, and the stored-callback pitfalls."
+- slug: "invoke-bind-mem-fn"
+  note: "The tools a lambda replaced: std::bind did partial application before lambdas, and std::invoke/std::mem_fn adapt member pointers into calls -- go there to read older bind-based code and for the uniform-call rule generic code needs."

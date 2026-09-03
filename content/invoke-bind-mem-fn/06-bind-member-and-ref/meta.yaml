@@ -1,0 +1,12 @@
+title: "Binding member functions and references"
+standard: "C++11"
+difficulty: 2
+summary: "std::bind(&T::method, obj, ...) turns a member call into a callable, with the object supplied where this would go -- the classic pre-lambda callback. bind copies its bound arguments, so pass &obj or std::ref(obj) when the call must act on the original."
+notes: "Two things come together here. First, a pointer-to-member bound with std::bind takes the object as the argument right after it, exactly like std::invoke -- pass &obj (a pointer) or obj (a copy) or std::ref(obj) (a reference). Before lambdas this was THE way to make a member function into a callback, and it is still common in older code. Second, and easy to miss: bind copies every bound argument into its own storage by default. Bind an object by value and the bound calls mutate that internal copy, not your variable; bind a big object and you pay for the copy silently. std::ref (a std::reference_wrapper) is how you bind a reference instead -- the calls then act on the live object, valid only as long as it outlives the bound callable. The result of bind stores neatly in a std::function to become a ready callback."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+detailed_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }

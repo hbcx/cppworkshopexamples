@@ -1,0 +1,15 @@
+- problem: "A library takes a user-supplied callable and must call it the same way whether the caller passed a free function, a lambda, a functor, or a pointer-to-member of some object -- which is exactly what std::thread, std::async and std::function do with their arguments internally."
+  why: "std::invoke is the single rule that covers all of them; plain f(args...) does not, because a pointer-to-member is called with obj.*p syntax, not p(obj). Writing the dispatch by hand means special-casing member pointers with SFINAE or if-constexpr -- reimplementing what std::invoke already specifies."
+  signal: "A function template that calls f(args...) and so rejects pointer-to-member callables, or hand-written overloads that split 'is it a member pointer' from 'is it a plain callable'."
+
+- problem: "Code pulls one field or one accessor out of every element of a collection -- ids for a lookup, names for a report, a key for sorting -- and feeds the result to a standard algorithm."
+  why: "std::mem_fn wraps the pointer-to-member into the functor the algorithm wants, and it fits best when the member to pull is chosen at run time (a pointer-to-member passed in). For a fixed member a lambda reads better, so this is a real but narrow win rather than the default."
+  signal: "std::transform or std::sort with a one-line lambda whose whole body is e.member or e.getter(), especially where the member to project is itself a parameter."
+
+- problem: "An API demands a fixed callback signature -- void(int), a std::function<void()> -- but the handler you have needs an object and some fixed arguments (a method on this, a channel name, a retry count)."
+  why: "std::bind_front(&T::method, this, fixed...) adapts the wider callable to the narrower signature by pinning the leading arguments, with no placeholder counting. A raw std::bind does it too but with _1/_2 ceremony that reads backwards; a lambda works but bind_front is terser when you are only fixing leading arguments."
+  signal: "A lambda that exists only to call one method on a captured object and forward the rest, or a std::bind(&T::m, obj, _1, _2) whose placeholders could be leading fixed arguments."
+
+- problem: "You are maintaining or reading a codebase written before lambdas were common, or ported from Boost, where callbacks and adapters are built with std::bind and placeholders."
+  why: "Knowing bind's rules -- placeholders select call arguments by number, bound arguments are copied unless wrapped in std::ref, extra call arguments are dropped, a nested bind is re-invoked -- is what lets you read that code and change it safely, or convert it to a lambda without altering behaviour."
+  signal: "std::bind, std::placeholders::_1, or boost::bind spread across the code, especially bound member functions used as callbacks that a lambda would now express."
