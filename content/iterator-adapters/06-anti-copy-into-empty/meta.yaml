@@ -1,0 +1,11 @@
+title: "Anti-pattern: copying into an empty container"
+standard: "C++11"
+difficulty: 2
+summary: "std::copy(src.begin(), src.end(), dst.begin()) into an empty dst writes past its end -- undefined behaviour -- because copy overwrites through the output iterator and never grows the container. Use std::back_inserter to append, or pre-size the destination first."
+notes: "This is the most common mistake with output iterators. The copying algorithms (copy, transform, remove_copy, the set operations) assume the output range already has room: they assign through the output iterator and advance it, but they never insert. Passing dst.begin() when dst is empty means the very first assignment writes to a slot that does not exist -- a buffer overrun, undefined behaviour that may crash, corrupt memory, or appear to work until it does not. The compiler cannot catch it because the types are valid. Two fixes. std::back_inserter(dst) adapts the container so each write is a push_back, so the destination grows to fit -- the right default when you do not know the size up front. Or size the destination first (std::vector<int> dst(src.size()) or dst.resize(n)) so there are real slots, then write through begin(); this avoids per-element growth when the count is known. The rule: an algorithm that writes needs either an insert iterator or a destination already big enough."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }
+detailed_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }

@@ -10,3 +10,5 @@
   note: "The modern generalisation of iterators: ranges wraps a begin and a sentinel into one object, keeps the same traversal categories, and adds lazy composable views over them -- go there for range algorithms, views, and the pipe operator."
 - slug: "operator-overloading"
   note: "The operators a custom iterator is made of, done properly: prefix versus postfix ++, * and ->, and symmetric ==. Go there for the return categories and member-versus-free rules the iterator idiom depends on."
+- slug: "iterator-adapters"
+  note: "The standard adapters built on this protocol: back_inserter, ostream/istream_iterator, reverse_iterator and move_iterator wrap a container, stream or iterator instead of writing one from scratch -- go there for the ready-made adapters and their traps."

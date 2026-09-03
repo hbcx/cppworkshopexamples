@@ -1,0 +1,11 @@
+title: "reverse_iterator and rbegin/rend"
+standard: "C++11"
+difficulty: 2
+summary: "A reverse_iterator adapts a bidirectional iterator so that ++ moves backward; rbegin()/rend() give them for a container. It wraps a base() iterator offset by one -- rit refers to *(rit.base() - 1) -- which lets algorithms run back-to-front and is the source of the classic off-by-one."
+notes: "std::reverse_iterator turns any bidirectional iterator around: incrementing it decrements the underlying one, so a normal forward loop or a standard algorithm processes the range from the end. v.rbegin()/v.rend() hand you the pair, and since they are ordinary iterators you can std::find_if from the back to get the LAST match, or copy a range reversed. The detail that trips people is the base(): a reverse_iterator stores an underlying iterator one position AHEAD of the element it refers to, so rit and rit.base() are offset by one -- rit points at *(rit.base() - 1). This design makes rbegin map to end() and rend map to begin() cleanly, but it means converting back for an operation like erase needs rit.base() - 1, not rit.base() (the reverse-base anti-pattern). std::make_reverse_iterator (C++14) constructs one from a base iterator when you are not starting from rbegin. Prefer rbegin/rend for readability; reach for the offset rule when you must cross between the two worlds."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reverse_iterator", url: "https://en.cppreference.com/w/cpp/iterator/reverse_iterator" }
+detailed_tags:
+  - { name: "std::make_reverse_iterator", url: "https://en.cppreference.com/w/cpp/iterator/make_reverse_iterator" }

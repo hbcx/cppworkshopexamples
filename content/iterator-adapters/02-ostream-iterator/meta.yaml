@@ -1,0 +1,11 @@
+title: "ostream_iterator"
+standard: "C++11"
+difficulty: 1
+summary: "std::ostream_iterator<T> is an output iterator that writes each assigned value to a stream, optionally followed by a delimiter string. Copying a range into one serializes it in one line -- but the delimiter comes AFTER each element, so you get a trailing separator."
+notes: "std::ostream_iterator<T>(stream, delim) adapts an output stream into an output iterator: assigning a value writes it with operator<<, then writes the optional delimiter. std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, \" \")) is the compact way to print a range, and the delimiter can be any string (a space, a comma, a newline). Two things to know. The delimiter is a SUFFIX, not an infix separator, so a comma delimiter yields \"1,2,3,4,\" with a trailing comma -- for a clean infix join you special-case the first element, or in C++20 print std::views with a separator. And the value type must be printable by the stream; ostream_iterator<T> just forwards to operator<<. It pairs naturally with istream_iterator (the input side) to move ranges of formatted values in and out of text."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ostream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/ostream_iterator" }
+detailed_tags:
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }

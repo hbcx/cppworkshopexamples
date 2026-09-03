@@ -1,0 +1,11 @@
+title: "Anti-pattern: istream_iterator stops silently"
+standard: "C++11"
+difficulty: 3
+summary: "An istream_iterator<int> ends the range at the first token that does not parse as an int, without an error -- so a malformed stream yields a partial read and the count looks fine. Check the stream state, or read tokens as strings and convert them yourself."
+notes: "istream_iterator advances with operator>>, and formatted extraction stops (setting failbit) at the first input that cannot be parsed as the element type. Because reaching the end sentinel is exactly how the range terminates, a parse failure is indistinguishable from a real end-of-stream: the vector is simply shorter than the input, with no exception and no obvious sign. Reading \"10 20 oops 40 50\" into a vector<int> gives {10, 20} and leaves 40 50 unread, which is a silent data-loss bug when you assumed clean input. Two defences. If you only need to know something went wrong, check the stream after: in.fail() is true when extraction stopped early. If you must handle mixed or dirty input, read tokens as std::string (which never fails on a word) and convert each with std::stoi / std::from_chars, catching or detecting the bad ones -- so a malformed token is classified rather than silently ending the range. Trust istream_iterator's brevity only when the input is known to be well-formed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/istream_iterator" }
+detailed_tags:
+  - { name: "std::stoi", url: "https://en.cppreference.com/w/cpp/string/basic_string/stol" }

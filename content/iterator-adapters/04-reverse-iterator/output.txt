@@ -1,0 +1,4 @@
+reversed: 5 4 3 2 1
+last even = 4
+*(rit.base())     = 5
+*(rit.base() - 1) = 4

@@ -1,0 +1,15 @@
+- problem: "An algorithm produces an unknown number of results -- filtered rows, transformed values, the output of a set union -- and you want them collected into a fresh container without computing the size first."
+  why: "std::back_inserter (or std::inserter for a set/map) makes the algorithm grow the destination as it writes, so you never pre-size or index by hand. Passing a container's begin() instead assumes it already has slots and overruns it; a manual loop reimplements the algorithm you are trying to reuse."
+  signal: "A resize(n) followed by an indexed loop that copies or transforms, a temporary counter to size the output, or std::copy into a begin() where the destination was just created empty."
+
+- problem: "You need to move a range of formatted values between memory and text -- print a vector space- or comma-separated, or read a whitespace-separated file or string into a container of numbers or words."
+  why: "std::ostream_iterator and std::istream_iterator turn a stream into an iterator, so one std::copy (or a range constructor) does the whole transfer, and it composes with the algorithms. Hand-written << / >> loops are longer and easy to get wrong at the boundaries; the iterators state the intent in one line."
+  signal: "A for loop that streams each element with a separator, or a while(in >> x) that push_backs into a vector -- both are an istream_/ostream_iterator plus copy."
+
+- problem: "A task is naturally expressed from the end of a sequence -- find the last matching element, walk events newest-first, scan a log backward -- and you do not want to reverse or copy the container to do it."
+  why: "reverse_iterator (via rbegin/rend) presents the range back-to-front to any algorithm, so std::find_if from rbegin finds the LAST match in one call, with no mutation and no allocation. Reversing the container is O(n) and destructive; a hand-rolled decrementing loop is error-prone at the ends."
+  signal: "std::reverse followed by a forward search (then reversing back), or an index loop counting down from size() - 1 to find or process the last qualifying element."
+
+- problem: "You are transferring ownership of a range of heavy objects from one container to another -- draining a staging buffer into a result, merging per-thread vectors, consuming a queue of unique_ptrs -- and copying them would be wasteful or impossible."
+  why: "std::make_move_iterator makes a copy-shaped algorithm move each element, so the elements' resources are transferred, not duplicated, and move-only types (std::unique_ptr) work at all. A plain copy duplicates every buffer (or fails to compile for move-only types); moving element by element in a loop is what the adapter automates."
+  signal: "A copy of a container whose source is discarded right after, an element-by-element std::move loop into another container, or a copy that fails to compile because the element type is move-only."

@@ -1,0 +1,11 @@
+title: "istream_iterator"
+standard: "C++11"
+difficulty: 2
+summary: "std::istream_iterator<T> reads values of type T from a stream, one per ++, using operator>>. A default-constructed one is the end sentinel, so the pair (istream_iterator<T>(s), istream_iterator<T>{}) is a range you can hand to a container constructor or an algorithm."
+notes: "istream_iterator<T> is the input counterpart of ostream_iterator: each increment does stream >> value, and dereference yields the value read. The trick is the end: a default-constructed istream_iterator represents end-of-stream, and the real iterator compares equal to it once the stream can no longer extract a T. So std::vector<int> nums(istream_iterator<int>(in), istream_iterator<int>{}) drains the stream into a vector. It skips whitespace like any formatted extraction, works for any type with operator>> (int, std::string, your own types), and composes with the algorithms. Two cautions: watch the most-vexing-parse when constructing in place (name the iterators, as here, or brace-init); and extraction stops at the FIRST token that does not parse as T, silently -- covered in the partial-read anti-pattern. Within those limits it is the shortest way to turn a text stream into a range."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::istream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/istream_iterator" }
+detailed_tags:
+  - { name: "std::ostream_iterator", url: "https://en.cppreference.com/w/cpp/iterator/ostream_iterator" }

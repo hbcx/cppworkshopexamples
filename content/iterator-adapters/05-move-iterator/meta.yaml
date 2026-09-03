@@ -1,0 +1,12 @@
+title: "move_iterator"
+standard: "C++11"
+difficulty: 3
+summary: "std::make_move_iterator wraps an iterator so dereferencing yields an rvalue, turning a copying algorithm into a moving one. Copying a range through move_iterators moves each element into the destination, leaving the sources in a valid-but-moved-from state."
+notes: "A move_iterator adapts an ordinary iterator so that *it produces an rvalue (T&&) instead of an lvalue. Feed a pair of them to any algorithm that assigns elements -- std::copy, a container's range insert, a range constructor -- and it MOVES each element rather than copying it, which is a real win when the elements are expensive (std::string, std::vector, std::unique_ptr, big structs). std::make_move_iterator(it) is the factory so you do not spell the type. The cost is that the source elements are left moved-from: valid, but with unspecified value (this library empties the strings), so you must not read their contents afterward -- reassign, clear, or destroy the source. Use it deliberately, when you are done with the source range and want to hand its guts to a new home; use a plain copy when the source must stay intact. Note some algorithms (std::move, the ranges move algorithms) already move without an adapter; move_iterator is the tool when you want a COPY-shaped algorithm to move."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::make_move_iterator", url: "https://en.cppreference.com/w/cpp/iterator/make_move_iterator" }
+detailed_tags:
+  - { name: "std::move_iterator", url: "https://en.cppreference.com/w/cpp/iterator/move_iterator" }
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }

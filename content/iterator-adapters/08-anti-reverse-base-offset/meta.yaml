@@ -1,0 +1,11 @@
+title: "Anti-pattern: the reverse_iterator base() offset"
+standard: "C++11"
+difficulty: 3
+summary: "A reverse_iterator refers to *(rit.base() - 1), not *rit.base(): its stored base iterator sits one position ahead of the element it points to. Erasing or inserting at rit.base() therefore hits the wrong element; use rit.base() - 1 to act on rit's element."
+notes: "The reverse_iterator design maps rbegin() to end() and rend() to begin() so the reversed range is a clean half-open interval, and the price is a one-position offset: the underlying base() iterator always points one element PAST the one the reverse_iterator dereferences. That is invisible while you only read through the reverse iterator, but it bites the moment you convert back to a forward iterator for a member operation like erase or insert, which take forward iterators. v.erase(rit.base()) deletes the element AFTER the one rit refers to; the fix is v.erase(rit.base() - 1) (or std::prev(rit.base())). Insert has the mirror subtlety -- inserting at rit.base() places the new element before base(), i.e. after rit's element in forward order. The rule to memorize: rit and rit.base() straddle the same gap from opposite sides, so rit's element is base() - 1. When in doubt, print both and confirm before mutating."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reverse_iterator", url: "https://en.cppreference.com/w/cpp/iterator/reverse_iterator" }
+detailed_tags:
+  - { name: "std::reverse_iterator::base", url: "https://en.cppreference.com/w/cpp/iterator/reverse_iterator/base" }

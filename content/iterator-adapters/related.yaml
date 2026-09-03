@@ -1,0 +1,8 @@
+- slug: "copy-copy-if"
+  note: "The algorithm these output iterators were made for: std::copy and copy_if write through an output iterator, and back_inserter turns that into container growth -- go there for copying and filtering ranges."
+- slug: "iterator"
+  note: "What an iterator IS and how to write your own: these adapters wrap an existing iterator or container, where that chapter builds the protocol from scratch -- go there for iterator categories, traits, and making a type iterable."
+- slug: "move-semantics"
+  note: "What move_iterator rests on: dereferencing to an rvalue is only useful because moving transfers resources cheaply -- go there for value categories, std::move, and why a moved-from object is valid but unspecified."
+- slug: "file-streams"
+  note: "Where the stream iterators do real I/O: ostream_iterator and istream_iterator adapt any std::istream/std::ostream, including file streams, into ranges -- go there for reading and writing files."

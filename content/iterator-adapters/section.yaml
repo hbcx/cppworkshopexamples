@@ -1,0 +1,4 @@
+title: "Iterator adapters"
+description: "The standard adapters that wrap a container, a stream, or another iterator to present an iterator interface -- the glue between algorithms and the world. Covers the insert iterators (back_inserter, front_inserter, inserter) that turn an algorithm's output into container growth, the stream iterators (ostream_iterator, istream_iterator) that read and write ranges of formatted values, reverse_iterator and rbegin/rend for walking a range backwards, and move_iterator for moving elements out of a source range instead of copying them -- alongside the traps: copying into an empty container through begin() and running off the end, an istream_iterator that stops silently at the first bad token, and the off-by-one between a reverse_iterator and its base(). This section is about the adapters; the iterator protocol itself, and writing your own, live in the Iterator design-pattern chapter."
+sort_order: 162
+category: "Iterators"

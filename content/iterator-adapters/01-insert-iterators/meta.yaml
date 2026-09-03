@@ -1,0 +1,13 @@
+title: "Insert iterators"
+standard: "C++11"
+difficulty: 1
+summary: "back_inserter, front_inserter and inserter are output iterators that turn an assignment into a container insertion: an algorithm writing through them grows the destination instead of overwriting it. back_inserter appends, front_inserter prepends (and reverses), inserter inserts at a position."
+notes: "An algorithm like std::copy writes to wherever its output iterator points; give it a container's begin() and it overwrites existing slots (and runs off the end if there are none -- an anti-pattern here). The insert iterators fix that by adapting a container into an output iterator whose assignment calls an insert operation. std::back_inserter(c) calls c.push_back, so the destination grows as the algorithm produces values -- the everyday choice for 'collect results into a fresh vector'. std::front_inserter(c) calls push_front (only for containers that have it, such as std::deque and std::list) and therefore emits the sequence reversed. std::inserter(c, pos) calls c.insert(pos, value); it is the general form and the only one usable with associative containers like std::set and std::map, which have no push_back. Reach for back_inserter by default, inserter for sets/maps, and remember front_inserter flips the order."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::back_inserter", url: "https://en.cppreference.com/w/cpp/iterator/back_inserter" }
+detailed_tags:
+  - { name: "std::front_inserter", url: "https://en.cppreference.com/w/cpp/iterator/front_inserter" }
+  - { name: "std::inserter", url: "https://en.cppreference.com/w/cpp/iterator/inserter" }
+  - { name: "std::copy", url: "https://en.cppreference.com/w/cpp/algorithm/copy" }

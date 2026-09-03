@@ -1,0 +1,3 @@
+*rit = 3
+*(rit.base()) = 4 (one past rit)
+after erasing rit's element: 1 2 4 5
