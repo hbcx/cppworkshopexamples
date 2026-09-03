@@ -1,0 +1,11 @@
+title: "std::hash basics"
+standard: "C++11"
+difficulty: 1
+summary: "std::hash<T> is a function object that maps a value to a std::size_t. The standard specializes it for the built-in types, pointers, and library types like std::string -- but NOT for std::pair, std::tuple or the containers, which you must hash yourself."
+notes: "std::hash is the building block of the unordered containers. It is a plain function object: std::hash<std::string>{}(\"x\") returns a size_t. The standard ships specializations for the arithmetic types, enums, pointers, and a set of library types (std::string, std::string_view, std::bitset, std::thread::id, the smart pointers, and more). Two facts to keep in mind from the start. First, there is no std::hash for aggregates you build out of them -- std::pair, std::tuple, std::array, std::vector have none -- so a key made of several fields needs a hash you write (the next examples). Second, the value is only guaranteed to be consistent WITHIN a single run of one program; it is not stable across runs or implementations (the not-stable anti-pattern). Inside those limits it is exactly what an unordered_map needs to place a key in a bucket."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "std::size_t", url: "https://en.cppreference.com/w/cpp/types/size_t" }

@@ -1,0 +1,5 @@
+hash(42)      = 42
+hash("hello") = 2762169579135187400
+hash("world") = 8751027807033337960
+hash(42) reproducible in-run? true
+hash(&x) nonzero? true

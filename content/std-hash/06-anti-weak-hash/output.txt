@@ -1,0 +1,2 @@
+weak: 11 elems, worst bucket = 11
+good: 11 elems, worst bucket = 2

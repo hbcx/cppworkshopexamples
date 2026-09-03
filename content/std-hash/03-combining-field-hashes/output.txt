@@ -1,0 +1,4 @@
+naive(1,2) == naive(2,1)?       true
+combined(1,2) == combined(2,1)? false
+has Ada/36? true
+has Ada/40? false

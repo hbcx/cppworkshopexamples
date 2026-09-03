@@ -1,0 +1,4 @@
+a == b?               true
+BadHash agrees?       false
+GoodHash agrees?      true
+found b via GoodHash? true

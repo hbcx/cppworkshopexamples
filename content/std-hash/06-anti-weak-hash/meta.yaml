@@ -1,0 +1,11 @@
+title: "Anti-pattern: a weak hash"
+standard: "C++11"
+difficulty: 3
+summary: "A hash that maps many distinct keys to the same value (a constant, x + y, a symmetric XOR) crowds them into one bucket, so the unordered container's O(1) average degrades to an O(n) linear scan. A proper mixing hash spreads keys and keeps buckets small."
+notes: "An unordered container is only O(1) on average when the hash distributes keys evenly across buckets. A weak hash defeats that. The example hashes a Coord as x + y, so every point on a diagonal (all distinct, all with the same sum) collapses to one value and lands in a single bucket -- 11 elements, worst bucket 11, every lookup a full scan of that bucket. Common weak hashes are the same story: returning a constant (all keys collide), a plain XOR of fields (symmetric, and equal fields cancel to zero), or using just one field of several. The container cannot rescue you: rehashing to more buckets does not help when the hash itself has no entropy. The fix is a real mixing function -- hash_combine over the fields -- which makes distinct keys produce distinct, well-spread hashes so buckets stay near size one. You do not need a cryptographic hash, just enough bit mixing that realistic keys do not pile up; the difference is O(1) versus O(n) on every operation."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }

@@ -6,3 +6,5 @@
   note: "Where a transparent comparator pays off: an ordered map keyed by std::string uses std::less as its Compare, and std::less<> enables const char*/string_view lookup with no temporary key -- go there for ordered maps, comparators, and lookup."
 - slug: "invoke-bind-mem-fn"
   note: "The tools that call and adapt any callable, including these objects: std::invoke calls one uniformly and std::bind composes one (the over-composition this section warns against) -- go there for invoke, bind, and mem_fn."
+- slug: "std-hash"
+  note: "The other function object an unordered container needs: std::hash picks the bucket and std::equal_to confirms the match, and both must agree -- go there for hashing your own key types and the hash/equality contract."

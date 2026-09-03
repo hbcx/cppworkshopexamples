@@ -1,0 +1,4 @@
+title: "std::hash"
+description: "std::hash, the function object that maps a value to a size_t, and how to make your own type usable as a key in an unordered_map or unordered_set. Covers the built-in specializations and the fact that pairs, tuples and containers have none, the full recipe for a custom key (specialize std::hash plus operator==), a reusable hash_combine for mixing several member hashes, and passing a hasher as a container's template argument instead of specializing std::hash -- alongside the traps: a hash that disagrees with operator== so lookups miss, a weak hash that collapses distinct keys into one bucket, and treating std::hash as a stable identifier when the standard promises no stability across runs or implementations. For the containers that consume a hash see the unordered-containers chapter; for hash and equality as function objects see the standard function objects chapter."
+sort_order: 161
+category: "Function objects & utilities"

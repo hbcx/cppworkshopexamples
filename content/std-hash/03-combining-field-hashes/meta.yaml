@@ -1,0 +1,11 @@
+title: "Combining several field hashes"
+standard: "C++11"
+difficulty: 2
+summary: "There is no standard way to combine hashes, so a multi-field key needs a mixing helper. The well-known hash_combine (a large odd constant plus shifts, from Boost) folds each field in a value- and order-sensitive way, avoiding the collisions a naive XOR of field hashes produces."
+notes: "Because std::hash has no specialization for pairs, tuples or your structs, hashing a multi-field key means combining the fields' hashes -- and the obvious combiner, h1 ^ h2, is a trap. XOR is symmetric, so it hashes (1,2) and (2,1) to the same value (a real collision for coordinate or edge keys), and it cancels equal fields to zero. The standard reusable answer is hash_combine: seed ^= hash(field) + 0x9e3779b97f4a7c15 + (seed<<6) + (seed>>2), applied once per field. The magic constant (derived from the golden ratio) and the shifts spread the bits so the result depends on every field and on their order, which is what breaks the symmetry. Write it once as a small template and call it per member inside your std::hash specialization. It is not a cryptographic hash -- it just needs to distribute keys well enough that buckets stay small; the weak-hash anti-pattern shows what happens when they do not."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }

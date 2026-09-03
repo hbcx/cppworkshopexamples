@@ -1,0 +1,11 @@
+title: "Anti-pattern: hash inconsistent with =="
+standard: "C++11"
+difficulty: 3
+summary: "Every hash must satisfy: if a == b then hash(a) == hash(b). A hash that mixes in fields operator== ignores (or ignores fields == uses) breaks it, so two equal keys can hash to different buckets and a lookup for a stored element quietly misses."
+notes: "This is the most damaging hashing bug because it compiles, runs, and fails silently. The unordered containers rely on one contract: equal keys hash equally. If they do not -- classically because the hash and the equality look at different fields -- then two keys that == considers equal may land in different buckets; a find or count for a key that IS present searches the wrong bucket and reports not-found, and an insert can create a duplicate the container thinks is unique. The example gives User an id-only equality but a hash that also folds in the name, so a==b holds while the hashes differ, and shows the fix: hash exactly the fields equality uses (here, id). The rule to internalise: decide what makes two values equal, then hash precisely those fields and no others. The reverse mistake -- equality comparing a field the hash ignores -- is fine for correctness (equal keys still hash equally) but wastes buckets; matching them exactly is best."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }

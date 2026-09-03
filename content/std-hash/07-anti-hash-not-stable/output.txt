@@ -1,0 +1,4 @@
+std::hash is fine INSIDE one run (e.g. for unordered_map),
+but do not persist it: no cross-run or cross-build promise.
+fnv1a("cppworkshop") = 9305923935996443825
+fnv1a("cppworkshop") = 9305923935996443825

@@ -1,0 +1,11 @@
+title: "Anti-pattern: relying on std::hash being stable"
+standard: "C++11"
+difficulty: 3
+summary: "std::hash is only consistent within a single run of one build. It is not specified to be the same across program runs, standard libraries or platforms, and some implementations randomize string hashing per process. Persisting it as an id or checksum is a bug; use a defined algorithm (e.g. FNV-1a) instead."
+notes: "std::hash exists to feed the unordered containers, and its contract is narrow: for a given type in a given program run, equal values hash equally. It is NOT required to be stable beyond that. Different standard-library implementations hash differently, a new compiler or library version may change the result, and some libraries intentionally seed string hashing with per-process randomness (a defence against algorithmic-complexity attacks that flood one bucket), so even two runs of the SAME binary can differ. Any design that writes a std::hash value to disk, sends it over a network, uses it as a database key, or compares it across processes is therefore broken -- it will silently stop matching. When you need a reproducible fingerprint, use an algorithm whose output is specified: FNV-1a for a quick non-cryptographic id, or a real cryptographic hash (SHA-256) when collisions must be infeasible. Keep std::hash for in-memory containers, and never let its value escape the process."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "std::uint64_t", url: "https://en.cppreference.com/w/cpp/types/integer" }

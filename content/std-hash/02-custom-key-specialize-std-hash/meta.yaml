@@ -1,0 +1,12 @@
+title: "Making your own type a key"
+standard: "C++11"
+difficulty: 2
+summary: "To use a custom type as an unordered_map or unordered_set key you need two things: operator== (to confirm a match within a bucket) and a hash. Specializing std::hash<YourType> inside namespace std is the standard-blessed way, and then the type just works with the default containers."
+notes: "An unordered container needs a hash to pick a bucket and an equality to distinguish a real match from a collision in that bucket -- so both are mandatory, and they must agree (see the mismatch anti-pattern). The idiomatic way to supply the hash for a type you own is to specialize std::hash<T>: opening namespace std to add a specialization for a user-defined type is one of the few things the standard explicitly permits. Provide operator== ordinarily (as a free function or member). Inside the hash, combine the members' individual hashes rather than returning just one field, so distinct values spread out; this example inlines a mix and the next factors out hash_combine. Once both are in place the type drops into std::unordered_set<Point> and std::unordered_map<Point, V> with no extra template arguments. One design rule: the container stores keys as const, so a key's hashed fields must not change while it is stored -- prefer immutable key types."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "std::unordered_set", url: "https://en.cppreference.com/w/cpp/container/unordered_set" }
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }

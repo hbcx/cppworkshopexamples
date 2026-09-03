@@ -1,0 +1,11 @@
+title: "A custom hasher as a template argument"
+standard: "C++11"
+difficulty: 2
+summary: "The unordered containers take the hasher (and the equality) as template arguments: unordered_map<K, V, Hash, Eq>. Passing your own function object hashes per-container without touching std::hash -- the right choice when you do not own the key type or want context-specific hashing."
+notes: "Specializing std::hash<T> is the wrong tool in two situations: when you do not own T (opening namespace std for a type from another library is not yours to do, and creates a global definition others may clash with), and when the hashing is specific to one container rather than the type's one natural identity. For both, pass a hasher as the container's third template argument, with a matching equality as the fourth -- unordered_map<std::string, int, CaseInsensitiveHash, CaseInsensitiveEq>. The example keys a map case-insensitively without disturbing how any other std::string is hashed. The rule of thumb: specialize std::hash when there is a single obvious hash for a type you own (a Point, a UserId); pass a hasher when the hash is a policy of this particular container (case-insensitive, hash only some fields, a faster-but-weaker hash for a known-small set). The hasher and the equality must stay consistent, exactly as std::hash and operator== must."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::unordered_map", url: "https://en.cppreference.com/w/cpp/container/unordered_map" }
+detailed_tags:
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }

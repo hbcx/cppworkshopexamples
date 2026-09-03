@@ -1,0 +1,15 @@
+- problem: "A domain value type -- a grid coordinate, a pair of ids, a small record -- has to be the key of a hash map or set for average O(1) lookup, membership, or counting, and it is not one of the types the standard already hashes."
+  why: "Specializing std::hash (with a matching operator==) is what lets the default std::unordered_map<Point, V> and std::unordered_set<Point> accept the type at all. The ordered std::map only needs operator<, but it is O(log n) and keeps an order you may not care about; hashing buys the faster average lookup when order is irrelevant."
+  signal: "A std::map keyed by a small struct that is only ever looked up by key (never iterated in order), or a compile error that std::unordered_map cannot find a hash for your key type."
+
+- problem: "Code needs to detect duplicates or 'seen before' over composite keys -- visited states in a search, deduplicating records by several fields, collapsing events by (type, source) -- fast and in bulk."
+  why: "A std::unordered_set of the key struct answers membership in average O(1), but only with a good combined hash over the fields; without hash_combine the keys collide and the set silently degrades to linear scans. Sorting to dedup is O(n log n) and needs an ordering the data may not have."
+  signal: "Nested loops checking 'have I seen this pair before', or a std::set<std::tuple<...>> used purely for membership where ordering is never needed."
+
+- problem: "An expensive pure function is called repeatedly with the same argument combinations, and you want to memoize results keyed by the tuple of inputs."
+  why: "An unordered_map keyed by a struct of the inputs is the memo table, and the key needs one hash combined from all the input fields -- exactly what a hash_combine over the members gives. A map keyed by a concatenated string works but pays string building and comparison on every call."
+  signal: "A recursive or repeatedly-called function with a small fixed set of scalar arguments and no caching, or a memo keyed by a hand-built string of the arguments."
+
+- problem: "You need container-specific hashing -- case-insensitive string keys, hashing only some fields, a cheaper hash for a known-small set -- or the key type belongs to another library you must not modify."
+  why: "Passing a hasher (and equality) as the container's template arguments scopes the behaviour to that one container and touches nothing global, where specializing std::hash would change hashing for every use of the type and is not yours to write for a type you do not own."
+  signal: "A wish to look keys up case-insensitively, a key type from a third-party header, or two containers of the same type that should hash by different fields."

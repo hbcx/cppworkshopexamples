@@ -1,0 +1,6 @@
+- slug: "unordered-containers"
+  note: "The containers that consume a hash: unordered_map and unordered_set turn std::hash plus operator== into average O(1) lookup, and this is where the hasher/equality template arguments and load factor live -- go there for the hash tables themselves."
+- slug: "standard-function-objects"
+  note: "The sibling function objects: std::hash is a callable just like std::less, and the container's equality slot takes std::equal_to (or its transparent form) -- go there for the arithmetic, comparison and logical objects and transparent lookup."
+- slug: "maps"
+  note: "The ordered alternative when you do not need hashing: std::map needs only operator< and keeps keys sorted, trading O(1) average for O(log n) and a defined order -- go there to weigh the tree against the hash table."

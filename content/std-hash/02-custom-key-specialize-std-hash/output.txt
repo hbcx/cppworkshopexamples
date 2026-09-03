@@ -1,0 +1,3 @@
+contains (1,2)? true
+contains (2,1)? false
+label (0,0) = origin
