@@ -1,0 +1,15 @@
+- problem: "An ordered container or a sort needs a non-default order -- a set that iterates largest-first, a map keyed high-to-low, a min-heap, a descending sort -- and you would rather not hand-write a comparator."
+  why: "std::greater / std::less are named, stateless, default-constructible types, so they drop straight into a container's Compare template argument, which a lambda's unique per-expression type traditionally cannot fill (it is not default-constructible before C++20). You get the order by naming a type, with no functor to define."
+  signal: "A hand-written comparator struct whose whole body is return a > b, or a lambda comparator awkwardly declared just to name its type for a std::set or std::priority_queue."
+
+- problem: "A string-keyed lookup table (std::set<std::string> or std::map<std::string, V>) is probed in a hot loop with string literals, std::string_views or const char* buffers you do not want to turn into std::strings."
+  why: "A transparent comparator (std::less<>) enables heterogeneous lookup, so find/count compare your argument against the keys directly and construct no temporary std::string -- removing an allocation per lookup. The default std::less<std::string> forces that temporary every time."
+  signal: "map.find(std::string(cstr)) or set.count(view) in a loop, or profiling that shows short-lived std::string allocations coming from container lookups."
+
+- problem: "A reduction over a range needs a named combining operation -- a product, a dot product, an XOR checksum, an all-flags-set test -- to feed std::accumulate, std::reduce, std::inner_product or std::transform_reduce."
+  why: "The arithmetic, logical and bitwise objects ARE those operations as types, which is exactly what the numeric algorithms (and their parallel overloads with std::execution) take. std::multiplies, std::bit_xor and std::logical_and read as intent and satisfy the type-argument the parallel forms require, where an inline lambda would still work but not name the operation."
+  signal: "std::accumulate with a lambda whose body is a single a op b, or a manual loop computing a product, checksum or all/any over a range."
+
+- problem: "You are writing generic code -- your own reduce, a numeric utility, a policy-based component -- that takes a combining or comparing operation as a parameter, and you want a sensible default that costs nothing."
+  why: "A standard function object is the natural default (this is how the STL itself is built: accumulate defaults to plus, ordered containers to std::less<Key>). It is stateless, empty-base-optimizable, and a real type callers can replace, unlike a defaulted lambda parameter."
+  signal: "A template with a BinaryOp or Compare parameter, or an operation currently hard-coded that ought to be a defaulted, replaceable policy."

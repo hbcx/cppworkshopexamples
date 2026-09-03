@@ -1,0 +1,12 @@
+title: "Transparent operators (std::less<>)"
+standard: "C++14"
+difficulty: 3
+summary: "The void specializations std::less<>, std::greater<> and friends (C++14) deduce their argument types at the call rather than fixing one, so they compare unlike types directly. Their headline use is heterogeneous lookup: a std::set<std::string, std::less<>> can be searched by a const char* with no temporary key."
+notes: "Writing std::less<> (that is, std::less<void>) gives a comparator whose operator() is a template: it deduces both argument types and forwards to a < b, so it compares an int with a double or a std::string with a const char* without first converting to a common type. That deduction is called a TRANSPARENT comparator, and it carries a member typedef is_transparent. Ordered containers check for that typedef to enable HETEROGENEOUS LOOKUP: find, count, lower_bound and the rest gain an overload that accepts any key-comparable type. So a std::set<std::string, std::less<>> can be probed with a string literal, a std::string_view or a const char* and compares it against the stored keys directly -- no temporary std::string is constructed, which on a hot path saves an allocation per lookup. The cost is one word (<>) in the type; the benefit is both flexibility and speed. The next example proves the saved temporary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::less", url: "https://en.cppreference.com/w/cpp/utility/functional/less" }
+detailed_tags:
+  - { name: "std::less<void>", url: "https://en.cppreference.com/w/cpp/utility/functional/less_void" }
+  - { name: "transparent comparator", url: "https://en.cppreference.com/w/cpp/utility/functional" }

@@ -1,0 +1,13 @@
+title: "Logical and bitwise objects"
+standard: "C++11"
+difficulty: 2
+summary: "std::logical_and/or/not wrap &&, || and !, and std::bit_and/or/xor wrap &, | and ^ (bit_not since C++14). As reduce operations they express intent: logical_and folds a range of flags to all-set, bit_xor folds a range to a checksum."
+notes: "These two families round out the set. The logical objects (logical_and, logical_or, logical_not) operate on bool-convertible values and, folded over a range with std::accumulate, answer all-set / any-set questions; note they do NOT short-circuit the way the operators do, because a function call evaluates its arguments first. The bitwise objects (bit_and, bit_or, bit_xor, and bit_not added in C++14) wrap the integer operators and are handy as reduce operations: a bit_xor fold is a compact checksum, a bit_or fold collects flags, a bit_and fold finds bits common to every element. As with the arithmetic family, prefer these when you need the operation as a NAMED type to hand an algorithm; for a one-off in-line test a lambda still reads better. Keep the non-short-circuit point in mind if the elements have side effects or a guard condition."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::logical_and", url: "https://en.cppreference.com/w/cpp/utility/functional/logical_and" }
+  - { name: "std::bit_xor", url: "https://en.cppreference.com/w/cpp/utility/functional/bit_xor" }
+detailed_tags:
+  - { name: "std::logical_or", url: "https://en.cppreference.com/w/cpp/utility/functional/logical_or" }
+  - { name: "std::bit_and", url: "https://en.cppreference.com/w/cpp/utility/functional/bit_and" }

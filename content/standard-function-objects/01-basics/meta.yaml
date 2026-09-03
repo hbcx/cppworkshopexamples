@@ -1,0 +1,12 @@
+title: "Standard function objects basics"
+standard: "C++11"
+difficulty: 1
+summary: "Each standard function object (std::plus, std::greater, ...) is a named type whose instances wrap one operator and are callable like a function. Being named, stateless and default-constructible, one drops straight into an algorithm or a container's Compare argument."
+notes: "The header <functional> ships small callable TYPES, one per built-in operator, grouped into families: arithmetic (plus, minus, multiplies, divides, modulus, negate), comparison (less, greater, equal_to, not_equal_to, less_equal, greater_equal), logical (logical_and, logical_or, logical_not) and bitwise (bit_and, bit_or, bit_xor, and bit_not since C++14). Each takes a type parameter and calls the matching operator on its arguments, so std::plus<int>{}(2,3) is 2+3. Their value is not that they beat 2+3 -- it is that they are objects you can pass around and name in a template. A named, default-constructible type slots into a container's Compare argument (std::set<int, std::greater<int>>) or an algorithm's operation (std::accumulate with std::multiplies) where a lambda's one-off type cannot serve as a template argument. The rest of this section shows those uses."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::plus", url: "https://en.cppreference.com/w/cpp/utility/functional/plus" }
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }
+detailed_tags:
+  - { name: "std::multiplies", url: "https://en.cppreference.com/w/cpp/utility/functional/multiplies" }

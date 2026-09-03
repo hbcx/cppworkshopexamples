@@ -1,0 +1,11 @@
+title: "Anti-pattern: reading direction from the name"
+standard: "C++11"
+difficulty: 3
+summary: "Guessing a comparator's effect from greater/less goes wrong because different facilities read it from opposite ends. std::sort with std::greater sorts descending, but std::priority_queue with std::greater is a MIN-heap. The rule to apply instead: comp(a, b) true means a is ordered before b."
+notes: "std::greater and std::less name a strict weak ordering, not a result, and the one rule that never misleads is comp(a, b) == true means 'a comes before b'. Facilities then use that ordering differently. std::sort and an ordered container place the before-element first, so std::greater (a before b when a > b) gives descending order and a set that starts at the largest. std::priority_queue instead pops the element that sorts LAST under the comparator, so std::greater -- which puts larger values first -- makes the SMALLEST value pop first: a min-heap, the opposite of what the word 'greater' suggests to most people. The example shows the same std::greater producing descending order in sort and ascending pops in priority_queue. Do not memorize per-container folklore; apply the comp(a,b) rule and, for the heap specifically, remember it serves the last element of the order. The priority-queue chapter covers this in depth."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }
+detailed_tags:
+  - { name: "std::less", url: "https://en.cppreference.com/w/cpp/utility/functional/less" }

@@ -1,0 +1,11 @@
+title: "Comparators as a template argument"
+standard: "C++11"
+difficulty: 2
+summary: "std::greater, std::less and the other comparison objects are the Compare type an ordered container takes: std::set<int, std::greater<int>> orders high-to-low, and the same object is the third template argument of std::map and std::priority_queue. As named types they slot in where a lambda's type cannot."
+notes: "This is where the comparison objects matter most. An ordered container (set, multiset, map, multimap) and std::priority_queue are parameterized on a Compare TYPE, default std::less<Key>. Swapping in std::greater<Key> flips the order -- a set that iterates largest-first, a map whose keys descend. The container default-constructs the comparator, so you only name the type; that is exactly why a stateless standard object fits and a lambda (whose type is unique and, before C++20, not default-constructible) traditionally did not. One direction to keep straight: for a priority_queue std::greater yields a MIN-heap, because the queue pops the element that sorts LAST under the comparator -- covered in the comparator-direction anti-pattern and the priority-queue chapter. For ordering by a member or a computed key you still need a custom comparator; the standard objects cover ordering by the whole value."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::greater", url: "https://en.cppreference.com/w/cpp/utility/functional/greater" }
+detailed_tags:
+  - { name: "std::less", url: "https://en.cppreference.com/w/cpp/utility/functional/less" }

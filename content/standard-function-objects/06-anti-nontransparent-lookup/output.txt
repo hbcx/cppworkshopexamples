@@ -1,0 +1,2 @@
+plain set: 3 temp keys for 3 lookups
+smart set: 0 temp keys for 3 lookups

@@ -1,0 +1,2 @@
+sort + greater: 5 4 3 1 1
+pq + greater pops: 1 1 3 4 5

@@ -1,0 +1,11 @@
+title: "Anti-pattern: a lookup that builds a temporary key"
+standard: "C++14"
+difficulty: 3
+summary: "An ordered container with the default comparator takes its lookup key by const key_type&, so searching a std::set<std::string> (or map) by a const char* constructs a temporary std::string every call -- an allocation on the hot path. A transparent comparator (std::less<>) removes it."
+notes: "The default comparator of an ordered container is std::less<Key>, which is NOT transparent, so find/count/lower_bound only accept a const Key&. Look one up with a different but comparable type -- the very common case of a std::set<std::string> or std::map<std::string, V> searched by a string literal or a std::string_view -- and the container must first convert your argument to the key type, constructing a temporary std::string (and, for a non-small string, allocating) on every single lookup. In a tight loop that is pure waste. The example makes the temporaries countable to prove they happen. The fix is a transparent comparator: declare the container with std::less<> and provide heterogeneous comparisons between the key and the lookup type; the container then compares your argument against the stored keys directly and builds nothing. This is the practical reason the void specializations exist -- reach for std::less<> whenever a string-keyed container is looked up by literals or views."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::less", url: "https://en.cppreference.com/w/cpp/utility/functional/less" }
+detailed_tags:
+  - { name: "std::less<void>", url: "https://en.cppreference.com/w/cpp/utility/functional/less_void" }

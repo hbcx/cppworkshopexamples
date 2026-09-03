@@ -7,3 +7,5 @@
   note: "The reprioritisable alternative: when you must change or remove a queued element's priority, a std::set of (priority, id) keeps everything reachable and ordered, which a heap cannot. Go there for the ordered structure to use when a priority_queue's fixed arrangement gets in the way."
 - slug: "vectors"
   note: "The default container a priority_queue heaps over: std::vector gives the contiguous storage the heap operations want. Go there for the growable array underneath, and its capacity and reallocation behaviour."
+- slug: "standard-function-objects"
+  note: "The comparator you pass as the third template argument: std::greater turns this into a min-heap, and reading its direction correctly is a trap of its own -- go there for the comparison objects and the comp(a,b) rule."

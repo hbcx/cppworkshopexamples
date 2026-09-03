@@ -1,0 +1,4 @@
+product = 24
+elementwise a+b: 11 22 33 44
+dot(a, b) = 300
+negated: -1 -2 -3 -4

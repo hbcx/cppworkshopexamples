@@ -1,0 +1,6 @@
+AND(true, false) = false
+OR(true, false)  = true
+NOT(false)       = true
+all set? false
+xor checksum = 1
+and-fold = 0

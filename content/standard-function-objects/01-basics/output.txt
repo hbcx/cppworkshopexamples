@@ -1,0 +1,4 @@
+add(2, 3) = 5
+mul(4, 5) = 20
+gt(7, 2) = true
+sorted desc: 9 5 4 3 2 1 1

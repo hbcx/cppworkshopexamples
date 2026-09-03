@@ -1,0 +1,12 @@
+title: "Anti-pattern: gluing function objects with bind"
+standard: "C++11"
+difficulty: 3
+summary: "Building a small operation by composing a standard function object with std::bind (std::bind(std::multiplies<int>(), _1, 2) for 'times two') reads backwards and pulls in placeholder machinery. A lambda states it directly. The old composition helpers (bind2nd, ptr_fun, mem_fun) were removed for this reason."
+notes: "Before lambdas, the only way to adapt a standard function object into a one-argument operation was to compose it -- std::bind2nd(std::multiplies<int>(), 2), later std::bind(std::multiplies<int>(), _1, 2). It works, but it is harder to read than the arithmetic it performs, needs the placeholders namespace, and returns an opaque type. A lambda, [](int x){ return x * 2; }, says exactly what happens and inlines. The standard itself moved this way: std::bind1st/bind2nd, std::ptr_fun, std::mem_fun and std::unary/binary_function were deprecated in C++11 and removed in C++17. The lesson is not that standard function objects are obsolete -- they remain the right tool as a WHOLE named operation handed to an algorithm or a container (std::plus as a reduce op, std::greater as a comparator). It is that you should not assemble them with bind to imitate a lambda; write the lambda."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::multiplies", url: "https://en.cppreference.com/w/cpp/utility/functional/multiplies" }
+detailed_tags:
+  - { name: "std::bind", url: "https://en.cppreference.com/w/cpp/utility/functional/bind" }
+  - { name: "lambda expression", url: "https://en.cppreference.com/w/cpp/language/lambda" }

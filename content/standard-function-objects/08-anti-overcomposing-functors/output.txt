@@ -1,0 +1,2 @@
+via bind+multiplies: 2 4 6 8
+via lambda: 2 4 6 8

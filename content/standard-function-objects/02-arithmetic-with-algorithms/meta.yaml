@@ -1,0 +1,15 @@
+title: "Arithmetic objects as named operations"
+standard: "C++11"
+difficulty: 2
+summary: "std::plus, std::minus, std::multiplies, std::negate and friends are the operations the numeric algorithms take: a product with accumulate + multiplies, an elementwise sum with transform + plus, a dot product with inner_product (whose defaults are plus and multiplies)."
+notes: "The numeric algorithms are parameterized on their combining operation, and the arithmetic function objects are exactly those operations named. std::accumulate defaults to std::plus, so a sum needs no operation argument, but a product passes std::multiplies; std::transform with two input ranges and std::plus adds them elementwise; std::inner_product's two operation slots default to plus (the outer reduce) and multiplies (the pairwise combine), which is the dot product. std::negate is the sole unary member and flips sign under transform. Compared with a lambda, a standard object reads as intent ('multiply', 'add') and, crucially, is a type -- which is what the parallel overloads (std::reduce, std::transform_reduce) and std::execution policies want to see. For anything beyond a single operator, a lambda is clearer; these earn their place as the whole named operation."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::multiplies", url: "https://en.cppreference.com/w/cpp/utility/functional/multiplies" }
+  - { name: "std::plus", url: "https://en.cppreference.com/w/cpp/utility/functional/plus" }
+detailed_tags:
+  - { name: "std::negate", url: "https://en.cppreference.com/w/cpp/utility/functional/negate" }
+  - { name: "std::accumulate", url: "https://en.cppreference.com/w/cpp/algorithm/accumulate" }
+  - { name: "std::inner_product", url: "https://en.cppreference.com/w/cpp/algorithm/inner_product" }
+  - { name: "std::transform", url: "https://en.cppreference.com/w/cpp/algorithm/transform" }
