@@ -1,0 +1,6 @@
+- slug: "invoke-bind-mem-fn"
+  note: "The most common reason to reach for std::ref: std::bind copies its bound arguments, so std::ref is how you bind a reference instead -- go there for partial application, member binding, and where the copy bites."
+- slug: "thread"
+  note: "The other classic std::ref user: a std::thread copies every argument into the new thread, so a reference parameter needs std::ref to bind the caller's object -- go there for launching threads and passing arguments safely."
+- slug: "lambdas"
+  note: "The modern alternative for carrying a reference into a callable: a lambda's [&x] capture holds a reference the way std::ref does, with an explicit capture list -- go there for closures, capture modes, and their lifetime traps."

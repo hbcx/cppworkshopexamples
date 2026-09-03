@@ -1,0 +1,2 @@
+after w = source: target = 1, w -> 42
+after w2.get() = source: target = 42

@@ -1,0 +1,12 @@
+title: "A reference_wrapper as a callable"
+standard: "C++11"
+difficulty: 2
+summary: "std::reference_wrapper<F> is itself callable when F is: it forwards operator() to the referent. That lets you pass a stateful functor to an algorithm by reference, so the accumulated state stays in your object instead of a throwaway copy."
+notes: "The standard algorithms that take a functor -- std::for_each, std::generate, std::remove_if -- take it BY VALUE and operate on a copy. For a stateless predicate that is fine, but a functor that accumulates state (a running total, a counter, a collected result) leaves its state in the algorithm's copy, not in your object. std::for_each returns that copy so you can retrieve it, but that is awkward when you want the state to live in a named object you already have. Because a reference_wrapper<F> is callable and forwards to the referent, std::ref(acc) hands the algorithm a reference: every call updates your acc directly. This is the callable side of reference_wrapper, and it applies the same INVOKE rule as std::invoke. A lambda capturing the state by reference ([&]{ ... }) is the modern alternative and is often clearer; std::ref shines when you already have a functor object you want to keep using."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }
+detailed_tags:
+  - { name: "std::reference_wrapper::operator()", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper/operator()" }
+  - { name: "std::for_each", url: "https://en.cppreference.com/w/cpp/algorithm/for_each" }

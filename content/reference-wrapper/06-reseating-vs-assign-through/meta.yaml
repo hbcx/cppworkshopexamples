@@ -1,0 +1,12 @@
+title: "Reseat vs assign-through"
+standard: "C++11"
+difficulty: 2
+summary: "A reference_wrapper's operator= rebinds the wrapper to a new referent; it does not write through to the current one -- the opposite of a plain reference, whose operator= assigns to the referent. Write through a wrapper with .get() (or the implicit conversion)."
+notes: "This is the sharpest behavioural difference between a reference and a reference_wrapper, and the source of a common bug. For a real reference, once bound, every assignment goes to the referent: int& r = a; r = 7; sets a. A reference_wrapper is an object, so its operator= reseats it -- w = std::ref(b) makes w refer to b and leaves the previous referent untouched. The two operations that look similar do opposite things: w = X changes what w points at; w.get() = X changes the value it points at. When you mean to update the referent, go through .get() or let the implicit conversion to T& do it. Being able to reseat is exactly the power that makes reference_wrapper storable and useful; it just means assignment does not mean what it means for T&. The anti-pattern chapter shows the mistake this invites."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }
+detailed_tags:
+  - { name: "std::reference_wrapper::operator=", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper/operator=" }
+  - { name: "std::reference_wrapper::get", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper/get" }

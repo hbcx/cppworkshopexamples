@@ -1,0 +1,2 @@
+with std::ref -> total = 15, calls = 5
+without std::ref -> lost.total = 0

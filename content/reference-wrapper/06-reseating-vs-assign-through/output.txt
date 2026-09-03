@@ -1,0 +1,3 @@
+plain reference: a = 7
+after rebind: a = 7, w -> 100
+through get(): b = 55

@@ -1,0 +1,3 @@
+x = 100
+original[0] = 100
+values[0] = 7, x stays 100

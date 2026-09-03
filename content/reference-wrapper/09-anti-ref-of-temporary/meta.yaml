@@ -1,0 +1,11 @@
+title: "Anti-pattern: wrapping a temporary"
+standard: "C++11"
+difficulty: 3
+summary: "std::ref(makeThing()) would wrap a reference to a temporary that dies at the end of the expression. The standard deletes the rvalue overloads of std::ref and std::cref, so this is a compile error rather than a runtime dangle -- bind the temporary to a named variable first."
+notes: "This is the one dangling case reference_wrapper actually protects you from at compile time. std::ref and std::cref are overloaded on T& only; their T&& overloads are explicitly deleted. So std::ref(makeName()) or std::ref(std::string(\"x\")) does not compile -- the library will not hand you a wrapper to a temporary, because that temporary is destroyed at the end of the full expression and the wrapper would dangle immediately. Treat the error as the compiler catching a real bug, not as an obstacle to route around (do not, for instance, cast away or store the temporary elsewhere just to satisfy ref). The fix is to give the value a name: assign the temporary to a variable whose lifetime covers the wrapper's use, then std::ref that variable. Note this guard only covers the obvious rvalue at the call to ref; a named object that later goes out of scope while a wrapper to it survives is still your responsibility (the dangling anti-pattern)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }
+detailed_tags:
+  - { name: "std::cref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }

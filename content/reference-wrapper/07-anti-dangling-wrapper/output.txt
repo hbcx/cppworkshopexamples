@@ -1,0 +1,2 @@
+safeRefs[0] = 1
+safeRefs count = 3

@@ -1,0 +1,12 @@
+title: "Holding references in a container"
+standard: "C++11"
+difficulty: 2
+summary: "A container cannot hold references (std::vector<T&> is ill-formed), but it can hold std::reference_wrapper<T>. That gives you a vector of references to objects owned elsewhere: reorder or filter the references cheaply while the objects stay put, and mutate the originals through them."
+notes: "This is the first thing a raw reference cannot do and reference_wrapper can. References are not objects, so std::vector<T&> does not exist; the workarounds are pointers (nullable, uglier syntax) or copies (expensive, and decoupled from the originals). std::reference_wrapper<T> gives a third option: a copyable stand-in for a reference that a container accepts. You get a lightweight view over objects stored somewhere else -- an index you can sort, filter and iterate without touching the underlying storage -- and writing through a wrapper edits the original. The elements convert implicitly to T&, so most code reads naturally; reach for .get() when you need to name the reference explicitly (as in queue.front().get()). The one rule to respect: the referents must outlive the wrappers, and must not move -- see the dangling anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }
+detailed_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }
+  - { name: "std::sort", url: "https://en.cppreference.com/w/cpp/algorithm/sort" }

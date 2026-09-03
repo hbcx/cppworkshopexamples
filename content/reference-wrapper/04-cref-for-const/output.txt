@@ -1,0 +1,4 @@
+config: host=prod;retries=3
+copies so far: 0
+view[0]: host=prod;retries=3
+total copies: 0

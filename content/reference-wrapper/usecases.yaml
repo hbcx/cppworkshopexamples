@@ -1,0 +1,15 @@
+- problem: "You need a collection of references to objects that are owned and stored somewhere else -- a priority view over records held in one big table, an index that reorders items without touching them, a worklist that points into a scene graph -- and the objects must not be copied or moved."
+  why: "std::vector<std::reference_wrapper<T>> is the container of references the language will not let you write directly (std::vector<T&> is ill-formed). The alternatives are worse: a vector of pointers is nullable and reads with * and ->, and a vector of copies duplicates the objects and decouples edits from the originals."
+  signal: "A std::vector<T*> whose pointers are never null and exist only to alias objects owned elsewhere, or code that copies large objects into a second container just to sort or filter them."
+
+- problem: "You must pass an object by reference to a facility that copies its arguments -- std::thread and std::async copy each argument into the new task, std::bind copies its bound arguments, std::make_tuple decays and stores by value -- but the callee needs to see and update your object, not a copy."
+  why: "std::ref (or std::cref) is the standard opt-in that carries a real reference through a by-value interface; a bare reference argument is simply copied there. It is the one thing a plain reference cannot do -- survive being passed through a value-based API."
+  signal: "A std::thread or std::bind whose worker mysteriously operates on stale data, or a static_assert about a non-copyable reference argument -- the sign a reference was silently copied and std::ref was needed."
+
+- problem: "An algorithm takes a functor by value, but yours carries state you need afterwards -- a running total, a counter, a collected list -- and you want that state in an object you already hold, not in a copy the algorithm made."
+  why: "A std::reference_wrapper<F> is callable and forwards to your functor, so std::ref(f) passes it by reference and every call updates your object. Retrieving the state from std::for_each's returned copy works but is clumsy, and templating the algorithm on the functor still copies it."
+  signal: "A stateful functor passed to for_each/generate/remove_if whose fields read back as their initial values, or code fishing the result out of the algorithm's return value instead of a named object."
+
+- problem: "You want a lookup table or cache of read-only views onto large objects -- configuration records, decoded buffers, parsed documents -- kept alive elsewhere, without duplicating them and without letting the table modify them."
+  why: "std::cref builds reference_wrapper<const T> entries: no copy of the big object, and const-correctness enforced at compile time. A table of T would copy every entry; a table of const T* would be nullable and lose the value-like syntax."
+  signal: "A container of const T* used purely as non-owning read-only handles, or large objects copied into a map/vector only to be read."

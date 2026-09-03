@@ -1,0 +1,12 @@
+title: "std::ref and reference_wrapper basics"
+standard: "C++11"
+difficulty: 1
+summary: "std::ref(x) makes a std::reference_wrapper<T>: an object that behaves like a reference to x but is copyable, assignable and storable. Read or write the referent through .get() or the implicit conversion to T&, and reassign the wrapper to reseat it."
+notes: "A std::reference_wrapper<T> is the missing piece between a reference and a value. A raw reference (T&) cannot be copied into a new binding, reseated, or stored in a container -- it is not an object. reference_wrapper is an object that holds a pointer to the referent and behaves like the reference: it converts implicitly to T& (so it reads and writes the original) and offers .get() when you want to be explicit. Two abilities set it apart from T&: you can copy and assign it, and assigning a fresh std::ref reseats it to a different object -- something a real reference can never do. std::ref makes the mutable wrapper, std::cref the const one. This example shows the read/write and reseat; the following ones show why those abilities matter -- storing references in containers and passing them through APIs that copy."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }
+detailed_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }
+  - { name: "std::reference_wrapper::get", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper/get" }

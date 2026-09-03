@@ -1,0 +1,3 @@
+stored by value: 5
+stored by ref:   99
+pair first:      123

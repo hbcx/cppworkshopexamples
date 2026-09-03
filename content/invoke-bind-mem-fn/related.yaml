@@ -4,3 +4,5 @@
   note: "The tool that replaced most of bind: a lambda spells out its captures and the exact call, inlines, and checks its argument list -- go there for closures, captures, and the type-erasure tradeoff."
 - slug: "variadic-templates"
   note: "The tuple and pack side of std::invoke: std::apply unpacks a tuple into a call, and invoke is the uniform-call rule used to build such forwarding wrappers -- go there for parameter packs, apply, and forwarding."
+- slug: "reference-wrapper"
+  note: "The tool that undoes bind's copy: bind stores its bound arguments by value, and std::ref wraps a reference so the bound call acts on the original -- go there for reference_wrapper, std::cref, and holding references in containers."

@@ -1,0 +1,11 @@
+title: "std::cref for a no-copy const view"
+standard: "C++11"
+difficulty: 2
+summary: "std::cref makes a std::reference_wrapper<const T>: a read-only reference you can store and pass by value without copying the object. Use it to build tables or pass large objects through copying APIs when you only need to read them."
+notes: "std::cref is std::ref's const sibling. It produces a reference_wrapper<const T>, so the referent can be read but not written through the wrapper -- the compile-time guarantee you want for a shared, read-only view. The value is the same as ref's: a reference you can copy, store and pass by value. That makes it the tool for a lookup table or cache of const views over large objects owned elsewhere (configuration records, big buffers, parsed documents) without duplicating them, and for handing a big object to a copying interface (make_tuple, bind, thread) as a const reference. The example counts copies to show there are none. The lifetime rule is unchanged: the referents must outlive every wrapper. cref also usefully forces the const: even given a non-const object, std::cref hands out a reference through which callers cannot modify it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }
+detailed_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }

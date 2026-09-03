@@ -1,0 +1,11 @@
+title: "Anti-pattern: assigning to the wrapper, not through it"
+standard: "C++11"
+difficulty: 3
+summary: "Writing wrapper = value to change the referent silently rebinds the wrapper instead. Because a T lvalue converts to a reference_wrapper<T>, the assignment compiles and reseats the wrapper to that lvalue, leaving the original object untouched. Assign through with .get()."
+notes: "This is the mistake the reseat-versus-assign-through mechanic invites, and it is nasty because it compiles and runs. You have a reference_wrapper<int> w referring to target, and you write w = source meaning target = source. But source is an int lvalue, reference_wrapper<int> has a non-explicit constructor from int&, so source converts to a temporary wrapper and w's copy-assignment rebinds w to refer to source. No error, no warning -- target keeps its old value and w now silently points somewhere else, which can also become a dangling bug if source is shorter-lived. The fix is to write through the referent: w.get() = source, or use the implicit conversion where an int& is expected. Whenever you assign to a reference_wrapper, ask whether you mean 'point at a different object' (bare =) or 'change the object's value' (.get() =); they are different operations that look the same."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }
+detailed_tags:
+  - { name: "std::reference_wrapper::operator=", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper/operator=" }

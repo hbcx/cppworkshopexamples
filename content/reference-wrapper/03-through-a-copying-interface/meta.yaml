@@ -1,0 +1,12 @@
+title: "Passing a reference through a copying API"
+standard: "C++11"
+difficulty: 2
+summary: "Many standard facilities copy their arguments by value -- make_tuple, make_pair, std::thread, std::async, std::bind. Wrapping an argument in std::ref (or std::cref) makes them store a reference instead: the reference_wrapper decays to a real T& inside the tuple, thread or bind."
+notes: "This is the second thing a raw reference cannot do. When an interface takes its arguments by value -- and the factory functions std::make_tuple / std::make_pair deliberately do, decaying each argument -- passing a bare reference simply copies the object; the connection to your variable is lost. std::ref is the opt-in that says 'store a reference here'. The wrappers carry the reference through the value-based interface, and where the target unwraps them (make_tuple decays reference_wrapper<T> to T&, giving a tuple<T&>) you end up with a genuine reference to the original. The same mechanism is why std::ref appears with std::thread (its arguments are copied into the new thread), std::async and std::bind -- all of them copy, and std::ref is the standard way to pass a reference through. Those chapters cover the threading and binding specifics; the rule is identical."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ref", url: "https://en.cppreference.com/w/cpp/utility/functional/ref" }
+detailed_tags:
+  - { name: "std::make_tuple", url: "https://en.cppreference.com/w/cpp/utility/tuple/make_tuple" }
+  - { name: "std::make_pair", url: "https://en.cppreference.com/w/cpp/utility/pair/make_pair" }

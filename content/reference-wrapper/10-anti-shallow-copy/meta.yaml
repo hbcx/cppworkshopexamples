@@ -1,0 +1,11 @@
+title: "Anti-pattern: shallow copy of a container of wrappers"
+standard: "C++11"
+difficulty: 3
+summary: "Copying a std::vector<std::reference_wrapper<T>> copies the wrappers, not the objects: the new container refers to the same referents, so a write through one shows up in the other. When you need independent data, copy the values into a container of T."
+notes: "A reference_wrapper copies like a pointer: the copy points at the same object. So copying a whole container of wrappers gives you a second container of references to the very same referents -- it looks like a deep copy of your data but is not. Writing through one container's element mutates the shared object, and the other container sees the change; this surprises people who reach for a container of wrappers as a cheap 'copy'. It is the flip side of the feature: the whole point of reference_wrapper is that it is a lightweight, sharable handle, so of course copying it shares. When you actually want an independent snapshot, materialize the values: build a std::vector<T> from the referents (v.get() for each), which copies the objects and decouples them. Decide up front whether you want a shared view (wrappers) or an owned copy (values) -- the two look almost identical in code but behave very differently."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }
+detailed_tags:
+  - { name: "std::reference_wrapper::get", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper/get" }

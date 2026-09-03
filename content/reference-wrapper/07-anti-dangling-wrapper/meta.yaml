@@ -1,0 +1,11 @@
+title: "Anti-pattern: a dangling reference_wrapper"
+standard: "C++11"
+difficulty: 3
+summary: "A reference_wrapper holds a reference, so it dangles whenever a raw reference would: when the referent is destroyed or moved. Wrapping the elements of a std::vector and then letting it reallocate leaves every wrapper pointing at freed memory."
+notes: "reference_wrapper offers no more lifetime safety than a raw reference or pointer -- it just makes the reference copyable and storable, which makes it easier to keep one around too long. The textbook trap is a container of wrappers over the elements of a std::vector: any operation that grows the vector past its capacity reallocates the storage and moves the elements, and every wrapper is now dangling; reading one is undefined behaviour. The example describes that read rather than performing it, then runs the safe version. Two defences: reserve enough capacity so no reallocation occurs while the wrappers live, or refer to storage whose element addresses are stable (std::list and std::deque do not move existing elements, and a wrapper to a long-lived named object is fine). The rule to carry: a reference_wrapper is only as valid as the object it names, and it does nothing to extend that object's life."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::reference_wrapper", url: "https://en.cppreference.com/w/cpp/utility/functional/reference_wrapper" }
+detailed_tags:
+  - { name: "iterator invalidation", url: "https://en.cppreference.com/w/cpp/container" }
