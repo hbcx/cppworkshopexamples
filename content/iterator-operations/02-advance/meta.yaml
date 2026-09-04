@@ -1,0 +1,11 @@
+title: "std::advance"
+standard: "C++11"
+difficulty: 2
+summary: "std::advance(it, n) moves an iterator in place by n steps and returns nothing. It is how you step an iterator that has no it + n (a list, set, or map iterator), and n may be negative for a bidirectional iterator to move backward."
+notes: "std::advance is the in-place mover: it changes the iterator you pass, by n positions, with no return value. Where std::next hands back a moved copy and leaves the original alone, advance mutates in place -- pick advance when you want to keep stepping one iterator through a container. Its reason to exist is generality: a std::list, std::set or std::map iterator supports ++ and -- but not it + n, and advance provides the n-step move on top of that, stepping internally. For a random-access iterator it does the arithmetic in one shot instead (the cost difference is its own topic). n can be negative, but only for a bidirectional (or random-access) iterator -- a negative advance on a forward-only iterator is an error (an anti-pattern here). Rule of thumb: std::advance to move an iterator you hold, std::next/std::prev to compute a new one in an expression."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }
+detailed_tags:
+  - { name: "std::next", url: "https://en.cppreference.com/w/cpp/iterator/next" }

@@ -1,0 +1,12 @@
+title: "Cost depends on the iterator category"
+standard: "C++11"
+difficulty: 2
+summary: "advance, next, prev and distance present the same interface for every container, but their cost follows the iterator category: O(1) for a random-access iterator (vector, array, deque), O(n) for a forward or bidirectional one (list, set, map). The library dispatches on the category to pick each."
+notes: "The iterator operations give generic code one way to move and measure iterators regardless of container -- elementAt(begin, n) with std::advance compiles for a vector and a list alike, where begin + n would compile only for the vector. That uniformity hides a real performance cliff. A random-access iterator supports jump arithmetic, so advance, next and distance are single O(1) operations (begin + n, last - first). A forward or bidirectional iterator has no jump: the library implements the same call by stepping one element at a time, O(n). The standard library chooses between the two at compile time by looking at the iterator's category tag (the tag-dispatch technique). So the code is portable but the cost is not uniform: advancing 1000 into a vector is instant, into a list it walks 1000 nodes. Write generic algorithms against these operations for correctness, but reach for a random-access container when you need cheap random positioning -- and never treat a list index as if it were free."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }
+detailed_tags:
+  - { name: "iterator category", url: "https://en.cppreference.com/w/cpp/iterator/iterator_tags" }

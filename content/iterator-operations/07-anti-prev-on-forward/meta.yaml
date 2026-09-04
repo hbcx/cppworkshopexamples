@@ -1,0 +1,12 @@
+title: "Anti-pattern: prev on a forward iterator"
+standard: "C++11"
+difficulty: 3
+summary: "std::prev and a negative std::advance require a bidirectional iterator. On a forward-only iterator -- std::forward_list, unordered_set/map, istream_iterator -- they do not compile (or are undefined). Track a trailing iterator, or use a bidirectional/random-access container."
+notes: "Iterator categories are a contract: a forward iterator can only go forward. std::prev and std::advance with a negative count both need to step backward, so they demand at least a bidirectional iterator. Apply them to a forward-only iterator -- from std::forward_list, the unordered associative containers, or istream_iterator -- and it is a hard compile error (from the requirement check) or, for a raw negative advance, undefined; there is no cheap 'previous' to fall back on. The fix depends on need. For a one-off 'last element' on a forward container, walk forward and keep a trailing iterator, as the example does. If you step backward often, that is a sign you picked the wrong container: use std::list (bidirectional) or std::vector (random-access), where prev and advance(-n) work directly and, for vector, in O(1). Know your iterator's category before you assume it can move backward -- the standard states each container's category exactly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::prev", url: "https://en.cppreference.com/w/cpp/iterator/prev" }
+detailed_tags:
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }
+  - { name: "iterator category", url: "https://en.cppreference.com/w/cpp/iterator/iterator_tags" }

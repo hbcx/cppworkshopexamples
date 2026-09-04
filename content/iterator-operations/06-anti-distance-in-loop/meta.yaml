@@ -1,0 +1,12 @@
+title: "Anti-pattern: distance inside a loop"
+standard: "C++11"
+difficulty: 3
+summary: "Calling std::distance (or std::advance) from begin inside a loop over a non-random-access range recomputes the walk every iteration, turning an O(n) traversal into O(n squared). A counting iterator makes the extra work visible. Carry the index as you iterate instead."
+notes: "On a forward or bidirectional iterator std::distance is O(n): it steps from the first argument to the second. Put it inside a loop that already visits every element -- for instance to compute each element's index as distance(begin, it) -- and you re-walk a growing prefix on every iteration, so the total work is 0 + 1 + ... + (n-1), i.e. O(n squared), for a loop that should be O(n). The example proves it with a forward iterator that counts its increments: the naive version does 36 steps over 8 elements, the fixed version 8. The same trap hits std::advance recomputed from a fixed point, or member operations like list::size on some old implementations. The fix is to maintain the value you need incrementally: keep a running index that you ++ alongside the iterator, or carry a second iterator, so each element costs O(1). Reserve distance/advance-from-begin for one-off computations, never per element of the same traversal."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }
+detailed_tags:
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }
+  - { name: "iterator category", url: "https://en.cppreference.com/w/cpp/iterator/iterator_tags" }

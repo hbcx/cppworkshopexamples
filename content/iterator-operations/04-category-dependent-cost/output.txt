@@ -1,0 +1,3 @@
+v element 7 = 7
+l element 7 = 7
+advance/distance: O(1) on a vector, O(n) on a list

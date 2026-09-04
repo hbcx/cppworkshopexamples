@@ -1,0 +1,3 @@
+after advance(it, 3):  *it = 4
+after advance(it, -2): *it = 2
+*it = 2, *ahead = 4

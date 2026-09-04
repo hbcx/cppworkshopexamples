@@ -1,0 +1,11 @@
+title: "std::distance"
+standard: "C++11"
+difficulty: 2
+summary: "std::distance(first, last) returns the number of steps from first to last -- the element count of [first, last). Use it for the size of a sub-range or the index of an element an algorithm returned (distance(begin, it)). last must be reachable from first for non-random-access iterators."
+notes: "std::distance measures the gap between two iterators of the same range. Its everyday uses are the length of a sub-range (distance(from, to)) and the zero-based index of a found element (distance(container.begin(), it)) -- the standard way to turn an iterator an algorithm handed back into a position. For a random-access iterator it is last - first in O(1); for forward and bidirectional iterators it counts by stepping, O(n). Two correctness notes. last must be reachable from first by ++ (except for random-access, where distance may be negative if they are out of order); passing a later iterator as first to a forward-only distance is undefined. And calling distance repeatedly inside a loop over a node-based container is the O(n squared) trap covered in the anti-patterns -- compute the index once, or carry it as you iterate, rather than re-measuring each time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }
+detailed_tags:
+  - { name: "std::find", url: "https://en.cppreference.com/w/cpp/algorithm/find" }

@@ -1,0 +1,2 @@
+distance-in-loop steps = 36
+running-index steps    = 8

@@ -1,0 +1,4 @@
+title: "Iterator operations"
+description: "The free functions in <iterator> that move iterators and measure the gap between them: std::next and std::prev, which return a new iterator a number of steps away without touching the original; std::advance, which moves an iterator in place and, for a bidirectional iterator, backward; and std::distance, which counts the steps between two iterators. Covers using them in expressions, in-place stepping, computing a length or an index, and the crucial point that their cost depends on the iterator category -- O(1) on a random-access iterator, O(n) on a node-based one -- alongside the traps: advancing past the end, recomputing distance inside a loop and turning O(n) into O(n squared), and using prev or a negative advance on a forward-only iterator. For the adapters these operate on see the iterator-adapters chapter; for how they dispatch on the category see tag dispatch."
+sort_order: 163
+category: "Iterators"

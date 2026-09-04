@@ -1,0 +1,3 @@
+size via distance = 6
+index of 20 = 3
+elements in [10, 25) = 3

@@ -1,0 +1,12 @@
+title: "std::next and std::prev"
+standard: "C++11"
+difficulty: 1
+summary: "std::next(it, n) returns a new iterator n steps forward and std::prev(it, n) n steps back, WITHOUT changing the original. The step defaults to 1. Because they return a value they compose in expressions, and they work on any iterator -- unlike it + n, which needs random access."
+notes: "std::next and std::prev are the non-mutating way to get a nearby iterator. next(it) is the one after it, next(it, 3) three along; prev(it) the one before, prev(it, 2) two back. They leave the argument untouched and hand back a fresh iterator, which is what makes them usable inside expressions: std::next(lst.begin()) as a loop bound, std::prev(v.end()) for the last element, next(m.begin()) to skip a header. The key advantage over it + n is generality: it + n compiles only for random-access iterators (vector, array, deque), whereas next/prev work on any forward (next) or bidirectional (next and prev) iterator, stepping internally. That generality has a cost on node-based containers (O(n), covered later), but for a small fixed step it is the clear, portable choice. Use next/prev when you want a new position and to keep the original; use std::advance when you want to move the iterator you hold."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::next", url: "https://en.cppreference.com/w/cpp/iterator/next" }
+  - { name: "std::prev", url: "https://en.cppreference.com/w/cpp/iterator/prev" }
+detailed_tags:
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }

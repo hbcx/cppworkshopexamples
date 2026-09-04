@@ -1,0 +1,15 @@
+- problem: "You need a position relative to an iterator you already have -- the element after a match, the one before end(), the second item, the range without its first and last -- as part of an expression, without disturbing the original iterator."
+  why: "std::next and std::prev return the moved iterator by value, so they drop into a loop bound or a call argument directly, and they work on list, set and map iterators where it + n does not compile. Writing a temporary copy and ++ing it is more code; it + n only works for random-access."
+  signal: "A copy-then-increment just to look one element ahead, an it + 1 that fails to compile on a list or map, or begin() + 1 / end() - 1 used as range bounds."
+
+- problem: "An algorithm handed you an iterator and you need the element's INDEX, or you need the number of elements between two iterators of the same range."
+  why: "std::distance(begin, it) is the standard way to convert a found iterator to a position, and distance(first, last) gives a sub-range length -- in one call that is O(1) on a random-access range. A hand-written counting loop restates it and is easy to get off by one."
+  signal: "A manual counter incremented alongside a search to record where a match was, or a loop that counts elements between two known iterators."
+
+- problem: "You are writing generic code -- an algorithm, a utility -- that must move iterators or measure ranges for whatever container the caller supplies, from std::vector to std::list to std::set."
+  why: "advance, next, prev and distance are the category-agnostic interface: the same call compiles for every iterator and the library selects the O(1) or O(n) implementation. Hard-coding it + n or last - first restricts the code to random-access iterators and fails to compile for node-based containers."
+  signal: "A template that uses it + n or last - first and therefore only accepts vectors and arrays, or a SFINAE branch hand-written to separate random-access from the rest."
+
+- problem: "You process a container in strides or windows -- sample every k-th element, move a sliding window's bounds forward by a fixed amount, skip a fixed-size header."
+  why: "std::advance(it, k) steps the iterator by the stride whatever the container is, and std::next expresses a window's far edge without mutating the near one. Index arithmetic (i += k) only applies to random-access containers and re-derives the position each time."
+  signal: "i += stride indexing that would not work on a list, or a window implemented with two indices where two iterators moved by next/advance would be clearer and container-agnostic."

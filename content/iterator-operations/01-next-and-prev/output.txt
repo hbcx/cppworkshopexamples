@@ -1,0 +1,7 @@
+*it          = 10
+*next(it)    = 20
+*next(it, 3) = 40
+*it still    = 10
+*prev(end)    = 50
+*prev(end, 2) = 40
+middle of list: 2 3 4

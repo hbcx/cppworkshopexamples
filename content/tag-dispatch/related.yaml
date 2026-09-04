@@ -16,3 +16,5 @@
   note: "Where the tag usually comes from: a trait produces the true_type or false_type this technique dispatches on, and reads a type's category or properties -- go there for the type-category, relationship and transformation traits that drive the dispatch."
 - slug: "sfinae"
   note: "How the tag is often computed in the first place: a void_t detector yields the true_type or false_type that tag dispatch then routes on, so detecting a capability and dispatching on it are two halves of one pattern -- go there for enable_if, expression SFINAE, and the detection idiom."
+- slug: "iterator-operations"
+  note: "The standard library's own use of this technique: std::advance and std::distance dispatch on the iterator category tag to pick an O(1) or O(n) path -- go there for the iterator operations and where their cost comes from."

@@ -1,0 +1,12 @@
+title: "Anti-pattern: advancing past the end"
+standard: "C++11"
+difficulty: 3
+summary: "std::advance and std::next do not bounds-check. Stepping past end() produces an iterator you must not dereference, and going further is undefined behaviour. On a random-access range, check std::distance to end() and clamp the step before moving."
+notes: "The iterator operations move exactly as far as you ask and trust you to stay in range -- there is no check that the target is valid. advance(it, n) or next(it, n) with an n larger than the remaining elements walks off the end: reaching end() itself is legal (you may compare it), but dereferencing it or stepping beyond it is undefined behaviour that can read or corrupt memory, with no diagnostic. The example describes the bad step and runs the guarded version instead. For a random-access iterator the guard is cheap: std::distance(it, end) is O(1), so clamp the step to it (or compare against end() after moving). For forward and bidirectional iterators there is no O(1) distance, so track your bounds as you go or step in a loop that tests against end() each time. The rule: the operations assume a valid target -- it is on you to ensure the position exists before you move to or read it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::advance", url: "https://en.cppreference.com/w/cpp/iterator/advance" }
+detailed_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }
+  - { name: "std::next", url: "https://en.cppreference.com/w/cpp/iterator/next" }

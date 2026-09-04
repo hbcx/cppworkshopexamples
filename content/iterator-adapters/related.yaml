@@ -6,3 +6,5 @@
   note: "What move_iterator rests on: dereferencing to an rvalue is only useful because moving transfers resources cheaply -- go there for value categories, std::move, and why a moved-from object is valid but unspecified."
 - slug: "file-streams"
   note: "Where the stream iterators do real I/O: ostream_iterator and istream_iterator adapt any std::istream/std::ostream, including file streams, into ranges -- go there for reading and writing files."
+- slug: "iterator-operations"
+  note: "How to move these adapters and measure between them: std::next, std::advance and std::distance step and count any iterator, with a cost that follows its category -- go there for the iterator operations and the O(1)-vs-O(n) rule."

@@ -1,0 +1,8 @@
+- slug: "iterator-adapters"
+  note: "The adapters these operations move: back_inserter, the stream iterators, reverse_iterator and move_iterator all satisfy an iterator category, and next/advance/distance work on them by that category -- go there for the adapters themselves."
+- slug: "tag-dispatch"
+  note: "How advance and distance get their O(1)-or-O(n) implementation: they dispatch at compile time on the iterator's category tag, the textbook use of the technique -- go there for tag dispatch and the iterator_tags hierarchy."
+- slug: "iterator"
+  note: "Where iterator categories come from: the protocol and the input/forward/bidirectional/random-access hierarchy that decides which of these operations are available and how fast -- go there for categories, traits, and writing your own iterator."
+- slug: "lists"
+  note: "The container where these operations are O(n): a std::list has bidirectional iterators, so advance/next/distance step node by node -- go there for the node-based container whose category is the trade-off against a vector's."
