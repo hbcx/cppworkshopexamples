@@ -1,0 +1,4 @@
+ids contains 16:   true
+temps contains 20: true
+word contains r:   true
+word contains z:   false

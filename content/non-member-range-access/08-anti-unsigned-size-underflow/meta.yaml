@@ -1,0 +1,11 @@
+title: "Anti-pattern: unsigned std::size arithmetic that underflows"
+standard: "C++20"
+difficulty: 3
+summary: "std::size returns an unsigned type, so std::size(v) - 1 on an empty range does not become -1 but wraps to a huge value -- a loop bounded by it runs billions of times. std::ssize returns a signed count that behaves in the arithmetic."
+notes: "The wraparound is well-defined (modular), so it is shown running, not as a crash. std::ssize arrived in C++20 for exactly this: reverse and offset loops written with a signed count instead of casting std::size every time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ssize", url: "https://en.cppreference.com/w/cpp/iterator/size" }
+detailed_tags:
+  - { name: "std::size", url: "https://en.cppreference.com/w/cpp/iterator/size" }

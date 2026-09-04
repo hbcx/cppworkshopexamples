@@ -1,0 +1,3 @@
+unsigned size()-1 on empty = 18446744073709551615
+signed ssize()-1 on empty  = -1
+reverse loop body ran 0 times

@@ -1,0 +1,8 @@
+- slug: "iterator-operations"
+  note: "Once std::begin/std::end hand you the iterators, these move and measure them: std::next, std::advance and std::distance step and count any range, with a cost that follows the iterator category."
+- slug: "iterator"
+  note: "What makes begin()/end() work at all: that chapter builds an iterator type from scratch -- the member typedefs, categories, and the protocol these free functions forward to -- so you can make your own type iterable."
+- slug: "span"
+  note: "Where std::data and std::size lead: std::span wraps a contiguous pointer-plus-length into a safe, bounds-carrying view, so you stop passing the two apart to C-style code."
+- slug: "arrays"
+  note: "The raw C array these functions were made to reach: std::begin(arr) and std::size(arr) give it begin/end and a length it has no members for -- go there for arrays and std::array."

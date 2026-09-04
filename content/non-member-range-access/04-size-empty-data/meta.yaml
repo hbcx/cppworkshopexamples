@@ -1,0 +1,12 @@
+title: "std::size, std::empty and std::data"
+standard: "C++17"
+difficulty: 2
+summary: "std::size gives an element count with no sizeof trick, std::empty tests for emptiness, and std::data returns a pointer to the contiguous buffer -- the safe way to hand a container or array to a C API that wants a pointer plus a length."
+notes: "std::data(v) plus std::size(v) replaces the fragile &v[0] idiom, which is undefined behaviour when v is empty. std::size on a raw array yields its length directly, without sizeof(arr)/sizeof(arr[0])."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::size", url: "https://en.cppreference.com/w/cpp/iterator/size" }
+  - { name: "std::data", url: "https://en.cppreference.com/w/cpp/iterator/data" }
+detailed_tags:
+  - { name: "std::empty", url: "https://en.cppreference.com/w/cpp/iterator/empty" }

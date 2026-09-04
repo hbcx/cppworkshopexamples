@@ -1,0 +1,15 @@
+- problem: "A utility library ships template algorithms (sum, find, hashing helpers) that callers pass std::vector, std::array, and plain C arrays into -- the C arrays coming from legacy code and C API buffers that are not going away."
+  why: "Member r.begin()/r.size() compiles for the containers and silently rejects the C array, forcing a second pointer-plus-length overload of every function. std::begin/std::size accept all three, so one template covers them and the overload set does not double."
+  signal: "A template that calls r.begin()/r.end()/r.size() on its range parameter, sitting next to a near-identical (T* p, size_t n) overload of the same function."
+
+- problem: "Code hands a std::vector or std::string to a C API that takes a pointer and a length -- a socket write, a compression call, an OpenGL buffer upload."
+  why: "The old &v[0] is undefined behaviour when the container is empty, and .data() is a member some ranges lack. std::data(v) with std::size(v) is one uniform, empty-safe pair that also works on a raw array."
+  signal: "&v[0] or &v.front() passed to a C function alongside v.size(), with no separate guard for the empty case."
+
+- problem: "A range library exposes its own view types whose traversal is provided only through free begin/end found by ADL, and generic algorithms must accept those views as well as containers and arrays."
+  why: "A qualified std::begin(r) never considers the view's namespace-scope begin, so it rejects exactly the types the library is built around. The using std::begin; begin(r); two-step is the customization point every generic algorithm and range-based for relies on."
+  signal: "std::begin(r) written qualified inside a template, or a range template that compiles for vectors but fails to instantiate for a third-party view type."
+
+- problem: "Reverse and offset loops over containers whose size can be zero -- walking a buffer back to front, or indexing size() - k."
+  why: "std::size is unsigned, so size() - 1 on an empty range wraps to a huge value and the loop runs away. std::ssize returns a signed count, so the boundary arithmetic is correct without scattering static_cast<ptrdiff_t> through the code."
+  signal: "A loop bound written as i <= size() - 1 or size() - k with an unsigned index, where the range can legitimately be empty."

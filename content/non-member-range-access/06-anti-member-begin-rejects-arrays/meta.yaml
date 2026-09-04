@@ -1,0 +1,12 @@
+title: "Anti-pattern: a template hard-coded to member .begin()"
+standard: "C++11"
+difficulty: 3
+summary: "Writing a range template on r.begin()/r.size() silently locks it to class types: a raw C array (still everywhere in C interop and legacy code) has no member .begin() and is rejected -- go through std::begin/std::end and it accepts arrays too."
+notes: "The broken form is shown in a comment because it fails to compile for arrays. The fix uses std::begin/std::end and std::distance, all available since C++11, so the same template serves vectors and arrays."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::begin", url: "https://en.cppreference.com/w/cpp/iterator/begin" }
+detailed_tags:
+  - { name: "std::end", url: "https://en.cppreference.com/w/cpp/iterator/end" }
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }

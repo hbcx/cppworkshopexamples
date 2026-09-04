@@ -1,0 +1,11 @@
+title: "Anti-pattern: std::data on an empty container"
+standard: "C++17"
+difficulty: 3
+summary: "std::data(v) on an empty vector may be nullptr, and even when it is not, dereferencing it reads one past the end -- undefined behaviour. Comparing the pointer is fine; every use of data() must be gated on std::size."
+notes: "The UB dereference is described in a comment, not run. The fix passes std::data(v) together with std::size(v) to the consumer, so a zero length means the pointer is never read -- the correct replacement for the old and unsafe &v[0]."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::data", url: "https://en.cppreference.com/w/cpp/iterator/data" }
+detailed_tags:
+  - { name: "std::size", url: "https://en.cppreference.com/w/cpp/iterator/size" }

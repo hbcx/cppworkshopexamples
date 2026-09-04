@@ -1,0 +1,12 @@
+title: "Generic code over both arrays and containers"
+standard: "C++11"
+difficulty: 2
+summary: "A single template written on std::begin/std::end accepts a std::vector, a raw array, and a std::string with no overloads -- the payoff of the free functions is that the same algorithm serves every range shape."
+notes: "Reach for std::begin/std::end in any template that takes a range, not just when you expect arrays: it also accepts library range types that offer only free begin/end, which member .begin() would reject."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::begin", url: "https://en.cppreference.com/w/cpp/iterator/begin" }
+  - { name: "std::end", url: "https://en.cppreference.com/w/cpp/iterator/end" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

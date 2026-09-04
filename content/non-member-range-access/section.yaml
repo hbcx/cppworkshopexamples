@@ -1,0 +1,4 @@
+title: "Non-member range access"
+description: "The free functions in <iterator> that give one spelling for iterating anything: std::begin/std::end, the const and reverse variants (cbegin/cend, rbegin/rend), and the C++17 size/empty/data. Their whole point is that they work on raw C arrays and on library range types with only free begin/end, not just on containers with member .begin() -- which is what lets a template accept all three. Covers the uniform begin/end, writing generic code over arrays and containers, the const and reverse variants, size/empty/data with C-API interop, and the two-step ADL customization-point idiom -- alongside the traps: a template hard-coded to member .begin() that rejects arrays, a qualified std::begin that defeats ADL, unsigned std::size arithmetic that underflows, and std::data on an empty container."
+sort_order: 164
+category: "Iterators"

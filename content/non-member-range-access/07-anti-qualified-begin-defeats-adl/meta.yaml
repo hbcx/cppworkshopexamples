@@ -1,0 +1,12 @@
+title: "Anti-pattern: a qualified std::begin that defeats ADL"
+standard: "C++11"
+difficulty: 3
+summary: "Writing std::begin(r) qualified in generic code looks more explicit but freezes the lookup: a range type that offers only a free begin/end in its namespace is never considered, so the template rejects it -- the two-step using-declaration keeps ADL in play."
+notes: "The broken qualified form is shown in a comment because it fails to compile for the ADL-only type. This is the exact mistake the customization-point idiom prevents; std::begin does not fall back to a namespace-scope begin."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "argument-dependent lookup", url: "https://en.cppreference.com/w/cpp/language/adl" }
+  - { name: "std::begin", url: "https://en.cppreference.com/w/cpp/iterator/begin" }
+detailed_tags:
+  - { name: "std::end", url: "https://en.cppreference.com/w/cpp/iterator/end" }

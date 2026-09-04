@@ -1,0 +1,3 @@
+total(vector)   = 12
+total(array)    = 3
+total(Triangle) = 12

@@ -1,0 +1,13 @@
+title: "The customization point: using std::begin, then unqualified begin"
+standard: "C++11"
+difficulty: 3
+summary: "Generic code brings std::begin/std::end into scope with a using-declaration and then calls begin/end unqualified, so argument-dependent lookup can also find a range type that offers only free begin/end in its own namespace."
+notes: "This two-step idiom is how the standard algorithms and range-based for reach both std::begin (for containers and arrays) and a library type's own free begin found by ADL. Calling std::begin qualified would freeze the lookup and miss the ADL overload."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::begin", url: "https://en.cppreference.com/w/cpp/iterator/begin" }
+  - { name: "argument-dependent lookup", url: "https://en.cppreference.com/w/cpp/language/adl" }
+detailed_tags:
+  - { name: "std::end", url: "https://en.cppreference.com/w/cpp/iterator/end" }
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

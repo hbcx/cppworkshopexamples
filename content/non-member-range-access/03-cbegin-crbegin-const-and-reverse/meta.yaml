@@ -1,0 +1,14 @@
+title: "The const and reverse variants: cbegin, cend, rbegin, rend"
+standard: "C++14"
+difficulty: 2
+summary: "std::cbegin/std::cend hand back a read-only iterator even on a non-const object, and std::rbegin/std::rend (with std::crbegin/std::crend) walk a range backwards -- all as free functions that work on raw arrays too."
+notes: "These landed in C++14, after std::begin/std::end in C++11. cbegin gives you const traversal without needing a const reference to the object; the reverse variants save you writing a manual backward loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cbegin", url: "https://en.cppreference.com/w/cpp/iterator/begin" }
+  - { name: "std::rbegin", url: "https://en.cppreference.com/w/cpp/iterator/rbegin" }
+detailed_tags:
+  - { name: "std::cend", url: "https://en.cppreference.com/w/cpp/iterator/end" }
+  - { name: "std::rend", url: "https://en.cppreference.com/w/cpp/iterator/rend" }
+  - { name: "std::reverse_iterator", url: "https://en.cppreference.com/w/cpp/iterator/reverse_iterator" }

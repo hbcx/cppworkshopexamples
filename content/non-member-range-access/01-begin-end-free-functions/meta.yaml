@@ -1,0 +1,13 @@
+title: "std::begin and std::end: one spelling for containers and arrays"
+standard: "C++11"
+difficulty: 1
+summary: "std::begin and std::end return the first and one-past-last iterator of any range, forwarding to the member begin/end for containers and returning plain pointers for a raw C array -- so one loop walks both."
+notes: "A raw array has no member .begin(); std::begin(arr) returns arr and std::end(arr) returns arr + N, deduced from the array type. That is why generic code prefers the free functions."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::begin", url: "https://en.cppreference.com/w/cpp/iterator/begin" }
+  - { name: "std::end", url: "https://en.cppreference.com/w/cpp/iterator/end" }
+detailed_tags:
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

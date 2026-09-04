@@ -1,0 +1,3 @@
+checksum = 15
+vector reversed: 5 4 3 2 1
+array reversed:  5 4 3 2 1

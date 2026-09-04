@@ -11,3 +11,5 @@
   note: "A container a span CANNOT view: std::deque stores its elements in separate chunks, so there is no contiguous run to borrow -- copy it into a vector first. Go there for the double-ended container and why its storage is not contiguous."
 - slug: "mdspan"
   note: "The multidimensional version of this view: std::mdspan borrows the same kind of contiguous buffer but presents it as a 2D, 3D or higher grid with m[i, j] -- go there when the thing you are viewing is a matrix or tensor, not a flat 1D range."
+- slug: "non-member-range-access"
+  note: "How to build a span safely from any range: std::data and std::size give the contiguous pointer and length a span is made of, empty-safe and uniform across containers and arrays -- go there for the free range-access functions."
