@@ -1,0 +1,13 @@
+title: "The model: insert_after, erase_after, and no way back"
+standard: "C++11"
+difficulty: 1
+summary: "A forward_list is a chain of nodes each holding one next pointer, so nothing points backward: there is no back(), no push_back and no size(), and every edit is named after the node in front of it -- insert_after and erase_after."
+notes: "Everything odd about the interface follows from one pointer per node. You cannot insert before a position without knowing the previous node, so mutation is *_after; finding the tail would mean walking the chain, so there is no push_back or back(); a size counter would slow splice_after, so there is no size(). push_front and front() are the cheap operations."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list", url: "https://en.cppreference.com/w/cpp/container/forward_list" }
+detailed_tags:
+  - { name: "std::forward_list::insert_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/insert_after" }
+  - { name: "std::forward_list::erase_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/erase_after" }
+  - { name: "std::forward_list::push_front", url: "https://en.cppreference.com/w/cpp/container/forward_list/push_front" }

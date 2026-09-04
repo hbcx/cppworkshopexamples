@@ -1,0 +1,12 @@
+title: "The payoff: one pointer per node versus two"
+standard: "C++17"
+difficulty: 3
+summary: "The whole reason to accept the awkward interface is memory: a forward_list node carries one next pointer where a std::list node carries next and prev, so a chain of many small elements saves one pointer of overhead per node."
+notes: "This measures the difference instead of asserting it. A node holds the element plus the link pointers, so the per-node overhead is one pointer for forward_list and two for std::list; on a 64-bit build that is 8 bytes saved per node. The saving only matters when nodes are many and small -- for a handful of large elements it is noise, and std::list buys you back(), size() and bidirectional iteration for those 8 bytes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list", url: "https://en.cppreference.com/w/cpp/container/forward_list" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+  - { name: "sizeof", url: "https://en.cppreference.com/w/cpp/language/sizeof" }

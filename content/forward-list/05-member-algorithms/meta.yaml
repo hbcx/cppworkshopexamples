@@ -1,0 +1,14 @@
+title: "Why forward_list ships its own sort, merge, unique and remove_if"
+standard: "C++11"
+difficulty: 2
+summary: "std::sort needs random-access iterators, which a forward_list does not have, so the container provides member sort, merge, unique, remove_if and reverse -- each relinks nodes instead of moving values, staying valid and cheap on a singly-linked chain."
+notes: "The member versions are not conveniences, they are the only option: the free std::sort will not compile on a forward_list iterator. sort is a stable merge sort over the links; merge folds another sorted list in by relinking (both must be sorted first); unique drops adjacent duplicates, so sort before unique to remove all duplicates; remove_if unlinks every matching node in one pass; reverse flips the next pointers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list::sort", url: "https://en.cppreference.com/w/cpp/container/forward_list/sort" }
+detailed_tags:
+  - { name: "std::forward_list::merge", url: "https://en.cppreference.com/w/cpp/container/forward_list/merge" }
+  - { name: "std::forward_list::unique", url: "https://en.cppreference.com/w/cpp/container/forward_list/unique" }
+  - { name: "std::forward_list::remove_if", url: "https://en.cppreference.com/w/cpp/container/forward_list/remove" }
+  - { name: "std::forward_list::reverse", url: "https://en.cppreference.com/w/cpp/container/forward_list/reverse" }

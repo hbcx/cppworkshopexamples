@@ -1,0 +1,12 @@
+title: "Anti-pattern: an erase_after loop that skips nodes"
+standard: "C++11"
+difficulty: 3
+summary: "Removing matching elements by advancing a single iterator and calling erase_after on it drops the wrong node and skips its successor -- the correct pattern holds a trailing iterator and only advances it when it did not erase."
+notes: "erase_after unlinks the node AFTER the position, so the position must stay put while the successor is removed. The classic bug advances the same iterator it erases through, skipping the element pulled into the gap. The fix keeps a trailing iterator (seeded at before_begin): erase the node after it when it matches, and advance the trailing iterator only when it does not. std::forward_list::remove_if does exactly this in one call -- prefer it when the whole condition fits a predicate."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list::erase_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/erase_after" }
+detailed_tags:
+  - { name: "std::forward_list::before_begin", url: "https://en.cppreference.com/w/cpp/container/forward_list/before_begin" }
+  - { name: "std::forward_list::remove_if", url: "https://en.cppreference.com/w/cpp/container/forward_list/remove" }

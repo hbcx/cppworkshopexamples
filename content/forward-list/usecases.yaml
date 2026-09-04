@@ -1,0 +1,15 @@
+- problem: "A hash table with separate chaining: each bucket holds the elements that hashed to it, and on a collision a new element is pushed onto the front of that bucket's chain. Buckets are many and often short."
+  why: "A bucket never needs back(), size(), or backward traversal -- only push at the head and a forward scan. Paying std::list's second pointer per node across millions of nodes is pure waste; the standard library's own unordered_map chains with singly-linked nodes for exactly this reason."
+  signal: "A container of short lists used as buckets where every insertion is push_front and lookup is a single forward scan, with no call to size() or back() on the inner list."
+
+- problem: "A fixed-block memory pool or free list: freed slots are threaded together so allocation pops one off the front and freeing pushes one back, and each node must be as small as possible to fit inside the block it manages."
+  why: "The link has to share space with tiny blocks, so one pointer of overhead per node is the budget; a doubly-linked node would not fit or would waste half the metadata. push_front / pop_front are the only operations a free list ever needs."
+  signal: "A LIFO of reusable slots or handles where nodes are tiny, only the head is touched, and the count is tracked elsewhere or not at all."
+
+- problem: "An adjacency list for a large sparse graph: every vertex owns the list of its outgoing edges, and there can be millions of vertices whose edge lists are walked front to back during traversal."
+  why: "Edges are enumerated in one direction and never counted per vertex or accessed from the back, so the prev pointer std::list adds is dead weight multiplied by the edge count -- real memory on a graph that barely fits as it is."
+  signal: "A per-vertex edge list that is only ever appended to during build and iterated forward during search, never indexed or reverse-traversed."
+
+- problem: "Undo or command chains that are moved between lists -- promoting a batch of pending commands into a committed history, or transferring queued work between stages."
+  why: "splice_after relinks whole runs of nodes in O(1) without copying the commands or invalidating handles to them, and the chains are only ever pushed at the head and spliced, so the singly-linked node carries no cost you do not use."
+  signal: "Lists whose elements are transferred wholesale between containers with splice, where nothing indexes them or reads size on the hot path."

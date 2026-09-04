@@ -1,0 +1,4 @@
+title: "std::forward_list"
+description: "The singly-linked list: one pointer per node and nothing more, traded for an interface built entirely around the fact that nothing points backward. There is no back(), no push_back and no size(), every edit is named *_after and needs the node in front of the one you want, and before_begin() is the phantom position that lets you touch the head. Covers the insert_after/erase_after model, before_begin and head operations, push_front as an O(1) stack, splice_after that moves nodes between lists in O(1), the member sort/merge/unique/remove_if/reverse, building a list front to back with a trailing iterator, and the real memory payoff against std::list -- alongside the traps: leaning on a missing size(), an erase_after loop that skips nodes, faking push_back into O(n^2), and reaching for it before profiling says the extra pointer matters."
+sort_order: 165
+category: "Containers"

@@ -1,0 +1,3 @@
+after insert_after(before_begin):  connect open read
+after erase_after(before_begin):  open read
+after deleting read by value:  open

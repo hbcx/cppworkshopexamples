@@ -1,0 +1,3 @@
+fake push_back: 50 appends took 1176 tail-walk steps
+matches (N-1)(N-2)/2 = 1176
+trailing-tail build: 0 tail-walk steps

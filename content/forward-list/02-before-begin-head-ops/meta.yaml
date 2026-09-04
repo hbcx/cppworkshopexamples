@@ -1,0 +1,12 @@
+title: "before_begin: the phantom position that reaches the head"
+standard: "C++11"
+difficulty: 2
+summary: "Since every edit acts on the node after a position, changing the head needs a position before it -- before_begin() is that iterator. It is not dereferenceable; it exists only so insert_after and erase_after can touch the first element."
+notes: "before_begin() returns an iterator to a position that sits before begin(). Dereferencing it is undefined behaviour -- its one job is to be the argument to insert_after (to prepend, the same as push_front) and erase_after (to drop the head, the same as pop_front). Keeping a before_begin iterator while you walk gives you the trailing position needed for any head-or-middle edit."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list::before_begin", url: "https://en.cppreference.com/w/cpp/container/forward_list/before_begin" }
+detailed_tags:
+  - { name: "std::forward_list::insert_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/insert_after" }
+  - { name: "std::forward_list::erase_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/erase_after" }

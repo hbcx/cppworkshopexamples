@@ -1,0 +1,6 @@
+ready after single splice:  a c
+done after single splice:   b x y
+ready after range splice: 
+done after range splice:   b a c x y
+done after whole-list splice:  m n b a c x y
+extra empty? true

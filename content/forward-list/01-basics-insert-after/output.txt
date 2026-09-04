@@ -1,0 +1,4 @@
+chain:  alpha beta gamma
+after insert_after(begin):  alpha alpha-and-a-half beta gamma
+after erase_after(begin):  alpha beta gamma
+front = alpha

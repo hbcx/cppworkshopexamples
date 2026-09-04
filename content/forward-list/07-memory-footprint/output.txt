@@ -1,0 +1,4 @@
+element:             sizeof(int) = 4 bytes
+forward_list node:   16 bytes (one next pointer)
+list node:           24 bytes (next + prev)
+saved per node:      8 bytes

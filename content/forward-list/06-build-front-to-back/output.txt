@@ -1,0 +1,3 @@
+built in order:  10 20 30 40
+after range append:  10 20 30 40 50 60
+new tail = 60

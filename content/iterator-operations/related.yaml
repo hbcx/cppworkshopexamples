@@ -8,3 +8,5 @@
   note: "The container where these operations are O(n): a std::list has bidirectional iterators, so advance/next/distance step node by node -- go there for the node-based container whose category is the trade-off against a vector's."
 - slug: "non-member-range-access"
   note: "Where the iterators these operations move come from: std::begin/std::end (and size/data) hand you the range endpoints uniformly for containers and raw arrays -- go there for the free range-access functions and the generic code they enable."
+- slug: "forward-list"
+  note: "The container that makes the category cost concrete: std::forward_list has forward iterators only, so it has no size() and std::distance on it is O(n) -- go there for the singly-linked list whose missing count these operations must compute."

@@ -1,0 +1,11 @@
+title: "Anti-pattern: faking push_back by walking to the tail"
+standard: "C++11"
+difficulty: 3
+summary: "There is no push_back, so appending by searching for the last node each time makes every append O(n) and building an n-element list O(n^2) -- keep a trailing tail iterator (O(1) per append) or, if you keep needing the back, use a different container."
+notes: "The counter proves the cost. Each fake push_back walks the whole chain to find the tail, so n appends do 0 + 1 + 2 + ... = n(n-1)/2 node visits. The trailing-iterator build from example 06 does zero searching. If append-at-the-end is your main operation, forward_list is the wrong choice: std::list has push_back and O(1) back(), std::vector has amortised O(1) push_back and contiguous storage."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list", url: "https://en.cppreference.com/w/cpp/container/forward_list" }
+detailed_tags:
+  - { name: "std::forward_list::insert_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/insert_after" }

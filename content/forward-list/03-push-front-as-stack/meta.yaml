@@ -1,0 +1,12 @@
+title: "push_front as an O(1) stack, at one pointer per node"
+standard: "C++11"
+difficulty: 2
+summary: "When you only ever add and remove at one end, a forward_list is a stack whose per-node cost is a single pointer -- push_front and pop_front are O(1), and you never pay for the tail pointer a std::list or the capacity of a std::vector would carry."
+notes: "This is the shape forward_list fits best: a LIFO where nodes are small and numerous and you never need size, back or random access. front() reads the top, push_front pushes, pop_front pops. Reversing the natural insertion order is a one-call member reverse if you need oldest-first at the end."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list::push_front", url: "https://en.cppreference.com/w/cpp/container/forward_list/push_front" }
+detailed_tags:
+  - { name: "std::forward_list", url: "https://en.cppreference.com/w/cpp/container/forward_list" }
+  - { name: "std::forward_list::reverse", url: "https://en.cppreference.com/w/cpp/container/forward_list/reverse" }

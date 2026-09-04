@@ -1,0 +1,11 @@
+title: "Anti-pattern: reaching for forward_list before profiling"
+standard: "C++11"
+difficulty: 3
+summary: "Choosing forward_list for the memory saving and then bolting a size counter and a tail pointer back on rebuilds a worse std::list by hand -- if the code needs size or back, the one saved pointer per node was never the real constraint."
+notes: "The saving is one pointer per node, and it only pays off when nodes are many and small AND you never need size, back, or bidirectional traversal. The moment a caller wants the count or the last element, wrapping forward_list with your own maintained size_ and tail_ costs more memory and code than std::list, which maintains both correctly and gives O(1) size() and back(). Measure first: reach for forward_list when a profiler shows node overhead matters, not by default."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list", url: "https://en.cppreference.com/w/cpp/container/forward_list" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

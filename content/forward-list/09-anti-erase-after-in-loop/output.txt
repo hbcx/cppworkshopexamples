@@ -1,0 +1,2 @@
+after trailing-iterator erase:  1 2 3
+after remove_if:                1 2 3

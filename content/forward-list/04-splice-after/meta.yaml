@@ -1,0 +1,12 @@
+title: "splice_after: moving nodes between lists in O(1)"
+standard: "C++11"
+difficulty: 2
+summary: "splice_after relinks nodes from one forward_list into another without copying, moving, or invalidating them -- a whole list, a single element, or a range, each in constant time by rewiring next pointers rather than touching the values."
+notes: "Like std::list::splice but *_after, because the insertion point is given as the node in front of where the moved nodes go. The single-element and range forms take the source position(s) as *_after too. The elements keep their identity: pointers and iterators to spliced nodes stay valid, which is the whole reason to splice instead of insert-and-erase."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::forward_list::splice_after", url: "https://en.cppreference.com/w/cpp/container/forward_list/splice_after" }
+detailed_tags:
+  - { name: "std::list::splice", url: "https://en.cppreference.com/w/cpp/container/list/splice" }
+  - { name: "std::forward_list::before_begin", url: "https://en.cppreference.com/w/cpp/container/forward_list/before_begin" }

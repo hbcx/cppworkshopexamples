@@ -42,3 +42,5 @@
   note: "The fixed-size relative of std::vector<bool>: when the bit count is a compile-time constant, std::bitset<N> packs the same bits but adds the bitwise operators and count and drops the dynamic sizing -- go there for the fixed bit array and set-algebra operations."
 - slug: "mdspan"
   note: "View a flat vector as a matrix or tensor: std::mdspan (C++23) lays a 2D or 3D grid over the vector's contiguous buffer with m[i, j] and no copy -- go there when you store a grid flat for cache locality but want multidimensional indexing."
+- slug: "forward-list"
+  note: "The leanest node-based container: std::forward_list is a singly-linked chain, one pointer per node, good only for head-only insertion and forward scans -- go there to see the far end of the node-versus-contiguous trade-off a vector sits at."

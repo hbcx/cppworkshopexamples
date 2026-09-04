@@ -1,0 +1,8 @@
+- slug: "lists"
+  note: "The doubly-linked sibling: std::list adds a prev pointer per node and buys back push_back, back(), O(1) size() and bidirectional iteration -- go there to see the head-to-head, and reach for it the moment you need any of those."
+- slug: "vectors"
+  note: "The default you should weigh against first: a contiguous vector wins on iteration speed and memory locality, and only loses when you need the node stability or head-only cheapness a forward_list gives -- go there for the container to justify NOT using."
+- slug: "unordered-containers"
+  note: "Where singly-linked chains do real work: hash tables resolve collisions with separate chaining, and a bucket is exactly a short forward-linked list pushed at the head -- go there for the hashed containers built on this shape."
+- slug: "iterator-operations"
+  note: "Why forward_list has no size() and counting is O(n): std::distance and std::advance step a forward iterator one node at a time, with the cost this container's missing size() forces you to pay -- go there for the free iterator operations and their category-dependent cost."

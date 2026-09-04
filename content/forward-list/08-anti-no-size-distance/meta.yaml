@@ -1,0 +1,11 @@
+title: "Anti-pattern: leaning on a size() forward_list does not have"
+standard: "C++11"
+difficulty: 3
+summary: "forward_list has no size(), so code that needs a count falls back to std::distance(begin, end) -- and calling that inside a loop condition walks the whole chain every iteration, turning an O(n) pass into O(n^2)."
+notes: "The trap is not std::distance itself but calling it repeatedly. If you keep asking a forward_list how long it is, you have picked the wrong container: cache the count in a variable, or use std::list (size() is O(1) since C++11) or std::vector. The example proves the cost with a counter instead of a timer, so it is deterministic."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::distance", url: "https://en.cppreference.com/w/cpp/iterator/distance" }
+detailed_tags:
+  - { name: "std::forward_list", url: "https://en.cppreference.com/w/cpp/container/forward_list" }

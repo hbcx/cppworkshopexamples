@@ -1,0 +1,4 @@
+undo: bold
+undo: type i
+undo: type H
+empty now? true
