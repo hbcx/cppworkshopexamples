@@ -1,0 +1,2 @@
+broken: Tracked destroyed = 0  (leaked: suspended forever, handle was never registered)
+fixed:  Tracked destroyed = 1  (resumed via the scheduler, ran to completion, frame freed)

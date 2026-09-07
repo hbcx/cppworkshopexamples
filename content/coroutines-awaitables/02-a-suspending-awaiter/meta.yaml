@@ -1,0 +1,14 @@
+title: "A suspending awaiter"
+standard: "C++20"
+difficulty: 2
+summary: "When await_ready returns false the coroutine suspends: await_suspend runs while it is parked, control returns to the resumer, and the body continues only when the handle is resumed again. The co_await point splits the function in two."
+notes: "This is the whole reason coroutines exist: a co_await can stop the function in the middle, hand control back, and pick up later exactly where it left off with all locals intact. await_suspend is where you would normally register the handle somewhere -- a scheduler, an I/O completion, a timer -- so that something will resume it. Here nothing is registered and the driver just resumes by hand to show the two halves. A real await_ready would return true only when the awaited result is already available, skipping the suspend."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "await_ready", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "await_suspend", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "await_resume", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

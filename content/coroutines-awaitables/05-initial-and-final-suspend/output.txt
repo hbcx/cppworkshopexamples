@@ -1,0 +1,6 @@
+creating eager task:
+  [eager] runs at creation, no resume needed
+creating lazy task:
+resuming lazy task:
+  [lazy] runs only when resumed
+lazy done, frame still owned: true

@@ -1,0 +1,15 @@
+title: "The awaiter protocol"
+standard: "C++20"
+difficulty: 1
+summary: "Every co_await drives an awaiter through three hooks -- await_ready, await_suspend, await_resume. When await_ready returns true the coroutine never suspends and await_resume gives the value of the co_await expression."
+notes: "await_ready is the fast path: if the result is already available, returning true skips the suspend machinery entirely and the coroutine runs straight through. await_resume always runs and its return type is the type of the whole co_await expression, so co_await can produce a value just like a function call. std::suspend_never and std::suspend_always are just tiny prewritten awaiters -- ready-true and ready-false with empty bodies."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "await_ready", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "await_suspend", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "await_resume", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

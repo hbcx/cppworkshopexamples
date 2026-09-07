@@ -1,0 +1,12 @@
+title: "The three await_suspend return types"
+standard: "C++20"
+difficulty: 3
+summary: "await_suspend can return void (park and go back to the resumer), bool (false means do not suspend after all, resume immediately), or a coroutine_handle (resume that coroutine next, without nesting the call stack -- symmetric transfer)."
+notes: "The handle-returning form is the important one. Returning a handle tells the runtime to resume it as a tail call, so a chain of coroutines handing off to each other runs in flat stack space instead of one frame nested inside the next. That is how schedulers and task graphs pass control around safely; doing the same thing by calling resume() inside await_suspend grows the stack on every hop and eventually overflows it. The bool form is a small optimization: await_ready said maybe, await_suspend looked and found the value already there, so it returns false to skip the suspension."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "await_suspend", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

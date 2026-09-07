@@ -1,0 +1,13 @@
+title: "Anti-pattern: suspending with nobody to resume"
+standard: "C++20"
+difficulty: 3
+summary: "An await_suspend that suspends the coroutine but forgets to hand its handle to something that will resume it strands the coroutine mid-body forever. Its frame -- and every local in it -- is never released, a quiet leak that no amount of caller-side cleanup can fix because the handle was lost."
+notes: "The whole job of await_suspend is to arrange the resume: store the handle in a scheduler, pass it to an I/O completion, attach it to a timer. If it just returns without doing that, the coroutine is parked with no way back. The example proves it with a destructor counter: the broken path never releases Tracked because the handle was dropped, while the fixed path registers the handle, gets resumed, and runs to completion. This is different from dropping an owned handle -- here even code that wants to resume never receives the handle, so it cannot even destroy the frame. The leak is a logic bug in await_suspend, not in the caller."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "await_suspend", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "std::suspend_never", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_never" }

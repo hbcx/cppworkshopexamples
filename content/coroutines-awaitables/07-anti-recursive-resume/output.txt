@@ -1,0 +1,2 @@
+recursive resume (anti):  max nesting depth = 6  (grows with the chain -> stack overflow risk)
+symmetric transfer (fix): max nesting depth = 1  (flat, no matter how long the chain)

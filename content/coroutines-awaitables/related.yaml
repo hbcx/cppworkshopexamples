@@ -1,0 +1,8 @@
+- slug: "coroutines-generator"
+  note: "The other half of the same machinery: that section builds the producer side around co_yield and a promise, this one opens the co_await suspension side -- read it first for what a coroutine and a promise_type are, then come here for how awaiting actually suspends and resumes."
+- slug: "future"
+  note: "The pre-coroutine way to wait for an async result: std::future and std::async block a thread on .get(). Go there to see the model co_await replaces -- an awaitable suspends the coroutine instead of blocking a thread, so the same wait costs a frame, not a parked OS thread."
+- slug: "semaphore"
+  note: "The thread-based tool for the backpressure an awaiter can model: std::counting_semaphore makes a producer wait for a free slot by blocking. Go there for the blocking version of the pause-until-capacity idea an await_ready check expresses without holding a thread."
+- slug: "raii"
+  note: "Why a coroutine return type owns its handle the way it does: the frame is a heap resource wrapped in a move-only type that destroy()s in its destructor -- the same ownership rule behind the leaked-frame anti-pattern here."

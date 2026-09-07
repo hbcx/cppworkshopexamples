@@ -1,0 +1,13 @@
+title: "initial_suspend and final_suspend are awaiters"
+standard: "C++20"
+difficulty: 2
+summary: "The promise hooks initial_suspend and final_suspend return awaiters too. suspend_never for initial_suspend makes the coroutine start eagerly at creation; suspend_always makes it lazy. final_suspend decides whether the frame cleans itself up or waits for the owner to destroy it."
+notes: "These two choices shape the whole return type. Eager plus a self-destroying final_suspend gives a fire-and-forget task that needs no handle and no owner. Lazy plus a suspend_always final_suspend gives a value the caller drives and owns, which is what a generator or an awaitable task needs -- the frame must survive past the last line so the caller can read a result or destroy it deliberately. Returning suspend_never from final_suspend while still holding the handle is a bug: the frame is already gone and the handle dangles."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::suspend_always", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_always" }
+  - { name: "std::suspend_never", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_never" }
+  - { name: "promise_type", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

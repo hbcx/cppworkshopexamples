@@ -1,0 +1,8 @@
+resume #1:
+  before co_await
+  await_suspend: parked, control goes back to the resumer
+coroutine is parked, done? false
+resume #2:
+  await_resume: back in the coroutine body
+  after co_await
+done? true

@@ -1,0 +1,6 @@
+operator co_await:
+  awaiting an Event (via operator co_await)
+  Event delivered id 5
+await_transform:
+  co_await 7 (rewritten by await_transform)
+  got 70 (7 * 10)

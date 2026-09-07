@@ -1,0 +1,7 @@
+creating coroutine (starts suspended)
+resuming
+coroutine body start
+  await_ready -> true (no suspend)
+  await_resume -> 42
+got 42
+done? true

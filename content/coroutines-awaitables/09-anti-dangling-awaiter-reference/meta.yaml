@@ -1,0 +1,12 @@
+title: "Anti-pattern: an awaiter that holds a dangling reference"
+standard: "C++20"
+difficulty: 3
+summary: "An awaiter is stored in the coroutine frame and outlives the suspension, but a reference member inside it does not extend the lifetime of what it points at. If the awaited argument was a temporary, it dies at the end of the co_await statement and await_resume then reads freed memory."
+notes: "This is the awaiter version of the by-reference parameter trap. The awaiter object survives the suspend point because it lives in the frame, which makes a reference member look safe -- but the temporary it refers to is bound only for the full expression, so it is gone before the coroutine is resumed. The fix is the same as for coroutine parameters: keep awaited data by value so the copy lives in the frame alongside the awaiter. The broken version is shown in a comment because running it is undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "await_resume", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

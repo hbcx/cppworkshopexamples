@@ -1,0 +1,13 @@
+title: "Anti-pattern: resuming inside await_suspend instead of transferring"
+standard: "C++20"
+difficulty: 3
+summary: "Calling next.resume() from inside await_suspend nests one coroutine call inside the next on the real stack, so a chain of coroutines handing off to each other grows the stack with its length and eventually overflows. Returning the handle instead lets the runtime transfer control with no nesting."
+notes: "This is the classic coroutine scaling bug. A void await_suspend that resumes another handle looks fine and works for short chains, but each hop adds a stack frame, so a producer feeding a consumer feeding a sink, or a long await chain in a scheduler, builds unbounded depth. The example counts the nesting depth to show it without actually overflowing: the recursive version reaches depth equal to the chain length, the symmetric-transfer version stays at 1. The fix is to return the next coroutine_handle from await_suspend (or std::noop_coroutine when there is nothing to run) so the runtime resumes it as a tail call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "await_suspend", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "std::noop_coroutine", url: "https://en.cppreference.com/w/cpp/coroutine/noop_coroutine" }

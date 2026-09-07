@@ -1,0 +1,11 @@
+resume outer:
+  await_suspend -> false: kept going without suspending
+  await_suspend -> true: about to suspend
+outer parked, resume again:
+  resumed after the true-suspend
+  await_suspend -> handle: transferring to inner
+    [inner] running via symmetric transfer
+inner done? true
+outer done? false
+  back in outer, inner already finished
+outer done now? true

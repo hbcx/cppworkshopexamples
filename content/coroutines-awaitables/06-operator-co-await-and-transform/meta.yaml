@@ -1,0 +1,13 @@
+title: "operator co_await and await_transform"
+standard: "C++20"
+difficulty: 3
+summary: "A type is awaitable if it is an awaiter (has the three hooks) or supplies operator co_await that returns one. await_transform in the promise is the other customization point: it intercepts every co_await in the coroutine, so the promise decides what may be awaited and turns it into an awaiter."
+notes: "operator co_await keeps the awaiter separate from the value the user holds -- the Event is a plain result object and its awaiter is an implementation detail produced on demand. await_transform sits one level up, on the promise, and applies to the whole coroutine: a library uses it to accept its own handle types, to inject the current scheduler, or to make co_await on a forbidden type fail to compile. Note that once a promise declares any await_transform, every co_await in that coroutine goes through it, so a general-purpose task usually adds a pass-through overload to keep normal awaiters working."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "operator co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "await_transform", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "promise_type", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

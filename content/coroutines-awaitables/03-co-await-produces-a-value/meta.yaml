@@ -1,0 +1,12 @@
+title: "co_await produces a value"
+standard: "C++20"
+difficulty: 2
+summary: "A co_await expression has a value: it is whatever await_resume returns. Data flows back into the coroutine body when it resumes, so co_await reads like an ordinary assignment even though the function suspended in between."
+notes: "This is what turns co_await from a bare suspend point into a way to receive results -- an awaited socket read gives back the bytes, an awaited future gives back its value. The awaiter object itself is stored in the coroutine frame for the duration of the suspension, so any value it holds is still there when await_resume runs. Note the loop in main resumes twice because there are two co_awaits; a real resumer would be an event loop reacting to each result arriving."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "await_resume", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "await_ready", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
