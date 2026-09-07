@@ -1,0 +1,14 @@
+title: "What a coroutine is: the promise protocol, resumed by hand"
+standard: "C++20"
+difficulty: 2
+summary: "A function containing co_await, co_yield or co_return is a coroutine: the compiler turns it into a resumable state machine and drives it through hooks on a promise_type you supply. Here the smallest one is suspended, resumed step by step through a coroutine_handle, and destroyed."
+notes: "The return type must name a promise_type; its hooks are the customization points. get_return_object builds what the caller receives, initial_suspend decides whether the body runs on call (suspend_always here means it does not, so we drive it), final_suspend keeps the frame alive at the end so we can query it, return_void handles co_return, and unhandled_exception catches an escape. The frame lives on the heap and is owned through the coroutine_handle -- whoever holds it must destroy() it, which is why real return types wrap it in RAII (from example 02 on)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::suspend_always", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_always" }

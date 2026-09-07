@@ -1,0 +1,13 @@
+title: "Getting an exception out of a coroutine"
+standard: "C++20"
+difficulty: 3
+summary: "If the coroutine body throws, the compiler calls unhandled_exception on the promise while the exception is in flight. Capturing it there with std::current_exception and rethrowing it from the consumer turns a coroutine failure into a normal exception the caller can catch."
+notes: "unhandled_exception runs inside the coroutine, so it cannot simply let the exception escape -- there is no ordinary caller on the stack. The robust pattern stores the exception in the promise (std::current_exception) and returns normally; the coroutine then finishes, and the consumer checks the stored exception on the next pull and rethrows it into its own context. Calling std::terminate instead (as the earlier examples did for brevity) is the blunt alternative -- fine for a demo, wrong for a library."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+detailed_tags:
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
+  - { name: "std::rethrow_exception", url: "https://en.cppreference.com/w/cpp/error/rethrow_exception" }

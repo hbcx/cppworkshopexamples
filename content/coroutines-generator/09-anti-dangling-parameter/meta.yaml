@@ -1,0 +1,12 @@
+title: "Anti-pattern: a coroutine parameter taken by reference"
+standard: "C++20"
+difficulty: 3
+summary: "A coroutine keeps its parameters in the frame, but a reference parameter keeps only the reference -- so if the argument was a temporary, it is destroyed when the coroutine is created and long before the suspended body reads it. Take parameters by value."
+notes: "This is the single most common coroutine bug. The generator is created and returned before its body runs (initial_suspend), so the full expression that built it -- including any temporary argument -- has already ended by the first resume. A reference parameter then dangles into freed memory. A by-value parameter is copied or moved INTO the frame, so it lives exactly as long as the coroutine. The same trap hits a lambda coroutine that captures a local by reference. The broken version is shown in a comment because running it is undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

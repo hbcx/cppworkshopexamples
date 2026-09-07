@@ -1,0 +1,8 @@
+- slug: "ranges"
+  note: "The declarative counterpart to a generator: range views (filter, transform, take) build the same kind of lazy, one-element-in-flight pipeline by composing adaptors instead of writing a coroutine -- go there for views and the pipe operator, and reach for a coroutine when the producer logic is easier to write as plain imperative code."
+- slug: "iterator"
+  note: "What the generator's begin()/end() actually model: a single-pass input iterator, the weakest iterator category -- go there for the iterator protocol, categories, and why a coroutine sequence cannot be rewound or indexed."
+- slug: "exceptions"
+  note: "The mechanism example 06 leans on: std::current_exception captures the in-flight exception and rethrow_exception replays it later, which is how a coroutine failure crosses back to the consumer -- go there for exception_ptr, throwing, and catching."
+- slug: "raii"
+  note: "Why the generator owns its handle the way it does: the frame is a heap resource, so it is wrapped in a move-only type that destroy()s in its destructor -- the same rule that governs the leaked-frame anti-pattern -- go there for the ownership idiom behind it."

@@ -1,0 +1,15 @@
+- problem: "Parsing or tokenizing a large input -- a log file, a network stream, a big CSV -- where building a vector of every token first would cost memory proportional to the input, but the consumer only ever looks at one token at a time."
+  why: "A generator yields one token per resume and holds only that one plus its scan state, so memory stays flat no matter how large the input, and the consumer can stop early (first error, first match) without the producer having done the rest of the work."
+  signal: "A parse function that fills and returns a big vector<Token>, whose caller then loops over it once and often breaks early -- the vector exists only to be walked."
+
+- problem: "Walking a tree or graph -- a directory tree, a scene graph, an AST -- and handing each node to a caller that decides what to do, without exposing the traversal's stack or forcing a visitor callback."
+  why: "Written as a generator, the recursive walk co_yields each node and the caller drives it with an ordinary loop, so the traversal keeps its natural recursive shape while the caller keeps ordinary control flow -- no hand-rolled explicit stack and no inversion of control into a callback."
+  signal: "A traverse(node, std::function<void(Node&)> visit) that threads a callback through recursion, or a hand-maintained explicit stack rebuilding what recursion would express directly."
+
+- problem: "Producing an unbounded or on-demand sequence -- fresh ids, retry backoff delays, sampled sensor readings, test data -- where the count is decided by the consumer, not the producer."
+  why: "A coroutine can loop forever safely because it only advances when pulled, so one generator expresses the infinite rule (naturals, fibonacci, an exponential backoff) and each caller takes exactly as many as it needs -- impossible for a function that must return a finished container."
+  signal: "A function that takes a count parameter only to size the vector it returns, or a stateful functor with a next() method and hand-kept member state that a coroutine's locals would hold for free."
+
+- problem: "The producer end of a data pipeline whose stages transform a stream -- decode, filter, batch -- feeding a range pipeline or another consumer, where each stage should stay lazy."
+  why: "Because generators compose (one coroutine pulls from another and yields the transformed value), a pipeline holds one element in flight per stage instead of a full intermediate container between stages, and any stage can end the stream early by simply stopping."
+  signal: "Successive passes that each build a full intermediate vector -- decode into one, filter into another, batch into a third -- when only the final result is consumed."

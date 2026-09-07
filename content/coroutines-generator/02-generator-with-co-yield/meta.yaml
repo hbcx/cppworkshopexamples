@@ -1,0 +1,13 @@
+title: "A generator with co_yield"
+standard: "C++20"
+difficulty: 2
+summary: "co_yield hands a value back to the caller and suspends. A generator<T> return type stores that value in its promise and wraps the coroutine_handle in RAII, so pulling values is: resume, read promise().current, repeat until the coroutine is done."
+notes: "yield_value is the promise hook co_yield calls: it stashes the value and returns suspend_always so the coroutine pauses after each element. initial_suspend is suspend_always too, so nothing runs until the first pull -- the essence of lazy. The generator owns the frame and destroys it in its destructor, and is move-only because two owners would double-destroy. next() returns false once the coroutine reaches its end (done())."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "std::suspend_always", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_always" }

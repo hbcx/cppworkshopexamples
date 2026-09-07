@@ -1,0 +1,11 @@
+title: "Anti-pattern: using a coroutine after it is done"
+standard: "C++20"
+difficulty: 3
+summary: "Resuming a coroutine that has already finished is undefined behaviour, and reading its value after the end reads a stale frame. A fixed-count pull loop that does not check done() runs straight off the end -- always gate on the pull returning false."
+notes: "handle.resume() may only be called on a suspended coroutine; once it has run to the end (done() is true), resuming again is UB, not a no-op. The trap is a loop that asks for a fixed number of values without checking whether the generator still has any. The fix is to make the pull itself the loop condition, so it stops the moment the coroutine is done. done() is the defined query; resume() past it is not."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+detailed_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

@@ -1,0 +1,2 @@
+words: alpha beta gamma
+squares of 1..5: 1 4 9 16 25

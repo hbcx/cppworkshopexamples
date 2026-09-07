@@ -1,0 +1,12 @@
+title: "Generic and composed generators"
+standard: "C++20"
+difficulty: 3
+summary: "generator<T> works for any element type, and because a coroutine can itself pull from another generator, generators compose into pipelines: one yields a source sequence, another consumes it and yields a transformed one, each still lazy."
+notes: "The composing coroutine takes the source generator BY VALUE, so it is moved into the frame and owned for exactly the coroutine's lifetime -- the safe way to pass it (taking it by reference is the trap in the last example). Nothing is materialised between stages: squares pulls one value from range, yields one, and suspends, so a pipeline of any depth still holds only one element in flight per stage."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "function template", url: "https://en.cppreference.com/w/cpp/language/function_template" }

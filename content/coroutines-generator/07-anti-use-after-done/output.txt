@@ -1,0 +1,4 @@
+got 1
+got 2
+asked for up to 5, safely took 2
+done? true

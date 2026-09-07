@@ -1,0 +1,12 @@
+title: "Driving a generator with range-based for"
+standard: "C++20"
+difficulty: 2
+summary: "Give the generator a begin() that pulls the first value and an end() sentinel, plus a tiny iterator whose ++ resumes the coroutine, and range-based for works over it directly -- the resume/read/check loop hidden behind for (x : gen)."
+notes: "Range-based for calls begin() once, then ++ and != until the iterator equals end(). The iterator holds the coroutine_handle: ++ resumes and, when the coroutine is done, becomes the null end() iterator, so the loop stops. begin() must resume once to reach the first value, since initial_suspend left the coroutine paused before the body. The iterator is an input iterator -- single pass, because you cannot rewind a coroutine."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "range-based for", url: "https://en.cppreference.com/w/cpp/language/range-for" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

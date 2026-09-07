@@ -1,0 +1,8 @@
+calling counter() -- body has NOT run yet
+resume 1
+  [coroutine] start
+resume 2
+  [coroutine] resumed once
+resume 3
+  [coroutine] resumed twice, finishing
+done? true

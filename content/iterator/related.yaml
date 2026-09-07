@@ -14,3 +14,5 @@
   note: "The standard adapters built on this protocol: back_inserter, ostream/istream_iterator, reverse_iterator and move_iterator wrap a container, stream or iterator instead of writing one from scratch -- go there for the ready-made adapters and their traps."
 - slug: "non-member-range-access"
   note: "The free functions that reach the begin()/end() this chapter builds: std::begin/std::end also work on raw arrays and on ADL-only ranges, which is how generic code stays container-agnostic -- go there for the range-access functions and the customization-point idiom."
+- slug: "coroutines-generator"
+  note: "An iterator you do not hand-write: a C++20 coroutine generator turns a function with co_yield into a single-pass input range, the compiler generating the iterator for you -- go there for coroutines and the promise protocol behind a generated sequence."

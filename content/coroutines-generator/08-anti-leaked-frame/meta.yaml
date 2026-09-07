@@ -1,0 +1,12 @@
+title: "Anti-pattern: leaking the coroutine frame"
+standard: "C++20"
+difficulty: 3
+summary: "A coroutine frame lives on the heap and is not owned by anything automatically -- drop the coroutine_handle without calling destroy() and the frame, plus every local still alive in the suspended body, leaks. This is why a generator wraps the handle in RAII."
+notes: "The frame holds the coroutine's locals while it is suspended, so leaking it also leaks their destructors -- proven here with a local whose destructor bumps a counter that never fires on the leaked path. resume() runs the frame only to the next suspend; it never frees it. Only running to the end (not the case for a suspended generator) or an explicit destroy() releases it. The fix is the RAII wrapper every other example uses: destroy() in the destructor, move-only so the frame has exactly one owner."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+detailed_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }

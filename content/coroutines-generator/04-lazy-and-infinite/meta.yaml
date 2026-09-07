@@ -1,0 +1,12 @@
+title: "Lazy and infinite: a generator that never returns"
+standard: "C++20"
+difficulty: 3
+summary: "Because a coroutine only advances when resumed, a generator can loop forever and still be safe: the consumer pulls as many values as it wants and stops. A counter inside the body proves that exactly as many values are computed as are pulled, no more."
+notes: "The fibonacci and naturals generators have no end -- there is no co_return, the for loop runs forever. That is fine only because nothing runs between pulls: each resume computes one value and suspends. This is the real meaning of lazy, and it is impossible with a function that returns a container, which would have to materialise the whole (infinite) sequence first. The consumer owns the stopping condition."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

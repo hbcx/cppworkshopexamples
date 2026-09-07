@@ -1,0 +1,3 @@
+got 1
+got 2
+caught: boom at the 3rd value
