@@ -1,0 +1,12 @@
+title: "Transforming a stream"
+standard: "C++20"
+difficulty: 3
+summary: "An async generator can consume another one: it co_awaits the source's next(), transforms each value, and co_yields the result. That makes it a lazy async pipeline stage -- one element in flight, pulled from the source only as the final consumer pulls from it."
+notes: "Because advancing and producing are the same co_await / co_yield the source uses, a transforming stage is just another async generator whose body reads from the one below it. The consumer pulls from the doubler, the doubler pulls from the source, and control ping-pongs down and back up the chain by symmetric transfer -- no intermediate buffer, one value moving through at a time. This is how you build decode-filter-batch pipelines over an async source, each stage lazy and each holding only its current element."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

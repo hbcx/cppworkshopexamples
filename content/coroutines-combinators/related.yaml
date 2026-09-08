@@ -2,5 +2,7 @@
   note: "The awaitable this section runs in parallel: a combinator is just a task that awaits several other tasks, so read that one first for the value-returning Task, co_await, and sync_wait -- then come here to run many of them at once instead of one after another."
 - slug: "coroutines-awaitables"
   note: "The protocol under the combinators: when_all and when_any are awaiters whose await_suspend starts the tasks and whose await_resume gathers the results, and they hand control back with the symmetric transfer explained there."
+- slug: "coroutines-async-generator"
+  note: "The same virtual-time event loop, put to producing a stream: an async generator co_awaits work between elements and is pulled with co_await, running on the loop built here. Go there for streaming instead of one-shot fan-out."
 - slug: "future"
   note: "The thread-based way to fan out: launch several std::async calls and wait on each future. Go there to compare -- futures give you real parallelism across threads but block a thread per wait, where these combinators interleave many tasks on one thread without blocking."

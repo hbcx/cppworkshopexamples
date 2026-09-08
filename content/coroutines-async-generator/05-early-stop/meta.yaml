@@ -1,0 +1,12 @@
+title: "Stopping early"
+standard: "C++20"
+difficulty: 2
+summary: "A consumer can stop pulling whenever it likes -- here it takes two of a possible five and breaks. The producer, suspended waiting for the next pull that never comes, simply never produces the rest, and its frame is cleaned up when the stream goes out of scope."
+notes: "Laziness carries over to async: the producer only advances when the consumer co_awaits next(), so stopping the consumer stops the production. The counter confirms it -- the producer that could yield five values produced exactly the two that were pulled. The suspended producer holds its frame until the async_generator is destroyed, which runs its remaining local destructors safely. This is the natural cancellation of a stream: stop reading and the upstream work simply does not happen."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

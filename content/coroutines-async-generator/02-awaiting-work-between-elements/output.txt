@@ -1,0 +1,6 @@
+  tick@t15
+  element 1@t20
+  tick@t30
+  element 2@t40
+  tick@t45
+  element 3@t60

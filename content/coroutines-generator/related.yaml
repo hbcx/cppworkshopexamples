@@ -6,6 +6,8 @@
   note: "The other way to end a coroutine: a generator co_yields many values and is pulled, a task co_returns one value and is awaited. Go there for the awaitable task that returns a result, with the same promise parts pointed the opposite direction."
 - slug: "coroutines-std-generator"
   note: "The C++23 library version of everything this section builds by hand: std::generator is the ready-made type, with recursive elements_of and reference elements for free. Go there once you understand the machinery and just want to use it."
+- slug: "coroutines-async-generator"
+  note: "The async counterpart: where this generator produces values that are ready at once, an async stream can co_await work before each element and is pulled with co_await. Go there when producing an element itself has to wait."
 - slug: "iterator"
   note: "What the generator's begin()/end() actually model: a single-pass input iterator, the weakest iterator category -- go there for the iterator protocol, categories, and why a coroutine sequence cannot be rewound or indexed."
 - slug: "exceptions"

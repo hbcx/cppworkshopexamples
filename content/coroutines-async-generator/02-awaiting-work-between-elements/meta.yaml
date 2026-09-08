@@ -1,0 +1,13 @@
+title: "Awaiting work between elements"
+standard: "C++20"
+difficulty: 3
+summary: "The point of an async stream: the producer co_awaits real work before each element, and while it waits the single-threaded loop runs other tasks. A ticker running alongside interleaves with the stream because both suspend rather than block."
+notes: "This is the difference between an async stream and a plain generator. A generator that needed to wait would have to block; the async generator suspends on the loop instead, so the gaps between its elements are time other coroutines get to run. The output shows the ticker's ticks landing in between the stream's elements, all on one thread with no parallelism -- just interleaved suspension. The next anti-pattern shows what happens when the producer blocks instead of awaiting: the ticker is starved until the stream is done."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

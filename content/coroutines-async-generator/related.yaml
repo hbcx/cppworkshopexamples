@@ -1,0 +1,8 @@
+- slug: "coroutines-generator"
+  note: "The synchronous half of this: a plain generator co_yields values that are ready immediately, where an async generator can co_await work before each one. Go there first for co_yield and the pull model without the async part."
+- slug: "coroutines-task"
+  note: "The other side of the machinery this reuses: the consumer of an async stream is a task, and next() is awaited with the same protocol. Go there for co_await, the awaitable task, and sync_wait at the top."
+- slug: "coroutines-combinators"
+  note: "Where the event loop comes from: this section reuses the virtual-time Sleep and loop built there to make the async waits deterministic. Go there for when_all/when_any and the loop these streams run on."
+- slug: "coroutines-std-generator"
+  note: "The C++23 library generator for the synchronous case: when the producer never needs to await, std::generator gives you the ready-made type. An async stream is what you reach for only when producing an element itself suspends."

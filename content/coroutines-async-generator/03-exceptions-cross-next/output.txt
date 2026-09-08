@@ -1,0 +1,3 @@
+  got 1
+  got 2
+  caught from the stream: stream failed at the 3rd element (at t=30)

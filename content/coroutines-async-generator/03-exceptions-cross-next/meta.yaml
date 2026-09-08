@@ -1,0 +1,15 @@
+title: "Exceptions cross next()"
+standard: "C++20"
+difficulty: 3
+summary: "A throw inside an async stream is caught by the promise's unhandled_exception, stored, and rethrown from the consumer's co_await gen.next(). A failure mid-stream surfaces at the pull that hit it, so the consumer handles it with an ordinary try/catch around the loop."
+notes: "It is the same exception_ptr round trip the value task and the generator use, now on the advance step of a stream: the producer's failure is stored in its promise, and the next NextAwaiter::await_resume rethrows it into the consumer. So the consumer does not need a separate error signal per element -- a broken stream throws exactly where it is pulled, and one try/catch around the while loop covers it. The elements produced before the failure are delivered normally; only the pull that hits the error throws."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+detailed_tags:
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
+  - { name: "std::rethrow_exception", url: "https://en.cppreference.com/w/cpp/error/rethrow_exception" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }
+  - { name: "std::exception", url: "https://en.cppreference.com/w/cpp/error/exception" }

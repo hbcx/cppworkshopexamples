@@ -1,0 +1,3 @@
+  took 1
+  took 2
+producer actually produced 2 of a possible 5

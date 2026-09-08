@@ -1,0 +1,13 @@
+title: "Anti-pattern: yielding from a source that has died"
+standard: "C++20"
+difficulty: 3
+summary: "An async stream that takes its source by reference and reads it on each pull dangles when the source was a temporary. The stream is consumed long after it was created, across many suspensions, so a by-reference temporary is freed well before the first element is pulled."
+notes: "This is the by-reference parameter trap at its most dangerous. A synchronous generator that dangles at least fails soon; an async stream is created now and drained much later on the event loop, so the window between the source dying and the body reading it is wide, and the bug hides. The rule is the same as everywhere in coroutines: take the source by value so it is moved into the frame and lives exactly as long as the stream. The broken version is in a comment because running it is undefined behaviour; the fix takes the vector by value and safely streams a temporary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

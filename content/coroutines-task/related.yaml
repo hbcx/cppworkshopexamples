@@ -4,6 +4,8 @@
   note: "Running many of these tasks at once instead of one after another: when_all starts a group and joins when the last finishes, when_any takes the first and cancels the rest. Go there once a single task makes sense and you need to fan out."
 - slug: "coroutines-generator"
   note: "The other coroutine shape: a generator produces many values with co_yield and is pulled, a task produces one value with co_return and is awaited. Same promise machinery, opposite direction -- go there for the streaming producer built on the same parts."
+- slug: "coroutines-async-generator"
+  note: "A task produces one awaited value; an async stream produces many, each pulled with co_await. Go there for the async generator, whose consumer is a task like this one and whose next() is awaited the same way."
 - slug: "future"
   note: "The pre-coroutine take on the same job: std::future plus std::async gives you an eager, thread-backed value-you-wait-on, where a task is lazy and suspends instead of blocking. Go there to compare the model co_await replaces -- and to see why eager start behaves differently."
 - slug: "exceptions"

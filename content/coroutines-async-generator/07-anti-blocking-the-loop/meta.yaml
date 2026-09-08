@@ -1,0 +1,12 @@
+title: "Anti-pattern: blocking the loop instead of awaiting"
+standard: "C++20"
+difficulty: 3
+summary: "A stream producer that does its work synchronously instead of co_awaiting it never returns control to the single-threaded loop, so every other task is starved until the whole stream is done. Awaiting the work lets the loop run other coroutines in the gaps."
+notes: "On a one-thread event loop, not suspending is the cardinal sin: a coroutine that runs straight through hogs the thread. The blocking producer yields all its elements in one uninterrupted run, and the ticker only gets to tick afterwards; the awaiting producer suspends on each Sleep, so the ticker interleaves with it. The fix is to make the wait a co_await -- an awaitable that registers with the loop and suspends -- rather than a synchronous call. The same rule applies to any blocking operation inside a coroutine on a shared loop: a blocking read, a lock, a sleep, all stall everyone else."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

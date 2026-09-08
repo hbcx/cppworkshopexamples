@@ -1,0 +1,15 @@
+title: "An async generator"
+standard: "C++20"
+difficulty: 3
+summary: "An async generator both produces with co_yield and waits with co_await, so advancing it is itself asynchronous and the consumer must co_await each step. It is the synthesis of the whole category: a lazy stream whose next element may take a suspension to arrive."
+notes: "A plain generator produces a value the instant it is pulled; an async generator may have to await work first -- the next network chunk, the next timer -- before it has a value. That means the consumer cannot just call a function and get the element; it co_awaits gen.next(). Under the hood control ping-pongs by symmetric transfer: next() resumes the producer, co_yield resumes the consumer with the value, and whenever the producer co_awaits, the whole chain parks on the event loop and unwinds back to it. This is why the consumer here is a coroutine (a Task) driven by the loop -- only a coroutine can co_await. The generator is owned by main so it outlives the consumer that borrows it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "std::noop_coroutine", url: "https://en.cppreference.com/w/cpp/coroutine/noop_coroutine" }

@@ -1,0 +1,12 @@
+title: "Collecting a stream into a container"
+standard: "C++20"
+difficulty: 3
+summary: "The async analog of draining a range into a container: a small coroutine co_awaits every element and appends it, so once the loop finishes the whole stream is in a vector the rest of the program can use as plain data."
+notes: "Sometimes you do want all of it at once -- collecting a bounded async stream into a container is the bridge from the streaming world back to ordinary values, the async counterpart of sync_wait for a task or ranges::to for a view. The collector is itself a coroutine because it has to co_await each element; main starts it, runs the loop until it finishes, and then reads the filled vector. This only makes sense for a stream known to be finite; an unbounded stream must be consumed incrementally or bounded first."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

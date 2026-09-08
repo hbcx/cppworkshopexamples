@@ -1,0 +1,15 @@
+- problem: "Reading from a source that hands over data a chunk at a time with a wait in between -- a paginated HTTP API, a database cursor, a socket delivering messages -- where each next item requires an I/O round trip before it exists."
+  why: "An async generator turns that into a plain pull loop: the producer co_awaits the next fetch and co_yields each item, and the consumer writes while (co_await stream.next()) as if the data were already there. Without it you hand-write a state machine across callbacks -- where is the cursor, is a request in flight, is this the last page -- which an async generator's locals hold for you."
+  signal: "A fetch-next-page callback that re-invokes itself, or a class with a member cursor and an inFlight flag driving an async read loop by hand."
+
+- problem: "A processing pipeline over an async source -- decode frames, drop the bad ones, batch the rest -- where each stage should stay lazy and hold only what it is working on, not buffer the whole stream between stages."
+  why: "Because an async generator can itself consume another with co_await, stages chain: each pulls one element from the stage below, transforms it, and yields it up. One element is in flight per stage instead of a full intermediate buffer, and any stage can end the stream early just by stopping. Callback pipelines or fully-buffered passes lose that."
+  signal: "Successive async passes that each build a complete intermediate collection before the next starts, or a chain of transform callbacks threaded through completion handlers."
+
+- problem: "A consumer that cannot keep up with, or does not want all of, an incoming stream -- it takes the first few results, or processes at its own pace -- and the producer must not race ahead and pile up work or memory."
+  why: "An async generator only advances when the consumer co_awaits the next element, so the consumer's pace sets the producer's: pulling slowly slows production, and stopping stops it. That is backpressure for free, where a push-based source (a callback fired on every event) would need an explicit buffer and a way to say slow down."
+  signal: "A push callback that enqueues into an unbounded buffer, or a producer that races ahead of a slow consumer and needs a manual high-water mark to throttle."
+
+- problem: "Producing items on a schedule or under a rate limit -- polling a sensor every interval, emitting no faster than an API allows -- where the timing is part of the stream, not something the consumer should manage."
+  why: "The producer co_awaits the delay or the rate-limit token between yields, so the pacing lives inside the stream and the consumer just pulls. On a single event loop the waits are suspensions, not blocked threads, so many such streams and other work share one thread. A thread-per-stream sleeping between items would cost a thread each and still tangle the timing into the consumer."
+  signal: "A consumer that sleeps between reads to pace a producer, or a producer thread that blocks on a timer between each item it pushes."

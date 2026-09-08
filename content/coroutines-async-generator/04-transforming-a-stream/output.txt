@@ -1,0 +1,3 @@
+  doubled 2@t10
+  doubled 4@t20
+  doubled 6@t30

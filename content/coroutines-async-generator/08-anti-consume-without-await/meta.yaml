@@ -1,0 +1,11 @@
+title: "Anti-pattern: consuming a stream without co_await"
+standard: "C++20"
+difficulty: 3
+summary: "An async stream is not an ordinary range: advancing it may suspend, so it has no synchronous begin()/end() iterator and cannot be walked with a plain range-for. It has to be consumed from inside a coroutine with a co_await loop."
+notes: "The reflex to write for (auto v : stream()) fails to compile, and that is the type system doing its job: producing the next element might need to await, and a range-for iterator's ++ cannot await. Forcing a synchronous read would mean blocking the thread until the element arrives, which throws away the reason the stream is async. The consumer must itself be a coroutine and pull with while (co_await gen.next()). This is the cost of async iteration -- it is contagious, the way any co_await is: whoever consumes an async stream becomes a coroutine too, up to the sync_wait-style boundary at the top."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
