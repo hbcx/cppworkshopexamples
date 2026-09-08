@@ -1,0 +1,15 @@
+- problem: "Walking a tree, graph, or AST -- a directory tree, a scene graph, a parsed document -- and handing each node to a caller, where the traversal is naturally recursive and you do not want to expose a stack or invert control into a visitor callback."
+  why: "A recursive std::generator co_yields the current node and then co_yield elements_of(child_walk) for each subtree, so the code keeps its recursive shape, the caller drives it with a plain loop, and elements_of keeps the cost flat instead of paying for the depth at every element. Hand-rolling this means either an explicit stack or re-yielding through every level, which is the slow trap this section warns about."
+  signal: "A traverse(node, std::function<void(Node&)>) that threads a callback through recursion, or a hand-maintained explicit stack rebuilding what recursion would express directly."
+
+- problem: "Turning a large or streaming input into a sequence of items -- tokens from a file, records from a socket, frames from a decoder -- that a later ranges pipeline will filter, transform, and batch, without materializing the whole thing."
+  why: "Writing the producer as a std::generator is usually far simpler than expressing it as a custom view, and because a generator is an input_range it drops straight into a views pipeline. The result is one lazy chain from source to sink that holds one item in flight, and the producer logic stays ordinary imperative code."
+  signal: "A parser that fills and returns a big vector of tokens the caller walks once, or a custom view class written by hand only to feed a ranges pipeline that a generator could source directly."
+
+- problem: "Iterating over large elements -- big strings, buffers, records held in a container -- where copying each one out of the sequence is a real cost, or where the consumer needs to modify the elements in place while iterating."
+  why: "std::generator<T&> yields references to the actual objects, so no element is copied on the way out and the consumer can write through them. A value-typed generator would copy every element; the reference form is the difference between streaming over a container cheaply and duplicating it."
+  signal: "A generator or iterator interface that returns items by value where the items are expensive to copy, or a separate write-back step because the traversal only exposed copies."
+
+- problem: "Producing an unbounded or on-demand sequence -- fresh ids, backoff delays, sampled readings, generated test data -- where the consumer decides how many are needed, not the producer."
+  why: "A std::generator can loop forever and only advances when pulled, so one generator expresses the infinite rule and each caller takes exactly as many as it needs, composing with take to bound it. C++20 made you write the generator type to get this; C++23 gives it to you, so the unbounded-sequence pattern is now a few lines with no boilerplate."
+  signal: "A function that takes a count only to size the vector it returns, or a stateful next()-style object hand-keeping the member state a generator's locals would hold for free."

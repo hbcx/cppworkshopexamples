@@ -1,0 +1,13 @@
+title: "Hello, std::generator"
+standard: "C++23"
+difficulty: 1
+summary: "std::generator<T> from <generator> is the library version of the generator the first coroutine section built by hand. Declare the return type, co_yield values, and range-for over it -- the promise, the iterator, and the frame ownership are all provided."
+notes: "This is the payoff for having built one from scratch: everything that section wrote out -- yield_value, the input iterator, the move-only destroy-in-destructor handle -- is what std::generator gives you in a single type. Reach for std::generator whenever you actually need a generator in C++23 code; the hand-rolled version is worth understanding, not worth copying into a project. The examples pass -fsized-deallocation because clang only exposes std::generator with it (g++ enables it by default)."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

@@ -1,0 +1,13 @@
+title: "Any element type"
+standard: "C++23"
+difficulty: 2
+summary: "std::generator<T> yields any type -- strings, structs, pairs -- by value. co_yield accepts anything convertible to T, and the consumer gets each element in turn through an ordinary range-for."
+notes: "The element type is just the template argument, so a generator of strings or of a small struct works exactly like a generator of ints. By default the element is yielded by value (the consumer gets a copy or move of each one); when the elements are large, or you want the consumer to see the real objects, the next example switches to a reference element type. co_yield here converts its operand to the element type, which is why a string literal can be yielded into a std::generator<std::string>."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

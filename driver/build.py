@@ -7,7 +7,7 @@ to the content it checks, and is run both locally and by this repo's GitHub
 Actions CI (see .github/workflows/ci.yml). See CLAUDE.md sec. 5.
 
 What it does, per example dir (content/<section>/<example>/):
-  * read meta.yaml (standard, run, sanitizers, werror, sources, libs);
+  * read meta.yaml (standard, run, sanitizers, werror, sources, libs, extra_flags);
   * map "C++NN" -> -std=c++NN;
   * pick sources BY CONVENTION -- every *.cpp in the dir, compiled together with
     -I <dir> so local headers resolve; one dir = one executable. .hpp files are
@@ -360,6 +360,11 @@ def compile_cmd(cc: str, std_flag: str, ex: Example, sources: list[Path],
     if sanitizers:
         cmd.append("-fsanitize=" + ",".join(sanitizers))
         cmd.append("-g")
+    # Extra compile flags an example needs (e.g. -fsized-deallocation, which clang
+    # requires before libstdc++ exposes std::generator; g++ has it on by default).
+    # Applied to every compiler, so only list flags both accept.
+    for flag in (ex.meta.get("extra_flags") or []):
+        cmd.append(flag)
     cmd += [to_compiler_path(s, flavor) for s in sources]
     # Extra link libraries (e.g. stdc++exp for std::print's terminal support on
     # libstdc++). Placed after the sources so the linker resolves them correctly.

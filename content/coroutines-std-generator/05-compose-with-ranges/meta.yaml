@@ -1,0 +1,14 @@
+title: "Composing with ranges views"
+standard: "C++23"
+difficulty: 2
+summary: "std::generator models input_range, so it pipes through the ranges views like any other range. The generator is the lazy source and views such as filter and take are lazy stages, pulling from it only as far as the consumer asks."
+notes: "This is where the coroutine and ranges worlds meet: writing the producer as a generator is often easier than expressing it as a view, and once it is a generator it composes with the whole views toolkit for free. Everything stays lazy end to end -- take(5) over a filter over an infinite generator only ever produces the numbers actually consumed. Because a generator is a move-only, single-pass range, piping the rvalue into the views is the natural form; the pipeline itself is also single-pass, matching the generator underneath."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::filter", url: "https://en.cppreference.com/w/cpp/ranges/filter_view" }
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }

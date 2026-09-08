@@ -1,0 +1,13 @@
+title: "Recursive generators with elements_of"
+standard: "C++23"
+difficulty: 3
+summary: "co_yield std::ranges::elements_of(inner) yields every element of another generator (or range) into this one. It makes recursive generators -- a tree or graph walk that co_yields its subtrees -- both easy to write and efficient, with no per-level forwarding overhead."
+notes: "This is the headline feature std::generator adds over a hand-rolled one. A recursive walk written by hand has to either keep an explicit stack or re-yield each element up through every level of recursion, which costs work proportional to the depth per element. elements_of tells the library to splice the child generator directly into the active chain, so producing an element is not slowed down by how deeply nested it is. The result is a preorder traversal that reads exactly like the recursive function it is. elements_of also accepts any range, not just a generator, so you can yield a whole container in one line."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+  - { name: "std::ranges::elements_of", url: "https://en.cppreference.com/w/cpp/ranges/elements_of" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

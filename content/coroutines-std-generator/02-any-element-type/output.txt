@@ -1,0 +1,2 @@
+words: alpha beta gamma
+corners: (0,0) (1,0) (1,1)

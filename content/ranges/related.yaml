@@ -20,3 +20,5 @@
   note: "The eager writers behind views::iota: fill, generate and iota put values into a container now, where views::iota produces an increasing sequence lazily in a pipeline -- go there for initializing ranges and building them from a generator."
 - slug: "coroutines-generator"
   note: "The imperative way to build a lazy sequence: where a view composes adaptors, a coroutine generator co_yields values from ordinary loop code -- go there when the producer logic reads more naturally as a function than as a pipeline of adaptors."
+- slug: "coroutines-std-generator"
+  note: "The C++23 std::generator that plugs into these views as a source: a coroutine produces the sequence and, being an input_range, pipes straight through filter, transform and take -- go there to feed a pipeline from imperative producer code."

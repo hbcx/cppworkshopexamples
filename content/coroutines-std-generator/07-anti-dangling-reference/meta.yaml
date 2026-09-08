@@ -1,0 +1,13 @@
+title: "Anti-pattern: yielding a reference into a dead source"
+standard: "C++23"
+difficulty: 3
+summary: "A generator that takes its source by reference and yields references into it dangles when the source was a temporary: the source dies at the end of the call expression, before iteration, so every yielded reference points into freed memory. Take the source by value instead."
+notes: "std::generator does the right thing when you co_yield a temporary directly -- it keeps that object alive across the suspension -- so this is not about the yielded value but about the source the references point into. A by-reference parameter binds to the caller's temporary, which is gone by the first pull, exactly the coroutine parameter trap from the hand-rolled generator section, now sharpened by a reference element type that hands those dead references straight to the consumer. The fix is the standard one: take the source by value so it is moved into the frame and outlives every reference into it. The broken version is shown in a comment because running it is undefined behaviour."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

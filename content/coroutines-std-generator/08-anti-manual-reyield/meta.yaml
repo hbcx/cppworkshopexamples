@@ -1,0 +1,13 @@
+title: "Anti-pattern: hand-forwarding nested generators"
+standard: "C++23"
+difficulty: 3
+summary: "Nesting generators by re-yielding each element in a loop runs one co_yield per level for every element, so the cost grows with the nesting depth. elements_of splices the inner generator in instead, keeping the cost flat no matter how deep."
+notes: "Re-yielding by hand looks harmless -- for (auto x : inner) co_yield x; -- but each wrapping level adds another co_yield and another coroutine to resume for every single element, so a deeply nested or deeply recursive generator does work proportional to depth times element count. The counter shows it: at four levels the manual version runs many times the co_yields the elements_of version does for the same five elements. This is the recursive-generator trap that elements_of exists to solve; it matters most exactly where recursion is natural, like a deep tree walk. The fix is a one-line swap to co_yield elements_of(inner)."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+  - { name: "std::ranges::elements_of", url: "https://en.cppreference.com/w/cpp/ranges/elements_of" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

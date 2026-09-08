@@ -1,0 +1,13 @@
+title: "Reference element types"
+standard: "C++23"
+difficulty: 3
+summary: "std::generator<T&> yields references rather than values, so the consumer touches the real objects with no copies and can modify them in place. It is the tool for streaming over large elements or exposing a container's items for editing."
+notes: "A value element type copies or moves each item out; a reference element type hands back a reference into whatever the generator is iterating, which matters when the elements are expensive to copy or the caller needs to write through them. std::generator also has a two-argument form, std::generator<Ref, Value>, for when the reference type and the value type differ -- a proxy reference over a computed value -- but the common case is the single T& shown here. The catch is lifetime: a yielded reference is only valid while what it refers to is alive, which is exactly the dangling trap later in this section."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

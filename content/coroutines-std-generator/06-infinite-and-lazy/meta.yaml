@@ -1,0 +1,13 @@
+title: "Infinite and lazy"
+standard: "C++23"
+difficulty: 2
+summary: "A std::generator can loop forever because it only advances when pulled. An infinite fibonacci generator consumed with a break produces exactly the values asked for -- the counter confirms it computed ten, not more."
+notes: "Laziness is the same property the hand-rolled generator had, now for free: the while(true) loop is safe because co_yield suspends after each value and nothing runs until the next pull. Stopping the consumer -- here with break, in a pipeline with take -- simply leaves the generator suspended, and its frame is cleaned up when it goes out of scope. This is what lets a generator stand in for an unbounded sequence (ids, samples, a backoff schedule) that the consumer sizes at the point of use rather than the producer deciding up front."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

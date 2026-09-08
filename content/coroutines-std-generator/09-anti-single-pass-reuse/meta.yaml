@@ -1,0 +1,13 @@
+title: "Anti-pattern: re-traversing a single-pass generator"
+standard: "C++23"
+difficulty: 3
+summary: "A std::generator is a single-pass input range: iterating it advances its one coroutine and cannot rewind. Calling begin() a second time on the same generator is undefined behaviour -- it is not a container you can walk again."
+notes: "The trap is treating a generator like a vector: storing it and looping over it twice, or handing it to two algorithms. The first pass drives the coroutine to the end; the second finds it exhausted, and asking a spent single-pass range for begin() again is undefined. The fixes match what you actually need: to traverse again, call the factory for a fresh generator; to reuse the values, materialize them once into a container that supports many passes. This is inherent to being lazy and single-pass, not a limitation of std::generator specifically -- the same holds for any input range. The broken version is shown in a comment because running it is undefined behaviour."
+run: true
+sanitizers: []
+extra_flags: ["-fsized-deallocation"]
+main_tags:
+  - { name: "std::generator", url: "https://en.cppreference.com/w/cpp/coroutine/generator" }
+detailed_tags:
+  - { name: "co_yield", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

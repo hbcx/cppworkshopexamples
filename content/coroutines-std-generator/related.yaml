@@ -1,0 +1,6 @@
+- slug: "coroutines-generator"
+  note: "The hand-rolled version this replaces: that section builds Generator<T> from the promise_type and iterator up, which is exactly what std::generator packages -- read it to understand what the library type is doing underneath, then use std::generator in real C++23 code."
+- slug: "ranges"
+  note: "What a generator composes with: because std::generator is an input_range it pipes through filter, transform, and take. Go there for the views toolkit and the pipe operator, and use a generator when the producer is easier to write as a coroutine than as a view."
+- slug: "iterator"
+  note: "The category a generator models: a single-pass input iterator, the weakest one -- which is why a std::generator cannot be rewound or walked twice. Go there for the iterator protocol and categories behind that single-pass rule."
