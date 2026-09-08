@@ -1,5 +1,7 @@
 - slug: "coroutines-generator"
   note: "The other half of the same machinery: that section builds the producer side around co_yield and a promise, this one opens the co_await suspension side -- read it first for what a coroutine and a promise_type are, then come here for how awaiting actually suspends and resumes."
+- slug: "coroutines-task"
+  note: "Where these hooks add up to something usable: a task is an awaitable that runs work and co_returns a value, built from the awaiter protocol here plus symmetric transfer back to the caller -- go there for the value-returning task, exceptions across the await, and sync_wait."
 - slug: "future"
   note: "The pre-coroutine way to wait for an async result: std::future and std::async block a thread on .get(). Go there to see the model co_await replaces -- an awaitable suspends the coroutine instead of blocking a thread, so the same wait costs a frame, not a parked OS thread."
 - slug: "semaphore"

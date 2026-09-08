@@ -1,0 +1,4 @@
+  after step 1: 10
+  after step 2: 20
+  after step 3: 40
+pipeline result = 40

@@ -2,6 +2,8 @@
   note: "The declarative counterpart to a generator: range views (filter, transform, take) build the same kind of lazy, one-element-in-flight pipeline by composing adaptors instead of writing a coroutine -- go there for views and the pipe operator, and reach for a coroutine when the producer logic is easier to write as plain imperative code."
 - slug: "coroutines-awaitables"
   note: "The consumer half of the same machinery: this section drives the coroutine with co_yield and a promise, that one opens co_await -- the awaiter protocol, what await_suspend can return, and how a coroutine waits on something instead of producing values."
+- slug: "coroutines-task"
+  note: "The other way to end a coroutine: a generator co_yields many values and is pulled, a task co_returns one value and is awaited. Go there for the awaitable task that returns a result, with the same promise parts pointed the opposite direction."
 - slug: "iterator"
   note: "What the generator's begin()/end() actually model: a single-pass input iterator, the weakest iterator category -- go there for the iterator protocol, categories, and why a coroutine sequence cannot be rewound or indexed."
 - slug: "exceptions"

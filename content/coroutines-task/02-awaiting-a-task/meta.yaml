@@ -1,0 +1,15 @@
+title: "Awaiting a task"
+standard: "C++20"
+difficulty: 3
+summary: "co_await on a task runs it and hands back its result. The awaiter records the calling coroutine as the task's continuation and transfers control to the task; when the task finishes, its final_suspend transfers straight back to the caller. This is the core of a task type."
+notes: "Two symmetric transfers make it work with no nesting: the awaiter returns the task handle so the runtime starts the task as a tail call, and the task's FinalAwaiter returns the stored continuation so the runtime resumes the caller the same way. The result is that one resume of the outer coroutine drives the whole chain, yet the call stack never grows -- which is exactly why await_suspend returns a handle instead of calling resume (see the anti-pattern in the co_await section). The task frame stays alive at final_suspend so await_resume can read the result before the awaited temporary task is destroyed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "operator co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "await_suspend", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "std::noop_coroutine", url: "https://en.cppreference.com/w/cpp/coroutine/noop_coroutine" }

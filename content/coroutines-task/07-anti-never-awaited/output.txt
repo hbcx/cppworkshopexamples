@@ -1,0 +1,3 @@
+not driven: body ran 0 times
+  work() body ran
+driven: body ran 1 times, result 1

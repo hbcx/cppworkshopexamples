@@ -1,0 +1,3 @@
+  calling a task that throws
+  caught across the await: boom in the task
+caller result = -1

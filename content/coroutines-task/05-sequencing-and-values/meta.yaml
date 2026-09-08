@@ -1,0 +1,12 @@
+title: "Sequencing tasks so values flow"
+standard: "C++20"
+difficulty: 2
+summary: "Several co_awaits in a row run dependent tasks in order, each result feeding the next call. The async code reads like ordinary sequential code -- no callbacks, no manual state between steps -- because co_await parks the coroutine until each result is ready."
+notes: "This is the payoff of the machinery: a chain of dependent async steps that would be nested callbacks or a .then() chain elsewhere becomes plain top-to-bottom code with normal locals carrying the values. The ordering is real -- the second doubler is not even called until the first has produced its value -- so there is no accidental concurrency to reason about. Independent tasks that could run at the same time are a different tool (a when_all-style combinator); co_await in sequence is specifically for steps that depend on each other."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "operator co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

@@ -1,0 +1,3 @@
+  outer: awaiting inner
+  outer: inner returned 42
+final result = 43

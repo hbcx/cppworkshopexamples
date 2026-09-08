@@ -1,0 +1,12 @@
+title: "Anti-pattern: a lazy task that is never awaited"
+standard: "C++20"
+difficulty: 3
+summary: "A lazy task starts at initial_suspend and runs nothing until it is awaited or driven. Calling the coroutine and then ignoring the returned task executes none of its body -- the work silently does not happen, which surprises anyone expecting the call itself to do it."
+notes: "This is the flip side of laziness. A lazy task is the right default -- it lets co_await control when and in what order work runs -- but it means the returned object is not optional: dropping it is dropping the work. The counter shows the body ran zero times when the task is discarded and once when it is driven. The trap is easy to hit for people used to std::async, which starts eagerly, or to a plain function call, which just runs. The rule is simple: a task must be awaited (by another coroutine) or handed to sync_wait; a task you neither await nor drive is dead code that looks live."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::suspend_always", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_always" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

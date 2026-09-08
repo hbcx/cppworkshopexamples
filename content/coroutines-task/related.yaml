@@ -1,0 +1,8 @@
+- slug: "coroutines-awaitables"
+  note: "The protocol this section builds on: a task is awaitable because it supplies the await_ready / await_suspend / await_resume hooks, and it hands control back with the symmetric transfer explained there -- go there first for how a co_await actually suspends and resumes."
+- slug: "coroutines-generator"
+  note: "The other coroutine shape: a generator produces many values with co_yield and is pulled, a task produces one value with co_return and is awaited. Same promise machinery, opposite direction -- go there for the streaming producer built on the same parts."
+- slug: "future"
+  note: "The pre-coroutine take on the same job: std::future plus std::async gives you an eager, thread-backed value-you-wait-on, where a task is lazy and suspends instead of blocking. Go there to compare the model co_await replaces -- and to see why eager start behaves differently."
+- slug: "exceptions"
+  note: "What crosses the await boundary in example 04: current_exception captures the task's failure and rethrow_exception replays it at the caller's co_await. Go there for exception_ptr, throwing, and catching in depth."

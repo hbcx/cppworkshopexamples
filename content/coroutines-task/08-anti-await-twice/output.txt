@@ -1,0 +1,2 @@
+reuse the value:      42
+fresh task each time: 42

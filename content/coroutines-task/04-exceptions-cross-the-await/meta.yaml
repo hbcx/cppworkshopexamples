@@ -1,0 +1,15 @@
+title: "Exceptions cross the await boundary"
+standard: "C++20"
+difficulty: 3
+summary: "A throw inside a task is caught by the promise's unhandled_exception, stored as an exception_ptr, and rethrown by await_resume when the caller resumes -- so co_await makes an async failure land in the caller's ordinary try/catch, exactly where a normal call's exception would."
+notes: "This is what makes tasks composable: the caller does not need a separate error channel or a status code threaded through callbacks -- a failure in the awaited task appears at the co_await as a normal exception. The mechanism is the same exception_ptr round trip the generator used for co_yield failures: current_exception captures the live exception in unhandled_exception, and rethrow_exception replays it in await_resume after control has transferred back. Note the task still reaches final_suspend after throwing, so its frame is cleaned up normally; only the result is replaced by the stored exception."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+detailed_tags:
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
+  - { name: "std::rethrow_exception", url: "https://en.cppreference.com/w/cpp/error/rethrow_exception" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }
+  - { name: "std::exception", url: "https://en.cppreference.com/w/cpp/error/exception" }

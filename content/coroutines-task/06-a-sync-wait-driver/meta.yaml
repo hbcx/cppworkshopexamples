@@ -1,0 +1,12 @@
+title: "sync_wait: bridging sync and async"
+standard: "C++20"
+difficulty: 3
+summary: "main() and tests are not coroutines, so they cannot co_await a task. sync_wait is the bridge: it starts a top-level task, drives it to completion, and returns its value -- the single point where the coroutine world meets ordinary blocking code."
+notes: "Every co_await hands control back up to whoever is driving, and at the very top something that is NOT a coroutine has to do that driving. That is sync_wait: it owns the top-level task, resumes it, and once it is done reads the result (rethrowing any stored exception). A production sync_wait blocks on a condition variable that the task signals from its final_suspend, so it works even when the task really suspends on I/O on another thread; here the work is synchronous, so one resume suffices. This is also the natural boundary for tests -- drive an async task from a plain test function and assert on the returned value."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

@@ -1,0 +1,13 @@
+title: "A void task"
+standard: "C++20"
+difficulty: 2
+summary: "A task that returns nothing uses return_void on the promise and an await_resume that yields void. It sequences work with effects but no result -- co_await runs each stage in order and still propagates exceptions, without carrying a value back."
+notes: "The value and void tasks are the same design with one difference: return_value plus a stored result versus return_void plus none. The promise protocol requires exactly one of return_value or return_void, matching how the body ends -- co_return x needs return_value, a bare co_return or falling off the end needs return_void. Everything else -- the lazy start, the continuation, the symmetric transfer, the exception path -- is identical, which is why a real library writes one template with a void specialization rather than two separate types."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "promise_type", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

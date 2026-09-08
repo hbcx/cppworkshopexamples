@@ -1,0 +1,4 @@
+  step A
+  step B
+  both steps done
+run finished

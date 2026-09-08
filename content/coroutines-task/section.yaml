@@ -1,0 +1,4 @@
+title: "Coroutines: a task that returns a value"
+description: "The piece that ties the first two coroutine sections together: an awaitable task that runs some work and hands back a value. It combines co_return with a value (a promise that stores a result, like the generator's promise) and the awaiter protocol (from the co_await section) so that co_await someTask() reads like a normal call while the coroutine suspends and resumes underneath. Covers a Task<T> driven by hand, awaiting a task from inside another coroutine with symmetric transfer back to the caller, a void task, exceptions crossing the await boundary, sequencing several tasks so values flow between them, and a sync_wait bridge from ordinary code -- alongside the traps that make tasks subtle: a lazy task that is never awaited and so never runs, awaiting the same one-shot task twice, and an eager task that finishes before anyone is waiting and loses the resumption."
+sort_order: 168
+category: "Coroutines"

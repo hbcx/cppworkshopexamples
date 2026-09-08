@@ -1,0 +1,14 @@
+title: "A task that returns a value"
+standard: "C++20"
+difficulty: 2
+summary: "A Task<T> is a coroutine that produces a value with co_return. The promise stores the result and, because final_suspend suspends instead of destroying the frame, the value is still there for the owner to read after the task finishes."
+notes: "This is the coroutine as a unit of work rather than a stream: one co_return, one result. The two pieces that make it work are return_value on the promise (co_return x calls it) and a final_suspend that keeps the frame alive at the end -- if it destroyed the frame, the result would be gone before anyone could read it. This first example drives the task by hand with resume() to show the laziness; the next one lets another coroutine await it so the value flows automatically. The continuation member is unused here and comes into play once a task is awaited."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "return_value", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::suspend_always", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_always" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

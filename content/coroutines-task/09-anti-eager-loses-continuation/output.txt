@@ -1,0 +1,13 @@
+LAZY task (correct):
+  creating task (nothing runs yet)
+  awaiting it now
+  inner body runs
+  got 42
+  orphaned completions: 0
+
+EAGER task (anti):
+  creating task
+  inner body runs
+  awaiting it now
+  got 42
+  orphaned completions: 1  (finished before anyone waited -- in real async, a lost wakeup)

@@ -1,0 +1,13 @@
+title: "Anti-pattern: an eager task loses its continuation"
+standard: "C++20"
+difficulty: 3
+summary: "A task that starts eagerly (suspend_never at initial_suspend) can run its body and finish before anyone awaits it. Its final_suspend then finds no continuation to resume -- an orphaned completion that, in real async code, is a lost wakeup: the caller that would have been resumed never is."
+notes: "This is why standard task types are lazy. With a lazy task the caller co_awaits first, which sets the continuation, and only then does the task start -- so when it finishes, the continuation is always in place to resume. An eager task inverts that order: it runs at creation, before the co_await that would register who to resume, so a task that completes at just the wrong moment hands its result to nobody. The example counts these orphaned completions: zero for the lazy task, one for the eager one, and the eager body visibly runs before the await line. The fix is to make the task lazy so co_await controls when it starts. Here the eager task happens to finish synchronously so the value is still read, but the orphaned completion is the bug that becomes a hang the moment the task really suspends."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::suspend_never", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_never" }
+  - { name: "std::suspend_always", url: "https://en.cppreference.com/w/cpp/coroutine/suspend_always" }
+  - { name: "await_ready", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: awaiting the same task twice"
+standard: "C++20"
+difficulty: 3
+summary: "A task is a one-shot handle: awaiting it runs its single frame to completion. Awaiting the same task object again resumes a coroutine that is already at final_suspend, which is undefined behaviour -- a task is not a value you can read repeatedly."
+notes: "The mental model that causes this is treating a task like a future you can query many times, or like a lazy value that caches. It is neither -- it is one frame that runs once. The first co_await drives it to the end; the second tries to resume a finished coroutine. The fixes match the intent: if you want the result more than once, await it once and reuse the returned value; if you genuinely need the work performed again, call the coroutine again to get a fresh task. The broken version is shown in a comment because running it is undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
