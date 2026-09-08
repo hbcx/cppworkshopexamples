@@ -1,0 +1,2 @@
+first to finish: task index 1 -> 20 at t=10
+the other two were cancelled before they could wake

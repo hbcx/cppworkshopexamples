@@ -1,5 +1,7 @@
 - slug: "coroutines-awaitables"
   note: "The protocol this section builds on: a task is awaitable because it supplies the await_ready / await_suspend / await_resume hooks, and it hands control back with the symmetric transfer explained there -- go there first for how a co_await actually suspends and resumes."
+- slug: "coroutines-combinators"
+  note: "Running many of these tasks at once instead of one after another: when_all starts a group and joins when the last finishes, when_any takes the first and cancels the rest. Go there once a single task makes sense and you need to fan out."
 - slug: "coroutines-generator"
   note: "The other coroutine shape: a generator produces many values with co_yield and is pulled, a task produces one value with co_return and is awaited. Same promise machinery, opposite direction -- go there for the streaming producer built on the same parts."
 - slug: "future"

@@ -1,0 +1,12 @@
+title: "when_any: the first to finish wins"
+standard: "C++20"
+difficulty: 3
+summary: "when_any resumes the awaiting coroutine as soon as the first task finishes and cancels the rest. Cancelling means removing the losers' pending wake-ups so the loop never resumes them; the cancelled tasks are then destroyed with the awaiter."
+notes: "The first completion callback to run flips a resolved flag, records the winner, and drops every other task's timer from the loop, so no loser is ever resumed. Owning the tasks in the awaiter is what makes cancellation safe: the losers are cleaned up together with the awaiter when the co_await ends, and because their wake-ups are already gone the loop cannot touch a destroyed frame. Skipping that cancellation is the anti-pattern later in this section. A real when_any also needs true cancellation of in-progress I/O, not just a timer removal, but the ownership and single-winner logic are the same."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

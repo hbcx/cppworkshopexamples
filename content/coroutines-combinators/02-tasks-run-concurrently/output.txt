@@ -1,0 +1,5 @@
+  worker 1 starts (waits 20), in flight now = 1
+  worker 2 starts (waits 10), in flight now = 2
+  worker 2 done at t=10
+  worker 1 done at t=20
+max in flight at once = 2

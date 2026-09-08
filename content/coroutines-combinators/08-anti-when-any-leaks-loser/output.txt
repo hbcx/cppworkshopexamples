@@ -1,0 +1,5 @@
+  winner value = 20 at t=10
+without cancel (anti): work done by 3 tasks
+
+  winner value = 20 at t=10
+with cancel (fix):     work done by 1 task

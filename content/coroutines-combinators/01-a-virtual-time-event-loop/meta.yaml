@@ -1,0 +1,13 @@
+title: "A virtual-time event loop"
+standard: "C++20"
+difficulty: 2
+summary: "The foundation the combinators need: a one-thread event loop with a simulated clock. Awaiting Sleep parks the coroutine at a future time, and the loop jumps the clock from one wake-up to the next -- so async timing is exact and repeatable instead of wall-clock flaky."
+notes: "Real async waits on I/O or timers; to demonstrate combinators deterministically we stand in a virtual clock for that. Sleep does not block -- it registers the coroutine handle in a time-ordered queue and suspends, and the loop resumes it when the clock reaches its wake time. Because the loop is single-threaded and driven purely by the queue, every run produces the same interleaving, which is what makes the when_all and when_any examples reliable. The Task gains an on_complete callback fired at final_suspend; the combinators use it to count how many tasks have finished."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "await_suspend", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

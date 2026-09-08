@@ -1,0 +1,4 @@
+  task 1 sleeps for 25
+before run, clock t=0
+  task 1 woke at t=25
+after run, clock t=25, result=1

@@ -1,0 +1,12 @@
+title: "Anti-pattern: serially awaiting independent tasks"
+standard: "C++20"
+difficulty: 3
+summary: "Awaiting independent tasks one after another runs each to completion before the next starts, so their wait times add up instead of overlapping. Three 20-unit fetches take 60 serially and 20 with when_all -- the same work, three times the latency, for no reason."
+notes: "The trap is that co_await reads so much like a normal call that a run of them looks like ordinary sequential code, and the fact that the tasks do not depend on each other goes unnoticed. If step two needs step one's result, serial is correct and required. If it does not, serial is pure wasted latency: each await parks the caller until that one task is done before the next is even started. The virtual clock makes the cost exact -- 60 versus 20. The rule: co_await in sequence only for dependent steps; for independent ones, start them together and join with when_all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "operator co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

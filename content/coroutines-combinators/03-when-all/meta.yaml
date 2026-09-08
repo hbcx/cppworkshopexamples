@@ -1,0 +1,13 @@
+title: "when_all: join when every task finishes"
+standard: "C++20"
+difficulty: 3
+summary: "when_all starts every task, then resumes the awaiting coroutine only after the last one finishes, handing back all results in input order. Because the tasks run interleaved, the total time is the slowest task's, not the sum -- the whole point of running them together."
+notes: "The awaiter starts each task with a completion callback that counts down; when the counter hits zero it wakes the joiner. The results vector is filled by index, so order is preserved no matter which task finishes first. The awaiter itself lives in the joining coroutine's frame for the whole suspension, which is what keeps the tasks, counter, and results alive while the loop runs them. Here every result is an int to keep the code readable; a general when_all returns a tuple of each task's own result type, but the mechanism -- count completions, wake once -- is identical. Note the finish time is 30, the max of 30/10/20, versus 60 if they were awaited one at a time."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

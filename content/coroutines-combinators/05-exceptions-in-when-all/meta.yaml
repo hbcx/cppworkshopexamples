@@ -1,0 +1,15 @@
+title: "Exceptions through a combinator"
+standard: "C++20"
+difficulty: 3
+summary: "When a task inside when_all fails, its exception is stored and rethrown from the combinator's await_resume, so a failure in one parallel task surfaces at the caller's co_await as an ordinary exception -- the same error path a single awaited task has, extended over a group."
+notes: "Each task already captures its own exception in unhandled_exception; the combinator just keeps the first failure it sees and rethrows it when the group is joined. This version still waits for every task before reporting -- a fail-fast when_all would instead cancel the rest at the first error, the same cancellation the when_any example uses. Which you want depends on the job: fail-fast to stop wasted work, wait-all to gather every result or every error. Either way the caller writes one try/catch around the co_await rather than checking a status per task."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "std::exception_ptr", url: "https://en.cppreference.com/w/cpp/error/exception_ptr" }
+detailed_tags:
+  - { name: "std::current_exception", url: "https://en.cppreference.com/w/cpp/error/current_exception" }
+  - { name: "std::rethrow_exception", url: "https://en.cppreference.com/w/cpp/error/rethrow_exception" }
+  - { name: "std::runtime_error", url: "https://en.cppreference.com/w/cpp/error/runtime_error" }
+  - { name: "std::exception", url: "https://en.cppreference.com/w/cpp/error/exception" }

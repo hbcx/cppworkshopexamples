@@ -1,0 +1,12 @@
+title: "Anti-pattern: a spawned task captures the loop variable by reference"
+standard: "C++20"
+difficulty: 3
+summary: "Spawning tasks in a loop where each takes its input by reference makes every task read that variable when it later runs, not when it was spawned. Sharing one referent, all tasks report its final value; binding to the loop variable itself dangles once the loop ends."
+notes: "A coroutine stores its parameters in the frame, but a reference parameter stores only the reference -- and the referent keeps changing (or dies) while the tasks sit suspended. Spawned in a loop, by-reference tasks all end up pointing at the same later state, so instead of ids 0, 1, 2 they all read 2. This is the coroutine form of the classic loop-capture bug, and it bites harder here because the task runs long after the loop, deep inside the event loop. The fix is the same as everywhere in coroutines: take by value so each frame owns its own copy taken at spawn time. The example keeps the shared variable alive to show the wrong-value case deterministically; referencing the loop variable directly would be undefined behaviour."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "dangling reference", url: "https://en.cppreference.com/w/cpp/language/lifetime" }
+detailed_tags:
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

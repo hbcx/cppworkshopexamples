@@ -1,0 +1,2 @@
+all results (input order): 10 20 30
+finished at t=30 (the max of 30/10/20, not the sum)

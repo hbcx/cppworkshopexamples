@@ -1,0 +1,13 @@
+title: "Combinators compose"
+standard: "C++20"
+difficulty: 3
+summary: "A combinator is just an awaitable, and a task that awaits one is just another task -- so combinators nest freely. Here a when_any (first of several replicas) is wrapped in a task that becomes one input of a when_all, and the whole thing runs as one interleaved schedule."
+notes: "This is the payoff of everything being an awaitable: when_all and when_any do not need to know what they contain, only that each input is a task that finishes. Wrapping a when_any in a Task turns first-of-N into a value another combinator can wait on, so you build fan-out and race logic in layers -- fetch from the fastest of three replicas, and do that for each of five shards, and wait for all five. The scheduling stays flat on the one event loop; nesting is in the code, not in the runtime, so there is no stack growth from the composition."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "co_return", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "operator co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: when_any that never cancels the losers"
+standard: "C++20"
+difficulty: 3
+summary: "A when_any that picks the winner but forgets to cancel the other tasks leaves them scheduled: the loop wakes them anyway, so their work still runs and their frames live on. Racing for the fastest answer only saves anything if the losers are actually stopped."
+notes: "The point of when_any -- take the first result, drop the rest -- is only half done if the losers keep going. The counter makes it concrete: without cancellation all three tasks do their post-wait work, so the race saved nothing and may even leak the loser frames; with cancellation only the winner's work runs. Cancellation here means removing the losers' scheduled wake-ups so the loop cannot resume them, after which they are safely destroyed with the awaiter. Note the sharper failure this avoids: destroying a loser whose wake-up is still queued would later resume freed memory. Real cancellation must also stop in-progress I/O, not just a timer, but the ownership rule is the same -- whoever runs the race owns the losers and must end them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }

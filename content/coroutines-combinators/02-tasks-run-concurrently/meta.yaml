@@ -1,0 +1,12 @@
+title: "Two tasks in flight at once"
+standard: "C++20"
+difficulty: 3
+summary: "Starting two tasks before either finishes puts both in flight at the same time on a single thread. Each parks on its Sleep, the loop wakes them in time order, and a counter shows two tasks active at once -- the concurrency a combinator will package."
+notes: "This is the raw idea behind when_all, done by hand: start does not run a task to completion, it runs it until the first suspension and returns, so starting both leaves both parked and progressing as the loop advances. The in-flight counter peaks at two, where awaiting them one after another (the serial anti-pattern) would peak at one. There is no second thread -- concurrency here is interleaving of suspended coroutines, which is exactly what an event loop gives you. The next example wraps this start-all-then-join pattern into a reusable when_all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "coroutines", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+  - { name: "co_await", url: "https://en.cppreference.com/w/cpp/language/coroutines" }
+detailed_tags:
+  - { name: "std::coroutine_handle", url: "https://en.cppreference.com/w/cpp/coroutine/coroutine_handle" }

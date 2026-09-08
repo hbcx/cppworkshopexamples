@@ -1,0 +1,15 @@
+- problem: "A request handler that must gather data from several independent back-end services -- a user profile, their permissions, and their recent activity -- before it can respond. Fetched one after another, the response waits for the sum of all three round trips."
+  why: "when_all issues all three fetches together and resumes only when the slowest returns, so the handler's latency is the max of the three, not their sum -- often a large cut when the calls are independent. Awaiting them in sequence would be correct only if each depended on the previous, which here it does not."
+  signal: "A handler with a run of co_awaits (or blocking calls) to unrelated services, each starting only after the last returned, where none of them uses a previous result."
+
+- problem: "An operation that must not hang forever -- a network read, a lock acquisition, a remote call -- needs a deadline, so that if it has not finished within some time the code gives up and does something else."
+  why: "when_any races the real operation against a timer: whichever finishes first wins, and the loser is cancelled. The timeout becomes just another task in the race instead of a separate watchdog thread or a manual timer callback threaded through the operation, and the winning branch is plain code after the co_await."
+  signal: "A watchdog thread or a manual timer paired with a flag and a callback to abort an in-flight operation, or an async call with no deadline at all that can stall the whole flow."
+
+- problem: "A read served by several replicas of a store, where tail latency matters: usually all replicas are fast, but any one of them can occasionally be slow, and waiting on a single chosen replica exposes the caller to that slow tail."
+  why: "when_any sends the read to several replicas and takes the first answer, then cancels the rest, so the response time tracks the fastest replica rather than the one you happened to pick. Cancelling the losers is essential -- without it the redundant reads keep running and the hedge just adds load. This is the pattern behind hedged requests in large storage systems."
+  signal: "A client that picks one replica and waits, then retries a different one on timeout, turning a slow tail into a slow-then-retry that is even slower, where a race would have hidden the slow replica entirely."
+
+- problem: "A batch step that must process many independent items -- validate a list of records, thumbnail a set of images, probe a list of hosts -- and produce all the results, or stop at the first failure."
+  why: "when_all over a vector of tasks runs the whole batch interleaved on one thread and gathers the results in order, and a failing item surfaces as one exception at the join instead of a status buried per item. It replaces a hand-written counter-and-callback join, which is the part of this that is easy to get wrong (miscounting, resuming twice, losing an error)."
+  signal: "A loop that starts async work per item and then hand-rolls the join -- an atomic counter, a done flag, a final callback -- to notice when the last one finished."
