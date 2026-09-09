@@ -1,0 +1,6 @@
+- slug: "non-member-range-access"
+  note: "ADL in action on the standard's own customization point: the same using std::begin; begin(r); two-step this section teaches for swap, and the mirror anti-pattern where qualifying std::begin defeats a type's own begin. Go there for the begin/end side of the story."
+- slug: "std-hash"
+  note: "The allowed exception to not touching namespace std, in depth: specializing std::hash for your own type so it works as a hash-map key -- the one addition to std the anti-pattern here permits. Go there for writing a good hash and the pitfalls."
+- slug: "operator-overloading"
+  note: "Why a type's operators go in the type's own namespace: ADL finds operator<< and operator+ there for an unqualified use, which is what makes cout << v and a + b work without qualification. Go there for writing the operators ADL then locates."

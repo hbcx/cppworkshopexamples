@@ -1,0 +1,12 @@
+title: "Anti-pattern: qualifying a call defeats ADL"
+standard: "C++11"
+difficulty: 3
+summary: "Hard-qualifying std::swap(a, b) always calls the generic library swap and never the type's own, so a type with a cheaper swap loses it. The two-step using std::swap; swap(a, b); lets ADL prefer the type's swap and fall back to std only when there is none."
+notes: "swap is a customization point: a type may provide its own faster swap in its namespace, and generic code is supposed to find it by ADL. Writing std::swap directly opts out of that -- the flag shows lib::swap runs under the two-step but not under the hard-qualified call. The same trap applies to std::begin/std::end and other customization points (the non-member range access section shows the begin version, where qualifying std::begin defeats a type's own begin). The rule for generic code: bring the std fallback in with using, then call unqualified. Qualify only when you specifically want the std version and nothing else."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "argument-dependent lookup", url: "https://en.cppreference.com/w/cpp/language/adl" }
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }
+detailed_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }

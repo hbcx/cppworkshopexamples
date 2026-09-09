@@ -1,0 +1,2 @@
+app::count(v)        = 4
+std::count(...,2)    = 2

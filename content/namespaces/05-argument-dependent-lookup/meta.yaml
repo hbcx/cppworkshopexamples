@@ -1,0 +1,12 @@
+title: "Argument-dependent lookup (ADL)"
+standard: "C++11"
+difficulty: 3
+summary: "For an unqualified call, C++ also looks in the namespaces of the arguments' types. That is how operator<< and a type's own swap are found without qualification, and it is the mechanism that lets user types plug into generic code."
+notes: "ADL is why cout << v works when operator<< lives in the same namespace as v, and why you never write std::operator+ for your own types. Its most important use is the customization point: generic code writes using std::swap; swap(a, b); so that ADL picks a type's own swap when it defines one and std::swap otherwise -- the same two-step std uses for swap, begin, and end. Write a type's helper operators and swap in the type's own namespace so ADL can find them. The flip side is that ADL can also reach names you did not expect (the qualifying anti-pattern and the begin example in non-member range access explore both directions)."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "argument-dependent lookup", url: "https://en.cppreference.com/w/cpp/language/adl" }
+detailed_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }

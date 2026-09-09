@@ -1,0 +1,12 @@
+title: "using-declaration vs using-directive"
+standard: "C++11"
+difficulty: 2
+summary: "A using-declaration (using lib::value;) brings one specific name into scope; a using-directive (using namespace lib;) makes every name in the namespace available. Both obey the scope they appear in, so keeping them inside a block limits the reach."
+notes: "The one-name using-declaration is precise and safe: it says exactly which name you mean. The all-names using-directive is convenient in a small scope -- a function body -- but dangerous at file or namespace scope, and especially in a header, where it dumps a whole namespace into every file that includes it and invites clashes and surprising overload resolution (the first anti-pattern). The rule of thumb: qualify by default, reach for a using-declaration for a name you use a lot, and keep any using namespace inside the narrowest block that needs it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "using declaration", url: "https://en.cppreference.com/w/cpp/language/using_declaration" }
+  - { name: "using directive", url: "https://en.cppreference.com/w/cpp/language/using_directive" }
+detailed_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }

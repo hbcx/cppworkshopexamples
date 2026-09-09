@@ -1,0 +1,2 @@
+fromMain()  -> main.cpp
+fromOther() -> other.cpp

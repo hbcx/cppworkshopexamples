@@ -1,0 +1,11 @@
+title: "Inline namespaces"
+standard: "C++11"
+difficulty: 3
+summary: "An inline namespace's members are also visible in the enclosing namespace, so callers of mylib::greet() reach the inline version while the others stay reachable by explicit name. It is the tool for shipping API/ABI versions side by side with one as the default."
+notes: "Marking v2 inline makes mylib::greet() mean mylib::v2::greet(), while mylib::v1::greet() still works for code that pinned the old version -- and because the namespace becomes part of the mangled symbol name, v1 and v2 are distinct symbols that link independently, so this versions the ABI, not just the API. Switching the default is a one-word change (move inline from v1 to v2). The standard library uses this itself: the suffix operators live in inline namespaces under std::literals, which is why using namespace std::literals brings them in. Pair it with a namespace alias so callers can pin a version in one place."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "inline namespace", url: "https://en.cppreference.com/w/cpp/language/namespace" }
+detailed_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }

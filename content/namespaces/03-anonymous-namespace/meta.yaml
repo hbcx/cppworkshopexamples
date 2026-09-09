@@ -1,0 +1,11 @@
+title: "The unnamed namespace"
+standard: "C++11"
+difficulty: 2
+summary: "Names in an unnamed namespace have internal linkage -- they are private to their translation unit. It is the modern replacement for file-scope static: two source files can each define a helper of the same name with no clash."
+notes: "Before this, you wrote static at file scope to keep a helper out of the linker's global names; the unnamed namespace does the same and works for types too, not just functions and variables. This example is two translation units (main.cpp and other.cpp) that each define who() in their own unnamed namespace: they compile and link together with no ODR violation, and each fromX() calls its own. Use it for anything a header should not expose -- internal helpers, file-local constants, a detail type -- so those names never leak into other files or collide across the program."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "unnamed namespace", url: "https://en.cppreference.com/w/cpp/language/namespace" }
+detailed_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }

@@ -1,0 +1,3 @@
+mylib::greet()     -> hello (v2)
+mylib::v1::greet() -> hello (v1)
+mylib::v2::greet() -> hello (v2)

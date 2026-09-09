@@ -1,0 +1,11 @@
+title: "Namespace basics"
+standard: "C++17"
+difficulty: 1
+summary: "A namespace groups declarations under a name and is reached with the :: qualifier. It can be reopened and extended across declarations, and nested namespaces have a compact a::b form since C++17."
+notes: "Namespaces exist to stop names from colliding as a program and its libraries grow -- two libraries can both have a Buffer as long as each is in its own namespace. Reopening is how a namespace is spread across many headers: every std header adds to namespace std. The compact namespace a::b {} form (C++17) saves the old nested braces. A qualified name like geometry::area names exactly one thing; the rest of this section is about the shortcuts (using, aliases) and the automatic lookup (ADL) that save you from writing the qualifier every time -- and when those shortcuts backfire."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }
+detailed_tags:
+  - { name: "nested namespace", url: "https://en.cppreference.com/w/cpp/language/namespace" }

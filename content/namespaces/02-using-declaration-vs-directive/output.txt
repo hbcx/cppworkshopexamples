@@ -1,0 +1,4 @@
+value() = 42
+name()  = lib
+value() = 42, name() = lib
+qualified: 42

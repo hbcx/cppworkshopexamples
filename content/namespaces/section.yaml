@@ -1,0 +1,4 @@
+title: "Namespaces and ADL"
+description: "How names are organized and found in C++. A namespace groups declarations and keeps them from colliding; this section covers declaring and reopening one, the compact nested form, the difference between a using-declaration (one name) and a using-directive (all of them) and why the latter does not belong at file scope, the unnamed namespace as the modern replacement for file-scope static, namespace aliases for long or versioned names, argument-dependent lookup -- the rule that lets an unqualified call find operator<< or swap in the namespace of its arguments, which is how user types plug into generic code -- and inline namespaces for shipping API/ABI versions side by side. The anti-patterns cover the classic traps: using namespace at file or header scope, hard-qualifying a call so it defeats an ADL customization point, and adding your own declarations to namespace std."
+sort_order: 172
+category: "Language & object model"

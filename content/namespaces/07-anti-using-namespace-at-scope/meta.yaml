@@ -1,0 +1,11 @@
+title: "Anti-pattern: using namespace at file or header scope"
+standard: "C++11"
+difficulty: 3
+summary: "A using-directive at file or namespace scope dumps a whole namespace into everything below it. Combined with another such directive it makes shared names (count, distance, data, size) ambiguous, and in a header it spreads the problem to every file that includes it."
+notes: "Here app::count and std::count both become the unqualified count, so calling count(v) is ambiguous and does not compile -- and the fix is to qualify, which means the using-directives bought nothing but a hazard. The quieter danger is a call that stays valid but binds to a different overload than you meant, changing behaviour silently. The rule: never write using namespace at file or namespace scope, and never in a header at all; qualify by default, use a using-declaration for a single heavily used name, and confine any using namespace to the narrowest block. std::literals is the rare exception, and even that is brought in locally. The ambiguous unqualified call is described in a comment rather than compiled, because it is a hard error."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "using directive", url: "https://en.cppreference.com/w/cpp/language/using_directive" }
+detailed_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }

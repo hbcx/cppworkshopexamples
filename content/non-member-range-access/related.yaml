@@ -2,6 +2,8 @@
   note: "Once std::begin/std::end hand you the iterators, these move and measure them: std::next, std::advance and std::distance step and count any range, with a cost that follows the iterator category."
 - slug: "iterator"
   note: "What makes begin()/end() work at all: that chapter builds an iterator type from scratch -- the member typedefs, categories, and the protocol these free functions forward to -- so you can make your own type iterable."
+- slug: "namespaces"
+  note: "The lookup rule behind the using std::begin; begin(r); two-step: argument-dependent lookup, and why qualifying std::begin defeats a type's own begin. Go there for ADL, namespaces, and the same customization idiom applied to swap."
 - slug: "span"
   note: "Where std::data and std::size lead: std::span wraps a contiguous pointer-plus-length into a safe, bounds-carrying view, so you stop passing the two apart to C-style code."
 - slug: "arrays"

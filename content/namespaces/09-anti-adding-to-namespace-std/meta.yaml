@@ -1,0 +1,12 @@
+title: "Anti-pattern: adding your own names to namespace std"
+standard: "C++17"
+difficulty: 3
+summary: "Adding a new function, type, or overload to namespace std is undefined behaviour, even when it compiles. The one thing you may add is a template specialization of a permitted std template (std::hash, std::less, formatter...) for your own type."
+notes: "The line is specialization versus new declaration. Specializing std::hash<Point> is allowed and is the normal way to make a user type a hash-map key, shown here working in an unordered_set. Opening namespace std to add a free function, a new type, or an extra overload of an existing algorithm is undefined behaviour -- the standard reserves the right to define those itself, and your addition can clash or be ignored in ways that differ by library and version. If you want a free function found for your type, put it in your type's own namespace and let ADL do the work. The forbidden version is in a comment because it must not be built."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }
+  - { name: "std::hash", url: "https://en.cppreference.com/w/cpp/utility/hash" }
+detailed_tags:
+  - { name: "argument-dependent lookup", url: "https://en.cppreference.com/w/cpp/language/adl" }

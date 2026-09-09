@@ -1,0 +1,11 @@
+title: "Namespace aliases"
+standard: "C++11"
+difficulty: 1
+summary: "A namespace alias gives a long or nested namespace a short local name: namespace vdn = very::deeply::nested;. It shortens qualified names without dragging every name into scope the way a using-directive would."
+notes: "An alias is the middle ground between writing the full qualifier every time and pulling everything in with using namespace: you keep the qualification (so nothing leaks or collides) but make it short. It is the usual way to tame deeply nested library namespaces in a function body. Aliases also decouple code from a versioned namespace -- point the alias at the version you want in one place, and the rest of the code follows -- which pairs with the inline-namespace versioning later in this section."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "namespace alias", url: "https://en.cppreference.com/w/cpp/language/namespace_alias" }
+detailed_tags:
+  - { name: "namespaces", url: "https://en.cppreference.com/w/cpp/language/namespace" }
