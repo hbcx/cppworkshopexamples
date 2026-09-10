@@ -1,0 +1,2 @@
+Risky (throwing move): moves=0 copies=1
+Safe  (noexcept move): moves=1 copies=0

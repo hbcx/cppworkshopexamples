@@ -1,0 +1,4 @@
+title: "General-purpose utilities"
+description: "The small, widely useful helpers from <utility> that do not fit a bigger chapter but come up everywhere. Covers std::exchange (set a new value and return the old one, the clean way to write a move or a flip-once flag), std::as_const (a const view that forces the read-only overload), the safe integer comparisons std::cmp_less and friends plus std::in_range (which fix the signed/unsigned comparison trap), std::to_underlying (the C++23 spelling of enum-to-integer), and std::move_if_noexcept (move only when it cannot throw, else copy, for the strong exception guarantee) -- alongside the traps these prevent: a mixed-sign comparison that quietly gives the wrong answer, a hand-written move that forgets to reset the source and double-frees, and a move constructor left without noexcept that makes std::vector copy every element when it grows."
+sort_order: 175
+category: "Function objects & utilities"

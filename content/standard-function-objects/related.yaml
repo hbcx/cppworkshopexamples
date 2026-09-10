@@ -8,3 +8,5 @@
   note: "The tools that call and adapt any callable, including these objects: std::invoke calls one uniformly and std::bind composes one (the over-composition this section warns against) -- go there for invoke, bind, and mem_fn."
 - slug: "std-hash"
   note: "The other function object an unordered container needs: std::hash picks the bucket and std::equal_to confirms the match, and both must agree -- go there for hashing your own key types and the hash/equality contract."
+- slug: "utilities"
+  note: "The other small helpers in this category: std::exchange, std::as_const, the safe integer comparisons, std::to_underlying and std::move_if_noexcept. Go there for the general-purpose <utility> tools that sit beside these function objects."

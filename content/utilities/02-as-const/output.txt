@@ -1,0 +1,4 @@
+  non-const overload ran (modified)
+after inspect(name):            Ada!
+  const overload ran (read-only, size 4)
+after inspect(as_const(name)):  Ada!

@@ -1,0 +1,2 @@
+delta > threshold  (built-in) = true  (wrong: -3 is not > 2)
+cmp_greater(delta, threshold) = false  (correct)

@@ -1,0 +1,4 @@
+in_range<std::uint8_t>(42)     = true
+in_range<std::uint8_t>(100000) = false
+in_range<std::uint8_t>(-5)     = false
+in_range<int>(100000)          = true

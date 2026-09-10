@@ -1,0 +1,12 @@
+title: "Anti-pattern: a move constructor without noexcept"
+standard: "C++11"
+difficulty: 3
+summary: "std::vector uses std::move_if_noexcept when it grows, so a move constructor left without noexcept forces the container to copy every element on reallocation instead of moving. The counters show the throwing-move type copied and the noexcept-move type moved."
+notes: "The container has to keep the strong exception guarantee across a reallocation: if relocating elements could throw partway, both the old and new buffers would be left inconsistent. So it only moves elements whose move is declared noexcept, and copies the rest -- meaning a forgotten noexcept quietly turns every grow into a full copy, the exact cost move semantics were meant to remove. The fix is a one-word promise: mark move constructors (and move assignment) noexcept whenever they genuinely cannot throw, which is the common case for stealing pointers. This is the practical reason move_if_noexcept exists and why noexcept on moves matters for performance, not just correctness."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "noexcept", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }
+  - { name: "std::move_if_noexcept", url: "https://en.cppreference.com/w/cpp/utility/move_if_noexcept" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }

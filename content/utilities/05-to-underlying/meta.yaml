@@ -1,0 +1,12 @@
+title: "std::to_underlying"
+standard: "C++23"
+difficulty: 1
+summary: "std::to_underlying(e) (C++23) converts a scoped enum to its underlying integer type. It replaces static_cast<std::underlying_type_t<E>>(e) with a shorter, safer spelling that can never name the wrong underlying type by hand."
+notes: "A scoped enum does not implicitly convert to a number, so getting the value out has always meant a static_cast -- and writing the target type by hand invites a mismatch, especially if the enum's underlying type later changes. to_underlying always uses the enum's declared underlying type, so it stays correct on its own. Note the value comes back in the underlying type, here unsigned char, which prints as a character unless you cast it to int for display. Use it wherever you need the raw value: a flag mask, a serialization index, an array subscript. The enums section covers the conversion both ways and the C++11 hand-written helper this replaces."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::to_underlying", url: "https://en.cppreference.com/w/cpp/utility/to_underlying" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }

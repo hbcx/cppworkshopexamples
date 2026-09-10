@@ -1,0 +1,12 @@
+title: "std::exchange"
+standard: "C++14"
+difficulty: 1
+summary: "std::exchange(obj, new_value) assigns new_value to obj and returns the old value. It packages the read-old-then-write-new step into one expression, which shows up in move constructors, reset-and-return, and flip-once flags."
+notes: "The value is that the old and the new are handled together, atomically as far as the reader is concerned: you get the previous state back while the object is already updated. The flag idiom here -- if (exchange(firstRun, false)) -- runs the branch only the first time and clears the flag in the same breath, with no separate assignment to forget. Its most important use is inside a move constructor, where std::exchange(other.ptr, nullptr) steals the resource and nulls the source at once; the anti-pattern later shows what goes wrong without it. Note it is unrelated to std::swap, which trades two values rather than replacing one and returning the old."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exchange", url: "https://en.cppreference.com/w/cpp/utility/exchange" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "std::swap", url: "https://en.cppreference.com/w/cpp/algorithm/swap" }

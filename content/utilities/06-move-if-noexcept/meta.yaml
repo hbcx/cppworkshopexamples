@@ -1,0 +1,12 @@
+title: "std::move_if_noexcept"
+standard: "C++11"
+difficulty: 3
+summary: "std::move_if_noexcept(x) casts to an rvalue only when x's move constructor is noexcept; otherwise it returns an lvalue so the value is copied. It trades a possible move for a safe copy to preserve the strong exception guarantee."
+notes: "The point is what happens on failure. When an operation must be able to roll back -- a container reallocating its storage -- moving an element and then having a later move throw would leave both the old and new storage half-built, with no way to restore the original. move_if_noexcept avoids that: if the move cannot throw it moves (fast), and if it might, it copies (safe, the source is untouched). This is exactly the rule std::vector uses when it grows. The practical lesson is the mirror image: mark your own move constructors noexcept so the library and this helper choose the move, which the non-noexcept-move anti-pattern makes concrete."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::move_if_noexcept", url: "https://en.cppreference.com/w/cpp/utility/move_if_noexcept" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "noexcept", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }

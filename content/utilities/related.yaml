@@ -1,0 +1,6 @@
+- slug: "move-semantics"
+  note: "Where std::exchange and std::move_if_noexcept do their real work: writing move constructors that steal cleanly and marking them noexcept so the library moves rather than copies. Go there for the move/copy mechanics these utilities support."
+- slug: "enums"
+  note: "The fuller treatment of the conversion std::to_underlying does: getting a scoped enum's value out and back, and the C++11 hand-written helper this C++23 one-liner replaces. Go there for scoped enums, underlying types, and using enum."
+- slug: "standard-function-objects"
+  note: "The sibling helpers in this category: the arithmetic, comparison and logical function objects and their transparent forms. Go there for the callable building blocks that pair with these small utilities."

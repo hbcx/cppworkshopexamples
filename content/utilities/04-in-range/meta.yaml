@@ -1,0 +1,12 @@
+title: "std::in_range"
+standard: "C++20"
+difficulty: 2
+summary: "std::in_range<T>(value) returns whether value fits in the integer type T without loss, handling signedness and width correctly. It is the check to run before a narrowing cast, so an out-of-range value is caught rather than silently wrapped."
+notes: "Casting a wider or differently-signed integer into a smaller type quietly truncates or wraps: assigning 100000 to a uint8_t gives some small leftover, and assigning -5 to an unsigned type gives a large positive. in_range answers up front whether the value is representable, so you can reject or handle the bad case instead of storing garbage. It is built on the same signedness-aware machinery as the cmp_ comparisons and pairs with them for correct integer handling at type boundaries -- parsing, serialization, talking to fixed-width APIs."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::in_range", url: "https://en.cppreference.com/w/cpp/utility/in_range" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "std::cmp_less", url: "https://en.cppreference.com/w/cpp/utility/intcmp" }

@@ -1,0 +1,2 @@
+after move: source data is null? true
+target has the buffer?           true

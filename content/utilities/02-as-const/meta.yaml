@@ -1,0 +1,12 @@
+title: "std::as_const"
+standard: "C++17"
+difficulty: 2
+summary: "std::as_const(x) yields a const reference to x, so overload resolution picks the const-qualified path. It is a one-word way to say read-only at a call site -- to select a const overload, get const iterators, or guard against an accidental mutation."
+notes: "When a type has both a mutating and a read-only overload -- operator[], begin/end, a member accessor -- an ordinary non-const object selects the mutating one, which may do more work (detach a copy-on-write buffer) or simply expose a handle you did not mean to hand out. Wrapping the argument in std::as_const forces the const version without writing a separate const variable. It is also how you get cbegin-style const iterators from a non-const container in generic code. It returns an lvalue reference, so never call it on a temporary you then keep a reference to -- the temporary still dies at the end of the full expression."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::as_const", url: "https://en.cppreference.com/w/cpp/utility/as_const" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "const correctness", url: "https://en.cppreference.com/w/cpp/language/cv" }

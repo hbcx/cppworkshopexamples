@@ -1,0 +1,4 @@
+-1 < 1u   (built-in)      = false
+cmp_less(-1, 1u)          = true
+cmp_greater(-1, 1u)       = false
+cmp_equal(-1, 1u)         = false

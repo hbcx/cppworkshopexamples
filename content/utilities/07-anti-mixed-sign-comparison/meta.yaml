@@ -1,0 +1,12 @@
+title: "Anti-pattern: mixing signed and unsigned in a comparison"
+standard: "C++20"
+difficulty: 2
+summary: "Comparing a signed value with an unsigned one converts the signed side to unsigned first, so a negative becomes huge and the comparison lies: -3 > 2u is true. Bounds checks and loop conditions written this way silently do the wrong thing."
+notes: "The usual arithmetic conversions win before the comparison runs, turning a negative signed value into a large unsigned one, so delta > threshold reports the opposite of the mathematical answer. The same rule makes a reverse loop with an unsigned index never end, because an unsigned value is always at least zero. Compilers warn (-Wsign-compare), which is worth heeding, but the fix is either to keep both operands the same signedness or to use the value-correct std::cmp_ comparisons and std::in_range. The mechanic examples show those helpers; this is the bug they exist to catch."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cmp_greater", url: "https://en.cppreference.com/w/cpp/utility/intcmp" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "std::cmp_less", url: "https://en.cppreference.com/w/cpp/utility/intcmp" }

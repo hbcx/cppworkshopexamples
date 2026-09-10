@@ -1,0 +1,4 @@
+SafeMove (noexcept move):
+  SafeMove moved
+RiskyMove (throwing move):
+  RiskyMove copied

@@ -1,0 +1,12 @@
+title: "Safe integer comparisons"
+standard: "C++20"
+difficulty: 2
+summary: "std::cmp_less, cmp_greater, cmp_equal and the rest (C++20) compare integers by their mathematical value regardless of signedness, fixing the trap where -1 < 1u is false because the signed value is converted to a huge unsigned first."
+notes: "Mixing signed and unsigned in a comparison is one of the oldest C++ footguns: the usual arithmetic conversions turn a negative signed value into a large unsigned one, so -1 < 1u evaluates to false and a bounds check can silently pass or fail. The cmp_ family sidesteps the conversion and answers the question you actually asked. They only accept integer types -- passing a bool, a character, or a floating-point value is a compile error, which is deliberate. Reach for them whenever a signed index or difference meets an unsigned size, and see the mixed-sign anti-pattern for the bug in the wild."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::cmp_less", url: "https://en.cppreference.com/w/cpp/utility/intcmp" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "std::cmp_greater", url: "https://en.cppreference.com/w/cpp/utility/intcmp" }

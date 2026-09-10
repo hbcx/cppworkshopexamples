@@ -1,0 +1,12 @@
+title: "Anti-pattern: a hand-written move that forgets to reset the source"
+standard: "C++14"
+difficulty: 3
+summary: "A move constructor that copies the resource pointer but does not null the source leaves two objects owning the same buffer, so both destructors free it -- a double free. std::exchange steals and resets in a single expression, so the moved-from object owns nothing."
+notes: "The move idiom is take the resource and leave the source empty, and the second half is the easy one to forget: writing data(other.data) alone compiles cleanly, works in simple tests, and double-frees the moment both objects are destroyed. std::exchange(other.data, nullptr) does both steps at once and cannot leave them out of sync, which is why it is the standard way to write these. The broken line is shown in a comment because running it is undefined behaviour; the example runs the correct version and confirms the source was reset. The same pattern applies to any owned handle -- a file descriptor, a lock, a socket."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::exchange", url: "https://en.cppreference.com/w/cpp/utility/exchange" }
+  - { name: "utility library", url: "https://en.cppreference.com/w/cpp/utility" }
+detailed_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }

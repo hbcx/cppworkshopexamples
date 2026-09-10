@@ -7,3 +7,5 @@
   note: "The same goal past enumerations: an enum class is the lightweight way to make a distinct type from an integer set, and a strong-type wrapper is how you do it for an arbitrary value like a UserId or a Meters. Go there for hand-rolled distinct types over any underlying value."
 - slug: "type-conversions-and-casts"
   note: "How you move between a scoped enum and its number: a static_cast, because enum class does not convert on its own. Go there for the four named casts and controlling conversions with explicit."
+- slug: "utilities"
+  note: "The C++23 one-liner for the enum-to-number direction: std::to_underlying replaces the hand-written static_cast and can never name the wrong underlying type. Go there for it and the other small <utility> helpers."
