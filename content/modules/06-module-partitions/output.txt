@@ -1,0 +1,2 @@
+rectangleArea(4, 5) = 20
+triangleArea(6, 3)  = 9

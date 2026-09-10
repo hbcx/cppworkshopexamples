@@ -4,3 +4,5 @@
   note: "The allowed exception to not touching namespace std, in depth: specializing std::hash for your own type so it works as a hash-map key -- the one addition to std the anti-pattern here permits. Go there for writing a good hash and the pitfalls."
 - slug: "operator-overloading"
   note: "Why a type's operators go in the type's own namespace: ADL finds operator<< and operator+ there for an unqualified use, which is what makes cout << v and a + b work without qualification. Go there for writing the operators ADL then locates."
+- slug: "modules"
+  note: "The compilation-boundary counterpart: a namespace groups names, a C++20 module decides which of them escape a compile boundary and cross an import. Go there for export/import, interface vs implementation units, and encapsulation the file itself enforces."

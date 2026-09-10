@@ -1,0 +1,11 @@
+title: "Anti-pattern: expecting a macro to cross an import"
+standard: "C++20"
+difficulty: 3
+summary: "Modules do not export macros. A #define in a module interface is visible only inside that unit; an importer that expects it to arrive with import gets a not-declared error. Export a real function or constant instead of relying on a macro."
+notes: "This is a deliberate and welcome difference from headers, where a #define leaks into every file that includes it -- the source of most macro grief. A module boundary is a real language boundary, so preprocessor names stay on their own side of it. Code that used a macro as a shared constant or a tiny function must move to an exported constexpr constant or an exported function to travel across import. The macro still works inside the module unit that defined it, as the exported answer() shows. If you genuinely need a macro shared -- rare, and usually avoidable -- it stays in a header that is #included, not imported. The broken use is shown in a comment; the example exports a constant and a function."
+run: true
+module_units: ["config.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "import", url: "https://en.cppreference.com/w/cpp/language/modules" }

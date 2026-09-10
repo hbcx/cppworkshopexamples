@@ -1,0 +1,11 @@
+title: "Anti-pattern: #include in the module purview"
+standard: "C++20"
+difficulty: 3
+summary: "A #include placed after the export module line -- in the module purview -- is wrong: the header's declarations attach to your module, and standard headers are not meant to be included there. Textual includes belong in the global module fragment before the module declaration."
+notes: "A module unit has two regions: the global module fragment (from a bare module; up to export module) where textual #includes go, and the purview (after export module) which is your module's own code. Putting an #include in the purview drags the header's declarations into your module -- ownership they should not have -- and standard library headers reject being included there. The fix is to move every legacy #include up into the global module fragment, exactly as the global-module-fragment example shows. As import std and header units become available, these includes turn into imports and the fragment shrinks. The broken placement is shown in a comment; the running unit does it correctly."
+run: true
+module_units: ["text.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "global module fragment", url: "https://en.cppreference.com/w/cpp/language/modules" }

@@ -1,0 +1,15 @@
+- problem: "A library whose public API must be small and stable while its internals stay hidden, but headers expose every helper, type, and macro in the file to every consumer, and there is no way to say private at the file level."
+  why: "A module exports only what is marked export; everything else in the interface unit is genuinely invisible to importers, so internal helpers cannot be called, collided with, or depended on by accident. Headers give you naming conventions and detail namespaces as a fig leaf; a module makes the boundary real and compiler-enforced."
+  signal: "A header with a detail namespace or an underscore-prefixed helper meant to be private, or internal types that leak into every translation unit that includes the header."
+
+- problem: "A large translation-heavy codebase where every .cpp re-parses the same thousands of lines of headers, and touching a widely-included header triggers a rebuild of half the project."
+  why: "A module interface is compiled once into a binary artifact that consumers read instead of re-parsing text, and splitting the interface from implementation units means editing a body rebuilds only that unit, not everyone who imports the interface. The header model re-tokenizes the same declarations in every including file and couples rebuild scope to include depth."
+  signal: "Build times dominated by header parsing, precompiled-header hacks to cut it, or a small header change that recompiles a large fraction of the project."
+
+- problem: "Fragile builds where behavior depends on include order, an earlier header's macros, or an accidental double include -- the classic header hazards that guards and include-what-you-use only partly tame."
+  why: "import is order-independent and hermetic: a module always presents the same interface regardless of what came before it, and macros do not leak across the boundary, so an imported module cannot be poisoned by a prior #define or reshaped by include order. The whole category of include-order and macro-collision bugs simply does not arise."
+  signal: "Bugs that appear only in certain include orders, headers that must be included first, or macros from one header silently changing another's meaning."
+
+- problem: "A big component that is naturally several cohesive pieces, but should present one coherent name to users rather than a scatter of headers each with its own include rules."
+  why: "Module partitions let the component be written across many files (module comp:parserial, comp:io) while the primary interface re-exports the pieces, so a consumer writes one import comp; and gets the whole surface. The header equivalent is a web of includes with their own ordering and a hand-maintained umbrella header that re-includes them all."
+  signal: "An umbrella header that just #includes a dozen sub-headers, or a component split into headers that must be included in a specific combination to work."

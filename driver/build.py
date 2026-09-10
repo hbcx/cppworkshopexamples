@@ -7,7 +7,8 @@ to the content it checks, and is run both locally and by this repo's GitHub
 Actions CI (see .github/workflows/ci.yml). See CLAUDE.md sec. 5.
 
 What it does, per example dir (content/<section>/<example>/):
-  * read meta.yaml (standard, run, sanitizers, werror, sources, libs, extra_flags);
+  * read meta.yaml (standard, run, sanitizers, werror, sources, libs, extra_flags,
+    module_units);
   * map "C++NN" -> -std=c++NN;
   * pick sources BY CONVENTION -- every *.cpp in the dir, compiled together with
     -I <dir> so local headers resolve; one dir = one executable. .hpp files are
@@ -374,6 +375,84 @@ def compile_cmd(cc: str, std_flag: str, ex: Example, sources: list[Path],
     return cmd
 
 
+# --- C++20 modules ----------------------------------------------------------
+# Module examples list their interface/partition units (*.cppm) in meta.yaml as
+# `module_units: [...]`, IN BUILD ORDER (a partition before the primary that
+# imports it). The *.cpp files (globbed as usual) are the consumers and any
+# implementation units. Because the two compilers handle modules very differently
+# we branch: g++ builds interface units and consumers in one command with
+# -fmodules-ts (it produces a gcm.cache in the working directory); clang needs two
+# phases -- precompile each *.cppm to a .pcm, then compile the consumers with an
+# explicit -fmodule-file=<name>=<pcm> mapping. Each example builds in its own
+# working directory so the gcm.cache / .pcm files of same-named modules in
+# different examples never collide.
+def _is_clang(cc: str) -> bool:
+    return "clang" in os.path.basename(str(cc)).lower()
+
+
+def _module_name(path: Path) -> str:
+    """The module (or partition) name a *.cppm interface unit exports."""
+    txt = path.read_text(encoding="utf-8", errors="replace")
+    m = re.search(r"export\s+module\s+([A-Za-z0-9_.:]+)\s*;", txt)
+    return m.group(1) if m else path.stem
+
+
+def _module_base_flags(cc: str, std_flag: str, ex: Example, werror: bool,
+                       flavor: str) -> list[str]:
+    base = [cc, f"-std={std_flag}", "-I", to_compiler_path(ex.path, flavor)]
+    if _shared_dir is not None:
+        base += ["-I", to_compiler_path(_shared_dir, flavor)]
+    base += ["-Wall", "-Wextra", "-pedantic"]
+    opt = ex.meta.get("optimize") or ""
+    if opt:
+        base.append(f"-{opt}")
+    if werror:
+        base.append("-Werror")
+    return base
+
+
+def _build_module(cc: str, std_flag: str, ex: Example, module_units: list[Path],
+                  consumers: list[Path], out: Path, werror: bool,
+                  build_root: Path, res: Result) -> bool:
+    flavor = compiler_flavor(cc)
+    work = build_root / f"mod__{ex.section}__{ex.slug}__{cc.replace('/', '_')}"
+    work.mkdir(parents=True, exist_ok=True)
+    base = _module_base_flags(cc, std_flag, ex, werror, flavor)
+    steps: list[list[str]] = []
+
+    if _is_clang(cc):
+        # Phase 1: precompile each interface/partition unit to a .pcm, passing the
+        # mappings for units already built so a primary can see its partitions.
+        mappings: list[str] = []
+        pcms: list[str] = []
+        for i, u in enumerate(module_units):
+            name = _module_name(u)
+            pcm = work / f"unit{i}.pcm"
+            steps.append(base + mappings
+                         + ["--precompile", to_compiler_path(u, flavor),
+                            "-o", to_compiler_path(pcm, flavor)])
+            mappings.append(f"-fmodule-file={name}={to_compiler_path(pcm, flavor)}")
+            pcms.append(to_compiler_path(pcm, flavor))
+        # Phase 2: compile the consumers (and impl units) with every mapping.
+        steps.append(base + mappings
+                     + [to_compiler_path(c, flavor) for c in consumers]
+                     + pcms + ["-o", to_compiler_path(out, flavor)])
+    else:
+        # g++: one command, interface units first, consumers after.
+        steps.append(base + ["-fmodules-ts"]
+                     + [to_compiler_path(u, flavor) for u in module_units]
+                     + [to_compiler_path(c, flavor) for c in consumers]
+                     + ["-o", to_compiler_path(out, flavor)])
+
+    for cmd in steps:
+        proc = subprocess.run(cmd, capture_output=True, text=True, cwd=str(work))
+        if proc.returncode != 0:
+            res.failures.append(f"{cc}: module compile failed\n"
+                                + _indent(proc.stderr or proc.stdout))
+            return False
+    return True
+
+
 def build_one(ex: Example, compilers: list[str], build_root: Path,
               args) -> Result:
     res = Result(ex.name)
@@ -400,6 +479,16 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
     if not has_int_main(sources):
         res.failures.append("no `int main` found in the compiled sources")
     if res.failures:
+        return res
+
+    # C++20 module example: interface/partition units listed (in build order) in
+    # meta.yaml. The *.cpp sources above are the consumers and any impl units.
+    module_units = [ex.path / u for u in (ex.meta.get("module_units") or [])]
+    is_module = bool(module_units)
+    missing_mods = [m for m in module_units if not m.is_file()]
+    if missing_mods:
+        res.failures.append("module_units not found: "
+                            + ", ".join(m.name for m in missing_mods))
         return res
 
     opt = ex.meta.get("optimize") or ""
@@ -439,24 +528,35 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
                     "-- Linux g++/clang or CI -- for the real check)")
 
         out = build_root / f"{ex.section}__{ex.slug}__{cc.replace('/', '_')}{EXE_SUFFIX}"
-        cmd = compile_cmd(cc, std_flag, ex, sources, out, eff_sanitizers, werror)
 
-        if args.dry_run:
-            res.warnings.append(f"[dry-run] {cc}: {' '.join(cmd)}"
-                                + ("  (would run binary)" if run else ""))
-            continue
+        if is_module:
+            # Modules take a compiler-specific build path (see _build_module).
+            if args.dry_run:
+                res.warnings.append(f"[dry-run] {cc}: module build of {ex.name}"
+                                    + ("  (would run binary)" if run else ""))
+                continue
+            if not _build_module(cc, std_flag, ex, module_units, sources, out,
+                                 werror, build_root, res):
+                continue
+        else:
+            cmd = compile_cmd(cc, std_flag, ex, sources, out, eff_sanitizers, werror)
 
-        proc = subprocess.run(cmd, capture_output=True, text=True)
-        if proc.returncode != 0:
-            res.failures.append(f"{cc}: compile failed\n"
-                                + _indent(proc.stderr or proc.stdout))
-            continue
+            if args.dry_run:
+                res.warnings.append(f"[dry-run] {cc}: {' '.join(cmd)}"
+                                    + ("  (would run binary)" if run else ""))
+                continue
 
-        # Optional negative check: one standard lower should NOT compile if the
-        # example genuinely requires its declared version. Never fatal.
-        if args.std_lower_check:
-            _lower_check(res, cc, ex, sources, standard, eff_sanitizers, werror,
-                         build_root)
+            proc = subprocess.run(cmd, capture_output=True, text=True)
+            if proc.returncode != 0:
+                res.failures.append(f"{cc}: compile failed\n"
+                                    + _indent(proc.stderr or proc.stdout))
+                continue
+
+            # Optional negative check: one standard lower should NOT compile if the
+            # example genuinely requires its declared version. Never fatal.
+            if args.std_lower_check:
+                _lower_check(res, cc, ex, sources, standard, eff_sanitizers, werror,
+                             build_root)
 
         # Skip RUNNING (not building) on a compiler whose runtime cannot execute a
         # feature this example needs (e.g. shared_mutex on winpthreads g++). A
@@ -493,7 +593,7 @@ def build_one(ex: Example, compilers: list[str], build_root: Path,
     if run and args.write_output and run_stdouts and not args.dry_run:
         _write_output_file(ex, run_stdouts, res, bench)
 
-    if run and args.write_trace and not args.dry_run and not bench:
+    if run and args.write_trace and not args.dry_run and not bench and not is_module:
         _write_trace_file(ex, compilers, std_flag, build_root, res)
 
     return res

@@ -12,3 +12,5 @@
   note: "The same hiding move applied to behaviour instead of data: type erasure hides a concrete type behind one value that dispatches at run time, using the same unique_ptr-to-hidden-object structure -- go there for the Concept/Model wrapper, std::function, and value semantics via clone()."
 - slug: "rule-of-0-3-5"
   note: "The special-member rules a pimpl class must follow, on their own: how many of the five to declare and why declaring one changes the others -- go there for rule of zero, three and five before applying them to the out-of-line pimpl members."
+- slug: "modules"
+  note: "The language feature that supersedes much of what pimpl works around: a C++20 module splits interface from implementation and hides internals without a header, cutting compile coupling at the language level instead of behind a pointer. Go there for export/import and implementation units."

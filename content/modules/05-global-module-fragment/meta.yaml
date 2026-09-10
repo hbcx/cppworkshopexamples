@@ -1,0 +1,11 @@
+title: "The global module fragment"
+standard: "C++20"
+difficulty: 2
+summary: "A module unit that needs a legacy header puts the #include in a global module fragment -- a section that starts with a bare module; and ends at the export module declaration. The header's names are usable inside the module but are not re-exported to importers."
+notes: "Standard and third-party headers are not modules, so they cannot simply be imported; the global module fragment is where a module unit brings them in textually. Everything included there attaches to the global module, not to yours, which means an importer of stats does NOT get std::sqrt just for importing stats -- the include stays an implementation detail. This is the correct home for #include in a module; putting one after the export module line, in the module purview, is the matching anti-pattern. As header units and import std mature, even these includes move to imports, but the global module fragment remains the bridge to code that is still header-based."
+run: true
+module_units: ["stats.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "global module fragment", url: "https://en.cppreference.com/w/cpp/language/modules" }

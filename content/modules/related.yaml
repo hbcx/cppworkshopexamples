@@ -1,0 +1,4 @@
+- slug: "namespaces"
+  note: "The other tool for organizing names, and a complementary one: a namespace groups names, a module controls which of them escape a compilation boundary. Go there for namespaces, using, and ADL -- a module still lives in a namespace, it just decides what importers can see."
+- slug: "pimpl"
+  note: "The idiom modules largely replace: PIMPL hides implementation behind a pointer to cut compile-time coupling and keep an ABI stable, which an interface-plus-implementation-unit module does at the language level. Go there for the pointer-to-implementation firewall and when it is still worth it."

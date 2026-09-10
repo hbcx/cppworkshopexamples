@@ -1,0 +1,11 @@
+title: "Module partitions"
+standard: "C++20"
+difficulty: 3
+summary: "A module can be split into partitions -- export module geo:trig; is part of module geo. The primary interface unit pulls a partition in with export import :trig; and re-exports it, so a consumer writes one import geo; and sees everything."
+notes: "Partitions organize a large module internally without exposing that structure to users. Each partition is its own file and its own interface unit named module:part, and the primary interface unit for the module decides which partitions to re-export. A consumer imports only the module name and gets the combined surface; the partition names (the part after the colon) are visible only within the module itself. This keeps a big component in manageable pieces while still presenting a single import, where the header world would force a web of includes with their own ordering rules. The partition must be built before the primary that imports it -- the driver builds the interface units in the order this example lists."
+run: true
+module_units: ["geo-trig.cppm", "geo.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "module partition", url: "https://en.cppreference.com/w/cpp/language/modules" }

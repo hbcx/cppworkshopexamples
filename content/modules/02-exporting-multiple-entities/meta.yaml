@@ -1,0 +1,11 @@
+title: "Exporting several entities"
+standard: "C++20"
+difficulty: 2
+summary: "export can prefix any declaration -- a type, a function, a variable -- and an export block exports everything inside it at once. The consumer imports the module and sees the struct, the function, the constant, and the block's names, all as one coherent interface."
+notes: "A module's public surface is whatever is marked export, and you mark it wherever it is convenient: on individual declarations, or as a block that saves repeating the keyword. Exporting a type makes the type name and its members available to importers; exporting a variable or an inline constant shares a value. Everything else in the interface unit stays private to the module. This is the same encapsulation a header lacks, where every declaration in the file is visible to whoever includes it, in whatever order."
+run: true
+module_units: ["shapes.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "export", url: "https://en.cppreference.com/w/cpp/language/modules" }

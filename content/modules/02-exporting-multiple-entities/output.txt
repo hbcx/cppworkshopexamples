@@ -1,0 +1,4 @@
+manhattan(a, b)   = 7
+dimensions        = 2
+originDistance(a) = 3
+library_name()    = shapes

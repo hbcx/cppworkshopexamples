@@ -1,0 +1,11 @@
+title: "Keeping names private to the module"
+standard: "C++20"
+difficulty: 2
+summary: "A declaration in an interface unit that is NOT marked export is private to the module -- importers cannot see it. The exported function uses the internal helper freely, but a consumer that tries to call the helper does not compile."
+notes: "This is real encapsulation at the compilation-unit level, which headers cannot give. In a header, every declaration is visible to whoever includes it; a helper you meant to keep internal leaks into every translation unit and can collide or be misused. In a module, only exported names cross the boundary, so the internal helper is genuinely private -- free to change or vanish without touching any caller. The next examples split that internal detail into a separate implementation unit; the forgot-to-export anti-pattern is the mirror image, where a name you wanted public stays hidden by mistake."
+run: true
+module_units: ["account.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "export", url: "https://en.cppreference.com/w/cpp/language/modules" }

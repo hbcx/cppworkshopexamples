@@ -1,0 +1,11 @@
+title: "Interface and implementation units"
+standard: "C++20"
+difficulty: 3
+summary: "A module can split into an interface unit that declares and exports the API and one or more implementation units (module calc; with no export) that define it. Consumers import only the interface, so changing a body does not force them to recompile against a changed interface."
+notes: "This is the module version of separating a header from its .cpp, but cleaner: the interface unit is the single source of the module's surface, and implementation units carry the bodies without repeating declarations or exposing internals. An implementation unit starts with module calc; -- no export -- and automatically sees everything in the interface. Keeping heavy or frequently-edited code in implementation units means editing a body recompiles just that unit, while the binary interface consumers depend on stays put. It is the same interface/implementation discipline the PIMPL idiom chases with pointers, achieved here by the language."
+run: true
+module_units: ["calc.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "module implementation unit", url: "https://en.cppreference.com/w/cpp/language/modules" }

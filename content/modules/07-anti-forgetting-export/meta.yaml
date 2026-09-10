@@ -1,0 +1,11 @@
+title: "Anti-pattern: forgetting to export a name"
+standard: "C++20"
+difficulty: 2
+summary: "In a module interface the default is private -- a declaration without export is invisible to importers. Leaving export off a function you meant to be public makes the consumer fail to compile with 'name was not declared', the most common first module mistake."
+notes: "Coming from headers, where every declaration in the file is visible to includers, it is easy to write a module's API and forget that nothing is public unless marked export. The symptom is a puzzling not-declared error at the call site even though the function is plainly there in the interface unit. The fix is simply to export the intended surface. This is the exact flip side of keeping names private on purpose: the same rule that gives modules real encapsulation also means you must opt every public name in. The broken version is shown in a comment because it does not compile; the running example exports the function."
+run: true
+module_units: ["greeter.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "export", url: "https://en.cppreference.com/w/cpp/language/modules" }

@@ -1,0 +1,12 @@
+title: "A named module"
+standard: "C++20"
+difficulty: 1
+summary: "An interface unit declares export module math; and exports its functions; a consumer writes import math; and calls them. There is no header, no include guard, and the compiler parses the interface once into a binary artifact instead of re-reading text in every file."
+notes: "This is the whole idea in miniature. The .cppm interface unit owns the module named math and decides its public surface with export. import math; in the consumer makes exactly those names available -- unlike a header, it does not dump macros or private declarations, and it cannot be affected by what was included before it. The build is two-phase (the interface is compiled first into a binary module interface, then the consumer against it), which this project's driver runs for each compiler. Module names are global across the program, so a program has exactly one module named math."
+run: true
+module_units: ["math.cppm"]
+main_tags:
+  - { name: "modules", url: "https://en.cppreference.com/w/cpp/language/modules" }
+detailed_tags:
+  - { name: "export", url: "https://en.cppreference.com/w/cpp/language/modules" }
+  - { name: "import", url: "https://en.cppreference.com/w/cpp/language/modules" }
