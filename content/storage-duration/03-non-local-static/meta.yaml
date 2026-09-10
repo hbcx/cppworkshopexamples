@@ -1,0 +1,12 @@
+title: "Non-local statics and startup"
+standard: "C++11"
+difficulty: 2
+summary: "Objects at namespace scope have static storage duration: they are zero-initialized, then any that need a runtime value are dynamically initialized, all before main runs. The banner's constructor prints before main starts."
+notes: "Two phases matter here. Static initialization happens first and gives every non-local static a zero (or a constant value computed at compile time) with no code running. Dynamic initialization then runs the constructors that need runtime work, before main. Within a single translation unit these dynamic initializations happen in definition order, which is defined and predictable. Across translation units the order is unspecified -- that is the gap the initialization order fiasco falls through, and the reason constinit and the Meyers singleton exist."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "static storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+  - { name: "static", url: "https://en.cppreference.com/w/cpp/keyword/static" }

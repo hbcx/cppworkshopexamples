@@ -1,0 +1,12 @@
+title: "constinit"
+standard: "C++20"
+difficulty: 3
+summary: "constinit (C++20) requires a static or thread-local variable to be initialized at compile time, so no dynamic initializer runs at startup. That removes it from the dynamic-initialization order entirely, making it immune to the initialization order fiasco."
+notes: "It is the guarantee you reach for when a global must be ready before anything else touches it and you can compute its value at compile time: constinit fails to compile if the initializer is not constant, so you cannot accidentally slip into dynamic initialization. Unlike constexpr, it says nothing about mutability -- the variable is a normal object you can modify at runtime, it just starts life constant-initialized. It also has no startup cost, since there is no constructor to run. Prefer it (or plain constant initialization) for global tables and configuration that can be constant, and the Meyers singleton for state that genuinely needs runtime construction."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "constinit", url: "https://en.cppreference.com/w/cpp/language/constinit" }
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "static storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }

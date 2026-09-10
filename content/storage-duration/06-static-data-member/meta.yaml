@@ -1,0 +1,12 @@
+title: "Static data members and inline static"
+standard: "C++17"
+difficulty: 2
+summary: "A static data member is one variable shared by every instance of a class -- here a live-instance counter bumped in the constructor and dropped in the destructor. C++17 inline static lets it be declared and defined in the class body with no separate out-of-line definition."
+notes: "A static data member has static storage duration and belongs to the class, not to any object, so all Widgets share the one liveCount. Before C++17 you had to declare it in the class and then define it once in a .cpp file, or the linker complained about a missing or duplicated symbol; inline static removes that second step and lets the initializer sit right next to the declaration. The counter tracks construction and destruction, showing it rise and fall as objects come and go -- a common use alongside per-class registries and id generators."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static data member", url: "https://en.cppreference.com/w/cpp/language/static" }
+  - { name: "inline variable", url: "https://en.cppreference.com/w/cpp/language/inline" }
+detailed_tags:
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }

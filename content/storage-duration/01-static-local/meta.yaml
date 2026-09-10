@@ -1,0 +1,12 @@
+title: "The function-local static"
+standard: "C++11"
+difficulty: 1
+summary: "A static local variable is initialized once, the first time control reaches it, and keeps its value across every later call. The initializer -- even an expensive one -- runs exactly once, which the seed output confirms."
+notes: "This is the basic unit of lazy, persistent state: the counter lives for the whole program but is set up only when the function is first called, not at program start. The seed prints once even though nextId runs four times, showing the one-time initialization; the counter then carries over. It is the building block of the Meyers singleton in the next example. The flip side -- hidden shared state that makes a function non-reentrant -- is a later anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static local variable", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "static", url: "https://en.cppreference.com/w/cpp/keyword/static" }

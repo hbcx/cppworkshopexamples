@@ -1,0 +1,4 @@
+live at start: 0
+after a, b:    2 (ids 1, 2)
+inside block:  3 (c.id 3)
+after block:   2

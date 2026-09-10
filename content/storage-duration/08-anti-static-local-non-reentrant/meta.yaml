@@ -1,0 +1,12 @@
+title: "Anti-pattern: a static local that breaks reentrancy"
+standard: "C++11"
+difficulty: 3
+summary: "Holding a function's working state in a static local makes the function non-reentrant: all calls share the one buffer, so a nested or recursive call overwrites what the outer call was using. The recursive version here returns width 0 instead of 6."
+notes: "A static local is persistent shared state hiding inside a function. That is fine for a one-time counter or cache, but not for scratch space a call needs to itself: the moment the function calls back into itself -- directly, through recursion, or through a callback -- the inner invocation clobbers the outer one's buffer. The same sharing makes the function a data race across threads even though nothing looks global. The output shows the recursive call collapsing pad to what the deepest level left. The fix is to keep per-call state in an ordinary local, so each call and each thread gets its own; reserve static locals for state that is genuinely meant to be shared and outlive the call."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static local variable", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "static", url: "https://en.cppreference.com/w/cpp/keyword/static" }

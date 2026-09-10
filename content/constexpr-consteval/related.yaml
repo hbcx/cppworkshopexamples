@@ -8,3 +8,5 @@
   note: "Where a compile-time table lives: a std::array is the literal type that holds the result of a constexpr computation, since a std::vector cannot survive constant evaluation -- go there for the fixed-size array and its compile-time-friendly interface."
 - slug: "decltype-declval"
   note: "The type side of compile-time C++: decltype and declval compute TYPES where constexpr and consteval compute VALUES -- go there to extract a member's type or a function's return type, function traits, and decltype(auto)."
+- slug: "storage-duration"
+  note: "Where a constant expression meets a global: constinit uses a constant initializer to force compile-time initialization of a static, so it starts ready and skips the init-order fiasco. Go there for static and thread_local storage, and the fiascoes constinit prevents."

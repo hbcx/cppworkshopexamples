@@ -1,0 +1,2 @@
+broken g_derived.doubled = 0  (wanted 20)
+fixed  derivedValue()    = 20  (wanted 20)

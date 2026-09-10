@@ -1,0 +1,3 @@
+  Banner constructed (before main runs)
+main starts
+g_zero = 0, g_constant = 42

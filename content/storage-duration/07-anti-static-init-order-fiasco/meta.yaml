@@ -1,0 +1,12 @@
+title: "Anti-pattern: the static initialization order fiasco"
+standard: "C++11"
+difficulty: 3
+summary: "A non-local static whose initializer reads another non-local static can run before that other one is constructed, reading its zero-initialized value instead. Here the dependent global computes 0 instead of 20; across translation units the order is unspecified, so it can strike anywhere."
+notes: "Dynamic initialization of non-local statics is ordered by definition within one translation unit, but between units the order is unspecified -- so a global that depends on another in a different file may be initialized first and see it still zero. This example forces the bug in a single file by defining the dependent before its dependency, making it deterministic and reproducible: the constructor reads the zero-initialized source and doubles 0. The fix is the Meyers singleton -- wrap the dependency in a function-local static so it is constructed on first use, always before anyone reads it. constinit is the other fix when the value can be a constant. The reliable rule: do not let one non-local static's initializer depend on another's."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static initialization order fiasco", url: "https://en.cppreference.com/w/cpp/language/siof" }
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "static storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }

@@ -1,0 +1,4 @@
+before first use
+version =   Config constructed (once, on first use)
+3
+same instance across calls? true

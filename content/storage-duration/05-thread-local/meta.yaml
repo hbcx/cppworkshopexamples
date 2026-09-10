@@ -1,0 +1,12 @@
+title: "thread_local"
+standard: "C++11"
+difficulty: 3
+summary: "A thread_local variable has one instance per thread, initialized on first use in that thread and destroyed when the thread exits. Each worker counts into its own copy, so there is no sharing and no data race -- and the main thread's copy stays untouched."
+notes: "This is the storage duration for per-thread state: a scratch buffer, a random-number engine, a small cache that each thread owns privately. Because every thread has its own object, no lock is needed to read or write it, which is the whole appeal. The output shows three threads counting to 5, 10, and 15 in independent counters while the main thread's counter stays at 0. The common misunderstanding is expecting thread_local to be shared -- accumulating a global total into one, for instance -- when it is exactly the opposite; genuinely shared state needs an atomic or a mutex instead."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "thread_local", url: "https://en.cppreference.com/w/cpp/keyword/thread_local" }
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }

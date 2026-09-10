@@ -1,0 +1,4 @@
+thread 0 counted to 5
+thread 1 counted to 10
+thread 2 counted to 15
+main thread t_counter = 0

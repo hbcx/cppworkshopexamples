@@ -1,0 +1,3 @@
+main running; statics are destroyed at exit
+  [log] hello from main
+  Service dtor: logger already destroyed -- message lost

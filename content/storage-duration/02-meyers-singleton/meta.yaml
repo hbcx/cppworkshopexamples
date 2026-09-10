@@ -1,0 +1,12 @@
+title: "The Meyers singleton"
+standard: "C++11"
+difficulty: 2
+summary: "A function returning a reference to a local static gives a single instance created lazily on first use, and since C++11 that first-use initialization is thread-safe. It is the standard way to have one shared object without a fragile global."
+notes: "The construction happens after the before first use line, showing the laziness -- the object costs nothing until something asks for it. The C++11 rule that the one-time initialization of a function-local static is thread-safe (magic statics) is what makes this pattern safe to reach from many threads without a lock around construction. It also sidesteps the initialization order fiasco: because the instance is built on first use rather than at program start, its dependencies are already up. What it does NOT give you is thread-safe use afterwards -- mutating the shared object concurrently still needs synchronization, which a later anti-pattern covers."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static local variable", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "static", url: "https://en.cppreference.com/w/cpp/keyword/static" }

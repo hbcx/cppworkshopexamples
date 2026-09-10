@@ -1,0 +1,6 @@
+- slug: "singleton"
+  note: "The design pattern this section's Meyers singleton implements: one shared instance with a controlled access point. Go there for the pattern's intent, its trade-offs, and when a plain namespace or dependency injection is the better answer than a singleton at all."
+- slug: "constexpr-consteval"
+  note: "The compile-time siblings of constinit: constexpr for values and functions usable in constant expressions, consteval for functions that must run at compile time. Go there for how a value becomes a constant expression -- the kind of initializer constinit then requires."
+- slug: "thread"
+  note: "Where thread_local and the thread-safe magic-static rule earn their keep: std::thread and the shared-state hazards this section's per-thread storage avoids. Go there for launching threads, joining, and when you do need a mutex or atomic instead."

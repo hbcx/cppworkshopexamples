@@ -1,0 +1,12 @@
+title: "Anti-pattern: the static destruction order fiasco"
+standard: "C++11"
+difficulty: 3
+summary: "Static objects are destroyed in reverse construction order, so a static whose destructor uses another static can run after that other one is already gone. Here a service destroyed after the logger finds the logger destroyed and loses its shutdown message."
+notes: "This is the mirror image of the initialization order fiasco, at the end of the program instead of the start. Because destruction is reverse of construction, the object built first is torn down last -- and if its destructor reaches for something built later, that thing is already destroyed. The example forces it in one file by defining the service before the logger; across translation units the order is unspecified. Touching the destroyed object's members would be undefined behaviour, so the code reads a separate always-alive flag and skips the dead logger. The real fix is to give a service that logs at shutdown a logger that outlives it -- a never-destroyed singleton (constructed on first use, deliberately leaked) is the usual answer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "static initialization order fiasco", url: "https://en.cppreference.com/w/cpp/language/siof" }
+  - { name: "storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }
+detailed_tags:
+  - { name: "static storage duration", url: "https://en.cppreference.com/w/cpp/language/storage_duration" }

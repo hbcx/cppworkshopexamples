@@ -4,3 +4,5 @@
   note: "A factory is one of the most common things wrapped in a singleton; go there for the family-creation mechanic that a single global factory hands out to the whole program."
 - slug: "dependency-injection"
   note: "The standard alternative to reaching for a singleton: instead of a global access point, hand the one instance in through the constructor -- go there for how to keep a single instance without the hidden global dependency."
+- slug: "storage-duration"
+  note: "The language mechanics under this pattern: the Meyers singleton is a function-local static, whose lazy, thread-safe-since-C++11 initialization is what makes it correct and dodges the init-order fiasco. Go there for static storage duration, constinit, and the fiascoes a singleton avoids."

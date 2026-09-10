@@ -1,0 +1,2 @@
+broken indent(3) width = 0  (wanted 6)
+fixed  indent(3) width = 6  (wanted 6)
