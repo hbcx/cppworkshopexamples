@@ -5,3 +5,5 @@
   note: "How each log line is built: the message uses std::format with a compile-time-checked format string and its arguments -- go there for the format-spec mini-language, writing a formatter for your own types, and the L option for locale-aware fields."
 - slug: "condition-variable"
   note: "The primitive the queue is built on: the wait-with-predicate handoff and notify that let the worker sleep until a record arrives -- go there to understand the blocking that makes the async logger cheap when idle."
+- slug: "source-location"
+  note: "How each entry learns where it was logged: a std::source_location default argument captures the call site with no macro, exactly what stamps this logger's file and line. Go there for the capture rule, forwarding it through wrappers, and the variadic-args gotcha."

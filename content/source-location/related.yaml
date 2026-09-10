@@ -1,0 +1,6 @@
+- slug: "logger"
+  note: "The recipe that puts this to work: a small logging library that stamps every entry with a source_location captured as a default argument, exactly the macro-free logging shown here. Go there for the full multi-file component with levels and an injectable clock."
+- slug: "stacktrace"
+  note: "The heavier diagnostic next to this light one: std::stacktrace (C++23) captures the whole call chain, where source_location captures just the one call site. Go there when a single origin line is not enough and you need the full path that led to it."
+- slug: "assertions-and-errno"
+  note: "The check side of the story: assert, static_assert and the assert-vs-code-vs-throw choice. Go there for the failure-reporting options that a source_location-based check function sits alongside."

@@ -1,0 +1,11 @@
+title: "A default argument captures the caller"
+standard: "C++20"
+difficulty: 2
+summary: "When std::source_location::current() is a default argument, it is evaluated where the function is CALLED, so the function learns its caller's location. The two calls to note() report their own two different lines, not a line inside note()."
+notes: "This is what makes source_location useful and is the whole reason it was designed the way it was. A default argument is evaluated at the call site, so current() there records the caller. That lets a plain function do what previously required a macro: know where it was invoked. The function signature gains a trailing parameter the caller never has to pass. Every practical use in this section -- logging, checks, construction tracking -- is built on this one rule, and the anti-patterns are the ways of accidentally capturing the wrong place instead."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }

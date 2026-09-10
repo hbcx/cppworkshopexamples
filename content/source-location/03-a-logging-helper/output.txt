@@ -1,0 +1,2 @@
+[INFO] main.cpp:33 -- starting up
+[WARN] main.cpp:34 -- low on memory

@@ -1,0 +1,2 @@
+ok:     x is positive
+FAILED: x exceeds 10  at main.cpp:26

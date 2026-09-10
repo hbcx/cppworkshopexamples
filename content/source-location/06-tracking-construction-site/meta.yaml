@@ -1,0 +1,11 @@
+title: "Recording where an object was created"
+standard: "C++20"
+difficulty: 2
+summary: "A constructor with a source_location default stores where each object was created, because the default is evaluated at the construction site. The object can later report its origin -- the two Tracked objects name their own two construction lines."
+notes: "Storing the location turns source_location into a debugging aid for lifetime problems: a resource that leaks can print where it was allocated, a lock held too long can name where it was taken, a bad object can say which call site produced it. The location is captured once at construction and copied into the object; the strings it points at have static storage, so keeping the source_location around is safe and cheap. This is the same idea behind allocation trackers and handle registries that report the origin of whatever they still hold at shutdown."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }

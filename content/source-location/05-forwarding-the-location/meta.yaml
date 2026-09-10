@@ -1,0 +1,11 @@
+title: "Forwarding the location through a wrapper"
+standard: "C++20"
+difficulty: 3
+summary: "When one helper calls another, each has its own source_location default, so the inner one would capture the outer wrapper's body. To report the real caller, the wrapper takes a source_location default and forwards it to the inner call, overriding the inner default."
+notes: "A default argument captures wherever the call is written -- and inside audit(), the call to record() is written in audit's body, so record()'s own default would blame audit, not the user. The fix is to give the wrapper a source_location default (which captures audit's caller) and pass it explicitly into record(), so the caller-supplied location flows all the way down. This is how layered logging and tracing APIs keep pointing at the application code rather than at their own plumbing. Forgetting to forward is the matching anti-pattern: the report then names the wrapper."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }

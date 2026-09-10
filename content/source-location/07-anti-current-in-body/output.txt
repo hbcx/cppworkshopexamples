@@ -1,0 +1,4 @@
+[bad]  main.cpp:16  hello
+[bad]  main.cpp:16  world
+[good] main.cpp:28  hello
+[good] main.cpp:29  world

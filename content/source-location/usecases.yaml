@@ -1,0 +1,15 @@
+- problem: "A logging or tracing layer that must stamp every message with where it came from -- file, line, function -- without forcing callers to write a macro or pass the location by hand at each call site."
+  why: "A log function with a trailing source_location default captures the caller automatically and stays an ordinary function: it can be overloaded, wrapped, passed as a callback, and tested. The old approach needed a LOG(...) macro to expand __FILE__ and __LINE__ at the call site, dragging in all the macro downsides -- no scoping, surprising argument evaluation, and no clean way to forward through helper layers."
+  signal: "A logging macro built on __FILE__/__LINE__/__func__, or log calls that pass __LINE__ by hand because a plain function could not see the caller."
+
+- problem: "A custom assertion or contract check -- expect(cond), require(x), a domain-specific validator -- that should report where it failed the way assert does, but as a real function you can disable, route, or unit-test."
+  why: "source_location as a default argument gives the failing call site to a normal function, so the check need not be a macro to know its location. That makes it composable and testable, where the assert macro is neither. The one thing it cannot capture that the macro can is the source text of the expression, so pass that as a string if you need it."
+  signal: "A hand-rolled assert macro used only to capture the location and expression, or checks that report a failure with no indication of which call site tripped it."
+
+- problem: "Debugging lifetime problems -- a resource that leaks, a lock held too long, a handle used after free -- where knowing WHERE the object was created would immediately point at the culprit."
+  why: "A constructor with a source_location default records the creation site into the object at no call-site cost, so a tracker can print, for everything it still holds at shutdown or at an error, exactly where it came from. Without it you are left adding ad-hoc printfs or guessing from a stack trace taken far from the allocation."
+  signal: "An allocation or handle tracker that reports counts but not origins, or debugging sessions spent bisecting to find which call site produced a leaked or bad object."
+
+- problem: "A library whose error type or exception should carry where the error originated, so callers and logs can see the failing location without the library reconstructing a full stack trace."
+  why: "Adding a source_location field, captured by a default argument on the throwing or error-returning function, attaches the origin cheaply and precisely at the point the error is raised. A full std::stacktrace is heavier and sometimes unavailable; a single source_location is a light, always-there breadcrumb that pinpoints the throw site."
+  signal: "Error messages or exceptions that describe what went wrong but not where, or a codebase reaching for a full stack trace only to identify a single origin line."

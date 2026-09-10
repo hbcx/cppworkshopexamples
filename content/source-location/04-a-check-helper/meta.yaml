@@ -1,0 +1,11 @@
+title: "A check helper that reports the call site"
+standard: "C++20"
+difficulty: 2
+summary: "A check function with a source_location default reports the line of the failing call, giving assert-style diagnostics from an ordinary function. The failing check names its own call site; the passing one stays quiet about location."
+notes: "assert is a macro precisely so it can capture __FILE__ and __LINE__ and the expression text. source_location lets a plain function capture the call site instead, so a custom check or contract routine can be a real function -- one you can pass a callback to, disable through a parameter, or unit-test -- while still pointing at the caller when it fails. It cannot capture the expression source the way the assert macro does; if you want the text too, that part still needs a macro or the caller passing a string, as here. Pair it with the assertions chapter for the assert/expect/throw trade-offs."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }

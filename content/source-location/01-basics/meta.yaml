@@ -1,0 +1,11 @@
+title: "source_location basics"
+standard: "C++20"
+difficulty: 1
+summary: "std::source_location::current() returns an object describing where it was written: file_name(), line(), column(), and function_name(). It is the first-class, macro-free replacement for __FILE__, __LINE__, and __func__."
+notes: "current() is a magic builtin that the compiler fills in with the position of that very call. Unlike the preprocessor macros it replaces, the result is an ordinary value you can store, copy, and pass around, and it carries the enclosing function's name too. file_name() gives the path exactly as the compiler received it, so it varies by toolchain and build directory; the examples reduce it to the bare file name so the output is identical everywhere. The real power is not calling current() directly like this, but putting it in a default argument, which the next example shows."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }

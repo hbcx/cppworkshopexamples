@@ -1,0 +1,2 @@
+main.cpp:43  user %d logged in  [1 args]
+main.cpp:44  shutting down  [0 args]

@@ -1,0 +1,11 @@
+title: "A macro-free logging helper"
+standard: "C++20"
+difficulty: 2
+summary: "A log function with a trailing source_location default records where each message came from, printed as file:line, with no macro at the call site. It replaces the old LOG(...) macro built on __FILE__ and __LINE__ with an ordinary, composable function."
+notes: "Before source_location, attaching the call site to a log line meant a macro, because only a macro expands at the call site -- a plain function saw its own body. That brought all the macro downsides: no scoping, surprising argument evaluation, and awkward composition. Here log is a normal function that takes the location as a defaulted last parameter, so it can be overloaded, passed around, and called with ordinary syntax. The logger recipe in this corpus uses exactly this to timestamp and locate entries. One caveat surfaces when you add printf-style variadic arguments -- the location can no longer be a trailing default -- which the variadic anti-pattern addresses."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }

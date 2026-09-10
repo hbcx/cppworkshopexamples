@@ -1,0 +1,12 @@
+title: "Anti-pattern: a source_location after a variadic pack"
+standard: "C++20"
+difficulty: 3
+summary: "You cannot put a defaulted source_location after a function parameter pack: the call arguments are deduced into the pack, leaving nothing to default the location from. A printf-style logf(fmt, args..., loc = current()) fails to capture the caller."
+notes: "This is the wall everyone hits when building a variadic logger. Because a parameter pack greedily absorbs the trailing arguments, a defaulted source_location placed after it is never given a chance to default at the call site. The standard technique is to make the FIRST parameter a small type -- here FmtLoc -- whose own constructor has the source_location default, so a plain format string implicitly becomes that type and captures the location right there; the pack then follows with no trouble. This is precisely the design of C++23's std::format_string, which carries a source_location for std::println-style APIs. The broken signature is shown in a comment because it does not compile as intended."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }
+  - { name: "variadic templates", url: "https://en.cppreference.com/w/cpp/language/parameter_pack" }

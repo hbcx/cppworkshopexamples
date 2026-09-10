@@ -1,0 +1,11 @@
+title: "Anti-pattern: calling current() in the helper body"
+standard: "C++20"
+difficulty: 2
+summary: "Calling std::source_location::current() inside a logging or checking helper records that line in the helper, not the caller's. Every message then points at the logger, and the two logBad calls report the same internal line while logGood reports each real call site."
+notes: "The value of source_location is caller capture, and that only happens when current() is a default argument, evaluated at the call site. Put it in the body and you get the body's location instead -- so all your log lines blame one line inside the logger, exactly the information you did not need. The output makes it plain: both logBad calls print the same line, while logGood distinguishes each caller. The fix is a one-line change: move current() from a local in the body to a trailing default parameter."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }

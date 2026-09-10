@@ -1,0 +1,11 @@
+title: "Anti-pattern: forgetting to forward the location"
+standard: "C++20"
+difficulty: 3
+summary: "A wrapper that calls a location-capturing helper but does not forward its own location lets the inner helper's default fire inside the wrapper, so every report names the wrapper's line instead of the real caller. The two auditBad calls collapse to one line; auditGood distinguishes each caller."
+notes: "This is the layered form of the current-in-body mistake. record()'s default captures wherever record() is called from -- and inside auditBad that is auditBad's own body, so the caller is lost one level up. The fix is the forwarding pattern: the wrapper takes a source_location default of its own, capturing the true caller, and passes it into record() to override record()'s default. Any intermediate layer that wants the report to reach past it must forward the location down; a single missing forward pins every message to that layer."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::source_location", url: "https://en.cppreference.com/w/cpp/utility/source_location" }
+detailed_tags:
+  - { name: "std::source_location::current", url: "https://en.cppreference.com/w/cpp/utility/source_location/current" }
