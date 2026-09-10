@@ -1,0 +1,12 @@
+title: "[[deprecated]]"
+standard: "C++14"
+difficulty: 2
+summary: "[[deprecated]] with a message marks an API as on its way out; using it warns, and the message points callers at the replacement. It guides migration through the compiler instead of a changelog nobody reads, while the old code keeps working."
+notes: "It can mark a function, type, variable, or enumerator, and the message should say what to use instead. The point is a soft transition: callers are told at every use site, but nothing breaks until you actually remove the old name. During migration you may need to keep calling the deprecated thing from code that has not moved yet -- this example silences that specific warning locally with a diagnostic pragma so the file still builds under -Werror, which is what you would do around a known, tracked call rather than turning the warning off globally."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[deprecated]]", url: "https://en.cppreference.com/w/cpp/language/attributes/deprecated" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "attribute specifier", url: "https://en.cppreference.com/w/cpp/language/attributes" }

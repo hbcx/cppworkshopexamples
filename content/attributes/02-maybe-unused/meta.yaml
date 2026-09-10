@@ -1,0 +1,12 @@
+title: "[[maybe_unused]]"
+standard: "C++17"
+difficulty: 1
+summary: "[[maybe_unused]] tells the compiler a name may legitimately go unused, so it does not warn. It fits parameters an implementation ignores and variables read only in some build configurations -- debug-only, assert-only, one platform."
+notes: "Without it, an unused parameter or variable triggers -Wunused, an error under -Werror, and the usual workarounds are ugly: an unnamed parameter loses its documentation, a (void)x cast is noise, an #ifdef splits the code. The attribute keeps the name and the intent while silencing the warning for the builds where the use disappears. Use it precisely, on the specific name that is conditionally unused -- reaching for it to quiet a warning that actually points at forgotten code is the anti-pattern later in this section."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[maybe_unused]]", url: "https://en.cppreference.com/w/cpp/language/attributes/maybe_unused" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "attribute specifier", url: "https://en.cppreference.com/w/cpp/language/attributes" }

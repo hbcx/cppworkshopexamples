@@ -1,0 +1,12 @@
+title: "[[no_unique_address]]"
+standard: "C++20"
+difficulty: 3
+summary: "[[no_unique_address]] lets a data member that is an empty type occupy no space, overlapping with the others. It brings the empty base optimization to members, so a struct holding a stateless helper does not pay a byte plus padding for it."
+notes: "Empty types are everywhere in generic code -- a default allocator, a stateless comparator or deleter, a tag. Stored as a plain member each one forces at least a byte and often alignment padding, which is why libraries used to inherit from them (the empty base optimization). This attribute gives the same saving without the inheritance trick: the compiler may place the empty member at the same offset as the next one. The sizeof output shows it -- the struct with the attribute is just its int, the one without is padded out. It only helps for empty members; a member with any state still needs its own storage."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[no_unique_address]]", url: "https://en.cppreference.com/w/cpp/language/attributes/no_unique_address" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "empty base optimization", url: "https://en.cppreference.com/w/cpp/language/ebo" }

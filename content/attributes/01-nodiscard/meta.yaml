@@ -1,0 +1,12 @@
+title: "[[nodiscard]]"
+standard: "C++20"
+difficulty: 1
+summary: "[[nodiscard]] marks a function -- or a whole type -- whose return value must not be ignored; dropping it is a warning. It catches the mistake of calling something for a side effect it does not have, and (C++20) can carry a reason shown in the message."
+notes: "Reach for it on functions where ignoring the result is almost always a bug: error codes, factory results, empty() (does the container have items, not make it empty), a lock guard you must keep. Marking the type is stronger than marking each function -- every function returning a Status is then checked. When you really do want to throw the result away, (void) the call to say so explicitly. The reason string (C++20) turns the warning into advice. This example uses the results correctly and discards one on purpose; the ignored-result case that the attribute flags is the first anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[nodiscard]]", url: "https://en.cppreference.com/w/cpp/language/attributes/nodiscard" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "attribute specifier", url: "https://en.cppreference.com/w/cpp/language/attributes" }

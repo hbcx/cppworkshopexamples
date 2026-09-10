@@ -1,0 +1,6 @@
+- slug: "assertions-and-errno"
+  note: "The runtime cousins of the compile-time hints here: assert checks an invariant and aborts if it fails, where [[assume]] promises one and trusts it unchecked. Go there for assert, static_assert, and errno -- and to see when a real check beats a promise."
+- slug: "expected"
+  note: "The return type that most wants [[nodiscard]]: a std::expected carries either a value or an error, and dropping it drops the error. Go there for value-or-error returns, the kind of result the attribute makes sure a caller actually inspects."
+- slug: "const-correctness"
+  note: "Another contract the compiler enforces for you: const says a function will not modify, as [[nodiscard]] says a result must be used. Go there for const member functions and the const-overload pattern, the other half of compiler-checked API intent."

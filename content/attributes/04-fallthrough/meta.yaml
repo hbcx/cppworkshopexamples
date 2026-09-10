@@ -1,0 +1,12 @@
+title: "[[fallthrough]]"
+standard: "C++17"
+difficulty: 2
+summary: "[[fallthrough]] marks a switch case that intentionally falls into the next one, silencing the -Wimplicit-fallthrough warning. It documents that the missing break is on purpose, so the reader and the compiler both know it was not forgotten."
+notes: "Fallthrough between cases that do real work is a classic source of bugs -- a forgotten break -- so compilers warn on it, and under -Werror that warning stops the build. When the fallthrough is deliberate, [[fallthrough]]; as the last statement before the next label says so and clears the warning. This is one of the attributes whose effect you see directly here: remove it and this file no longer compiles clean. Note it is only needed when a case has statements; empty cases stacked together (case 1: case 2:) never warn."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[fallthrough]]", url: "https://en.cppreference.com/w/cpp/language/attributes/fallthrough" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "attribute specifier", url: "https://en.cppreference.com/w/cpp/language/attributes" }

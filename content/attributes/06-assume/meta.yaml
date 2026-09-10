@@ -1,0 +1,12 @@
+title: "[[assume]]"
+standard: "C++23"
+difficulty: 3
+summary: "[[assume(cond)]] (C++23) promises the compiler that cond holds, so it can optimize on that fact without re-deriving or checking it. It emits no code and does no runtime check -- the results are the same, only the generated code differs."
+notes: "It is the portable successor to __builtin_assume and __builtin_unreachable: a way to feed the optimizer an invariant it cannot prove -- a value is non-negative, a length is a multiple of four, a pointer is aligned -- that you know from a prior check, the type, or the caller's contract. That lets it drop redundant bounds checks and unroll or vectorize loops cleanly. The one rule is that the condition must be genuinely true on every path that reaches it: assume is trusted, not verified, so a false assumption is undefined behaviour, not a caught error -- the paired anti-pattern shows that edge. Assume facts, not hopes."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[assume]]", url: "https://en.cppreference.com/w/cpp/language/attributes/assume" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "attribute specifier", url: "https://en.cppreference.com/w/cpp/language/attributes" }

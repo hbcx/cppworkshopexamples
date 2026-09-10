@@ -1,0 +1,12 @@
+title: "Anti-pattern: silencing a real warning with [[maybe_unused]]"
+standard: "C++17"
+difficulty: 2
+summary: "An unused-variable warning often points at a real mistake -- a value computed and then never used. Slapping [[maybe_unused]] on it to quiet the compiler hides the bug instead of fixing it; here a greeting is built and the code prints the name by accident."
+notes: "The attribute is for names that are genuinely unused in some build -- a debug-only variable, an ignored parameter. It is not a way to make an inconvenient warning go away. When -Wunused fires, the first question is why the name is unused: often it is unused because you forgot to use it, which is exactly the defect the warning surfaces. Reaching for [[maybe_unused]] there trades a compiler diagnostic for a latent bug. Fix the code; keep the attribute for the cases that are unused on purpose."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[maybe_unused]]", url: "https://en.cppreference.com/w/cpp/language/attributes/maybe_unused" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "attribute specifier", url: "https://en.cppreference.com/w/cpp/language/attributes" }

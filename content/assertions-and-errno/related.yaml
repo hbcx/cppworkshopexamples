@@ -7,3 +7,5 @@
   note: "The modern replacement for strtol and errno: std::from_chars parses without touching errno and reports through a return value, avoiding the reset-and-check dance. Go there for allocation-free, errno-free number parsing."
 - slug: "concepts"
   note: "The modern successor to a hand-written static_assert on a template parameter: a concept states the requirement in the signature and gives a clearer error. Go there for constraining templates the C++20 way."
+- slug: "attributes"
+  note: "The compile-time relative of assert: [[assume]] promises an invariant the compiler trusts unchecked (a false one is UB, not an abort), and [[maybe_unused]] fits a variable read only inside an assert. Go there for the standard attributes and how they differ from a runtime check."

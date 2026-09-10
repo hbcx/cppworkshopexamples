@@ -1,0 +1,2 @@
+roundDownToMultipleOf16(70) = 64
+sumAll(data, 8) = 36

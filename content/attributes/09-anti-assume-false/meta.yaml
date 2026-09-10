@@ -1,0 +1,12 @@
+title: "Anti-pattern: [[assume]] with a condition that can be false"
+standard: "C++23"
+difficulty: 3
+summary: "[[assume(cond)]] (C++23) is a promise the compiler trusts without checking, so it may optimize on the premise that cond always holds. If cond can ever be false, the program has undefined behaviour -- unlike assert, nothing catches the violation at runtime."
+notes: "assume is a tool for handing the optimizer an invariant it cannot derive, and it is only safe when the invariant is genuinely guaranteed -- by a prior check, the type, or an enforced contract. Assuming something merely hoped for is worse than a missing assert: an assert would abort on a bad value, while a false assume lets the compiler generate code that is wrong for it, with no diagnostic. Keep assumptions to facts you have established, and prefer an actual check when you are not certain. The violating call is shown only in a comment because running it is undefined behaviour; the runnable part assumes only what always holds."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[assume]]", url: "https://en.cppreference.com/w/cpp/language/attributes/assume" }
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }
+detailed_tags:
+  - { name: "attribute specifier", url: "https://en.cppreference.com/w/cpp/language/attributes" }

@@ -1,0 +1,3 @@
+sizeof(int)         = 4
+sizeof(WithoutAttr) = 8
+sizeof(WithAttr)    = 4

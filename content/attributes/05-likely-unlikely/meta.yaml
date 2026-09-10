@@ -1,0 +1,12 @@
+title: "[[likely]] and [[unlikely]]"
+standard: "C++20"
+difficulty: 3
+summary: "[[likely]] and [[unlikely]] mark the expected and rare branches of an if or a switch case, so the optimizer can arrange code for the common path. They are a portable, standard replacement for compiler builtins like __builtin_expect."
+notes: "These change performance, not behaviour -- the results are identical with or without them. They earn their keep only on a genuinely hot branch whose likelihood is known and lopsided: an error path that almost never runs, a status code that is nearly always success. On a rarely executed or evenly split branch they do nothing useful and can even hurt, and a wrong hint pessimizes the path you actually take, so measure rather than sprinkle them. Because the effect is code layout, this example just shows the placement and correct results; there is no deterministic output to prove the speedup."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "[[likely]]", url: "https://en.cppreference.com/w/cpp/language/attributes/likely" }
+  - { name: "[[unlikely]]", url: "https://en.cppreference.com/w/cpp/language/attributes/likely" }
+detailed_tags:
+  - { name: "attributes", url: "https://en.cppreference.com/w/cpp/language/attributes" }

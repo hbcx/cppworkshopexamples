@@ -1,0 +1,15 @@
+- problem: "An API with functions whose result must not be dropped -- an error code, a status, a handle you have to close, a value that answers a question rather than performing an action -- where a caller ignoring the result is a real bug."
+  why: "[[nodiscard]] turns that contract into a compile-time check: ignore the result and the build warns (or fails under -Werror), at every call site, forever. A comment saying please use this or a naming convention is unenforced and quietly rots; the attribute is checked by the compiler on code that has not been written yet."
+  signal: "A function documented as check the return value, an error-returning API whose result is discarded at some call sites, or a query like empty() that someone will eventually call as a statement expecting a side effect."
+
+- problem: "Code that compiles in several configurations -- debug vs release, with or without a feature, across platforms -- where a variable or parameter is used in some builds and not others, and a warnings-as-errors build fails on the unused one."
+  why: "[[maybe_unused]] keeps the name and its documentation while telling the compiler the unused case is expected, so the same source builds clean everywhere. The alternatives are worse: an unnamed parameter loses its meaning, a (void)x cast is noise, and an #ifdef around the declaration splits the code and multiplies the paths to maintain."
+  signal: "A variable read only inside assert or a debug log, a parameter an interface requires but this implementation ignores, or #ifdef guards added solely to dodge an unused-variable warning."
+
+- problem: "Evolving a library that other code depends on: an old function or type is being replaced, and you want existing callers to migrate on their own schedule without a hard break and without a changelog they will not read."
+  why: "[[deprecated]] with a message delivers the migration notice through the compiler, at each use site, with the replacement named -- while the old name keeps working until you remove it. It turns a silent, easy-to-miss change into a visible, actionable warning exactly where the outdated call lives."
+  signal: "A header comment saying do not use, prefer Y, or a wiki page of removed APIs, where nothing tells a caller at build time that they are on the old path."
+
+- problem: "A hot loop or dispatch where one branch dominates -- success over error, a common opcode over rare ones -- and you want the optimizer to lay the code out for the common path, or you have an invariant the compiler cannot prove but you can guarantee."
+  why: "[[likely]]/[[unlikely]] give the optimizer the branch probability portably, and [[assume]] hands it an invariant it cannot derive, replacing non-standard builtins like __builtin_expect and __builtin_unreachable. Both are for the rare case where you know something the compiler does not -- and [[assume]] must be a fact, since a false one is undefined behaviour."
+  signal: "Hand-written __builtin_expect or compiler-specific hints, or a comment asserting an invariant (always non-negative, never null) that the optimizer is re-checking on every pass."

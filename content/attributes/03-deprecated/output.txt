@@ -1,0 +1,2 @@
+fastHash(abc) = 440920331
+slowHash(abc) = 96354

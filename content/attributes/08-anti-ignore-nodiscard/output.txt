@@ -1,0 +1,2 @@
+after clear(), size = 0
+w is not empty, front = 9
