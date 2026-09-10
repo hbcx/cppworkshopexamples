@@ -1,0 +1,12 @@
+title: "Catching exceptions at the boundary"
+standard: "C++11"
+difficulty: 3
+summary: "A C++ exception must not unwind through a C caller's frame -- that is undefined. An extern C function that C might call therefore wraps its body in try/catch and reports failure the C way: a return code and an out-parameter, so nothing throws across the boundary."
+notes: "C has no exceptions and no unwinding machinery, so when a C++ exception propagates out of a function that C called, the behaviour is undefined -- in practice std::terminate, sometimes a corrupted stack. The discipline is to make every extern C function that faces C exception-tight: catch everything inside and translate it into the return-code-and-out-param idiom C already uses for errors. Here safe_divide turns a thrown runtime_error into a non-zero code and leaves the result in an out-parameter. Catch by const reference for the types you can describe, and add a catch(...) as a backstop when the boundary must never throw. The matching anti-pattern shows the version that forgets this."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+detailed_tags:
+  - { name: "noexcept", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }

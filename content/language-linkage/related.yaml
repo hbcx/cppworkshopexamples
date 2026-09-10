@@ -1,0 +1,6 @@
+- slug: "exceptions"
+  note: "The mechanism the boundary must contain: throwing, catching, and unwinding -- none of which cross into C. Go there for the exception model, then keep every extern C function exception-tight by translating throws into return codes at the edge."
+- slug: "type-conversions-and-casts"
+  note: "The casts C interop leans on: static_cast to recover a typed pointer from the void* a C callback receives, and reinterpret_cast at the rawest boundaries. Go there for the four named casts and when each is the right tool."
+- slug: "modules"
+  note: "The other side of the compilation and ABI story: modules control what a C++ boundary exports and how it is built, where extern C controls the symbol names and calling convention that let non-C++ code link against it. Go there for export/import and the module build model."

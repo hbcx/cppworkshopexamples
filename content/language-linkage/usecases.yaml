@@ -1,0 +1,15 @@
+- problem: "Calling a C library from C++ -- a system API, a codec, a database client -- whose functions were compiled with C linkage, so the C++ linker looks for mangled names that do not exist."
+  why: "Declaring those functions inside extern C (or including a header that already guards its declarations with __cplusplus) tells the C++ compiler to look up the plain, unmangled names the C library actually exports. Without it every call is an unresolved-symbol link error. It is the one thing that makes the vast body of C code reachable from C++ at all."
+  signal: "Undefined-reference link errors against a C library whose header was not wrapped, or a third-party C header included without its extern C guard."
+
+- problem: "Exposing a C++ library as a stable API that C, Python, C#, or a plugin loader can call -- across a boundary where mangled C++ names and the C++ ABI are not portable."
+  why: "extern C functions present plain, unmangled symbols with the C calling convention, which every language and every dlopen/GetProcAddress can bind to. The C++ implementation hides behind them, often as thin wrappers over real C++ objects passed as opaque pointers. A mangled C++ interface would be unusable outside C++ and unstable even across C++ compilers."
+  signal: "A shared library or plugin whose entry points are mangled C++ names, or an FFI layer that cannot resolve the symbols it needs from the other language."
+
+- problem: "Handing behavior to a C API that takes a function pointer -- qsort's comparator, a signal handler, an event-loop or callback registration -- where the API's pointer type has C linkage."
+  why: "A callback given to a C API should itself have C language linkage, so its type matches the C-linkage function-pointer parameter; marking it extern C makes that explicit and portable across strict compilers. The callback recovers its typed data from a void* (and often a void* user-data argument), the shape every C callback uses."
+  signal: "A C API expecting a function pointer being handed a C++-linkage function or a capturing lambda, or callback code that ignores the linkage of the function-pointer type."
+
+- problem: "Designing the surface between C++ and C so data crosses safely and errors and exceptions do not corrupt the caller -- the hard part of any FFI, where a leaked exception or an unrepresentable type is undefined behavior."
+  why: "Keeping the boundary to C-compatible types (trivial structs by pointer, C strings, fixed-width integers, opaque handles) and catching every exception inside each extern C function, translating it to a return code, keeps both sides in a vocabulary they share. Passing a std::string by value or letting an exception unwind into C is undefined; the disciplined boundary avoids both."
+  signal: "extern C functions that throw, or that take or return std::string / std::vector by value, or that pass C++ objects with non-trivial layout across to C."

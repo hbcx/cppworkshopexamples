@@ -1,0 +1,11 @@
+title: "An extern C function"
+standard: "C++11"
+difficulty: 1
+summary: "extern C on a function gives it C language linkage: the symbol is not name-mangled, so C and other languages can call it by its plain name. The body is normal C++ -- only the linker-level name changes."
+notes: "C++ mangles function names to encode their parameter types (that is what makes overloading work), but C does not, so a C caller looking for add_ints would never find the mangled C++ symbol. extern C turns mangling off for that function, producing the bare name C expects. Nothing else changes: inside the function you write whatever C++ you like. This one specifier is the foundation of every C interop story -- exposing C++ to C, calling C from C++, and building plugin ABIs -- and the rest of this section is the rules and pitfalls that come with it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+detailed_tags: []

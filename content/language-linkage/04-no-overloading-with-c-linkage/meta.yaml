@@ -1,0 +1,11 @@
+title: "C linkage forbids overloading"
+standard: "C++11"
+difficulty: 2
+summary: "Overloading works because C++ mangles the parameter types into the symbol name, so two describe functions become two distinct symbols. An extern C function is unmangled -- its symbol is just the bare name -- so two extern C functions cannot share a name."
+notes: "This is a direct consequence of what C linkage means: no mangling, so the linker sees only the plain identifier. That is exactly what makes the symbol callable from C, and it is also why C-linkage overloading is impossible -- there is nothing in the name to tell the two apart. The rule is practical: expose one extern C function per name (the C convention is distinct names like value_int, value_double), and keep overloading on the C++ side where mangling handles it. The conflicting pair is shown in a comment because it does not compile."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+detailed_tags: []

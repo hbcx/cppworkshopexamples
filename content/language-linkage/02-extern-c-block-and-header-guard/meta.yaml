@@ -1,0 +1,11 @@
+title: "The extern C block and the __cplusplus guard"
+standard: "C++11"
+difficulty: 2
+summary: "extern C { ... } applies C linkage to a group of declarations. Wrapping a header's declarations in that block, guarded by #ifdef __cplusplus, lets one header be included from both C and C++ -- the C++ side gets C linkage, the C side never sees the C++-only syntax."
+notes: "This is the header pattern every C library with a C++-friendly API uses. C does not understand extern C, so the block must be hidden from a C compiler; the __cplusplus macro, defined only in C++, is the switch. A definition whose declaration was inside the block inherits C linkage, so the .cpp implementing the API does not repeat extern C. The result is a single source of truth that both languages compile. Only put actual declarations in the block -- not other headers with their own linkage handling, and not template or overload-heavy C++ that C linkage cannot represent."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+detailed_tags: []

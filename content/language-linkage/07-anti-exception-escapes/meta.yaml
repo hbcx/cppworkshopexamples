@@ -1,0 +1,12 @@
+title: "Anti-pattern: an exception escaping an extern C function"
+standard: "C++11"
+difficulty: 3
+summary: "Letting a C++ exception propagate out of an extern C function is undefined when C called it -- there is no C++ unwinding through a C frame. Contain failures inside the function and report them with a return code; mark it noexcept so the boundary is explicit."
+notes: "The danger is invisible in a pure-C++ build, where the exception just unwinds normally, and only bites when a C caller sits between the throw and the handler -- then behaviour is undefined, typically a terminate. Treat every extern C function that C might call as a hard wall: no exception may cross it. The fix is the boundary discipline from the previous example -- translate to error codes -- and adding noexcept turns a stray throw into an immediate, localized terminate rather than a corrupted C stack, which is at least diagnosable. The throwing version is shown in a comment because its bad case is undefined behaviour that only appears across the language boundary."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "noexcept", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }
+detailed_tags:
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }

@@ -1,0 +1,11 @@
+title: "Only C-compatible types cross"
+standard: "C++11"
+difficulty: 2
+summary: "Across a C boundary you may pass only types C also understands: trivial structs, pointers, C strings, fixed-width integers. A trivial Point crosses by pointer, and results come back through a caller-provided char buffer -- the C-ABI idioms of out-params and return codes."
+notes: "extern C changes linkage, not the ABI of the types you pass. A std::string or std::vector has a C++-only layout, constructors, and a destructor; C cannot build, copy, or destroy one, and there is no agreed way to pass it by value across the boundary. So the interface trades in what both sides share: a struct with standard layout (passed by pointer to avoid ABI questions), a const char* in, and a caller-owned buffer out, with a return code for success or failure. Each language then owns its own memory in its own way. Passing a non-trivial C++ type by value is the matching anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+detailed_tags: []

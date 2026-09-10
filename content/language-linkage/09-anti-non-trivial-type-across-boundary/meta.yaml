@@ -1,0 +1,11 @@
+title: "Anti-pattern: a non-trivial C++ type across the boundary"
+standard: "C++11"
+difficulty: 3
+summary: "An extern C function that takes or returns a std::string (or any non-trivial C++ type) by value cannot be called from C: C has no constructor, destructor, or layout for it, and there is no shared by-value ABI. Exchange C strings and buffers instead, using std::string only inside."
+notes: "extern C fixes the function's linkage, not the calling convention of its parameters. A std::string carries a destructor, possible heap ownership, and a C++-specific layout, none of which C can honor -- so a by-value std::string across the boundary is meaningless to a C caller even though it compiles in a C++-only build. Keep the interface in the common vocabulary: const char* in, a caller-owned char buffer out, sizes and return codes, or an opaque pointer to a C++ object plus C-linkage functions that operate on it. Inside the function, use whatever C++ you like -- here std::string builds the result before it is copied out. The by-value signature is shown in a comment as the shape to avoid."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+detailed_tags: []

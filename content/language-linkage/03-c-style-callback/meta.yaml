@@ -1,0 +1,12 @@
+title: "A C-style callback"
+standard: "C++11"
+difficulty: 2
+summary: "C APIs take behavior as a function pointer, and the callback receives void* because the API is type-agnostic. std::qsort is the classic example; its comparator casts the void* back to the real type and returns an int ordering. An extern C comparator matches the C-linkage pointer qsort expects."
+notes: "This is the shape of every C callback -- qsort, bsearch, a signal handler, an event-loop hook: a plain function pointer plus, often, a void* user-data argument. The comparator recovers the type with static_cast from const void* and returns negative, zero, or positive; the (x>y)-(x<y) form avoids the overflow that x-y can hit. Strictly, a callback handed to a C API should have C language linkage, since the API's function-pointer type is C-linkage; marking the comparator extern C makes that explicit and portable. The type-agnostic void* is the price of a callback that works for any element type without templates."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "std::qsort", url: "https://en.cppreference.com/w/cpp/algorithm/qsort" }
+detailed_tags:
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }

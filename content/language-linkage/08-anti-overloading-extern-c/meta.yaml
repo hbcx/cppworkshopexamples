@@ -1,0 +1,11 @@
+title: "Anti-pattern: overloading an extern C function"
+standard: "C++11"
+difficulty: 2
+summary: "Two extern C functions cannot share a name: with no mangling, both are the same bare symbol and the declaration is rejected. Either give the C-linkage functions distinct names, the C way, or keep C++ linkage and let mangling support the overload."
+notes: "This is the flip side of what C linkage buys you: the unmangled name that lets C call the function is also a name that must be unique. The mistake is natural when converting a C++ overload set into a C-callable API -- you cannot just prefix the set with extern C. Pick per case: expose distinct-named C entry points (value_int, value_double) for the C boundary, and keep the overloaded set on the C++ side for C++ callers, often with the extern C functions implemented as thin wrappers over the overloads. The conflicting pair is shown in a comment because it does not compile."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "extern C", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+  - { name: "language linkage", url: "https://en.cppreference.com/w/cpp/language/language_linkage" }
+detailed_tags: []

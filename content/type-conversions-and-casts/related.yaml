@@ -13,3 +13,5 @@
   note: "How to know a value fits before a narrowing cast: numeric_limits gives the target type's min and max, so you can range-check instead of truncating silently -- go there for the arithmetic-type bounds behind a safe conversion."
 - slug: "cstdint"
   note: "The fixed-width targets these casts often aim at: reinterpret_cast to uintptr_t to hold a pointer, and static_cast narrowing into an int32_t/uint8_t -- go there for the exact-width integer types and their portability rules."
+- slug: "language-linkage"
+  note: "Where these casts meet C interop: a C callback hands you a void*, and static_cast recovers the real typed pointer inside it. Go there for extern C, C-style callbacks, and the boundary rules the cast serves."

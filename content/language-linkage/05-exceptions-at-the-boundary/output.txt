@@ -1,0 +1,3 @@
+10 / 2 = 5
+  (caught at the boundary: division by zero)
+10 / 0 reported an error, no exception escaped

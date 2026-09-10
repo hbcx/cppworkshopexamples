@@ -11,3 +11,5 @@
   note: "The advanced layer over this one: capturing an exception as a value with std::exception_ptr, moving it across a thread, nesting causes with throw_with_nested, and the terminate handler. Go there once the basic throw/catch model here is solid."
 - slug: "stacktrace"
   note: "Record WHERE an exception was thrown, not just what: capture a std::stacktrace in a custom exception's constructor so the handler can log the call path. Go there for capturing and printing the stack (C++23)."
+- slug: "language-linkage"
+  note: "The boundary an exception must never cross: unwinding out of an extern C function into a C caller is undefined. Go there for catching at the C boundary and translating throws into return codes."

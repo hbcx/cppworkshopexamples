@@ -1,0 +1,4 @@
+scale_i(21)  = 42
+scale_d(2.5) = 5
+scale(21)    = 42
+scale(2.5)   = 5
