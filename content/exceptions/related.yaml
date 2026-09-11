@@ -13,3 +13,5 @@
   note: "Record WHERE an exception was thrown, not just what: capture a std::stacktrace in a custom exception's constructor so the handler can log the call path. Go there for capturing and printing the stack (C++23)."
 - slug: "language-linkage"
   note: "The boundary an exception must never cross: unwinding out of an extern C function into a C caller is undefined. Go there for catching at the C boundary and translating throws into return codes."
+- slug: "scope-guard"
+  note: "Cleanup that rides the unwinding this section describes: a scope guard runs an action when the stack unwinds, and scope_fail/scope_success split it by whether an exception is in flight. Go there for finally and exception-safe cleanup without a try/catch on every path."

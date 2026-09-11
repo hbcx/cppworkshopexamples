@@ -1,0 +1,15 @@
+- problem: "Releasing a resource that has no RAII wrapper -- a C library handle, an OS descriptor, a temporary registry entry, a flag that must be reset -- across a function with several return points and possible exceptions."
+  why: "A finally next to the acquisition ties the release to the scope, so it runs on every path out without a manual cleanup before each return or in each catch. Writing a dedicated wrapper class is overkill for a one-off, and repeating the release by hand is exactly where a leaked handle or a forgotten reset creeps in."
+  signal: "The same free/close/reset call copied before every return and inside catch blocks, or a resource whose release is easy to miss on an early-exit path."
+
+- problem: "An operation that changes several things and must be all-or-nothing: if a later step fails, the earlier ones have to be undone, and hand-written rollback on each failure path is verbose and easy to get wrong."
+  why: "Guard each step with a rollback and dismiss the guards once the whole operation succeeds. Any early return or exception leaves the guards active, so the partial work unwinds in reverse automatically -- the strong exception guarantee assembled from local objects, without a rollback branch per failure point."
+  signal: "Undo code duplicated across every error path of a multi-step operation, or a function that leaves half-applied state when a middle step throws."
+
+- problem: "Cleanup that must differ by outcome -- commit on success but roll back on failure, log a completion but capture diagnostics on an exception, keep a built result or discard a partial one."
+  why: "scope_success and scope_fail run only on the matching exit direction, detected via std::uncaught_exceptions(), so the two cases live in separate, declarative actions instead of a hand-tracked did-it-throw flag checked at the end. It keeps the success and failure handling next to the code they belong to and correct on every path."
+  signal: "A bool succeeded flag set at the end of a try and inspected in a catch or after the block, or success and failure cleanup tangled into one exit path."
+
+- problem: "Temporarily changing global or thread state -- a locale, a rounding mode, a feature flag, the current working directory -- and needing to restore it no matter how the scope exits."
+  why: "Save the old value, set the new one, and arm a guard that restores it; the restoration then happens on the normal path, an early return, and an exception alike, with the restore logic written once. The alternative is repeating the restore before every exit, which drifts out of sync the moment a new return is added."
+  signal: "State saved and restored by hand around a block, with the restore duplicated on multiple exits or missing on the exception path."

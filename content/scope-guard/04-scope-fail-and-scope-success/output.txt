@@ -1,0 +1,7 @@
+normal:
+  doing work (fail=false)
+  success action
+throwing:
+  doing work (fail=true)
+  failure action
+  caught: boom

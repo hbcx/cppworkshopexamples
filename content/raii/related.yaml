@@ -14,3 +14,5 @@
   note: "Why RAII exists: a thrown exception unwinds the stack and runs your destructors, so a resource wrapped in one is released on the error path with no cleanup code. Go there for throwing, catching, and stack unwinding."
 - slug: "operator-new-delete"
   note: "The raw new/delete RAII exists to hide: the allocation functions the compiler calls, why manual new/delete leaks on the exception path, and placement new for building objects in storage you own. Go there for the low level under the idiom."
+- slug: "scope-guard"
+  note: "RAII for a one-off action rather than a resource type: a scope guard runs an arbitrary cleanup at scope exit, so you get the exception-safe release without writing a dedicated wrapper class. Go there for finally, dismiss-to-commit, and scope_fail/scope_success."

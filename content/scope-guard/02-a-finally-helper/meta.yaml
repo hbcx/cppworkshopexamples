@@ -1,0 +1,12 @@
+title: "A reusable finally"
+standard: "C++17"
+difficulty: 2
+summary: "Wrapping the guard in a move-only type plus a finally() factory gives the idiom auto _ = finally([&]{ ... });. The move constructor transfers the cleanup and leaves the source inactive, so moving the guard never runs the action twice."
+notes: "The factory exists so callers do not name the guard's type, and the guard is move-only for a reason: cleanup is a responsibility exactly one object should hold. Copying would risk running the action twice; deleting the copy constructor and providing a move that flips an active_ flag makes ownership single and transferable. This is essentially GSL's finally and the shape of std::experimental::scope_exit. The named guard variable is what keeps it alive to the end of the scope -- the unnamed-temporary anti-pattern shows what happens without it. Later examples add dismiss and the success/fail variants on top of this base."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

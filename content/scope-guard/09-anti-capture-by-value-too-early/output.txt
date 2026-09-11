@@ -1,0 +1,2 @@
+by value: frees = 0 (real buffer leaked)
+by ref:   frees = 1 (real buffer freed)

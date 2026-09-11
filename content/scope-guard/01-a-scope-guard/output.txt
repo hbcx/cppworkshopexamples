@@ -1,0 +1,8 @@
+normal path:
+  working...
+  finished normally
+  cleanup ran
+early-return path:
+  working...
+  early return
+  cleanup ran

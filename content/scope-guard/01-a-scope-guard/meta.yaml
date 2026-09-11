@@ -1,0 +1,12 @@
+title: "A scope guard"
+standard: "C++17"
+difficulty: 1
+summary: "A scope guard stores a callable and runs it in its destructor, so a cleanup action fires automatically when the guard leaves scope -- on a normal exit, an early return, or an exception. The cleanup lives next to the code it guards, not repeated on every path out."
+notes: "This is RAII applied to an arbitrary action rather than a specific resource. Because the guard is a local object, the language's normal destruction rules run the cleanup exactly when the scope ends, however it ends -- which is what makes it exception-safe for free. The example shows the cleanup firing on both the normal and the early-return path. The rest of this section turns this into a reusable finally, adds dismiss and success/fail variants, and covers the pitfalls; a guard is best when a full RAII wrapper class would be overkill for a one-off cleanup."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

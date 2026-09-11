@@ -1,0 +1,11 @@
+title: "Dismiss to commit"
+standard: "C++17"
+difficulty: 2
+summary: "A guard with a dismiss() runs its rollback unless the operation completes and dismisses it. That is the transaction pattern: do each step under a rollback guard, and on success dismiss the guards so the changes stick; on any early exit or exception, the rollbacks fire."
+notes: "This is how you get all-or-nothing behavior without hand-writing cleanup on every failure path. Each step registers how to undo itself, then the happy path dismisses the guards at the end. If anything between throws or returns early, the still-active guards unwind the partial work in reverse order -- the strong exception guarantee, built from local objects. The example commits step 1, guards its rollback, and either fails (rollback fires, log returns to empty) or succeeds (dismiss, log keeps both steps). Forgetting the dismiss would undo a successful operation, so the dismiss is the commit."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags: []

@@ -1,0 +1,12 @@
+title: "Moving the guard"
+standard: "C++17"
+difficulty: 3
+summary: "Because the guard is move-only, a function can acquire a resource and return the guard that releases it, transferring the cleanup to the caller. The release still runs exactly once -- at the caller's scope exit -- not when the factory returns."
+notes: "This makes cleanup a value you can hand around. acquire() sets up the resource and returns a finally that undoes it; the caller holds that guard and the release fires when the caller's scope ends. The move-only design is what keeps it correct: moving transfers the active flag and disarms the source, so the action never double-runs, and copying is forbidden so responsibility is never duplicated. Guaranteed copy elision means the returned guard is built directly in the caller with no move at all. The destructor is marked noexcept -- the default for destructors, but stated here as a reminder that a cleanup must never throw, which the next anti-pattern explains."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

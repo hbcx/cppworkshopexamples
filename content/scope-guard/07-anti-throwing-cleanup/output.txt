@@ -1,0 +1,2 @@
+working
+  cleanup: swallowed error (close failed)

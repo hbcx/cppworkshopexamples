@@ -1,0 +1,12 @@
+title: "Anti-pattern: a cleanup that throws"
+standard: "C++17"
+difficulty: 3
+summary: "A scope guard runs its action in a destructor, and destructors are noexcept by default. If the cleanup throws -- worst of all while the stack is already unwinding from another exception -- the program calls std::terminate. The cleanup must contain its own failures."
+notes: "The whole appeal of a guard is that it runs during unwinding, which is exactly when a second exception is fatal: two exceptions in flight at once means std::terminate. So a cleanup action has to be exception-tight. Whatever it does -- close a handle, roll back, notify -- it must catch and handle any failure internally: log it, swallow it, record a flag for later, but never propagate. The example wraps the risky close in try/catch so nothing escapes. This is the same discipline as any destructor, sharpened because a guard's destructor so often runs on the error path. The throwing version is described in a comment because its bad case terminates the program."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+detailed_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }

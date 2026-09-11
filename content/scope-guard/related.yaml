@@ -1,0 +1,6 @@
+- slug: "raii"
+  note: "The idiom a scope guard generalizes: RAII ties a resource's release to an object's lifetime; a guard does the same for an arbitrary action when writing a dedicated resource class would be overkill. Go there for the acquisition-is-initialization pattern and move-only ownership."
+- slug: "exceptions"
+  note: "Why guards fire on the error path and why cleanup must not throw: the exception model, stack unwinding, and std::uncaught_exceptions() behind scope_fail/scope_success. Go there for throw/catch and the two-exceptions-at-once rule that makes a throwing cleanup terminate."
+- slug: "rule-of-0-3-5"
+  note: "The special members a guard declares: it is move-only -- a deleted copy and a move that transfers the active flag -- which is a rule-of-five decision. Go there for when to declare, default, or delete the five, and why single ownership needs a move but no copy."

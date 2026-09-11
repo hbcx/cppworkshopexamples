@@ -1,0 +1,5 @@
+  cleanup (fired immediately!)
+  work that should have been guarded
+---
+  guarded work
+  cleanup (at scope exit)

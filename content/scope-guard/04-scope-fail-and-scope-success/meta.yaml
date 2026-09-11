@@ -1,0 +1,12 @@
+title: "scope_fail and scope_success"
+standard: "C++17"
+difficulty: 3
+summary: "Two conditional guards: scope_success runs its action only when the scope exits normally, scope_fail only when it exits because of an exception. Each captures std::uncaught_exceptions() at construction and compares it at destruction -- a higher count means the stack is unwinding."
+notes: "std::uncaught_exceptions() (C++17, note the plural) returns how many exceptions are currently in flight, and comparing the value at entry with the value in the destructor tells a guard whether it is being destroyed by normal scope exit or by unwinding. That is exactly enough to split cleanup into on-success and on-failure actions -- commit vs roll back, log an ok vs log an error, keep vs discard a partially built result. These are the scope_success and scope_fail of the Library Fundamentals TS (and std::experimental::scope_*), reproduced in a few lines. Use them when the two exit directions need different work; a plain scope guard is simpler when they do not."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "std::uncaught_exceptions", url: "https://en.cppreference.com/w/cpp/error/uncaught_exception" }
+detailed_tags:
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }

@@ -1,0 +1,11 @@
+title: "Guarding a C resource"
+standard: "C++17"
+difficulty: 2
+summary: "For a C-style resource with no RAII wrapper -- a malloc buffer, a FILE*, an OS handle -- a finally guarantees the matching release on every exit path, including exceptions, without a manual free scattered before each return."
+notes: "This is where a scope guard shines: interfacing with C or OS APIs that hand you a raw resource and a separate release function. Rather than writing a full wrapper class for a one-off, or repeating std::free before every return and in every catch, one finally next to the acquisition ties the release to the scope. For a resource you use often it is still worth a dedicated RAII type (or std::unique_ptr with a custom deleter); finally is the lightweight answer for the occasional handle. Note the lambda captures by reference so it frees the actual pointer, and the buffer is checked for null before the guard is armed."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags: []

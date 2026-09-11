@@ -1,0 +1,11 @@
+title: "Anti-pattern: capturing the resource by value too early"
+standard: "C++17"
+difficulty: 3
+summary: "A guard lambda that captures the resource by value at arming time freezes whatever value it had then. Arm the guard before the resource is really acquired -- while a pointer is still null -- and the cleanup releases the old value, leaking the one acquired afterward."
+notes: "A by-value capture copies the variable when the lambda is created, not when it runs, so if you set the guard up before the acquisition completes, it captures the pre-acquisition state -- here a null pointer -- and the real allocation is invisible to it. The counter shows it: the by-value guard frees nothing (leak), the by-reference guard frees the actual buffer. Two fixes: capture by reference so the guard reads the pointer's final value at scope exit, or -- cleaner -- arm the guard only after the resource is successfully acquired, so there is nothing stale to capture. This is the scope-guard form of the general lambda capture-timing trap."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags: []

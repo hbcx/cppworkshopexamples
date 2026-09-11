@@ -1,0 +1,2 @@
+buffer holds: hello
+  freed the buffer

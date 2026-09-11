@@ -1,0 +1,5 @@
+before acquire
+  acquired resource 7
+  using resource 7
+  released resource 7
+after block

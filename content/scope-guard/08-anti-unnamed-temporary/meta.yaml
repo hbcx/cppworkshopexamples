@@ -1,0 +1,11 @@
+title: "Anti-pattern: an unnamed guard temporary"
+standard: "C++17"
+difficulty: 2
+summary: "Calling finally(...) without binding the result creates a temporary that is destroyed at the end of the full expression -- immediately -- so the cleanup fires right away instead of at scope exit. The guard must be bound to a named variable to live for the scope."
+notes: "A temporary lives only until the semicolon, so finally([]{...}); runs its action on that very line, guarding nothing. The output shows the cleanup printing before the work it was meant to protect. Bind it -- auto guard = finally(...); -- and its lifetime extends to the end of the enclosing block, which is the point. The mistake is easy because the call looks like it did something; naming the guard, and treating an unused-variable warning on it as a signal to check placement, avoids it. A [[maybe_unused]] name or a conventional auto _ = keeps the guard alive without a warning."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "scope guard", url: "https://en.cppreference.com/w/cpp/experimental/scope_exit" }
+  - { name: "RAII", url: "https://en.cppreference.com/w/cpp/language/raii" }
+detailed_tags: []
