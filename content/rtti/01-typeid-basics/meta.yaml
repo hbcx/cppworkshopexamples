@@ -1,0 +1,11 @@
+title: "typeid basics"
+standard: "C++11"
+difficulty: 1
+summary: "The typeid operator returns a const std::type_info& for a type or an expression. Its name() is implementation-defined and for humans only; the dependable operation is comparing two type_info objects with == to ask whether two types are the same."
+notes: "typeid(expr) reports the type, and for a non-polymorphic expression that is its static type, decided at compile time. name() differs by compiler -- a mangled string here on gcc and clang, a readable one on MSVC -- and can change between versions, so never build logic or storage on it. What is portable is identity: typeid(a) == typeid(b) is true exactly when a and b have the same type. The next examples add the dynamic type of a polymorphic object and using types as map keys; the name-portability trap is spelled out in an anti-pattern."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }
+detailed_tags: []

@@ -1,0 +1,11 @@
+title: "Anti-pattern: RTTI instead of virtual dispatch"
+standard: "C++11"
+difficulty: 3
+summary: "A chain of typeid comparisons that picks behavior by run-time type re-implements, badly, what virtual functions do for free. It is slower, must be edited for every new type, and silently mishandles a type it does not list. Put the behavior in a virtual function."
+notes: "typeid and dynamic_cast are for the rare case where you genuinely need the concrete type and cannot add a method to it -- not for dispatch you control. A type-switch like this grows a branch per type, is easy to leave incomplete (the fall-through returns a wrong answer with no warning), and costs a comparison chain where a virtual call is a single indirect jump. The fix is ordinary polymorphism: declare a virtual function on the base and let each derived type answer, so adding a shape cannot be forgotten. When the operation does not belong on the class -- many unrelated operations over a fixed type set -- the Visitor pattern is the structured alternative to a typeid chain."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+detailed_tags:
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }

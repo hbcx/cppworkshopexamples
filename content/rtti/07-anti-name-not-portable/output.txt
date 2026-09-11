@@ -1,0 +1,3 @@
+name() (implementation-defined): 6Widget
+same type via ==?         true
+same type via type_index? true

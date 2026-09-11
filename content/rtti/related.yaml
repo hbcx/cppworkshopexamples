@@ -1,0 +1,6 @@
+- slug: "type-conversions-and-casts"
+  note: "The cast half of RTTI: dynamic_cast asks is this at least a T and hands back a usable pointer, where typeid asks exactly what type this is. Go there for dynamic_cast and the four named casts -- the two are the read-and-convert pair of run-time type queries."
+- slug: "visitor"
+  note: "The structured answer to the typeid type-switch this section warns against: Visitor dispatches many operations over a fixed set of types through double dispatch, no typeid chain in sight. Go there when behavior does not belong on the class and a virtual method is not enough."
+- slug: "type-traits"
+  note: "The compile-time counterpart: type traits answer questions about types during compilation (is_base_of, is_same, is_polymorphic), where typeid answers at run time. Go there for the introspection that costs nothing at run time and works on types you never instantiate."

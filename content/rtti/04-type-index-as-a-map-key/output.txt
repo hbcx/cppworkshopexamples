@@ -1,0 +1,4 @@
+Cat  -> meow
+Dog  -> woof
+Bird -> tweet
+registered types: 3

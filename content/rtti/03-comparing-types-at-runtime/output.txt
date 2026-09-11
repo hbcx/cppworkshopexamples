@@ -1,0 +1,4 @@
+int == int?    true
+int != double? true
+before() gives a strict order (exactly one direction): true
+typeid(int) hashes equal to itself? true

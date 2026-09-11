@@ -1,0 +1,4 @@
+typeid(n).name()      = i
+typeid(double).name() = d
+typeid(int) == typeid(n)? true
+typeid(int) == typeid(d)? false

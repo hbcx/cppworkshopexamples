@@ -1,0 +1,13 @@
+title: "Querying the type inside a std::any"
+standard: "C++17"
+difficulty: 3
+summary: "std::any erases the type of what it holds, and any::type() returns the type_info for it. Comparing that against typeid(T) tells you what is inside before you any_cast, so you dispatch on the run-time type instead of guessing and catching a bad_any_cast."
+notes: "This is RTTI powering a type-erased container. std::any hides its value behind a uniform interface, but keeps the type_info so callers can ask what it is. Testing a.type() == typeid(int) before any_cast<int> turns a possible throw into a clean branch, and lets one function handle several stored types. The same idea underlies visitors over heterogeneous stores and message handlers keyed by payload type -- often combined with the type_index registry from the previous example to scale past a hand-written if/else. any_cast to the wrong type throws std::bad_any_cast, which the type() check here is exactly what avoids."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::any::type", url: "https://en.cppreference.com/w/cpp/utility/any/type" }
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+detailed_tags:
+  - { name: "std::any", url: "https://en.cppreference.com/w/cpp/utility/any" }
+  - { name: "std::any_cast", url: "https://en.cppreference.com/w/cpp/utility/any/any_cast" }

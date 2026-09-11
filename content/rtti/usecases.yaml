@@ -1,0 +1,15 @@
+- problem: "A dispatch table that must map a run-time type to behavior -- a deserializer picking a factory from a type tag, a message router choosing a handler by payload type, a plugin registry -- where the set of types is open and not known to one switch."
+  why: "std::type_index makes a type a first-class key, so an unordered_map<type_index, Handler> routes by actual type and new types register a row instead of editing a central switch. A hand-written chain of typeid comparisons is closed (it must list every type) and slower; the map is open and O(1) average."
+  signal: "A long if (typeid(x) == typeid(A)) else if (== B) chain used for dispatch, or a factory selected by a stringly-typed tag that a type_index key would make exact."
+
+- problem: "Pulling a value back out of a type-erased container -- std::any, a variant-of-any, a property bag -- where casting to the wrong type would throw, and you want to branch on what is actually stored."
+  why: "any::type() returns the stored value's type_info, so comparing it against typeid(T) tells you what is inside before any_cast, turning a possible bad_any_cast into a clean branch. It lets one function handle several stored types and pairs with a type_index registry to scale past a fixed if/else."
+  signal: "any_cast calls wrapped in try/catch to probe the stored type, or a type-erased store whose readers guess the contained type instead of checking it."
+
+- problem: "Logging or asserting with the concrete type of an object for a human -- a diagnostic that says which subclass was seen, an error that names the unexpected type -- where readability matters and portability does not."
+  why: "typeid(x).name() gives a type string cheaply, and after demangling it is readable enough for a log or an assert message. It is the quickest way to record what type showed up at a point in the code, as long as it stays in the diagnostic and never drives logic, since the raw string is compiler-specific."
+  signal: "A debug print that hand-writes type names, or an assert failure that reports a value but not the unexpected type behind it."
+
+- problem: "Tracking or de-duplicating the set of types seen at run time -- which event types a bus has carried, which components a registry has instantiated, whether a type has already been handled."
+  why: "std::type_index in a set or as a hash key records types by identity, correctly and cheaply, where the unstable name() string would be both slower and wrong across builds. hash_code() and the type_index wrapper give the ordering and hashing a container needs without any per-type bookkeeping."
+  signal: "A set of type-name strings used to mean a set of types, or code that stringifies types only to compare or store them."

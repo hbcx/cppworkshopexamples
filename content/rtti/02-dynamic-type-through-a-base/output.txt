@@ -1,0 +1,4 @@
+runtime type: 6Circle
+runtime type: 6Square
+shapes[0] is a Circle? true
+shapes[1] is a Circle? false

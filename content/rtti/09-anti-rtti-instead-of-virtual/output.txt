@@ -1,0 +1,2 @@
+by RTTI type-switch: 3.14 4
+by virtual dispatch: 3.14 4 

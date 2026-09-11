@@ -1,0 +1,2 @@
+typeid(*a).name() = 6Animal   (static type Animal, not Snake)
+is *a a Snake?    false   (false -- wrong!)

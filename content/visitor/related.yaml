@@ -10,3 +10,5 @@
   note: "The principle behind Visitor's central trade-off: a class hierarchy is open to new types but closed to new operations, and Visitor flips that (open to operations, closed to types) -- go there for open-closed as the general rule this expression-problem choice bends."
 - slug: "tag-dispatch"
   note: "The compile-time answer to the same dispatch-on-type question: Visitor picks behaviour by an object's dynamic type through double dispatch, where tag dispatch picks an overload by a compile-time type or trait with no virtual call -- go there when the type is known at compile time."
+- slug: "rtti"
+  note: "The crude alternative Visitor replaces: a chain of typeid comparisons that switches on run-time type is slower, fragile, and forgets new types -- go there for typeid and type_index, and why double dispatch beats a type-switch."

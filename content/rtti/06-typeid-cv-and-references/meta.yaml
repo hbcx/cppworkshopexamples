@@ -1,0 +1,12 @@
+title: "typeid, cv-qualifiers, references, and bad_typeid"
+standard: "C++11"
+difficulty: 3
+summary: "typeid strips top-level const/volatile and reference-ness, so typeid(const int&) equals typeid(int). And typeid on a dereferenced null pointer to a polymorphic type throws std::bad_typeid rather than returning a bogus answer."
+notes: "These are the corners worth knowing. Top-level cv and references are not part of the type typeid reports, which is usually what you want -- const int and int are the same type for identity purposes -- but it means typeid cannot distinguish a const object from a non-const one. The null case is the one runtime failure typeid can raise: dereferencing a null pointer to a polymorphic type in typeid must consult run-time data that is not there, so it throws bad_typeid. For a non-polymorphic type the dereference is not evaluated, so no throw. Guarding polymorphic pointers before typeid(*p), or checking for null, avoids it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+  - { name: "std::bad_typeid", url: "https://en.cppreference.com/w/cpp/types/bad_typeid" }
+detailed_tags:
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }

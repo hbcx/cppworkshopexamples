@@ -1,0 +1,11 @@
+title: "Comparing types at run time"
+standard: "C++11"
+difficulty: 2
+summary: "std::type_info supports == and != for identity, before() for a consistent strict ordering, and hash_code() for a size_t hash. These are the operations that let you compare, sort, and hash types at run time without touching the unstable name()."
+notes: "== is the everyday check -- same type or not. before() provides a total order whose exact direction is implementation-defined but stable within a run, so it can back an ordered container of types (though std::type_index is the more convenient key). hash_code() gives a hash that agrees for equal types, which is what makes type_info usable in a hash table via type_index. The example prints only the relationships that are guaranteed -- that before() picks exactly one direction and that a type hashes equal to itself -- rather than raw ordering or hash values, which vary by implementation."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+detailed_tags: []

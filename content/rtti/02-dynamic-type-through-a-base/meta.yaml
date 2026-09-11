@@ -1,0 +1,11 @@
+title: "The dynamic type through a base"
+standard: "C++11"
+difficulty: 2
+summary: "Applied to a glvalue of a polymorphic type, typeid reports the most-derived (dynamic) type. So typeid(*basePtr) on a Shape* pointing at a Circle gives Circle, not Shape -- the run-time answer that RTTI exists to provide."
+notes: "This only happens when the type is polymorphic -- it has at least one virtual function -- because that is what gives an object the run-time type data typeid consults. Dereference a base pointer or bind a base reference to a derived object, and typeid sees through to the real type. It is the query counterpart of dynamic_cast: typeid asks exactly what type this is, where dynamic_cast asks is this at least a T and hands back a usable pointer. If the base is NOT polymorphic, typeid falls back to the static type -- a common surprise covered in the anti-patterns."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }
+detailed_tags: []

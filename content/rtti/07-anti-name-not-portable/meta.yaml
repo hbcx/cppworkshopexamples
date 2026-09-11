@@ -1,0 +1,12 @@
+title: "Anti-pattern: relying on type_info::name()"
+standard: "C++11"
+difficulty: 2
+summary: "type_info::name() is implementation-defined: mangled on gcc and clang, readable on MSVC, and not promised to be stable across versions. Using it to test type identity, key a map, or persist a type is fragile. Compare type_info with == or key on std::type_index instead."
+notes: "name() exists for human eyes -- a debugger, a log line (usually after demangling with abi::__cxa_demangle or a tool). It is not an identifier: two unrelated builds can disagree on the string, and string-comparing names is both slower and less reliable than comparing the type_info objects the compiler already made unique. For identity use ==; for a key use type_index, which hashes and orders correctly regardless of the name. The one legitimate use of name() is diagnostics, and even then treat it as opaque, compiler-specific text. The example prints the mangled name to show what it looks like, then does identity the right way."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }
+  - { name: "std::type_index", url: "https://en.cppreference.com/w/cpp/types/type_index" }
+detailed_tags:
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }

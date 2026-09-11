@@ -1,0 +1,4 @@
+const int == int?  true
+int& == int?       true
+const int& == int? true
+typeid(*null polymorphic) threw std::bad_typeid

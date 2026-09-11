@@ -1,0 +1,11 @@
+title: "Anti-pattern: typeid on a non-polymorphic base"
+standard: "C++11"
+difficulty: 2
+summary: "typeid reports the dynamic type only for polymorphic types. On a base with no virtual functions, typeid(*basePtr) gives the STATIC type of the expression -- the base -- so a check for the derived type is silently false even though the object really is derived."
+notes: "The dynamic-type behavior of typeid depends entirely on the type being polymorphic: no virtual function means no run-time type data, so the compiler answers from the static type it can see. Here *a is statically an Animal, and typeid says Animal even though the object is a Snake -- a check that quietly does the wrong thing. The fix is to make the base polymorphic by giving it a virtual function, almost always a virtual destructor (which a base used through base pointers needs anyway). Then typeid, and dynamic_cast, work as expected. If a type has no virtual functions, treat typeid on it as a compile-time, static-type query only."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }
+detailed_tags: []

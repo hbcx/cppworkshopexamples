@@ -1,0 +1,12 @@
+title: "std::type_index as a map key"
+standard: "C++11"
+difficulty: 2
+summary: "std::type_index wraps a std::type_info reference into a regular value -- copyable, comparable, and hashable -- so a type can be a key in a std::map or std::unordered_map. That turns typeid into a run-time type-to-handler registry."
+notes: "type_info itself cannot be a key: it is not copyable and only referenced through typeid. type_index fixes that by holding the reference and forwarding ==, <, and a hash, so std::unordered_map<std::type_index, T> just works. The pattern is a dispatch table keyed by run-time type -- map a type to a factory, a serializer, a visitor -- which is how plugin systems and message routers pick behavior from a value's actual type. It is the reusable, extensible alternative to a hand-written chain of typeid comparisons; adding a type is inserting a row, not editing a switch."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::type_index", url: "https://en.cppreference.com/w/cpp/types/type_index" }
+  - { name: "typeid", url: "https://en.cppreference.com/w/cpp/language/typeid" }
+detailed_tags:
+  - { name: "std::type_info", url: "https://en.cppreference.com/w/cpp/types/type_info" }
