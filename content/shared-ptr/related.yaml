@@ -16,3 +16,5 @@
   note: "The idiom shared_ptr automates for shared ownership: tie a resource to object lifetime so it is released without a manual call -- go there for the pattern itself and how to write your own single-owner guard."
 - slug: "atomic-shared-ptr"
   note: "How to share the shared_ptr HANDLE itself between threads: the reference count is atomic but the handle is not, so concurrent load/store of one shared_ptr races -- go there for std::atomic<std::shared_ptr>, the read-mostly config hot-swap, and lock-free structures built on it."
+- slug: "type-conversions-and-casts"
+  note: "The language-level casts the pointer_cast family mirrors: static_cast, dynamic_cast and const_cast on raw pointers and references. Go there for the casts themselves and when each applies -- then use the shared_ptr version here so the cast keeps shared ownership."

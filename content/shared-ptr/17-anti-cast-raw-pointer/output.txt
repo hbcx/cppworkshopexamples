@@ -1,0 +1,4 @@
+cast to Derived
+one shared count, use_count = 2
+dynamic_pointer_cast succeeded: yes
+object destroyed

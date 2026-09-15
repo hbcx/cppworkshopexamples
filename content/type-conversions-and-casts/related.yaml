@@ -17,3 +17,5 @@
   note: "Where these casts meet C interop: a C callback hands you a void*, and static_cast recovers the real typed pointer inside it. Go there for extern C, C-style callbacks, and the boundary rules the cast serves."
 - slug: "rtti"
   note: "The query half of run-time type information: dynamic_cast converts, while typeid and std::type_info report exactly what type an object is and let you key a map on it. Go there for typeid, type_index, and dispatching on the run-time type."
+- slug: "shared-ptr"
+  note: "The same casts, but for a shared_ptr: static_pointer_cast and dynamic_pointer_cast move up or down a hierarchy while KEEPING shared ownership, where a raw static_cast of get() would start a second control block. Go there for the pointer_cast family and why casting a smart pointer is not the same as casting a raw one."

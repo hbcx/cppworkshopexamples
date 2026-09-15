@@ -1,0 +1,6 @@
+static_pointer_cast -> Circle, radius 2
+shared count after cast = 2
+dynamic_pointer_cast to the wrong type is empty
+dynamic_pointer_cast to the right type is non-empty
+const_pointer_cast let us write radius = 3.5
+final shared count = 5

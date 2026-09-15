@@ -1,0 +1,13 @@
+title: "Anti-pattern: static_cast a shared_ptr's raw pointer"
+standard: "C++11"
+difficulty: 3
+summary: "Casting shared_ptr::get() and wrapping the result in a new shared_ptr starts a second control block over an already-owned object and double-frees it; use static_pointer_cast, which shares the control block."
+notes: "When you need a shared_ptr to a different type in the hierarchy, the wrong reflex is to cast the raw pointer: shared_ptr<Derived> d(static_cast<Derived*>(base.get())). That new shared_ptr builds its OWN control block over an object base already owns, so each count reaches zero on its own and deletes the object -- a double free and undefined behaviour. The cast itself is fine; re-wrapping get() is the bug, the same trap as the two-control-blocks anti-pattern. The fix is static_pointer_cast (or dynamic_pointer_cast when the dynamic type is not certain): it returns a shared_ptr that SHARES the existing control block, so there is one shared count and the object is deleted exactly once."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::static_pointer_cast", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/pointer_cast" }
+  - { name: "std::dynamic_pointer_cast", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/pointer_cast" }
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }

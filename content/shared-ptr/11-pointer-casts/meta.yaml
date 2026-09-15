@@ -1,0 +1,14 @@
+title: "Casting a shared_ptr: the pointer_cast family"
+standard: "C++11"
+difficulty: 2
+summary: "static_pointer_cast, dynamic_pointer_cast and const_pointer_cast cast a shared_ptr up or down a hierarchy while sharing the same control block, so the reference count stays one shared count."
+notes: "These are the shared_ptr versions of the language casts, and the point of them is that the result SHARES ownership with the source: same control block, one reference count across both. static_pointer_cast is an unchecked downcast for when you already know the dynamic type (the analog of static_cast). dynamic_pointer_cast is the checked version -- it needs a polymorphic type and returns an EMPTY shared_ptr on a type mismatch, the way dynamic_cast returns nullptr on a raw pointer. const_pointer_cast adds or strips const on the pointed-to type. C++17 adds reinterpret_pointer_cast for the reinterpret_cast case. Never cast the raw get() pointer and wrap it in a new shared_ptr to do this: that starts a SECOND control block over an object the first already owns and frees it twice -- see the two-control-blocks anti-pattern. Always go through the pointer_cast helpers so ownership is shared, not duplicated."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::static_pointer_cast", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/pointer_cast" }
+  - { name: "std::dynamic_pointer_cast", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/pointer_cast" }
+  - { name: "std::const_pointer_cast", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/pointer_cast" }
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }
