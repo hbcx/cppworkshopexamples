@@ -6,20 +6,26 @@
 template <class E>
 struct enable_bitmask_operators : std::false_type {};
 
-// The operators, written ONCE as templates. enable_if makes each one exist only
-// for enums that opted in, so a plain enum class never accidentally gets bitwise
+// A concept satisfied only by enums that opted in. It reads at the point of use
+// and, when an enum did not opt in, gives a plain "constraints not satisfied"
+// error -- the C++20 replacement for an enable_if hung off every operator.
+template <class E>
+concept BitmaskEnum = std::is_enum_v<E> && enable_bitmask_operators<E>::value;
+
+// The operators, written ONCE as constrained templates. Only enums that opted in
+// satisfy BitmaskEnum, so a plain enum class never accidentally gets bitwise
 // operators, and only one definition is maintained for all flag enums.
-template <class E, class = std::enable_if_t<enable_bitmask_operators<E>::value>>
+template <BitmaskEnum E>
 constexpr E operator|(E a, E b) {
     using U = std::underlying_type_t<E>;
     return static_cast<E>(static_cast<U>(a) | static_cast<U>(b));
 }
-template <class E, class = std::enable_if_t<enable_bitmask_operators<E>::value>>
+template <BitmaskEnum E>
 constexpr E operator&(E a, E b) {
     using U = std::underlying_type_t<E>;
     return static_cast<E>(static_cast<U>(a) & static_cast<U>(b));
 }
-template <class E, class = std::enable_if_t<enable_bitmask_operators<E>::value>>
+template <BitmaskEnum E>
 constexpr bool has(E set, E flag) {
     return (set & flag) == flag;
 }
@@ -44,7 +50,7 @@ int main() {
 
     // Neither of these compiles, which is the safety:
     //   FileMode::Read | LogLevel::Info;  // different E on each side -> type error
-    //   Color::Red | Color::Green;        // Color did not opt in -> no operator
+    //   Color::Red | Color::Green;        // Color does not satisfy BitmaskEnum
     std::cout << "raw bits: " << static_cast<unsigned>(fm)
               << ", " << static_cast<unsigned>(lv) << '\n';                     // 5, 6
     return 0;
