@@ -34,3 +34,5 @@
   note: "The small helpers that make these moves correct: std::exchange steals-and-resets the source in one line, and std::move_if_noexcept (what vector uses) shows why marking a move noexcept matters. Go there for those and the other <utility> tools."
 - slug: "small-buffer-optimization"
   note: "Where a move stops being a pointer steal: an object with an inline buffer must move-construct each element into the destination, so the move is O(N) and its noexcept decides whether a vector moves or copies it. Go there for the SBO technique and its move traps."
+- slug: "copy-on-write"
+  note: "The other way to make a copy cheap, and the one std::string rejected: copy-on-write shares the buffer until a write forces a private copy, where a move just hands the buffer over with no sharing or detach. Go there for the technique and when a move is the better answer."

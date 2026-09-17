@@ -1,0 +1,11 @@
+title: "Benchmark: copies are free until the first write"
+standard: "C++17"
+difficulty: 2
+summary: "Count the deep copies of the buffer: copying a copy-on-write value many times does zero, the first write after sharing does one, and a plain value type does one on every copy."
+notes: "The honest way to show a technique earns its keep is to measure it, and for copy-on-write the metric is how many times the expensive buffer is actually deep-copied. A counter in the buffer's copy constructor shows a hundred copies of a shared value doing zero deep copies, one write after sharing doing exactly one, and a plain value type doing a hundred -- one per copy. That is the case copy-on-write is for: values copied far more often than they are modified. When the ratio flips -- writes as common as copies -- copy-on-write becomes pure overhead, which is its own anti-pattern in this section."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

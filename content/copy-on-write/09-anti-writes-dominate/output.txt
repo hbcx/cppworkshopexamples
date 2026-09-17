@@ -1,0 +1,5 @@
+COW deep copies:   100
+plain deep copies: 100
+same deep copies -- but COW also paid for a refcounted control
+block and a bump/release on every copy. When writes follow copies,
+copy-on-write is pure overhead; use a plain value type.

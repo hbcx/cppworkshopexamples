@@ -1,0 +1,11 @@
+title: "Anti-pattern: a reference into a value outlives a detach"
+standard: "C++17"
+difficulty: 3
+summary: "A reference obtained from a copy-on-write value stops tracking it the moment the value detaches: after a copy and a write, the reference points into the old shared buffer, not the value's new one."
+notes: "A reference into a copy-on-write value is only valid until the value detaches, and a detach can be triggered from a distance -- by making a copy and then writing. The example takes a reference into a value, makes a copy so the buffer is shared, then writes to the value: the write detaches it onto a new buffer, and the reference is left pointing into the old buffer the copy still holds. It compares addresses to show the reference no longer refers to the value's live buffer, without dereferencing anything dangling. This is exactly the reference-invalidation hazard that made a copy-on-write std::string unworkable and got it banned in C++11. The rule: do not hold a reference, pointer, or iterator into a copy-on-write value across any operation that can detach it."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

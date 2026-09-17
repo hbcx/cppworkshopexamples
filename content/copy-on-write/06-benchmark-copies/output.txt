@@ -1,0 +1,3 @@
+COW: 100 copies -> deep copies: 0
+COW: one write after sharing -> deep copies: 1
+plain value: 100 copies -> deep copies: 100

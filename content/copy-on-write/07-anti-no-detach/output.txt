@@ -1,0 +1,2 @@
+buggy: a=hat b=hat
+fixed: a=hat b=cat

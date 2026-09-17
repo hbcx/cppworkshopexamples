@@ -1,0 +1,2 @@
+a[0]=c b[0]=c still shared? 1
+after b.set: a=cat b=hat shared? 0

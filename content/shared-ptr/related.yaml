@@ -18,3 +18,5 @@
   note: "How to share the shared_ptr HANDLE itself between threads: the reference count is atomic but the handle is not, so concurrent load/store of one shared_ptr races -- go there for std::atomic<std::shared_ptr>, the read-mostly config hot-swap, and lock-free structures built on it."
 - slug: "type-conversions-and-casts"
   note: "The language-level casts the pointer_cast family mirrors: static_cast, dynamic_cast and const_cast on raw pointers and references. Go there for the casts themselves and when each applies -- then use the shared_ptr version here so the cast keeps shared ownership."
+- slug: "copy-on-write"
+  note: "A technique built directly on the reference count: copy-on-write holds a shared_ptr<const Data>, shares it on copy, and uses use_count() to decide when a write must make a private copy. Go there for cheap copies that split only on modification."

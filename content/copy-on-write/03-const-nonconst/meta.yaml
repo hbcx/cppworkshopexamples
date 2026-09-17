@@ -1,0 +1,12 @@
+title: "const reads don't detach, writes do"
+standard: "C++17"
+difficulty: 2
+summary: "A read must not detach and a write must; the split falls naturally on const, so a const operator[] returns a value and shares stay intact, while a mutating setter detaches first."
+notes: "Copy-on-write leans on const to decide whether to detach. Reading is const and cheap: a const operator[] returns the character by value and never touches the reference count, so two copies keep sharing while they are only read. Writing is non-const and detaches: a setter calls detach() before it modifies, so it lands in a private buffer. The rule is that any non-const path that could modify the buffer must detach. The dangerous version -- a non-const operator[] that returns a writable reference into the shared buffer without detaching -- is a classic bug and has its own anti-pattern in this section. Keeping the read path const and value-returning avoids handing out that reference at all."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+detailed_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+  - { name: "const correctness", url: "https://en.cppreference.com/w/cpp/language/cv" }

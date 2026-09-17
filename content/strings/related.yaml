@@ -24,3 +24,5 @@
   note: "The algorithms behind substring search: std::string::find is std::search over characters, and finding the last separator or the first of a set of delimiters are find_end and find_first_of on text -- go there for pattern search, runs, and any-of-a-set scanning."
 - slug: "small-buffer-optimization"
   note: "Why a short std::string does not allocate: the small-string optimization keeps short text in an inline buffer inside the object. Go there to build that inline-or-heap string by hand and see where the length boundary falls."
+- slug: "copy-on-write"
+  note: "What std::string used to be and had to stop being: a copy-on-write string shared its buffer between copies until a write, which C++11 banned over thread-safety and reference invalidation. Go there for the technique and exactly why it failed for std::string."

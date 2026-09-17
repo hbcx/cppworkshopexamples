@@ -1,0 +1,5 @@
+unique append kept the same buffer? 1
+a = abc
+shared append detached b? 1
+a = abc, b = abcd
+a still on the shared buffer? 1

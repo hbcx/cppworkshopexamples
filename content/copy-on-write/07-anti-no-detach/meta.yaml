@@ -1,0 +1,11 @@
+title: "Anti-pattern: a non-const accessor that skips detach"
+standard: "C++17"
+difficulty: 3
+summary: "A non-const accessor that hands out a writable reference into the shared buffer without detaching lets a write land in the shared bytes, so it silently changes every other copy too."
+notes: "The whole point of copy-on-write is that a write to one copy does not touch the others, and detach() is what guarantees it. A non-const accessor that returns a reference into the buffer without calling detach breaks that: the caller writes through the reference into bytes that are still shared, so every copy sharing that buffer changes at once. The example shows a buggy at() that returns a char& without detaching -- writing through it on one value also mutates the other -- next to a fixed at() that detaches first and only affects its own copy. The rule is that every non-const path that can modify the buffer must detach before handing anything out."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+detailed_tags:
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }

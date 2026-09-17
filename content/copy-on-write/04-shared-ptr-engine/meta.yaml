@@ -1,0 +1,13 @@
+title: "Copy-on-write with shared_ptr"
+standard: "C++17"
+difficulty: 2
+summary: "Let std::shared_ptr be the reference count: hold a shared_ptr<const Data>, use use_count() to tell whether the buffer is shared, and detach by making a fresh copy when it is."
+notes: "Hand-rolling the reference count is error-prone; std::shared_ptr already has one, so lean on it. The value holds a shared_ptr<const Data>: copying it shares the buffer and bumps the count, and use_count() greater than one means it is shared. detach() replaces the pointer with a make_shared copy when the buffer is shared; because we then own the only reference, casting away the const to modify it is safe. Holding the data as shared_ptr<const Data> is deliberate -- it makes the shared state read-only, so the only way to modify is through detach(), and a stray write cannot reach a shared buffer. Note that use_count() is only a reliable single-owner test in one thread; the next example is about why."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::shared_ptr", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr" }
+detailed_tags:
+  - { name: "std::shared_ptr::use_count", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count" }
+  - { name: "std::make_shared", url: "https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared" }
+  - { name: "const_cast", url: "https://en.cppreference.com/w/cpp/language/const_cast" }

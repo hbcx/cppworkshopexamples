@@ -1,0 +1,11 @@
+title: "Share until you write"
+standard: "C++17"
+difficulty: 1
+summary: "Several copies share one refcounted buffer, so a copy just bumps the reference count; only a write makes a private copy, which keeps copying O(1) until something is actually modified."
+notes: "This is the whole idea in one class. The value holds a pointer to a refcounted control block; the copy constructor shares that block and bumps the count instead of duplicating the buffer, so two copies point at the same bytes. A write is the only thing that pays: if the buffer is shared it makes a private copy first, then modifies. Reading never detaches. This is Qt's implicit sharing (QString, QByteArray) and the shape behind operating-system fork, where a child shares the parent's pages until one side writes. The later examples make the write path explicit, build it on std::shared_ptr, and show why the reference count has to be atomic."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+detailed_tags:
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }

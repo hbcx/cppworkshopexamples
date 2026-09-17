@@ -1,0 +1,11 @@
+title: "detach(): the write path"
+standard: "C++17"
+difficulty: 2
+summary: "Every mutating operation begins by detaching: modify in place when this value owns the only reference, but make a private copy first when the buffer is still shared."
+notes: "detach() is the one place that keeps copy-on-write correct, so every mutator calls it before touching the buffer. If the reference count is one, this value is the sole owner and can modify the buffer in place -- no copy. If it is greater than one, the buffer is shared, so detach steps off it onto a fresh private copy before the change. The example shows the difference directly: appending to a value that is unique keeps the same buffer, while appending to a shared value moves it to a new one and leaves the other owners untouched. Centralising this in detach() means a new mutator is correct just by calling it first."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+detailed_tags:
+  - { name: "copy assignment operator", url: "https://en.cppreference.com/w/cpp/language/copy_assignment" }

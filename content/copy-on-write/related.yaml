@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "shared-ptr"
+  note: "The reference count copy-on-write runs on: shared_ptr already counts owners and use_count() reports sharing, which the shared_ptr-based version here uses directly instead of hand-rolling the count. Go there for the control block, use_count, and the aliasing constructor."
+- slug: "strings"
+  note: "The value type that used to BE copy-on-write and is not any more: std::string was required to drop it in C++11 over thread-safety and reference invalidation, and switched to the small-string optimization. Go there for how a modern std::string stores its bytes instead."
+- slug: "move-semantics"
+  note: "The other way to make a copy cheap, and the one std::string chose: a move hands over the buffer in O(1) with no sharing, so there is no detach and no reference-invalidation hazard. Go there for move constructors and when a move beats copy-on-write outright."
+- slug: "flyweight"
+  note: "The sharing cousin for the read-only case: Flyweight shares immutable objects across many owners with no detach because nothing ever writes, where copy-on-write shares mutable ones until a write forces a split. Go there for interning shared immutable state."

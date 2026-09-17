@@ -1,0 +1,12 @@
+title: "Why std::string dropped copy-on-write"
+standard: "C++17"
+difficulty: 3
+summary: "The shared count is touched from every thread that copies or destroys a value, so it must be atomic; and even then a non-const reference into the shared buffer can dangle on a detach -- which is why C++11 required std::string to stop being copy-on-write."
+notes: "Copy-on-write across threads has two problems. The first is the count: copies and destructions on different threads increment and decrement it at the same time, so a plain int races and can double free or leak. Making it std::atomic fixes that, and this example runs many threads copying one value with an atomic count, clean under ThreadSanitizer. The second problem is deeper and the atomic count does not solve it: a non-const operator[] hands out a reference into the shared buffer, and if any owner then writes and detaches, that reference points into a buffer the writer has left behind -- reference invalidation. GCC shipped a copy-on-write std::string for years; C++11 outlawed it for exactly these reasons, and libstdc++ switched to a non-shared, small-string-optimized string."
+run: true
+sanitizers: [thread]
+main_tags:
+  - { name: "std::atomic", url: "https://en.cppreference.com/w/cpp/atomic/atomic" }
+detailed_tags:
+  - { name: "std::thread", url: "https://en.cppreference.com/w/cpp/thread/thread" }
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

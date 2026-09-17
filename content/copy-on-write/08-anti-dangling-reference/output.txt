@@ -1,0 +1,2 @@
+ref still points into s's live buffer? 0
+ref sees old data 'h', s now starts with 'w'

@@ -1,0 +1,2 @@
+use_count = 2, same buffer? 1
+a=alpha b=beta use_count(a)=1

@@ -1,0 +1,15 @@
+- problem: "A GUI or document toolkit passes big value objects around constantly -- strings, byte arrays, images, glyph runs -- by value for a clean API, and most of those copies are never modified. Qt does this with implicit sharing across QString, QByteArray and QImage."
+  why: "Passing everything by const reference to dodge the deep copy leaks lifetime and const into every signature and still cannot store the value cheaply; deep-copying by value is wasteful when the copy is only read. Copy-on-write keeps the by-value interface but makes the common read-only copy O(1), paying only when a copy is actually edited."
+  signal: "A large value type passed and stored by value all over the code, almost always only read, where the team reached for const& everywhere to avoid the copy cost."
+
+- problem: "An editor or config system keeps snapshots -- undo history, saved versions, a proposed edit alongside the current state -- where each snapshot is mostly identical to the last and only a small part changes."
+  why: "Deep-copying the whole document per snapshot makes memory and time grow with history length, most of it duplicating unchanged data; copy-on-write shares the common state and copies only the part that a snapshot actually diverges on. It is the cheap-snapshot half of a persistent data structure."
+  signal: "An undo stack or version list that stores full deep copies of a large document, where successive entries differ only slightly."
+
+- problem: "A system models fork-style semantics: a child context starts as a duplicate of a parent -- an address space, a virtual filesystem, a simulation world -- and usually reads far more of it than it changes. Operating-system fork shares the parent's pages copy-on-write."
+  why: "Eagerly duplicating the whole parent state on every fork is expensive when the child touches little of it; sharing the state and copying only the pages or nodes that are written makes fork cheap and pays for divergence only where it happens. That is exactly what the kernel does with copy-on-write pages."
+  signal: "A clone or fork operation that deep-copies a large parent structure the child mostly reads, with duplication showing up as a spike in memory and setup time."
+
+- problem: "A string-like or buffer value flows through many layers -- parsed, tagged, forwarded, logged -- being copied at each hop but modified only rarely, near the edges."
+  why: "Deep-copying the buffer at every hop is wasted work when almost every hop only reads it; copy-on-write makes each hop a reference-count bump and pays the copy only at the rare point that mutates. This is the case the old copy-on-write std::string targeted before thread-safety killed it."
+  signal: "A buffer or string copied at many stages of a pipeline whose profile shows repeated allocation and copying of data that is seldom changed."

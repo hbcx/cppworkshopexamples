@@ -1,0 +1,11 @@
+title: "Anti-pattern: copy-on-write when writes dominate"
+standard: "C++17"
+difficulty: 3
+summary: "If a value is written right after every copy, copy-on-write detaches every time, doing the same deep copies as a plain value plus the refcount and control-block overhead -- pure cost, no saving."
+notes: "Copy-on-write pays off only when copies far outnumber writes. In a copy-then-write workload the sharing never lasts: each copy shares, then the immediate write detaches, so the buffer is deep-copied exactly as often as a plain value would copy it -- and on top of that copy-on-write pays for a refcounted control block and its bump and release on every copy. The example counts the deep copies for both and shows they are equal, which means the copy-on-write version bought nothing and cost extra. The lesson: measure the copy-to-write ratio before reaching for copy-on-write, and use a plain value type when values are modified about as often as they are copied."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "copy constructor", url: "https://en.cppreference.com/w/cpp/language/copy_constructor" }
+detailed_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }

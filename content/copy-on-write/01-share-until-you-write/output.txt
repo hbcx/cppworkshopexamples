@@ -1,0 +1,4 @@
+after copy, share_count = 2
+same buffer? 1
+after b.write, a = hello, b = world
+share_count = 1, same buffer? 0
