@@ -1,0 +1,3 @@
+hello (len 5) on heap? 0
+exactly15charss (len 15) on heap? 0
+this text is far too long to fit inline (len 39) on heap? 1

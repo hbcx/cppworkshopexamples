@@ -1,0 +1,13 @@
+title: "A small_vector with inline capacity"
+standard: "C++17"
+difficulty: 2
+summary: "A vector-like container that keeps its first N elements in an inline buffer and only allocates once it grows past N, so the common short case does no heap work at all."
+notes: "This is the container LLVM ships as SmallVector and boost as small_vector, and it is worth it because most real vectors are short-lived and tiny. Elements are built with placement new into an aligned inline buffer; when the count passes N the container allocates a heap block, moves the existing elements over, and switches to it. is_inline compares the data pointer against the inline buffer address to know which mode it is in. The copy and move members need care -- example 05 covers move -- so this one deletes copy to stay focused on the inline-versus-heap switch. The trade-off is the same as always: a bigger object, in exchange for zero allocation while the element count stays under N."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+detailed_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "move-semantics"
+  note: "The operation SBO makes subtle: a normal move steals a pointer in O(1), but an inline SBO move must move-construct every element, so it is O(N) and its noexcept matters. Go there for move constructors, the moved-from state, and noexcept moves."
+- slug: "alignment"
+  note: "Why the inline buffer is declared alignas(T): a bare char buffer can be misaligned for the stored type, and accessing a misaligned object is undefined. Go there for alignof, alignas, over-aligned types, and std::align."
+- slug: "allocators"
+  note: "The other way to cut allocation cost: instead of avoiding the heap with an inline buffer, keep using it but through a fast custom allocator. Go there for the allocator interface and when a pool beats SBO."
+- slug: "pmr"
+  note: "A ready-made version of the same trade: std::pmr containers take a monotonic_buffer_resource that can sit on a stack array, giving vector and string an inline-ish buffer without hand-rolling one. Go there for polymorphic allocators and buffer resources."

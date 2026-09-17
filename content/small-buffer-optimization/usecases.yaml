@@ -1,0 +1,15 @@
+- problem: "A hot event or callback path stores many short-lived callables -- handlers, continuations, tasks -- and each one is a small lambda with a tiny capture. std::function already does this, storing a small callable inline."
+  why: "A type-erased holder that always heap-allocates pays an allocation and a matching free for every callback, which dominates the cost when the callable itself is trivial; a raw function pointer avoids the allocation but cannot carry the captured state. Inline storage keeps the small callable in the holder and only spills the rare large one to the heap."
+  signal: "A std::function (or a hand-rolled type-erased wrapper) created and destroyed per event on a hot path, holding lambdas with one or two captured values."
+
+- problem: "A compiler or graph tool gives most nodes a small list -- an AST node's children, a vertex's neighbours, a basic block's successors -- where the count is almost always one to four but occasionally large. Clang and LLVM use SmallVector for exactly this."
+  why: "A std::vector allocates a heap block for every node even when it holds two elements, so a tree of a million nodes does a million tiny allocations; a fixed array wastes space and cannot grow for the rare wide node. An inline capacity covers the common small case with no allocation and still grows to the heap when a node is unusually wide."
+  signal: "A std::vector member on a node or element type that is almost always tiny, built once per node, showing up as a flood of small allocations in a profile."
+
+- problem: "A service builds and compares many short strings -- symbol names, map keys, header fields, log tags -- most only a handful of characters. Every std::string implementation stores these inline via the small-string optimization."
+  why: "Allocating a heap buffer for a five-character key costs more than the key itself and scatters the data across the heap, hurting cache locality; a fixed char array cannot hold the occasional long value. Inline storage keeps short strings in place and only the rare long one on the heap."
+  signal: "Short std::string values created in bulk as keys or identifiers, or a custom string type that always calls new even for a few characters."
+
+- problem: "A network or protocol layer parses a stream of messages whose size is almost always under a small bound -- a few hundred bytes -- with the occasional large frame. The parser needs a working buffer per message on a hot path."
+  why: "Allocating a buffer per message adds an allocation and free to every packet, which shows up as heap contention under load; a fixed maximum-size buffer wastes memory and still fails on an oversize frame. An inline buffer handles the common small message with no allocation and falls back to the heap only for the rare large one."
+  signal: "A per-message std::vector<char> or new[] buffer in a parse loop, sized for the common case but allocated every time, dominating a network path's allocation profile."

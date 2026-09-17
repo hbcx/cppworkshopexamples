@@ -1,0 +1,13 @@
+title: "Anti-pattern: a pointer into inline storage outlives a move"
+standard: "C++17"
+difficulty: 3
+summary: "A pointer or iterator into an SBO container's inline storage is invalidated by a move, not just by growth, because the inline bytes stay in the source while the data is move-constructed into the destination."
+notes: "With a heap-backed vector, moving the container keeps the same buffer, so a pointer into an element survives the move -- only growth (reallocation) invalidates it. SBO breaks that intuition: when the data is inline, a move copies each element into the destination's OWN inline buffer, so the element now lives at a different address and any pointer taken before the move points into the moved-from source. The example compares addresses rather than dereferencing the stale pointer, so nothing undefined runs. The rule: do not hold a pointer, reference or iterator into SBO storage across any operation that can move or grow the container; re-fetch it afterwards."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }

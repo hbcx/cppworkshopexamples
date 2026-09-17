@@ -1,0 +1,3 @@
+inline data address changed on move: 1
+elements move-constructed during the move: 3
+b now holds: 1 2 3

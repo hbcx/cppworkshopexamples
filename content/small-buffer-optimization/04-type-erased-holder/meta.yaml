@@ -1,0 +1,14 @@
+title: "A type-erased holder with a small buffer"
+standard: "C++17"
+difficulty: 3
+summary: "Store a callable inline when it fits a small buffer and on the heap when it does not, behind a type-erased interface -- which is how std::function avoids an allocation for a small lambda."
+notes: "This combines type erasure with the small-buffer optimization. A hand-written vtable of function pointers -- how to invoke the callable, how to destroy it -- lets the holder work with any callable while forgetting its type. The callable is placement-new'd into an inline buffer when its size and alignment fit, and heap-allocated otherwise; either way it is reached through the erased pointer. This is a faithful sketch of std::function, whose implementations store a small callable inline for exactly this reason. The trade-off is visible here: the inline buffer sets a size limit, so a lambda with a large capture spills to the heap and pays the allocation the small case avoided."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "type erasure", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "std::function", url: "https://en.cppreference.com/w/cpp/utility/functional/function" }
+  - { name: "alignof", url: "https://en.cppreference.com/w/cpp/language/alignof" }
+  - { name: "std::max_align_t", url: "https://en.cppreference.com/w/cpp/types/max_align_t" }

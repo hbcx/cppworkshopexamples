@@ -1,0 +1,13 @@
+title: "Moving an SBO type correctly"
+standard: "C++17"
+difficulty: 3
+summary: "The move that makes SBO subtle: the heap case can steal the pointer in O(1), but the inline case cannot -- the bytes live inside the source, so each element must be move-constructed into the destination's own inline buffer."
+notes: "A normal container move is a pointer steal: take the source's heap pointer, null the source, done in O(1). An SBO type cannot do that when the data is inline, because the buffer is part of the source object -- stealing the pointer would leave the destination pointing into a source that is about to die. So the move constructor has two paths: if the source is on the heap, steal the pointer and point the source back at its own inline buffer; if it is inline, move-construct every element into this object's inline buffer and destroy the source's, which is O(N). Two consequences follow, and the next examples are about them: an inline move changes the data's address, so pointers into it dangle, and the move is not O(1) and may not be noexcept."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "noexcept", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }

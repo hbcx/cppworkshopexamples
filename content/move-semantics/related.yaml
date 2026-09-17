@@ -32,3 +32,5 @@
   note: "The exchange these moves make cheap: std::swap moves three times instead of copying, a noexcept swap pairs with a noexcept move, and copy-and-swap builds assignment on both -- go there for swap, iter_swap, and a custom swap."
 - slug: "utilities"
   note: "The small helpers that make these moves correct: std::exchange steals-and-resets the source in one line, and std::move_if_noexcept (what vector uses) shows why marking a move noexcept matters. Go there for those and the other <utility> tools."
+- slug: "small-buffer-optimization"
+  note: "Where a move stops being a pointer steal: an object with an inline buffer must move-construct each element into the destination, so the move is O(N) and its noexcept decides whether a vector moves or copies it. Go there for the SBO technique and its move traps."

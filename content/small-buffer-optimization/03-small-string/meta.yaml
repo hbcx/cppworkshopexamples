@@ -1,0 +1,11 @@
+title: "A small string by hand (SSO)"
+standard: "C++17"
+difficulty: 2
+summary: "Store short text in an inline character buffer and only allocate for long text, which is exactly the small-string optimization every std::string implementation uses so short strings cost no allocation."
+notes: "Short strings are everywhere -- map keys, identifiers, tokens, log tags -- and allocating for each one is pure waste. This miniature string keeps up to a fixed length inline and switches to a heap buffer past it, deciding once at construction from the length. A real std::string is more clever (it reuses the capacity field's bytes for inline storage so it stays 32 bytes or less) but the shape is the same: an inline buffer, a length, and a flag or capacity that says which mode is active. The boundary is a design choice: bigger inline storage catches more strings but grows the object, which is why implementations settle around 15 to 22 inline characters."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::string", url: "https://en.cppreference.com/w/cpp/string/basic_string" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

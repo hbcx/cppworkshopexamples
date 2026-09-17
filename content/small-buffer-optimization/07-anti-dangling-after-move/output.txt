@@ -1,0 +1,3 @@
+*p before move = 20
+p still points at the live element? 0
+re-fetched pointer is valid: 1

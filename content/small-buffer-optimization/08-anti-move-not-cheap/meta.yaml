@@ -1,0 +1,13 @@
+title: "Anti-pattern: assuming an SBO move is cheap and noexcept"
+standard: "C++17"
+difficulty: 3
+summary: "An SBO move is O(N) over the inline elements, not a pointer steal, and if its move constructor is not noexcept every std::vector reallocation copies instead of moves."
+notes: "Two costs hide behind an SBO move. First, it is O(N): the inline case move-constructs every element, so moving a container of SBO objects is O(N times M), where a heap vector move is O(1). Second, and shown here, is noexcept. std::vector only MOVES its elements when it reallocates if their move constructor is noexcept; otherwise it COPIES, to keep the strong exception guarantee -- this is std::move_if_noexcept. Two element types that differ only in whether their move is marked noexcept make the vector move in one case and copy in the other, proven by counting. The lesson: mark an SBO type's move constructor noexcept whenever the element moves are noexcept, or its objects will be silently copied on every growth of a vector that holds them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "noexcept", url: "https://en.cppreference.com/w/cpp/language/noexcept_spec" }
+detailed_tags:
+  - { name: "std::move_if_noexcept", url: "https://en.cppreference.com/w/cpp/utility/move_if_noexcept" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

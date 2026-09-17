@@ -1,0 +1,4 @@
+SmallBuf, small payload -> allocations: 0
+SmallBuf, large payload -> allocations: 1
+std::vector, small payload -> allocations: 1
+cost: sizeof(SmallBuf<64>) = 80 bytes (the inline buffer is always carried)

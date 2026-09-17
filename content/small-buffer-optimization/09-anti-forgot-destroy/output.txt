@@ -1,0 +1,2 @@
+after LeakyBox scope, live Resources: 1
+after FixedBox scope, live Resources: 0

@@ -1,0 +1,13 @@
+title: "Benchmark: the allocations SBO removes"
+standard: "C++17"
+difficulty: 2
+summary: "Count every global allocation to measure exactly what the small-buffer optimization buys: zero allocations on the small path, one on the large path, against a std::vector that always allocates."
+notes: "The honest way to show a technique earns its keep is to measure it, and for SBO the metric is allocation count, which is deterministic (unlike wall-clock time). Replacing global operator new with a counting version shows the inline case doing no allocation, the spilled case doing one, and a std::vector doing one even for a tiny payload. The cost side is printed too: sizeof of the SBO holder is larger because it always carries the inline buffer. So SBO trades a bigger object -- and an O(N) move, from the previous examples -- for no allocation on the common small path, which is the right trade when objects are small and created often on a hot path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+detailed_tags:
+  - { name: "operator delete", url: "https://en.cppreference.com/w/cpp/memory/new/operator_delete" }
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

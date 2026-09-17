@@ -1,0 +1,5 @@
+16 bytes on heap? 0
+  data IS the inline buffer? 1
+1000 bytes on heap? 1
+  data IS the inline buffer? 0
+sizeof(SmallStorage) = 48 bytes

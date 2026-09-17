@@ -1,0 +1,12 @@
+title: "Anti-pattern: placement-new without the matching destructor"
+standard: "C++17"
+difficulty: 3
+summary: "An SBO holder that placement-news an object into its inline buffer must call the destructor by hand; forgetting it never runs the object's destructor, leaking whatever it owned."
+notes: "Placement new only constructs -- it does not register a destructor the way a normal declaration does, because the storage is yours to manage. So an SBO holder that builds an object in its inline buffer must call obj->~T() in its own destructor. Forget it, and the inline object is never destroyed: its destructor side effects never run, and anything it owns (a heap buffer, a file handle, a lock) leaks. The example counts live objects to show the buggy holder leaving one alive after its scope, and the fixed holder returning to zero. This is not undefined behaviour, just a resource leak, so it is safe to run; the fix is one explicit destructor call for the object that was placement-new'd."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+detailed_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+  - { name: "reinterpret_cast", url: "https://en.cppreference.com/w/cpp/language/reinterpret_cast" }

@@ -1,0 +1,4 @@
+title: "Small-buffer optimization"
+description: "Keep small objects inside the object itself -- in an inline buffer that lives where the object lives -- and fall back to the heap only when the data does not fit, so the common small case costs no allocation. This is what std::string (SSO), std::function and LLVM SmallVector do. Covers the inline-buffer-versus-heap mechanic, a small_vector with inline capacity, a hand-rolled small string, a type-erased holder that stores a small callable inline like std::function, how to move an SBO type correctly (the inline case cannot steal a pointer), and a measurement of the allocations SBO removes -- alongside the traps: a pointer into inline storage that outlives a move, assuming the move is cheap and noexcept when it is O(N), and placement-new without the matching explicit destructor. The cost is a bigger object and an O(N) move; the win is no allocation on the hot small path."
+sort_order: 182
+category: "Techniques"

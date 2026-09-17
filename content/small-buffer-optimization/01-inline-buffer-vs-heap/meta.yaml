@@ -1,0 +1,12 @@
+title: "Inline buffer versus the heap"
+standard: "C++17"
+difficulty: 1
+summary: "Keep a fixed byte buffer inside the object and hand it out for small requests, falling back to the heap only when the request does not fit, so small data lives where the object lives and costs no allocation."
+notes: "This is the whole idea in one class. A small request points at the object's own inline bytes -- on the stack when the object is on the stack -- and no operator new runs; a large request goes to the heap. The inline buffer must be aligned for whatever it will hold, which is why it is declared with alignas: a bare char buffer can be misaligned for the stored type, and reading a misaligned object is undefined behaviour (the alignment section covers this). The visible cost is that every object carries the buffer, so sizeof is larger even when the data is on the heap -- the trade you accept for skipping the allocation on the common path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "alignas", url: "https://en.cppreference.com/w/cpp/language/alignas" }
+detailed_tags:
+  - { name: "std::max_align_t", url: "https://en.cppreference.com/w/cpp/types/max_align_t" }
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }

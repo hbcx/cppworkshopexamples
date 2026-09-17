@@ -9,3 +9,5 @@
   note: "A concrete stateful allocator taken further: a pool recycles fixed-size blocks and hands them out through the same acquire/release shape a container allocator uses. Go there for the pooling pattern behind an arena or free-list allocator."
 - slug: "pmr"
   note: "The same idea moved from compile time to run time: pmr makes the allocation strategy a memory_resource pointer, so std::pmr::vector is one type whatever the backend. Go there for polymorphic_allocator, monotonic and pool resources, and the copy-does-not-propagate gotcha."
+- slug: "small-buffer-optimization"
+  note: "The other way to kill allocation cost: instead of a faster allocator, avoid the heap entirely for small data with an inline buffer, spilling to the allocator only when it does not fit. Go there for the SBO technique and when it beats a custom allocator."
