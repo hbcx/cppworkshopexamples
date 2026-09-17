@@ -1,0 +1,7 @@
+read+write, has Write: 1
+after clear, has Write: 0
+toggled Lock on:  1
+toggled Lock off: 0
+has ALL of read+write: 0
+has ANY of read+write: 1
+final raw bits: 1

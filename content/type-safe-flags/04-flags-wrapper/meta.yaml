@@ -1,0 +1,13 @@
+title: "A Flags wrapper object"
+standard: "C++17"
+difficulty: 2
+summary: "Wrap the bits of a flag enum in a small class template that offers named operations -- test, set, reset, flip, any, none, count -- and an explicit bool, instead of scattering raw bitwise operators at every call site."
+notes: "The raw-operator style keeps the bits visible everywhere they are used; a Flags<E> object hides them behind a named interface and adds operations that are awkward as free operators, such as count() and an explicit operator bool for use in an if. The trade-off: the object is a bit more code and one indirection, but call sites read as f.set(Bold).test(Italic) instead of masks and shifts. Making operator bool explicit stops a Flags from silently converting to int in arithmetic, which is exactly the bug the scoped enum avoided in the first place. count() clears the lowest set bit with b and (b - 1) until none remain -- the standard population-count loop."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }

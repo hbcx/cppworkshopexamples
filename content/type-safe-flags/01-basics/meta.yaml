@@ -1,0 +1,14 @@
+title: "A scoped enum as a bitmask"
+standard: "C++11"
+difficulty: 1
+summary: "Give a scoped enum single-bit enumerators and define the bitwise operators by hand, so flags combine with | and test with & while the result stays a typed enum, not a bare int."
+notes: "The whole point of a scoped enum (enum class) here is what it does NOT do: it never implicitly converts to int, so Read | Write does not even compile until you define operator| for this type -- and a different flag enum can never be OR-ed in by accident. Each operator converts to the underlying integer, does the bit work, and converts back, so the result is still a Permission. Enumerators are single bits (1, 2, 4, ...), and has() tests that every bit of a flag is set with (set and flag) == flag. This is the minimal version; later examples make the operators reusable and wrap them in an object."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }

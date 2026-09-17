@@ -1,0 +1,15 @@
+- problem: "A file or resource API takes a set of open options -- read, write, create, truncate, append. The caller wants to pass any combination in one argument, and the standard library already models this exactly (std::ios_base::openmode, std::filesystem::perms)."
+  why: "A raw int mask (the POSIX open() style) lets any constant in, so a value from the wrong flag family compiles silently; a separate bool per option makes the signature grow and cannot be forwarded as one set. The enum-class bitmask passes the whole combination as one typed value the compiler checks."
+  signal: "A function taking an int or unsigned named flags or mode, called with hand-OR-ed constants, or a constructor with a long tail of bool parameters that are really independent on/off options."
+
+- problem: "An event system lets a listener say which events it cares about -- mouse, keyboard, resize, focus -- and the dispatcher checks the subscription before delivering. The set is small, fixed, and passed around as one value."
+  why: "A separate bool per event makes every subscribe signature and every stored record grow with the event list, and you cannot hand the set to another layer in one argument; a std::set<Event> heap-allocates for what fits in one integer. A flags value is one word, copied freely and tested with a single AND."
+  signal: "A subscribe or addListener call with several bool wantX parameters, or a std::set / std::vector of a small fixed enum that is only ever tested for membership."
+
+- problem: "A UI toolkit describes a widget's style or a window's properties as a combination of options -- bold and italic, or frameless and always-on-top. Qt models this with QFlags, which is this idiom under a name."
+  why: "A plain int style lets a constant from another widget's flags be OR-ed in with no error, and loses which enum a value came from; QFlags keeps the type so only this widget's options combine. It is the difference between a mix-up caught at compile time and a wrong window that only shows up at runtime."
+  signal: "An int or unsigned style/flags field set from named constants, or a QFlags-like wrapper being reinvented ad hoc with loose int masks around a widget or window type."
+
+- problem: "A record is stored or sent on the wire and carries a set of boolean attributes -- compressed, encrypted, cached, final. Space matters, and the whole set must be read or written in one field."
+  why: "One byte or field per boolean bloats the format and cannot be read atomically; a flags integer packs the set into a few bits, is written and parsed as one value, and -- unlike a raw mask -- keeps the names so the same value can be logged as tokens. Iterating the set bits turns the number back into readable names for debugging."
+  signal: "A struct or message with many bool fields serialized one per byte, or a single integer field whose bits are set and tested with bare shifts and hex constants scattered across the codec."

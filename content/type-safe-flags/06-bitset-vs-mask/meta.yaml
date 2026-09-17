@@ -1,0 +1,13 @@
+title: "When std::bitset or a raw mask fits better"
+standard: "C++17"
+difficulty: 2
+summary: "The enum-class bitmask is for a small fixed set of named, typed options; std::bitset is for many bits addressed by index; a raw unsigned mask is what a C ABI hands you. Pick by how the bits are identified."
+notes: "Three tools, three jobs. The enum-class bitmask names each option and keeps the type, so the compiler stops you mixing two flag sets -- best for a handful of fixed options checked by name. std::bitset<N> addresses bits by NUMBER and scales to hundreds of them, but has no names and no type safety: a bitset of permissions and a bitset of features are the same type, so nothing stops you passing one where the other is meant. A raw unsigned mask is fast and ABI-stable and is what C APIs use, but the type is just unsigned, so any constant can be OR-ed in. Rule of thumb: small named set to enum-class, many indexed bits to std::bitset, a C boundary to a raw mask."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "std::bitset", url: "https://en.cppreference.com/w/cpp/utility/bitset" }
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }

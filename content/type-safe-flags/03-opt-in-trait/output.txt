@@ -1,0 +1,4 @@
+FileMode has Create: 1
+FileMode has Write:  0
+LogLevel has Error:  1
+raw bits: 5, 6

@@ -1,0 +1,14 @@
+title: "Reusable operators via an opt-in trait"
+standard: "C++17"
+difficulty: 2
+summary: "Write the bitwise operators once as templates, enabled only for enums that opt in through a trait, so each new flag enum turns them on with a single line instead of copying the operators."
+notes: "Hand-writing operator|, operator& and the rest for every flag enum is repetitive and easy to get wrong. The scalable form is a trait -- enable_bitmask_operators<E> -- that defaults to false, plus the operators defined once as templates constrained with enable_if on that trait. A flag enum opts in with one specialization set to true. Two benefits fall out for free: an enum that did not opt in never accidentally gains bitwise operators, and because each operator is one template E op E, mixing two DIFFERENT flag enums is a type error rather than a silent int. This is close to how library authors ship a reusable bitmask header."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "std::enable_if", url: "https://en.cppreference.com/w/cpp/types/enable_if" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }

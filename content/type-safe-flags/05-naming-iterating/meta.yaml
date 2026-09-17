@@ -1,0 +1,14 @@
+title: "Naming and iterating the set flags"
+standard: "C++20"
+difficulty: 2
+summary: "Walk the set bits of a flags value one at a time and look each up in a small name table, so a mask can be logged or serialized as readable names instead of a raw number."
+notes: "Logging a flags value as 6 is useless; logging it as Compress, Verbose is not. The loop clears the lowest set bit each turn with bits and (bits - 1); isolating that bit with bits and (~bits + 1) and taking its position with std::countr_zero (C++20 header bit) gives both the single-bit value to look up and the bit index. A tiny table of {flag, name} in bit order turns each isolated bit into a name. std::popcount reports how many are set in one call. The same walk is the core of serializing a flags set to a list of tokens and back."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "std::countr_zero", url: "https://en.cppreference.com/w/cpp/numeric/countr_zero" }
+  - { name: "std::popcount", url: "https://en.cppreference.com/w/cpp/numeric/popcount" }
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }

@@ -13,3 +13,5 @@
   note: "The C++20 successor to the comparison operators here: one <=> replaces the whole ==, <, > block, and a defaulted one is a single line. Go there for the spaceship operator, the ordering categories, and why == stays separate."
 - slug: "type-conversions-and-casts"
   note: "Where the conversion operators here fit the bigger picture: implicit conversions, the four named casts, and explicit to switch unwanted conversions off. Go there for static_cast, dynamic_cast, const_cast, reinterpret_cast, and bit_cast."
+- slug: "type-safe-flags"
+  note: "A focused use of the bitwise operators: define operator| / operator& / operator~ for a scoped enum and it becomes a type-safe set of flags. Go there for the enum-class bitmask idiom and the operator-precedence and enum-mixing traps."

@@ -1,0 +1,3 @@
+type is int now, combined = 3
+mixing FileFlag and NetFlag compiles, nonsense = 6
+with enum class, mixing two flag enums is a compile error

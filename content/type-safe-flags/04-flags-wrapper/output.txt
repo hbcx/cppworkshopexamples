@@ -1,0 +1,7 @@
+count set: 3
+is bold:   1
+is strike: 0
+after reset bold, is bold: 0
+g count: 2
+f still non-empty, raw bits = 6
+empty.none(): 1

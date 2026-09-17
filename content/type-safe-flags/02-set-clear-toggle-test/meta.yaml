@@ -1,0 +1,13 @@
+title: "Set, clear, toggle, and test"
+standard: "C++17"
+difficulty: 2
+summary: "The full working set of operations on a flags value: set a bit with |=, clear it with &= ~flag, toggle with ^=, test one bit with has(), and check any or all of a mask."
+notes: "Once the four bitwise operators exist, the compound-assignment forms (|=, &=, ^=) follow in one line each and are what call sites actually use: set is |= flag, clear is &= ~flag, toggle is ^= flag. has(set, flag) tests that every bit of flag is present; for a mask of several bits, (set and mask) == mask means all are present, while (set and mask) != None means any is present. Building these small named helpers once keeps the raw bit twiddling out of the rest of the code."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }

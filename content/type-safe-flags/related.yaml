@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "enums"
+  note: "The scoped enum this whole technique is built on: enum class, the underlying type, and why it does not convert to int -- which is exactly the property that makes a flag enum safe."
+- slug: "bit"
+  note: "The C++20 bit toolkit behind naming and iterating flags: countr_zero to find a set bit, popcount to count them, and the rest of <bit> for working one bit at a time."
+- slug: "operator-overloading"
+  note: "How the bitwise operators are written: free operator|, operator&, operator~ and the compound forms, including as hidden friends found by argument-dependent lookup."
+- slug: "strong-types"
+  note: "The sibling technique for the other half of type safety: wrap a plain value so the compiler tells a UserId from a ProductId, the same idea applied to single values instead of sets of flags."

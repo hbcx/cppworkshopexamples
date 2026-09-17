@@ -1,0 +1,5 @@
+has Read:    1
+has Write:   1
+has Execute: 0
+after clearing Write, has Write: 0
+raw bits now: 1

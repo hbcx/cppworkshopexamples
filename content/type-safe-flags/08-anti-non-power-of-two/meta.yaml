@@ -1,0 +1,12 @@
+title: "Anti-pattern: flag values that are not powers of two"
+standard: "C++17"
+difficulty: 3
+summary: "Numbering flags 1, 2, 3, 4 instead of 1, 2, 4, 8 makes bits overlap, so a value built from two flags tests as if a third flag were also set."
+notes: "Each flag must be a single distinct bit. Counting the enumerators up -- Read = 1, Write = 2, Execute = 3 -- looks harmless but 3 is 0b011, the same bits as Read (1) OR Write (2). So Read | Write is 0b011, and asking has(Read | Write, Execute) checks whether 0b011 contains 0b011, which is true: the code reports Execute even though it was never granted. The bug is silent because every operation is well defined; only the numbering is wrong. The fix is one bit per flag, written as 1u << n so the pattern is obvious and mistakes stand out."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "std::underlying_type", url: "https://en.cppreference.com/w/cpp/types/underlying_type" }

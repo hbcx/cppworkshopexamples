@@ -1,0 +1,2 @@
+set flags: Cache(bit 0) Encrypt(bit 2) Verbose(bit 3)
+popcount: 3

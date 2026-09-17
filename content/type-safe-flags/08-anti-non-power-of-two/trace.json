@@ -1,0 +1,1 @@
+{"file": "main.cpp", "steps": [{"file": "main.cpp", "line": 22}, {"file": "main.cpp", "line": 27, "out": "read+write, has Execute (buggy): "}, {"file": "main.cpp", "line": 18}, {"file": "main.cpp", "line": 19, "out": "1\n"}, {"file": "main.cpp", "line": 32, "out": "with 1u<<n values, has Execute would be 0\n"}, {"file": "main.cpp", "line": 33}, {"file": "main.cpp", "line": 34}]}

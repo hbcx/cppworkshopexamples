@@ -1,0 +1,3 @@
+canRead_wrong (==):  0
+canRead_right (has): 1
+is EXACTLY Read only? 0

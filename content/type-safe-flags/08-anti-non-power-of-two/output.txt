@@ -1,0 +1,2 @@
+read+write, has Execute (buggy): 1
+with 1u<<n values, has Execute would be 0

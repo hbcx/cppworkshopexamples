@@ -1,0 +1,12 @@
+title: "Anti-pattern: comparing flags with == instead of testing the bit"
+standard: "C++17"
+difficulty: 3
+summary: "Checking flags == Read is an exact match of the whole value, so it fails the moment any other bit is also set; test the single bit with has() instead."
+notes: "== compares the entire flags value, not one bit. A guard written as flags == Read returns false as soon as another flag is present, because Read | Write is not equal to Read. It often passes the first tests -- when only Read is set -- then fails in production once a second flag joins. The fix is to test the bit: has(flags, Read), which is (flags and Read) == Read and stays true whatever else is set. == is only correct when you truly mean exactly these flags and no others, which is rare for a permission or option check."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "operator overloading", url: "https://en.cppreference.com/w/cpp/language/operators" }

@@ -1,0 +1,12 @@
+title: "Anti-pattern: a plain enum for flags"
+standard: "C++17"
+difficulty: 3
+summary: "An unscoped enum implicitly converts to int, so combining flags gives up the type and two unrelated flag sets mix into one meaningless int with no error."
+notes: "A plain (unscoped) enum decays to int, which is why people reach for it: Read | Write just works. But the result is a bare int, not the enum, so the type is gone the instant you combine, and because every flag enum decays to int, OR-ing a FileFlag with a NetFlag compiles and produces a number that means nothing. The enumerators also leak into the enclosing scope, so two enums with a Read enumerator clash. The fix is enum class plus the operators from the earlier examples: it does not convert to int, keeps the type through every combine, and makes mixing two flag enums a compile error instead of a silent int."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "BitmaskType", url: "https://en.cppreference.com/w/cpp/named_req/BitmaskType" }
+detailed_tags:
+  - { name: "enum", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
