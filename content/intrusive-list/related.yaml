@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "lists"
+  note: "The owning container this technique is measured against: std::list allocates a node per element and owns them, where an intrusive list allocates nothing and owns nothing. Go there for the standard doubly linked list, splice, and its node-per-element model."
+- slug: "object-pool"
+  note: "Where intrusive elements usually live: a pool gives them stable addresses and manages their lifetime, so the list can safely thread them without owning them. Go there for the pooling pattern that pairs with an intrusive list."
+- slug: "small-buffer-optimization"
+  note: "The sibling allocation-avoiding technique, and the same relocation hazard: both keep data in place to skip the heap, and both break if that storage moves. Go there for inline buffers and why relocation invalidates pointers into them."
+- slug: "unique-ptr"
+  note: "The ownership model an intrusive list deliberately does NOT provide: unique_ptr says exactly who frees an object, which is the question you must answer separately once the list stops owning its elements. Go there for single-owner lifetime management."

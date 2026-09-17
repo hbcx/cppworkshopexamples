@@ -1,0 +1,15 @@
+- problem: "A kernel or embedded scheduler threads task or buffer structures through ready, blocked and timer lists, in a context where calling the allocator on a hot path -- or at all -- is banned or too slow. The Linux kernel does this with list_head."
+  why: "A std::list allocates a node for every element, which is exactly the allocation the scheduler cannot afford and, in an interrupt or allocator-free zone, cannot even make; a fixed array cannot reorder in O(1). The intrusive list puts the links in the task struct itself, so enqueue and dequeue touch no allocator."
+  signal: "Structures that are queued and dequeued on a hot or interrupt path, or in code that must not allocate, currently forced through a std::list or a hand-rolled node-allocating list."
+
+- problem: "One object must sit on several lists at once -- a connection that is in an all-connections list, a per-timeout-bucket list, and a ready list -- and move between them cheaply as its state changes."
+  why: "Doing this with std::list means several containers of pointers to the same object that must be kept in step, and each std::list::remove is an O(n) search. Giving the object one hook per list makes each membership a field of the object, so moving it between lists is O(1) and the memberships cannot drift apart."
+  signal: "The same objects held in two or more std::list or std::vector of pointers that are inserted into and erased from together, kept consistent by hand."
+
+- problem: "An LRU cache or a timer wheel must remove a specific node the instant it is touched -- move an entry to the front on a hit, or cancel a timer -- given only a pointer or handle to that node, not its position."
+  why: "std::list::erase needs an iterator; with only the object you must search for it, which is O(n) and defeats the cache. Because the intrusive node holds its own prev and next, unlinking it is O(1) from nothing but the node, which is what makes move-to-front and timer-cancel constant time."
+  signal: "A map from key to a std::list iterator kept alongside the list so an element can be erased by key, or an O(n) search-then-erase to remove a known element."
+
+- problem: "A hot path builds and tears down lists constantly -- a per-frame render queue, a free list, an event queue -- where the per-node allocation of std::list shows up as heap traffic and cache misses in the profile."
+  why: "std::list allocates and frees a node for every push and pop, scattering nodes across the heap; the intrusive list reuses the elements' own storage, so there is no allocation and the links sit next to the data. It trades a larger element for no allocator traffic on the churn path."
+  signal: "A std::list with high insert/erase churn on a hot path, or a profile dominated by list node allocation and freeing."

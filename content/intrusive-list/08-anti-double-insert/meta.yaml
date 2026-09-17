@@ -1,0 +1,11 @@
+title: "Anti-pattern: inserting the same element twice"
+standard: "C++17"
+difficulty: 3
+summary: "Inserting an element that is already linked overwrites its next pointer through the one hook, hijacking it into the new list and silently corrupting the old one; guard with an is-linked check and move by unlink-then-insert."
+notes: "One hook can hold one set of links, so an element can be in one list per hook -- no more. Inserting an already-linked element through the same hook overwrites its next pointer, so it leaves the list it was in and that list's traversal now wanders into the new list. The example shows an element linked in one list, then pushed into a second through the same hook: the first list's size is now wrong because walking it runs into the second list's nodes. The fix is a guard -- refuse to insert a node whose is_linked flag is set, and to move a node, unlink it from its current list first. boost::intrusive's safe_link mode adds exactly this check."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

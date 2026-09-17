@@ -1,0 +1,11 @@
+title: "One element in two lists at once"
+standard: "C++17"
+difficulty: 2
+summary: "Give the element two hooks and it can belong to two independent lists at the same time -- an all list and a ready list, say -- with no copies, and moving between them is O(1)."
+notes: "Because the hook is part of the element, an element can carry more than one, and each hook threads it into a separate list. A scheduler keeps every task in an all list and, at the same time, the runnable ones in a ready list; a task moves in and out of ready in O(1) without touching its place in all, and without any container holding a copy of it. Doing this with std::list would mean two lists of pointers that both refer to the same objects and must be kept in step -- the intrusive version makes the double membership a property of the object itself. The Linux kernel uses exactly this to put one structure on several lists."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

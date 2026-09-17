@@ -1,0 +1,3 @@
+all: c b a
+ready: c a
+b ready? 0

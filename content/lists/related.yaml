@@ -18,3 +18,5 @@
   note: "The both-ends container that keeps random access: std::deque also inserts at the front in O(1) and keeps references valid, but indexes in O(1) where a list cannot -- go there when you want front operations and indexing but not per-node splicing."
 - slug: "forward-list"
   note: "The singly-linked sibling: std::forward_list drops the prev pointer for one pointer per node, and with it back(), size() and insert -- go there for the *_after interface, before_begin, splice_after, and when the smaller node is worth the awkwardness."
+- slug: "intrusive-list"
+  note: "The list turned inside out: put the next/prev links inside the element instead of in an allocated node, and the list allocates nothing, unlinks in O(1) from the object, and lets one element sit in several lists at once -- go there for the intrusive technique and the lifetime traps it brings."

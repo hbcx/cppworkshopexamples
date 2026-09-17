@@ -18,3 +18,5 @@
   note: "The same pooling idea wired into the standard containers: package the free-list as an Allocator and a std::vector or std::list draws its storage from it. Go there for the allocator interface, allocator_traits, and stateful arena allocators."
 - slug: "pmr"
   note: "The standard library's ready-made pool, no hand-rolling: unsynchronized_pool_resource recycles fixed-size blocks for any pmr container, and monotonic_buffer_resource is the arena form. Go there for polymorphic_allocator and the standard memory resources."
+- slug: "intrusive-list"
+  note: "A common consumer of a pool's stable addresses: an intrusive list threads pooled objects through links inside them, allocating nothing, as long as the pool keeps them at a fixed address. Go there for the intrusive technique that pairs with a pool."

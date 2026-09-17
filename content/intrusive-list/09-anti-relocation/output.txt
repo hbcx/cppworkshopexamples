@@ -1,0 +1,4 @@
+link points at the live element? 1
+elements moved to a new address: 1
+the stored link still points at the live element? 0
+fix: use stable storage (reserve, deque, or a pool) for the nodes

@@ -26,3 +26,5 @@
   note: "Why a unique_ptr member is the shortcut to rule of zero: hold your resource in one and you declare none of the five special members yourself -- go there for the special-member decision and what you would have to write without it."
 - slug: "operator-new-delete"
   note: "What unique_ptr calls for you and what it is protecting you from: how new/delete really work, why raw new/delete leaks when something throws, and the custom allocation a custom deleter pairs with. Go there for the allocation layer underneath."
+- slug: "intrusive-list"
+  note: "A container that deliberately does NOT own its elements: an intrusive list only threads objects, leaving who-frees-them to something like a unique_ptr or a pool. Go there for the intrusive technique and why its ownership must be answered separately."

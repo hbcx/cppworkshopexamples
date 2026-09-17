@@ -1,0 +1,11 @@
+title: "Anti-pattern: destroying an element still linked in a list"
+standard: "C++17"
+difficulty: 3
+summary: "If an element is destroyed while still threaded into a list, the list keeps a pointer into freed memory; the fix is an auto-unlink hook that removes the element from its list in the element's own destructor."
+notes: "An intrusive list does not own its elements, so nothing stops an element from dying while still linked. When it does, the list holds a dangling pointer, and the next iteration dereferences freed memory -- undefined behaviour. The standard fix, which boost::intrusive offers as the auto_unlink hook, is to make the element unlink itself in its destructor: the element remembers which list it is in and removes itself when it dies, so the list can never point at a destroyed object. The example shows the auto-unlink version keeping the list correct as a scoped element goes away; the dangling case is described in a comment, not run, because dereferencing freed memory is undefined."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }

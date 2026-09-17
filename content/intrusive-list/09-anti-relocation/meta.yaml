@@ -1,0 +1,11 @@
+title: "Anti-pattern: intrusive elements in a container that relocates"
+standard: "C++17"
+difficulty: 3
+summary: "The links store element addresses, so putting intrusive elements in a std::vector is a trap: a reallocation moves every element to a new address and every stored link is left dangling."
+notes: "Intrusive links are raw addresses of the elements, which is fine only while the elements do not move. A std::vector moves its elements to a new block when it grows past capacity, so every address the list stored is now stale -- the links point at where the elements used to be. The example threads two elements, grows the vector, and shows the elements' addresses have changed while the stored link still holds the old one, all by comparing pointers without dereferencing the dangling one. The fix is stable storage: reserve enough up front so the vector never reallocates, or keep the elements in a std::deque, a std::list, or a pool whose elements never move. This is the same relocation hazard the small-buffer optimization runs into with its inline storage."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "std::vector", url: "https://en.cppreference.com/w/cpp/container/vector" }

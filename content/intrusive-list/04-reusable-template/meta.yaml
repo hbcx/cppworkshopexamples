@@ -1,0 +1,12 @@
+title: "A reusable IntrusiveList template"
+standard: "C++17"
+difficulty: 3
+summary: "Package the pattern once: a ListHook base and an IntrusiveList<T> that recovers the element from the hook with a static_cast, plus a circular sentinel so insert and unlink have no end cases."
+notes: "The hand-threaded lists so far repeat the same pointer work. This packages it. The element inherits from ListHook (the base-hook style boost::intrusive also offers), so the list can turn a hook pointer back into the element with a static_cast -- no offset arithmetic. A circular sentinel head, whose next and prev start pointing at itself, removes every null special case: an empty list is just the sentinel pointing at itself, and insert and unlink are the same three assignments whether or not the list is empty. boost::intrusive also has a member-hook variant that finds the element from a pointer-to-member, useful when a type cannot add a base. The list still owns nothing; it only threads elements that live elsewhere."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "static_cast", url: "https://en.cppreference.com/w/cpp/language/static_cast" }
+  - { name: "class template", url: "https://en.cppreference.com/w/cpp/language/class_template" }

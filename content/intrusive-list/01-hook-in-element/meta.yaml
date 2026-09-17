@@ -1,0 +1,11 @@
+title: "The hook lives in the element"
+standard: "C++17"
+difficulty: 1
+summary: "The element carries its own next and prev pointers, and the list just threads them, so the list allocates nothing -- unlike std::list, which allocates a node holding a copy of the value for every element."
+notes: "This is the whole idea in one class. A std::list owns its elements: each push_back allocates a node that holds the pointers and a copy of the value. An intrusive list flips that -- the pointers (the hook) are members of the element itself, and the list only threads existing objects, so it never allocates. The objects here live on the stack and the list points into them. Two consequences follow and the rest of the section is about them: the list does not own the elements (their lifetime is managed elsewhere), and because the hook is part of the element, one element can carry several hooks and belong to several lists at once."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

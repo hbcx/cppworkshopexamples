@@ -1,0 +1,3 @@
+intrusive list, 100 elements -> allocations: 0
+std::list, 100 elements -> allocations: 100
+cost: the element carries the hook (sizeof(Node) = 24 bytes) and is owned elsewhere

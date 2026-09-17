@@ -1,0 +1,12 @@
+title: "The list does not own its elements"
+standard: "C++17"
+difficulty: 2
+summary: "An intrusive list only threads elements that live somewhere else; clearing the list detaches the links but destroys nothing, so ownership and lifetime are managed apart from list membership."
+notes: "This is the semantic that trips people who expect a std::list. A std::list owns its elements: its destructor and clear() destroy them. An intrusive list owns nothing -- it holds no storage, just threads objects that live in a pool, a vector, or on the stack. clear() unlinks them and stops there; the objects live until their real owner goes away. That separation is the price of no allocation, and it is why boost::intrusive makes you say explicitly what should happen to elements on clear (a disposer). The rule: decide where the elements live and who frees them, independently of which lists they are threaded into."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "std::deque", url: "https://en.cppreference.com/w/cpp/container/deque" }
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

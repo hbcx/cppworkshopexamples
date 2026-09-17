@@ -1,0 +1,2 @@
+before: a b c d (size 4)
+after unlinking c: a b d (size 3)

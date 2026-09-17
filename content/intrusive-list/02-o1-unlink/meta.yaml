@@ -1,0 +1,11 @@
+title: "O(1) unlink given the element"
+standard: "C++17"
+difficulty: 2
+summary: "Because the element holds its own prev and next, you can remove it from the list in O(1) with only a pointer to the element -- no search, no iterator, unlike std::list::erase which needs an iterator."
+notes: "This is the intrusive list's signature win. The element already knows its neighbours, so unlinking is just splicing prev and next together and clearing the element's own links -- constant time, from nothing but a pointer to the object. A std::list can also erase in O(1), but only if you already hold an iterator to the element; if all you have is the object, you must first find it, which is O(n). Systems that must cancel a timer, drop a connection, or move a task off a queue given only the object -- the Linux kernel list_del is exactly this -- lean on this property."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }

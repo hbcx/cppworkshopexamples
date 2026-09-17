@@ -1,0 +1,12 @@
+title: "Benchmark: no allocation versus std::list"
+standard: "C++17"
+difficulty: 2
+summary: "Count every global allocation to measure the intrusive list's core saving: threading elements that already exist costs zero allocations, where std::list allocates one node per element."
+notes: "The honest way to show a technique earns its keep is to measure it, and for an intrusive list the metric is allocation count, which is deterministic. Replacing global operator new with a counting version shows the intrusive list threading a hundred existing elements with no allocation at all, against a std::list that allocates a node for every push_back. The cost side is printed too: the element is larger because it carries the hook, and its lifetime must be managed elsewhere. So the intrusive list trades a fatter element and manual lifetime for zero per-element allocation and O(1) unlink -- the right trade when elements already exist and are inserted and removed a lot on a hot path."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+detailed_tags:
+  - { name: "std::list", url: "https://en.cppreference.com/w/cpp/container/list" }
+  - { name: "pointer", url: "https://en.cppreference.com/w/cpp/language/pointer" }
