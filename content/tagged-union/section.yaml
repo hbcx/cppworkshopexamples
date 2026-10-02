@@ -1,4 +1,4 @@
 title: "Tagged unions"
 description: "Build a sum type by hand: a union that can hold one of several types, plus a tag that records which one is active, so a value is exactly one of a closed set of shapes with no heap and no vtable. This is std::variant seen from the inside. Covers a union with a tag for trivial types, the manual construction and destruction a non-trivial member needs, a full copy/move/destroy that switches on the tag, a hand-written visit, the standard std::variant that does all of this for you, and the size and cost against a class hierarchy -- alongside the traps: reading a member the tag does not say is active, changing the tag without destroying the old member, and punning types through a union. The win is a compact, allocation-free value over a fixed set of alternatives; the cost is that you manage the active member's lifetime yourself, which is exactly why std::variant exists."
-sort_order: 185
+sort_order: 183
 category: "Techniques"

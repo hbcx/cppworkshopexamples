@@ -1,4 +1,4 @@
 title: "Type-safe flags and bitmasks"
 description: "The enum-class bitmask idiom: represent a set of on/off options as bits in one integer, but keep the type so the compiler stops you mixing two unrelated flag sets or letting a stray int in. Covers a scoped enum with power-of-two enumerators and hand-written bitwise operators, the full set/clear/toggle/test operations, a reusable opt-in trait that defines the operators once for every flag enum, a Flags wrapper object with named operations and an explicit bool, naming and iterating the set bits for logging, and when std::bitset or a raw unsigned mask fits better -- alongside the traps: a plain unscoped enum that decays to int and mixes flag sets, flag values that are not single bits and so overlap, and comparing flags with == instead of testing the bit. It is how the standard library models std::ios_base::openmode, std::filesystem::perms and std::launch."
-sort_order: 181
+sort_order: 179
 category: "Techniques"
