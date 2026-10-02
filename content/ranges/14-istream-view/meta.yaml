@@ -1,0 +1,13 @@
+title: "istream view: a stream as a lazy range"
+standard: "C++20"
+difficulty: 2
+summary: "views::istream<T> reads values of type T from a stream with operator>> one at a time, turning input into a lazy range that composes with take, transform and the rest."
+notes: "views::istream<T>(stream) is a range factory over an input stream: each step extracts one T with operator>>, and iteration ends when extraction fails -- at end of stream or on bad input. It makes stream parsing composable: instead of a hand-written while(in >> x) loop you get a view you can pipe through take, filter and transform. It is an input range, single-pass, so you can walk it once; that is the right model for a stream. Pair it with ranges::to to collect the parsed values into a container."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::istream", url: "https://en.cppreference.com/w/cpp/ranges/basic_istream_view" }
+  - { name: "std::views::take", url: "https://en.cppreference.com/w/cpp/ranges/take_view" }
+  - { name: "std::views::transform", url: "https://en.cppreference.com/w/cpp/ranges/transform_view" }

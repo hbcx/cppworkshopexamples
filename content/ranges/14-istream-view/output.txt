@@ -1,0 +1,2 @@
+sum of the stream: 31
+first three doubled: 20 40 60

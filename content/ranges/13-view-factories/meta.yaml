@@ -1,0 +1,14 @@
+title: "The small view factories: all, counted, single, empty"
+standard: "C++20"
+difficulty: 2
+summary: "The minor factories that round out the views toolkit: all wraps a range as a view, counted makes a view from an iterator and a length, and single and empty build one-element and zero-element views."
+notes: "These are the small building blocks the bigger adaptors are made of. views::all turns a range into a non-owning view and is what the pipe operator inserts implicitly at the front of a pipeline, so you rarely write it by hand. views::counted(it, n) adapts an iterator-plus-length pair -- a C-style buffer, say -- into a view of n elements. views::single(x) is a view of exactly one element and views::empty is a typed view of none; together they are the natural base cases of a conditional pipeline, where a branch yields either a single value or nothing while staying the same view-shaped type. None of them is exciting alone, but reaching for the right factory keeps a pipeline uniform instead of special-casing the ends."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::all", url: "https://en.cppreference.com/w/cpp/ranges/all_view" }
+  - { name: "std::views::counted", url: "https://en.cppreference.com/w/cpp/ranges/counted" }
+  - { name: "std::views::single", url: "https://en.cppreference.com/w/cpp/ranges/single_view" }
+  - { name: "std::views::empty", url: "https://en.cppreference.com/w/cpp/ranges/empty_view" }

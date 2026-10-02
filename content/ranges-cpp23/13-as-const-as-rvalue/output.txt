@@ -1,0 +1,3 @@
+as_const sum (read-only view): 6
+as_rvalue moved 3, copied 0
+dst first id = 10

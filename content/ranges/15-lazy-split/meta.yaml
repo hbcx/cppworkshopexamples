@@ -1,0 +1,12 @@
+title: "lazy_split versus split"
+standard: "C++20"
+difficulty: 2
+summary: "lazy_split is the older, more general sibling of split: it works on input-only ranges and multi-element patterns, but each piece is a lazy range you iterate element by element, not a subrange you can turn into a string_view."
+notes: "C++20 ships two splitters and they are not interchangeable. views::split keeps each piece as a subrange of the original range, so over contiguous input (a std::string) each piece is contiguous and can be handed straight to a string_view -- which is what you usually want. views::lazy_split is the general form: it accepts input-only ranges and a delimiter that is itself a pattern, but to stay that general each piece is a lazy range whose elements you visit one at a time, with no contiguity to borrow a string_view from. The rule: reach for split on contiguous input you want to slice cheaply, and for lazy_split when the input is input-only or the delimiter is a multi-element pattern split cannot handle."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::lazy_split", url: "https://en.cppreference.com/w/cpp/ranges/lazy_split_view" }
+  - { name: "std::views::split", url: "https://en.cppreference.com/w/cpp/ranges/split_view" }

@@ -1,0 +1,2 @@
+split: [a] [bb] [ccc]
+lazy_split: [a] [bb] [ccc]

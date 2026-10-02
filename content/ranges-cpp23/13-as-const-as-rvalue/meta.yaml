@@ -1,0 +1,13 @@
+title: "as_const and as_rvalue"
+standard: "C++23"
+difficulty: 2
+summary: "Two C++23 adaptors that change how elements are handed out: as_const yields them as const so a pipeline cannot modify the source, and as_rvalue yields them as rvalues so consuming the view moves elements instead of copying."
+notes: "Both adaptors leave the elements where they are and only change their value category as they pass through. views::as_const makes each element a reference to const, so a view can expose a range read-only without copying it -- the view equivalent of handing out a const reference. views::as_rvalue yields each element as an rvalue, so a loop or a ranges::to that consumes the view MOVES the elements out of the source instead of copying them, which is the clean way to drain one container into another. The example proves the move with a type that counts moves versus copies. Note the source is left in the usual moved-from state afterwards, so do not read it expecting its old values."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::ranges", url: "https://en.cppreference.com/w/cpp/ranges" }
+detailed_tags:
+  - { name: "std::views::as_const", url: "https://en.cppreference.com/w/cpp/ranges/as_const_view" }
+  - { name: "std::views::as_rvalue", url: "https://en.cppreference.com/w/cpp/ranges/as_rvalue_view" }
+  - { name: "std::move", url: "https://en.cppreference.com/w/cpp/utility/move" }
