@@ -1,0 +1,12 @@
+title: "Visiting the active alternative"
+standard: "C++17"
+difficulty: 2
+summary: "A visit function switches on the tag once and calls a callable with whatever member is active, so callers handle every alternative in one place instead of repeating the switch."
+notes: "Reading a tagged union everywhere with a bare switch spreads the same tag logic across the code and risks forgetting a case. A single visit does it once: it switches on the tag and calls the caller's function with the active member, so a generic lambda -- or a set of overloads -- handles each alternative and the switch lives in exactly one spot. This is the shape of std::visit, and writing it by hand shows what std::visit saves you: it also checks at compile time that the visitor handles every alternative, which the hand-rolled switch cannot. Keeping the switch in one place is still a real gain over scattering tag checks."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }

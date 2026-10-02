@@ -1,0 +1,6 @@
+index = 0
+get<int> = 42
+index = 1
+visit: hello
+holds a string of length 5
+get<int> threw bad_variant_access, as it should

@@ -1,0 +1,9 @@
+# Related chapters -- cross-links shown at the bottom of the section page.
+- slug: "variant"
+  note: "The standard version of this whole technique: std::variant is a type-safe tagged union that tracks the active type, runs the right constructors and destructors, and gives std::visit and std::get. Go there and reach for it before hand-rolling a union."
+- slug: "enums"
+  note: "The tag half of a tagged union: a scoped enum names the alternatives, and its underlying type and switch exhaustiveness are what make the discriminant safe to branch on. Go there for enum class, the underlying type, and switch coverage."
+- slug: "optional"
+  note: "The two-alternative special case: std::optional is a tagged union of a value or nothing, with the tag reduced to has_value(). Go there for the value-or-empty type and why it beats a sentinel or a bare pointer."
+- slug: "any"
+  note: "The open-set counterpart: std::any holds a value of ANY type, decided at run time, where a tagged union fixes the set at compile time. Go there for type-erased storage and when an open set is worth losing the exhaustive switch."

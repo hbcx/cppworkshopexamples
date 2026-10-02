@@ -1,0 +1,2 @@
+reinterpreted bits as float: 3.14159
+use memcpy or std::bit_cast to pun bits in C++, not a union

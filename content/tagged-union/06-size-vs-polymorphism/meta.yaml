@@ -1,0 +1,12 @@
+title: "Size and cost versus polymorphism"
+standard: "C++17"
+difficulty: 2
+summary: "A tagged union stores its value inline with no allocation and no vtable, where a class hierarchy heap-allocates each object behind a base pointer and adds a vtable -- the closed-set versus open-set trade."
+notes: "The two ways to hold one of several shapes pull in opposite directions. A tagged union is a closed set: every alternative is known up front, the value lives inline as the largest member plus a tag, dispatch is a switch, and nothing is allocated. A class hierarchy is an open set: new derived types can be added later, but each object is heap-allocated behind a base pointer, carries a vtable pointer, and dispatches through virtual calls. The example counts allocations -- zero for the tagged union, one per object for the polymorphic version -- and prints the sizes. Choose the tagged union (or std::variant) when the set of alternatives is fixed and you want it compact and allocation-free; choose a hierarchy when the set is meant to grow."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "operator new", url: "https://en.cppreference.com/w/cpp/memory/new/operator_new" }
+  - { name: "std::unique_ptr", url: "https://en.cppreference.com/w/cpp/memory/unique_ptr" }

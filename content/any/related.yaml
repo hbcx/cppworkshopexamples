@@ -1,3 +1,5 @@
 # Related chapters -- cross-links shown at the bottom of the section page.
 - slug: "variant"
   note: "The closed-set counterpart: when the value is one of a known few types, variant keeps it type-safe with an exhaustive std::visit and no allocation."
+- slug: "tagged-union"
+  note: "The closed-set technique any is the open-set version of: a tagged union fixes the set of types at compile time and dispatches with a switch, where any decides the type at run time. Go there for building a sum type over a known set by hand."

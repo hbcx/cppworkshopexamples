@@ -11,3 +11,5 @@
   note: "The simpler tool when a state only needs a NAME, not a value: a scoped enum is a closed set of tags with a switch for exhaustiveness, and a variant is what you reach for once each tag must also carry data. Go there for enum class, switching, and type-safe flags."
 - slug: "inheritance-and-virtual"
   note: "The open-set counterpart: a class hierarchy with virtual functions handles a growing set of types where a variant handles a fixed one, and the two are the standard alternatives for run-time dispatch. Go there for abstract bases, overrides, and virtual destructors."
+- slug: "tagged-union"
+  note: "What std::variant is made of: a union of the alternatives plus a tag, with the construction, destruction and visiting done by hand. Go there to build one yourself and see exactly which bookkeeping variant takes over."

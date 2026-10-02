@@ -1,0 +1,13 @@
+title: "Non-trivial members need manual lifetime"
+standard: "C++17"
+difficulty: 2
+summary: "A union does not construct or destroy its members for you, so a non-trivial member like std::string must be built with placement new and torn down with an explicit destructor call."
+notes: "The moment a union holds a type with a non-trivial constructor or destructor -- a std::string, a std::vector, anything that owns a resource -- the compiler stops managing it, because it cannot know which member is active. So you take over: construct the active member in place with placement new, and destroy it by hand in your own destructor, guided by the tag. Miss the placement new and the string is never built; miss the destructor call and its buffer leaks. std::destroy_at is the clean way to run the destructor. This bookkeeping is the real cost of a hand-rolled tagged union, and copy, move and assignment each need the same care -- the next example puts them together."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "destructor", url: "https://en.cppreference.com/w/cpp/language/destructor" }
+  - { name: "std::destroy_at", url: "https://en.cppreference.com/w/cpp/memory/destroy_at" }

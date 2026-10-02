@@ -1,0 +1,13 @@
+title: "The standard version: std::variant"
+standard: "C++17"
+difficulty: 2
+summary: "std::variant is the tagged union done for you: it tracks the active type, runs the right constructors and destructors, gives std::visit and std::get, and is normally never empty."
+notes: "Everything the earlier examples wrote by hand, std::variant provides. It stores one of its alternative types inline with a hidden tag, constructs and destroys the active one for you, and exposes index() for the tag, std::get and std::get_if for typed access, and std::visit for exhaustive, type-checked visiting. Assigning a different alternative destroys the old and constructs the new correctly, and the value is guaranteed not to be empty except in the rare case where a move or assignment throws (valueless_by_exception). Reach for std::variant by default; hand-roll a tagged union only when you cannot -- a C ABI boundary, a toolchain without the header, or a layout you must control exactly."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "std::variant", url: "https://en.cppreference.com/w/cpp/utility/variant" }
+detailed_tags:
+  - { name: "std::visit", url: "https://en.cppreference.com/w/cpp/utility/variant/visit" }
+  - { name: "std::get_if", url: "https://en.cppreference.com/w/cpp/utility/variant/get_if" }
+  - { name: "std::variant::index", url: "https://en.cppreference.com/w/cpp/utility/variant/index" }

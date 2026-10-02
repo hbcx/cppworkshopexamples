@@ -1,0 +1,2 @@
+with the fix, live Resources: 0
+with the bug, live Resources: 1

@@ -1,0 +1,13 @@
+title: "Copy, move, and destroy a tagged union"
+standard: "C++17"
+difficulty: 3
+summary: "A tagged union with a non-trivial member needs all five special members written by hand: each one switches on the tag to construct, move, or destroy whichever alternative is active."
+notes: "This is the full rule of five for a sum type. The destructor destroys the active member; the copy and move constructors read the source's tag and build this object's matching member (a copy, or a move that steals the buffer); the assignment operators destroy the current active member and then construct the new one. Every path is driven by the tag, because only it knows which union member is real. This assignment is written the simple way -- destroy then construct -- which is not exception-safe if the construction throws; std::variant handles that corner (and the whole job) for you, which is the point of the next example. Writing this once by hand is the best way to see exactly what std::variant is doing."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "move constructor", url: "https://en.cppreference.com/w/cpp/language/move_constructor" }
+  - { name: "std::destroy_at", url: "https://en.cppreference.com/w/cpp/memory/destroy_at" }

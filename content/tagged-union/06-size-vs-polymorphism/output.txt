@@ -1,0 +1,4 @@
+tagged union area = 12.5664, allocations: 0
+polymorphic area = 12.5664, allocations: 1
+sizeof(tagged Shape) = 16 (inline), sizeof(base pointer) = 8 + a heap object with a vtable
+closed set: inline, no vtable; open set: heap, virtual dispatch

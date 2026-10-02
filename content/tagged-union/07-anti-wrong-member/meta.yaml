@@ -1,0 +1,11 @@
+title: "Anti-pattern: reading the wrong union member"
+standard: "C++17"
+difficulty: 3
+summary: "Reading a union member other than the active one is undefined behaviour; the tag exists so you can avoid it, and ignoring the tag defeats the whole point of a tagged union."
+notes: "A union holds one member at a time, and only that member may be read. Reading a different member -- the double when the int is active -- reinterprets one type's bytes as another: undefined behaviour, with a result that changes between compilers and builds. It often appears to work, which is what makes it dangerous. The tag is there precisely so every read can check which member is live and touch only that one. The example writes the active member, describes the invalid read in a comment rather than running it (the result would be nondeterministic), and shows the correct tag-checked read. If you find yourself reading a member without consulting the tag, the tag is not doing its job."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }

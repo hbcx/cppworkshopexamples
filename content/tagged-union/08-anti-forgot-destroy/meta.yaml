@@ -1,0 +1,12 @@
+title: "Anti-pattern: changing the tag without destroying the old member"
+standard: "C++17"
+difficulty: 3
+summary: "Overwriting the active member with a new alternative without first destroying the old one leaks whatever it owned; the fix is to destroy the current active member before constructing the next."
+notes: "When a tagged union switches from one alternative to another, the old active member has to be destroyed first, or its destructor never runs and anything it owns leaks. The trap is a setter that just placement-news the new member over the old bytes and flips the tag, skipping the destroy. The example counts live resources: the buggy setter leaves one alive after it replaces a resource with another, while the fixed setter destroys the current member first and ends clean. This is the same discipline the assignment operators need -- destroy the active member, then construct the new one -- and it is exactly the bookkeeping std::variant does for you on every assignment."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "placement new", url: "https://en.cppreference.com/w/cpp/language/new" }
+  - { name: "std::destroy_at", url: "https://en.cppreference.com/w/cpp/memory/destroy_at" }

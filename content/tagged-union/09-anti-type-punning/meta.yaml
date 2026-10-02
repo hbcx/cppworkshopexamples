@@ -1,0 +1,12 @@
+title: "Anti-pattern: type punning through a union"
+standard: "C++17"
+difficulty: 3
+summary: "Writing one union member and reading another to reinterpret the bits is a defined trick in C but undefined behaviour in C++; copy the bytes with std::memcpy or std::bit_cast instead."
+notes: "A classic C idiom stores an integer in one union member and reads a float from another to reinterpret the bit pattern. C defines that; C++ does not -- only the active member may be read, so this is undefined behaviour even though it appears to work on common compilers. The correct, portable way to reinterpret bytes is std::memcpy from one object to another, which every compiler turns into the same no-op move as the union trick but with defined behaviour; std::bit_cast (C++20) is the same in a single expression. The example writes the integer, describes the invalid union read in a comment, and runs the memcpy version. Reach for memcpy or bit_cast to pun bits, never a union."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "std::memcpy", url: "https://en.cppreference.com/w/cpp/string/byte/memcpy" }
+  - { name: "std::bit_cast", url: "https://en.cppreference.com/w/cpp/numeric/bit_cast" }

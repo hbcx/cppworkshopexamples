@@ -1,0 +1,11 @@
+title: "A union plus a tag"
+standard: "C++17"
+difficulty: 1
+summary: "A union holds one of several types in the same storage, and a tag next to it records which one is active, so you always know which member is safe to read."
+notes: "This is the whole idea in one struct. A union overlays its members in one block of memory, so it holds exactly one of them at a time; on its own it does not remember which, which is where the tag comes in -- an enum that says whether the int or the double is currently live. Every read goes through the tag: switch on it and touch only the active member. With trivial members like int and double there is nothing to construct or destroy, so a plain union is enough; the next example is about what changes when a member is non-trivial. The payoff is size: the value is as big as the largest member plus the tag, not the sum of all of them."
+run: true
+sanitizers: []
+main_tags:
+  - { name: "union", url: "https://en.cppreference.com/w/cpp/language/union" }
+detailed_tags:
+  - { name: "scoped enumeration", url: "https://en.cppreference.com/w/cpp/language/enum" }

@@ -1,0 +1,15 @@
+- problem: "A JSON or config value is exactly one of a small fixed set of shapes -- null, boolean, number, string, array, object -- and code needs to hold any of them in one value and branch on which it is."
+  why: "A class hierarchy with dynamic_cast heap-allocates every leaf and opens the set to types nobody intended; a struct with a field per shape wastes space and lets several be set at once. A tagged union (or std::variant) makes the value exactly one alternative, inline and allocation-free, and the tag makes the branch total."
+  signal: "A value type that is one-of-N kinds handled by a chain of dynamic_cast or a struct with several mutually exclusive optional fields and a kind enum kept in sync by hand."
+
+- problem: "A network or IPC message carries a type field followed by a payload whose shape depends on it -- a login, a heartbeat, a data frame. The type on the wire IS the tag."
+  why: "Separate fields for every message type bloat the struct and still allow an inconsistent combination; reinterpret_cast of the buffer to the wrong payload type is undefined and unsafe. A tagged union maps the wire's type field to the tag and the payload to the matching member, so only the right payload is ever read."
+  signal: "A message struct with a type or opcode field and a reinterpret_cast of the body, or one payload field per message type guarded by if-on-type."
+
+- problem: "An interpreter or expression evaluator represents its AST as a small, closed set of node kinds -- literal, variable, binary-op, call -- walked over and over to evaluate or print."
+  why: "A virtual class hierarchy allocates every node on the heap and dispatches each visit through a vtable, which the closed, hot-walked node set does not need; a tagged union keeps nodes inline and dispatches with a switch that the compiler can optimise well. std::variant plus std::visit is the idiomatic form."
+  signal: "An AST or IR node base class with a handful of fixed derived kinds, allocated per node and visited through virtual calls on a hot evaluation path."
+
+- problem: "Code must interoperate with a C API whose struct is a tagged union -- a kind field next to a union of payloads -- as many system and library headers define."
+  why: "The C layout is fixed by the ABI, so a C++ class hierarchy cannot represent it and reinterpreting the bytes as the wrong payload is undefined; mirroring it as a tagged union matches the C struct exactly and reads each payload through its tag. It is the only representation that is both correct and ABI-compatible."
+  signal: "A C struct crossing the boundary with an int or enum kind member and a union of payload structs, currently read with hand-written casts on the C++ side."
